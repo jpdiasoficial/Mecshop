@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEC SHOP | VITRINE PRO</title>
+    <title>MEC SHOP | PRO</title>
     <style>
         :root {
             --neon-blue: #00f2ff;
@@ -12,7 +12,7 @@
             --bg-light: #f1f3f6;
         }
 
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--bg-light); padding-bottom: 120px; overflow-x: hidden; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--bg-light); padding-bottom: 120px; }
 
         /* BANNER */
         .slider-container { width: 100%; height: 200px; overflow: hidden; position: relative; background: #000; }
@@ -27,23 +27,25 @@
         /* CATEGORIAS */
         .categorias-bar { display: flex; overflow-x: auto; padding: 15px; gap: 10px; scrollbar-width: none; }
         .categorias-bar::-webkit-scrollbar { display: none; }
-        .cat-item { background: #fff; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .cat-item { background: #fff; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; }
         .cat-item.active { background: #000; color: #fff; }
 
         /* VITRINE */
         .loja-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 15px; }
-        .produto-card { background: #fff; border-radius: 15px; padding: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .img-produto { width: 100%; height: 120px; object-fit: contain; margin-bottom: 8px; }
+        .produto-card { background: #fff; border-radius: 15px; padding: 12px; text-align: center; }
+        .img-produto { width: 100%; height: 120px; object-fit: contain; }
         .preco { font-size: 16px; font-weight: 900; display: block; margin: 8px 0; }
         .btn-add { background: #000; color: #fff; border: none; width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-        /* FOOTER FIXO */
+        /* FOOTER */
         .footer-cart { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; z-index: 1000; border-radius: 20px 20px 0 0; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); }
-
+        
         /* MODAL */
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 2000; }
-        .modal-body { position: absolute; bottom: 0; background: #fff; width: 100%; border-radius: 30px 30px 0 0; padding: 25px; box-sizing: border-box; max-height: 90vh; overflow-y: auto; }
+        .modal-body { position: absolute; bottom: 0; background: #fff; width: 100%; border-radius: 30px 30px 0 0; padding: 25px; box-sizing: border-box; }
         .input-checkout { width: 100%; padding: 12px; margin-bottom: 8px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        
+        /* ÁREA CUPOM */
         .coupon-box { display: flex; gap: 8px; margin-bottom: 15px; }
         .btn-cupom { background: #333; color: #fff; border: none; padding: 0 15px; border-radius: 8px; font-weight: bold; }
     </style>
@@ -52,21 +54,21 @@
 
     <div class="slider-container">
         <div class="slider-track" id="slider">
-            <div class="slide"><img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800"></div>
-            <div class="slide"><img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800"></div>
-            <div class="slide"><img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800"></div>
+            <div class="slide"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800"></div>
+            <div class="slide"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800"></div>
+            <div class="slide"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800"></div>
         </div>
     </div>
 
     <div class="search-area">
-        <div class="search-box">🔍 <input type="text" id="inputBusca" onkeyup="filtrarBusca()" placeholder="Pesquisar produto..."></div>
+        <div class="search-box">🔍 <input type="text" id="inputBusca" onkeyup="filtrarBusca()" placeholder="O que você procura?"></div>
     </div>
 
     <div class="categorias-bar">
         <div class="cat-item active" onclick="filtrarCat('Tudo', this)">Tudo</div>
         <div class="cat-item" onclick="filtrarCat('Tech', this)">Tecnologia</div>
         <div class="cat-item" onclick="filtrarCat('Moda', this)">Moda</div>
-        <div class="cat-item" onclick="filtrarCat('Drones', this)">Drones</div>
+        <div class="cat-item" onclick="filtrarCat('Acessórios', this)">Acessórios</div>
     </div>
 
     <div id="vitrine" class="loja-grid"></div>
@@ -78,41 +80,40 @@
 
     <div class="modal" id="modalCart">
         <div class="modal-body">
-            <h3 style="margin-top:0">Seu Carrinho</h3>
-            <div id="cartItemsList" style="margin-bottom: 15px;"></div>
+            <h3 style="margin-top:0">Seu Pedido</h3>
+            <div id="cartItemsList" style="max-height: 150px; overflow-y: auto; margin-bottom: 10px;"></div>
             
             <div class="coupon-box">
-                <input type="text" id="cupomInput" class="input-checkout" style="margin-bottom:0" placeholder="Cupom (MEC10)">
+                <input type="text" id="cupomInput" class="input-checkout" style="margin-bottom:0" placeholder="Cupom de Desconto">
                 <button class="btn-cupom" onclick="aplicarCupom()">Aplicar</button>
             </div>
-            <div id="cupomStatus" style="font-size: 11px; margin-bottom: 10px;"></div>
+            <div id="cupomStatus" style="font-size: 11px; margin-bottom: 10px; font-weight: bold;"></div>
 
             <input type="text" id="nomeCliente" class="input-checkout" placeholder="Seu Nome">
             <input type="text" id="endCliente" class="input-checkout" placeholder="Endereço de Entrega">
             
-            <button style="width:100%; background:var(--btn-green); color:white; border:none; padding:15px; border-radius:10px; margin-top:10px; font-weight:bold;" onclick="enviarZap()">FINALIZAR PEDIDO</button>
-            <button onclick="toggleModal(false)" style="width:100%; background:none; border:none; color:#999; margin-top:10px;">Voltar</button>
+            <button style="width:100%; background:var(--btn-green); color:white; border:none; padding:15px; border-radius:10px; margin-top:10px; font-weight:bold;" onclick="enviarZap()">FINALIZAR NO WHATSAPP</button>
+            <button onclick="toggleModal(false)" style="width:100%; background:none; border:none; color:#999; margin-top:10px;">Continuar Comprando</button>
         </div>
     </div>
 
     <script>
         const produtos = [
-            { id: 1, cat: "Tech", nome: "Smartwatch Ultra Series", preco: 289.90, img: "https://m.media-amazon.com/images/I/71Yp-H-O8rL._AC_SL1500_.jpg" },
-            { id: 2, cat: "Tech", nome: "Fone Bluetooth Noise Cancelling", preco: 159.00, img: "https://m.media-amazon.com/images/I/61CGHv6kmWL._AC_SL1500_.jpg" },
-            { id: 3, cat: "Moda", nome: "Tênis Running Sport", preco: 197.00, img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400" },
-            { id: 4, cat: "Drones", nome: "Drone 4K Compact", preco: 450.00, img: "https://m.media-amazon.com/images/I/61u9AnE0O5L._AC_SL1200_.jpg" }
+            { id: 1, cat: "Tech", nome: "Smartwatch Ultra 9", preco: 289.90, img: "https://m.media-amazon.com/images/I/71Yp-H-O8rL._AC_SL1500_.jpg" },
+            { id: 2, cat: "Tech", nome: "Headset Gamer Pro", preco: 159.00, img: "https://m.media-amazon.com/images/I/61CGHv6kmWL._AC_SL1500_.jpg" },
+            { id: 3, cat: "Moda", nome: "Tênis Esportivo Nitro", preco: 197.00, img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400" },
+            { id: 4, cat: "Acessórios", nome: "Caixa de Som Bass+", preco: 124.50, img: "https://m.media-amazon.com/images/I/71pE7v07N3L._AC_SL1500_.jpg" }
         ];
 
         let carrinho = [];
         let categoriaAtual = "Tudo";
         let descontoGlobal = 0;
 
-        function render(lista = null) {
+        function render() {
             const v = document.getElementById('vitrine');
             v.innerHTML = "";
-            const dados = lista || (categoriaAtual === "Tudo" ? produtos : produtos.filter(p => p.cat === categoriaAtual));
-            
-            dados.forEach(p => {
+            const filtrados = categoriaAtual === "Tudo" ? produtos : produtos.filter(p => p.cat === categoriaAtual);
+            filtrados.forEach(p => {
                 v.innerHTML += `<div class="produto-card">
                     <img src="${p.img}" class="img-produto">
                     <span style="font-size:12px; font-weight:700; display:block; height:32px">${p.nome}</span>
@@ -122,26 +123,27 @@
             });
         }
 
-        function filtrarBusca() {
-            const t = document.getElementById('inputBusca').value.toLowerCase();
-            const encontrados = produtos.filter(p => p.nome.toLowerCase().includes(t));
-            render(encontrados);
-        }
-
         function filtrarCat(cat, el) {
             categoriaAtual = cat;
             document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
             el.classList.add('active');
-            document.getElementById('inputBusca').value = "";
             render();
+        }
+
+        function filtrarBusca() {
+            const t = document.getElementById('inputBusca').value.toLowerCase();
+            document.querySelectorAll('.produto-card').forEach(card => {
+                const n = card.querySelector('span').innerText.toLowerCase();
+                card.style.display = n.includes(t) ? "block" : "none";
+            });
         }
 
         function aplicarCupom() {
             const c = document.getElementById('cupomInput').value.toUpperCase();
             const status = document.getElementById('cupomStatus');
             if(c === "MEC10") {
-                descontoGlobal = 0.10;
-                status.innerHTML = "✅ Cupom MEC10 aplicado! 10% OFF";
+                descontoGlobal = 0.10; // 10%
+                status.innerHTML = "✅ Cupom MEC10 aplicado! 10% de desconto.";
                 status.style.color = "green";
             } else {
                 descontoGlobal = 0;
@@ -178,7 +180,7 @@
         function enviarZap() {
             const n = document.getElementById('nomeCliente').value;
             const e = document.getElementById('endCliente').value;
-            if(!n || !e || carrinho.length === 0) return alert("Preencha Nome, Endereço e adicione itens!");
+            if(!n || !e || carrinho.length === 0) return alert("Preencha os dados corretamente!");
             
             let sub = 0;
             let msg = `*🛒 NOVO PEDIDO - MEC SHOP*\n👤 *CLIENTE:* ${n}\n📍 *END:* ${e}\n---\n`;
@@ -188,14 +190,15 @@
             });
 
             if(descontoGlobal > 0) {
-                msg += `\n💰 *Subtotal:* R$ ${sub.toFixed(2)}\n🏷️ *Desconto:* ${descontoGlobal*100}%\n✅ *TOTAL FINAL: R$ ${document.getElementById('total-val').innerText}*`;
+                msg += `\n💰 *Subtotal:* R$ ${sub.toFixed(2)}`;
+                msg += `\n🏷️ *Desconto:* ${descontoGlobal * 100}%`;
+                msg += `\n✅ *TOTAL FINAL: R$ ${document.getElementById('total-val').innerText}*`;
             } else {
-                msg += `\n✅ *TOTAL: R$ ${sub.toFixed(2).replace('.',',')}*`;
+                msg += `\n✅ *TOTAL: R$ ${sub.toFixed(2)}*`;
             }
 
             window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(msg)}`);
         }
-
         render();
         let si = 0; setInterval(() => { si = (si + 1) % 3; document.getElementById('slider').style.transform = `translateX(-${si * 100}vw)`; }, 4000);
     </script>
