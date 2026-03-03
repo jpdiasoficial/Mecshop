@@ -1,174 +1,175 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEC SHOP | OFICIAL</title>
-    <style>
-        /* CORES EXATAS DA IMAGEM */
-        :root {
-            --neon-blue: #00f2ff;
-            --btn-green: #2ecc71;
-            --price-old: #999999;
-            --discount-red: #ff4757;
-            --bg-gray: #f4f4f4;
-        }
+<script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  
+  fbq('init', 'XXXXXXXXXXXXXX'); // SUBSTITUA PELO SEU ID
+  fbq('track', 'PageView');
+</script>
 
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--bg-gray); padding-bottom: 220px; }
-        
-        header { background: #000; padding: 15px; text-align: center; border-bottom: 2px solid var(--neon-blue); }
-        .logo { color: #fff; font-weight: bold; font-size: 20px; letter-spacing: 2px; }
+<style>
+  :root {
+    --neon-blue: #00f2ff;
+    --btn-green: #2ecc71;
+    --discount-red: #ff4757;
+  }
 
-        .banner { width: 100%; background: #000; }
-        .banner img { width: 100%; max-width: 600px; display: block; margin: 0 auto; }
+  body { margin: 0; padding: 0; background-color: #f0f2f5; font-family: 'Segoe UI', sans-serif; padding-bottom: 240px; }
+  
+  header { background: #000; padding: 15px; text-align: center; border-bottom: 2px solid var(--neon-blue); margin-bottom: 10px; }
+  .logo { color: #fff; font-weight: bold; font-size: 20px; letter-spacing: 2px; }
 
-        .container { display: flex; justify-content: center; gap: 12px; padding: 15px; flex-wrap: wrap; }
+  .loja-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 12px; }
+  @media (min-width: 768px) { .loja-grid { grid-template-columns: repeat(4, 1fr); } }
 
-        /* CARD IDENTICO AO VÍDEO */
-        .product-card { 
-            background: #fff; border-radius: 12px; width: 160px; padding: 10px; 
-            text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: relative;
-        }
+  /* CARD PADRÃO MEC SHOP */
+  .produto-caixa { 
+    background: #fff; padding: 12px; border-radius: 15px; text-align: center; 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08); position: relative; 
+  }
+  
+  .off-badge { 
+    position: absolute; top: 8px; left: 8px; background: var(--discount-red); 
+    color: #fff; font-size: 10px; font-weight: bold; padding: 3px 7px; border-radius: 5px; 
+  }
 
-        .off-badge { 
-            position: absolute; top: 8px; left: 8px; background: var(--discount-red); 
-            color: #fff; font-size: 10px; font-weight: bold; padding: 3px 7px; border-radius: 4px; 
-        }
+  .img-produto { width: 100%; border-radius: 10px; margin-bottom: 10px; }
+  .nome { font-size: 13px; font-weight: 600; color: #333; display: block; height: 35px; overflow: hidden; }
+  .preco-de { color: #999; text-decoration: line-through; font-size: 11px; display: block; margin-top: 5px; }
+  .preco-por { color: #000; font-size: 19px; font-weight: 800; display: block; margin: 2px 0; }
+  .parcelas { color: var(--btn-green); font-size: 11px; font-weight: bold; margin-bottom: 10px; display: block; }
 
-        .product-card img { width: 100%; border-radius: 8px; }
-        .product-card h3 { font-size: 13px; margin: 8px 0; color: #333; height: 32px; overflow: hidden; }
-        
-        .price-old { text-decoration: line-through; color: var(--price-old); font-size: 11px; margin: 0; }
-        .price-new { color: #000; font-size: 20px; font-weight: 800; margin: 2px 0; }
-        .installments { color: var(--btn-green); font-size: 11px; font-weight: bold; margin-bottom: 10px; }
+  /* CONTROLES QTD */
+  .qtd-controles { display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .btn-qtd { background: #f8f8f8; border: 1px solid #ddd; width: 28px; height: 28px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+  .input-qtd { width: 30px; text-align: center; border: none; font-size: 14px; font-weight: bold; }
 
-        /* CONTROLES DE QUANTIDADE */
-        .qty-box { display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 10px; }
-        .qty-btn { border: 1px solid #ddd; background: #f8f8f8; width: 28px; height: 28px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        .qty-val { font-weight: bold; font-size: 14px; }
-        
-        .btn-add { 
-            background: #000; color: var(--neon-blue); border: 1px solid var(--neon-blue); 
-            padding: 10px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 11px; 
-        }
+  .btn-add { 
+    background: #000; color: var(--neon-blue); border: 1.5px solid var(--neon-blue); 
+    padding: 10px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; font-size: 11px; 
+  }
 
-        /* CARRINHO FLUTUANTE ARREDONDADO */
-        .cart-fixed { 
-            position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; 
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.15); border-radius: 20px 20px 0 0; z-index: 1000; 
-        }
-        .cart-status { 
-            padding: 10px; text-align: center; font-size: 12px; color: #00a8e8; font-weight: bold; 
-            background: #fafafa; border-radius: 20px 20px 0 0; border-bottom: 1px solid #eee;
-        }
+  /* BARRA DE CHECKOUT ARREDONDADA */
+  .barra-checkout { 
+    position: fixed; bottom: 0; left: 0; right: 0; background: #fff; 
+    padding: 15px; z-index: 9999; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); 
+    border-radius: 25px 25px 0 0; 
+  }
+  
+  #lista-visual { font-size: 12px; color: #00a8e8; margin-bottom: 12px; text-align: center; font-weight: bold; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+  
+  .checkout-flex { display: flex; align-items: center; gap: 10px; }
+  .btn-limpar { background: #f1f1f1; border: none; padding: 12px; border-radius: 12px; cursor: pointer; }
+  .btn-fechar { 
+    background: var(--btn-green); color: #fff; border: none; padding: 15px; 
+    border-radius: 12px; font-weight: bold; flex-grow: 1; font-size: 15px; cursor: pointer; 
+  }
 
-        .cart-actions { display: flex; justify-content: space-around; align-items: center; padding: 15px; gap: 10px; }
-        .btn-clear { background: #eee; border: none; padding: 12px 15px; border-radius: 10px; cursor: pointer; font-size: 16px; }
-        .btn-finish { 
-            background: var(--btn-green); color: #fff; border: none; padding: 15px; 
-            border-radius: 10px; font-weight: bold; flex-grow: 1; font-size: 16px; cursor: pointer;
-        }
+  .whatsapp-portfolio { 
+    position: fixed; bottom: 210px; right: 15px; background-color: #25d366; 
+    color: white; padding: 10px 18px; border-radius: 30px; font-weight: 600; 
+    font-size: 13px; text-decoration: none; z-index: 9998; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+</style>
 
-        .payments { text-align: center; padding-bottom: 15px; }
-        .payments img { width: 130px; opacity: 0.6; }
+<a href="https://wa.me/5511999999999" class="whatsapp-portfolio" target="_blank">
+  💬 Suporte Online
+</a>
 
-        /* SUPORTE */
-        .btn-support { 
-            position: fixed; bottom: 215px; right: 15px; background: #25d366; color: #fff; 
-            padding: 10px 15px; border-radius: 50px; text-decoration: none; font-weight: bold; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2); font-size: 13px; z-index: 1001; 
-        }
-    </style>
-</head>
-<body>
+<div id="vitrine" class="loja-grid"></div>
 
-    <header><div class="logo">MEC SHOP</div></header>
+<div class="barra-checkout">
+  <div id="lista-visual">Seu carrinho está vazio</div>
+  <div class="checkout-flex">
+    <button class="btn-limpar" onclick="limparCarrinho()">🗑️</button>
+    <button class="btn-fechar" onclick="finalizar()">FINALIZAR COMPRA (R$ <span id="valor-total">0,00</span>)</button>
+  </div>
+  <center><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Logo%E2%80%94pix.png/1200px-Logo%E2%80%94pix.png" width="100" style="margin-top:10px; opacity:0.5;"></center>
+</div>
 
-    <a href="https://wa.me/5511999999999" target="_blank" class="btn-support">💬 Suporte Online</a>
+<script>
+  // ATUALIZE OS LINKS DAS IMAGENS AQUI COM OS NOMES DOS SEUS ARQUIVOS NO GITHUB
+  const produtos = [
+    { id: 1, off: "45% OFF", nome: "Tênis Performance Tech", precoDe: 349.90, precoPor: 187.00, img: "p1.jpg" },
+    { id: 2, off: "60% OFF", nome: "Fone Bluetooth Pro", precoDe: 199.00, precoPor: 79.90, img: "p2.jpg" }
+  ];
 
-    <div class="banner">
-        <img src="https://via.placeholder.com/600x300/000/00f2ff?text=LOJA+MEC+SHOP+ACHADOS" alt="Banner">
-    </div>
-
-    <div class="container">
-        <div class="product-card">
-            <div class="off-badge">45% OFF</div>
-            <img src="https://via.placeholder.com/150" alt="P1">
-            <h3>Tênis Performance Tech</h3>
-            <p class="price-old">R$ 349,90</p>
-            <p class="price-new">R$ 187,00</p>
-            <p class="installments">Pix ou 12x no cartão</p>
-            <div class="qty-box">
-                <button class="qty-btn" onclick="mudar('q1', -1)">-</button>
-                <span class="qty-val" id="q1">1</span>
-                <button class="qty-btn" onclick="mudar('q1', 1)">+</button>
-            </div>
-            <button class="btn-add" onclick="adicionar('Tênis Performance Tech', 187, 'q1')">ADICIONAR</button>
+  const vitrine = document.getElementById('vitrine');
+  produtos.forEach(p => {
+    vitrine.innerHTML += `
+      <div class="produto-caixa">
+        <div class="off-badge">${p.off}</div>
+        <img src="${p.img}" class="img-produto">
+        <span class="nome">${p.nome}</span>
+        <span class="preco-de">R$ ${p.precoDe.toFixed(2).replace('.',',')}</span>
+        <span class="preco-por">R$ ${p.precoPor.toFixed(2).replace('.',',')}</span>
+        <span class="parcelas">Pix ou 12x no cartão</span>
+        <div class="qtd-controles">
+          <button class="btn-qtd" onclick="alterar('qtd${p.id}', -1)">-</button>
+          <span id="qtd${p.id}" class="input-qtd">1</span>
+          <button class="btn-qtd" onclick="alterar('qtd${p.id}', 1)">+</button>
         </div>
+        <button class="btn-add" onclick="adicionar(${p.id})">ADICIONAR AO CARRINHO</button>
+      </div>`;
+  });
 
-        <div class="product-card">
-            <div class="off-badge">60% OFF</div>
-            <img src="https://via.placeholder.com/150" alt="P2">
-            <h3>Fone Bluetooth Pro</h3>
-            <p class="price-old">R$ 199,00</p>
-            <p class="price-new">R$ 79,90</p>
-            <p class="installments">Pix ou 12x no cartão</p>
-            <div class="qty-box">
-                <button class="qty-btn" onclick="mudar('q2', -1)">-</button>
-                <span class="qty-val" id="q2">1</span>
-                <button class="qty-btn" onclick="mudar('q2', 1)">+</button>
-            </div>
-            <button class="btn-add" onclick="adicionar('Fone Bluetooth Pro', 79.9, 'q2')">ADICIONAR</button>
-        </div>
-    </div>
+  let totalGeral = 0; let carrinho = {};
 
-    <div class="cart-fixed">
-        <div class="cart-status" id="cart-list">Seu carrinho está vazio</div>
-        <div class="cart-actions">
-            <button class="btn-clear" onclick="limpar()">🗑️</button>
-            <button class="btn-finish" onclick="finalizar()">FINALIZAR COMPRA (R$ <span id="total-val">0,00</span>)</button>
-        </div>
-        <div class="payments">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Logo%E2%80%94pix.png/1200px-Logo%E2%80%94pix.png" alt="Pix">
-        </div>
-    </div>
+  function alterar(id, delta) {
+    let el = document.getElementById(id);
+    let n = parseInt(el.innerText) + delta;
+    if (n >= 1) el.innerText = n;
+  }
 
-    <script>
-        let carrinho = {};
+  function adicionar(id) {
+    const p = produtos.find(prod => prod.id === id);
+    const qtd = parseInt(document.getElementById('qtd' + id).innerText);
+    
+    if(carrinho[p.nome]) {
+      carrinho[p.nome].qtd += qtd;
+    } else {
+      carrinho[p.nome] = { preco: p.precoPor, qtd: qtd };
+    }
+    
+    totalGeral += (p.precoPor * qtd);
+    document.getElementById('qtd' + id).innerText = "1";
+    atualizarInterface();
+  }
 
-        function mudar(id, val) {
-            let el = document.getElementById(id);
-            let atual = parseInt(el.innerText) + val;
-            if(atual >= 1) el.innerText = atual;
-        }
+  function atualizarInterface() {
+    document.getElementById('valor-total').innerText = totalGeral.toFixed(2).replace('.', ',');
+    let resumo = "";
+    for(let nome in carrinho) {
+      resumo += `${carrinho[nome].qtd}x ${nome} | `;
+    }
+    document.getElementById('lista-visual').innerText = resumo || "Seu carrinho está vazio";
+  }
 
-        function adicionar(nome, preco, idQtd) {
-            let qtd = parseInt(document.getElementById(idQtd).innerText);
-            if(carrinho[nome]) carrinho[nome].qtd += qtd;
-            else carrinho[nome] = { qtd: qtd, preco: preco };
-            document.getElementById(idQtd).innerText = "1";
-            atualizar();
-        }
+  function limparCarrinho() {
+    totalGeral = 0; carrinho = {};
+    atualizarInterface();
+  }
 
-        function limpar() { carrinho = {}; atualizar(); }
+  function finalizar() {
+    if (totalGeral === 0) return alert("Seu carrinho está vazio!");
+    
+    // Disparo Pixel
+    if (typeof fbq !== 'undefined') {
+      fbq('track', 'Purchase', { value: totalGeral, currency: 'BRL' });
+    }
 
-        function atualizar() {
-            let texto = ""; let total = 0;
-            for(let item in carrinho) {
-                texto += `${item} (x${carrinho[item].qtd}) | `;
-                total += carrinho[item].qtd * carrinho[item].preco;
-            }
-            document.getElementById('cart-list').innerText = texto || "Seu carrinho está vazio";
-            document.getElementById('total-val').innerText = total.toFixed(2).replace('.', ',');
-        }
-
-        function finalizar() {
-            if(Object.keys(carrinho).length === 0) return alert("Adicione itens!");
-            let msg = "*NOVO PEDIDO - MEC SHOP*\n\n";
-            for(let item in carrinho) msg += `✅ ${item} (Qtd: ${carrinho[item].qtd})\n`;
-            msg += `\n*TOTAL: R$ ${document.getElementById('total-val').innerText}*`;
-            window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(msg)}`);
-        }
-    </script>
-</body>
-</html>
+    const fone = "5511999999999"; // COLOQUE SEU NÚMERO AQUI
+    let textoMsg = "*NOVO PEDIDO - MEC SHOP*\n\n";
+    for(let nome in carrinho) {
+      textoMsg += `✅ ${carrinho[nome].qtd}x ${nome}\n`;
+    }
+    textoMsg += `\n💰 *Total: R$ ${totalGeral.toFixed(2).replace('.', ',')}*`;
+    
+    window.open(`https://wa.me/${fone}?text=${encodeURIComponent(textoMsg)}`);
+  }
+</script>
