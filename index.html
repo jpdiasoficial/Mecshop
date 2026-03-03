@@ -3,115 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LOJA MEC SHOP | OFICIAL</title>
+    <title>MEC SHOP | OFERTAS</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #f9f9f9; }
+        :root { --accent: #00f2ff; --price-tag: #2ecc71; --discount: #ff4757; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f0f2f5; padding-bottom: 230px; }
         
-        /* Banner / Slide */
-        .banner { width: 100%; background: #000; text-align: center; }
+        header { background: #000; padding: 15px; text-align: center; border-bottom: 2px solid var(--accent); }
+        .logo { color: #fff; font-weight: bold; font-size: 20px; letter-spacing: 1px; }
+
+        /* Banner */
+        .banner { width: 100%; background: #000; }
         .banner img { width: 100%; max-width: 600px; display: block; margin: 0 auto; }
 
-        /* Grade de Produtos */
-        .container { display: flex; justify-content: center; gap: 15px; padding: 20px; flex-wrap: wrap; margin-bottom: 200px; }
-        .product-card { background: #fff; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); width: 160px; padding: 12px; text-align: center; }
-        .product-card img { width: 100%; border-radius: 10px; }
-        .product-card h3 { font-size: 14px; margin: 8px 0; color: #333; }
-        .price-new { color: #00a8e8; font-size: 18px; font-weight: bold; }
+        /* Container de Produtos */
+        .container { display: flex; justify-content: center; gap: 12px; padding: 15px; flex-wrap: wrap; }
         
-        /* Controles de Quantidade */
-        .qty-box { display: flex; justify-content: center; align-items: center; gap: 10px; margin: 10px 0; }
-        .qty-btn { background: #eee; border: none; width: 25px; height: 25px; border-radius: 5px; cursor: pointer; }
+        .product-card { 
+            background: #fff; border-radius: 12px; width: 160px; padding: 10px; 
+            text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: relative;
+        }
 
-        .btn-add { background: #00a8e8; color: #fff; border: none; padding: 8px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        /* Etiqueta de Desconto */
+        .off-badge { 
+            position: absolute; top: 5px; left: 5px; background: var(--discount); 
+            color: #fff; font-size: 10px; font-weight: bold; padding: 3px 6px; border-radius: 4px; 
+        }
 
-        /* CARRINHO FIXO (IGUAL A IMAGEM) */
-        .cart-fixed { position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; box-shadow: 0 -5px 15px rgba(0,0,0,0.1); padding: 15px 0; z-index: 999; border-radius: 20px 20px 0 0; }
+        .product-card img { width: 100%; border-radius: 8px; }
+        .product-card h3 { font-size: 13px; margin: 8px 0; color: #444; height: 32px; overflow: hidden; }
         
-        /* Nomes e Quantidade no Carrinho */
-        #cart-items-list { font-size: 12px; text-align: center; margin-bottom: 10px; color: #555; padding: 0 20px; }
+        /* PREÇOS */
+        .price-old { text-decoration: line-through; color: #888; font-size: 11px; margin: 0; }
+        .price-new { color: #000; font-size: 20px; font-weight: 800; margin: 2px 0; }
+        .installments { color: var(--price-tag); font-size: 11px; font-weight: bold; margin-bottom: 8px; }
 
-        .cart-buttons { display: flex; justify-content: center; gap: 10px; padding: 0 15px; }
-        .btn-clear { background: #ff5e5e; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        .btn-finish { background: #2ecc71; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: bold; flex-grow: 1; font-size: 16px; cursor: pointer; }
+        /* Controles */
+        .qty-box { display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 8px; }
+        .qty-btn { border: 1px solid #ddd; background: #f8f8f8; width: 28px; height: 28px; border-radius: 5px; cursor: pointer; }
+        
+        .btn-add { background: #000; color: var(--accent); border: 1px solid var(--accent); padding: 10px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 11px; }
 
-        /* Pagamentos embaixo dos botões */
-        .pay-footer { text-align: center; margin-top: 10px; }
-        .pay-footer img { width: 180px; filter: grayscale(1); opacity: 0.6; }
+        /* CARRINHO FIXO PROFISSIONAL */
+        .cart-wrapper { position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; box-shadow: 0 -5px 20px rgba(0,0,0,0.2); border-radius: 20px 20px 0 0; z-index: 1000; }
+        .cart-info { padding: 8px 15px; text-align: center; font-size: 12px; border-bottom: 1px solid #eee; background: #fafafa; border-radius: 20px 20px 0 0; }
+        #cart-list { color: #00a8e8; font-weight: bold; }
+
+        .cart-main { display: flex; justify-content: space-between; align-items: center; padding: 15px; gap: 10px; }
+        .btn-clear { background: #eee; border: none; padding: 15px; border-radius: 10px; cursor: pointer; }
+        .btn-finish { background: var(--price-tag); color: #fff; border: none; padding: 15px; border-radius: 10px; font-weight: bold; flex-grow: 1; font-size: 16px; cursor: pointer; }
+
+        .footer-pay { text-align: center; padding-bottom: 10px; }
+        .footer-pay img { width: 120px; opacity: 0.5; }
     </style>
 </head>
 <body>
 
+    <header><div class="logo">MEC SHOP</div></header>
+
     <div class="banner">
-        <img src="https://via.placeholder.com/600x300/000/00f2ff?text=LOJA+MEC+SHOP+ACHADOS" id="slide" alt="Banner">
+        <img src="https://via.placeholder.com/600x300/000/00f2ff?text=OFERTAS+COM+ATÉ+70%+OFF" alt="Banner">
     </div>
 
     <div class="container">
         <div class="product-card">
-            <img src="https://via.placeholder.com/150" alt="Produto 1">
-            <h3>Tênis Confort Plus</h3>
-            <p class="price-new">R$ 50,00</p>
-            <button class="btn-add" onclick="adicionar('Tênis Confort Plus', 50)">ADICIONAR</button>
+            <div class="off-badge">45% OFF</div>
+            <img src="https://via.placeholder.com/150/000/fff?text=Tênis" alt="P1">
+            <h3>Tênis Ultra Sport 2026</h3>
+            <p class="price-old">R$ 349,90</p>
+            <p class="price-new">R$ 187,00</p>
+            <p class="installments">Pix ou 12x no cartão</p>
+            <div class="qty-box">
+                <button class="qty-btn" onclick="change('q1', -1)">-</button>
+                <span id="q1" style="font-weight:bold">1</span>
+                <button class="qty-btn" onclick="change('q1', 1)">+</button>
+            </div>
+            <button class="btn-add" onclick="add('Tênis Ultra Sport', 187, 'q1')">ADICIONAR AO CARRINHO</button>
         </div>
 
         <div class="product-card">
-            <img src="https://via.placeholder.com/150" alt="Produto 2">
-            <h3>Fone Bluetooth Pro</h3>
-            <p class="price-new">R$ 80,00</p>
-            <button class="btn-add" onclick="adicionar('Fone Bluetooth Pro', 80)">ADICIONAR</button>
+            <div class="off-badge">60% OFF</div>
+            <img src="https://via.placeholder.com/150/000/fff?text=Fone" alt="P2">
+            <h3>Fone Bluetooth Noise Cancelling</h3>
+            <p class="price-old">R$ 199,00</p>
+            <p class="price-new">R$ 79,90</p>
+            <p class="installments">Pix ou 12x no cartão</p>
+            <div class="qty-box">
+                <button class="qty-btn" onclick="change('q2', -1)">-</button>
+                <span id="q2" style="font-weight:bold">1</span>
+                <button class="qty-btn" onclick="change('q2', 1)">+</button>
+            </div>
+            <button class="btn-add" onclick="add('Fone Bluetooth', 79.9, 'q2')">ADICIONAR AO CARRINHO</button>
         </div>
     </div>
 
-    <div class="cart-fixed">
-        <div id="cart-items-list">Seu carrinho está vazio</div>
-        
-        <div class="cart-buttons">
-            <button class="btn-clear" onclick="limpar()">LIMPAR</button>
-            <button class="btn-finish" onclick="finalizar()">FINALIZAR (Total: R$ <span id="total-val">0,00</span>)</button>
+    <div class="cart-wrapper">
+        <div class="cart-info">🛒 <span id="cart-list">Seu carrinho está vazio</span></div>
+        <div class="cart-main">
+            <button class="btn-clear" onclick="reset()">🗑️</button>
+            <button class="btn-finish" onclick="checkout()">FINALIZAR COMPRA • R$ <span id="total">0,00</span></button>
         </div>
-
-        <div class="pay-footer">
-            <p style="font-size: 10px; margin: 5px 0;">FORMAS DE PAGAMENTO SEGURAS</p>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Logo%E2%80%94pix.png/1200px-Logo%E2%80%94pix.png" alt="Pagamentos">
+        <div class="footer-pay">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Logo%E2%80%94pix.png/1200px-Logo%E2%80%94pix.png" alt="Pix">
         </div>
     </div>
 
     <script>
-        let carrinho = {};
-        let total = 0;
-
-        function adicionar(nome, preco) {
-            if (carrinho[nome]) {
-                carrinho[nome].qtd += 1;
-            } else {
-                carrinho[nome] = { qtd: 1, preco: preco };
+        let cart = {};
+        function change(id, v) {
+            let e = document.getElementById(id);
+            let n = parseInt(e.innerText) + v;
+            if(n >= 1) e.innerText = n;
+        }
+        function add(n, p, id) {
+            let q = parseInt(document.getElementById(id).innerText);
+            if(cart[n]) cart[n].q += q;
+            else cart[n] = { q: q, p: p };
+            document.getElementById(id).innerText = "1";
+            upd();
+        }
+        function reset() { cart = {}; upd(); }
+        function upd() {
+            let t = 0; let s = "";
+            for(let i in cart) {
+                t += cart[i].q * cart[i].p;
+                s += `${i} (x${cart[i].q}) | `;
             }
-            atualizarCarrinho();
+            document.getElementById('total').innerText = t.toFixed(2).replace('.', ',');
+            document.getElementById('cart-list').innerText = s || "Seu carrinho está vazio";
         }
-
-        function limpar() {
-            carrinho = {};
-            atualizarCarrinho();
-        }
-
-        function atualizarCarrinho() {
-            const lista = document.getElementById('cart-items-list');
-            const totalTxt = document.getElementById('total-val');
-            let texto = "";
-            let soma = 0;
-
-            for (let item in carrinho) {
-                texto += `${item} (x${carrinho[item].qtd}) | `;
-                soma += carrinho[item].qtd * carrinho[item].preco;
-            }
-
-            lista.innerText = texto || "Seu carrinho está vazio";
-            totalTxt.innerText = soma.toFixed(2);
-        }
-
-        function finalizar() {
-            if (Object.keys(carrinho).length === 0) return alert("Adicione produtos!");
-            alert("Pedido enviado! Total: R$ " + document.getElementById('total-val').innerText);
-            // Aqui podemos colocar o link do seu WhatsApp depois!
+        function checkout() {
+            if(Object.keys(cart).length === 0) return alert("Adicione itens!");
+            let m = "*NOVO PEDIDO - MEC SHOP*\n\n";
+            for(let i in cart) m += `🔹 ${i} - Qtd: ${cart[i].q}\n`;
+            m += `\n*TOTAL: R$ ${document.getElementById('total').innerText}*`;
+            window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(m)}`);
         }
     </script>
 </body>
