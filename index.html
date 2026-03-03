@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEC SHOP | OFICIAL</title>
+    <title>MEC SHOP | WHATSAPP DIRETO</title>
     <style>
         :root {
             --neon-blue: #00f2ff;
@@ -12,142 +12,141 @@
             --bg-gray: #f0f2f5;
         }
 
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--bg-gray); padding-bottom: 240px; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--bg-gray); padding-bottom: 120px; }
 
-        /* SLIDER NO TOPO (SUBSTITUINDO O NOME) */
-        .header-slider { width: 100%; height: 180px; overflow: hidden; background: #000; border-bottom: 2px solid var(--neon-blue); }
-        .slider-track { display: flex; transition: transform 0.5s ease-in-out; height: 100%; }
-        .slider-track img { width: 100%; flex-shrink: 0; object-fit: cover; }
+        /* HEADER */
+        .header { background: #000; color: white; padding: 20px; text-align: center; border-bottom: 3px solid var(--neon-blue); }
 
-        /* PESQUISA */
-        .search-container { padding: 12px; background: #fff; }
-        .search-bar { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 12px; font-size: 14px; outline: none; box-sizing: border-box; }
-
-        /* GRID E CARDS */
+        /* GRID PRODUTOS */
         .loja-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 15px; }
         .produto-caixa { background: #fff; border-radius: 20px; padding: 12px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.08); position: relative; }
-        .off-badge { position: absolute; top: 10px; left: 10px; background: var(--discount-red); color: #fff; font-size: 10px; font-weight: bold; padding: 4px 8px; border-radius: 6px; }
         .img-produto { width: 100%; border-radius: 15px; margin-bottom: 10px; }
+        .nome { font-size: 13px; font-weight: 700; color: #333; height: 35px; display: block; overflow: hidden; }
+        .preco-por { color: #000; font-size: 18px; font-weight: 900; display: block; margin: 8px 0; }
+        .btn-add { background: #000; color: var(--neon-blue); border: 2px solid var(--neon-blue); padding: 10px; border-radius: 12px; cursor: pointer; width: 100%; font-weight: 800; }
+
+        /* FOOTER BAR */
+        .footer-cart { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); z-index: 999; border-radius: 25px 25px 0 0; }
         
-        .nome { font-size: 13px; font-weight: 700; color: #333; height: 35px; overflow: hidden; }
-        .preco-por { color: #000; font-size: 20px; font-weight: 900; display: block; margin: 5px 0; }
-
-        /* CONTROLES DE QUANTIDADE */
-        .qtd-container { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 10px; background: #f8f8f8; border-radius: 8px; padding: 5px; }
-        .btn-qtd { background: none; border: none; font-size: 18px; font-weight: bold; cursor: pointer; color: #333; width: 30px; }
-        .qtd-num { font-weight: 800; font-size: 15px; min-width: 20px; }
-
-        .btn-add { background: #000; color: var(--neon-blue); border: 2px solid var(--neon-blue); padding: 10px; border-radius: 12px; cursor: pointer; width: 100%; font-weight: 800; font-size: 11px; }
-
-        /* BARRA DE CHECKOUT */
-        .barra-checkout { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 20px; z-index: 10000; box-shadow: 0 -10px 30px rgba(0,0,0,0.15); border-radius: 35px 35px 0 0; }
-        #lista-visual { font-size: 12px; color: #00a8e8; text-align: center; font-weight: 700; margin-bottom: 12px; }
-        .checkout-flex { display: flex; align-items: center; gap: 12px; }
+        /* MODAL */
+        .modal-cart { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 2000; }
+        .modal-content { position: absolute; bottom: 0; background: #fff; width: 100%; max-height: 90%; border-radius: 30px 30px 0 0; padding: 25px; box-sizing: border-box; overflow-y: auto; }
         
-        /* BOTÃO CARRINHO (LIMPAR) */
-        .btn-carrinho { background: #f1f1f1; border: none; padding: 12px; border-radius: 15px; cursor: pointer; }
-        .btn-carrinho img { width: 24px; height: 24px; }
-
-        .btn-fechar { background: var(--btn-green); color: #fff; border: none; padding: 18px; border-radius: 18px; font-weight: 900; flex-grow: 1; font-size: 16px; cursor: pointer; }
-
-        /* SUPORTE */
-        .btn-suporte { position: fixed; bottom: 230px; right: 15px; background-color: #25d366; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 9999; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        /* FORMULÁRIO */
+        .checkout-form { margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; }
+        .input-group { margin-bottom: 10px; }
+        .input-group input, .input-group select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
+        
+        .btn-finalizar { background: var(--btn-green); color: #fff; border: none; width: 100%; padding: 18px; border-radius: 15px; font-weight: 900; font-size: 16px; margin-top: 10px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div class="header-slider" id="sliderTop">
-        <div class="slider-track">
-            <img src="banner1.jpg" alt="Oferta 1">
-            <img src="banner2.jpg" alt="Oferta 2">
-        </div>
+    <div class="header">
+        <h1>MEC SHOP</h1>
     </div>
-
-    <div class="search-container">
-        <input type="text" id="searchInput" class="search-bar" placeholder="Buscar produto..." onkeyup="filtrar()">
-    </div>
-
-    <a href="https://wa.me/5511999999999" class="btn-suporte" target="_blank">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="30">
-    </a>
 
     <div id="vitrine" class="loja-grid"></div>
 
-    <div class="barra-checkout">
-        <div id="lista-visual">Carrinho vazio</div>
-        <div class="checkout-flex">
-            <button class="btn-carrinho" onclick="limparCarrinho()">
-                <img src="https://cdn-icons-png.flaticon.com/512/263/263142.png" alt="Limpar">
-            </button>
-            <button class="btn-fechar" onclick="finalizar()">FINALIZAR (R$ <span id="total-v">0,00</span>)</button>
+    <div class="footer-cart" onclick="toggleModal(true)">
+        <div><b>Total: R$ <span id="total-val">0,00</span></b></div>
+        <button class="btn-add" style="width:auto; padding: 10px 20px;">VER PEDIDO</button>
+    </div>
+
+    <div class="modal-cart" id="modalCart">
+        <div class="modal-content">
+            <h2 style="margin-top:0">🛒 Finalizar no WhatsApp</h2>
+            <div id="cartItemsList"></div>
+
+            <div class="checkout-form">
+                <div class="input-group"><input type="text" id="nomeCliente" placeholder="Seu Nome"></div>
+                <div class="input-group"><input type="text" id="endCliente" placeholder="Endereço de Entrega"></div>
+                <div class="input-group">
+                    <select id="pagamento">
+                        <option value="Pix">Pix</option>
+                        <option value="Cartão de Crédito">Cartão de Crédito</option>
+                        <option value="Dinheiro">Dinheiro</option>
+                    </select>
+                </div>
+                <button class="btn-finalizar" onclick="enviarWhatsApp()">ENVIAR PEDIDO AGORA</button>
+                <button onclick="toggleModal(false)" style="width:100%; background:none; border:none; color:#999; margin-top:10px;">Voltar à Loja</button>
+            </div>
         </div>
     </div>
 
     <script>
         const produtos = [
-            { id: 1, off: "10% OFF", nome: "Produto Exemplo 01", preco: 187.00, img: "p1.jpg" },
-            { id: 2, off: "20% OFF", nome: "Produto Exemplo 02", preco: 79.90, img: "p2.jpg" }
+            { id: 1, nome: "Ténis Performance Tech", preco: 187.00, img: "https://via.placeholder.com/150" },
+            { id: 2, nome: "Fone Bluetooth Pro", preco: 79.90, img: "https://via.placeholder.com/150" },
+            { id: 3, nome: "Relógio Smart V8", preco: 245.00, img: "https://via.placeholder.com/150" }
         ];
 
-        function render(itens) {
+        let carrinho = [];
+
+        function render() {
             const v = document.getElementById('vitrine');
             v.innerHTML = "";
-            itens.forEach(p => {
+            produtos.forEach(p => {
                 v.innerHTML += `
                 <div class="produto-caixa">
-                    <div class="off-badge">${p.off}</div>
-                    <img src="${p.img}" class="img-produto" onerror="this.src='https://via.placeholder.com/150'">
+                    <img src="${p.img}" class="img-produto">
                     <span class="nome">${p.nome}</span>
-                    <span class="preco-por">R$ ${p.preco.toFixed(2).replace('.',',')}</span>
-                    <div class="qtd-container">
-                        <button class="btn-qtd" onclick="mudarQtd('${p.id}', -1)">-</button>
-                        <span class="qtd-num" id="qtd-${p.id}">1</span>
-                        <button class="btn-qtd" onclick="mudarQtd('${p.id}', 1)">+</button>
-                    </div>
-                    <button class="btn-add" onclick="add('${p.id}')">ADICIONAR</button>
+                    <span class="preco-por">R$ ${p.preco.toFixed(2)}</span>
+                    <button class="btn-add" onclick="addAoCarrinho(${p.id})">ADICIONAR</button>
                 </div>`;
             });
         }
 
-        function mudarQtd(id, val) {
-            let el = document.getElementById('qtd-'+id);
-            let n = parseInt(el.innerText) + val;
-            if(n > 0) el.innerText = n;
+        function addAoCarrinho(id) {
+            const p = produtos.find(x => x.id === id);
+            const item = carrinho.find(x => x.id === id);
+            if(item) { item.qtd++; } else { carrinho.push({...p, qtd: 1}); }
+            atualizarUI();
         }
 
-        let totalG = 0; let car = {};
-
-        function add(id) {
-            const p = produtos.find(x => x.id == id);
-            const qtd = parseInt(document.getElementById('qtd-'+id).innerText);
-            car[p.nome] = (car[p.nome] || 0) + qtd;
-            totalG += p.preco * qtd;
-            up();
+        function atualizarUI() {
+            let total = 0;
+            const list = document.getElementById('cartItemsList');
+            list.innerHTML = "";
+            carrinho.forEach(item => {
+                total += item.preco * item.qtd;
+                list.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                    <span>${item.qtd}x ${item.nome}</span>
+                    <span>R$ ${(item.preco * item.qtd).toFixed(2)}</span>
+                </div>`;
+            });
+            document.getElementById('total-val').innerText = total.toFixed(2);
         }
 
-        function up() {
-            document.getElementById('total-v').innerText = totalG.toFixed(2).replace('.', ',');
-            let r = "";
-            for(let n in car) r += `${car[n]}x ${n} | `;
-            document.getElementById('lista-visual').innerText = r || "Carrinho vazio";
+        function toggleModal(s) { document.getElementById('modalCart').style.display = s ? 'block' : 'none'; }
+
+        // ESTE É O COMANDO QUE ESTÁ NO TEU BLOCO DE NOTAS 1
+        function enviarWhatsApp() {
+            const nome = document.getElementById('nomeCliente').value;
+            const endereco = document.getElementById('endCliente').value;
+            const pag = document.getElementById('pagamento').value;
+
+            if(!nome || !endereco || carrinho.length === 0) return alert("Por favor, preencha os dados!");
+
+            let msg = "*🛒 NOVO PEDIDO - MEC SHOP*\n\n";
+            msg += "👤 *CLIENTE:* " + nome + "\n";
+            msg += "📍 *ENDEREÇO:* " + endereco + "\n";
+            msg += "💳 *PAGAMENTO:* " + pag + "\n\n";
+            msg += "📦 *ITENS:*\n";
+            
+            let total = 0;
+            carrinho.forEach(item => {
+                msg += "• " + item.qtd + "x " + item.nome + " (R$ " + (item.preco * item.qtd).toFixed(2) + ")\n";
+                total += item.preco * item.qtd;
+            });
+
+            msg += "\n💰 *TOTAL: R$ " + total.toFixed(2) + "*";
+
+            const fone = "5511999999999"; // ALTERA PARA O TEU NÚMERO
+            window.open("https://wa.me/" + fone + "?text=" + encodeURIComponent(msg));
         }
 
-        function limparCarrinho() { totalG = 0; car = {}; up(); }
-
-        function filtrar() {
-            const t = document.getElementById('searchInput').value.toLowerCase();
-            render(produtos.filter(p => p.nome.toLowerCase().includes(t)));
-        }
-
-        // Slider Auto
-        let index = 0;
-        setInterval(() => {
-            const track = document.querySelector('.slider-track');
-            index = (index + 1) % 2; // Altere para o número de imagens que tiver
-            track.style.transform = `translateX(-${index * 100}%)`;
-        }, 3000);
-
-        render(produtos);
+        render();
     </script>
 </body>
 </html>
