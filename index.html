@@ -7,67 +7,54 @@
     <style>
         :root {
             --neon-blue: #00f2ff;
-            --btn-green: #2ecc71;
+            --btn-green: #004d40;
             --discount-red: #ff4757;
             --bg-light: #f1f3f6;
         }
 
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--bg-light); padding-bottom: 120px; overflow-x: hidden; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--bg-light); padding-bottom: 120px; }
 
-        /* SLIDER PROFISSIONAL (Igual à imagem) */
-        .slider-container { width: 100%; height: 250px; overflow: hidden; position: relative; background: #000; }
+        /* SLIDER E BUSCA */
+        .slider-container { width: 100%; height: 230px; overflow: hidden; position: relative; background: #000; }
         .slider-track { display: flex; width: 300%; height: 100%; transition: transform 0.6s ease-in-out; }
         .slide { width: 100vw; height: 100%; position: relative; flex-shrink: 0; }
         .slide img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6); }
-        .slide-text { position: absolute; top: 50%; left: 20px; transform: translateY(-50%); color: white; z-index: 5; }
-        .slide-text h2 { margin: 0; font-size: 26px; text-transform: uppercase; font-weight: 900; }
-        .slide-text h2 span { color: var(--neon-blue); display: block; }
-        .slide-btn { margin-top: 10px; background: var(--neon-blue); color: #000; padding: 8px 20px; border-radius: 20px; font-size: 10px; font-weight: bold; border: none; text-transform: uppercase; }
-
-        /* BUSCA */
         .search-area { padding: 0 15px; margin-top: -25px; position: relative; z-index: 100; }
         .search-box { background: #fff; display: flex; align-items: center; padding: 12px 15px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .search-box input { border: none; outline: none; width: 100%; margin-left: 10px; font-size: 14px; }
+        .search-box input { border: none; outline: none; width: 100%; margin-left: 10px; }
 
         /* VITRINE */
         .loja-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 25px 15px; }
-        .produto-card { background: #fff; border-radius: 15px; padding: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); position: relative; }
-        .off-badge { position: absolute; top: 8px; left: 8px; background: var(--discount-red); color: #fff; font-size: 9px; font-weight: bold; padding: 3px 7px; border-radius: 5px; z-index: 2; }
+        .produto-card { background: #fff; border-radius: 15px; padding: 12px; text-align: center; position: relative; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .off-badge { position: absolute; top: 8px; left: 8px; background: var(--discount-red); color: #fff; font-size: 9px; font-weight: bold; padding: 3px 7px; border-radius: 5px; }
         .img-produto { width: 100%; height: 130px; object-fit: contain; margin-bottom: 8px; }
-        .nome { font-size: 13px; font-weight: 700; color: #333; text-align: left; height: 35px; overflow: hidden; display: block; }
-        .preco { font-size: 17px; font-weight: 900; color: #000; display: block; text-align: left; margin: 8px 0; }
-        .btn-add { background: #000; color: #fff; border: none; width: 100%; padding: 12px; border-radius: 10px; font-weight: bold; font-size: 11px; cursor: pointer; }
+        .preco { font-size: 17px; font-weight: 900; display: block; margin: 8px 0; }
+        .btn-add { background: #000; color: #fff; border: none; width: 100%; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; }
 
         /* BARRA FIXA */
-        .footer-cart { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); z-index: 1000; border-radius: 20px 20px 0 0; }
-        .btn-ver { background: #004d40; color: white; border: none; padding: 12px 20px; border-radius: 10px; font-weight: bold; }
+        .footer-cart { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; z-index: 1000; border-radius: 20px 20px 0 0; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); }
+        .btn-ver { background: var(--btn-green); color: white; border: none; padding: 12px 20px; border-radius: 10px; font-weight: bold; cursor: pointer; }
 
         /* MODAL */
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 2000; }
         .modal-body { position: absolute; bottom: 0; background: #fff; width: 100%; border-radius: 30px 30px 0 0; padding: 25px; box-sizing: border-box; max-height: 90vh; overflow-y: auto; }
-        .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
-        .controles { display: flex; align-items: center; gap: 10px; }
-        .btn-q { background: #000; color: #fff; border: none; width: 30px; height: 30px; border-radius: 8px; font-weight: bold; }
+        .input-checkout { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
         
-        .input-checkout { width: 100%; padding: 15px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .btn-q { background: #000; color: #fff; border: none; width: 25px; height: 25px; border-radius: 5px; }
+        
+        /* CUPOM */
+        .coupon-area { display: flex; gap: 10px; margin: 15px 0; }
+        .btn-cupom { background: #eee; border: none; padding: 0 15px; border-radius: 8px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div class="slider-container">
         <div class="slider-track" id="slider">
-            <div class="slide">
-                <div class="slide-text"><h2>LOJA MEC SHOP <span>ACHADOS!</span></h2><button class="slide-btn">Ver Ofertas</button></div>
-                <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800">
-            </div>
-            <div class="slide">
-                <div class="slide-text"><h2>ESTILO <span>& PERFORMANCE</span></h2><button class="slide-btn">Confira</button></div>
-                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800">
-            </div>
-            <div class="slide">
-                <div class="slide-text"><h2>TECNOLOGIA <span>DE PONTA!</span></h2><button class="slide-btn">Aproveitar</button></div>
-                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800">
-            </div>
+            <div class="slide"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800"></div>
+            <div class="slide"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800"></div>
+            <div class="slide"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800"></div>
         </div>
     </div>
 
@@ -87,13 +74,17 @@
             <h3 style="margin-top:0">Finalizar Pedido</h3>
             <div id="cartItemsList"></div>
             
-            <div style="margin-top:20px;">
-                <input type="text" id="nomeCliente" class="input-checkout" placeholder="Seu Nome Completo">
-                <input type="text" id="endCliente" class="input-checkout" placeholder="Endereço de Entrega (Rua, Nº, Bairro)">
+            <div class="coupon-area">
+                <input type="text" id="cupomTexto" class="input-checkout" style="margin-bottom:0" placeholder="Cupom de Desconto">
+                <button class="btn-cupom" onclick="aplicarCupom()">Aplicar</button>
             </div>
+            <div id="msgCupom" style="font-size: 12px; margin-bottom: 10px;"></div>
 
-            <button class="btn-ver" style="width:100%; padding:18px; margin-top:10px; font-size:16px;" onclick="enviarZap()">FINALIZAR NO WHATSAPP</button>
-            <button onclick="toggleModal(false)" style="width:100%; background:none; border:none; color:#999; margin-top:15px; font-weight:bold;">Voltar para a loja</button>
+            <input type="text" id="nomeCliente" class="input-checkout" placeholder="Seu Nome Completo">
+            <input type="text" id="endCliente" class="input-checkout" placeholder="Endereço (Rua, Nº, Bairro)">
+
+            <button class="btn-ver" style="width:100%; padding:18px; margin-top:10px;" onclick="enviarZap()">ENVIAR WHATSAPP</button>
+            <button onclick="toggleModal(false)" style="width:100%; background:none; border:none; color:#999; margin-top:15px;">Voltar</button>
         </div>
     </div>
 
@@ -106,6 +97,7 @@
         ];
 
         let carrinho = [];
+        let descontoPorcentagem = 0;
         let slideIndex = 0;
         setInterval(() => { slideIndex = (slideIndex + 1) % 3; document.getElementById('slider').style.transform = `translateX(-${slideIndex * 100}vw)`; }, 4000);
 
@@ -115,8 +107,8 @@
             produtos.forEach(p => {
                 v.innerHTML += `<div class="produto-card">
                     <div class="off-badge">${p.off}</div>
-                    <img src="${p.img}" class="img-produto" onerror="this.src='https://via.placeholder.com/150'">
-                    <span class="nome">${p.nome}</span>
+                    <img src="${p.img}" class="img-produto">
+                    <span style="font-size:12px; font-weight:700;">${p.nome}</span>
                     <span class="preco">R$ ${p.preco.toFixed(2).replace('.',',')}</span>
                     <button class="btn-add" onclick="add(${p.id})">ADICIONAR</button>
                 </div>`;
@@ -126,58 +118,72 @@
         function add(id) {
             const p = produtos.find(x => x.id === id);
             const item = carrinho.find(x => x.id === id);
-            if(item) { item.qtd++; } else { carrinho.push({...p, qtd: 1}); }
+            item ? item.qtd++ : carrinho.push({...p, qtd: 1});
             update();
         }
 
         function change(id, d) {
             const item = carrinho.find(x => x.id === id);
             item.qtd += d;
-            if(item.qtd <= 0) { carrinho = carrinho.filter(x => x.id !== id); }
+            if(item.qtd <= 0) carrinho = carrinho.filter(x => x.id !== id);
+            update();
+        }
+
+        function aplicarCupom() {
+            const cupom = document.getElementById('cupomTexto').value.toUpperCase();
+            if(cupom === "MEC10") {
+                descontoPorcentagem = 10;
+                document.getElementById('msgCupom').innerHTML = "<span style='color:green'>Cupom MEC10 aplicado! (10% OFF)</span>";
+            } else {
+                descontoPorcentagem = 0;
+                document.getElementById('msgCupom').innerHTML = "<span style='color:red'>Cupom inválido.</span>";
+            }
             update();
         }
 
         function update() {
-            let total = 0;
+            let subtotal = 0;
             const list = document.getElementById('cartItemsList');
             list.innerHTML = "";
             carrinho.forEach(item => {
-                total += item.preco * item.qtd;
+                subtotal += item.preco * item.qtd;
                 list.innerHTML += `<div class="cart-item">
-                    <span style="font-size:14px; font-weight:bold;">${item.nome}</span>
-                    <div class="controles">
+                    <span style="font-size:13px">${item.nome}</span>
+                    <div style="display:flex; align-items:center; gap:8px">
                         <button class="btn-q" onclick="change(${item.id},-1)">-</button>
                         <b>${item.qtd}</b>
                         <button class="btn-q" onclick="change(${item.id},1)">+</button>
                     </div>
                 </div>`;
             });
-            document.getElementById('total-val').innerText = total.toFixed(2).replace('.',',');
+            let valorFinal = subtotal - (subtotal * (descontoPorcentagem/100));
+            document.getElementById('total-val').innerText = valorFinal.toFixed(2).replace('.',',');
         }
 
         function toggleModal(s) { document.getElementById('modalCart').style.display = s ? 'block' : 'none'; }
 
         function enviarZap() {
             const nome = document.getElementById('nomeCliente').value;
-            const endereco = document.getElementById('endCliente').value;
-            const totalStr = document.getElementById('total-val').innerText;
+            const end = document.getElementById('endCliente').value;
+            if(!nome || !end || carrinho.length === 0) return alert("Preencha tudo!");
 
-            if(!nome || !endereco || carrinho.length === 0) return alert("Preencha seu nome, endereço e adicione produtos!");
-            
-            let msg = `*🛒 NOVO PEDIDO - MEC SHOP*\n\n`;
-            msg += `👤 *NOME:* ${nome}\n`;
-            msg += `📍 *END:* ${endereco}\n`;
-            msg += `--------------------------\n`;
-            
+            let subtotal = 0;
+            let msg = `*🛒 NOVO PEDIDO - MEC SHOP*\n\n👤 *CLIENTE:* ${nome}\n📍 *END:* ${end}\n---\n`;
             carrinho.forEach(i => {
-                msg += `• ${i.qtd}x ${i.nome} - R$ ${(i.preco * i.qtd).toFixed(2).replace('.',',')}\n`;
+                let vItem = i.preco * i.qtd;
+                subtotal += vItem;
+                msg += `• ${i.qtd}x ${i.nome} (R$ ${vItem.toFixed(2)})\n`;
             });
             
-            msg += `--------------------------\n`;
-            msg += `💰 *TOTAL: R$ ${totalStr}*`;
+            msg += `\n💰 *SUBTOTAL:* R$ ${subtotal.toFixed(2)}`;
+            if(descontoPorcentagem > 0) {
+                let vFinal = subtotal - (subtotal * (descontoPorcentagem/100));
+                msg += `\n🏷️ *DESCONTO:* ${descontoPorcentagem}%\n✅ *TOTAL COM DESCONTO:* R$ ${vFinal.toFixed(2)}`;
+            } else {
+                msg += `\n✅ *TOTAL:* R$ ${subtotal.toFixed(2)}`;
+            }
 
-            const meuWhats = "5511999999999"; // SUBSTITUA PELO SEU NÚMERO
-            window.open(`https://wa.me/${meuWhats}?text=${encodeURIComponent(msg)}`);
+            window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(msg)}`);
         }
         render();
     </script>
