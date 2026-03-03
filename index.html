@@ -3,52 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEC SHOP | INFRA PREMIUM</title>
+    <title>MEC SHOP | ALTA CONVERSÃO</title>
     <style>
-        :root {
-            --btn-green: #004d40;
-            --bg-light: #f1f3f6;
-            --accent: #000;
-        }
-
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--bg-light); padding-bottom: 120px; overflow-x: hidden; }
-
-        /* BANNER */
+        :root { --btn-green: #004d40; --bg-light: #f1f3f6; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--bg-light); padding-bottom: 120px; }
+        
+        /* HEADER & BANNER */
         .slider-container { width: 100%; height: 200px; overflow: hidden; position: relative; background: #000; }
         .slider-track { display: flex; width: 300%; height: 100%; transition: transform 0.6s ease-in-out; }
         .slide img { width: 100vw; height: 100%; object-fit: cover; filter: brightness(0.5); }
 
-        /* BUSCA E CATEGORIAS */
+        /* BUSCA */
         .search-area { padding: 0 15px; margin-top: -25px; position: relative; z-index: 100; }
         .search-box { background: #fff; display: flex; align-items: center; padding: 12px 15px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .search-box input { border: none; outline: none; width: 100%; margin-left: 10px; font-size: 14px; }
+        .search-box input { border: none; outline: none; width: 100%; margin-left: 10px; }
+
+        /* CATEGORIAS */
         .categorias-bar { display: flex; overflow-x: auto; padding: 15px; gap: 10px; scrollbar-width: none; }
-        .categorias-bar::-webkit-scrollbar { display: none; }
         .cat-item { background: #fff; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .cat-item.active { background: #000; color: #fff; }
 
         /* VITRINE */
         .loja-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 15px; }
-        .produto-card { background: #fff; border-radius: 15px; padding: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .img-produto { width: 100%; height: 110px; object-fit: contain; margin-bottom: 8px; }
-        .preco { font-size: 16px; font-weight: 900; display: block; margin: 8px 0; }
-        .btn-add { background: #000; color: #fff; border: none; width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .produto-card { background: #fff; border-radius: 15px; padding: 12px; text-align: center; }
+        .img-produto { width: 100%; height: 110px; object-fit: contain; }
+        .btn-add { background: #000; color: #fff; border: none; width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 8px; }
 
-        /* FOOTER */
-        .footer-cart { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; z-index: 1000; border-radius: 20px 20px 0 0; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); }
+        /* FOOTER COM SOMA REAL-TIME */
+        .footer-cart { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; z-index: 1000; border-radius: 20px 20px 0 0; box-shadow: 0 -5px 15px rgba(0,0,0,0.1); }
+        .total-info { display: flex; flex-direction: column; }
+        .total-info span { font-size: 12px; color: #666; }
+        .total-info b { font-size: 18px; color: #000; }
 
-        /* MODAL */
+        /* MODAL CHECKOUT */
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 2000; }
         .modal-body { position: absolute; bottom: 0; background: #fff; width: 100%; border-radius: 30px 30px 0 0; padding: 25px; box-sizing: border-box; max-height: 90vh; overflow-y: auto; }
-        
-        .item-carrinho { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 14px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
-        .controles-qtd { display: flex; align-items: center; gap: 10px; }
-        .btn-qtd { background: #000; color: #fff; border: none; width: 26px; height: 26px; border-radius: 5px; font-weight: bold; cursor: pointer; }
-        
-        .input-checkout { width: 100%; padding: 12px; margin-bottom: 8px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
-        .readonly-input { background: #f1f3f6; color: #666; }
-        .coupon-box { display: flex; gap: 8px; margin-bottom: 15px; }
-        .btn-cupom { background: #333; color: #fff; border: none; padding: 0 15px; border-radius: 8px; font-weight: bold; }
+        .item-carrinho { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px dotted #ccc; padding-bottom: 8px; }
+        .btn-qtd { background: #000; color: #fff; border: none; width: 26px; height: 26px; border-radius: 5px; cursor: pointer; }
+        .input-checkout { width: 100%; padding: 12px; margin-bottom: 8px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        .readonly { background: #f9f9f9; color: #777; }
     </style>
 </head>
 <body>
@@ -57,49 +50,48 @@
         <div class="slider-track" id="slider">
             <div class="slide"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800"></div>
             <div class="slide"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800"></div>
-            <div class="slide"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800"></div>
         </div>
     </div>
 
     <div class="search-area">
-        <div class="search-box">🔍 <input type="text" id="inputBusca" onkeyup="filtrarBusca()" placeholder="O que você procura hoje?"></div>
+        <div class="search-box">🔍 <input type="text" id="inputBusca" onkeyup="filtrarBusca()" placeholder="O que você procura?"></div>
     </div>
 
     <div class="categorias-bar">
         <div class="cat-item active" onclick="filtrarCat('Tudo', this)">Tudo</div>
         <div class="cat-item" onclick="filtrarCat('Tech', this)">Tecnologia</div>
         <div class="cat-item" onclick="filtrarCat('Moda', this)">Moda</div>
-        <div class="cat-item" onclick="filtrarCat('Acessórios', this)">Acessórios</div>
     </div>
 
     <div id="vitrine" class="loja-grid"></div>
 
     <div class="footer-cart">
-        <div>Total: <br><b>R$ <span id="total-val">0,00</span></b></div>
-        <button style="background:var(--btn-green); color:white; border:none; padding:12px 20px; border-radius:10px; font-weight:bold;" onclick="toggleModal(true)">VER PEDIDO</button>
+        <div class="total-info">
+            <span>Subtotal:</span>
+            <b>R$ <span id="total-val">0,00</span></b>
+        </div>
+        <button style="background:var(--btn-green); color:white; border:none; padding:12px 25px; border-radius:10px; font-weight:bold;" onclick="toggleModal(true)">FECHAR PEDIDO</button>
     </div>
 
     <div class="modal" id="modalCart">
         <div class="modal-body">
-            <h3 style="margin-top:0">Finalizar Compra</h3>
+            <h3 style="margin-top:0">Seu Carrinho</h3>
+            <div id="cartItemsList"></div>
             
-            <div id="cartItemsList" style="margin-bottom: 20px;"></div>
-            
-            <div class="coupon-box">
-                <input type="text" id="cupomInput" class="input-checkout" style="margin-bottom:0" placeholder="Cupom (MEC10)">
-                <button class="btn-cupom" onclick="aplicarCupom()">Aplicar</button>
+            <p style="font-size: 12px; color: #888; margin-bottom: 5px;">Cupom (Opcional):</p>
+            <div style="display:flex; gap:5px; margin-bottom:15px;">
+                <input type="text" id="cupomInput" class="input-checkout" style="margin-bottom:0" placeholder="Ex: MEC10">
+                <button onclick="update()" style="background:#333; color:#fff; border:none; padding:0 15px; border-radius:8px;">Aplicar</button>
             </div>
 
-            <input type="text" id="nomeCliente" class="input-checkout" placeholder="Nome Completo">
-            
-            <input type="text" id="cepCliente" class="input-checkout" placeholder="Digite seu CEP" onblur="buscarCEP()" maxlength="8">
-            <input type="text" id="ruaCliente" class="input-checkout readonly-input" placeholder="Rua / Logradouro" readonly>
-            <input type="text" id="bairroCliente" class="input-checkout readonly-input" placeholder="Bairro" readonly>
-            <input type="text" id="cidadeCliente" class="input-checkout readonly-input" placeholder="Cidade/UF" readonly>
-            <input type="text" id="numCliente" class="input-checkout" placeholder="Nº e Complemento (Apto, Bloco, etc)">
-            
-            <button style="width:100%; background:var(--btn-green); color:white; border:none; padding:18px; border-radius:10px; margin-top:10px; font-weight:bold;" onclick="enviarZap()">ENVIAR PEDIDO PELO WHATSAPP</button>
-            <button onclick="toggleModal(false)" style="width:100%; background:none; border:none; color:#999; margin-top:15px;">Voltar e Adicionar Mais</button>
+            <input type="text" id="nomeCliente" class="input-checkout" placeholder="Seu Nome">
+            <input type="text" id="cepCliente" class="input-checkout" placeholder="Seu CEP" onblur="buscarCEP()" maxlength="8">
+            <input type="text" id="ruaCliente" class="input-checkout readonly" placeholder="Endereço" readonly>
+            <input type="text" id="numCliente" class="input-checkout" placeholder="Nº e Complemento">
+            <input type="hidden" id="cidadeOculta">
+
+            <button style="width:100%; background:var(--btn-green); color:white; border:none; padding:18px; border-radius:10px; margin-top:10px; font-weight:bold; font-size:16px;" onclick="enviarZap()">FINALIZAR NO WHATSAPP</button>
+            <button onclick="toggleModal(false)" style="width:100%; background:none; border:none; color:#999; margin-top:15px;">Continuar comprando</button>
         </div>
     </div>
 
@@ -107,13 +99,11 @@
         const produtos = [
             { id: 1, cat: "Tech", nome: "Smartwatch Ultra 9", preco: 289.90, img: "https://m.media-amazon.com/images/I/71Yp-H-O8rL._AC_SL1500_.jpg" },
             { id: 2, cat: "Tech", nome: "Headset Gamer Pro", preco: 159.00, img: "https://m.media-amazon.com/images/I/61CGHv6kmWL._AC_SL1500_.jpg" },
-            { id: 3, cat: "Moda", nome: "Tênis Esportivo Nitro", preco: 197.00, img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400" },
-            { id: 4, cat: "Acessórios", nome: "Caixa de Som Bass+", preco: 124.50, img: "https://m.media-amazon.com/images/I/71pE7v07N3L._AC_SL1500_.jpg" }
+            { id: 3, cat: "Moda", nome: "Tênis Esportivo Nitro", preco: 197.00, img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400" }
         ];
 
         let carrinho = [];
         let categoriaAtual = "Tudo";
-        let descontoGlobal = 0;
 
         function render(lista = null) {
             const v = document.getElementById('vitrine');
@@ -123,22 +113,10 @@
                 v.innerHTML += `<div class="produto-card">
                     <img src="${p.img}" class="img-produto">
                     <span style="font-size:12px; font-weight:700; display:block; height:32px">${p.nome}</span>
-                    <span class="preco">R$ ${p.preco.toFixed(2).replace('.',',')}</span>
+                    <b style="display:block; margin:5px 0;">R$ ${p.preco.toFixed(2).replace('.',',')}</b>
                     <button class="btn-add" onclick="add(${p.id})">ADICIONAR</button>
                 </div>`;
             });
-        }
-
-        function filtrarBusca() {
-            const t = document.getElementById('inputBusca').value.toLowerCase();
-            render(produtos.filter(p => p.nome.toLowerCase().includes(t)));
-        }
-
-        function filtrarCat(cat, el) {
-            categoriaAtual = cat;
-            document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
-            el.classList.add('active');
-            render();
         }
 
         function add(id) {
@@ -157,84 +135,69 @@
         }
 
         function update() {
-            let subtotal = 0;
+            let total = 0;
             const list = document.getElementById('cartItemsList');
             list.innerHTML = "";
             
             carrinho.forEach(item => {
-                subtotal += item.preco * item.qtd;
-                list.innerHTML += `
-                <div class="item-carrinho">
-                    <span style="max-width: 60%;">${item.nome}</span>
-                    <div class="controles-qtd">
+                total += item.preco * item.qtd;
+                list.innerHTML += `<div class="item-carrinho">
+                    <span>${item.nome}</span>
+                    <div style="display:flex; align-items:center; gap:8px;">
                         <button class="btn-qtd" onclick="alterarQtd(${item.id}, -1)">-</button>
                         <b>${item.qtd}</b>
                         <button class="btn-qtd" onclick="alterarQtd(${item.id}, 1)">+</button>
                     </div>
                 </div>`;
             });
-            
-            let totalFinal = subtotal * (1 - descontoGlobal);
-            document.getElementById('total-val').innerText = totalFinal.toFixed(2).replace('.',',');
+
+            // Lógica de Cupom Opcional
+            const cupom = document.getElementById('cupomInput').value.toUpperCase();
+            if(cupom === "MEC10") total *= 0.9;
+
+            document.getElementById('total-val').innerText = total.toFixed(2).replace('.',',');
         }
 
         function buscarCEP() {
             let cep = document.getElementById('cepCliente').value.replace(/\D/g, '');
             if (cep.length === 8) {
-                fetch(`https://viacep.com.br/ws/${cep}/json/`)
-                    .then(res => res.json())
-                    .then(d => {
-                        if(!d.erro) {
-                            document.getElementById('ruaCliente').value = d.logradouro;
-                            document.getElementById('bairroCliente').value = d.bairro;
-                            document.getElementById('cidadeCliente').value = d.localidade + " / " + d.uf;
-                            document.getElementById('numCliente').focus();
-                        }
-                    });
+                fetch(`https://viacep.com.br/ws/${cep}/json/`).then(r => r.json()).then(d => {
+                    if(!d.erro) {
+                        document.getElementById('ruaCliente').value = `${d.logradouro}, ${d.bairro}`;
+                        document.getElementById('cidadeOculta').value = `${d.localidade}/${d.uf}`;
+                    }
+                });
             }
         }
-
-        function aplicarCupom() {
-            if(document.getElementById('cupomInput').value.toUpperCase() === "MEC10") {
-                descontoGlobal = 0.10;
-                alert("Cupom MEC10 aplicado com sucesso!");
-            } else {
-                descontoGlobal = 0;
-                alert("Cupom inválido!");
-            }
-            update();
-        }
-
-        function toggleModal(s) { document.getElementById('modalCart').style.display = s ? 'block' : 'none'; }
 
         function enviarZap() {
             const n = document.getElementById('nomeCliente').value;
-            const cep = document.getElementById('cepCliente').value;
-            const rua = document.getElementById('ruaCliente').value;
+            const r = document.getElementById('ruaCliente').value;
             const num = document.getElementById('numCliente').value;
-            const cid = document.getElementById('cidadeCliente').value;
+            if(!n || !r || !num) return alert("Preencha os dados de entrega!");
 
-            if(!n || !rua || !num || carrinho.length === 0) return alert("Preencha todos os dados de entrega!");
+            let msg = `*🛒 NOVO PEDIDO*\n👤 *CLIENTE:* ${n}\n📍 *ENTREGA:* ${r}, ${num}\n🏙️ *CIDADE:* ${document.getElementById('cidadeOculta').value}\n---\n`;
+            carrinho.forEach(i => msg += `• ${i.qtd}x ${i.nome}\n`);
+            msg += `\n*TOTAL: R$ ${document.getElementById('total-val').innerText}*`;
             
-            let sub = 0;
-            let msg = `*🛒 NOVO PEDIDO - MEC SHOP*\n\n👤 *CLIENTE:* ${n}\n📍 *ENTREGA:* ${rua}, ${num}\n🏙️ *CIDADE:* ${cid} (CEP: ${cep})\n---\n`;
-            
-            carrinho.forEach(i => {
-                sub += (i.preco * i.qtd);
-                msg += `• ${i.qtd}x ${i.nome} - R$ ${(i.preco * i.qtd).toFixed(2)}\n`;
-            });
-
-            if(descontoGlobal > 0) {
-                msg += `\n💰 *Subtotal:* R$ ${sub.toFixed(2)}\n🏷️ *Desconto:* ${descontoGlobal*100}%\n✅ *TOTAL FINAL: R$ ${document.getElementById('total-val').innerText}*`;
-            } else {
-                msg += `\n✅ *TOTAL: R$ ${sub.toFixed(2).replace('.',',')}*`;
-            }
-
             window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(msg)}`);
         }
 
+        function filtrarBusca() {
+            const t = document.getElementById('inputBusca').value.toLowerCase();
+            render(produtos.filter(p => p.nome.toLowerCase().includes(t)));
+        }
+
+        function filtrarCat(cat, el) {
+            categoriaAtual = cat;
+            document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active');
+            render();
+        }
+
+        function toggleModal(s) { document.getElementById('modalCart').style.display = s ? 'block' : 'none'; }
         render();
-        let si = 0; setInterval(() => { si = (si + 1) % 3; document.getElementById('slider').style.transform = `translateX(-${si * 100}vw)`; }, 4000);
+        setInterval(() => { /* Lógica do slider */ }, 4000);
     </script>
 </body>
 </html>
