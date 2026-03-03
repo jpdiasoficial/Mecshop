@@ -3,45 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEC SHOP | ALTA CONVERSÃO</title>
+    <title>MEC SHOP | FINAL PRO</title>
     <style>
         :root { --btn-green: #004d40; --bg-light: #f1f3f6; }
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--bg-light); padding-bottom: 120px; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--bg-light); padding-bottom: 120px; overflow-x: hidden; }
         
-        /* HEADER & BANNER */
-        .slider-container { width: 100%; height: 200px; overflow: hidden; position: relative; background: #000; }
-        .slider-track { display: flex; width: 300%; height: 100%; transition: transform 0.6s ease-in-out; }
-        .slide img { width: 100vw; height: 100%; object-fit: cover; filter: brightness(0.5); }
+        .slider-container { width: 100%; height: 180px; overflow: hidden; position: relative; background: #000; }
+        .slider-track { display: flex; width: 300%; height: 100%; transition: transform 0.6s; }
+        .slide img { width: 100vw; height: 100%; object-fit: cover; filter: brightness(0.6); }
 
-        /* BUSCA */
         .search-area { padding: 0 15px; margin-top: -25px; position: relative; z-index: 100; }
-        .search-box { background: #fff; display: flex; align-items: center; padding: 12px 15px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .search-box { background: #fff; display: flex; align-items: center; padding: 12px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         .search-box input { border: none; outline: none; width: 100%; margin-left: 10px; }
 
-        /* CATEGORIAS */
         .categorias-bar { display: flex; overflow-x: auto; padding: 15px; gap: 10px; scrollbar-width: none; }
-        .cat-item { background: #fff; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .cat-item { background: #fff; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; }
         .cat-item.active { background: #000; color: #fff; }
 
-        /* VITRINE */
         .loja-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 15px; }
         .produto-card { background: #fff; border-radius: 15px; padding: 12px; text-align: center; }
-        .img-produto { width: 100%; height: 110px; object-fit: contain; }
-        .btn-add { background: #000; color: #fff; border: none; width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 8px; }
+        .img-produto { width: 100%; height: 100px; object-fit: contain; }
+        .btn-add { background: #000; color: #fff; border: none; width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-        /* FOOTER COM SOMA REAL-TIME */
         .footer-cart { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; z-index: 1000; border-radius: 20px 20px 0 0; box-shadow: 0 -5px 15px rgba(0,0,0,0.1); }
-        .total-info { display: flex; flex-direction: column; }
-        .total-info span { font-size: 12px; color: #666; }
-        .total-info b { font-size: 18px; color: #000; }
 
-        /* MODAL CHECKOUT */
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 2000; }
         .modal-body { position: absolute; bottom: 0; background: #fff; width: 100%; border-radius: 30px 30px 0 0; padding: 25px; box-sizing: border-box; max-height: 90vh; overflow-y: auto; }
-        .item-carrinho { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px dotted #ccc; padding-bottom: 8px; }
-        .btn-qtd { background: #000; color: #fff; border: none; width: 26px; height: 26px; border-radius: 5px; cursor: pointer; }
+        
+        .item-carrinho { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #eee; padding-bottom: 8px; font-size: 14px; }
+        .controles { display: flex; align-items: center; gap: 8px; }
+        .btn-qtd { background: #000; color: #fff; border: none; width: 24px; height: 24px; border-radius: 4px; cursor: pointer; }
+        
         .input-checkout { width: 100%; padding: 12px; margin-bottom: 8px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        .readonly { background: #f9f9f9; color: #777; }
+        .readonly { background: #f4f4f4; color: #888; }
     </style>
 </head>
 <body>
@@ -50,11 +44,12 @@
         <div class="slider-track" id="slider">
             <div class="slide"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800"></div>
             <div class="slide"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800"></div>
+            <div class="slide"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800"></div>
         </div>
     </div>
 
     <div class="search-area">
-        <div class="search-box">🔍 <input type="text" id="inputBusca" onkeyup="filtrarBusca()" placeholder="O que você procura?"></div>
+        <div class="search-box">🔍 <input type="text" id="inputBusca" onkeyup="filtrarBusca()" placeholder="Pesquisar..."></div>
     </div>
 
     <div class="categorias-bar">
@@ -66,32 +61,28 @@
     <div id="vitrine" class="loja-grid"></div>
 
     <div class="footer-cart">
-        <div class="total-info">
-            <span>Subtotal:</span>
-            <b>R$ <span id="total-val">0,00</span></b>
-        </div>
-        <button style="background:var(--btn-green); color:white; border:none; padding:12px 25px; border-radius:10px; font-weight:bold;" onclick="toggleModal(true)">FECHAR PEDIDO</button>
+        <div>Total: <br><b>R$ <span id="total-val">0,00</span></b></div>
+        <button style="background:var(--btn-green); color:white; border:none; padding:12px 20px; border-radius:10px; font-weight:bold;" onclick="toggleModal(true)">VER PEDIDO</button>
     </div>
 
     <div class="modal" id="modalCart">
         <div class="modal-body">
-            <h3 style="margin-top:0">Seu Carrinho</h3>
+            <h3 style="margin-top:0">Meus Itens</h3>
             <div id="cartItemsList"></div>
             
-            <p style="font-size: 12px; color: #888; margin-bottom: 5px;">Cupom (Opcional):</p>
-            <div style="display:flex; gap:5px; margin-bottom:15px;">
-                <input type="text" id="cupomInput" class="input-checkout" style="margin-bottom:0" placeholder="Ex: MEC10">
-                <button onclick="update()" style="background:#333; color:#fff; border:none; padding:0 15px; border-radius:8px;">Aplicar</button>
+            <div style="display:flex; gap:5px; margin-bottom:15px; margin-top: 15px;">
+                <input type="text" id="cupomInput" class="input-checkout" style="margin-bottom:0" placeholder="Cupom de desconto">
+                <button onclick="update()" style="background:#333; color:#fff; border:none; padding:0 15px; border-radius:8px; font-weight:bold;">Aplicar</button>
             </div>
 
             <input type="text" id="nomeCliente" class="input-checkout" placeholder="Seu Nome">
             <input type="text" id="cepCliente" class="input-checkout" placeholder="Seu CEP" onblur="buscarCEP()" maxlength="8">
             <input type="text" id="ruaCliente" class="input-checkout readonly" placeholder="Endereço" readonly>
-            <input type="text" id="numCliente" class="input-checkout" placeholder="Nº e Complemento">
+            <input type="text" id="numCliente" class="input-checkout" placeholder="Número e Complemento">
             <input type="hidden" id="cidadeOculta">
 
-            <button style="width:100%; background:var(--btn-green); color:white; border:none; padding:18px; border-radius:10px; margin-top:10px; font-weight:bold; font-size:16px;" onclick="enviarZap()">FINALIZAR NO WHATSAPP</button>
-            <button onclick="toggleModal(false)" style="width:100%; background:none; border:none; color:#999; margin-top:15px;">Continuar comprando</button>
+            <button style="width:100%; background:var(--btn-green); color:white; border:none; padding:18px; border-radius:10px; margin-top:10px; font-weight:bold;" onclick="enviarZap()">FINALIZAR NO WHATSAPP</button>
+            <button onclick="toggleModal(false)" style="width:100%; background:none; border:none; color:#999; margin-top:10px;">Continuar Comprando</button>
         </div>
     </div>
 
@@ -140,10 +131,14 @@
             list.innerHTML = "";
             
             carrinho.forEach(item => {
-                total += item.preco * item.qtd;
+                let sub = item.preco * item.qtd;
+                total += sub;
                 list.innerHTML += `<div class="item-carrinho">
-                    <span>${item.nome}</span>
-                    <div style="display:flex; align-items:center; gap:8px;">
+                    <div style="max-width:55%">
+                        <b>R$ ${sub.toFixed(2).replace('.',',')}</b><br>
+                        <span>${item.nome}</span>
+                    </div>
+                    <div class="controles">
                         <button class="btn-qtd" onclick="alterarQtd(${item.id}, -1)">-</button>
                         <b>${item.qtd}</b>
                         <button class="btn-qtd" onclick="alterarQtd(${item.id}, 1)">+</button>
@@ -151,10 +146,8 @@
                 </div>`;
             });
 
-            // Lógica de Cupom Opcional
             const cupom = document.getElementById('cupomInput').value.toUpperCase();
             if(cupom === "MEC10") total *= 0.9;
-
             document.getElementById('total-val').innerText = total.toFixed(2).replace('.',',');
         }
 
@@ -174,11 +167,11 @@
             const n = document.getElementById('nomeCliente').value;
             const r = document.getElementById('ruaCliente').value;
             const num = document.getElementById('numCliente').value;
-            if(!n || !r || !num) return alert("Preencha os dados de entrega!");
+            if(!n || !r || !num || carrinho.length === 0) return alert("Preencha todos os dados!");
 
             let msg = `*🛒 NOVO PEDIDO*\n👤 *CLIENTE:* ${n}\n📍 *ENTREGA:* ${r}, ${num}\n🏙️ *CIDADE:* ${document.getElementById('cidadeOculta').value}\n---\n`;
-            carrinho.forEach(i => msg += `• ${i.qtd}x ${i.nome}\n`);
-            msg += `\n*TOTAL: R$ ${document.getElementById('total-val').innerText}*`;
+            carrinho.forEach(i => msg += `• ${i.qtd}x ${i.nome} (R$ ${(i.preco * i.qtd).toFixed(2)})\n`);
+            msg += `\n*TOTAL FINAL: R$ ${document.getElementById('total-val').innerText}*`;
             
             window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(msg)}`);
         }
@@ -197,7 +190,6 @@
 
         function toggleModal(s) { document.getElementById('modalCart').style.display = s ? 'block' : 'none'; }
         render();
-        setInterval(() => { /* Lógica do slider */ }, 4000);
     </script>
 </body>
 </html>
