@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEC SHOP | FINAL</title>
+    <title>MEC SHOP | INFRA PREMIUM</title>
     <style>
         :root {
             --btn-green: #004d40;
             --bg-light: #f1f3f6;
+            --accent: #000;
         }
 
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--bg-light); padding-bottom: 120px; overflow-x: hidden; }
@@ -23,7 +24,7 @@
         .search-box input { border: none; outline: none; width: 100%; margin-left: 10px; font-size: 14px; }
         .categorias-bar { display: flex; overflow-x: auto; padding: 15px; gap: 10px; scrollbar-width: none; }
         .categorias-bar::-webkit-scrollbar { display: none; }
-        .cat-item { background: #fff; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+        .cat-item { background: #fff; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .cat-item.active { background: #000; color: #fff; }
 
         /* VITRINE */
@@ -36,14 +37,16 @@
         /* FOOTER */
         .footer-cart { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; z-index: 1000; border-radius: 20px 20px 0 0; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); }
 
-        /* MODAL E CONTROLES DE QTD */
+        /* MODAL */
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 2000; }
-        .modal-body { position: absolute; bottom: 0; background: #fff; width: 100%; border-radius: 30px 30px 0 0; padding: 25px; box-sizing: border-box; max-height: 85vh; overflow-y: auto; }
-        .item-carrinho { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 14px; }
-        .controles-qtd { display: flex; align-items: center; gap: 10px; }
-        .btn-qtd { background: #000; color: #fff; border: none; width: 28px; height: 28px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .modal-body { position: absolute; bottom: 0; background: #fff; width: 100%; border-radius: 30px 30px 0 0; padding: 25px; box-sizing: border-box; max-height: 90vh; overflow-y: auto; }
         
-        .input-checkout { width: 100%; padding: 12px; margin-bottom: 8px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        .item-carrinho { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 14px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+        .controles-qtd { display: flex; align-items: center; gap: 10px; }
+        .btn-qtd { background: #000; color: #fff; border: none; width: 26px; height: 26px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        
+        .input-checkout { width: 100%; padding: 12px; margin-bottom: 8px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
+        .readonly-input { background: #f1f3f6; color: #666; }
         .coupon-box { display: flex; gap: 8px; margin-bottom: 15px; }
         .btn-cupom { background: #333; color: #fff; border: none; padding: 0 15px; border-radius: 8px; font-weight: bold; }
     </style>
@@ -59,7 +62,7 @@
     </div>
 
     <div class="search-area">
-        <div class="search-box">🔍 <input type="text" id="inputBusca" onkeyup="filtrarBusca()" placeholder="O que você procura?"></div>
+        <div class="search-box">🔍 <input type="text" id="inputBusca" onkeyup="filtrarBusca()" placeholder="O que você procura hoje?"></div>
     </div>
 
     <div class="categorias-bar">
@@ -78,19 +81,25 @@
 
     <div class="modal" id="modalCart">
         <div class="modal-body">
-            <h3 style="margin-top:0">Seu Pedido</h3>
+            <h3 style="margin-top:0">Finalizar Compra</h3>
+            
             <div id="cartItemsList" style="margin-bottom: 20px;"></div>
             
             <div class="coupon-box">
-                <input type="text" id="cupomInput" class="input-checkout" style="margin-bottom:0" placeholder="Cupom de Desconto">
+                <input type="text" id="cupomInput" class="input-checkout" style="margin-bottom:0" placeholder="Cupom (MEC10)">
                 <button class="btn-cupom" onclick="aplicarCupom()">Aplicar</button>
             </div>
 
-            <input type="text" id="nomeCliente" class="input-checkout" placeholder="Seu Nome">
-            <input type="text" id="endCliente" class="input-checkout" placeholder="Endereço de Entrega">
+            <input type="text" id="nomeCliente" class="input-checkout" placeholder="Nome Completo">
             
-            <button style="width:100%; background:var(--btn-green); color:white; border:none; padding:15px; border-radius:10px; margin-top:10px; font-weight:bold;" onclick="enviarZap()">FINALIZAR NO WHATSAPP</button>
-            <button onclick="toggleModal(false)" style="width:100%; background:none; border:none; color:#999; margin-top:10px;">Continuar Comprando</button>
+            <input type="text" id="cepCliente" class="input-checkout" placeholder="Digite seu CEP" onblur="buscarCEP()" maxlength="8">
+            <input type="text" id="ruaCliente" class="input-checkout readonly-input" placeholder="Rua / Logradouro" readonly>
+            <input type="text" id="bairroCliente" class="input-checkout readonly-input" placeholder="Bairro" readonly>
+            <input type="text" id="cidadeCliente" class="input-checkout readonly-input" placeholder="Cidade/UF" readonly>
+            <input type="text" id="numCliente" class="input-checkout" placeholder="Nº e Complemento (Apto, Bloco, etc)">
+            
+            <button style="width:100%; background:var(--btn-green); color:white; border:none; padding:18px; border-radius:10px; margin-top:10px; font-weight:bold;" onclick="enviarZap()">ENVIAR PEDIDO PELO WHATSAPP</button>
+            <button onclick="toggleModal(false)" style="width:100%; background:none; border:none; color:#999; margin-top:15px;">Voltar e Adicionar Mais</button>
         </div>
     </div>
 
@@ -138,7 +147,6 @@
             update();
         }
 
-        // FUNÇÃO PARA ALTERAR QUANTIDADE NO CARRINHO
         function alterarQtd(id, delta) {
             const item = carrinho.find(x => x.id === id);
             if (item) {
@@ -157,7 +165,7 @@
                 subtotal += item.preco * item.qtd;
                 list.innerHTML += `
                 <div class="item-carrinho">
-                    <span>${item.nome}</span>
+                    <span style="max-width: 60%;">${item.nome}</span>
                     <div class="controles-qtd">
                         <button class="btn-qtd" onclick="alterarQtd(${item.id}, -1)">-</button>
                         <b>${item.qtd}</b>
@@ -170,10 +178,29 @@
             document.getElementById('total-val').innerText = totalFinal.toFixed(2).replace('.',',');
         }
 
+        function buscarCEP() {
+            let cep = document.getElementById('cepCliente').value.replace(/\D/g, '');
+            if (cep.length === 8) {
+                fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                    .then(res => res.json())
+                    .then(d => {
+                        if(!d.erro) {
+                            document.getElementById('ruaCliente').value = d.logradouro;
+                            document.getElementById('bairroCliente').value = d.bairro;
+                            document.getElementById('cidadeCliente').value = d.localidade + " / " + d.uf;
+                            document.getElementById('numCliente').focus();
+                        }
+                    });
+            }
+        }
+
         function aplicarCupom() {
             if(document.getElementById('cupomInput').value.toUpperCase() === "MEC10") {
                 descontoGlobal = 0.10;
-                alert("Cupom Aplicado!");
+                alert("Cupom MEC10 aplicado com sucesso!");
+            } else {
+                descontoGlobal = 0;
+                alert("Cupom inválido!");
             }
             update();
         }
@@ -182,12 +209,27 @@
 
         function enviarZap() {
             const n = document.getElementById('nomeCliente').value;
-            const e = document.getElementById('endCliente').value;
-            if(!n || !e || carrinho.length === 0) return alert("Preencha os dados!");
+            const cep = document.getElementById('cepCliente').value;
+            const rua = document.getElementById('ruaCliente').value;
+            const num = document.getElementById('numCliente').value;
+            const cid = document.getElementById('cidadeCliente').value;
+
+            if(!n || !rua || !num || carrinho.length === 0) return alert("Preencha todos os dados de entrega!");
             
-            let msg = `*🛒 NOVO PEDIDO*\n👤 ${n}\n📍 ${e}\n---\n`;
-            carrinho.forEach(i => { msg += `• ${i.qtd}x ${i.nome}\n`; });
-            msg += `\n*TOTAL: R$ ${document.getElementById('total-val').innerText}*`;
+            let sub = 0;
+            let msg = `*🛒 NOVO PEDIDO - MEC SHOP*\n\n👤 *CLIENTE:* ${n}\n📍 *ENTREGA:* ${rua}, ${num}\n🏙️ *CIDADE:* ${cid} (CEP: ${cep})\n---\n`;
+            
+            carrinho.forEach(i => {
+                sub += (i.preco * i.qtd);
+                msg += `• ${i.qtd}x ${i.nome} - R$ ${(i.preco * i.qtd).toFixed(2)}\n`;
+            });
+
+            if(descontoGlobal > 0) {
+                msg += `\n💰 *Subtotal:* R$ ${sub.toFixed(2)}\n🏷️ *Desconto:* ${descontoGlobal*100}%\n✅ *TOTAL FINAL: R$ ${document.getElementById('total-val').innerText}*`;
+            } else {
+                msg += `\n✅ *TOTAL: R$ ${sub.toFixed(2).replace('.',',')}*`;
+            }
+
             window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(msg)}`);
         }
 
