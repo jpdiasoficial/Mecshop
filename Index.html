@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CENTRO DE INFORMAÇÕES | Notícias Econômicas</title>
+    <title>INFO NOTÍCIAS | Portal de Tecnologia</title>
     <style>
         :root { --news-blue: #003366; --news-red: #c4170c; --news-gray: #f4f7f6; --success-green: #28a745; }
         body { font-family: -apple-system, system-ui, sans-serif; margin: 0; padding-bottom: 100px; background: var(--news-gray); color: #1a1a1a; }
@@ -16,19 +16,22 @@
         @keyframes slide { 0% { transform: translateX(0); } 33% { transform: translateX(-100%); } 66% { transform: translateX(-200%); } 100% { transform: translateX(0); } }
 
         /* HEADER PROFISSIONAL */
-        .portal-header { background: #fff; padding: 20px 15px; border-bottom: 4px solid var(--news-blue); display: flex; align-items: center; justify-content: space-between; }
-        .portal-logo { color: var(--news-blue); font-size: 20px; font-weight: 900; letter-spacing: -1px; text-transform: uppercase; }
+        .portal-header { background: #fff; padding: 15px; border-bottom: 4px solid var(--news-blue); text-align: left; }
+        .portal-logo { color: var(--news-blue); font-size: 22px; font-weight: 900; letter-spacing: -1px; text-transform: uppercase; }
         .portal-logo span { color: var(--news-red); }
 
-        .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 25px 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 25px 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
         /* HIERARQUIA DE NOTÍCIA */
         .category { color: var(--news-red); font-size: 11px; font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 8px; }
         h1 { font-size: 26px; line-height: 1.2; margin: 0 0 15px 0; color: #000; font-weight: 800; letter-spacing: -0.5px; }
-        .meta { font-size: 12px; color: #666; margin-bottom: 25px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        .meta { font-size: 12px; color: #666; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+
+        /* IMAGEM DO PRODUTO */
+        .main-img { width: 100%; border-radius: 8px; margin-bottom: 15px; display: block; }
 
         /* BOX DE OFERTA DISCRETO (CONFIÁVEL) */
-        .verified-box { background: #f0f4f8; border-left: 5px solid var(--news-blue); padding: 20px; margin: 30px 0; border-radius: 4px; position: relative; }
+        .verified-box { background: #f0f4f8; border-left: 5px solid var(--news-blue); padding: 20px; margin: 30px 0; border-radius: 4px; position: relative; text-align: center; }
         .verified-badge { background: var(--news-blue); color: #fff; font-size: 9px; padding: 3px 8px; border-radius: 2px; font-weight: bold; position: absolute; top: -10px; left: 15px; }
         
         .price-label { font-size: 13px; color: #444; font-weight: bold; }
@@ -55,7 +58,7 @@
 
     <div class="breaking-news">
         <div class="slider-track">
-            <div class="slide">📡 PLANTÃO: DISTRIBUIDORA LIBERA LOTE LOGÍSTICO PARA PESSOA FÍSICA</div>
+            <div class="slide">📡 PLANTÃO: DISTRIBUIDORA LIBERA LOTE LOGÍSTICO PARA CONSUMIDOR FINAL</div>
             <div class="slide">✅ VERIFICADO: PRODUTOS NOVOS COM GARANTIA OFICIAL DE 12 MESES</div>
             <div class="slide">🕒 URGENTE: OPORTUNIDADE VÁLIDA ENQUANTO DURAR O ESTOQUE DO LOTE 402</div>
         </div>
@@ -70,16 +73,18 @@
         <h1>Lotes de smartphones com avaria na embalagem são liberados com 60% de desconto</h1>
         <div class="meta">Publicado hoje às 14:32 | Por Redação InfoNotícias</div>
 
-        <p style="font-size: 17px; line-height: 1.6; color: #444;">Um incidente logístico em um centro de distribuição resultou na liberação de um lote exclusivo de <b>Motorola Moto G06</b>. Os aparelhos estão intactos, porém as embalagens sofreram danos estéticos, impedindo a venda em grandes varejistas.</p>
+        <p style="font-size: 17px; line-height: 1.6; color: #444;">Um incidente logístico em um centro de distribuição resultou na liberação de um lote exclusivo de <b>Motorola Moto G06</b>. Os aparelhos estão intactos, porém as embalagens sofreram danos estéticos leves.</p>
+
+        <img src="https://m.media-amazon.com/images/I/6196TfS6A+L._AC_SL1200_.jpg" class="main-img" alt="Motorola Moto G06">
 
         <div class="verified-box">
             <span class="verified-badge">OFERTA VERIFICADA</span>
             <span class="price-label">Valor Promocional do Lote:</span>
             <span class="price-value">R$ 594,90</span>
-            <a href="SEU-LINK-AQUI" class="btn-news">CONSULTAR DISPONIBILIDADE →</a>
+            <a href="SEU-LINK-AQUI" class="btn-news">VERIFICAR ESTOQUE →</a>
         </div>
 
-        <p style="font-size: 17px; line-height: 1.6; color: #444;">O canal oficial de escoamento permite a compra de até duas unidades por CPF. A garantia de fábrica permanece integral.</p>
+        <p style="font-size: 17px; line-height: 1.6; color: #444;">O canal oficial de escoamento permite a compra de até duas unidades por CPF para evitar revendas não autorizadas.</p>
 
         <div class="comments-section">
             <div class="comment-title">Comentários (124)</div>
@@ -87,7 +92,14 @@
                 <img src="https://i.pravatar.cc/100?u=12" class="user-img">
                 <div>
                     <span class="c-name">Amanda Silva</span>
-                    <p class="c-text">O meu chegou em 3 dias aqui em Curitiba! A caixa realmente tinha um amassado, mas o celular veio lacradinho. Valeu cada centavo! 😍</p>
+                    <p class="c-text">O meu chegou em 3 dias! A caixa realmente tinha um amassado, mas o celular veio lacradinho e zerado. Valeu muito a pena! 😍</p>
+                </div>
+            </div>
+            <div class="comment-item">
+                <img src="https://i.pravatar.cc/100?u=15" class="user-img">
+                <div>
+                    <span class="c-name">Marcos Oliveira</span>
+                    <p class="c-text">Consegui pegar dois para os meus filhos. Site confiável, aprovado!</p>
                 </div>
             </div>
         </div>
