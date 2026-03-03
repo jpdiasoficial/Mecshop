@@ -9,117 +9,186 @@
             --neon-blue: #00f2ff;
             --btn-green: #2ecc71;
             --discount-red: #ff4757;
-            --bg-gray: #f0f2f5;
+            --bg-light: #f8f9fa;
         }
 
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--bg-gray); padding-bottom: 120px; overflow-x: hidden; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--bg-light); padding-bottom: 100px; overflow-x: hidden; }
 
-        /* SLIDER DE TOPO (Substituindo o nome) */
-        .slider-container { width: 100%; height: 200px; overflow: hidden; position: relative; background: #000; border-bottom: 3px solid var(--neon-blue); }
-        .slider-track { display: flex; width: 300%; height: 100%; transition: transform 0.6s ease-in-out; }
-        .slider-track img { width: 100vw; height: 100%; object-fit: cover; }
+        /* SLIDER ESTILO PROFISSIONAL (Igual à imagem) */
+        .slider-container { width: 100%; height: 250px; overflow: hidden; position: relative; background: #000; }
+        .slider-track { display: flex; width: 300%; height: 100%; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .slide { width: 100vw; height: 100%; position: relative; flex-shrink: 0; }
+        .slide img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.7); }
+        
+        /* TEXTO SOBRE O BANNER */
+        .slide-text { position: absolute; top: 50%; left: 20px; transform: translateY(-50%); color: white; z-index: 5; }
+        .slide-text h2 { margin: 0; font-size: 26px; text-transform: uppercase; font-weight: 900; line-height: 1; }
+        .slide-text h2 span { color: var(--neon-blue); display: block; font-size: 22px; }
+        .slide-btn { margin-top: 15px; background: var(--neon-blue); color: #000; padding: 8px 20px; border-radius: 25px; font-size: 10px; font-weight: 800; border: none; text-transform: uppercase; cursor: pointer; }
 
-        /* GRID PRODUTOS */
-        .loja-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 15px; }
-        .produto-caixa { background: #fff; border-radius: 20px; padding: 12px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.08); position: relative; }
-        .off-badge { position: absolute; top: 10px; left: 10px; background: var(--discount-red); color: #fff; font-size: 10px; font-weight: bold; padding: 4px 8px; border-radius: 6px; z-index: 2; }
-        .img-produto { width: 100%; border-radius: 15px; margin-bottom: 10px; }
-        .nome { font-size: 13px; font-weight: 700; color: #333; height: 35px; overflow: hidden; display: block; }
-        .preco-de { color: #999; text-decoration: line-through; font-size: 11px; display: block; margin-top: 5px; }
-        .preco-por { color: #000; font-size: 18px; font-weight: 900; display: block; margin-bottom: 8px; }
-        .btn-add { background: #000; color: var(--neon-blue); border: 2px solid var(--neon-blue); padding: 10px; border-radius: 12px; cursor: pointer; width: 100%; font-weight: 800; font-size: 11px; }
+        /* BARRA DE BUSCA (Abaixo do Banner) */
+        .search-container { padding: 0 20px; margin-top: -25px; position: relative; z-index: 100; }
+        .search-box { background: #fff; display: flex; align-items: center; padding: 12px 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .search-box input { border: none; outline: none; width: 100%; margin-left: 10px; font-size: 14px; color: #666; }
 
-        /* BARRA FIXA */
-        .footer-cart { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); z-index: 999; border-radius: 25px 25px 0 0; }
+        /* GRID DE PRODUTOS */
+        .loja-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 20px; }
+        .produto-card { background: #fff; border-radius: 15px; padding: 10px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.03); position: relative; }
+        .off-badge { position: absolute; top: 10px; left: 10px; background: var(--discount-red); color: #fff; font-size: 10px; font-weight: bold; padding: 4px 8px; border-radius: 5px; z-index: 2; }
+        .img-produto { width: 100%; border-radius: 12px; margin-bottom: 10px; }
+        .nome-produto { font-size: 13px; font-weight: 600; color: #333; text-align: left; height: 35px; overflow: hidden; display: block; }
+        .preco { font-size: 16px; font-weight: 800; color: #000; display: block; text-align: left; margin-top: 5px; }
+        .btn-add { background: #000; color: #fff; border: none; width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 11px; margin-top: 10px; cursor: pointer; }
+
+        /* FOOTER CARRINHO */
+        .footer-cart { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 15px 25px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); z-index: 1000; }
+        .btn-ver-pedido { background: #004d40; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: bold; cursor: pointer; }
 
         /* MODAL CARRINHO */
-        .modal-cart { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 2000; }
-        .modal-content { position: absolute; bottom: 0; background: #fff; width: 100%; max-height: 90%; border-radius: 30px 30px 0 0; padding: 25px; box-sizing: border-box; overflow-y: auto; }
-        .cart-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #eee; }
-        .qtd-controles { display: flex; align-items: center; gap: 10px; }
-        .btn-q { background: #eee; border: none; width: 30px; height: 30px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        
-        .checkout-form { margin-top: 20px; border-top: 2px solid #eee; padding-top: 15px; }
-        .input-group { margin-bottom: 10px; }
-        .input-group input, .input-group select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; outline: none; }
-        .btn-finalizar { background: var(--btn-green); color: #fff; border: none; width: 100%; padding: 18px; border-radius: 15px; font-weight: 900; font-size: 16px; margin-top: 10px; cursor: pointer; width: 100%; }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 2000; }
+        .modal-body { position: absolute; bottom: 0; background: #fff; width: 100%; border-radius: 25px 25px 0 0; padding: 30px 20px; box-sizing: border-box; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .controles { display: flex; align-items: center; gap: 12px; }
+        .btn-q { background: #000; color: #fff; border: none; width: 28px; height: 28px; border-radius: 6px; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div class="slider-container">
         <div class="slider-track" id="slider">
-            <img src="banner1.jpg" alt="Promo 1">
-            <img src="banner2.jpg" alt="Promo 2">
-            <img src="banner3.jpg" alt="Promo 3">
+            <div class="slide">
+                <div class="slide-text">
+                    <h2>LOJA MEC SHOP <span>ACHADOS!</span></h2>
+                    <button class="slide-btn">Ofertas Imperdíveis!</button>
+                </div>
+                <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=800">
+            </div>
+            <div class="slide">
+                <div class="slide-text">
+                    <h2>LOJA MEC SHOP <span>TECH!</span></h2>
+                    <button class="slide-btn">Ver Novidades</button>
+                </div>
+                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=800">
+            </div>
+            <div class="slide">
+                <div class="slide-text">
+                    <h2>LOJA MEC SHOP <span>PROMO!</span></h2>
+                    <button class="slide-btn">60% de Desconto</button>
+                </div>
+                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=800">
+            </div>
+        </div>
+    </div>
+
+    <div class="search-container">
+        <div class="search-box">
+            <span>🔍</span>
+            <input type="text" placeholder="O que você procura?">
         </div>
     </div>
 
     <div id="vitrine" class="loja-grid"></div>
 
-    <div class="footer-cart" onclick="toggleModal(true)">
-        <div><b>Total: R$ <span id="total-val">0,00</span></b></div>
-        <button class="btn-add" style="width:auto; padding: 12px 20px;">VER CARRINHO</button>
+    <div class="footer-cart">
+        <div>Total: <br><b>R$ <span id="total-val">0,00</span></b></div>
+        <button class="btn-ver-pedido" onclick="toggleModal(true)">VER PEDIDO</button>
     </div>
 
-    <div class="modal-cart" id="modalCart">
-        <div class="modal-content">
-            <h2 style="margin-top:0">🛒 Seu Carrinho</h2>
+    <div class="modal" id="modalCart">
+        <div class="modal-body">
+            <h3 style="margin-top:0">Meu Carrinho</h3>
             <div id="cartItemsList"></div>
-
-            <div class="checkout-form">
-                <h3>📍 Dados de Entrega</h3>
-                <div class="input-group"><input type="text" id="nomeCliente" placeholder="Nome Completo"></div>
-                <div class="input-group"><input type="text" id="endCliente" placeholder="Endereço Completo"></div>
-                <div class="input-group">
-                    <select id="pagamento">
-                        <option value="Pix">Pix (Desconto Especial)</option>
-                        <option value="Cartão">Cartão de Crédito</option>
-                    </select>
-                </div>
-                <button class="btn-finalizar" onclick="enviarWhatsApp()">FINALIZAR PEDIDO</button>
-                <button onclick="toggleModal(false)" style="width:100%; background:none; border:none; color:#999; margin-top:15px; font-weight:bold;">Voltar</button>
-            </div>
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+            <input type="text" id="nomeCliente" placeholder="Seu Nome Completo" style="width:100%; padding:15px; margin-bottom:15px; border:1px solid #ddd; border-radius:10px; box-sizing:border-box;">
+            <button class="btn-ver-pedido" style="width:100%; padding:18px;" onclick="enviarZap()">FINALIZAR NO WHATSAPP</button>
+            <button onclick="toggleModal(false)" style="width:100%; background:none; border:none; color:#999; margin-top:15px; font-weight:bold;">Continuar Comprando</button>
         </div>
     </div>
 
     <script>
         const produtos = [
-            { id: 1, off: "45% OFF", nome: "Tênis Performance Tech", precoDe: 349.90, precoPor: 187.00, img: "p1.jpg" },
-            { id: 2, off: "60% OFF", nome: "Fone Bluetooth Pro", precoDe: 199.00, precoPor: 79.90, img: "p2.jpg" },
-            { id: 3, off: "30% OFF", nome: "Relógio Smart V8", precoDe: 350.00, precoPor: 245.00, img: "p3.jpg" }
+            { id: 1, off: "45% OFF", nome: "Tênis Performance Tech", preco: 187.00, img: "https://via.placeholder.com/150/000000/FFFFFF?text=TENIS" },
+            { id: 2, off: "60% OFF", nome: "Fone Bluetooth Pro", preco: 79.90, img: "https://via.placeholder.com/150/000000/FFFFFF?text=FONE" },
+            { id: 3, off: "30% OFF", nome: "Relógio Smart V8", preco: 245.00, img: "https://via.placeholder.com/150/000000/FFFFFF?text=WATCH" },
+            { id: 4, off: "20% OFF", nome: "Carregador Turbo 20W", preco: 59.90, img: "https://via.placeholder.com/150/000000/FFFFFF?text=CABO" }
         ];
 
         let carrinho = [];
 
-        // Lógica do Slide Automático
-        let index = 0;
+        // Lógica do Slider
+        let slideIndex = 0;
         setInterval(() => {
-            index = (index + 1) % 3;
-            document.getElementById('slider').style.transform = `translateX(-${index * 100}vw)`;
-        }, 3000);
+            slideIndex = (slideIndex + 1) % 3;
+            document.getElementById('slider').style.transform = `translateX(-${slideIndex * 100}vw)`;
+        }, 4000);
 
-        function render() {
+        function renderLoja() {
             const v = document.getElementById('vitrine');
             v.innerHTML = "";
             produtos.forEach(p => {
                 v.innerHTML += `
-                <div class="produto-caixa">
+                <div class="produto-card">
                     <div class="off-badge">${p.off}</div>
-                    <img src="${p.img}" class="img-produto" onerror="this.src='https://via.placeholder.com/150'">
-                    <span class="nome">${p.nome}</span>
-                    <span class="preco-de">R$ ${p.precoDe.toFixed(2).replace('.',',')}</span>
-                    <span class="preco-por">R$ ${p.precoPor.toFixed(2).replace('.',',')}</span>
-                    <button class="btn-add" onclick="addAoCarrinho(${p.id})">ADICIONAR</button>
+                    <img src="${p.img}" class="img-produto">
+                    <span class="nome-produto">${p.nome}</span>
+                    <span class="preco">R$ ${p.preco.toFixed(2).replace('.',',')}</span>
+                    <button class="btn-add" onclick="addToCart(${p.id})">ADICIONAR</button>
                 </div>`;
             });
         }
 
-        function addAoCarrinho(id) {
+        function addToCart(id) {
             const p = produtos.find(x => x.id === id);
             const item = carrinho.find(x => x.id === id);
             if(item) { item.qtd++; } else { carrinho.push({...p, qtd: 1}); }
-            atualizarUI();
+            updateCart();
+        }
+
+        function changeQtd(id, delta) {
+            const item = carrinho.find(x => x.id === id);
+            item.qtd += delta;
+            if(item.qtd <= 0) { carrinho = carrinho.filter(x => x.id !== id); }
+            updateCart();
+        }
+
+        function updateCart() {
+            let total = 0;
+            const list = document.getElementById('cartItemsList');
+            list.innerHTML = "";
+            carrinho.forEach(item => {
+                total += item.preco * item.qtd;
+                list.innerHTML += `
+                <div class="cart-item">
+                    <span style="font-size:14px; font-weight:600;">${item.nome}</span>
+                    <div class="controles">
+                        <button class="btn-q" onclick="changeQtd(${item.id}, -1)">-</button>
+                        <span style="font-weight:bold">${item.qtd}</span>
+                        <button class="btn-q" onclick="changeQtd(${item.id}, 1)">+</button>
+                    </div>
+                </div>`;
+            });
+            document.getElementById('total-val').innerText = total.toFixed(2).replace('.', ',');
+        }
+
+        function toggleModal(show) { document.getElementById('modalCart').style.display = show ? 'block' : 'none'; }
+
+        function enviarZap() {
+            const nome = document.getElementById('nomeCliente').value;
+            if(!nome || carrinho.length === 0) return alert("Adicione produtos e digite seu nome!");
+            
+            let texto = `*🛒 NOVO PEDIDO - MEC SHOP*\n👤 *CLIENTE:* ${nome}\n---\n`;
+            carrinho.forEach(item => {
+                texto += `• ${item.qtd}x ${item.nome} (R$ ${item.preco.toFixed(2)})\n`;
+            });
+            texto += `\n💰 *TOTAL: R$ ${document.getElementById('total-val').innerText}*`;
+            
+            window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(texto)}`);
+        }
+
+        renderLoja();
+    </script>
+</body>
+</html>
         }
 
         function mudarQtd(id, delta) {
