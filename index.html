@@ -3,74 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Tech | Notícia Urgente</title>
+    <title>BABADOS TECH | A fofoca em dia!</title>
     <style>
-        :root { --blue: #003366; --red: #c4170c; --green: #25d366; }
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; padding-bottom: 100px; background: #f4f4f4; color: #333; }
+        :root { --pink: #ff0055; --yellow: #ffeb3b; --black: #1a1a1a; }
+        body { font-family: 'Arial Black', sans-serif; margin: 0; padding-bottom: 90px; background: #fff; color: var(--black); }
         
-        /* HEADER */
-        .header { background: var(--blue); color: white; padding: 15px; text-align: center; font-weight: bold; text-transform: uppercase; }
+        /* HEADER ESTILO CHOQUEI */
+        .header { background: var(--yellow); color: black; padding: 15px; text-align: center; font-size: 24px; border-bottom: 5px solid var(--pink); }
         
-        .container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .container { max-width: 500px; margin: 0 auto; padding: 15px; }
         
-        .tag { color: var(--red); font-weight: bold; font-size: 12px; }
-        h1 { font-size: 26px; line-height: 1.2; margin: 10px 0; }
+        .badge { background: var(--pink); color: white; padding: 4px 10px; font-size: 12px; border-radius: 20px; display: inline-block; margin-bottom: 10px; }
         
-        .author { font-size: 12px; color: #666; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 20px; }
+        /* TÍTULO CHAMATIVO */
+        h1 { font-size: 30px; line-height: 1.1; margin: 5px 0 15px 0; text-transform: uppercase; font-style: italic; }
+        
+        .social-bar { display: flex; gap: 10px; margin-bottom: 15px; opacity: 0.7; }
+        
+        .main-img { width: 100%; border-radius: 15px; border: 3px solid var(--yellow); }
 
-        /* ANÚNCIO NO MEIO DA NOTÍCIA */
-        .ad-middle { background: #fff9f9; border: 2px dashed #ffbaba; padding: 15px; border-radius: 8px; text-align: center; margin: 25px 0; }
-        .ad-middle img { width: 100%; max-width: 250px; border-radius: 5px; }
-        .price { font-size: 24px; color: #2d2d2d; font-weight: bold; margin: 10px 0; }
-        .price span { color: var(--green); }
+        /* ANÚNCIO DISFARÇADO DE "BABADOS" */
+        .fofoca-ad { background: #fff0f5; border: 2px solid var(--pink); border-radius: 15px; padding: 15px; text-align: center; margin: 25px 0; }
+        .fofoca-ad h2 { color: var(--pink); font-size: 20px; margin-top: 0; }
+        .price-tag { font-size: 32px; color: #25d366; font-weight: 900; display: block; margin: 10px 0; }
         
-        .btn-buy { background: var(--green); color: white; text-decoration: none; padding: 12px 25px; border-radius: 5px; font-weight: bold; display: inline-block; margin-top: 10px; }
+        .btn-fofoca { background: var(--pink); color: white; text-decoration: none; padding: 15px; border-radius: 50px; font-weight: bold; display: block; font-size: 18px; box-shadow: 0 4px 10px rgba(255, 0, 85, 0.3); }
 
-        /* ANÚNCIO FIXO NO RODAPÉ (FOOTER AD) */
-        .footer-ad { 
+        /* RODAPÉ FLUTUANTE ESTILO "ÚLTIMA HORA" */
+        .sticky-footer { 
             position: fixed; bottom: 0; left: 0; width: 100%; 
-            background: rgba(0, 51, 102, 0.95); color: white; 
-            padding: 15px; display: flex; align-items: center; 
-            justify-content: space-around; box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
-            z-index: 999;
+            background: var(--black); color: white; padding: 10px;
+            display: flex; align-items: center; justify-content: space-between;
+            z-index: 1000;
         }
-        .footer-ad img { width: 50px; height: 50px; border-radius: 5px; border: 1px solid white; }
-        .footer-text { font-size: 14px; font-weight: bold; }
-        .btn-footer { background: var(--green); color: white; text-decoration: none; padding: 8px 15px; border-radius: 4px; font-weight: bold; font-size: 13px; }
+        .footer-info { font-size: 14px; padding-left: 10px; }
+        .footer-info span { color: var(--yellow); font-weight: bold; }
+        .btn-footer { background: var(--yellow); color: black; text-decoration: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; margin-right: 10px; }
 
-        p { line-height: 1.6; font-size: 17px; }
+        p { font-family: 'Helvetica', sans-serif; font-size: 18px; line-height: 1.5; font-weight: 500; }
     </style>
 </head>
 <body>
 
-    <div class="header">PORTAL INFO-NOTÍCIAS</div>
+    <div class="header">🔥 BABADOS TECH</div>
 
     <div class="container">
-        <span class="tag">BRASIL > ECONOMIA</span>
-        <h1>Lote de Motorola com embalagem avariada vaza com 60% de desconto</h1>
-        <div class="author">Por Equipe de Redação • Atualizado hoje</div>
+        <span class="badge">BABADO DO DIA</span>
+        <h1>URGENTE: Vazou o site secreto onde famosos estão comprando Motorola por preço de custo!</h1>
+        
+        <div class="social-bar">❤️ 2.4k 💬 582 ✈️ 1.1k</div>
 
-        <p>Um lote logístico foi liberado hoje para venda direta ao consumidor após um incidente no centro de distribuição que danificou as caixas dos aparelhos.</p>
+        <img src="https://images.unsplash.com/photo-1612441798922-048762ba33b5?w=600" class="main-img">
+        <p style="font-size: 14px; color: #666; font-style: italic;">Internautas ficaram chocados com a queda no preço da linha Moto G...</p>
 
-        <div class="ad-middle">
-            <span style="font-size: 12px; color: #999; display: block; margin-bottom: 5px;">ANÚNCIO</span>
-            <img src="https://images.unsplash.com/photo-1612441798922-048762ba33b5?w=400" alt="Smartphone">
-            <div class="price">Motorola Moto G06<br><span>R$ 594,90</span></div>
-            <a href="SEU-LINK-AQUI" class="btn-buy">APROVEITAR OFERTA →</a>
+        <p>Gente, o babado é real! O link de um <b>Outlet Logístico</b> caiu nos grupos de fofoca e todo mundo está correndo. São celulares novos que as lojas não podem vender porque a caixa deu uma amassadinha.</p>
+
+        <div class="fofoca-ad">
+            <h2>😱 É SÉRIO ISSO?</h2>
+            <p>O Moto G06 que custa mais de R$ 1.200 está saindo por:</p>
+            <span class="price-tag">R$ 594,90</span>
+            <a href="SEU-LINK-AQUI" class="btn-fofoca">QUERO O MEU AGORA! 🚀</a>
         </div>
 
-        <p>Apesar da caixa externa estar amassada, os smartphones estão intactos, lacrados e possuem garantia total de 12 meses pelo fabricante.</p>
-        
-        <p>Devido ao baixo preço, as unidades estão se esgotando rapidamente. O limite é de duas unidades por CPF para evitar revendas.</p>
+        <p>A gente conferiu e é real, mas o estoque dura poucos minutos quando esses links vazam. Se você quer trocar de celular sem gastar quase nada, a hora é essa!</p>
     </div>
 
-    <div class="footer-ad">
-        <img src="https://images.unsplash.com/photo-1612441798922-048762ba33b5?w=100" alt="Moto">
-        <div class="footer-text">
-            Moto G06 com 60% OFF<br>
-            <span style="color: #25d366;">R$ 594,90 no PIX</span>
+    <div class="sticky-footer">
+        <div class="footer-info">
+            MOTO G06: <span>R$ 594,90</span><br>
+            <small>Restam apenas 07 unidades!</small>
         </div>
-        <a href="SEU-LINK-AQUI" class="btn-footer">COMPRAR</a>
+        <a href="SEU-LINK-AQUI" class="btn-footer">APROVEITAR</a>
     </div>
 
 </body>
