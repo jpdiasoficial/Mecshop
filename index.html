@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-pt">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEC SHOP | WHATSAPP DIRETO</title>
+    <title>MEC SHOP | OFERTAS</title>
     <style>
         :root {
             --neon-blue: #00f2ff;
@@ -12,76 +12,92 @@
             --bg-gray: #f0f2f5;
         }
 
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--bg-gray); padding-bottom: 120px; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--bg-gray); padding-bottom: 120px; overflow-x: hidden; }
 
-        /* HEADER */
-        .header { background: #000; color: white; padding: 20px; text-align: center; border-bottom: 3px solid var(--neon-blue); }
+        /* SLIDER DE TOPO (Substituindo o nome) */
+        .slider-container { width: 100%; height: 200px; overflow: hidden; position: relative; background: #000; border-bottom: 3px solid var(--neon-blue); }
+        .slider-track { display: flex; width: 300%; height: 100%; transition: transform 0.6s ease-in-out; }
+        .slider-track img { width: 100vw; height: 100%; object-fit: cover; }
 
         /* GRID PRODUTOS */
         .loja-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 15px; }
         .produto-caixa { background: #fff; border-radius: 20px; padding: 12px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.08); position: relative; }
+        .off-badge { position: absolute; top: 10px; left: 10px; background: var(--discount-red); color: #fff; font-size: 10px; font-weight: bold; padding: 4px 8px; border-radius: 6px; z-index: 2; }
         .img-produto { width: 100%; border-radius: 15px; margin-bottom: 10px; }
-        .nome { font-size: 13px; font-weight: 700; color: #333; height: 35px; display: block; overflow: hidden; }
-        .preco-por { color: #000; font-size: 18px; font-weight: 900; display: block; margin: 8px 0; }
-        .btn-add { background: #000; color: var(--neon-blue); border: 2px solid var(--neon-blue); padding: 10px; border-radius: 12px; cursor: pointer; width: 100%; font-weight: 800; }
+        .nome { font-size: 13px; font-weight: 700; color: #333; height: 35px; overflow: hidden; display: block; }
+        .preco-de { color: #999; text-decoration: line-through; font-size: 11px; display: block; margin-top: 5px; }
+        .preco-por { color: #000; font-size: 18px; font-weight: 900; display: block; margin-bottom: 8px; }
+        .btn-add { background: #000; color: var(--neon-blue); border: 2px solid var(--neon-blue); padding: 10px; border-radius: 12px; cursor: pointer; width: 100%; font-weight: 800; font-size: 11px; }
 
-        /* FOOTER BAR */
+        /* BARRA FIXA */
         .footer-cart { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); z-index: 999; border-radius: 25px 25px 0 0; }
-        
-        /* MODAL */
+
+        /* MODAL CARRINHO */
         .modal-cart { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 2000; }
         .modal-content { position: absolute; bottom: 0; background: #fff; width: 100%; max-height: 90%; border-radius: 30px 30px 0 0; padding: 25px; box-sizing: border-box; overflow-y: auto; }
+        .cart-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #eee; }
+        .qtd-controles { display: flex; align-items: center; gap: 10px; }
+        .btn-q { background: #eee; border: none; width: 30px; height: 30px; border-radius: 8px; font-weight: bold; cursor: pointer; }
         
-        /* FORMULÁRIO */
-        .checkout-form { margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; }
+        .checkout-form { margin-top: 20px; border-top: 2px solid #eee; padding-top: 15px; }
         .input-group { margin-bottom: 10px; }
-        .input-group input, .input-group select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
-        
-        .btn-finalizar { background: var(--btn-green); color: #fff; border: none; width: 100%; padding: 18px; border-radius: 15px; font-weight: 900; font-size: 16px; margin-top: 10px; cursor: pointer; }
+        .input-group input, .input-group select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; outline: none; }
+        .btn-finalizar { background: var(--btn-green); color: #fff; border: none; width: 100%; padding: 18px; border-radius: 15px; font-weight: 900; font-size: 16px; margin-top: 10px; cursor: pointer; width: 100%; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>MEC SHOP</h1>
+    <div class="slider-container">
+        <div class="slider-track" id="slider">
+            <img src="banner1.jpg" alt="Promo 1">
+            <img src="banner2.jpg" alt="Promo 2">
+            <img src="banner3.jpg" alt="Promo 3">
+        </div>
     </div>
 
     <div id="vitrine" class="loja-grid"></div>
 
     <div class="footer-cart" onclick="toggleModal(true)">
         <div><b>Total: R$ <span id="total-val">0,00</span></b></div>
-        <button class="btn-add" style="width:auto; padding: 10px 20px;">VER PEDIDO</button>
+        <button class="btn-add" style="width:auto; padding: 12px 20px;">VER CARRINHO</button>
     </div>
 
     <div class="modal-cart" id="modalCart">
         <div class="modal-content">
-            <h2 style="margin-top:0">🛒 Finalizar no WhatsApp</h2>
+            <h2 style="margin-top:0">🛒 Seu Carrinho</h2>
             <div id="cartItemsList"></div>
 
             <div class="checkout-form">
-                <div class="input-group"><input type="text" id="nomeCliente" placeholder="Seu Nome"></div>
-                <div class="input-group"><input type="text" id="endCliente" placeholder="Endereço de Entrega"></div>
+                <h3>📍 Dados de Entrega</h3>
+                <div class="input-group"><input type="text" id="nomeCliente" placeholder="Nome Completo"></div>
+                <div class="input-group"><input type="text" id="endCliente" placeholder="Endereço Completo"></div>
                 <div class="input-group">
                     <select id="pagamento">
-                        <option value="Pix">Pix</option>
-                        <option value="Cartão de Crédito">Cartão de Crédito</option>
-                        <option value="Dinheiro">Dinheiro</option>
+                        <option value="Pix">Pix (Desconto Especial)</option>
+                        <option value="Cartão">Cartão de Crédito</option>
                     </select>
                 </div>
-                <button class="btn-finalizar" onclick="enviarWhatsApp()">ENVIAR PEDIDO AGORA</button>
-                <button onclick="toggleModal(false)" style="width:100%; background:none; border:none; color:#999; margin-top:10px;">Voltar à Loja</button>
+                <button class="btn-finalizar" onclick="enviarWhatsApp()">FINALIZAR PEDIDO</button>
+                <button onclick="toggleModal(false)" style="width:100%; background:none; border:none; color:#999; margin-top:15px; font-weight:bold;">Voltar</button>
             </div>
         </div>
     </div>
 
     <script>
         const produtos = [
-            { id: 1, nome: "Ténis Performance Tech", preco: 187.00, img: "https://via.placeholder.com/150" },
-            { id: 2, nome: "Fone Bluetooth Pro", preco: 79.90, img: "https://via.placeholder.com/150" },
-            { id: 3, nome: "Relógio Smart V8", preco: 245.00, img: "https://via.placeholder.com/150" }
+            { id: 1, off: "45% OFF", nome: "Tênis Performance Tech", precoDe: 349.90, precoPor: 187.00, img: "p1.jpg" },
+            { id: 2, off: "60% OFF", nome: "Fone Bluetooth Pro", precoDe: 199.00, precoPor: 79.90, img: "p2.jpg" },
+            { id: 3, off: "30% OFF", nome: "Relógio Smart V8", precoDe: 350.00, precoPor: 245.00, img: "p3.jpg" }
         ];
 
         let carrinho = [];
+
+        // Lógica do Slide Automático
+        let index = 0;
+        setInterval(() => {
+            index = (index + 1) % 3;
+            document.getElementById('slider').style.transform = `translateX(-${index * 100}vw)`;
+        }, 3000);
 
         function render() {
             const v = document.getElementById('vitrine');
@@ -89,9 +105,11 @@
             produtos.forEach(p => {
                 v.innerHTML += `
                 <div class="produto-caixa">
-                    <img src="${p.img}" class="img-produto">
+                    <div class="off-badge">${p.off}</div>
+                    <img src="${p.img}" class="img-produto" onerror="this.src='https://via.placeholder.com/150'">
                     <span class="nome">${p.nome}</span>
-                    <span class="preco-por">R$ ${p.preco.toFixed(2)}</span>
+                    <span class="preco-de">R$ ${p.precoDe.toFixed(2).replace('.',',')}</span>
+                    <span class="preco-por">R$ ${p.precoPor.toFixed(2).replace('.',',')}</span>
                     <button class="btn-add" onclick="addAoCarrinho(${p.id})">ADICIONAR</button>
                 </div>`;
             });
@@ -104,46 +122,49 @@
             atualizarUI();
         }
 
+        function mudarQtd(id, delta) {
+            const item = carrinho.find(x => x.id === id);
+            item.qtd += delta;
+            if(item.qtd <= 0) { carrinho = carrinho.filter(x => x.id !== id); }
+            atualizarUI();
+        }
+
         function atualizarUI() {
             let total = 0;
             const list = document.getElementById('cartItemsList');
             list.innerHTML = "";
             carrinho.forEach(item => {
-                total += item.preco * item.qtd;
-                list.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px;">
-                    <span>${item.qtd}x ${item.nome}</span>
-                    <span>R$ ${(item.preco * item.qtd).toFixed(2)}</span>
+                total += item.precoPor * item.qtd;
+                list.innerHTML += `
+                <div class="cart-item">
+                    <span>${item.nome}</span>
+                    <div class="qtd-controles">
+                        <button class="btn-q" onclick="mudarQtd(${item.id}, -1)">-</button>
+                        <span>${item.qtd}</span>
+                        <button class="btn-q" onclick="mudarQtd(${item.id}, 1)">+</button>
+                    </div>
                 </div>`;
             });
-            document.getElementById('total-val').innerText = total.toFixed(2);
+            document.getElementById('total-val').innerText = total.toFixed(2).replace('.', ',');
         }
 
         function toggleModal(s) { document.getElementById('modalCart').style.display = s ? 'block' : 'none'; }
 
-        // ESTE É O COMANDO QUE ESTÁ NO TEU BLOCO DE NOTAS 1
         function enviarWhatsApp() {
             const nome = document.getElementById('nomeCliente').value;
             const endereco = document.getElementById('endCliente').value;
-            const pag = document.getElementById('pagamento').value;
-
-            if(!nome || !endereco || carrinho.length === 0) return alert("Por favor, preencha os dados!");
+            if(!nome || !endereco || carrinho.length === 0) return alert("Preencha os dados!");
 
             let msg = "*🛒 NOVO PEDIDO - MEC SHOP*\n\n";
-            msg += "👤 *CLIENTE:* " + nome + "\n";
-            msg += "📍 *ENDEREÇO:* " + endereco + "\n";
-            msg += "💳 *PAGAMENTO:* " + pag + "\n\n";
-            msg += "📦 *ITENS:*\n";
-            
+            msg += `👤 *NOME:* ${nome}\n📍 *END:* ${endereco}\n\n`;
             let total = 0;
             carrinho.forEach(item => {
-                msg += "• " + item.qtd + "x " + item.nome + " (R$ " + (item.preco * item.qtd).toFixed(2) + ")\n";
-                total += item.preco * item.qtd;
+                msg += `• ${item.qtd}x ${item.nome} - R$ ${(item.precoPor * item.qtd).toFixed(2)}\n`;
+                total += item.precoPor * item.qtd;
             });
+            msg += `\n💰 *TOTAL: R$ ${total.toFixed(2)}*`;
 
-            msg += "\n💰 *TOTAL: R$ " + total.toFixed(2) + "*";
-
-            const fone = "5511999999999"; // ALTERA PARA O TEU NÚMERO
-            window.open("https://wa.me/" + fone + "?text=" + encodeURIComponent(msg));
+            window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(msg)}`);
         }
 
         render();
