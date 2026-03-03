@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEC SHOP | OFERTAS</title>
+    <title>MEC SHOP | CATEGORIAS</title>
     <style>
         :root {
             --neon-blue: #00f2ff;
@@ -14,38 +14,51 @@
 
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--bg-light); padding-bottom: 120px; }
 
-        /* SLIDER E BUSCA */
-        .slider-container { width: 100%; height: 230px; overflow: hidden; position: relative; background: #000; }
+        /* BANNER */
+        .slider-container { width: 100%; height: 200px; overflow: hidden; position: relative; background: #000; }
         .slider-track { display: flex; width: 300%; height: 100%; transition: transform 0.6s ease-in-out; }
-        .slide { width: 100vw; height: 100%; position: relative; flex-shrink: 0; }
-        .slide img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6); }
+        .slide img { width: 100vw; height: 100%; object-fit: cover; filter: brightness(0.5); }
+
+        /* BUSCA */
         .search-area { padding: 0 15px; margin-top: -25px; position: relative; z-index: 100; }
         .search-box { background: #fff; display: flex; align-items: center; padding: 12px 15px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         .search-box input { border: none; outline: none; width: 100%; margin-left: 10px; }
 
+        /* BARRA DE CATEGORIAS (NOVO) */
+        .categorias-bar { 
+            display: flex; 
+            overflow-x: auto; 
+            padding: 15px; 
+            gap: 10px; 
+            white-space: nowrap; 
+            scrollbar-width: none; /* Esconde scroll no Firefox */
+        }
+        .categorias-bar::-webkit-scrollbar { display: none; } /* Esconde scroll no Chrome/Safari */
+        
+        .cat-item { 
+            background: #fff; 
+            padding: 8px 18px; 
+            border-radius: 20px; 
+            font-size: 13px; 
+            font-weight: 600; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+        .cat-item.active { background: #000; color: #fff; border-color: #000; }
+
         /* VITRINE */
-        .loja-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 25px 15px; }
-        .produto-card { background: #fff; border-radius: 15px; padding: 12px; text-align: center; position: relative; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .off-badge { position: absolute; top: 8px; left: 8px; background: var(--discount-red); color: #fff; font-size: 9px; font-weight: bold; padding: 3px 7px; border-radius: 5px; }
-        .img-produto { width: 100%; height: 130px; object-fit: contain; margin-bottom: 8px; }
-        .preco { font-size: 17px; font-weight: 900; display: block; margin: 8px 0; }
-        .btn-add { background: #000; color: #fff; border: none; width: 100%; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        .loja-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 15px 25px 15px; }
+        .produto-card { background: #fff; border-radius: 15px; padding: 12px; text-align: center; position: relative; }
+        .img-produto { width: 100%; height: 120px; object-fit: contain; }
+        .preco { font-size: 16px; font-weight: 900; display: block; margin: 8px 0; }
+        .btn-add { background: #000; color: #fff; border: none; width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-        /* BARRA FIXA */
+        /* FOOTER E MODAL */
         .footer-cart { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; z-index: 1000; border-radius: 20px 20px 0 0; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); }
-        .btn-ver { background: var(--btn-green); color: white; border: none; padding: 12px 20px; border-radius: 10px; font-weight: bold; cursor: pointer; }
-
-        /* MODAL */
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 2000; }
-        .modal-body { position: absolute; bottom: 0; background: #fff; width: 100%; border-radius: 30px 30px 0 0; padding: 25px; box-sizing: border-box; max-height: 90vh; overflow-y: auto; }
-        .input-checkout { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        
-        .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .btn-q { background: #000; color: #fff; border: none; width: 25px; height: 25px; border-radius: 5px; }
-        
-        /* CUPOM */
-        .coupon-area { display: flex; gap: 10px; margin: 15px 0; }
-        .btn-cupom { background: #eee; border: none; padding: 0 15px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .modal-body { position: absolute; bottom: 0; background: #fff; width: 100%; border-radius: 30px 30px 0 0; padding: 25px; box-sizing: border-box; }
+        .input-checkout { width: 100%; padding: 12px; margin-bottom: 8px; border: 1px solid #ddd; border-radius: 8px; }
     </style>
 </head>
 <body>
@@ -59,59 +72,74 @@
     </div>
 
     <div class="search-area">
-        <div class="search-box">🔍 <input type="text" placeholder="O que você procura?"></div>
+        <div class="search-box">🔍 <input type="text" id="inputBusca" onkeyup="filtrarBusca()" placeholder="O que você procura?"></div>
+    </div>
+
+    <div class="categorias-bar">
+        <div class="cat-item active" onclick="filtrarCat('Tudo', this)">Tudo</div>
+        <div class="cat-item" onclick="filtrarCat('Tech', this)">Tecnologia</div>
+        <div class="cat-item" onclick="filtrarCat('Moda', this)">Moda</div>
+        <div class="cat-item" onclick="filtrarCat('Casa', this)">Casa</div>
+        <div class="cat-item" onclick="filtrarCat('Acessórios', this)">Acessórios</div>
     </div>
 
     <div id="vitrine" class="loja-grid"></div>
 
     <div class="footer-cart">
         <div>Total: <br><b>R$ <span id="total-val">0,00</span></b></div>
-        <button class="btn-ver" onclick="toggleModal(true)">VER PEDIDO</button>
+        <button style="background:var(--btn-green); color:white; border:none; padding:12px 20px; border-radius:10px; font-weight:bold;" onclick="toggleModal(true)">VER PEDIDO</button>
     </div>
 
     <div class="modal" id="modalCart">
         <div class="modal-body">
-            <h3 style="margin-top:0">Finalizar Pedido</h3>
+            <h3 style="margin-top:0">Seu Pedido</h3>
             <div id="cartItemsList"></div>
-            
-            <div class="coupon-area">
-                <input type="text" id="cupomTexto" class="input-checkout" style="margin-bottom:0" placeholder="Cupom de Desconto">
-                <button class="btn-cupom" onclick="aplicarCupom()">Aplicar</button>
-            </div>
-            <div id="msgCupom" style="font-size: 12px; margin-bottom: 10px;"></div>
-
-            <input type="text" id="nomeCliente" class="input-checkout" placeholder="Seu Nome Completo">
-            <input type="text" id="endCliente" class="input-checkout" placeholder="Endereço (Rua, Nº, Bairro)">
-
-            <button class="btn-ver" style="width:100%; padding:18px; margin-top:10px;" onclick="enviarZap()">ENVIAR WHATSAPP</button>
-            <button onclick="toggleModal(false)" style="width:100%; background:none; border:none; color:#999; margin-top:15px;">Voltar</button>
+            <input type="text" id="nomeCliente" class="input-checkout" placeholder="Seu Nome">
+            <input type="text" id="endCliente" class="input-checkout" placeholder="Endereço">
+            <button style="width:100%; background:var(--btn-green); color:white; border:none; padding:15px; border-radius:10px; margin-top:10px; font-weight:bold;" onclick="enviarZap()">FINALIZAR NO WHATSAPP</button>
+            <button onclick="toggleModal(false)" style="width:100%; background:none; border:none; color:#999; margin-top:10px;">Voltar</button>
         </div>
     </div>
 
     <script>
         const produtos = [
-            { id: 1, off: "40% OFF", nome: "Smartwatch Ultra Series 9", preco: 289.90, img: "https://m.media-amazon.com/images/I/71Yp-H-O8rL._AC_SL1500_.jpg" },
-            { id: 2, off: "30% OFF", nome: "Headset Gamer Pro", preco: 159.00, img: "https://m.media-amazon.com/images/I/61CGHv6kmWL._AC_SL1500_.jpg" },
-            { id: 3, off: "50% OFF", nome: "Tênis Esportivo Nitro", preco: 197.00, img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400" },
-            { id: 4, off: "25% OFF", nome: "Caixa de Som Bass+", preco: 124.50, img: "https://m.media-amazon.com/images/I/71pE7v07N3L._AC_SL1500_.jpg" }
+            { id: 1, cat: "Tech", nome: "Smartwatch Ultra 9", preco: 289.90, img: "https://m.media-amazon.com/images/I/71Yp-H-O8rL._AC_SL1500_.jpg" },
+            { id: 2, cat: "Tech", nome: "Headset Gamer Pro", preco: 159.00, img: "https://m.media-amazon.com/images/I/61CGHv6kmWL._AC_SL1500_.jpg" },
+            { id: 3, cat: "Moda", nome: "Tênis Esportivo Nitro", preco: 197.00, img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400" },
+            { id: 4, cat: "Acessórios", nome: "Caixa de Som Bass+", preco: 124.50, img: "https://m.media-amazon.com/images/I/71pE7v07N3L._AC_SL1500_.jpg" }
         ];
 
         let carrinho = [];
-        let descontoPorcentagem = 0;
-        let slideIndex = 0;
-        setInterval(() => { slideIndex = (slideIndex + 1) % 3; document.getElementById('slider').style.transform = `translateX(-${slideIndex * 100}vw)`; }, 4000);
+        let categoriaAtual = "Tudo";
 
         function render() {
             const v = document.getElementById('vitrine');
             v.innerHTML = "";
-            produtos.forEach(p => {
+            const listaFiltrada = categoriaAtual === "Tudo" ? produtos : produtos.filter(p => p.cat === categoriaAtual);
+            
+            listaFiltrada.forEach(p => {
                 v.innerHTML += `<div class="produto-card">
-                    <div class="off-badge">${p.off}</div>
                     <img src="${p.img}" class="img-produto">
-                    <span style="font-size:12px; font-weight:700;">${p.nome}</span>
+                    <span style="font-size:12px; font-weight:700; display:block; height:30px">${p.nome}</span>
                     <span class="preco">R$ ${p.preco.toFixed(2).replace('.',',')}</span>
                     <button class="btn-add" onclick="add(${p.id})">ADICIONAR</button>
                 </div>`;
+            });
+        }
+
+        function filtrarCat(cat, el) {
+            categoriaAtual = cat;
+            document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active');
+            render();
+        }
+
+        function filtrarBusca() {
+            const termo = document.getElementById('inputBusca').value.toLowerCase();
+            const cards = document.getElementsByClassName('produto-card');
+            Array.from(cards).forEach(card => {
+                const nome = card.querySelector('span').innerText.toLowerCase();
+                card.style.display = nome.includes(termo) ? "block" : "none";
             });
         }
 
@@ -122,42 +150,18 @@
             update();
         }
 
-        function change(id, d) {
-            const item = carrinho.find(x => x.id === id);
-            item.qtd += d;
-            if(item.qtd <= 0) carrinho = carrinho.filter(x => x.id !== id);
-            update();
-        }
-
-        function aplicarCupom() {
-            const cupom = document.getElementById('cupomTexto').value.toUpperCase();
-            if(cupom === "MEC10") {
-                descontoPorcentagem = 10;
-                document.getElementById('msgCupom').innerHTML = "<span style='color:green'>Cupom MEC10 aplicado! (10% OFF)</span>";
-            } else {
-                descontoPorcentagem = 0;
-                document.getElementById('msgCupom').innerHTML = "<span style='color:red'>Cupom inválido.</span>";
-            }
-            update();
-        }
-
         function update() {
-            let subtotal = 0;
+            let total = 0;
             const list = document.getElementById('cartItemsList');
             list.innerHTML = "";
             carrinho.forEach(item => {
-                subtotal += item.preco * item.qtd;
-                list.innerHTML += `<div class="cart-item">
-                    <span style="font-size:13px">${item.nome}</span>
-                    <div style="display:flex; align-items:center; gap:8px">
-                        <button class="btn-q" onclick="change(${item.id},-1)">-</button>
-                        <b>${item.qtd}</b>
-                        <button class="btn-q" onclick="change(${item.id},1)">+</button>
-                    </div>
+                total += item.preco * item.qtd;
+                list.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                    <span>${item.nome} (x${item.qtd})</span>
+                    <b>R$ ${(item.preco * item.qtd).toFixed(2)}</b>
                 </div>`;
             });
-            let valorFinal = subtotal - (subtotal * (descontoPorcentagem/100));
-            document.getElementById('total-val').innerText = valorFinal.toFixed(2).replace('.',',');
+            document.getElementById('total-val').innerText = total.toFixed(2).replace('.',',');
         }
 
         function toggleModal(s) { document.getElementById('modalCart').style.display = s ? 'block' : 'none'; }
@@ -165,27 +169,17 @@
         function enviarZap() {
             const nome = document.getElementById('nomeCliente').value;
             const end = document.getElementById('endCliente').value;
-            if(!nome || !end || carrinho.length === 0) return alert("Preencha tudo!");
-
-            let subtotal = 0;
-            let msg = `*🛒 NOVO PEDIDO - MEC SHOP*\n\n👤 *CLIENTE:* ${nome}\n📍 *END:* ${end}\n---\n`;
-            carrinho.forEach(i => {
-                let vItem = i.preco * i.qtd;
-                subtotal += vItem;
-                msg += `• ${i.qtd}x ${i.nome} (R$ ${vItem.toFixed(2)})\n`;
-            });
-            
-            msg += `\n💰 *SUBTOTAL:* R$ ${subtotal.toFixed(2)}`;
-            if(descontoPorcentagem > 0) {
-                let vFinal = subtotal - (subtotal * (descontoPorcentagem/100));
-                msg += `\n🏷️ *DESCONTO:* ${descontoPorcentagem}%\n✅ *TOTAL COM DESCONTO:* R$ ${vFinal.toFixed(2)}`;
-            } else {
-                msg += `\n✅ *TOTAL:* R$ ${subtotal.toFixed(2)}`;
-            }
-
+            if(!nome || !end || carrinho.length === 0) return alert("Preencha os dados!");
+            let msg = `*PEDIDO MEC SHOP*\n👤 ${nome}\n📍 ${end}\n---\n`;
+            carrinho.forEach(i => { msg += `• ${i.qtd}x ${i.nome}\n`; });
+            msg += `\n*TOTAL: R$ ${document.getElementById('total-val').innerText}*`;
             window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(msg)}`);
         }
+
         render();
+        // Slider Auto
+        let si = 0;
+        setInterval(() => { si = (si + 1) % 3; document.getElementById('slider').style.transform = `translateX(-${si * 100}vw)`; }, 4000);
     </script>
 </body>
 </html>
