@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CENTRO DE INFORMAÇÕES | Notícias Econômicas</title>
+    <style>
+        :root { --news-blue: #003366; --news-red: #c4170c; --news-gray: #f4f7f6; --success-green: #28a745; }
+        body { font-family: -apple-system, system-ui, sans-serif; margin: 0; padding-bottom: 100px; background: var(--news-gray); color: #1a1a1a; }
+
+        /* SLIDER DE PLANTÃO (TOPO) */
+        .breaking-news { width: 100%; height: 35px; background: #222; overflow: hidden; position: relative; }
+        .slider-track { display: flex; width: 300%; height: 100%; animation: slide 15s infinite linear; }
+        .slide { width: 100%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+        
+        @keyframes slide { 0% { transform: translateX(0); } 33% { transform: translateX(-100%); } 66% { transform: translateX(-200%); } 100% { transform: translateX(0); } }
+
+        /* HEADER PROFISSIONAL */
+        .portal-header { background: #fff; padding: 20px 15px; border-bottom: 4px solid var(--news-blue); display: flex; align-items: center; justify-content: space-between; }
+        .portal-logo { color: var(--news-blue); font-size: 20px; font-weight: 900; letter-spacing: -1px; text-transform: uppercase; }
+        .portal-logo span { color: var(--news-red); }
+
+        .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 25px 20px; }
+
+        /* HIERARQUIA DE NOTÍCIA */
+        .category { color: var(--news-red); font-size: 11px; font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 8px; }
+        h1 { font-size: 26px; line-height: 1.2; margin: 0 0 15px 0; color: #000; font-weight: 800; letter-spacing: -0.5px; }
+        .meta { font-size: 12px; color: #666; margin-bottom: 25px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+
+        /* BOX DE OFERTA DISCRETO (CONFIÁVEL) */
+        .verified-box { background: #f0f4f8; border-left: 5px solid var(--news-blue); padding: 20px; margin: 30px 0; border-radius: 4px; position: relative; }
+        .verified-badge { background: var(--news-blue); color: #fff; font-size: 9px; padding: 3px 8px; border-radius: 2px; font-weight: bold; position: absolute; top: -10px; left: 15px; }
+        
+        .price-label { font-size: 13px; color: #444; font-weight: bold; }
+        .price-value { font-size: 34px; color: var(--success-green); font-weight: 900; display: block; margin: 5px 0; }
+        
+        .btn-news { background: var(--success-green); color: white; text-decoration: none; padding: 16px; border-radius: 4px; font-weight: bold; display: block; text-align: center; font-size: 18px; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+
+        /* COMENTÁRIOS ESTILO PORTAL */
+        .comments-section { border-top: 2px solid #eee; margin-top: 40px; padding-top: 20px; }
+        .comment-title { font-size: 16px; font-weight: bold; margin-bottom: 20px; color: #333; }
+        .comment-item { display: flex; gap: 12px; margin-bottom: 20px; }
+        .user-img { width: 42px; height: 42px; border-radius: 50%; background: #eee; }
+        .c-name { font-weight: bold; font-size: 14px; color: #385898; }
+        .c-text { font-size: 14px; margin-top: 3px; color: #333; line-height: 1.4; }
+
+        /* RODAPÉ FIXO CORPORATIVO */
+        .footer-news { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--news-blue); color: white; padding: 15px; display: flex; align-items: center; justify-content: space-between; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.2); }
+        .footer-price { font-weight: bold; font-size: 20px; color: #fff; }
+        .btn-footer { background: #fff; color: var(--news-blue); text-decoration: none; padding: 10px 20px; border-radius: 4px; font-weight: bold; font-size: 13px; text-transform: uppercase; }
+
+    </style>
+</head>
+<body>
+
+    <div class="breaking-news">
+        <div class="slider-track">
+            <div class="slide">📡 PLANTÃO: DISTRIBUIDORA LIBERA LOTE LOGÍSTICO PARA PESSOA FÍSICA</div>
+            <div class="slide">✅ VERIFICADO: PRODUTOS NOVOS COM GARANTIA OFICIAL DE 12 MESES</div>
+            <div class="slide">🕒 URGENTE: OPORTUNIDADE VÁLIDA ENQUANTO DURAR O ESTOQUE DO LOTE 402</div>
+        </div>
+    </div>
+
+    <div class="portal-header">
+        <div class="portal-logo">INFO<span>NOTÍCIAS</span></div>
+    </div>
+
+    <div class="container">
+        <span class="category">Tecnologia & Economia</span>
+        <h1>Lotes de smartphones com avaria na embalagem são liberados com 60% de desconto</h1>
+        <div class="meta">Publicado hoje às 14:32 | Por Redação InfoNotícias</div>
+
+        <p style="font-size: 17px; line-height: 1.6; color: #444;">Um incidente logístico em um centro de distribuição resultou na liberação de um lote exclusivo de <b>Motorola Moto G06</b>. Os aparelhos estão intactos, porém as embalagens sofreram danos estéticos, impedindo a venda em grandes varejistas.</p>
+
+        <div class="verified-box">
+            <span class="verified-badge">OFERTA VERIFICADA</span>
+            <span class="price-label">Valor Promocional do Lote:</span>
+            <span class="price-value">R$ 594,90</span>
+            <a href="SEU-LINK-AQUI" class="btn-news">CONSULTAR DISPONIBILIDADE →</a>
+        </div>
+
+        <p style="font-size: 17px; line-height: 1.6; color: #444;">O canal oficial de escoamento permite a compra de até duas unidades por CPF. A garantia de fábrica permanece integral.</p>
+
+        <div class="comments-section">
+            <div class="comment-title">Comentários (124)</div>
+            <div class="comment-item">
+                <img src="https://i.pravatar.cc/100?u=12" class="user-img">
+                <div>
+                    <span class="c-name">Amanda Silva</span>
+                    <p class="c-text">O meu chegou em 3 dias aqui em Curitiba! A caixa realmente tinha um amassado, mas o celular veio lacradinho. Valeu cada centavo! 😍</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-news">
+        <div>
+            <span style="font-size: 10px; opacity: 0.8; display: block; margin-bottom: 2px;">VALOR NO PIX:</span>
+            <span class="footer-price">R$ 594,90</span>
+        </div>
+        <a href="SEU-LINK-AQUI" class="btn-footer">APROVEITAR</a>
+    </div>
+
+</body>
+</html>
