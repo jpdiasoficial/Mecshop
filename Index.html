@@ -1,68 +1,194 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEC SHOP | CATÁLOGO</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEC SHOP | FINAL PRO</title>
     <style>
-        body { font-family: sans-serif; margin: 0; background: #f4f4f4; padding-bottom: 100px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px; }
-        .card { background: #fff; padding: 10px; border-radius: 8px; text-align: center; }
-        .card img { width: 100%; height: 100px; object-fit: contain; }
-        .btn-add { background: #000; color: #fff; border: none; width: 100%; padding: 8px; border-radius: 5px; font-weight: bold; cursor: pointer; }
-        .footer { position: fixed; bottom: 0; width: 100%; background: #fff; padding: 15px; display: flex; justify-content: space-around; align-items: center; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
-        .modal { position: fixed; top: 0; background: rgba(0,0,0,0.8); width: 100%; height: 100%; display: none; }
-        .modal-body { background: #fff; margin-top: 20%; padding: 20px; border-radius: 20px 20px 0 0; height: 100%; }
-        .item { display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-        .btn-qtd { background: #000; color: #fff; border: none; width: 25px; height: 25px; border-radius: 4px; }
-        input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        :root { --btn-green: #004d40; --bg-light: #f1f3f6; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--bg-light); padding-bottom: 120px; overflow-x: hidden; }
+        
+        .slider-container { width: 100%; height: 180px; overflow: hidden; position: relative; background: #000; }
+        .slider-track { display: flex; width: 300%; height: 100%; transition: transform 0.6s; }
+        .slide img { width: 100vw; height: 100%; object-fit: cover; filter: brightness(0.6); }
+
+        .search-area { padding: 0 15px; margin-top: -25px; position: relative; z-index: 100; }
+        .search-box { background: #fff; display: flex; align-items: center; padding: 12px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .search-box input { border: none; outline: none; width: 100%; margin-left: 10px; }
+
+        .categorias-bar { display: flex; overflow-x: auto; padding: 15px; gap: 10px; scrollbar-width: none; }
+        .cat-item { background: #fff; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+        .cat-item.active { background: #000; color: #fff; }
+
+        .loja-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 15px; }
+        .produto-card { background: #fff; border-radius: 15px; padding: 12px; text-align: center; }
+        .img-produto { width: 100%; height: 100px; object-fit: contain; }
+        .btn-add { background: #000; color: #fff; border: none; width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+
+        .footer-cart { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; z-index: 1000; border-radius: 20px 20px 0 0; box-shadow: 0 -5px 15px rgba(0,0,0,0.1); }
+
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 2000; }
+        .modal-body { position: absolute; bottom: 0; background: #fff; width: 100%; border-radius: 30px 30px 0 0; padding: 25px; box-sizing: border-box; max-height: 90vh; overflow-y: auto; }
+        
+        .item-carrinho { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #eee; padding-bottom: 8px; font-size: 14px; }
+        .controles { display: flex; align-items: center; gap: 8px; }
+        .btn-qtd { background: #000; color: #fff; border: none; width: 24px; height: 24px; border-radius: 4px; cursor: pointer; }
+        
+        .input-checkout { width: 100%; padding: 12px; margin-bottom: 8px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        .readonly { background: #f4f4f4; color: #888; }
     </style>
 </head>
 <body>
-    <div style="background:#000; color:#fff; padding:15px; text-align:center; font-weight:bold;">MEC SHOP</div>
-    <div id="vitrine" class="grid"></div>
-    <div class="footer">
-        <div>Total: <b>R$ <span id="total-val">0,00</span></b></div>
-        <button onclick="toggle(true)" style="background:#28a745; color:white; border:none; padding:10px 20px; border-radius:8px; font-weight:bold;">VER PEDIDO</button>
-    </div>
-    <div class="modal" id="modal">
-        <div class="modal-body">
-            <h3>Seu Pedido</h3>
-            <div id="lista"></div>
-            <input type="text" id="nome" placeholder="Seu Nome">
-            <input type="text" id="cep" placeholder="Seu CEP" onblur="buscarCEP()">
-            <input type="text" id="rua" placeholder="Endereço (Auto)" readonly>
-            <input type="text" id="num" placeholder="Nº e Complemento">
-            <button onclick="enviar()" style="width:100%; background:#28a745; color:#fff; border:none; padding:15px; border-radius:8px; margin-top:10px; font-weight:bold;">FINALIZAR NO ZAP</button>
-            <button onclick="toggle(false)" style="width:100%; background:none; border:none; margin-top:10px; color:#999;">Voltar</button>
+
+    <div class="slider-container">
+        <div class="slider-track" id="slider">
+            <div class="slide"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800"></div>
+            <div class="slide"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800"></div>
+            <div class="slide"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800"></div>
         </div>
     </div>
+
+    <div class="search-area">
+        <div class="search-box">🔍 <input type="text" id="inputBusca" onkeyup="filtrarBusca()" placeholder="Pesquisar..."></div>
+    </div>
+
+    <div class="categorias-bar">
+        <div class="cat-item active" onclick="filtrarCat('Tudo', this)">Tudo</div>
+        <div class="cat-item" onclick="filtrarCat('Tech', this)">Tecnologia</div>
+        <div class="cat-item" onclick="filtrarCat('Moda', this)">Moda</div>
+    </div>
+
+    <div id="vitrine" class="loja-grid"></div>
+
+    <div class="footer-cart">
+        <div>Total: <br><b>R$ <span id="total-val">0,00</span></b></div>
+        <button style="background:var(--btn-green); color:white; border:none; padding:12px 20px; border-radius:10px; font-weight:bold;" onclick="toggleModal(true)">VER PEDIDO</button>
+    </div>
+
+    <div class="modal" id="modalCart">
+        <div class="modal-body">
+            <h3 style="margin-top:0">Meus Itens</h3>
+            <div id="cartItemsList"></div>
+            
+            <div style="display:flex; gap:5px; margin-bottom:15px; margin-top: 15px;">
+                <input type="text" id="cupomInput" class="input-checkout" style="margin-bottom:0" placeholder="Cupom de desconto">
+                <button onclick="update()" style="background:#333; color:#fff; border:none; padding:0 15px; border-radius:8px; font-weight:bold;">Aplicar</button>
+            </div>
+
+            <input type="text" id="nomeCliente" class="input-checkout" placeholder="Seu Nome">
+            <input type="text" id="cepCliente" class="input-checkout" placeholder="Seu CEP" onblur="buscarCEP()" maxlength="8">
+            <input type="text" id="ruaCliente" class="input-checkout readonly" placeholder="Endereço" readonly>
+            <input type="text" id="numCliente" class="input-checkout" placeholder="Número e Complemento">
+            <input type="hidden" id="cidadeOculta">
+
+            <button style="width:100%; background:var(--btn-green); color:white; border:none; padding:18px; border-radius:10px; margin-top:10px; font-weight:bold;" onclick="enviarZap()">FINALIZAR NO WHATSAPP</button>
+            <button onclick="toggleModal(false)" style="width:100%; background:none; border:none; color:#999; margin-top:10px;">Continuar Comprando</button>
+        </div>
+    </div>
+
     <script>
-        const produtos = [{id:1, nome:"Smartwatch", preco:289.9, img:"https://via.placeholder.com/150"}, {id:2, nome:"Fone Bluetooth", preco:159.0, img:"https://via.placeholder.com/150"}];
-        let cart = [];
-        function render(){
+        const produtos = [
+            { id: 1, cat: "Tech", nome: "Smartwatch Ultra 9", preco: 289.90, img: "https://m.media-amazon.com/images/I/71Yp-H-O8rL._AC_SL1500_.jpg" },
+            { id: 2, cat: "Tech", nome: "Headset Gamer Pro", preco: 159.00, img: "https://m.media-amazon.com/images/I/61CGHv6kmWL._AC_SL1500_.jpg" },
+            { id: 3, cat: "Moda", nome: "Tênis Esportivo Nitro", preco: 197.00, img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400" }
+        ];
+
+        let carrinho = [];
+        let categoriaAtual = "Tudo";
+
+        function render(lista = null) {
             const v = document.getElementById('vitrine');
-            v.innerHTML = produtos.map(p => `<div class="card"><img src="${p.img}"><h4>${p.nome}</h4><b>R$ ${p.preco}</b><button class="btn-add" onclick="add(${p.id})">ADICIONAR</button></div>`).join('');
+            v.innerHTML = "";
+            const dados = lista || (categoriaAtual === "Tudo" ? produtos : produtos.filter(p => p.cat === categoriaAtual));
+            dados.forEach(p => {
+                v.innerHTML += `<div class="produto-card">
+                    <img src="${p.img}" class="img-produto">
+                    <span style="font-size:12px; font-weight:700; display:block; height:32px">${p.nome}</span>
+                    <b style="display:block; margin:5px 0;">R$ ${p.preco.toFixed(2).replace('.',',')}</b>
+                    <button class="btn-add" onclick="add(${p.id})">ADICIONAR</button>
+                </div>`;
+            });
         }
-        function add(id){
-            const i = cart.find(x => x.id === id);
-            i ? i.qtd++ : cart.push({...produtos.find(x => x.id === id), qtd: 1});
-            upd();
+
+        function add(id) {
+            const item = carrinho.find(x => x.id === id);
+            item ? item.qtd++ : carrinho.push({...produtos.find(x => x.id === id), qtd: 1});
+            update();
         }
-        function upd(){
-            let t = 0;
-            document.getElementById('lista').innerHTML = cart.map(i => {
-                t += i.preco * i.qtd;
-                return `<div class="item"><span>${i.nome}</span><div><button class="btn-qtd" onclick="alt(${i.id},-1)">-</button> <b>${i.qtd}</b> <button class="btn-qtd" onclick="alt(${i.id},1)">+</button></div></div>`;
-            }).join('');
-            document.getElementById('total-val').innerText = t.toFixed(2);
+
+        function alterarQtd(id, delta) {
+            const item = carrinho.find(x => x.id === id);
+            if (item) {
+                item.qtd += delta;
+                if (item.qtd <= 0) carrinho = carrinho.filter(x => x.id !== id);
+                update();
+            }
         }
-        function alt(id, d){ const i = cart.find(x => x.id === id); if(i){ i.qtd += d; if(i.qtd<=0) cart = cart.filter(x=>x.id!==id); upd(); } }
-        function toggle(s){ document.getElementById('modal').style.display = s ? 'block' : 'none'; }
-        function buscarCEP(){ 
-            let c = document.getElementById('cep').value.replace(/\D/g,'');
-            if(c.length==8) fetch(`https://viacep.com.br/ws/${c}/json/`).then(r=>r.json()).then(d=>{ if(!d.erro) document.getElementById('rua').value = d.logradouro; });
+
+        function update() {
+            let total = 0;
+            const list = document.getElementById('cartItemsList');
+            list.innerHTML = "";
+            
+            carrinho.forEach(item => {
+                let sub = item.preco * item.qtd;
+                total += sub;
+                list.innerHTML += `<div class="item-carrinho">
+                    <div style="max-width:55%">
+                        <b>R$ ${sub.toFixed(2).replace('.',',')}</b><br>
+                        <span>${item.nome}</span>
+                    </div>
+                    <div class="controles">
+                        <button class="btn-qtd" onclick="alterarQtd(${item.id}, -1)">-</button>
+                        <b>${item.qtd}</b>
+                        <button class="btn-qtd" onclick="alterarQtd(${item.id}, 1)">+</button>
+                    </div>
+                </div>`;
+            });
+
+            const cupom = document.getElementById('cupomInput').value.toUpperCase();
+            if(cupom === "MEC10") total *= 0.9;
+            document.getElementById('total-val').innerText = total.toFixed(2).replace('.',',');
         }
-        function enviar(){ window.open(`https://wa.me/5511999999999?text=Pedido:%20Total%20R$%20${document.getElementById('total-val').innerText}`); }
+
+        function buscarCEP() {
+            let cep = document.getElementById('cepCliente').value.replace(/\D/g, '');
+            if (cep.length === 8) {
+                fetch(`https://viacep.com.br/ws/${cep}/json/`).then(r => r.json()).then(d => {
+                    if(!d.erro) {
+                        document.getElementById('ruaCliente').value = `${d.logradouro}, ${d.bairro}`;
+                        document.getElementById('cidadeOculta').value = `${d.localidade}/${d.uf}`;
+                    }
+                });
+            }
+        }
+
+        function enviarZap() {
+            const n = document.getElementById('nomeCliente').value;
+            const r = document.getElementById('ruaCliente').value;
+            const num = document.getElementById('numCliente').value;
+            if(!n || !r || !num || carrinho.length === 0) return alert("Preencha todos os dados!");
+
+            let msg = `*🛒 NOVO PEDIDO*\n👤 *CLIENTE:* ${n}\n📍 *ENTREGA:* ${r}, ${num}\n🏙️ *CIDADE:* ${document.getElementById('cidadeOculta').value}\n---\n`;
+            carrinho.forEach(i => msg += `• ${i.qtd}x ${i.nome} (R$ ${(i.preco * i.qtd).toFixed(2)})\n`);
+            msg += `\n*TOTAL FINAL: R$ ${document.getElementById('total-val').innerText}*`;
+            
+            window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(msg)}`);
+        }
+
+        function filtrarBusca() {
+            const t = document.getElementById('inputBusca').value.toLowerCase();
+            render(produtos.filter(p => p.nome.toLowerCase().includes(t)));
+        }
+
+        function filtrarCat(cat, el) {
+            categoriaAtual = cat;
+            document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active');
+            render();
+        }
+
+        function toggleModal(s) { document.getElementById('modalCart').style.display = s ? 'block' : 'none'; }
         render();
     </script>
 </body>
