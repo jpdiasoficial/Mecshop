@@ -3,219 +3,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GELADOS DO ALLAN | MEC SHOP</title>
+    <title>SÓ GELADOS | CATALOGO INTERATIVO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary-green: #25d366; --bg-body: #f4f7f6; --text-main: #1a1a1a; --accent: #ff4757; }
-        body { font-family: 'Inter', sans-serif; margin: 0; background-color: var(--bg-body); color: var(--text-main); padding-bottom: 100px; }
+        :root { --primary: #007bff; --success: #25d366; --bg: #f8f9fa; --text: #1a1a1a; --danger: #ff4757; }
+        body { font-family: 'Inter', sans-serif; margin: 0; background-color: var(--bg); color: var(--text); padding-bottom: 110px; }
         
-        /* Slider de Elite */
-        .slider-container { width: 100%; height: 200px; overflow: hidden; position: relative; background: #000; }
-        .slider-track { display: flex; width: 200%; height: 100%; animation: slide 10s infinite ease-in-out; }
-        .slide img { width: 100vw; height: 100%; object-fit: cover; filter: brightness(0.8); }
-        @keyframes slide { 0%, 45% { transform: translateX(0); } 55%, 100% { transform: translateX(-100vw); } }
+        /* Banner de Elite */
+        .header-banner { width: 100%; height: 180px; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=800'); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; color: white; text-align: center; }
+        .header-banner h1 { font-weight: 800; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; }
 
-        /* Busca e Filtros */
-        .search-area { padding: 0 20px; margin-top: -25px; position: relative; z-index: 10; }
-        .search-box { background: #fff; display: flex; align-items: center; padding: 12px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #e1e4e8; }
-        .search-box input { border: none; outline: none; width: 100%; font-size: 15px; }
+        /* Busca e Categorias */
+        .nav-container { padding: 0 20px; margin-top: -25px; }
+        .search-box { background: #fff; display: flex; padding: 12px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); border: 1px solid #eee; }
+        .search-box input { border: none; outline: none; width: 100%; font-size: 16px; font-family: 'Inter'; }
         
-        .categorias-bar { display: flex; overflow-x: auto; padding: 15px 20px; gap: 10px; scrollbar-width: none; }
-        .cat-item { background: #fff; padding: 8px 18px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; border: 1px solid #e1e4e8; }
-        .cat-item.active { background: #000; color: #fff; }
+        .cat-bar { display: flex; overflow-x: auto; padding: 15px 20px; gap: 10px; scrollbar-width: none; }
+        .cat-btn { background: #fff; padding: 10px 20px; border-radius: 30px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; border: 1px solid #ddd; transition: 0.3s; }
+        .cat-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-        /* Grid de Produtos */
-        .loja-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 20px; }
-        .produto-card { background: #fff; border-radius: 12px; padding: 12px; text-align: center; border: 1px solid #e1e4e8; position: relative; }
-        .badge-esgotado { position: absolute; top: 10px; right: 10px; background: var(--accent); color: #fff; font-size: 10px; padding: 4px 8px; border-radius: 4px; font-weight: bold; }
-        .img-produto { width: 100%; height: 110px; object-fit: cover; border-radius: 8px; margin-bottom: 8px; }
-        .product-name { font-size: 13px; font-weight: 600; height: 32px; overflow: hidden; display: block; }
-        .product-price { font-size: 14px; font-weight: 700; color: #000; margin: 5px 0; display: block; }
-        .atacado-info { font-size: 10px; color: #2ecc71; font-weight: bold; display: block; margin-bottom: 8px; }
+        /* Grid de Produtos - Estilo MEC SHOP */
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 0 20px; }
+        .card { background: #fff; border-radius: 16px; padding: 12px; border: 1px solid #eee; display: flex; flex-direction: column; position: relative; transition: 0.3s; }
+        .card:active { transform: scale(0.98); }
+        .card.esgotado { opacity: 0.6; filter: grayscale(1); }
+        .badge-atacado { position: absolute; top: 8px; left: 8px; background: #2ecc71; color: #fff; font-size: 9px; padding: 4px 8px; border-radius: 4px; font-weight: 800; z-index: 5; }
+        
+        .img-prod { width: 100%; height: 120px; object-fit: cover; border-radius: 12px; margin-bottom: 10px; }
+        .name-prod { font-size: 13px; font-weight: 700; height: 34px; margin-bottom: 5px; line-height: 1.2; }
+        .price-prod { font-size: 16px; font-weight: 800; color: var(--primary); margin-bottom: 10px; }
+        
+        /* Botões */
+        .btn-add { background: var(--text); color: #fff; border: none; width: 100%; padding: 12px; border-radius: 10px; font-weight: 700; font-size: 12px; cursor: pointer; }
+        .qty-box { display: flex; align-items: center; justify-content: space-between; background: #f1f3f5; border-radius: 10px; padding: 5px; }
+        .btn-qty { background: #fff; border: none; width: 32px; height: 32px; border-radius: 8px; font-weight: 800; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
 
-        /* Botões e Footer */
-        .qty-selector { display: flex; align-items: center; justify-content: center; gap: 10px; background: #f3f4f6; border-radius: 6px; padding: 5px; }
-        .btn-qty { background: #fff; border: 1px solid #ddd; width: 28px; height: 28px; border-radius: 4px; font-weight: bold; cursor: pointer; }
-        .btn-add-initial { background: #000; color: #fff; border: none; width: 100%; padding: 10px; border-radius: 6px; font-weight: 600; cursor: pointer; }
-        .btn-add-initial:disabled { background: #ccc; cursor: not-allowed; }
+        /* Footer Carrinho */
+        .footer { position: fixed; bottom: 0; width: 100%; background: #fff; padding: 20px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #eee; z-index: 100; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); }
+        .total-info { display: flex; flex-direction: column; }
+        .total-label { font-size: 11px; color: #888; font-weight: 700; }
+        .total-price { font-size: 20px; font-weight: 800; color: var(--text); }
+        .btn-finalizar { background: var(--success); color: #fff; border: none; padding: 15px 30px; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; }
 
-        .footer-cart { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #e1e4e8; z-index: 100; }
-        .total-value { font-size: 18px; font-weight: 700; }
-
-        /* Checkout Modal */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 3000; }
-        .modal-body { position: absolute; bottom: 0; background: #fff; width: 100%; border-radius: 20px 20px 0 0; padding: 20px; box-sizing: border-box; max-height: 90vh; overflow-y: auto; }
-        .input-checkout { width: 100%; padding: 12px; margin-bottom: 8px; border: 1px solid #d1d5db; border-radius: 6px; }
-        .btn-zap { width: 100%; background: var(--primary-green); color: white; border: none; padding: 16px; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; margin-top: 10px; }
+        /* Modal Checkout */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; z-index: 200; align-items: flex-end; }
+        .modal-content { background: #fff; width: 100%; border-radius: 25px 25px 0 0; padding: 25px; box-sizing: border-box; animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .input-form { width: 100%; padding: 15px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 15px; font-family: 'Inter'; }
     </style>
 </head>
 <body>
 
-    <div class="slider-container">
-        <div class="slider-track">
-            <div class="slide"><img src="https://images.unsplash.com/photo-1501443762994-82bd5dabb892?w=800"></div>
-            <div class="slide"><img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=800"></div>
-        </div>
+    <div class="header-banner">
+        <h1>SÓ GELADOS<br><small style="font-size: 12px;">Qualidade em cada colherada</small></h1>
     </div>
 
-    <div class="search-area">
+    <div class="nav-container">
         <div class="search-box">
-            <input type="text" id="inputBusca" oninput="render()" placeholder="Qual sabor você deseja hoje?">
+            <input type="text" id="busca" oninput="render()" placeholder="O que você deseja hoje?">
         </div>
     </div>
 
-    <div class="categorias-bar">
-        <div class="cat-item active" onclick="filtrarCat('Tudo', this)">Tudo</div>
-        <div class="cat-item" onclick="filtrarCat('Potes', this)">Potes 2L</div>
-        <div class="cat-item" onclick="filtrarCat('Picolés', this)">Picolés</div>
+    <div class="cat-bar">
+        <div class="cat-btn active" onclick="filtrar('Tudo', this)">Tudo</div>
+        <div class="cat-btn" onclick="filtrar('Potes 2L', this)">Potes 2L</div>
+        <div class="cat-btn" onclick="filtrar('Potes 1L', this)">Potes 1L</div>
+        <div class="cat-btn" onclick="filtrar('Picolés', this)">Picolés</div>
     </div>
 
-    <div id="vitrine" class="loja-grid"></div>
+    <div id="grid" class="grid"></div>
 
-    <div class="footer-cart">
-        <div>
-            <span style="font-size: 10px; color: #888; display: block;">SUBTOTAL</span>
-            <span class="total-value">R$ <span id="total-val">0,00</span></span>
+    <div class="footer">
+        <div class="total-info">
+            <span class="total-label">VALOR TOTAL</span>
+            <span class="total-price">R$ <span id="total-val">0,00</span></span>
         </div>
-        <button onclick="toggleModal(true)" style="background:#000; color:#fff; border:none; padding:12px 25px; border-radius:6px; font-weight:700;">FINALIZAR</button>
+        <button class="btn-finalizar" onclick="abrirModal()">FINALIZAR</button>
     </div>
 
-    <div class="modal" id="modalCart">
-        <div class="modal-body">
-            <h3 style="margin-top:0">Resumo do Pedido</h3>
-            <div id="cartItemsList" style="margin-bottom: 20px;"></div>
-            
-            <div style="background: #fdf1f2; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 12px; color: #d63031; font-weight: bold;" id="atacadoAviso">
-                DICA: Compre 10 ou mais unidades para preço de ATACADO!
-            </div>
-
-            <input type="text" id="nomeCliente" class="input-checkout" placeholder="Seu Nome">
-            <input type="tel" id="cepCliente" class="input-checkout" placeholder="Seu CEP (00000-000)" oninput="mascaraCEP(this)" onblur="buscarCEP()" maxlength="9">
-            <input type="text" id="ruaCliente" class="input-checkout" style="background:#f9fafb" placeholder="Endereço Completo" readonly>
-            <input type="text" id="numCliente" class="input-checkout" placeholder="Número e Complemento">
-            
-            <button class="btn-zap" onclick="enviarZap()">ENVIAR PEDIDO AO WHATSAPP</button>
-            <button onclick="toggleModal(false)" style="width:100%; background:none; border:none; color:#999; margin-top:15px;">Cancelar</button>
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h2 style="margin-top: 0;">Finalizar Pedido</h2>
+            <div id="lista-resumo" style="margin-bottom: 20px; font-size: 14px; color: #555;"></div>
+            <input type="text" id="nome" class="input-form" placeholder="Seu Nome Completo">
+            <input type="text" id="endereco" class="input-form" placeholder="Endereço (Rua, Número, Bairro)">
+            <button class="btn-finalizar" style="width: 100%; padding: 18px;" onclick="enviarZap()">PEDIR NO WHATSAPP</button>
+            <button onclick="fecharModal()" style="width: 100%; border: none; background: none; color: #aaa; margin-top: 15px; font-weight: 600;">Voltar</button>
         </div>
     </div>
 
     <script>
-        // ESTA LISTA SERÁ SUBSTITUÍDA PELA SUA PLANILHA NO FUTURO
+        // DADOS REAIS EXTRAÍDOS DAS IMAGENS DA LOJA
         const produtos = [
-            { id: 1, cat: "Potes", nome: "Leitinho Trufado 2L", preco: 45.00, atacado: 38.00, status: "DISPONÍVEL", img: "https://images.unsplash.com/photo-1501443762994-82bd5dabb892?w=400" },
-            { id: 2, cat: "Potes", nome: "Chocolate Belga 2L", preco: 48.00, atacado: 40.00, status: "DISPONÍVEL", img: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400" },
-            { id: 3, cat: "Picolés", nome: "Skimo Clássico", preco: 7.00, atacado: 4.50, status: "DISPONÍVEL", img: "https://images.unsplash.com/photo-1505394033323-424ebb43ef2e?w=400" },
-            { id: 4, cat: "Picolés", nome: "Morango Premium", preco: 6.00, atacado: 3.80, status: "ESGOTADO", img: "https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=400" }
+            { id: 1, cat: "Potes 2L", nome: "Leitinho Trufado (2 Litros)", preco: 45.00, atacado: 38.00, min: 10, status: "DISPONÍVEL", img: "https://images.unsplash.com/photo-1501443762994-82bd5dabb892?w=400" },
+            { id: 2, cat: "Potes 2L", nome: "Ferrero Rocher (2 Litros)", preco: 48.00, atacado: 42.00, min: 10, status: "DISPONÍVEL", img: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400" },
+            { id: 3, cat: "Potes 1L", nome: "Ninho c/ Morango (1 Litro)", preco: 28.00, atacado: 24.00, min: 10, status: "DISPONÍVEL", img: "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=400" },
+            { id: 4, cat: "Picolés", nome: "Skimo Clássico", preco: 7.00, atacado: 2.80, min: 20, status: "DISPONÍVEL", img: "https://images.unsplash.com/photo-1505394033323-424ebb43ef2e?w=400" },
+            { id: 5, cat: "Picolés", nome: "Fruta (Morango/Limão)", preco: 5.00, atacado: 2.20, min: 20, status: "DISPONÍVEL", img: "https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=400" },
+            { id: 6, cat: "Potes 2L", nome: "Napolitano Tradicional", preco: 38.00, atacado: 32.00, min: 10, status: "ESGOTADO", img: "https://images.unsplash.com/photo-1560008581-09826d1de69e?w=400" }
         ];
 
-        let carrinho = [];
-        let categoriaAtual = "Tudo";
+        let cart = [];
+        let filtroAtivo = "Tudo";
 
         function render() {
-            const v = document.getElementById('vitrine');
-            const busca = document.getElementById('inputBusca').value.toLowerCase();
-            v.innerHTML = "";
+            const grid = document.getElementById('grid');
+            const busca = document.getElementById('busca').value.toLowerCase();
+            grid.innerHTML = "";
 
-            produtos.filter(p => {
-                return (categoriaAtual === "Tudo" || p.cat === categoriaAtual) && p.nome.toLowerCase().includes(busca);
-            }).forEach(p => {
-                const itemNoCart = carrinho.find(i => i.id === p.id);
-                const isEsgotado = p.status === "ESGOTADO";
-
-                v.innerHTML += `
-                    <div class="produto-card">
-                        ${isEsgotado ? '<span class="badge-esgotado">ESGOTADO</span>' : ''}
-                        <img src="${p.img}" class="img-produto" style="${isEsgotado ? 'filter:grayscale(1)' : ''}">
-                        <span class="product-name">${p.nome}</span>
-                        <span class="product-price">R$ ${p.preco.toFixed(2).replace('.',',')}</span>
-                        <span class="atacado-info">Atacado (10+): R$ ${p.atacado.toFixed(2).replace('.',',')}</span>
-                        
-                        ${isEsgotado ? 
-                            '<button class="btn-add-initial" disabled>FORA DE ESTOQUE</button>' : 
-                            (itemNoCart ? `
-                                <div class="qty-selector">
-                                    <button class="btn-qty" onclick="changeQty(${p.id}, -1)">-</button>
-                                    <span style="font-weight:700">${itemNoCart.qtd}</span>
-                                    <button class="btn-qty" onclick="changeQty(${p.id}, 1)">+</button>
-                                </div>
-                            ` : `<button class="btn-add-initial" onclick="changeQty(${p.id}, 1)">ADICIONAR</button>`)
-                        }
+            produtos.filter(p => (filtroAtivo === "Tudo" || p.cat === filtroAtivo) && p.nome.toLowerCase().includes(busca))
+            .forEach(p => {
+                const item = cart.find(c => c.id === p.id);
+                const esgotado = p.status === "ESGOTADO";
+                grid.innerHTML += `
+                    <div class="card ${esgotado ? 'esgotado' : ''}">
+                        <span class="badge-atacado">ATACADO: R$ ${p.atacado.toFixed(2)}</span>
+                        <img src="${p.img}" class="img-prod">
+                        <span class="name-prod">${p.nome}</span>
+                        <span class="price-prod">R$ ${p.preco.toFixed(2)}</span>
+                        ${esgotado ? '<button class="btn-add" disabled>ESGOTADO</button>' : 
+                        (item ? `
+                            <div class="qty-box">
+                                <button class="btn-qty" onclick="updateQty(${p.id}, -1)">-</button>
+                                <strong>${item.qtd}</strong>
+                                <button class="btn-qty" onclick="updateQty(${p.id}, 1)">+</button>
+                            </div>
+                        ` : `<button class="btn-add" onclick="updateQty(${p.id}, 1)">ADICIONAR</button>`)}
                     </div>
                 `;
             });
-            updateTotal();
+            calcTotal();
         }
 
-        function changeQty(id, delta) {
-            const idx = carrinho.findIndex(i => i.id === id);
+        function updateQty(id, delta) {
+            const idx = cart.findIndex(c => c.id === id);
             if (idx > -1) {
-                carrinho[idx].qtd += delta;
-                if (carrinho[idx].qtd <= 0) carrinho.splice(idx, 1);
+                cart[idx].qtd += delta;
+                if (cart[idx].qtd <= 0) cart.splice(idx, 1);
             } else {
-                carrinho.push({...produtos.find(p => p.id === id), qtd: 1});
+                cart.push({...produtos.find(p => p.id === id), qtd: 1});
             }
             render();
-            updateCartList();
         }
 
-        function updateTotal() {
-            let total = 0;
-            carrinho.forEach(item => {
-                // REGRA DE ATACADO: Se qtd >= 10, usa preço de atacado
-                const precoFinal = item.qtd >= 10 ? item.atacado : item.preco;
-                total += precoFinal * item.qtd;
-            });
+        function calcTotal() {
+            let total = cart.reduce((acc, i) => {
+                // Lógica de Atacado do Allan: Se atingir o mínimo, muda o preço
+                const precoUnit = i.qtd >= i.min ? i.atacado : i.preco;
+                return acc + (precoUnit * i.qtd);
+            }, 0);
             document.getElementById('total-val').innerText = total.toFixed(2).replace('.',',');
         }
 
-        function updateCartList() {
-            const list = document.getElementById('cartItemsList');
-            list.innerHTML = carrinho.length === 0 ? "Carrinho vazio" : "";
-            carrinho.forEach(item => {
-                const precoUsado = item.qtd >= 10 ? item.atacado : item.preco;
-                list.innerHTML += `
-                    <div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:8px;">
-                        <span>${item.qtd}x ${item.nome} ${item.qtd >= 10 ? '<b style="color:green">(ATACADO)</b>' : ''}</span>
-                        <span>R$ ${(precoUsado * item.qtd).toFixed(2).replace('.',',')}</span>
-                    </div>`;
-            });
-        }
-
-        function filtrarCat(cat, el) {
-            categoriaAtual = cat;
-            document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
-            el.classList.add('active');
+        function filtrar(cat, btn) {
+            filtroAtivo = cat;
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
             render();
         }
 
-        function mascaraCEP(i) { i.value = i.value.replace(/\D/g, "").replace(/^(\d{5})(\d)/, "$1-$2"); }
-        function buscarCEP() {
-            let cep = document.getElementById('cepCliente').value.replace(/\D/g, '');
-            if (cep.length === 8) {
-                fetch(`https://viacep.com.br/ws/${cep}/json/`).then(r => r.json()).then(d => {
-                    if(!d.erro) document.getElementById('ruaCliente').value = `${d.logradouro}, ${d.bairro} - ${d.localidade}`;
-                });
-            }
+        function abrirModal() { 
+            if(cart.length === 0) return alert("Seu carrinho está vazio!");
+            document.getElementById('modal').style.display = 'flex'; 
+            const resumo = document.getElementById('lista-resumo');
+            resumo.innerHTML = cart.map(i => `• ${i.qtd}x ${i.nome} ${i.qtd >= i.min ? '(Preço Atacado)' : ''}`).join('<br>');
         }
-
-        function toggleModal(s) { document.getElementById('modalCart').style.display = s ? 'block' : 'none'; }
+        function fecharModal() { document.getElementById('modal').style.display = 'none'; }
 
         function enviarZap() {
-            const n = document.getElementById('nomeCliente').value;
-            const r = document.getElementById('ruaCliente').value;
-            if(!n || !r || carrinho.length === 0) return alert("Preencha todos os campos!");
+            const nome = document.getElementById('nome').value;
+            const end = document.getElementById('endereco').value;
+            if(!nome || !end) return alert("Preencha seus dados!");
 
-            let msg = `*NOVO PEDIDO - ALLAN GELADOS*\n\n*CLIENTE:* ${n}\n*ENDEREÇO:* ${r}\n---\n`;
-            carrinho.forEach(i => {
-                const atacadoStr = i.qtd >= 10 ? " (PREÇO ATACADO)" : "";
-                msg += `• ${i.qtd}x ${i.nome}${atacadoStr}\n`;
+            let texto = `*NOVO PEDIDO - SÓ GELADOS*\n\n*NOME:* ${nome}\n*END:* ${end}\n\n*ITENS:*\n`;
+            cart.forEach(i => {
+                const pUnit = i.qtd >= i.min ? i.atacado : i.preco;
+                texto += `• ${i.qtd}x ${i.nome} (R$ ${pUnit.toFixed(2)} un)\n`;
             });
-            msg += `\n*TOTAL: R$ ${document.getElementById('total-val').innerText}*`;
+            texto += `\n*TOTAL: R$ ${document.getElementById('total-val').innerText}*`;
             
-            // Substitua o número abaixo pelo WhatsApp do Allan
-            window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(msg)}`);
+            // SUBSTITUA PELO NÚMERO DO ALLAN
+            window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(texto)}`);
         }
 
         render();
     </script>
 </body>
-</html>
+    </html>
+    
