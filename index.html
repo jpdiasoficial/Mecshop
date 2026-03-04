@@ -23,7 +23,6 @@
         .product-name { font-size: 12px; font-weight: 500; height: 32px; overflow: hidden; margin-bottom: 5px; }
         .product-price { font-size: 15px; font-weight: 700; color: #000; margin-bottom: 10px; display: block;}
 
-        /* Controles de Quantidade */
         .qty-selector { display: flex; align-items: center; justify-content: center; gap: 10px; background: #f3f4f6; border-radius: 6px; padding: 5px; }
         .btn-qty { background: #fff; border: 1px solid #ddd; width: 28px; height: 28px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 16px; display: flex; align-items: center; justify-content: center; }
         .qty-val { font-size: 14px; font-weight: 600; min-width: 20px; }
@@ -35,6 +34,12 @@
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 1000; }
         .modal-body { position: absolute; bottom: 0; background: #fff; width: 100%; border-radius: 20px 20px 0 0; padding: 20px; box-sizing: border-box; max-height: 90vh; overflow-y: auto; }
         .timer-bar { background: #fef9c3; color: #713f12; padding: 8px; border-radius: 6px; text-align: center; margin-bottom: 15px; font-size: 12px; font-weight: 600; }
+        
+        /* Seção de Cupom */
+        .cupom-box { background: #f9fafb; border: 1px dashed #d1d5db; border-radius: 6px; padding: 10px; margin-bottom: 15px; display: flex; gap: 8px; }
+        .input-cupom { flex: 1; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 12px; text-transform: uppercase; }
+        .btn-cupom { background: #000; color: #fff; border: none; padding: 0 15px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; }
+
         .input-checkout { width: 100%; padding: 12px; margin-bottom: 8px; border: 1px solid #d1d5db; border-radius: 6px; box-sizing: border-box; }
         .btn-zap { width: 100%; background: var(--primary-green); color: white; border: none; padding: 16px; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; }
     </style>
@@ -70,6 +75,11 @@
             <h3 style="margin-bottom:15px">Carrinho</h3>
             <div id="cartItemsList"></div>
             
+            <div class="cupom-box">
+                <input type="text" id="cupomInput" class="input-cupom" placeholder="CUPOM (OPCIONAL)">
+                <button class="btn-cupom" onclick="updateTotal()">Aplicar</button>
+            </div>
+
             <input type="text" id="nomeCliente" class="input-checkout" placeholder="Seu Nome">
             <input type="tel" id="cepCliente" class="input-checkout" placeholder="Seu CEP" oninput="mascaraCEP(this)" onblur="buscarCEP()" maxlength="9">
             <input type="text" id="ruaCliente" class="input-checkout" style="background:#f9fafb" placeholder="Endereço Completo" readonly>
@@ -97,7 +107,6 @@
             
             produtos.filter(p => p.nome.toLowerCase().includes(busca)).forEach(p => {
                 const noCart = carrinho.find(item => item.id === p.id);
-                
                 v.innerHTML += `
                     <div class="produto-card">
                         <img src="${p.img}" class="img-produto">
@@ -119,7 +128,6 @@
 
         function changeQty(id, delta) {
             const itemIdx = carrinho.findIndex(x => x.id === id);
-            
             if (itemIdx > -1) {
                 carrinho[itemIdx].qtd += delta;
                 if (carrinho[itemIdx].qtd <= 0) carrinho.splice(itemIdx, 1);
@@ -131,7 +139,14 @@
         }
 
         function updateTotal() {
-            const total = carrinho.reduce((acc, i) => acc + (i.preco * i.qtd), 0);
+            let total = carrinho.reduce((acc, i) => acc + (i.preco * i.qtd), 0);
+            
+            // Lógica do Cupom
+            const cupom = document.getElementById('cupomInput').value.toUpperCase();
+            if(cupom === "MEC10") {
+                total *= 0.90; // 10% de desconto
+            }
+            
             document.getElementById('total-val').innerText = total.toFixed(2).replace('.',',');
         }
 
@@ -176,9 +191,12 @@
         function enviarZap() {
             const n = document.getElementById('nomeCliente').value;
             const r = document.getElementById('ruaCliente').value;
-            if(!n || !r || carrinho.length === 0) return alert("Preencha os dados e adicione itens!");
+            const c = document.getElementById('cupomInput').value.toUpperCase();
+            if(!n || !r || carrinho.length === 0) return alert("Preencha os dados!");
             
-            let msg = `*NOVO PEDIDO - MEC SHOP*\n\n*CLIENTE:* ${n}\n*ENDEREÇO:* ${r}\n---\n`;
+            let msg = `*NOVO PEDIDO - MEC SHOP*\n\n*CLIENTE:* ${n}\n*ENDEREÇO:* ${r}\n`;
+            if(c) msg += `*CUPOM APLICADO:* ${c}\n`;
+            msg += `---\n`;
             carrinho.forEach(i => msg += `• ${i.qtd}x ${i.nome}\n`);
             msg += `\n*TOTAL: R$ ${document.getElementById('total-val').innerText}*`;
             
