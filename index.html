@@ -175,7 +175,7 @@
             let msg = `*NOVO PEDIDO - ALLAN GELADOS*\n\n*CLIENTE:* ${n}\n*END:* ${r}\n\n*ITENS:*\n`;
             carrinho.forEach(i => msg += `• ${i.qtd}x ${i.nome} (R$ ${(i.qtd >= i.min ? i.atacado : i.preco).toFixed(2)})\n`);
             msg += `\n*TOTAL: R$ ${document.getElementById('total-val').innerText}*`;
-            window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(msg)}`);
+            window.open(`https://wa.me/+55 19 99691-2728?text=${encodeURIComponent(msg)}`);
         }
         render();
     </script>
