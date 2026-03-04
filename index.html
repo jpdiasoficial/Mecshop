@@ -3,52 +3,219 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vitrine Allan - Controle de Estoque</title>
+    <title>GELADOS DO ALLAN | MEC SHOP</title>
     <style>
-        body { font-family: sans-serif; background: #f4f4f4; display: flex; justify: center; padding: 20px; }
-        .card { background: white; border-radius: 15px; padding: 20px; width: 300px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; }
-        .badge { background: #ff4757; color: white; padding: 5px 10px; border-radius: 5px; font-size: 12px; display: none; }
-        img { width: 100%; border-radius: 10px; }
-        .price-box { margin: 15px 0; border-top: 1px solid #eee; padding-top: 10px; }
-        .wholesale { color: #2ed573; font-weight: bold; font-size: 14px; }
-        button { width: 100%; padding: 12px; border: none; border-radius: 8px; background: #1e90ff; color: white; cursor: pointer; font-weight: bold; }
-        button:disabled { background: #ccc; cursor: not-allowed; }
+        :root { --primary-green: #25d366; --bg-body: #f4f7f6; --text-main: #1a1a1a; --accent: #ff4757; }
+        body { font-family: 'Inter', sans-serif; margin: 0; background-color: var(--bg-body); color: var(--text-main); padding-bottom: 100px; }
+        
+        /* Slider de Elite */
+        .slider-container { width: 100%; height: 200px; overflow: hidden; position: relative; background: #000; }
+        .slider-track { display: flex; width: 200%; height: 100%; animation: slide 10s infinite ease-in-out; }
+        .slide img { width: 100vw; height: 100%; object-fit: cover; filter: brightness(0.8); }
+        @keyframes slide { 0%, 45% { transform: translateX(0); } 55%, 100% { transform: translateX(-100vw); } }
+
+        /* Busca e Filtros */
+        .search-area { padding: 0 20px; margin-top: -25px; position: relative; z-index: 10; }
+        .search-box { background: #fff; display: flex; align-items: center; padding: 12px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #e1e4e8; }
+        .search-box input { border: none; outline: none; width: 100%; font-size: 15px; }
+        
+        .categorias-bar { display: flex; overflow-x: auto; padding: 15px 20px; gap: 10px; scrollbar-width: none; }
+        .cat-item { background: #fff; padding: 8px 18px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; border: 1px solid #e1e4e8; }
+        .cat-item.active { background: #000; color: #fff; }
+
+        /* Grid de Produtos */
+        .loja-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 20px; }
+        .produto-card { background: #fff; border-radius: 12px; padding: 12px; text-align: center; border: 1px solid #e1e4e8; position: relative; }
+        .badge-esgotado { position: absolute; top: 10px; right: 10px; background: var(--accent); color: #fff; font-size: 10px; padding: 4px 8px; border-radius: 4px; font-weight: bold; }
+        .img-produto { width: 100%; height: 110px; object-fit: cover; border-radius: 8px; margin-bottom: 8px; }
+        .product-name { font-size: 13px; font-weight: 600; height: 32px; overflow: hidden; display: block; }
+        .product-price { font-size: 14px; font-weight: 700; color: #000; margin: 5px 0; display: block; }
+        .atacado-info { font-size: 10px; color: #2ecc71; font-weight: bold; display: block; margin-bottom: 8px; }
+
+        /* Botões e Footer */
+        .qty-selector { display: flex; align-items: center; justify-content: center; gap: 10px; background: #f3f4f6; border-radius: 6px; padding: 5px; }
+        .btn-qty { background: #fff; border: 1px solid #ddd; width: 28px; height: 28px; border-radius: 4px; font-weight: bold; cursor: pointer; }
+        .btn-add-initial { background: #000; color: #fff; border: none; width: 100%; padding: 10px; border-radius: 6px; font-weight: 600; cursor: pointer; }
+        .btn-add-initial:disabled { background: #ccc; cursor: not-allowed; }
+
+        .footer-cart { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #e1e4e8; z-index: 100; }
+        .total-value { font-size: 18px; font-weight: 700; }
+
+        /* Checkout Modal */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 3000; }
+        .modal-body { position: absolute; bottom: 0; background: #fff; width: 100%; border-radius: 20px 20px 0 0; padding: 20px; box-sizing: border-box; max-height: 90vh; overflow-y: auto; }
+        .input-checkout { width: 100%; padding: 12px; margin-bottom: 8px; border: 1px solid #d1d5db; border-radius: 6px; }
+        .btn-zap { width: 100%; background: var(--primary-green); color: white; border: none; padding: 16px; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-    <div class="card" id="card-01">
-        <span id="badge-01" class="badge">ESGOTADO</span>
-        <img src="https://via.placeholder.com/250x250?text=Sorvete+2L" alt="Produto">
-        <h3>Leitinho Trufado 2L</h3>
-        
-        <div class="price-box">
-            <p id="varejo-01">Varejo: R$ 45,00</p>
-            <p id="atacado-01" class="wholesale">Atacado (10+): R$ 38,00</p>
+    <div class="slider-container">
+        <div class="slider-track">
+            <div class="slide"><img src="https://images.unsplash.com/photo-1501443762994-82bd5dabb892?w=800"></div>
+            <div class="slide"><img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=800"></div>
         </div>
+    </div>
 
-        <button id="btn-01">COMPRAR NO WHATSAPP</button>
+    <div class="search-area">
+        <div class="search-box">
+            <input type="text" id="inputBusca" oninput="render()" placeholder="Qual sabor você deseja hoje?">
+        </div>
+    </div>
+
+    <div class="categorias-bar">
+        <div class="cat-item active" onclick="filtrarCat('Tudo', this)">Tudo</div>
+        <div class="cat-item" onclick="filtrarCat('Potes', this)">Potes 2L</div>
+        <div class="cat-item" onclick="filtrarCat('Picolés', this)">Picolés</div>
+    </div>
+
+    <div id="vitrine" class="loja-grid"></div>
+
+    <div class="footer-cart">
+        <div>
+            <span style="font-size: 10px; color: #888; display: block;">SUBTOTAL</span>
+            <span class="total-value">R$ <span id="total-val">0,00</span></span>
+        </div>
+        <button onclick="toggleModal(true)" style="background:#000; color:#fff; border:none; padding:12px 25px; border-radius:6px; font-weight:700;">FINALIZAR</button>
+    </div>
+
+    <div class="modal" id="modalCart">
+        <div class="modal-body">
+            <h3 style="margin-top:0">Resumo do Pedido</h3>
+            <div id="cartItemsList" style="margin-bottom: 20px;"></div>
+            
+            <div style="background: #fdf1f2; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 12px; color: #d63031; font-weight: bold;" id="atacadoAviso">
+                DICA: Compre 10 ou mais unidades para preço de ATACADO!
+            </div>
+
+            <input type="text" id="nomeCliente" class="input-checkout" placeholder="Seu Nome">
+            <input type="tel" id="cepCliente" class="input-checkout" placeholder="Seu CEP (00000-000)" oninput="mascaraCEP(this)" onblur="buscarCEP()" maxlength="9">
+            <input type="text" id="ruaCliente" class="input-checkout" style="background:#f9fafb" placeholder="Endereço Completo" readonly>
+            <input type="text" id="numCliente" class="input-checkout" placeholder="Número e Complemento">
+            
+            <button class="btn-zap" onclick="enviarZap()">ENVIAR PEDIDO AO WHATSAPP</button>
+            <button onclick="toggleModal(false)" style="width:100%; background:none; border:none; color:#999; margin-top:15px;">Cancelar</button>
+        </div>
     </div>
 
     <script>
-        // ESTA FUNÇÃO SIMULA A LEITURA DA PLANILHA DO GOOGLE
-        function simularPlanilha(statusEstoque) {
-            const btn = document.getElementById('btn-01');
-            const badge = document.getElementById('badge-01');
+        // ESTA LISTA SERÁ SUBSTITUÍDA PELA SUA PLANILHA NO FUTURO
+        const produtos = [
+            { id: 1, cat: "Potes", nome: "Leitinho Trufado 2L", preco: 45.00, atacado: 38.00, status: "DISPONÍVEL", img: "https://images.unsplash.com/photo-1501443762994-82bd5dabb892?w=400" },
+            { id: 2, cat: "Potes", nome: "Chocolate Belga 2L", preco: 48.00, atacado: 40.00, status: "DISPONÍVEL", img: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400" },
+            { id: 3, cat: "Picolés", nome: "Skimo Clássico", preco: 7.00, atacado: 4.50, status: "DISPONÍVEL", img: "https://images.unsplash.com/photo-1505394033323-424ebb43ef2e?w=400" },
+            { id: 4, cat: "Picolés", nome: "Morango Premium", preco: 6.00, atacado: 3.80, status: "ESGOTADO", img: "https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=400" }
+        ];
 
-            if (statusEstoque === "ESGOTADO") {
-                btn.disabled = true;
-                btn.innerText = "INDISPONÍVEL";
-                badge.style.display = "inline-block";
+        let carrinho = [];
+        let categoriaAtual = "Tudo";
+
+        function render() {
+            const v = document.getElementById('vitrine');
+            const busca = document.getElementById('inputBusca').value.toLowerCase();
+            v.innerHTML = "";
+
+            produtos.filter(p => {
+                return (categoriaAtual === "Tudo" || p.cat === categoriaAtual) && p.nome.toLowerCase().includes(busca);
+            }).forEach(p => {
+                const itemNoCart = carrinho.find(i => i.id === p.id);
+                const isEsgotado = p.status === "ESGOTADO";
+
+                v.innerHTML += `
+                    <div class="produto-card">
+                        ${isEsgotado ? '<span class="badge-esgotado">ESGOTADO</span>' : ''}
+                        <img src="${p.img}" class="img-produto" style="${isEsgotado ? 'filter:grayscale(1)' : ''}">
+                        <span class="product-name">${p.nome}</span>
+                        <span class="product-price">R$ ${p.preco.toFixed(2).replace('.',',')}</span>
+                        <span class="atacado-info">Atacado (10+): R$ ${p.atacado.toFixed(2).replace('.',',')}</span>
+                        
+                        ${isEsgotado ? 
+                            '<button class="btn-add-initial" disabled>FORA DE ESTOQUE</button>' : 
+                            (itemNoCart ? `
+                                <div class="qty-selector">
+                                    <button class="btn-qty" onclick="changeQty(${p.id}, -1)">-</button>
+                                    <span style="font-weight:700">${itemNoCart.qtd}</span>
+                                    <button class="btn-qty" onclick="changeQty(${p.id}, 1)">+</button>
+                                </div>
+                            ` : `<button class="btn-add-initial" onclick="changeQty(${p.id}, 1)">ADICIONAR</button>`)
+                        }
+                    </div>
+                `;
+            });
+            updateTotal();
+        }
+
+        function changeQty(id, delta) {
+            const idx = carrinho.findIndex(i => i.id === id);
+            if (idx > -1) {
+                carrinho[idx].qtd += delta;
+                if (carrinho[idx].qtd <= 0) carrinho.splice(idx, 1);
             } else {
-                btn.disabled = false;
-                btn.innerText = "COMPRAR NO WHATSAPP";
-                badge.style.display = "none";
+                carrinho.push({...produtos.find(p => p.id === id), qtd: 1});
+            }
+            render();
+            updateCartList();
+        }
+
+        function updateTotal() {
+            let total = 0;
+            carrinho.forEach(item => {
+                // REGRA DE ATACADO: Se qtd >= 10, usa preço de atacado
+                const precoFinal = item.qtd >= 10 ? item.atacado : item.preco;
+                total += precoFinal * item.qtd;
+            });
+            document.getElementById('total-val').innerText = total.toFixed(2).replace('.',',');
+        }
+
+        function updateCartList() {
+            const list = document.getElementById('cartItemsList');
+            list.innerHTML = carrinho.length === 0 ? "Carrinho vazio" : "";
+            carrinho.forEach(item => {
+                const precoUsado = item.qtd >= 10 ? item.atacado : item.preco;
+                list.innerHTML += `
+                    <div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:8px;">
+                        <span>${item.qtd}x ${item.nome} ${item.qtd >= 10 ? '<b style="color:green">(ATACADO)</b>' : ''}</span>
+                        <span>R$ ${(precoUsado * item.qtd).toFixed(2).replace('.',',')}</span>
+                    </div>`;
+            });
+        }
+
+        function filtrarCat(cat, el) {
+            categoriaAtual = cat;
+            document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active');
+            render();
+        }
+
+        function mascaraCEP(i) { i.value = i.value.replace(/\D/g, "").replace(/^(\d{5})(\d)/, "$1-$2"); }
+        function buscarCEP() {
+            let cep = document.getElementById('cepCliente').value.replace(/\D/g, '');
+            if (cep.length === 8) {
+                fetch(`https://viacep.com.br/ws/${cep}/json/`).then(r => r.json()).then(d => {
+                    if(!d.erro) document.getElementById('ruaCliente').value = `${d.logradouro}, ${d.bairro} - ${d.localidade}`;
+                });
             }
         }
 
-        // Exemplo: Se na planilha estiver 'ESGOTADO', o site fica assim:
-        simularPlanilha("DISPONÍVEL"); // Mude para "ESGOTADO" para testar
+        function toggleModal(s) { document.getElementById('modalCart').style.display = s ? 'block' : 'none'; }
+
+        function enviarZap() {
+            const n = document.getElementById('nomeCliente').value;
+            const r = document.getElementById('ruaCliente').value;
+            if(!n || !r || carrinho.length === 0) return alert("Preencha todos os campos!");
+
+            let msg = `*NOVO PEDIDO - ALLAN GELADOS*\n\n*CLIENTE:* ${n}\n*ENDEREÇO:* ${r}\n---\n`;
+            carrinho.forEach(i => {
+                const atacadoStr = i.qtd >= 10 ? " (PREÇO ATACADO)" : "";
+                msg += `• ${i.qtd}x ${i.nome}${atacadoStr}\n`;
+            });
+            msg += `\n*TOTAL: R$ ${document.getElementById('total-val').innerText}*`;
+            
+            // Substitua o número abaixo pelo WhatsApp do Allan
+            window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(msg)}`);
+        }
+
+        render();
     </script>
 </body>
 </html>
