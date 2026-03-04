@@ -3,86 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEC SHOP | FINAL PRO</title>
+    <title>MEC SHOP | CASE PREMIUM</title>
     <style>
-        :root { --btn-green: #004d40; --bg-light: #f1f3f6; }
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--bg-light); padding-bottom: 120px; overflow-x: hidden; }
+        :root { --btn-green: #25d366; --bg-light: #f8f9fa; --accent: #000; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; background-color: var(--bg-light); padding-bottom: 120px; overflow-x: hidden; color: #333; }
         
-        .slider-container { width: 100%; height: 180px; overflow: hidden; position: relative; background: #000; }
-        .slider-track { display: flex; width: 300%; height: 100%; transition: transform 0.6s; }
-        .slide img { width: 100vw; height: 100%; object-fit: cover; filter: brightness(0.6); }
+        /* Slider Ajustado para Velocidade */
+        .slider-container { width: 100%; height: 200px; overflow: hidden; position: relative; background: #000; }
+        .slider-track { display: flex; width: 300%; height: 100%; animation: slide 12s infinite cubic-bezier(0.4, 0, 0.2, 1); }
+        .slide img { width: 100vw; height: 100%; object-fit: cover; filter: brightness(0.7); }
+        @keyframes slide { 0%, 20% { transform: translateX(0); } 33%, 53% { transform: translateX(-100vw); } 66%, 86% { transform: translateX(-200vw); } 100% { transform: translateX(0); } }
 
-        .search-area { padding: 0 15px; margin-top: -25px; position: relative; z-index: 100; }
-        .search-box { background: #fff; display: flex; align-items: center; padding: 12px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .search-box input { border: none; outline: none; width: 100%; margin-left: 10px; }
+        /* Busca Estilizada */
+        .search-area { padding: 0 20px; margin-top: -30px; position: relative; z-index: 100; }
+        .search-box { background: #fff; display: flex; align-items: center; padding: 15px; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.08); border: 1px solid #eee; }
+        .search-box input { border: none; outline: none; width: 100%; margin-left: 10px; font-size: 16px; }
 
-        .categorias-bar { display: flex; overflow-x: auto; padding: 15px; gap: 10px; scrollbar-width: none; }
-        .cat-item { background: #fff; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; }
-        .cat-item.active { background: #000; color: #fff; }
+        /* Categorias Sticky */
+        .categorias-bar { display: flex; overflow-x: auto; padding: 20px; gap: 12px; scrollbar-width: none; position: sticky; top: 0; background: var(--bg-light); z-index: 90; }
+        .cat-item { background: #fff; padding: 10px 22px; border-radius: 25px; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: 0.3s; border: 1px solid #eee; }
+        .cat-item.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
-        .loja-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 15px; }
-        .produto-card { background: #fff; border-radius: 15px; padding: 12px; text-align: center; }
-        .img-produto { width: 100%; height: 100px; object-fit: contain; }
-        .btn-add { background: #000; color: #fff; border: none; width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        /* Grid de Produtos */
+        .loja-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 0 20px; }
+        .produto-card { background: #fff; border-radius: 18px; padding: 15px; text-align: center; border: 1px solid #eee; transition: transform 0.2s; }
+        .img-produto { width: 100%; height: 120px; object-fit: contain; margin-bottom: 10px; }
+        .btn-add { background: var(--accent); color: #fff; border: none; width: 100%; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 13px; }
 
-        .footer-cart { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; z-index: 1000; border-radius: 20px 20px 0 0; box-shadow: 0 -5px 15px rgba(0,0,0,0.1); }
-
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 2000; }
+        /* Modal e Checkout */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; z-index: 2000; backdrop-filter: blur(4px); }
         .modal-body { position: absolute; bottom: 0; background: #fff; width: 100%; border-radius: 30px 30px 0 0; padding: 25px; box-sizing: border-box; max-height: 90vh; overflow-y: auto; }
+        .input-checkout { width: 100%; padding: 14px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 10px; font-size: 15px; }
         
-        .item-carrinho { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #eee; padding-bottom: 8px; font-size: 14px; }
-        .controles { display: flex; align-items: center; gap: 8px; }
-        .btn-qtd { background: #000; color: #fff; border: none; width: 24px; height: 24px; border-radius: 4px; cursor: pointer; }
-        
-        .input-checkout { width: 100%; padding: 12px; margin-bottom: 8px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        .readonly { background: #f4f4f4; color: #888; }
+        .footer-cart { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 20px; display: flex; align-items: center; justify-content: space-between; z-index: 1000; border-radius: 25px 25px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.08); }
     </style>
 </head>
 <body>
 
     <div class="slider-container">
-        <div class="slider-track" id="slider">
-            <div class="slide"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800"></div>
-            <div class="slide"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800"></div>
-            <div class="slide"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800"></div>
+        <div class="slider-track">
+            <div class="slide"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800" alt="Promo 1"></div>
+            <div class="slide"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800" alt="Promo 2"></div>
         </div>
     </div>
 
     <div class="search-area">
-        <div class="search-box">🔍 <input type="text" id="inputBusca" onkeyup="filtrarBusca()" placeholder="Pesquisar..."></div>
+        <div class="search-box">🔍 <input type="text" id="inputBusca" oninput="filtrarBusca()" placeholder="O que você procura hoje?"></div>
     </div>
 
     <div class="categorias-bar">
-        <div class="cat-item active" onclick="filtrarCat('Tudo', this)">Tudo</div>
-        <div class="cat-item" onclick="filtrarCat('Tech', this)">Tecnologia</div>
-        <div class="cat-item" onclick="filtrarCat('Moda', this)">Moda</div>
+        <div class="cat-item active" onclick="filtrarCat('Tudo', this)">🔥 Tudo</div>
+        <div class="cat-item" onclick="filtrarCat('Tech', this)">💻 Tecnologia</div>
+        <div class="cat-item" onclick="filtrarCat('Moda', this)">👟 Moda</div>
     </div>
 
     <div id="vitrine" class="loja-grid"></div>
 
     <div class="footer-cart">
-        <div>Total: <br><b>R$ <span id="total-val">0,00</span></b></div>
-        <button style="background:var(--btn-green); color:white; border:none; padding:12px 20px; border-radius:10px; font-weight:bold;" onclick="toggleModal(true)">VER PEDIDO</button>
+        <div><span style="font-size: 12px; color: #888;">Total do pedido</span><br><b>R$ <span id="total-val">0,00</span></b></div>
+        <button style="background:var(--btn-green); color:white; border:none; padding:15px 25px; border-radius:12px; font-weight:bold; display: flex; align-items: center; gap: 8px;" onclick="toggleModal(true)">
+            CONFERIR PEDIDO <span>🛒</span>
+        </button>
     </div>
 
     <div class="modal" id="modalCart">
         <div class="modal-body">
-            <h3 style="margin-top:0">Meus Itens</h3>
-            <div id="cartItemsList"></div>
-            
-            <div style="display:flex; gap:5px; margin-bottom:15px; margin-top: 15px;">
-                <input type="text" id="cupomInput" class="input-checkout" style="margin-bottom:0" placeholder="Cupom de desconto">
-                <button onclick="update()" style="background:#333; color:#fff; border:none; padding:0 15px; border-radius:8px; font-weight:bold;">Aplicar</button>
+            <div id="timer-escasso" style="background: #fff3cd; color: #856404; padding: 12px; border-radius: 12px; text-align: center; margin-bottom: 20px; font-size: 13px; font-weight: bold; border: 1px solid #ffeeba;">
+                ⏱️ Oferta reservada por: <span id="contagem">15:00</span>
             </div>
 
-            <input type="text" id="nomeCliente" class="input-checkout" placeholder="Seu Nome">
-            <input type="text" id="cepCliente" class="input-checkout" placeholder="Seu CEP" onblur="buscarCEP()" maxlength="8">
-            <input type="text" id="ruaCliente" class="input-checkout readonly" placeholder="Endereço" readonly>
+            <h3 style="margin: 0 0 15px 0">🛒 Seu Carrinho</h3>
+            <div id="cartItemsList"></div>
+            
+            <div style="display:flex; gap:8px; margin: 20px 0;">
+                <input type="text" id="cupomInput" class="input-checkout" style="margin-bottom:0" placeholder="Cupom: MEC10">
+                <button onclick="update()" style="background:#333; color:#fff; border:none; padding:0 20px; border-radius:10px; font-weight:bold;">Aplicar</button>
+            </div>
+
+            <input type="text" id="nomeCliente" class="input-checkout" placeholder="Nome Completo">
+            <input type="tel" id="cepCliente" class="input-checkout" placeholder="Seu CEP (00000-000)" oninput="mascaraCEP(this)" onblur="buscarCEP()" maxlength="9">
+            <input type="text" id="ruaCliente" class="input-checkout" style="background: #f4f4f4" placeholder="Endereço automático" readonly>
             <input type="text" id="numCliente" class="input-checkout" placeholder="Número e Complemento">
             <input type="hidden" id="cidadeOculta">
 
-            <button style="width:100%; background:var(--btn-green); color:white; border:none; padding:18px; border-radius:10px; margin-top:10px; font-weight:bold;" onclick="enviarZap()">FINALIZAR NO WHATSAPP</button>
-            <button onclick="toggleModal(false)" style="width:100%; background:none; border:none; color:#999; margin-top:10px;">Continuar Comprando</button>
+            <button style="width:100%; background:var(--btn-green); color:white; border:none; padding:20px; border-radius:15px; margin-top:10px; font-weight:900; font-size:16px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);" onclick="enviarZap()">
+                FINALIZAR NO WHATSAPP
+            </button>
+
+            <div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px; opacity: 0.6; font-size: 11px; font-weight: bold; text-align: center;">
+                <div>🛡️ SITE SEGURO</div>
+                <div>🚀 ENVIO IMEDIATO</div>
+            </div>
+
+            <button onclick="toggleModal(false)" style="width:100%; background:none; border:none; color:#999; margin-top:15px; font-weight: 600;">← Continuar Comprando</button>
         </div>
     </div>
 
@@ -95,6 +108,7 @@
 
         let carrinho = [];
         let categoriaAtual = "Tudo";
+        let tempo = 900;
 
         function render(lista = null) {
             const v = document.getElementById('vitrine');
@@ -102,10 +116,10 @@
             const dados = lista || (categoriaAtual === "Tudo" ? produtos : produtos.filter(p => p.cat === categoriaAtual));
             dados.forEach(p => {
                 v.innerHTML += `<div class="produto-card">
-                    <img src="${p.img}" class="img-produto">
-                    <span style="font-size:12px; font-weight:700; display:block; height:32px">${p.nome}</span>
-                    <b style="display:block; margin:5px 0;">R$ ${p.preco.toFixed(2).replace('.',',')}</b>
-                    <button class="btn-add" onclick="add(${p.id})">ADICIONAR</button>
+                    <img src="${p.img}" class="img-produto" loading="lazy">
+                    <span style="font-size:13px; font-weight:600; display:block; height:35px">${p.nome}</span>
+                    <b style="display:block; margin:8px 0; color: #000;">R$ ${p.preco.toFixed(2).replace('.',',')}</b>
+                    <button class="btn-add" onclick="add(${p.id})">ADICIONAR +</button>
                 </div>`;
             });
         }
@@ -114,6 +128,28 @@
             const item = carrinho.find(x => x.id === id);
             item ? item.qtd++ : carrinho.push({...produtos.find(x => x.id === id), qtd: 1});
             update();
+        }
+
+        function update() {
+            let total = 0;
+            const list = document.getElementById('cartItemsList');
+            list.innerHTML = "";
+            
+            carrinho.forEach(item => {
+                let sub = item.preco * item.qtd;
+                total += sub;
+                list.innerHTML += `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; background:#f9f9f9; padding:10px; border-radius:10px;">
+                    <div style="max-width:60%"><b>${item.nome}</b><br><span style="color:var(--btn-green)">R$ ${sub.toFixed(2).replace('.',',')}</span></div>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <button style="width:25px; height:25px; border-radius:50%; border:1px solid #ccc;" onclick="alterarQtd(${item.id}, -1)">-</button>
+                        <b>${item.qtd}</b>
+                        <button style="width:25px; height:25px; border-radius:50%; border:1px solid #ccc;" onclick="alterarQtd(${item.id}, 1)">+</button>
+                    </div>
+                </div>`;
+            });
+
+            if(document.getElementById('cupomInput').value.toUpperCase() === "MEC10") total *= 0.9;
+            document.getElementById('total-val').innerText = total.toFixed(2).replace('.',',');
         }
 
         function alterarQtd(id, delta) {
@@ -125,30 +161,10 @@
             }
         }
 
-        function update() {
-            let total = 0;
-            const list = document.getElementById('cartItemsList');
-            list.innerHTML = "";
-            
-            carrinho.forEach(item => {
-                let sub = item.preco * item.qtd;
-                total += sub;
-                list.innerHTML += `<div class="item-carrinho">
-                    <div style="max-width:55%">
-                        <b>R$ ${sub.toFixed(2).replace('.',',')}</b><br>
-                        <span>${item.nome}</span>
-                    </div>
-                    <div class="controles">
-                        <button class="btn-qtd" onclick="alterarQtd(${item.id}, -1)">-</button>
-                        <b>${item.qtd}</b>
-                        <button class="btn-qtd" onclick="alterarQtd(${item.id}, 1)">+</button>
-                    </div>
-                </div>`;
-            });
-
-            const cupom = document.getElementById('cupomInput').value.toUpperCase();
-            if(cupom === "MEC10") total *= 0.9;
-            document.getElementById('total-val').innerText = total.toFixed(2).replace('.',',');
+        function mascaraCEP(i) {
+            let v = i.value.replace(/\D/g, "");
+            v = v.replace(/^(\d{5})(\d)/, "$1-$2");
+            i.value = v;
         }
 
         function buscarCEP() {
@@ -163,19 +179,6 @@
             }
         }
 
-        function enviarZap() {
-            const n = document.getElementById('nomeCliente').value;
-            const r = document.getElementById('ruaCliente').value;
-            const num = document.getElementById('numCliente').value;
-            if(!n || !r || !num || carrinho.length === 0) return alert("Preencha todos os dados!");
-
-            let msg = `*🛒 NOVO PEDIDO*\n👤 *CLIENTE:* ${n}\n📍 *ENTREGA:* ${r}, ${num}\n🏙️ *CIDADE:* ${document.getElementById('cidadeOculta').value}\n---\n`;
-            carrinho.forEach(i => msg += `• ${i.qtd}x ${i.nome} (R$ ${(i.preco * i.qtd).toFixed(2)})\n`);
-            msg += `\n*TOTAL FINAL: R$ ${document.getElementById('total-val').innerText}*`;
-            
-            window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(msg)}`);
-        }
-
         function filtrarBusca() {
             const t = document.getElementById('inputBusca').value.toLowerCase();
             render(produtos.filter(p => p.nome.toLowerCase().includes(t)));
@@ -188,7 +191,32 @@
             render();
         }
 
-        function toggleModal(s) { document.getElementById('modalCart').style.display = s ? 'block' : 'none'; }
+        function toggleModal(s) { 
+            document.getElementById('modalCart').style.display = s ? 'block' : 'none'; 
+            if(s) startTimer();
+        }
+
+        function startTimer() {
+            const display = document.getElementById('contagem');
+            const interval = setInterval(() => {
+                let m = Math.floor(tempo / 60);
+                let s = tempo % 60;
+                display.innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+                if (tempo <= 0) clearInterval(interval);
+                tempo--;
+            }, 1000);
+        }
+
+        function enviarZap() {
+            const n = document.getElementById('nomeCliente').value;
+            const r = document.getElementById('ruaCliente').value;
+            if(!n || !r || carrinho.length === 0) return alert("Preencha os dados e adicione itens!");
+            let msg = `*🛒 NOVO PEDIDO - MEC SHOP*\n\n👤 *CLIENTE:* ${n}\n📍 *ENDEREÇO:* ${r}\n---\n`;
+            carrinho.forEach(i => msg += `• ${i.qtd}x ${i.nome}\n`);
+            msg += `\n💰 *TOTAL: R$ ${document.getElementById('total-val').innerText}*`;
+            window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(msg)}`);
+        }
+
         render();
     </script>
 </body>
