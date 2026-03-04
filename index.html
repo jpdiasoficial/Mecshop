@@ -3,183 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CATÁLOGO SERGEL | ALLAN GELADOS</title>
+    <title>Allan Gelados | Catálogo Inteligente</title>
     <style>
-        :root { --primary: #25d366; --dark: #121212; --accent: #ff4757; }
-        body { font-family: 'Segoe UI', Roboto, sans-serif; margin: 0; background: #f9f9f9; color: var(--dark); padding-bottom: 110px; }
+        :root { --ifood-red: #ea1d2c; --green: #2ecc71; --text: #3e3e3e; }
+        body { font-family: 'Segoe UI', Roboto, sans-serif; margin: 0; background: #fff; color: var(--text); padding-bottom: 110px; }
         
-        .header { background: #000; color: #fff; padding: 20px; text-align: center; }
-        .header h1 { margin: 0; font-size: 18px; letter-spacing: 1px; }
-        .header p { margin: 5px 0 0; font-size: 12px; color: #ccc; }
+        /* Banner Slider */
+        .slider { width: 100%; height: 160px; overflow: hidden; position: relative; background: #000; }
+        .slider img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; }
+        .shop-header { position: absolute; bottom: 15px; left: 15px; color: #fff; }
 
-        .search-area { padding: 15px; position: sticky; top: 0; background: #f9f9f9; z-index: 100; }
-        .search-box { background: #fff; border: 1px solid #ddd; padding: 12px; border-radius: 8px; display: flex; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .search-box input { border: none; outline: none; width: 100%; font-size: 16px; }
+        /* Barra de Navegação Fixa */
+        .nav-sticky { position: sticky; top: 0; background: #fff; z-index: 1000; border-bottom: 1px solid #f2f2f2; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .nav-categories { display: flex; overflow-x: auto; padding: 12px 15px; gap: 10px; scrollbar-width: none; }
+        .nav-categories::-webkit-scrollbar { display: none; }
+        .cat-item { padding: 8px 18px; border-radius: 20px; background: #f2f2f2; color: #717171; font-size: 14px; font-weight: 600; white-space: nowrap; cursor: pointer; border: none; }
+        .cat-item.active { background: var(--ifood-red); color: #fff; }
 
-        .categoria-label { padding: 15px 15px 5px; font-weight: 800; font-size: 14px; color: #666; text-transform: uppercase; }
+        /* Busca */
+        .search-box { padding: 15px; background: #fff; }
+        .search-input { width: 100%; padding: 12px 20px; border-radius: 10px; border: 1px solid #eee; background: #f7f7f7; font-size: 15px; box-sizing: border-box; outline: none; }
 
-        .lista-produtos { padding: 0 15px; }
-        .item { background: #fff; border-radius: 10px; padding: 15px; margin-bottom: 12px; border: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
-        .info { flex: 1; padding-right: 10px; }
-        .nome { font-weight: 700; font-size: 15px; display: block; margin-bottom: 4px; }
-        .desc { font-size: 12px; color: #777; line-height: 1.3; }
-        .precos { margin-top: 8px; display: block; }
-        .v-price { font-weight: 800; color: #000; font-size: 14px; }
-        .a-price { font-size: 11px; color: #2ecc71; font-weight: 600; margin-left: 5px; }
+        /* Lista estilo iFood */
+        .section-title { padding: 20px 15px 10px; font-size: 18px; font-weight: 700; color: #000; }
+        .product-card { display: flex; padding: 15px; border-bottom: 1px solid #f8f8f8; gap: 15px; align-items: center; }
+        .product-info { flex: 1; }
+        .product-name { font-size: 16px; font-weight: 600; color: #333; margin-bottom: 4px; display: block; }
+        .product-desc { font-size: 13px; color: #717171; line-height: 1.3; margin-bottom: 8px; display: block; }
+        .price-v { font-size: 15px; font-weight: 700; color: #2e7d32; }
+        .price-a { font-size: 11px; color: var(--green); font-weight: 800; display: block; margin-top: 2px; }
 
-        .controls { text-align: right; min-width: 100px; }
-        .btn-add { background: #000; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; font-weight: 700; cursor: pointer; }
-        .qty-ctrl { display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
-        .btn-q { width: 30px; height: 30px; border: 1px solid #ddd; background: #fff; border-radius: 4px; font-weight: bold; }
+        .btn-add { color: var(--ifood-red); border: 1px solid #f2f2f2; background: #fff; padding: 8px 15px; border-radius: 5px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .qty-controls { display: flex; align-items: center; gap: 10px; border: 1px solid var(--ifood-red); border-radius: 5px; padding: 5px 10px; }
+        .qty-btn { background: none; border: none; color: var(--ifood-red); font-size: 18px; font-weight: bold; }
 
-        .footer { position: fixed; bottom: 0; width: 100%; background: #fff; border-top: 1px solid #eee; padding: 15px 20px; box-sizing: border-box; display: flex; justify-content: space-between; align-items: center; z-index: 200; }
-        .total-box span { display: block; }
-        .btn-zap { background: var(--primary); color: #fff; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 800; font-size: 14px; }
+        /* Footer Fixo */
+        .footer-cart { position: fixed; bottom: 0; width: 100%; background: #fff; border-top: 1px solid #eee; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 1100; box-sizing: border-box; }
+        .total-text { font-size: 12px; color: #717171; display: block; }
+        .total-val { font-size: 18px; font-weight: 800; }
+        .btn-finish { background: var(--ifood-red); color: #fff; border: none; padding: 12px 30px; border-radius: 8px; font-weight: bold; font-size: 15px; }
 
-        .modal { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); display:none; z-index:300; align-items:center; justify-content:center; }
-        .modal-body { background:#fff; width:90%; border-radius:15px; padding:20px; box-sizing:border-box; }
-        .input { width:100%; padding:12px; margin:10px 0; border:1px solid #ddd; border-radius:5px; box-sizing:border-box; }
+        /* Modal */
+        .modal { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); display:none; z-index:2000; align-items:flex-end; }
+        .modal-content { background:#fff; width:100%; border-radius:20px 20px 0 0; padding:25px; box-sizing:border-box; }
+        .input-ifood { width:100%; padding:15px; margin-bottom:10px; border:1px solid #ddd; border-radius:8px; font-size:14px; box-sizing:border-box; }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <h1>ALLAN GELADOS - SERGEL</h1>
-    <p>O VERDADEIRO SABOR DA FELICIDADE</p>
-</div>
-
-<div class="search-area">
-    <div class="search-box">
-        <input type="text" id="busca" oninput="render()" placeholder="🔍 Buscar sabor ou categoria...">
+<div class="slider">
+    <img src="https://images.unsplash.com/photo-1576506295286-5cda18df43c7?w=800">
+    <div class="shop-header">
+        <h2 style="margin:0">Allan Gelados</h2>
+        <span style="font-size: 12px;">🍦 O melhor da Sergel na sua casa</span>
     </div>
 </div>
 
-<div id="conteudo"></div>
-
-<div class="footer">
-    <div class="total-box">
-        <span style="font-size: 10px; color: #888;">SUBTOTAL</span>
-        <span style="font-size: 18px; font-weight: 900;">R$ <span id="resumo-total">0,00</span></span>
+<div class="nav-sticky">
+    <div class="nav-categories" id="cat-nav">
+        <button class="cat-item active" onclick="filterCat('Tudo', this)">Tudo</button>
+        <button class="cat-item" onclick="filterCat('Pote 2L', this)">Pote 2L</button>
+        <button class="cat-item" onclick="filterCat('Picolé', this)">Picolé</button>
     </div>
-    <button class="btn-zap" onclick="abrirModal()">FECHAR PEDIDO</button>
+</div>
+
+<div class="search-box">
+    <input type="text" id="searchInput" class="search-input" placeholder="Buscar sabor..." oninput="render()">
+</div>
+
+<div id="product-container"></div>
+
+<div class="footer-cart">
+    <div>
+        <span class="total-text">Total sem entrega</span>
+        <span class="total-val">R$ <span id="total-html">0,00</span></span>
+    </div>
+    <button class="btn-finish" onclick="openModal()">Finalizar</button>
 </div>
 
 <div class="modal" id="modal">
-    <div class="modal-body">
-        <h3 style="margin-top:0">Dados para Entrega</h3>
-        <div id="resumo-itens" style="font-size: 12px; color: #666; margin-bottom: 10px; max-height: 80px; overflow-y: auto;"></div>
-        <input type="text" id="cliente" class="input" placeholder="Seu Nome">
-        <input type="text" id="rua" class="input" placeholder="Endereço Completo">
-        <button class="btn-zap" style="width:100%" onclick="enviarZap()">ENVIAR NO WHATSAPP</button>
-        <button onclick="fecharModal()" style="width:100%; background:none; border:none; margin-top:10px; color:#999; font-size:12px;">Voltar</button>
+    <div class="modal-content">
+        <h3 style="margin-top:0">Finalizar Pedido</h3>
+        <div id="resumo" style="font-size:13px; color:#666; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;"></div>
+        <input type="text" id="userName" class="input-ifood" placeholder="Seu Nome">
+        <input type="text" id="userAddr" class="input-ifood" placeholder="Endereço Completo">
+        <button class="btn-finish" style="width:100%" onclick="sendOrder()">FECHAR PEDIDO NO WHATSAPP</button>
+        <button onclick="closeModal()" style="width:100%; background:none; border:none; color:#999; margin-top:15px;">Voltar ao cardápio</button>
     </div>
 </div>
 
 <script>
     const produtos = [
-        { id: 1, cat: 'Potes 2 Litros', nome: 'Leitinho Trufado', desc: 'O campeão de vendas. Sorvete de leite com trufas de chocolate artesanal.', preco: 45.0, atacado: 38.0, min: 10 },
-        { id: 2, cat: 'Potes 2 Litros', nome: 'Delicielo Avelã', desc: 'Sabor irresistível de avelã cremosa com pedaços.', preco: 45.0, atacado: 38.0, min: 10 },
-        { id: 3, cat: 'Potes 2 Litros', nome: 'Iogurte com Amarena', desc: 'Toque azedinho do iogurte com a doçura da cereja silvestre amarena.', preco: 45.0, atacado: 38.0, min: 10 },
-        { id: 4, cat: 'Potes 2 Litros', nome: 'Chocolate Belga', desc: 'Intenso, cremoso e feito com o puro cacau selecionado.', preco: 45.0, atacado: 38.0, min: 10 },
-        { id: 5, cat: 'Potes 2 Litros', nome: 'Napolitano Especial', desc: 'Três cores, três sabores: Morango, Creme e Chocolate Clássico.', preco: 40.0, atacado: 35.0, min: 10 },
-        
-        { id: 6, cat: 'Picolés (Especiais)', nome: 'Skimo Clássico', desc: 'Sorvete de baunilha com casquinha crocante de chocolate meio amargo.', preco: 7.0, atacado: 2.8, min: 20 },
-        { id: 7, cat: 'Picolés (Especiais)', nome: 'Chocolate Holandês', desc: 'Cremosidade extrema com chocolate tipo exportação no palito.', preco: 7.0, atacado: 2.8, min: 20 },
-        { id: 8, cat: 'Picolés (Especiais)', nome: 'Pavê de Chocolate', desc: 'Inspirado na sobremesa brasileira, com pedaços de biscoito.', preco: 7.0, atacado: 2.8, min: 20 },
-        
-        { id: 9, cat: 'Picolés (Frutas)', nome: 'Milho Verde', desc: 'O sabor da roça. Feito com milho selecionado e muito leite.', preco: 6.0, atacado: 2.2, min: 20 },
-        { id: 10, cat: 'Picolés (Frutas)', nome: 'Morango com Leite Cond.', desc: 'Recheado com leite condensado cremoso.', preco: 7.0, atacado: 2.8, min: 20 },
-        { id: 11, cat: 'Picolés (Frutas)', nome: 'Limão Siciliano', desc: 'Refrescante, cítrico e natural. Ideal para dias quentes.', preco: 5.0, atacado: 2.0, min: 20 }
+        { id: 1, cat: 'Pote 2L', nome: 'Leitinho Trufado 2L', desc: 'Sorvete de leite cremoso com trufas artesanais.', preco: 45.0, atacado: 38.0, min: 10 },
+        { id: 2, cat: 'Pote 2L', nome: 'Chocolate Belga 2L', desc: 'Puro chocolate com textura aveludada.', preco: 45.0, atacado: 38.0, min: 10 },
+        { id: 3, cat: 'Pote 2L', nome: 'Iogurte c/ Amarena 2L', desc: 'Iogurte suave com cerejas amarenas importadas.', preco: 45.0, atacado: 38.0, min: 10 },
+        { id: 4, cat: 'Picolé', nome: 'Skimo Clássico', desc: 'Baunilha com casquinha de chocolate crocante.', preco: 7.0, atacado: 2.8, min: 20 },
+        { id: 5, cat: 'Picolé', nome: 'Morango c/ Leite Cond.', desc: 'Picolé recheado com leite condensado.', preco: 7.0, atacado: 2.8, min: 20 },
+        { id: 6, cat: 'Picolé', nome: 'Milho Verde', desc: 'Sabor tradicional e refrescante.', preco: 6.0, atacado: 2.2, min: 20 }
     ];
 
-    let carrinho = [];
+    let cart = [];
+    let activeCat = 'Tudo';
 
     function render() {
-        const container = document.getElementById('conteudo');
-        const busca = document.getElementById('busca').value.toLowerCase();
+        const container = document.getElementById('product-container');
+        const search = document.getElementById('searchInput').value.toLowerCase();
         container.innerHTML = '';
 
-        let categorias = [...new Set(produtos.map(p => p.cat))];
-
-        categorias.forEach(cat => {
-            const itensFiltrados = produtos.filter(p => p.cat === cat && p.nome.toLowerCase().includes(busca));
-            
-            if(itensFiltrados.length > 0) {
-                container.innerHTML += `<div class="categoria-label">${cat}</div><div class="lista-produtos">`;
-                itensFiltrados.forEach(p => {
-                    const itemNoCart = carrinho.find(c => c.id === p.id);
-                    container.innerHTML += `
-                        <div class="item">
-                            <div class="info">
-                                <span class="nome">${p.nome}</span>
-                                <span class="desc">${p.desc}</span>
-                                <span class="precos">
-                                    <span class="v-price">R$ ${p.preco.toFixed(2).replace('.',',')}</span>
-                                    <span class="a-price">Atacado: R$ ${p.atacado.toFixed(2).replace('.',',')}</span>
-                                </span>
-                            </div>
-                            <div class="controls">
-                                ${itemNoCart ? `
-                                    <div class="qty-ctrl">
-                                        <button class="btn-q" onclick="updateQty(${p.id}, -1)">-</button>
-                                        <strong>${itemNoCart.qtd}</strong>
-                                        <button class="btn-q" onclick="updateQty(${p.id}, 1)">+</button>
-                                    </div>
-                                ` : `<button class="btn-add" onclick="updateQty(${p.id}, 1)">ADD</button>`}
-                            </div>
+        const filterProducts = produtos.filter(p => (activeCat === 'Tudo' || p.cat === activeCat) && p.nome.toLowerCase().includes(search));
+        
+        const categories = [...new Set(filterProducts.map(p => p.cat))];
+        
+        categories.forEach(cat => {
+            container.innerHTML += `<div class="section-title">${cat}</div>`;
+            const items = filterProducts.filter(p => p.cat === cat);
+            items.forEach(p => {
+                const itemCart = cart.find(c => c.id === p.id);
+                container.innerHTML += `
+                    <div class="product-card">
+                        <div class="product-info">
+                            <span class="product-name">${p.nome}</span>
+                            <span class="product-desc">${p.desc}</span>
+                            <span class="price-v">R$ ${p.preco.toFixed(2).replace('.',',')}</span>
+                            <span class="price-a">📦 Atacado (${p.min}+): R$ ${p.atacado.toFixed(2).replace('.',',')}</span>
                         </div>
-                    `;
-                });
-                container.innerHTML += `</div>`;
-            }
+                        <div class="actions">
+                            ${itemCart ? `
+                                <div class="qty-controls">
+                                    <button class="qty-btn" onclick="update(${p.id}, -1)">-</button>
+                                    <strong>${itemCart.qty}</strong>
+                                    <button class="qty-btn" onclick="update(${p.id}, 1)">+</button>
+                                </div>
+                            ` : `
+                                <button class="btn-add" onclick="update(${p.id}, 1)">Adicionar</button>
+                            `}
+                        </div>
+                    </div>
+                `;
+            });
         });
-        calcTotal();
+        updateTotal();
     }
 
-    function updateQty(id, d) {
-        const idx = carrinho.findIndex(c => c.id === id);
+    function filterCat(cat, btn) {
+        activeCat = cat;
+        document.querySelectorAll('.cat-item').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        render();
+    }
+
+    function update(id, d) {
+        const idx = cart.findIndex(c => c.id === id);
         if(idx > -1) {
-            carrinho[idx].qtd += d;
-            if(carrinho[idx].qtd <= 0) carrinho.splice(idx, 1);
+            cart[idx].qty += d;
+            if(cart[idx].qty <= 0) cart.splice(idx, 1);
         } else {
-            carrinho.push({...produtos.find(p => p.id === id), qtd: 1});
+            cart.push({...produtos.find(p => p.id === id), qty: 1});
         }
         render();
     }
 
-    function calcTotal() {
+    function updateTotal() {
         let total = 0;
-        carrinho.forEach(i => {
-            const p = i.qtd >= i.min ? i.atacado : i.preco;
-            total += p * i.qtd;
+        cart.forEach(i => {
+            const price = i.qty >= i.min ? i.atacado : i.preco;
+            total += price * i.qty;
         });
-        document.getElementById('resumo-total').innerText = total.toFixed(2).replace('.',',');
+        document.getElementById('total-html').innerText = total.toFixed(2).replace('.',',');
     }
 
-    function abrirModal() {
-        if(carrinho.length === 0) return alert("Adicione itens primeiro!");
-        document.getElementById('resumo-itens').innerHTML = carrinho.map(i => `${i.qtd}x ${i.nome}`).join(', ');
+    function openModal() {
+        if(cart.length === 0) return alert("Adicione itens à sacola!");
+        document.getElementById('resumo').innerHTML = cart.map(i => `${i.qty}x ${i.nome}`).join(', ');
         document.getElementById('modal').style.display = 'flex';
     }
 
-    function fecharModal() { document.getElementById('modal').style.display = 'none'; }
+    function closeModal() { document.getElementById('modal').style.display = 'none'; }
 
-    function enviarZap() {
-        const nome = document.getElementById('cliente').value;
-        const end = document.getElementById('rua').value;
-        if(!nome || !end) return alert("Preencha os campos!");
+    function sendOrder() {
+        const name = document.getElementById('userName').value;
+        const addr = document.getElementById('userAddr').value;
+        if(!name || !addr) return alert("Preencha seus dados!");
 
-        let msg = `*PEDIDO ALLAN GELADOS*\n\n*Cliente:* ${nome}\n*Endereço:* ${end}\n\n*ITENS:*\n`;
-        carrinho.forEach(i => {
-            const p = i.qtd >= i.min ? i.atacado : i.preco;
-            msg += `• ${i.qtd}x ${i.nome} - R$ ${(p * i.qtd).toFixed(2)}${i.qtd >= i.min ? ' (ATACADO)' : ''}\n`;
-        });
-        msg += `\n*TOTAL: R$ ${document.getElementById('resumo-total').innerText}*`;
-        
-        window.open(`https://wa.me/5519996912728?text=${encodeURIComponent(msg)}`);
-    }
-
-    render();
-</script>
-</body>
-</html>
+        let msg = `*PEDIDO ALLAN GELADOS*\n\n*Cliente:* ${name}\n*Endereço:* ${addr}\n\n*ÍTENS:*\n`;
+        cart
