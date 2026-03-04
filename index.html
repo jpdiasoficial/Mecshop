@@ -3,28 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sorveteria Sergel - Allan | Catálogo</title>
+    <title>Sorveteria Sergel - Allan</title>
     <style>
         :root { --primary: #ea1d2c; --green: #2ecc71; --text-main: #3e3e3e; --text-light: #717171; }
         body { font-family: 'Segoe UI', Roboto, sans-serif; margin: 0; background: #fff; color: var(--text-main); padding-bottom: 120px; }
         
-        /* Header */
         .slider { width: 100%; height: 160px; position: relative; background: #000; overflow: hidden; }
         .slider img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
         .shop-header { position: absolute; bottom: 15px; left: 15px; color: #fff; }
 
-        /* Navegação Fixa */
         .nav-container { position: sticky; top: 0; background: #fff; z-index: 1000; border-bottom: 1px solid #f2f2f2; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .nav-tabs { display: flex; overflow-x: auto; padding: 12px 15px; gap: 10px; scrollbar-width: none; }
         .tab { padding: 8px 20px; border-radius: 20px; background: #f2f2f2; color: var(--text-light); font-size: 14px; font-weight: 600; white-space: nowrap; border: none; cursor: pointer; }
         .tab.active { background: var(--primary); color: #fff; }
 
-        /* Busca */
         .search-wrap { padding: 15px; background: #fff; }
         .search-input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #eee; background: #f7f7f7; font-size: 15px; outline: none; }
 
-        /* Itens */
-        .category-title { padding: 20px 15px 10px; font-size: 18px; font-weight: 700; color: #000; background: #fff; text-transform: uppercase; letter-spacing: 1px; }
+        .category-title { padding: 20px 15px 10px; font-size: 18px; font-weight: 700; color: #000; background: #fff; text-transform: uppercase; }
         .card { display: flex; padding: 15px; border-bottom: 1px solid #f8f8f8; gap: 15px; align-items: flex-start; }
         .info { flex: 1; }
         .name { font-size: 16px; font-weight: 600; color: #333; margin: 0 0 4px 0; }
@@ -38,12 +34,10 @@
         .qty-wrap { display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--primary); border-radius: 6px; padding: 4px; }
         .qty-btn { background: none; border: none; color: var(--primary); font-size: 18px; font-weight: bold; width: 30px; }
 
-        /* Modal Checkout */
         .delivery-toggle { display: flex; gap: 10px; margin-bottom: 15px; }
         .toggle-btn { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #ddd; background: #f9f9f9; font-weight: 600; font-size: 13px; cursor: pointer; }
         .toggle-btn.active { border-color: var(--primary); color: var(--primary); background: #fff5f5; }
 
-        /* Rodapé */
         .footer { position: fixed; bottom: 0; width: 100%; background: #fff; border-top: 1px solid #eee; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 1100; box-sizing: border-box; }
         .btn-finish { background: var(--primary); color: #fff; border: none; padding: 12px 30px; border-radius: 8px; font-weight: bold; font-size: 16px; }
 
@@ -58,7 +52,7 @@
     <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=800">
     <div class="shop-header">
         <h2 style="margin:0">Sorveteria Sergel - Allan</h2>
-        <span style="font-size: 12px;">Preço de Atacado e Varejo</span>
+        <span style="font-size: 12px;">Tabela de Preços Atacado e Varejo</span>
     </div>
 </div>
 
@@ -72,7 +66,7 @@
 </div>
 
 <div class="search-wrap">
-    <input type="text" id="search" class="search-input" placeholder="Buscar sabor no catálogo..." oninput="render()">
+    <input type="text" id="search" class="search-input" placeholder="Buscar sabor ou categoria..." oninput="render()">
 </div>
 
 <div id="app"></div>
@@ -88,15 +82,12 @@
 <div class="modal" id="checkoutModal">
     <div class="modal-body">
         <h3 style="margin-bottom: 15px;">Forma de Retirada</h3>
-        
         <div class="delivery-toggle">
             <button class="toggle-btn active" id="btnDelivery" onclick="setMethod('Entrega')">Entrega</button>
             <button class="toggle-btn" id="btnPickup" onclick="setMethod('Retirada')">Retirar na Loja</button>
         </div>
-
         <input type="text" id="userName" class="input" placeholder="Nome Completo">
-        <input type="text" id="userAddress" class="input" placeholder="Endereço de Entrega (Rua, Número, Bairro)">
-        
+        <input type="text" id="userAddress" class="input" placeholder="Endereço de Entrega Completo">
         <button class="btn-finish" style="width:100%" onclick="sendToWhatsApp()">CONFIRMAR NO WHATSAPP</button>
         <button onclick="closeCheckout()" style="width:100%; background:none; border:none; color:#999; margin-top:10px;">Voltar ao Catálogo</button>
     </div>
@@ -104,17 +95,23 @@
 
 <script>
     const db = [
-        { id: 1, cat: 'Potes 2L', name: 'Leitinho Trufado', desc: 'Sorvete de leite com trufa de chocolate artesanal.', v: 45.0, a: 38.0, min: 10 },
-        { id: 2, cat: 'Potes 2L', name: 'Delicielo Avelã', desc: 'Sabor de avelã com pedaços crocantes.', v: 45.0, a: 38.0, min: 10 },
-        { id: 3, cat: 'Potes 2L', name: 'Napolitano Sergel', desc: 'Combinação clássica de Morango, Creme e Chocolate.', v: 40.0, a: 35.0, min: 10 },
-        { id: 4, cat: 'Potes 2L', name: 'Chocolate Belga', desc: 'Chocolate intenso com textura aveludada.', v: 45.0, a: 38.0, min: 10 },
+        // POTES 2L
+        { id: 1, cat: 'Potes 2L', name: 'Leitinho Trufado', desc: 'Sorvete de leite com trufas de chocolate artesanal.', v: 45.0, a: 38.0, min: 10 },
+        { id: 2, cat: 'Potes 2L', name: 'Delicielo Avelã', desc: 'Sabor irresistível de avelã cremosa com pedaços.', v: 45.0, a: 38.0, min: 10 },
+        { id: 3, cat: 'Potes 2L', name: 'Iogurte com Amarena', desc: 'Iogurte suave com a doçura da cereja silvestre.', v: 45.0, a: 38.0, min: 10 },
+        { id: 4, cat: 'Potes 2L', name: 'Chocolate Belga', desc: 'Intenso, cremoso e feito com puro cacau.', v: 45.0, a: 38.0, min: 10 },
+        { id: 5, cat: 'Potes 2L', name: 'Napolitano Sergel', desc: 'Três sabores clássicos: Morango, Creme e Chocolate.', v: 40.0, a: 35.0, min: 10 },
         
-        { id: 6, cat: 'Picolés Especiais', name: 'Skimo Clássico', desc: 'Baunilha com cobertura de chocolate crocante.', v: 7.0, a: 2.8, min: 20 },
-        { id: 7, cat: 'Picolés Especiais', name: 'Morango com Leite Cond.', desc: 'Picolé recheado com leite condensado.', v: 7.0, a: 2.8, min: 20 },
-        { id: 8, cat: 'Picolés Especiais', name: 'Chocolate Holandês', desc: 'Cremosidade extrema com chocolate selecionado.', v: 7.0, a: 2.8, min: 20 },
+        // PICOLÉS ESPECIAIS
+        { id: 6, cat: 'Picolés Especiais', name: 'Skimo Clássico', desc: 'Baunilha com casquinha crocante de chocolate meio amargo.', v: 7.0, a: 2.8, min: 20 },
+        { id: 7, cat: 'Picolés Especiais', name: 'Chocolate Holandês', desc: 'Cremosidade extrema com chocolate tipo exportação.', v: 7.0, a: 2.8, min: 20 },
+        { id: 8, cat: 'Picolés Especiais', name: 'Pavê de Chocolate', desc: 'Inspirado na sobremesa, com pedaços de biscoito.', v: 7.0, a: 2.8, min: 20 },
+        { id: 9, cat: 'Picolés Especiais', name: 'Morango com Leite Cond.', desc: 'Picolé recheado com leite condensado cremoso.', v: 7.0, a: 2.8, min: 20 },
         
-        { id: 10, cat: 'Picolés Fruta', name: 'Milho Verde', desc: 'Sabor tradicional e natural.', v: 6.0, a: 2.2, min: 20 },
-        { id: 11, cat: 'Picolés Fruta', name: 'Limão Siciliano', desc: 'Refrescante e 100% natural.', v: 5.0, a: 2.0, min: 20 }
+        // PICOLÉS FRUTA
+        { id: 10, cat: 'Picolés Fruta', name: 'Milho Verde', desc: 'Sabor tradicional feito com milho selecionado.', v: 6.0, a: 2.2, min: 20 },
+        { id: 11, cat: 'Picolés Fruta', name: 'Limão Siciliano', desc: 'Refrescante, cítrico e 100% natural.', v: 5.0, a: 2.0, min: 20 },
+        { id: 12, cat: 'Picolés Fruta', name: 'Maracujá Natural', desc: 'Sabor marcante da fruta fresca.', v: 5.0, a: 2.0, min: 20 }
     ];
 
     let cart = [];
@@ -190,7 +187,18 @@
     function sendToWhatsApp() {
         const name = document.getElementById('userName').value;
         const addr = document.getElementById('userAddress').value;
-        if(!name || (method === 'Entrega' && !addr)) return alert("Por favor, preencha as informações obrigatórias.");
+        if(!name || (method === 'Entrega' && !addr)) return alert("Preencha as informações necessárias.");
 
-        let msg = `*PEDIDO SORVETERIA SERGEL - ALLAN*\n\n*Tipo:* ${method}\n*Cliente:* ${name
-    
+        let msg = `*PEDIDO SORVETERIA SERGEL - ALLAN*\n\n*Tipo:* ${method}\n*Cliente:* ${name}\n${method === 'Entrega' ? `*Endereço:* ${addr}\n` : ''}\n*ITENS:*\n`;
+        cart.forEach(i => {
+            const price = i.qty >= i.min ? i.a : i.v;
+            msg += `- ${i.qty}x ${i.name} | R$ ${(price * i.qty).toFixed(2)}${i.qty >= i.min ? ' (Atacado)' : ''}\n`;
+        });
+        msg += `\n*VALOR TOTAL: R$ ${document.getElementById('total-val').innerText}*`;
+        window.open(`https://wa.me/5519996912728?text=${encodeURIComponent(msg)}`);
+    }
+
+    render();
+</script>
+</body>
+</html>
