@@ -3,107 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEC SHOP | CASE PREMIUM</title>
+    <title>MEC SHOP | INFRAESTRUTURA ALTA CONVERSÃO</title>
     <style>
-        :root { --btn-green: #25d366; --bg-light: #f8f9fa; --accent: #000; }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; background-color: var(--bg-light); padding-bottom: 120px; overflow-x: hidden; color: #333; }
+        :root { --primary-green: #25d366; --bg-body: #f4f7f6; --text-main: #1a1a1a; --border-color: #e1e4e8; }
+        body { font-family: 'Inter', -apple-system, sans-serif; margin: 0; background-color: var(--bg-body); color: var(--text-main); line-height: 1.5; padding-bottom: 100px; }
         
-        /* Slider Ajustado para Velocidade */
-        .slider-container { width: 100%; height: 200px; overflow: hidden; position: relative; background: #000; }
-        .slider-track { display: flex; width: 300%; height: 100%; animation: slide 12s infinite cubic-bezier(0.4, 0, 0.2, 1); }
-        .slide img { width: 100vw; height: 100%; object-fit: cover; filter: brightness(0.7); }
-        @keyframes slide { 0%, 20% { transform: translateX(0); } 33%, 53% { transform: translateX(-100vw); } 66%, 86% { transform: translateX(-200vw); } 100% { transform: translateX(0); } }
+        /* Slider Profissional */
+        .slider-container { width: 100%; height: 220px; overflow: hidden; position: relative; background: #000; }
+        .slider-track { display: flex; width: 300%; height: 100%; animation: slide 15s infinite ease-in-out; }
+        .slide img { width: 100vw; height: 100%; object-fit: cover; filter: brightness(0.8); }
+        @keyframes slide { 0%, 25% { transform: translateX(0); } 33%, 58% { transform: translateX(-100vw); } 66%, 91% { transform: translateX(-200vw); } 100% { transform: translateX(0); } }
 
-        /* Busca Estilizada */
-        .search-area { padding: 0 20px; margin-top: -30px; position: relative; z-index: 100; }
-        .search-box { background: #fff; display: flex; align-items: center; padding: 15px; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.08); border: 1px solid #eee; }
-        .search-box input { border: none; outline: none; width: 100%; margin-left: 10px; font-size: 16px; }
+        /* Busca Minimalista */
+        .search-area { padding: 0 20px; margin-top: -25px; position: relative; z-index: 10; }
+        .search-box { background: #fff; display: flex; align-items: center; padding: 12px 18px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid var(--border-color); }
+        .search-box input { border: none; outline: none; width: 100%; font-size: 15px; color: #444; }
 
-        /* Categorias Sticky */
-        .categorias-bar { display: flex; overflow-x: auto; padding: 20px; gap: 12px; scrollbar-width: none; position: sticky; top: 0; background: var(--bg-light); z-index: 90; }
-        .cat-item { background: #fff; padding: 10px 22px; border-radius: 25px; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: 0.3s; border: 1px solid #eee; }
-        .cat-item.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+        /* Categorias */
+        .categorias-bar { display: flex; overflow-x: auto; padding: 20px; gap: 10px; scrollbar-width: none; }
+        .cat-item { background: #fff; padding: 8px 20px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap; border: 1px solid var(--border-color); color: #666; transition: 0.2s; }
+        .cat-item.active { background: #000; color: #fff; border-color: #000; }
 
         /* Grid de Produtos */
-        .loja-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 0 20px; }
-        .produto-card { background: #fff; border-radius: 18px; padding: 15px; text-align: center; border: 1px solid #eee; transition: transform 0.2s; }
-        .img-produto { width: 100%; height: 120px; object-fit: contain; margin-bottom: 10px; }
-        .btn-add { background: var(--accent); color: #fff; border: none; width: 100%; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 13px; }
+        .loja-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 20px; }
+        .produto-card { background: #fff; border-radius: 12px; padding: 16px; text-align: center; border: 1px solid var(--border-color); }
+        .img-produto { width: 100%; height: 130px; object-fit: contain; margin-bottom: 12px; }
+        .product-name { font-size: 13px; font-weight: 500; height: 38px; overflow: hidden; display: block; margin-bottom: 8px; }
+        .product-price { font-size: 16px; font-weight: 700; color: #000; display: block; margin-bottom: 12px; }
+        .btn-add { background: #000; color: #fff; border: none; width: 100%; padding: 10px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        /* Modal e Checkout */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; z-index: 2000; backdrop-filter: blur(4px); }
-        .modal-body { position: absolute; bottom: 0; background: #fff; width: 100%; border-radius: 30px 30px 0 0; padding: 25px; box-sizing: border-box; max-height: 90vh; overflow-y: auto; }
-        .input-checkout { width: 100%; padding: 14px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 10px; font-size: 15px; }
+        /* Footer Cart */
+        .footer-cart { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border-color); z-index: 100; }
+        .total-label { font-size: 11px; color: #888; text-transform: uppercase; }
+        .total-value { font-size: 18px; font-weight: 700; }
+
+        /* Modal e Checkout Profissional */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 1000; backdrop-filter: blur(2px); }
+        .modal-body { position: absolute; bottom: 0; background: #fff; width: 100%; border-radius: 20px 20px 0 0; padding: 24px; box-sizing: border-box; max-height: 85vh; overflow-y: auto; }
         
-        .footer-cart { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 20px; display: flex; align-items: center; justify-content: space-between; z-index: 1000; border-radius: 25px 25px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.08); }
+        .timer-bar { background: #fef9c3; color: #713f12; padding: 8px; border-radius: 6px; text-align: center; margin-bottom: 20px; font-size: 12px; font-weight: 600; }
+        .input-checkout { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; box-sizing: border-box; }
+        
+        /* Cupom Opcional */
+        .cupom-section { margin-bottom: 15px; padding: 10px; background: #f9fafb; border-radius: 6px; border: 1px dashed #d1d5db; }
+        .btn-zap { width: 100%; background: var(--primary-green); color: white; border: none; padding: 16px; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.3s; }
+        .btn-zap:hover { background: #1eb956; }
+        
+        .trust-badges { display: flex; justify-content: center; gap: 15px; margin-top: 15px; color: #9ca3af; font-size: 10px; font-weight: 600; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
     <div class="slider-container">
         <div class="slider-track">
-            <div class="slide"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800" alt="Promo 1"></div>
-            <div class="slide"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800" alt="Promo 2"></div>
+            <div class="slide"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800"></div>
+            <div class="slide"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800"></div>
         </div>
     </div>
 
     <div class="search-area">
-        <div class="search-box">🔍 <input type="text" id="inputBusca" oninput="filtrarBusca()" placeholder="O que você procura hoje?"></div>
+        <div class="search-box">
+            <input type="text" id="inputBusca" oninput="filtrarBusca()" placeholder="Pesquisar no catálogo...">
+        </div>
     </div>
 
     <div class="categorias-bar">
-        <div class="cat-item active" onclick="filtrarCat('Tudo', this)">🔥 Tudo</div>
-        <div class="cat-item" onclick="filtrarCat('Tech', this)">💻 Tecnologia</div>
-        <div class="cat-item" onclick="filtrarCat('Moda', this)">👟 Moda</div>
+        <div class="cat-item active" onclick="filtrarCat('Tudo', this)">Todos</div>
+        <div class="cat-item" onclick="filtrarCat('Tech', this)">Tecnologia</div>
+        <div class="cat-item" onclick="filtrarCat('Moda', this)">Moda</div>
     </div>
 
     <div id="vitrine" class="loja-grid"></div>
 
     <div class="footer-cart">
-        <div><span style="font-size: 12px; color: #888;">Total do pedido</span><br><b>R$ <span id="total-val">0,00</span></b></div>
-        <button style="background:var(--btn-green); color:white; border:none; padding:15px 25px; border-radius:12px; font-weight:bold; display: flex; align-items: center; gap: 8px;" onclick="toggleModal(true)">
-            CONFERIR PEDIDO <span>🛒</span>
+        <div>
+            <span class="total-label">Subtotal</span><br>
+            <span class="total-value">R$ <span id="total-val">0,00</span></span>
+        </div>
+        <button onclick="toggleModal(true)" style="background:#000; color:#fff; border:none; padding:12px 24px; border-radius:6px; font-weight:600; cursor:pointer;">
+            CONFERIR PEDIDO
         </button>
     </div>
 
     <div class="modal" id="modalCart">
         <div class="modal-body">
-            <div id="timer-escasso" style="background: #fff3cd; color: #856404; padding: 12px; border-radius: 12px; text-align: center; margin-bottom: 20px; font-size: 13px; font-weight: bold; border: 1px solid #ffeeba;">
-                ⏱️ Oferta reservada por: <span id="contagem">15:00</span>
-            </div>
-
-            <h3 style="margin: 0 0 15px 0">🛒 Seu Carrinho</h3>
+            <div class="timer-bar">Oferta reservada por: <span id="contagem">15:00</span></div>
+            
+            <h3 style="margin: 0 0 15px 0; font-size: 18px;">Itens no Pedido</h3>
             <div id="cartItemsList"></div>
             
-            <div style="display:flex; gap:8px; margin: 20px 0;">
-                <input type="text" id="cupomInput" class="input-checkout" style="margin-bottom:0" placeholder="Cupom: MEC10">
-                <button onclick="update()" style="background:#333; color:#fff; border:none; padding:0 20px; border-radius:10px; font-weight:bold;">Aplicar</button>
+            <div class="cupom-section">
+                <label style="font-size: 11px; color: #666; display: block; margin-bottom: 5px;">CUPOM DE DESCONTO (OPCIONAL)</label>
+                <div style="display:flex; gap:8px;">
+                    <input type="text" id="cupomInput" class="input-checkout" style="margin-bottom:0" placeholder="Ex: MEC10">
+                    <button onclick="update()" style="background:#000; color:#fff; border:none; padding:0 15px; border-radius:6px; font-size:12px;">Aplicar</button>
+                </div>
             </div>
 
             <input type="text" id="nomeCliente" class="input-checkout" placeholder="Nome Completo">
-            <input type="tel" id="cepCliente" class="input-checkout" placeholder="Seu CEP (00000-000)" oninput="mascaraCEP(this)" onblur="buscarCEP()" maxlength="9">
-            <input type="text" id="ruaCliente" class="input-checkout" style="background: #f4f4f4" placeholder="Endereço automático" readonly>
+            <input type="tel" id="cepCliente" class="input-checkout" placeholder="CEP (00000-000)" oninput="mascaraCEP(this)" onblur="buscarCEP()" maxlength="9">
+            <input type="text" id="ruaCliente" class="input-checkout" style="background: #f3f4f6" placeholder="Endereço (Preenchimento automático)" readonly>
             <input type="text" id="numCliente" class="input-checkout" placeholder="Número e Complemento">
             <input type="hidden" id="cidadeOculta">
 
-            <button style="width:100%; background:var(--btn-green); color:white; border:none; padding:20px; border-radius:15px; margin-top:10px; font-weight:900; font-size:16px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);" onclick="enviarZap()">
-                FINALIZAR NO WHATSAPP
-            </button>
-
-            <div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px; opacity: 0.6; font-size: 11px; font-weight: bold; text-align: center;">
-                <div>🛡️ SITE SEGURO</div>
-                <div>🚀 ENVIO IMEDIATO</div>
+            <button class="btn-zap" onclick="enviarZap()">FINALIZAR NO WHATSAPP</button>
+            
+            <div class="trust-badges">
+                <span>CONEXÃO SEGURA</span>
+                <span>PRODUTO ORIGINAL</span>
             </div>
 
-            <button onclick="toggleModal(false)" style="width:100%; background:none; border:none; color:#999; margin-top:15px; font-weight: 600;">← Continuar Comprando</button>
+            <button onclick="toggleModal(false)" style="width:100%; background:none; border:none; color:#6b7280; margin-top:15px; font-size:13px; cursor:pointer;">Voltar para a loja</button>
         </div>
     </div>
 
     <script>
         const produtos = [
-            { id: 1, cat: "Tech", nome: "Smartwatch Ultra 9", preco: 289.90, img: "https://m.media-amazon.com/images/I/71Yp-H-O8rL._AC_SL1500_.jpg" },
-            { id: 2, cat: "Tech", nome: "Headset Gamer Pro", preco: 159.00, img: "https://m.media-amazon.com/images/I/61CGHv6kmWL._AC_SL1500_.jpg" },
-            { id: 3, cat: "Moda", nome: "Tênis Esportivo Nitro", preco: 197.00, img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400" }
+            { id: 1, cat: "Tech", nome: "Smartwatch Ultra Series 9", preco: 289.90, img: "https://m.media-amazon.com/images/I/71Yp-H-O8rL._AC_SL1500_.jpg" },
+            { id: 2, cat: "Tech", nome: "Headset Wireless Noise Cancelling", preco: 159.00, img: "https://m.media-amazon.com/images/I/61CGHv6kmWL._AC_SL1500_.jpg" },
+            { id: 3, cat: "Moda", nome: "Tênis Running Performance Nitro", preco: 197.00, img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400" }
         ];
 
         let carrinho = [];
@@ -115,12 +133,13 @@
             v.innerHTML = "";
             const dados = lista || (categoriaAtual === "Tudo" ? produtos : produtos.filter(p => p.cat === categoriaAtual));
             dados.forEach(p => {
-                v.innerHTML += `<div class="produto-card">
-                    <img src="${p.img}" class="img-produto" loading="lazy">
-                    <span style="font-size:13px; font-weight:600; display:block; height:35px">${p.nome}</span>
-                    <b style="display:block; margin:8px 0; color: #000;">R$ ${p.preco.toFixed(2).replace('.',',')}</b>
-                    <button class="btn-add" onclick="add(${p.id})">ADICIONAR +</button>
-                </div>`;
+                v.innerHTML += `
+                    <div class="produto-card">
+                        <img src="${p.img}" class="img-produto">
+                        <span class="product-name">${p.nome}</span>
+                        <span class="product-price">R$ ${p.preco.toFixed(2).replace('.',',')}</span>
+                        <button class="btn-add" onclick="add(${p.id})">Adicionar</button>
+                    </div>`;
             });
         }
 
@@ -138,86 +157,16 @@
             carrinho.forEach(item => {
                 let sub = item.preco * item.qtd;
                 total += sub;
-                list.innerHTML += `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; background:#f9f9f9; padding:10px; border-radius:10px;">
-                    <div style="max-width:60%"><b>${item.nome}</b><br><span style="color:var(--btn-green)">R$ ${sub.toFixed(2).replace('.',',')}</span></div>
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <button style="width:25px; height:25px; border-radius:50%; border:1px solid #ccc;" onclick="alterarQtd(${item.id}, -1)">-</button>
-                        <b>${item.qtd}</b>
-                        <button style="width:25px; height:25px; border-radius:50%; border:1px solid #ccc;" onclick="alterarQtd(${item.id}, 1)">+</button>
-                    </div>
-                </div>`;
+                list.innerHTML += `
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid #f3f4f6;">
+                        <div style="font-size:13px"><strong>${item.qtd}x</strong> ${item.nome}</div>
+                        <div style="font-weight:700">R$ ${sub.toFixed(2).replace('.',',')}</div>
+                    </div>`;
             });
 
-            if(document.getElementById('cupomInput').value.toUpperCase() === "MEC10") total *= 0.9;
-            document.getElementById('total-val').innerText = total.toFixed(2).replace('.',',');
-        }
-
-        function alterarQtd(id, delta) {
-            const item = carrinho.find(x => x.id === id);
-            if (item) {
-                item.qtd += delta;
-                if (item.qtd <= 0) carrinho = carrinho.filter(x => x.id !== id);
-                update();
+            const cupom = document.getElementById('cupomInput').value.toUpperCase();
+            if(cupom === "MEC10") {
+                total *= 0.9;
             }
-        }
-
-        function mascaraCEP(i) {
-            let v = i.value.replace(/\D/g, "");
-            v = v.replace(/^(\d{5})(\d)/, "$1-$2");
-            i.value = v;
-        }
-
-        function buscarCEP() {
-            let cep = document.getElementById('cepCliente').value.replace(/\D/g, '');
-            if (cep.length === 8) {
-                fetch(`https://viacep.com.br/ws/${cep}/json/`).then(r => r.json()).then(d => {
-                    if(!d.erro) {
-                        document.getElementById('ruaCliente').value = `${d.logradouro}, ${d.bairro}`;
-                        document.getElementById('cidadeOculta').value = `${d.localidade}/${d.uf}`;
-                    }
-                });
-            }
-        }
-
-        function filtrarBusca() {
-            const t = document.getElementById('inputBusca').value.toLowerCase();
-            render(produtos.filter(p => p.nome.toLowerCase().includes(t)));
-        }
-
-        function filtrarCat(cat, el) {
-            categoriaAtual = cat;
-            document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
-            el.classList.add('active');
-            render();
-        }
-
-        function toggleModal(s) { 
-            document.getElementById('modalCart').style.display = s ? 'block' : 'none'; 
-            if(s) startTimer();
-        }
-
-        function startTimer() {
-            const display = document.getElementById('contagem');
-            const interval = setInterval(() => {
-                let m = Math.floor(tempo / 60);
-                let s = tempo % 60;
-                display.innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
-                if (tempo <= 0) clearInterval(interval);
-                tempo--;
-            }, 1000);
-        }
-
-        function enviarZap() {
-            const n = document.getElementById('nomeCliente').value;
-            const r = document.getElementById('ruaCliente').value;
-            if(!n || !r || carrinho.length === 0) return alert("Preencha os dados e adicione itens!");
-            let msg = `*🛒 NOVO PEDIDO - MEC SHOP*\n\n👤 *CLIENTE:* ${n}\n📍 *ENDEREÇO:* ${r}\n---\n`;
-            carrinho.forEach(i => msg += `• ${i.qtd}x ${i.nome}\n`);
-            msg += `\n💰 *TOTAL: R$ ${document.getElementById('total-val').innerText}*`;
-            window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(msg)}`);
-        }
-
-        render();
-    </script>
-</body>
-</html>
+            document.getElementById('total-val').innerText = total.toFixed(2).replace('.',
+        
