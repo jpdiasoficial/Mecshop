@@ -3,29 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Allan Gelados | Cardápio Inteligente Sergel</title>
+    <title>Sorveteria Sergel - Allan | Catálogo</title>
     <style>
-        :root { --ifood-red: #ea1d2c; --green: #2ecc71; --text-main: #3e3e3e; --text-light: #717171; }
+        :root { --primary: #ea1d2c; --green: #2ecc71; --text-main: #3e3e3e; --text-light: #717171; }
         body { font-family: 'Segoe UI', Roboto, sans-serif; margin: 0; background: #fff; color: var(--text-main); padding-bottom: 120px; }
         
-        /* Header & Slider */
+        /* Header */
         .slider { width: 100%; height: 160px; position: relative; background: #000; overflow: hidden; }
         .slider img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
         .shop-header { position: absolute; bottom: 15px; left: 15px; color: #fff; }
 
-        /* Navegação Fixa Estilo App */
+        /* Navegação Fixa */
         .nav-container { position: sticky; top: 0; background: #fff; z-index: 1000; border-bottom: 1px solid #f2f2f2; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .nav-tabs { display: flex; overflow-x: auto; padding: 12px 15px; gap: 10px; scrollbar-width: none; }
-        .nav-tabs::-webkit-scrollbar { display: none; }
         .tab { padding: 8px 20px; border-radius: 20px; background: #f2f2f2; color: var(--text-light); font-size: 14px; font-weight: 600; white-space: nowrap; border: none; cursor: pointer; }
-        .tab.active { background: var(--ifood-red); color: #fff; }
+        .tab.active { background: var(--primary); color: #fff; }
 
         /* Busca */
         .search-wrap { padding: 15px; background: #fff; }
         .search-input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #eee; background: #f7f7f7; font-size: 15px; outline: none; }
 
-        /* Lista de Produtos */
-        .category-title { padding: 20px 15px 10px; font-size: 18px; font-weight: 700; color: #000; background: #fff; }
+        /* Itens */
+        .category-title { padding: 20px 15px 10px; font-size: 18px; font-weight: 700; color: #000; background: #fff; text-transform: uppercase; letter-spacing: 1px; }
         .card { display: flex; padding: 15px; border-bottom: 1px solid #f8f8f8; gap: 15px; align-items: flex-start; }
         .info { flex: 1; }
         .name { font-size: 16px; font-weight: 600; color: #333; margin: 0 0 4px 0; }
@@ -33,20 +32,21 @@
         .prices { display: flex; flex-direction: column; gap: 2px; }
         .v-price { font-size: 15px; font-weight: 700; color: #000; }
         .a-price { font-size: 12px; color: var(--green); font-weight: 700; }
-        .min-info { font-size: 10px; color: #999; text-transform: uppercase; }
-
-        /* Botões */
+        
         .actions { min-width: 90px; text-align: right; }
-        .btn-add { color: var(--ifood-red); border: 1px solid #f2f2f2; background: #fff; padding: 8px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; }
-        .qty-wrap { display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--ifood-red); border-radius: 6px; padding: 4px; }
-        .qty-btn { background: none; border: none; color: var(--ifood-red); font-size: 18px; font-weight: bold; width: 30px; }
+        .btn-add { color: var(--primary); border: 1px solid #f2f2f2; background: #fff; padding: 8px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .qty-wrap { display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--primary); border-radius: 6px; padding: 4px; }
+        .qty-btn { background: none; border: none; color: var(--primary); font-size: 18px; font-weight: bold; width: 30px; }
 
-        /* Footer Fixo */
+        /* Modal Checkout */
+        .delivery-toggle { display: flex; gap: 10px; margin-bottom: 15px; }
+        .toggle-btn { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #ddd; background: #f9f9f9; font-weight: 600; font-size: 13px; cursor: pointer; }
+        .toggle-btn.active { border-color: var(--primary); color: var(--primary); background: #fff5f5; }
+
+        /* Rodapé */
         .footer { position: fixed; bottom: 0; width: 100%; background: #fff; border-top: 1px solid #eee; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 1100; box-sizing: border-box; }
-        .footer-total { font-size: 18px; font-weight: 800; }
-        .btn-finish { background: var(--ifood-red); color: #fff; border: none; padding: 12px 30px; border-radius: 8px; font-weight: bold; font-size: 16px; }
+        .btn-finish { background: var(--primary); color: #fff; border: none; padding: 12px 30px; border-radius: 8px; font-weight: bold; font-size: 16px; }
 
-        /* Modal */
         .modal { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); display:none; z-index:2000; align-items:flex-end; }
         .modal-body { background:#fff; width:100%; border-radius:20px 20px 0 0; padding:25px; box-sizing:border-box; }
         .input { width:100%; padding:15px; margin-bottom:12px; border:1px solid #ddd; border-radius:8px; font-size:14px; box-sizing:border-box; }
@@ -55,10 +55,10 @@
 <body>
 
 <div class="slider">
-    <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=800" alt="Banner Sergel">
+    <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=800">
     <div class="shop-header">
-        <h2 style="margin:0">Allan Gelados - Sergel</h2>
-        <span style="font-size: 12px;">🛵 Entrega Rápida • Preço de Atacado</span>
+        <h2 style="margin:0">Sorveteria Sergel - Allan</h2>
+        <span style="font-size: 12px;">Preço de Atacado e Varejo</span>
     </div>
 </div>
 
@@ -72,7 +72,7 @@
 </div>
 
 <div class="search-wrap">
-    <input type="text" id="search" class="search-input" placeholder="Buscar sabor (ex: Leitinho, Skimo...)" oninput="render()">
+    <input type="text" id="search" class="search-input" placeholder="Buscar sabor no catálogo..." oninput="render()">
 </div>
 
 <div id="app"></div>
@@ -80,49 +80,51 @@
 <div class="footer">
     <div>
         <span style="font-size: 10px; color: #717171; display: block;">SUBTOTAL</span>
-        <span class="footer-total">R$ <span id="total-val">0,00</span></span>
+        <span style="font-size: 18px; font-weight: 800;">R$ <span id="total-val">0,00</span></span>
     </div>
-    <button class="btn-finish" onclick="openCheckout()">Finalizar</button>
+    <button class="btn-finish" onclick="openCheckout()">Finalizar Pedido</button>
 </div>
 
 <div class="modal" id="checkoutModal">
     <div class="modal-body">
-        <h3 style="margin:0 0 15px 0">Resumo do Pedido</h3>
-        <div id="summary" style="font-size:13px; margin-bottom:15px; max-height: 100px; overflow-y: auto; color: #666;"></div>
-        <input type="text" id="userName" class="input" placeholder="Seu Nome">
-        <input type="text" id="userAddress" class="input" placeholder="Endereço de Entrega Completo">
-        <button class="btn-finish" style="width:100%" onclick="sendToWhatsApp()">ENVIAR PEDIDO</button>
-        <button onclick="closeCheckout()" style="width:100%; background:none; border:none; color:#999; margin-top:10px;">Voltar ao Cardápio</button>
+        <h3 style="margin-bottom: 15px;">Forma de Retirada</h3>
+        
+        <div class="delivery-toggle">
+            <button class="toggle-btn active" id="btnDelivery" onclick="setMethod('Entrega')">Entrega</button>
+            <button class="toggle-btn" id="btnPickup" onclick="setMethod('Retirada')">Retirar na Loja</button>
+        </div>
+
+        <input type="text" id="userName" class="input" placeholder="Nome Completo">
+        <input type="text" id="userAddress" class="input" placeholder="Endereço de Entrega (Rua, Número, Bairro)">
+        
+        <button class="btn-finish" style="width:100%" onclick="sendToWhatsApp()">CONFIRMAR NO WHATSAPP</button>
+        <button onclick="closeCheckout()" style="width:100%; background:none; border:none; color:#999; margin-top:10px;">Voltar ao Catálogo</button>
     </div>
 </div>
 
 <script>
-    // DADOS COMPLETOS EXTRAÍDOS DAS IMAGENS
     const db = [
         { id: 1, cat: 'Potes 2L', name: 'Leitinho Trufado', desc: 'Sorvete de leite com trufa de chocolate artesanal.', v: 45.0, a: 38.0, min: 10 },
-        { id: 2, cat: 'Potes 2L', name: 'Delicielo Avelã', desc: 'Sabor irresistível de avelã com pedaços.', v: 45.0, a: 38.0, min: 10 },
-        { id: 3, cat: 'Potes 2L', name: 'Chocolate Belga', desc: 'Cremosidade extrema com chocolate intenso.', v: 45.0, a: 38.0, min: 10 },
-        { id: 4, cat: 'Potes 2L', name: 'Iogurte com Amarena', desc: 'Iogurte suave com cerejas silvestre.', v: 45.0, a: 38.0, min: 10 },
-        { id: 5, cat: 'Potes 2L', name: 'Napolitano Sergel', desc: 'Morango, Creme e Chocolate Clássico.', v: 40.0, a: 35.0, min: 10 },
+        { id: 2, cat: 'Potes 2L', name: 'Delicielo Avelã', desc: 'Sabor de avelã com pedaços crocantes.', v: 45.0, a: 38.0, min: 10 },
+        { id: 3, cat: 'Potes 2L', name: 'Napolitano Sergel', desc: 'Combinação clássica de Morango, Creme e Chocolate.', v: 40.0, a: 35.0, min: 10 },
+        { id: 4, cat: 'Potes 2L', name: 'Chocolate Belga', desc: 'Chocolate intenso com textura aveludada.', v: 45.0, a: 38.0, min: 10 },
         
-        { id: 6, cat: 'Picolés Especiais', name: 'Skimo Clássico', desc: 'Baunilha com casquinha de chocolate crocante.', v: 7.0, a: 2.8, min: 20 },
-        { id: 7, cat: 'Picolés Especiais', name: 'Chocolate Holandês', desc: 'Sabor intenso de chocolate cremoso.', v: 7.0, a: 2.8, min: 20 },
-        { id: 8, cat: 'Picolés Especiais', name: 'Pavê de Chocolate', desc: 'Com pedaços de biscoito e chocolate.', v: 7.0, a: 2.8, min: 20 },
-        { id: 9, cat: 'Picolés Especiais', name: 'Morango com Leite Cond.', desc: 'Picolé recheado com leite condensado.', v: 7.0, a: 2.8, min: 20 },
+        { id: 6, cat: 'Picolés Especiais', name: 'Skimo Clássico', desc: 'Baunilha com cobertura de chocolate crocante.', v: 7.0, a: 2.8, min: 20 },
+        { id: 7, cat: 'Picolés Especiais', name: 'Morango com Leite Cond.', desc: 'Picolé recheado com leite condensado.', v: 7.0, a: 2.8, min: 20 },
+        { id: 8, cat: 'Picolés Especiais', name: 'Chocolate Holandês', desc: 'Cremosidade extrema com chocolate selecionado.', v: 7.0, a: 2.8, min: 20 },
         
-        { id: 10, cat: 'Picolés Fruta', name: 'Milho Verde', desc: 'O sabor tradicional da espiga.', v: 6.0, a: 2.2, min: 20 },
-        { id: 11, cat: 'Picolés Fruta', name: 'Limão Siciliano', desc: 'Refrescante e 100% natural.', v: 5.0, a: 2.0, min: 20 },
-        { id: 12, cat: 'Picolés Fruta', name: 'Maracujá Natural', desc: 'Sabor marcante da fruta.', v: 5.0, a: 2.0, min: 20 }
+        { id: 10, cat: 'Picolés Fruta', name: 'Milho Verde', desc: 'Sabor tradicional e natural.', v: 6.0, a: 2.2, min: 20 },
+        { id: 11, cat: 'Picolés Fruta', name: 'Limão Siciliano', desc: 'Refrescante e 100% natural.', v: 5.0, a: 2.0, min: 20 }
     ];
 
     let cart = [];
     let filter = 'Tudo';
+    let method = 'Entrega';
 
     function render() {
         const app = document.getElementById('app');
         const term = document.getElementById('search').value.toLowerCase();
         app.innerHTML = '';
-
         const categories = filter === 'Tudo' ? [...new Set(db.map(p => p.cat))] : [filter];
 
         categories.forEach(cat => {
@@ -137,46 +139,37 @@
                                 <p class="name">${p.name}</p>
                                 <span class="description">${p.desc}</span>
                                 <div class="prices">
-                                    <span class="v-price">R$ ${p.v.toFixed(2).replace('.',',')} <small style="font-size:10px; color:#999">Varejo</small></span>
-                                    <span class="a-price">R$ ${p.a.toFixed(2).replace('.',',')} <span class="min-info">(${p.min}+ un)</span></span>
+                                    <span class="v-price">Varejo: R$ ${p.v.toFixed(2).replace('.',',')}</span>
+                                    <span class="a-price">Atacado: R$ ${p.a.toFixed(2).replace('.',',')} (${p.min}+ un)</span>
                                 </div>
                             </div>
                             <div class="actions">
-                                ${itemInCart ? `
-                                    <div class="qty-wrap">
-                                        <button class="qty-btn" onclick="changeQty(${p.id}, -1)">-</button>
-                                        <strong>${itemInCart.qty}</strong>
-                                        <button class="qty-btn" onclick="changeQty(${p.id}, 1)">+</button>
-                                    </div>
-                                ` : `
-                                    <button class="btn-add" onclick="changeQty(${p.id}, 1)">ADICIONAR</button>
-                                `}
+                                ${itemInCart ? `<div class="qty-wrap"><button class="qty-btn" onclick="changeQty(${p.id}, -1)">-</button><strong>${itemInCart.qty}</strong><button class="qty-btn" onclick="changeQty(${p.id}, 1)">+</button></div>` : `<button class="btn-add" onclick="changeQty(${p.id}, 1)">ADICIONAR</button>`}
                             </div>
-                        </div>
-                    `;
+                        </div>`;
                 });
             }
         });
         updateTotal();
     }
 
+    function setMethod(m) {
+        method = m;
+        document.getElementById('btnDelivery').classList.toggle('active', m === 'Entrega');
+        document.getElementById('btnPickup').classList.toggle('active', m === 'Retirada');
+        document.getElementById('userAddress').style.display = m === 'Entrega' ? 'block' : 'none';
+    }
+
     function changeQty(id, d) {
         const idx = cart.findIndex(c => c.id === id);
-        if(idx > -1) {
-            cart[idx].qty += d;
-            if(cart[idx].qty <= 0) cart.splice(idx, 1);
-        } else {
-            cart.push({...db.find(p => p.id === id), qty: 1});
-        }
+        if(idx > -1) { cart[idx].qty += d; if(cart[idx].qty <= 0) cart.splice(idx, 1); }
+        else { cart.push({...db.find(p => p.id === id), qty: 1}); }
         render();
     }
 
     function updateTotal() {
         let total = 0;
-        cart.forEach(i => {
-            const price = i.qty >= i.min ? i.a : i.v;
-            total += price * i.qty;
-        });
+        cart.forEach(i => { total += (i.qty >= i.min ? i.a : i.v) * i.qty; });
         document.getElementById('total-val').innerText = total.toFixed(2).replace('.',',');
     }
 
@@ -188,8 +181,7 @@
     }
 
     function openCheckout() {
-        if(cart.length === 0) return alert("Sua sacola está vazia!");
-        document.getElementById('summary').innerHTML = cart.map(i => `${i.qty}x ${i.name}`).join(', ');
+        if(cart.length === 0) return alert("Sua sacola está vazia.");
         document.getElementById('checkoutModal').style.display = 'flex';
     }
 
@@ -198,19 +190,7 @@
     function sendToWhatsApp() {
         const name = document.getElementById('userName').value;
         const addr = document.getElementById('userAddress').value;
-        if(!name || !addr) return alert("Preencha seu nome e endereço!");
+        if(!name || (method === 'Entrega' && !addr)) return alert("Por favor, preencha as informações obrigatórias.");
 
-        let msg = `*PEDIDO ALLAN GELADOS - SERGEL*\n\n*Cliente:* ${name}\n*Endereço:* ${addr}\n\n*ITENS:*\n`;
-        cart.forEach(i => {
-            const price = i.qty >= i.min ? i.a : i.v;
-            msg += `• ${i.qty}x ${i.name} - R$ ${(price * i.qty).toFixed(2)}${i.qty >= i.min ? ' (ATACADO)' : ''}\n`;
-        });
-        msg += `\n*TOTAL DO PEDIDO: R$ ${document.getElementById('total-val').innerText}*`;
-        
-        window.open(`https://wa.me/5519996912728?text=${encodeURIComponent(msg)}`);
-    }
-
-    render();
-</script>
-</body>
-</html>
+        let msg = `*PEDIDO SORVETERIA SERGEL - ALLAN*\n\n*Tipo:* ${method}\n*Cliente:* ${name
+    
