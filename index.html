@@ -35,7 +35,7 @@
         .qty-btn { background: none; border: none; color: var(--primary); font-size: 18px; font-weight: bold; width: 30px; }
 
         .delivery-toggle { display: flex; gap: 10px; margin-bottom: 15px; }
-        .toggle-btn { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #ddd; background: #f9f9f9; font-weight: 600; font-size: 13px; cursor: pointer; }
+        .toggle-btn { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #ddd; background: #f9f9f9; font-weight: 600; font-size: 14px; cursor: pointer; }
         .toggle-btn.active { border-color: var(--primary); color: var(--primary); background: #fff5f5; }
 
         .footer { position: fixed; bottom: 0; width: 100%; background: #fff; border-top: 1px solid #eee; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 1100; box-sizing: border-box; }
@@ -44,6 +44,7 @@
         .modal { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); display:none; z-index:2000; align-items:flex-end; }
         .modal-body { background:#fff; width:100%; border-radius:20px 20px 0 0; padding:25px; box-sizing:border-box; }
         .input { width:100%; padding:15px; margin-bottom:12px; border:1px solid #ddd; border-radius:8px; font-size:14px; box-sizing:border-box; }
+        .label-auto { font-size: 11px; color: #999; margin-bottom: 4px; display: block; }
     </style>
 </head>
 <body>
@@ -52,7 +53,7 @@
     <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=800">
     <div class="shop-header">
         <h2 style="margin:0">Sorveteria Sergel - Allan</h2>
-        <span style="font-size: 12px;">Tabela de Preços Atacado e Varejo</span>
+        <span style="font-size: 12px;">Atacado e Varejo</span>
     </div>
 </div>
 
@@ -66,7 +67,7 @@
 </div>
 
 <div class="search-wrap">
-    <input type="text" id="search" class="search-input" placeholder="Buscar sabor ou categoria..." oninput="render()">
+    <input type="text" id="search" class="search-input" placeholder="O que você procura?" oninput="render()">
 </div>
 
 <div id="app"></div>
@@ -81,37 +82,39 @@
 
 <div class="modal" id="checkoutModal">
     <div class="modal-body">
-        <h3 style="margin-bottom: 15px;">Forma de Retirada</h3>
+        <h3 style="margin-bottom: 20px;">Como deseja receber?</h3>
+        
         <div class="delivery-toggle">
             <button class="toggle-btn active" id="btnDelivery" onclick="setMethod('Entrega')">Entrega</button>
             <button class="toggle-btn" id="btnPickup" onclick="setMethod('Retirada')">Retirar na Loja</button>
         </div>
-        <input type="text" id="userName" class="input" placeholder="Nome Completo">
-        <input type="text" id="userAddress" class="input" placeholder="Endereço de Entrega Completo">
-        <button class="btn-finish" style="width:100%" onclick="sendToWhatsApp()">CONFIRMAR NO WHATSAPP</button>
-        <button onclick="closeCheckout()" style="width:100%; background:none; border:none; color:#999; margin-top:10px;">Voltar ao Catálogo</button>
+        
+        <input type="text" id="userName" class="input" placeholder="Seu Nome">
+        
+        <div id="addressSection">
+            <span class="label-auto">Endereço de entrega:</span>
+            <input type="text" id="userAddressAuto" class="input" value="Rua das Flores, 123 - Bairro Jardim" readonly style="background: #f7f7f7; color: #888;">
+            <input type="text" id="userComplement" class="input" placeholder="Complemento (Ap, Bloco, Referência)">
+        </div>
+
+        <button class="btn-finish" style="width:100%" onclick="sendToWhatsApp()">ENVIAR PEDIDO</button>
+        <button onclick="closeCheckout()" style="width:100%; background:none; border:none; color:#999; margin-top:15px;">Voltar</button>
     </div>
 </div>
 
 <script>
     const db = [
-        // POTES 2L
         { id: 1, cat: 'Potes 2L', name: 'Leitinho Trufado', desc: 'Sorvete de leite com trufas de chocolate artesanal.', v: 45.0, a: 38.0, min: 10 },
         { id: 2, cat: 'Potes 2L', name: 'Delicielo Avelã', desc: 'Sabor irresistível de avelã cremosa com pedaços.', v: 45.0, a: 38.0, min: 10 },
         { id: 3, cat: 'Potes 2L', name: 'Iogurte com Amarena', desc: 'Iogurte suave com a doçura da cereja silvestre.', v: 45.0, a: 38.0, min: 10 },
         { id: 4, cat: 'Potes 2L', name: 'Chocolate Belga', desc: 'Intenso, cremoso e feito com puro cacau.', v: 45.0, a: 38.0, min: 10 },
         { id: 5, cat: 'Potes 2L', name: 'Napolitano Sergel', desc: 'Três sabores clássicos: Morango, Creme e Chocolate.', v: 40.0, a: 35.0, min: 10 },
-        
-        // PICOLÉS ESPECIAIS
-        { id: 6, cat: 'Picolés Especiais', name: 'Skimo Clássico', desc: 'Baunilha com casquinha crocante de chocolate meio amargo.', v: 7.0, a: 2.8, min: 20 },
-        { id: 7, cat: 'Picolés Especiais', name: 'Chocolate Holandês', desc: 'Cremosidade extrema com chocolate tipo exportação.', v: 7.0, a: 2.8, min: 20 },
-        { id: 8, cat: 'Picolés Especiais', name: 'Pavê de Chocolate', desc: 'Inspirado na sobremesa, com pedaços de biscoito.', v: 7.0, a: 2.8, min: 20 },
-        { id: 9, cat: 'Picolés Especiais', name: 'Morango com Leite Cond.', desc: 'Picolé recheado com leite condensado cremoso.', v: 7.0, a: 2.8, min: 20 },
-        
-        // PICOLÉS FRUTA
-        { id: 10, cat: 'Picolés Fruta', name: 'Milho Verde', desc: 'Sabor tradicional feito com milho selecionado.', v: 6.0, a: 2.2, min: 20 },
-        { id: 11, cat: 'Picolés Fruta', name: 'Limão Siciliano', desc: 'Refrescante, cítrico e 100% natural.', v: 5.0, a: 2.0, min: 20 },
-        { id: 12, cat: 'Picolés Fruta', name: 'Maracujá Natural', desc: 'Sabor marcante da fruta fresca.', v: 5.0, a: 2.0, min: 20 }
+        { id: 6, cat: 'Picolés Especiais', name: 'Skimo Clássico', desc: 'Baunilha com casquinha crocante de chocolate.', v: 7.0, a: 2.8, min: 20 },
+        { id: 7, cat: 'Picolés Especiais', name: 'Chocolate Holandês', desc: 'Cremosidade extrema com chocolate selecionado.', v: 7.0, a: 2.8, min: 20 },
+        { id: 8, cat: 'Picolés Especiais', name: 'Pavê de Chocolate', desc: 'Sabor de sobremesa com pedaços de biscoito.', v: 7.0, a: 2.8, min: 20 },
+        { id: 9, cat: 'Picolés Especiais', name: 'Morango com Leite Cond.', desc: 'Picolé recheado com leite condensado.', v: 7.0, a: 2.8, min: 20 },
+        { id: 10, cat: 'Picolés Fruta', name: 'Milho Verde', desc: 'Sabor tradicional e refrescante.', v: 6.0, a: 2.2, min: 20 },
+        { id: 11, cat: 'Picolés Fruta', name: 'Limão Siciliano', desc: '100% natural e muito refrescante.', v: 5.0, a: 2.0, min: 20 }
     ];
 
     let cart = [];
@@ -154,7 +157,7 @@
         method = m;
         document.getElementById('btnDelivery').classList.toggle('active', m === 'Entrega');
         document.getElementById('btnPickup').classList.toggle('active', m === 'Retirada');
-        document.getElementById('userAddress').style.display = m === 'Entrega' ? 'block' : 'none';
+        document.getElementById('addressSection').style.display = m === 'Entrega' ? 'block' : 'none';
     }
 
     function changeQty(id, d) {
@@ -186,15 +189,17 @@
 
     function sendToWhatsApp() {
         const name = document.getElementById('userName').value;
-        const addr = document.getElementById('userAddress').value;
-        if(!name || (method === 'Entrega' && !addr)) return alert("Preencha as informações necessárias.");
+        const autoAddr = document.getElementById('userAddressAuto').value;
+        const complement = document.getElementById('userComplement').value;
+        
+        if(!name || (method === 'Entrega' && !complement)) return alert("Por favor, preencha seu nome e o complemento.");
 
-        let msg = `*PEDIDO SORVETERIA SERGEL - ALLAN*\n\n*Tipo:* ${method}\n*Cliente:* ${name}\n${method === 'Entrega' ? `*Endereço:* ${addr}\n` : ''}\n*ITENS:*\n`;
+        let msg = `*PEDIDO SORVETERIA SERGEL - ALLAN*\n\n*Tipo:* ${method}\n*Cliente:* ${name}\n${method === 'Entrega' ? `*Endereço:* ${autoAddr}\n*Complemento:* ${complement}\n` : ''}\n*ITENS:*\n`;
         cart.forEach(i => {
             const price = i.qty >= i.min ? i.a : i.v;
             msg += `- ${i.qty}x ${i.name} | R$ ${(price * i.qty).toFixed(2)}${i.qty >= i.min ? ' (Atacado)' : ''}\n`;
         });
-        msg += `\n*VALOR TOTAL: R$ ${document.getElementById('total-val').innerText}*`;
+        msg += `\n*TOTAL: R$ ${document.getElementById('total-val').innerText}*`;
         window.open(`https://wa.me/5519996912728?text=${encodeURIComponent(msg)}`);
     }
 
