@@ -3,11 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEC SHOP | ALTA CONVERSÃO</title>
+    <title>MEC SHOP | PREMIUM</title>
     <style>
         :root { --primary-green: #25d366; --bg-body: #f4f7f6; --text-main: #1a1a1a; --border-color: #e1e4e8; }
-        body { font-family: 'Inter', sans-serif; margin: 0; background-color: var(--bg-body); color: var(--text-main); padding-bottom: 100px; }
+        body { font-family: 'Inter', sans-serif; margin: 0; background-color: var(--bg-body); color: var(--text-main); padding-top: 60px; padding-bottom: 100px; }
         
+        /* Barra de Menu Superior */
+        .navbar { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); z-index: 2000; }
+        .logo { font-weight: 800; font-size: 18px; letter-spacing: -1px; }
+        .menu-icons { display: flex; gap: 15px; font-size: 20px; }
+
         .slider-container { width: 100%; height: 200px; overflow: hidden; position: relative; background: #000; }
         .slider-track { display: flex; width: 300%; height: 100%; animation: slide 15s infinite ease-in-out; }
         .slide img { width: 100vw; height: 100%; object-fit: cover; filter: brightness(0.7); }
@@ -31,11 +36,9 @@
         .footer-cart { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border-color); z-index: 100; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
         .total-value { font-size: 18px; font-weight: 700; }
 
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 1000; }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 3000; }
         .modal-body { position: absolute; bottom: 0; background: #fff; width: 100%; border-radius: 20px 20px 0 0; padding: 20px; box-sizing: border-box; max-height: 90vh; overflow-y: auto; }
-        .timer-bar { background: #fef9c3; color: #713f12; padding: 8px; border-radius: 6px; text-align: center; margin-bottom: 15px; font-size: 12px; font-weight: 600; }
         
-        /* Seção de Cupom */
         .cupom-box { background: #f9fafb; border: 1px dashed #d1d5db; border-radius: 6px; padding: 10px; margin-bottom: 15px; display: flex; gap: 8px; }
         .input-cupom { flex: 1; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 12px; text-transform: uppercase; }
         .btn-cupom { background: #000; color: #fff; border: none; padding: 0 15px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; }
@@ -45,6 +48,14 @@
     </style>
 </head>
 <body>
+
+    <nav class="navbar">
+        <div class="logo">MEC SHOP</div>
+        <div class="menu-icons">
+            <span>🔍</span>
+            <span>👤</span>
+        </div>
+    </nav>
 
     <div class="slider-container">
         <div class="slider-track">
@@ -71,7 +82,6 @@
 
     <div class="modal" id="modalCart">
         <div class="modal-body">
-            <div class="timer-bar">Sua reserva expira em: <span id="contagem">15:00</span></div>
             <h3 style="margin-bottom:15px">Carrinho</h3>
             <div id="cartItemsList"></div>
             
@@ -98,7 +108,6 @@
         ];
 
         let carrinho = [];
-        let tempo = 900;
 
         function render() {
             const v = document.getElementById('vitrine');
@@ -140,13 +149,8 @@
 
         function updateTotal() {
             let total = carrinho.reduce((acc, i) => acc + (i.preco * i.qtd), 0);
-            
-            // Lógica do Cupom
             const cupom = document.getElementById('cupomInput').value.toUpperCase();
-            if(cupom === "MEC10") {
-                total *= 0.90; // 10% de desconto
-            }
-            
+            if(cupom === "MEC10") total *= 0.90;
             document.getElementById('total-val').innerText = total.toFixed(2).replace('.',',');
         }
 
@@ -177,26 +181,14 @@
 
         function toggleModal(s) { 
             document.getElementById('modalCart').style.display = s ? 'block' : 'none'; 
-            if(s) {
-                const display = document.getElementById('contagem');
-                const interval = setInterval(() => {
-                    let m = Math.floor(tempo / 60);
-                    let s = tempo % 60;
-                    display.innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
-                    if (tempo-- <= 0) clearInterval(interval);
-                }, 1000);
-            }
         }
 
         function enviarZap() {
             const n = document.getElementById('nomeCliente').value;
             const r = document.getElementById('ruaCliente').value;
-            const c = document.getElementById('cupomInput').value.toUpperCase();
             if(!n || !r || carrinho.length === 0) return alert("Preencha os dados!");
             
-            let msg = `*NOVO PEDIDO - MEC SHOP*\n\n*CLIENTE:* ${n}\n*ENDEREÇO:* ${r}\n`;
-            if(c) msg += `*CUPOM APLICADO:* ${c}\n`;
-            msg += `---\n`;
+            let msg = `*NOVO PEDIDO - MEC SHOP*\n\n*CLIENTE:* ${n}\n*ENDEREÇO:* ${r}\n---\n`;
             carrinho.forEach(i => msg += `• ${i.qtd}x ${i.nome}\n`);
             msg += `\n*TOTAL: R$ ${document.getElementById('total-val').innerText}*`;
             
