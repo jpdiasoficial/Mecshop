@@ -3,162 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Allan Gelados | Catálogo Inteligente</title>
+    <title>Allan Gelados | Cardápio Inteligente Sergel</title>
     <style>
-        :root { --ifood-red: #ea1d2c; --green: #2ecc71; --text: #3e3e3e; }
-        body { font-family: 'Segoe UI', Roboto, sans-serif; margin: 0; background: #fff; color: var(--text); padding-bottom: 110px; }
+        :root { --ifood-red: #ea1d2c; --green: #2ecc71; --text-main: #3e3e3e; --text-light: #717171; }
+        body { font-family: 'Segoe UI', Roboto, sans-serif; margin: 0; background: #fff; color: var(--text-main); padding-bottom: 120px; }
         
-        /* Banner Slider */
-        .slider { width: 100%; height: 160px; overflow: hidden; position: relative; background: #000; }
-        .slider img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; }
+        /* Header & Slider */
+        .slider { width: 100%; height: 160px; position: relative; background: #000; overflow: hidden; }
+        .slider img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
         .shop-header { position: absolute; bottom: 15px; left: 15px; color: #fff; }
 
-        /* Barra de Navegação Fixa */
-        .nav-sticky { position: sticky; top: 0; background: #fff; z-index: 1000; border-bottom: 1px solid #f2f2f2; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .nav-categories { display: flex; overflow-x: auto; padding: 12px 15px; gap: 10px; scrollbar-width: none; }
-        .nav-categories::-webkit-scrollbar { display: none; }
-        .cat-item { padding: 8px 18px; border-radius: 20px; background: #f2f2f2; color: #717171; font-size: 14px; font-weight: 600; white-space: nowrap; cursor: pointer; border: none; }
-        .cat-item.active { background: var(--ifood-red); color: #fff; }
+        /* Navegação Fixa Estilo App */
+        .nav-container { position: sticky; top: 0; background: #fff; z-index: 1000; border-bottom: 1px solid #f2f2f2; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .nav-tabs { display: flex; overflow-x: auto; padding: 12px 15px; gap: 10px; scrollbar-width: none; }
+        .nav-tabs::-webkit-scrollbar { display: none; }
+        .tab { padding: 8px 20px; border-radius: 20px; background: #f2f2f2; color: var(--text-light); font-size: 14px; font-weight: 600; white-space: nowrap; border: none; cursor: pointer; }
+        .tab.active { background: var(--ifood-red); color: #fff; }
 
         /* Busca */
-        .search-box { padding: 15px; background: #fff; }
-        .search-input { width: 100%; padding: 12px 20px; border-radius: 10px; border: 1px solid #eee; background: #f7f7f7; font-size: 15px; box-sizing: border-box; outline: none; }
+        .search-wrap { padding: 15px; background: #fff; }
+        .search-input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #eee; background: #f7f7f7; font-size: 15px; outline: none; }
 
-        /* Lista estilo iFood */
-        .section-title { padding: 20px 15px 10px; font-size: 18px; font-weight: 700; color: #000; }
-        .product-card { display: flex; padding: 15px; border-bottom: 1px solid #f8f8f8; gap: 15px; align-items: center; }
-        .product-info { flex: 1; }
-        .product-name { font-size: 16px; font-weight: 600; color: #333; margin-bottom: 4px; display: block; }
-        .product-desc { font-size: 13px; color: #717171; line-height: 1.3; margin-bottom: 8px; display: block; }
-        .price-v { font-size: 15px; font-weight: 700; color: #2e7d32; }
-        .price-a { font-size: 11px; color: var(--green); font-weight: 800; display: block; margin-top: 2px; }
+        /* Lista de Produtos */
+        .category-title { padding: 20px 15px 10px; font-size: 18px; font-weight: 700; color: #000; background: #fff; }
+        .card { display: flex; padding: 15px; border-bottom: 1px solid #f8f8f8; gap: 15px; align-items: flex-start; }
+        .info { flex: 1; }
+        .name { font-size: 16px; font-weight: 600; color: #333; margin: 0 0 4px 0; }
+        .description { font-size: 12px; color: var(--text-light); line-height: 1.4; margin-bottom: 8px; display: block; }
+        .prices { display: flex; flex-direction: column; gap: 2px; }
+        .v-price { font-size: 15px; font-weight: 700; color: #000; }
+        .a-price { font-size: 12px; color: var(--green); font-weight: 700; }
+        .min-info { font-size: 10px; color: #999; text-transform: uppercase; }
 
-        .btn-add { color: var(--ifood-red); border: 1px solid #f2f2f2; background: #fff; padding: 8px 15px; border-radius: 5px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .qty-controls { display: flex; align-items: center; gap: 10px; border: 1px solid var(--ifood-red); border-radius: 5px; padding: 5px 10px; }
-        .qty-btn { background: none; border: none; color: var(--ifood-red); font-size: 18px; font-weight: bold; }
+        /* Botões */
+        .actions { min-width: 90px; text-align: right; }
+        .btn-add { color: var(--ifood-red); border: 1px solid #f2f2f2; background: #fff; padding: 8px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .qty-wrap { display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--ifood-red); border-radius: 6px; padding: 4px; }
+        .qty-btn { background: none; border: none; color: var(--ifood-red); font-size: 18px; font-weight: bold; width: 30px; }
 
         /* Footer Fixo */
-        .footer-cart { position: fixed; bottom: 0; width: 100%; background: #fff; border-top: 1px solid #eee; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 1100; box-sizing: border-box; }
-        .total-text { font-size: 12px; color: #717171; display: block; }
-        .total-val { font-size: 18px; font-weight: 800; }
-        .btn-finish { background: var(--ifood-red); color: #fff; border: none; padding: 12px 30px; border-radius: 8px; font-weight: bold; font-size: 15px; }
+        .footer { position: fixed; bottom: 0; width: 100%; background: #fff; border-top: 1px solid #eee; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 1100; box-sizing: border-box; }
+        .footer-total { font-size: 18px; font-weight: 800; }
+        .btn-finish { background: var(--ifood-red); color: #fff; border: none; padding: 12px 30px; border-radius: 8px; font-weight: bold; font-size: 16px; }
 
         /* Modal */
         .modal { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); display:none; z-index:2000; align-items:flex-end; }
-        .modal-content { background:#fff; width:100%; border-radius:20px 20px 0 0; padding:25px; box-sizing:border-box; }
-        .input-ifood { width:100%; padding:15px; margin-bottom:10px; border:1px solid #ddd; border-radius:8px; font-size:14px; box-sizing:border-box; }
+        .modal-body { background:#fff; width:100%; border-radius:20px 20px 0 0; padding:25px; box-sizing:border-box; }
+        .input { width:100%; padding:15px; margin-bottom:12px; border:1px solid #ddd; border-radius:8px; font-size:14px; box-sizing:border-box; }
     </style>
 </head>
 <body>
 
 <div class="slider">
-    <img src="https://images.unsplash.com/photo-1576506295286-5cda18df43c7?w=800">
+    <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=800" alt="Banner Sergel">
     <div class="shop-header">
-        <h2 style="margin:0">Allan Gelados</h2>
-        <span style="font-size: 12px;">🍦 O melhor da Sergel na sua casa</span>
+        <h2 style="margin:0">Allan Gelados - Sergel</h2>
+        <span style="font-size: 12px;">🛵 Entrega Rápida • Preço de Atacado</span>
     </div>
 </div>
 
-<div class="nav-sticky">
-    <div class="nav-categories" id="cat-nav">
-        <button class="cat-item active" onclick="filterCat('Tudo', this)">Tudo</button>
-        <button class="cat-item" onclick="filterCat('Pote 2L', this)">Pote 2L</button>
-        <button class="cat-item" onclick="filterCat('Picolé', this)">Picolé</button>
+<div class="nav-container">
+    <div class="nav-tabs" id="tabNav">
+        <button class="tab active" onclick="setFilter('Tudo', this)">Tudo</button>
+        <button class="tab" onclick="setFilter('Potes 2L', this)">Potes 2L</button>
+        <button class="tab" onclick="setFilter('Picolés Especiais', this)">Picolés Especiais</button>
+        <button class="tab" onclick="setFilter('Picolés Fruta', this)">Picolés Fruta</button>
     </div>
 </div>
 
-<div class="search-box">
-    <input type="text" id="searchInput" class="search-input" placeholder="Buscar sabor..." oninput="render()">
+<div class="search-wrap">
+    <input type="text" id="search" class="search-input" placeholder="Buscar sabor (ex: Leitinho, Skimo...)" oninput="render()">
 </div>
 
-<div id="product-container"></div>
+<div id="app"></div>
 
-<div class="footer-cart">
+<div class="footer">
     <div>
-        <span class="total-text">Total sem entrega</span>
-        <span class="total-val">R$ <span id="total-html">0,00</span></span>
+        <span style="font-size: 10px; color: #717171; display: block;">SUBTOTAL</span>
+        <span class="footer-total">R$ <span id="total-val">0,00</span></span>
     </div>
-    <button class="btn-finish" onclick="openModal()">Finalizar</button>
+    <button class="btn-finish" onclick="openCheckout()">Finalizar</button>
 </div>
 
-<div class="modal" id="modal">
-    <div class="modal-content">
-        <h3 style="margin-top:0">Finalizar Pedido</h3>
-        <div id="resumo" style="font-size:13px; color:#666; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;"></div>
-        <input type="text" id="userName" class="input-ifood" placeholder="Seu Nome">
-        <input type="text" id="userAddr" class="input-ifood" placeholder="Endereço Completo">
-        <button class="btn-finish" style="width:100%" onclick="sendOrder()">FECHAR PEDIDO NO WHATSAPP</button>
-        <button onclick="closeModal()" style="width:100%; background:none; border:none; color:#999; margin-top:15px;">Voltar ao cardápio</button>
+<div class="modal" id="checkoutModal">
+    <div class="modal-body">
+        <h3 style="margin:0 0 15px 0">Resumo do Pedido</h3>
+        <div id="summary" style="font-size:13px; margin-bottom:15px; max-height: 100px; overflow-y: auto; color: #666;"></div>
+        <input type="text" id="userName" class="input" placeholder="Seu Nome">
+        <input type="text" id="userAddress" class="input" placeholder="Endereço de Entrega Completo">
+        <button class="btn-finish" style="width:100%" onclick="sendToWhatsApp()">ENVIAR PEDIDO</button>
+        <button onclick="closeCheckout()" style="width:100%; background:none; border:none; color:#999; margin-top:10px;">Voltar ao Cardápio</button>
     </div>
 </div>
 
 <script>
-    const produtos = [
-        { id: 1, cat: 'Pote 2L', nome: 'Leitinho Trufado 2L', desc: 'Sorvete de leite cremoso com trufas artesanais.', preco: 45.0, atacado: 38.0, min: 10 },
-        { id: 2, cat: 'Pote 2L', nome: 'Chocolate Belga 2L', desc: 'Puro chocolate com textura aveludada.', preco: 45.0, atacado: 38.0, min: 10 },
-        { id: 3, cat: 'Pote 2L', nome: 'Iogurte c/ Amarena 2L', desc: 'Iogurte suave com cerejas amarenas importadas.', preco: 45.0, atacado: 38.0, min: 10 },
-        { id: 4, cat: 'Picolé', nome: 'Skimo Clássico', desc: 'Baunilha com casquinha de chocolate crocante.', preco: 7.0, atacado: 2.8, min: 20 },
-        { id: 5, cat: 'Picolé', nome: 'Morango c/ Leite Cond.', desc: 'Picolé recheado com leite condensado.', preco: 7.0, atacado: 2.8, min: 20 },
-        { id: 6, cat: 'Picolé', nome: 'Milho Verde', desc: 'Sabor tradicional e refrescante.', preco: 6.0, atacado: 2.2, min: 20 }
+    // DADOS COMPLETOS EXTRAÍDOS DAS IMAGENS
+    const db = [
+        { id: 1, cat: 'Potes 2L', name: 'Leitinho Trufado', desc: 'Sorvete de leite com trufa de chocolate artesanal.', v: 45.0, a: 38.0, min: 10 },
+        { id: 2, cat: 'Potes 2L', name: 'Delicielo Avelã', desc: 'Sabor irresistível de avelã com pedaços.', v: 45.0, a: 38.0, min: 10 },
+        { id: 3, cat: 'Potes 2L', name: 'Chocolate Belga', desc: 'Cremosidade extrema com chocolate intenso.', v: 45.0, a: 38.0, min: 10 },
+        { id: 4, cat: 'Potes 2L', name: 'Iogurte com Amarena', desc: 'Iogurte suave com cerejas silvestre.', v: 45.0, a: 38.0, min: 10 },
+        { id: 5, cat: 'Potes 2L', name: 'Napolitano Sergel', desc: 'Morango, Creme e Chocolate Clássico.', v: 40.0, a: 35.0, min: 10 },
+        
+        { id: 6, cat: 'Picolés Especiais', name: 'Skimo Clássico', desc: 'Baunilha com casquinha de chocolate crocante.', v: 7.0, a: 2.8, min: 20 },
+        { id: 7, cat: 'Picolés Especiais', name: 'Chocolate Holandês', desc: 'Sabor intenso de chocolate cremoso.', v: 7.0, a: 2.8, min: 20 },
+        { id: 8, cat: 'Picolés Especiais', name: 'Pavê de Chocolate', desc: 'Com pedaços de biscoito e chocolate.', v: 7.0, a: 2.8, min: 20 },
+        { id: 9, cat: 'Picolés Especiais', name: 'Morango com Leite Cond.', desc: 'Picolé recheado com leite condensado.', v: 7.0, a: 2.8, min: 20 },
+        
+        { id: 10, cat: 'Picolés Fruta', name: 'Milho Verde', desc: 'O sabor tradicional da espiga.', v: 6.0, a: 2.2, min: 20 },
+        { id: 11, cat: 'Picolés Fruta', name: 'Limão Siciliano', desc: 'Refrescante e 100% natural.', v: 5.0, a: 2.0, min: 20 },
+        { id: 12, cat: 'Picolés Fruta', name: 'Maracujá Natural', desc: 'Sabor marcante da fruta.', v: 5.0, a: 2.0, min: 20 }
     ];
 
     let cart = [];
-    let activeCat = 'Tudo';
+    let filter = 'Tudo';
 
     function render() {
-        const container = document.getElementById('product-container');
-        const search = document.getElementById('searchInput').value.toLowerCase();
-        container.innerHTML = '';
+        const app = document.getElementById('app');
+        const term = document.getElementById('search').value.toLowerCase();
+        app.innerHTML = '';
 
-        const filterProducts = produtos.filter(p => (activeCat === 'Tudo' || p.cat === activeCat) && p.nome.toLowerCase().includes(search));
-        
-        const categories = [...new Set(filterProducts.map(p => p.cat))];
-        
+        const categories = filter === 'Tudo' ? [...new Set(db.map(p => p.cat))] : [filter];
+
         categories.forEach(cat => {
-            container.innerHTML += `<div class="section-title">${cat}</div>`;
-            const items = filterProducts.filter(p => p.cat === cat);
-            items.forEach(p => {
-                const itemCart = cart.find(c => c.id === p.id);
-                container.innerHTML += `
-                    <div class="product-card">
-                        <div class="product-info">
-                            <span class="product-name">${p.nome}</span>
-                            <span class="product-desc">${p.desc}</span>
-                            <span class="price-v">R$ ${p.preco.toFixed(2).replace('.',',')}</span>
-                            <span class="price-a">📦 Atacado (${p.min}+): R$ ${p.atacado.toFixed(2).replace('.',',')}</span>
-                        </div>
-                        <div class="actions">
-                            ${itemCart ? `
-                                <div class="qty-controls">
-                                    <button class="qty-btn" onclick="update(${p.id}, -1)">-</button>
-                                    <strong>${itemCart.qty}</strong>
-                                    <button class="qty-btn" onclick="update(${p.id}, 1)">+</button>
+            const items = db.filter(p => p.cat === cat && p.name.toLowerCase().includes(term));
+            if(items.length > 0) {
+                app.innerHTML += `<div class="category-title">${cat}</div>`;
+                items.forEach(p => {
+                    const itemInCart = cart.find(c => c.id === p.id);
+                    app.innerHTML += `
+                        <div class="card">
+                            <div class="info">
+                                <p class="name">${p.name}</p>
+                                <span class="description">${p.desc}</span>
+                                <div class="prices">
+                                    <span class="v-price">R$ ${p.v.toFixed(2).replace('.',',')} <small style="font-size:10px; color:#999">Varejo</small></span>
+                                    <span class="a-price">R$ ${p.a.toFixed(2).replace('.',',')} <span class="min-info">(${p.min}+ un)</span></span>
                                 </div>
-                            ` : `
-                                <button class="btn-add" onclick="update(${p.id}, 1)">Adicionar</button>
-                            `}
+                            </div>
+                            <div class="actions">
+                                ${itemInCart ? `
+                                    <div class="qty-wrap">
+                                        <button class="qty-btn" onclick="changeQty(${p.id}, -1)">-</button>
+                                        <strong>${itemInCart.qty}</strong>
+                                        <button class="qty-btn" onclick="changeQty(${p.id}, 1)">+</button>
+                                    </div>
+                                ` : `
+                                    <button class="btn-add" onclick="changeQty(${p.id}, 1)">ADICIONAR</button>
+                                `}
+                            </div>
                         </div>
-                    </div>
-                `;
-            });
+                    `;
+                });
+            }
         });
         updateTotal();
     }
 
-    function filterCat(cat, btn) {
-        activeCat = cat;
-        document.querySelectorAll('.cat-item').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        render();
-    }
-
-    function update(id, d) {
+    function changeQty(id, d) {
         const idx = cart.findIndex(c => c.id === id);
         if(idx > -1) {
             cart[idx].qty += d;
             if(cart[idx].qty <= 0) cart.splice(idx, 1);
         } else {
-            cart.push({...produtos.find(p => p.id === id), qty: 1});
+            cart.push({...db.find(p => p.id === id), qty: 1});
         }
         render();
     }
@@ -166,24 +174,43 @@
     function updateTotal() {
         let total = 0;
         cart.forEach(i => {
-            const price = i.qty >= i.min ? i.atacado : i.preco;
+            const price = i.qty >= i.min ? i.a : i.v;
             total += price * i.qty;
         });
-        document.getElementById('total-html').innerText = total.toFixed(2).replace('.',',');
+        document.getElementById('total-val').innerText = total.toFixed(2).replace('.',',');
     }
 
-    function openModal() {
-        if(cart.length === 0) return alert("Adicione itens à sacola!");
-        document.getElementById('resumo').innerHTML = cart.map(i => `${i.qty}x ${i.nome}`).join(', ');
-        document.getElementById('modal').style.display = 'flex';
+    function setFilter(cat, btn) {
+        filter = cat;
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+        render();
     }
 
-    function closeModal() { document.getElementById('modal').style.display = 'none'; }
+    function openCheckout() {
+        if(cart.length === 0) return alert("Sua sacola está vazia!");
+        document.getElementById('summary').innerHTML = cart.map(i => `${i.qty}x ${i.name}`).join(', ');
+        document.getElementById('checkoutModal').style.display = 'flex';
+    }
 
-    function sendOrder() {
+    function closeCheckout() { document.getElementById('checkoutModal').style.display = 'none'; }
+
+    function sendToWhatsApp() {
         const name = document.getElementById('userName').value;
-        const addr = document.getElementById('userAddr').value;
-        if(!name || !addr) return alert("Preencha seus dados!");
+        const addr = document.getElementById('userAddress').value;
+        if(!name || !addr) return alert("Preencha seu nome e endereço!");
 
-        let msg = `*PEDIDO ALLAN GELADOS*\n\n*Cliente:* ${name}\n*Endereço:* ${addr}\n\n*ÍTENS:*\n`;
-        cart
+        let msg = `*PEDIDO ALLAN GELADOS - SERGEL*\n\n*Cliente:* ${name}\n*Endereço:* ${addr}\n\n*ITENS:*\n`;
+        cart.forEach(i => {
+            const price = i.qty >= i.min ? i.a : i.v;
+            msg += `• ${i.qty}x ${i.name} - R$ ${(price * i.qty).toFixed(2)}${i.qty >= i.min ? ' (ATACADO)' : ''}\n`;
+        });
+        msg += `\n*TOTAL DO PEDIDO: R$ ${document.getElementById('total-val').innerText}*`;
+        
+        window.open(`https://wa.me/5519996912728?text=${encodeURIComponent(msg)}`);
+    }
+
+    render();
+</script>
+</body>
+</html>
