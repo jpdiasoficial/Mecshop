@@ -24,7 +24,7 @@
         .loja-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 20px; }
         .produto-card { background: #fff; border-radius: 12px; padding: 12px; text-align: center; border: 1px solid #e1e4e8; position: relative; }
         .badge-atacado { position: absolute; top: 10px; right: 10px; background: #2ecc71; color: #fff; font-size: 9px; padding: 4px 8px; border-radius: 4px; font-weight: bold; }
-        .img-produto { width: 100%; height: 110px; object-fit: cover; border-radius: 8px; margin-bottom: 8px; }
+        .img-produto { width: 100%; height: 110px; object-fit: cover; border-radius: 8px; margin-bottom: 8px; background: #eee; }
         .product-name { font-size: 12px; font-weight: 600; height: 32px; overflow: hidden; display: block; line-height: 1.2; }
         .product-price { font-size: 14px; font-weight: 700; color: #000; margin: 5px 0; display: block; }
         .atacado-info { font-size: 9px; color: #2ecc71; font-weight: bold; display: block; margin-bottom: 8px; }
@@ -46,8 +46,8 @@
 
     <div class="slider-container">
         <div class="slider-track">
-            <div class="slide"><img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=800"></div>
-            <div class="slide"><img src="https://images.unsplash.com/photo-1501443762994-82bd5dabb892?w=800"></div>
+            <div class="slide"><img src="https://images.unsplash.com/photo-1576506295286-5cda18df43c7?w=800"></div>
+            <div class="slide"><img src="https://images.unsplash.com/photo-1488477181946-6428a0291777?w=800"></div>
         </div>
     </div>
 
@@ -90,19 +90,18 @@
 
     <script>
         const produtos = [
-            // POTES 2L - VAREJO 45 | ATACADO 38 (mínimo 10)
-            { id: 1, cat: "Potes", nome: "Pote Leitinho Trufado 2L", preco: 45.0, atacado: 38.0, min: 10, img: "https://images.unsplash.com/photo-1501443762994-82bd5dabb892?w=400" },
+            // POTES 2L - IMAGENS CORRESPONDENTES
+            { id: 1, cat: "Potes", nome: "Pote Leitinho Trufado 2L", preco: 45.0, atacado: 38.0, min: 10, img: "https://images.unsplash.com/photo-1534706936160-d5ee67737249?w=400" },
             { id: 2, cat: "Potes", nome: "Pote Delicielo de Avelã 2L", preco: 45.0, atacado: 38.0, min: 10, img: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400" },
-            { id: 3, cat: "Potes", nome: "Pote Iogurte c/ Amarena 2L", preco: 45.0, atacado: 38.0, min: 10, img: "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=400" },
+            { id: 3, cat: "Potes", nome: "Pote Iogurte c/ Amarena 2L", preco: 45.0, atacado: 38.0, min: 10, img: "https://images.unsplash.com/photo-1580915411954-282cb1b0d780?w=400" },
             { id: 4, cat: "Potes", nome: "Pote Chocolate Belga 2L", preco: 45.0, atacado: 38.0, min: 10, img: "https://images.unsplash.com/photo-1557142046-c704a3adf364?w=400" },
             { id: 5, cat: "Potes", nome: "Pote Napolitano Sergel 2L", preco: 40.0, atacado: 35.0, min: 10, img: "https://images.unsplash.com/photo-1560008581-09826d1de69e?w=400" },
             
-            // PICOLÉS - VAREJO 7.00 | ATACADO 2.80 (mínimo 20)
+            // PICOLÉS - IMAGENS CORRESPONDENTES
             { id: 6, cat: "Picolés", nome: "Skimo Clássico Sergel", preco: 7.00, atacado: 2.80, min: 20, img: "https://images.unsplash.com/photo-1505394033323-424ebb43ef2e?w=400" },
-            { id: 7, cat: "Picolés", nome: "Picolé Chocolate Holandês", preco: 7.00, atacado: 2.80, min: 20, img: "https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=400" },
-            { id: 8, cat: "Picolés", nome: "Picolé Milho Verde", preco: 7.00, atacado: 2.80, min: 20, img: "https://images.unsplash.com/photo-1560008581-09826d1de69e?w=400" },
-            { id: 9, cat: "Picolés", nome: "Picolé Morango c/ Leite Cond.", preco: 7.00, atacado: 2.80, min: 20, img: "https://images.unsplash.com/photo-1502741126161-b048400d085d?w=400" },
-            { id: 10, cat: "Picolés", nome: "Picolé Pavê de Chocolate", preco: 7.00, atacado: 2.80, min: 20, img: "https://images.unsplash.com/photo-1517093157656-b9424f461537?w=400" }
+            { id: 7, cat: "Picolés", nome: "Picolé Chocolate Holandês", preco: 7.00, atacado: 2.80, min: 20, img: "https://images.unsplash.com/photo-1517093157656-b9424f461537?w=400" },
+            { id: 8, cat: "Picolés", nome: "Picolé Milho Verde", preco: 7.00, atacado: 2.80, min: 20, img: "https://images.unsplash.com/photo-1502741126161-b048400d085d?w=400" },
+            { id: 9, cat: "Picolés", nome: "Picolé Morango c/ Leite Cond.", preco: 7.00, atacado: 2.80, min: 20, img: "https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=400" }
         ];
 
         let carrinho = [];
@@ -120,7 +119,7 @@
                         <span class="badge-atacado">ATACADO R$ ${p.atacado.toFixed(2).replace('.',',')}</span>
                         <img src="${p.img}" class="img-produto">
                         <span class="product-name">${p.nome}</span>
-                        <span class="product-price">Varejo: R$ ${p.preco.toFixed(2).replace('.',',')}</span>
+                        <span class="product-price">R$ ${p.preco.toFixed(2).replace('.',',')}</span>
                         <span class="atacado-info">Atacado (${p.min}+ un): R$ ${p.atacado.toFixed(2).replace('.',',')}</span>
                         ${item ? `
                             <div class="qty-selector">
@@ -184,7 +183,7 @@
             });
             msg += `\n*TOTAL: R$ ${document.getElementById('total-val').innerText}*`;
             
-            window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(msg)}`);
+            window.open(`https://wa.me/5519996912728?text=${encodeURIComponent(msg)}`);
         }
         render();
     </script>
