@@ -168,5 +168,68 @@
             if(cupom === "MEC10") {
                 total *= 0.9;
             }
-            document.getElementById('total-val').innerText = total.toFixed(2).replace('.',
-        
+            document.getElementById('total-val').innerText = total.toFixed(2).replace('.',',');
+        }
+
+        function mascaraCEP(i) {
+            let v = i.value.replace(/\D/g, "");
+            v = v.replace(/^(\d{5})(\d)/, "$1-$2");
+            i.value = v;
+        }
+
+        function buscarCEP() {
+            let cep = document.getElementById('cepCliente').value.replace(/\D/g, '');
+            if (cep.length === 8) {
+                fetch(`https://viacep.com.br/ws/${cep}/json/`).then(r => r.json()).then(d => {
+                    if(!d.erro) {
+                        document.getElementById('ruaCliente').value = `${d.logradouro}, ${d.bairro}`;
+                        document.getElementById('cidadeOculta').value = `${d.localidade}/${d.uf}`;
+                    }
+                });
+            }
+        }
+
+        function filtrarBusca() {
+            const t = document.getElementById('inputBusca').value.toLowerCase();
+            render(produtos.filter(p => p.nome.toLowerCase().includes(t)));
+        }
+
+        function filtrarCat(cat, el) {
+            categoriaAtual = cat;
+            document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active');
+            render();
+        }
+
+        function toggleModal(s) { 
+            document.getElementById('modalCart').style.display = s ? 'block' : 'none'; 
+            if(s) startTimer();
+        }
+
+        function startTimer() {
+            const display = document.getElementById('contagem');
+            const interval = setInterval(() => {
+                let m = Math.floor(tempo / 60);
+                let s = tempo % 60;
+                display.innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+                if (tempo <= 0) clearInterval(interval);
+                tempo--;
+            }, 1000);
+        }
+
+        function enviarZap() {
+            const n = document.getElementById('nomeCliente').value;
+            const r = document.getElementById('ruaCliente').value;
+            if(!n || !r || carrinho.length === 0) return alert("Por favor, preencha as informações de entrega.");
+            
+            let msg = `*NOVO PEDIDO - MEC SHOP*\n\nCLIENTE: ${n}\nENDEREÇO: ${r}\n---\n`;
+            carrinho.forEach(i => msg += `• ${i.qtd}x ${i.nome}\n`);
+            msg += `\nTOTAL: R$ ${document.getElementById('total-val').innerText}`;
+            
+            window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(msg)}`);
+        }
+
+        render();
+    </script>
+</body>
+</html>
