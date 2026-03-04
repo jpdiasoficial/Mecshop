@@ -3,172 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SÓ GELADOS | MEC SHOP</title>
+    <title>CATÁLOGO SERGEL | OFICIAL</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --green: #25d366; --blue: #007bff; --bg: #f4f7f6; --dark: #1a1a1a; }
-        body { font-family: 'Inter', sans-serif; margin: 0; background: var(--bg); color: var(--dark); padding-bottom: 110px; }
+        :root { --sergel-blue: #004aad; --sergel-red: #e63946; --green: #25d366; --bg: #f9f9f9; }
+        body { font-family: 'Inter', sans-serif; margin: 0; background: var(--bg); padding-bottom: 110px; }
         
-        /* Header & Logo */
-        .hero { width: 100%; height: 200px; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=800&q=80'); background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; border-radius: 0 0 25px 25px; text-align: center; }
-        .hero h1 { margin: 0; font-size: 32px; font-weight: 900; }
+        /* Slide Sergel */
+        .slider { width: 100%; height: 200px; background: var(--sergel-blue); overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; color: #fff; text-align: center; }
+        .slider img { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0.5; }
+        .slider-content { position: relative; z-index: 10; padding: 20px; }
+        .slider h1 { margin: 0; font-size: 28px; font-weight: 900; text-transform: uppercase; }
 
-        /* Busca */
-        .search-container { padding: 0 20px; margin-top: -30px; }
-        .search-bar { background: #fff; display: flex; padding: 15px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid #eee; }
-        .search-bar input { border: none; outline: none; width: 100%; font-size: 16px; font-weight: 500; }
-        
         /* Categorias */
         .cats { display: flex; overflow-x: auto; padding: 20px; gap: 10px; scrollbar-width: none; }
-        .cat-card { background: #fff; padding: 10px 20px; border-radius: 50px; font-size: 13px; font-weight: 700; white-space: nowrap; border: 1px solid #ddd; cursor: pointer; }
-        .cat-card.active { background: var(--dark); color: #fff; border-color: var(--dark); }
+        .cat-btn { background: #fff; padding: 12px 20px; border-radius: 50px; font-size: 13px; font-weight: 700; white-space: nowrap; border: 1px solid #ddd; cursor: pointer; transition: 0.3s; }
+        .cat-btn.active { background: var(--sergel-blue); color: #fff; border-color: var(--sergel-blue); }
 
-        /* Grid MEC SHOP */
+        /* Grid de Produtos */
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; }
-        .card { background: #fff; border-radius: 20px; padding: 12px; border: 1px solid #eee; display: flex; flex-direction: column; transition: 0.2s; }
-        .card:active { transform: scale(0.96); }
-        .img-box { width: 100%; height: 130px; border-radius: 15px; object-fit: cover; margin-bottom: 10px; background: #eee; }
-        .name { font-size: 13px; font-weight: 700; line-height: 1.2; height: 32px; margin-bottom: 5px; overflow: hidden; }
-        .price { font-size: 17px; font-weight: 900; color: var(--blue); margin-bottom: 2px; }
-        .atacado-tag { font-size: 10px; color: #27ae60; font-weight: 800; margin-bottom: 10px; display: block; }
+        .card { background: #fff; border-radius: 20px; padding: 12px; border: 1px solid #eee; display: flex; flex-direction: column; position: relative; }
+        .badge-atacado { position: absolute; top: 8px; right: 8px; background: var(--sergel-red); color: white; font-size: 9px; padding: 4px 8px; border-radius: 10px; font-weight: 800; }
+        .img-prod { width: 100%; height: 130px; border-radius: 15px; object-fit: cover; margin-bottom: 10px; }
+        .name-prod { font-size: 13px; font-weight: 700; line-height: 1.2; height: 32px; overflow: hidden; }
+        .price-prod { font-size: 17px; font-weight: 900; color: var(--sergel-blue); margin: 5px 0; }
         
-        /* Controles */
-        .btn-add { background: var(--dark); color: #fff; border: none; width: 100%; padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; }
+        /* Botões */
+        .btn-add { background: var(--sergel-blue); color: #fff; border: none; width: 100%; padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; }
         .qty-controls { display: flex; align-items: center; justify-content: space-between; background: #f1f3f5; border-radius: 12px; padding: 5px; }
         .btn-qty { background: #fff; border: none; width: 32px; height: 32px; border-radius: 8px; font-weight: 900; cursor: pointer; }
 
-        /* Footer Fixo */
-        .footer { position: fixed; bottom: 0; width: 100%; background: #fff; padding: 20px 25px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #eee; z-index: 100; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); }
-        .btn-check { background: var(--green); color: #fff; border: none; padding: 15px 30px; border-radius: 15px; font-weight: 800; font-size: 14px; cursor: pointer; }
+        /* Checkout Footer */
+        .footer { position: fixed; bottom: 0; width: 100%; background: #fff; padding: 20px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; border-top: 2px solid #eee; z-index: 100; }
+        .total-box { line-height: 1.2; }
+        .btn-finalizar { background: var(--green); color: #fff; border: none; padding: 15px 25px; border-radius: 15px; font-weight: 800; font-size: 14px; cursor: pointer; }
 
-        /* Modal Checkout */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; z-index: 200; align-items: flex-end; }
-        .modal-body { background: #fff; width: 100%; border-radius: 30px 30px 0 0; padding: 30px; box-sizing: border-box; max-height: 90vh; overflow-y: auto; animation: slideUp 0.3s ease; }
+        /* Modal Formulário */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; z-index: 200; align-items: flex-end; }
+        .modal-body { background: #fff; width: 100%; border-radius: 25px 25px 0 0; padding: 25px; box-sizing: border-box; animation: slideUp 0.3s ease; }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        .form-input { width: 100%; padding: 15px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 12px; font-size: 15px; box-sizing: border-box; }
-        .summary { background: #f8f9fa; padding: 15px; border-radius: 15px; margin-bottom: 15px; font-size: 13px; line-height: 1.6; }
+        .input-form { width: 100%; padding: 15px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 12px; font-size: 15px; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
-    <div class="hero">
-        <h1>SÓ GELADOS</h1>
-        <p>Catálogo Oficial Allan</p>
-    </div>
-
-    <div class="search-container">
-        <div class="search-bar">
-            <input type="text" id="search" oninput="render()" placeholder="Qual sabor você busca?">
+    <div class="slider">
+        <img src="https://images.unsplash.com/photo-1576506295286-5cda18df43c7?w=800" alt="Sorvete Sergel">
+        <div class="slider-content">
+            <h1>SERGEL SORVETES</h1>
+            <p>Qualidade que você já conhece!</p>
         </div>
     </div>
 
     <div class="cats">
-        <div class="cat-card active" onclick="filter('Tudo', this)">Tudo</div>
-        <div class="cat-card" onclick="filter('Potes', this)">Potes 2L</div>
-        <div class="cat-card" onclick="filter('Picolés', this)">Picolés</div>
+        <div class="cat-btn active" onclick="filter('Tudo', this)">Tudo</div>
+        <div class="cat-btn" onclick="filter('Potes 2L', this)">Potes Premium</div>
+        <div class="cat-btn" onclick="filter('Picolés', this)">Picolés</div>
     </div>
 
-    <div id="vitrine" class="grid"></div>
+    <div id="grid" class="grid"></div>
 
     <div class="footer">
-        <div>
-            <span style="font-size: 11px; font-weight: 700; color: #888;">TOTAL</span><br>
-            <span style="font-size: 22px; font-weight: 900;">R$ <span id="total-val">0,00</span></span>
+        <div class="total-box">
+            <span style="font-size: 11px; font-weight: 700; color: #888;">VALOR TOTAL</span><br>
+            <span style="font-size: 22px; font-weight: 900; color: var(--sergel-blue);">R$ <span id="total-val">0,00</span></span>
         </div>
-        <button class="btn-check" onclick="openCheckout()">FINALIZAR</button>
+        <button class="btn-finalizar" onclick="openCheckout()">FINALIZAR PEDIDO</button>
     </div>
 
     <div class="modal" id="modal">
         <div class="modal-body">
-            <h2 style="margin: 0 0 15px 0;">Seu Pedido</h2>
-            <div id="resumo-lista" class="summary"></div>
-            
-            <input type="text" id="cupom" class="form-input" style="border: 2px dashed var(--green); color: var(--green); font-weight: bold;" placeholder="CUPOM (Tente: MEC10)" oninput="updateTotal()">
-            <input type="text" id="nome" class="form-input" placeholder="Nome Completo">
-            <input type="tel" id="cep" class="form-input" placeholder="Seu CEP" onblur="buscarEndereco()" maxlength="9">
-            <input type="text" id="endereco" class="form-input" placeholder="Endereço (Rua e Número)">
-            <input type="text" id="bairro" class="form-input" placeholder="Bairro">
-
-            <button class="btn-check" style="width: 100%; padding: 20px; margin-top: 10px;" onclick="sendWhatsApp()">PEDIR NO WHATSAPP DA LOJA</button>
-            <button onclick="closeModal()" style="width: 100%; border: none; background: none; color: #999; margin-top: 15px; font-weight: 600;">Voltar ao Catálogo</button>
+            <h2 style="margin-top: 0;">Finalizar Pedido</h2>
+            <div id="resumo" style="background: #f8f9fa; padding: 15px; border-radius: 12px; margin-bottom: 15px; font-size: 14px;"></div>
+            <input type="text" id="nome" class="input-form" placeholder="Nome Completo">
+            <input type="tel" id="cep" class="input-form" placeholder="CEP (Auto-preenche)" onblur="buscarCep()" maxlength="9">
+            <input type="text" id="endereco" class="input-form" placeholder="Rua e Número">
+            <input type="text" id="bairro" class="input-form" placeholder="Bairro">
+            <button class="btn-finalizar" style="width: 100%; padding: 20px;" onclick="enviarZap()">ENVIAR PARA O WHATSAPP DA LOJA</button>
+            <button onclick="closeModal()" style="width: 100%; border: none; background: none; color: #999; margin-top: 15px;">Voltar</button>
         </div>
     </div>
 
     <script>
-        // DADOS REAIS EXTRAÍDOS DO LINK E IMAGENS
         const produtos = [
-            { id: 1, cat: "Potes", nome: "Pote Leitinho Trufado 2L", preco: 45.0, atacado: 38.0, min: 10, img: "https://images.unsplash.com/photo-1501443762994-82bd5dabb892?w=400" },
-            { id: 2, cat: "Potes", nome: "Pote Ferrero Rocher 2L", preco: 48.0, atacado: 42.0, min: 10, img: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400" },
-            { id: 3, cat: "Picolés", nome: "Skimo Tradicional", preco: 7.0, atacado: 2.8, min: 20, img: "https://images.unsplash.com/photo-1505394033323-424ebb43ef2e?w=400" },
-            { id: 4, cat: "Picolés", nome: "Picolé de Fruta", preco: 5.0, atacado: 2.2, min: 20, img: "https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=400" }
+            { id: 1, cat: "Potes 2L", nome: "Leitinho Trufado (Premium)", preco: 50.0, atacado: 42.0, min: 10, img: "https://images.unsplash.com/photo-1501443762994-82bd5dabb892?w=400" },
+            { id: 2, cat: "Potes 2L", nome: "Delicielo de Avelã (Rafaello)", preco: 50.0, atacado: 42.0, min: 10, img: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400" },
+            { id: 3, cat: "Potes 2L", nome: "Iogurte com Amarena", preco: 50.0, atacado: 42.0, min: 10, img: "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=400" },
+            { id: 4, cat: "Potes 2L", nome: "Napolitano Clássico", preco: 45.0, atacado: 38.0, min: 10, img: "https://images.unsplash.com/photo-1560008581-09826d1de69e?w=400" },
+            { id: 5, cat: "Picolés", nome: "Picolé Skimo Chocolate", preco: 7.0, atacado: 2.8, min: 20, img: "https://images.unsplash.com/photo-1505394033323-424ebb43ef2e?w=400" },
+            { id: 6, cat: "Picolés", nome: "Picolé Fruta (Morango/Limão)", preco: 5.5, atacado: 2.2, min: 20, img: "https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=400" }
         ];
 
         let cart = [];
         let currentCat = "Tudo";
 
         function render() {
-            const vitrine = document.getElementById('vitrine');
-            const busca = document.getElementById('search').value.toLowerCase();
-            vitrine.innerHTML = "";
-
-            produtos.filter(p => (currentCat === "Tudo" || p.cat === currentCat) && p.nome.toLowerCase().includes(busca))
-            .forEach(p => {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = "";
+            produtos.filter(p => currentCat === "Tudo" || p.cat === currentCat).forEach(p => {
                 const inCart = cart.find(c => c.id === p.id);
-                vitrine.innerHTML += `
+                grid.innerHTML += `
                     <div class="card">
-                        <img src="${p.img}" class="img-box">
-                        <span class="name">${p.nome}</span>
-                        <span class="price">R$ ${p.preco.toFixed(2).replace('.',',')}</span>
-                        <span class="atacado-tag">Atacado: R$ ${p.atacado.toFixed(2).replace('.',',')} (+${p.min})</span>
+                        <span class="badge-atacado">ATACADO R$ ${p.atacado.toFixed(2)}</span>
+                        <img src="${p.img}" class="img-prod">
+                        <span class="name-prod">${p.nome}</span>
+                        <span class="price-prod">R$ ${p.preco.toFixed(2)}</span>
                         ${inCart ? `
                             <div class="qty-controls">
-                                <button class="btn-qty" onclick="qty(${p.id}, -1)">-</button>
+                                <button class="btn-qty" onclick="update(${p.id}, -1)">-</button>
                                 <strong>${inCart.qtd}</strong>
-                                <button class="btn-qty" onclick="qty(${p.id}, 1)">+</button>
+                                <button class="btn-qty" onclick="update(${p.id}, 1)">+</button>
                             </div>
-                        ` : `<button class="btn-add" onclick="qty(${p.id}, 1)">ADICIONAR</button>`}
+                        ` : `<button class="btn-add" onclick="update(${p.id}, 1)">ADICIONAR</button>`}
                     </div>
                 `;
             });
-            updateTotal();
+            calcTotal();
         }
 
-        function qty(id, d) {
+        function update(id, d) {
             const i = cart.findIndex(c => c.id === id);
-            if (i > -1) {
-                cart[i].qtd += d;
-                if (cart[i].qtd <= 0) cart.splice(i, 1);
-            } else {
-                cart.push({...produtos.find(p => p.id === id), qtd: 1});
-            }
+            if(i > -1) { cart[i].qtd += d; if(cart[i].qtd <= 0) cart.splice(i, 1); }
+            else { cart.push({...produtos.find(p => p.id === id), qtd: 1}); }
             render();
         }
 
-        function updateTotal() {
-            let total = cart.reduce((acc, i) => {
-                const pUnit = i.qtd >= i.min ? i.atacado : i.preco;
-                return acc + (pUnit * i.qtd);
-            }, 0);
-            
-            if(document.getElementById('cupom').value.toUpperCase() === "MEC10") total *= 0.9;
+        function calcTotal() {
+            const total = cart.reduce((acc, i) => acc + (i.qtd >= i.min ? i.atacado : i.preco) * i.qtd, 0);
             document.getElementById('total-val').innerText = total.toFixed(2).replace('.',',');
         }
 
-        function filter(c, btn) {
+        function filter(c, b) {
             currentCat = c;
-            document.querySelectorAll('.cat-card').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+            b.classList.add('active');
             render();
         }
 
         function openCheckout() {
-            if(cart.length === 0) return alert("Seu carrinho está vazio!");
+            if(!cart.length) return alert("Carrinho vazio!");
             document.getElementById('modal').style.display = 'flex';
-            document.getElementById('resumo-lista').innerHTML = cart.map(i => `• ${i.qtd}x ${i.nome} ${i.qtd >= i.min ? '<b>(ATACADO)</b>' : ''}`).join('<br>');
+            document.getElementById('resumo').innerHTML = cart.map(i => `• ${i.qtd}x ${i.nome} ${i.qtd >= i.min ? '<b>(ATACADO)</b>' : ''}`).join('<br>');
         }
         function closeModal() { document.getElementById('modal').style.display = 'none'; }
 
-        function buscarEndereco() {
+        function buscarCep() {
             const cep = document.getElementById('cep').value.replace(/\D/g, '');
             if(cep.length === 8) {
                 fetch(`https://viacep.com.br/ws/${cep}/json/`).then(r => r.json()).then(d => {
@@ -180,26 +159,17 @@
             }
         }
 
-        function sendWhatsApp() {
+        function enviarZap() {
             const n = document.getElementById('nome').value;
             const e = document.getElementById('endereco').value;
-            const b = document.getElementById('bairro').value;
-            const cupom = document.getElementById('cupom').value;
-            if(!n || !e) return alert("Preencha Nome e Endereço!");
-
-            let msg = `*NOVO PEDIDO - SÓ GELADOS*\n\n*CLIENTE:* ${n}\n*END:* ${e}, ${b}\n*CUPOM:* ${cupom || 'Nenhum'}\n\n*ITENS:*\n`;
-            cart.forEach(i => {
-                const unit = i.qtd >= i.min ? i.atacado : i.preco;
-                msg += `• ${i.qtd}x ${i.nome} (R$ ${unit.toFixed(2)} un)\n`;
-            });
+            if(!n || !e) return alert("Preencha seus dados!");
+            let msg = `*PEDIDO SERGEL SORVETES*\n\n*CLIENTE:* ${n}\n*END:* ${e}\n\n*ITENS:*\n`;
+            cart.forEach(i => msg += `• ${i.qtd}x ${i.nome} (R$ ${(i.qtd >= i.min ? i.atacado : i.preco).toFixed(2)})\n`);
             msg += `\n*TOTAL: R$ ${document.getElementById('total-val').innerText}*`;
-            
-            // INSIRA O WHATSAPP DA LOJA AQUI
-            window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(msg)}`);
+            window.open(`https://wa.me/5519999999999?text=${encodeURIComponent(msg)}`);
         }
 
         render();
     </script>
 </body>
-    </html>
-    
+</html>
