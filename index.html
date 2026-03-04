@@ -95,5 +95,112 @@
     </div>
 
     <script>
-        const produtos = 
+        const produtos = [
+            { id: 1, cat: "Tech", nome: "Smartwatch Ultra 9", preco: 289.90, img: "https://m.media-amazon.com/images/I/71Yp-H-O8rL._AC_SL1500_.jpg" },
+            { id: 2, cat: "Tech", nome: "Headset Wireless", preco: 159.00, img: "https://m.media-amazon.com/images/I/61CGHv6kmWL._AC_SL1500_.jpg" },
+            { id: 3, cat: "Moda", nome: "Tênis Running Nitro", preco: 197.00, img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400" }
+        ];
+
+        let carrinho = [];
+        let categoriaAtual = "Tudo";
+
+        function render() {
+            const v = document.getElementById('vitrine');
+            const busca = document.getElementById('inputBusca').value.toLowerCase();
+            v.innerHTML = "";
+            
+            const filtrados = produtos.filter(p => {
+                const matchCat = categoriaAtual === "Tudo" || p.cat === categoriaAtual;
+                const matchBusca = p.nome.toLowerCase().includes(busca);
+                return matchCat && matchBusca;
+            });
+
+            filtrados.forEach(p => {
+                const noCart = carrinho.find(item => item.id === p.id);
+                v.innerHTML += `
+                    <div class="produto-card">
+                        <img src="${p.img}" class="img-produto">
+                        <span class="product-name">${p.nome}</span>
+                        <span class="product-price">R$ ${p.preco.toFixed(2).replace('.',',')}</span>
+                        ${noCart ? `
+                            <div class="qty-selector">
+                                <button class="btn-qty" onclick="changeQty(${p.id}, -1)">-</button>
+                                <span class="qty-val">${noCart.qtd}</span>
+                                <button class="btn-qty" onclick="changeQty(${p.id}, 1)">+</button>
+                            </div>
+                        ` : `
+                            <button class="btn-add-initial" onclick="changeQty(${p.id}, 1)">ADICIONAR</button>
+                        `}
+                    </div>
+                `;
+            });
+            updateTotal();
+        }
+
+        function filtrarCat(cat, el) {
+            categoriaAtual = cat;
+            document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active');
+            render();
+        }
+
+        function changeQty(id, delta) {
+            const itemIdx = carrinho.findIndex(x => x.id === id);
+            if (itemIdx > -1) {
+                carrinho[itemIdx].qtd += delta;
+                if (carrinho[itemIdx].qtd <= 0) carrinho.splice(itemIdx, 1);
+            } else if (delta > 0) {
+                carrinho.push({...produtos.find(x => x.id === id), qtd: 1});
+            }
+            render();
+            updateCartList();
+        }
+
+        function updateTotal() {
+            let total = carrinho.reduce((acc, i) => acc + (i.preco * i.qtd), 0);
+            const cupom = document.getElementById('cupomInput').value.toUpperCase();
+            if(cupom === "MEC10") total *= 0.90;
+            document.getElementById('total-val').innerText = total.toFixed(2).replace('.',',');
+        }
+
+        function updateCartList() {
+            const list = document.getElementById('cartItemsList');
+            list.innerHTML = "";
+            carrinho.forEach(item => {
+                list.innerHTML += `
+                    <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size:14px; border-bottom:1px solid #eee; padding-bottom:5px;">
+                        <span>${item.nome} (x${item.qtd})</span>
+                        <strong>R$ ${(item.preco * item.qtd).toFixed(2).replace('.',',')}</strong>
+                    </div>`;
+            });
+        }
+
+        function mascaraCEP(i) { i.value = i.value.replace(/\D/g, "").replace(/^(\d{5})(\d)/, "$1-$2"); }
         
+        function buscarCEP() {
+            let cep = document.getElementById('cepCliente').value.replace(/\D/g, '');
+            if (cep.length === 8) {
+                fetch(`https://viacep.com.br/ws/${cep}/json/`).then(r => r.json()).then(d => {
+                    if(!d.erro) document.getElementById('ruaCliente').value = `${d.logradouro}, ${d.bairro} - ${d.localidade}`;
+                });
+            }
+        }
+
+        function toggleModal(s) { document.getElementById('modalCart').style.display = s ? 'block' : 'none'; }
+
+        function enviarZap() {
+            const n = document.getElementById('nomeCliente').value;
+            const r = document.getElementById('ruaCliente').value;
+            const num = document.getElementById('numCliente').value;
+            if(!n || !r || carrinho.length === 0) return alert("Preencha os dados e adicione produtos!");
+            
+            let msg = `*NOVO PEDIDO - MEC SHOP*\n\n*CLIENTE:* ${n}\n*ENDEREÇO:* ${r}, ${num}\n---\n`;
+            carrinho.forEach(i => msg += `• ${i.qtd}x ${i.nome}\n`);
+            msg += `\n*TOTAL: R$ ${document.getElementById('total-val').innerText}*`;
+            window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(msg)}`);
+        }
+
+        render();
+    </script>
+</body>
+</html>
