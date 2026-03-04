@@ -3,172 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CATÁLOGO SERGEL | OFICIAL</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>GELADOS DO ALLAN | SERGEL</title>
     <style>
-        :root { --sergel-blue: #004aad; --sergel-red: #e63946; --green: #25d366; --bg: #f9f9f9; }
-        body { font-family: 'Inter', sans-serif; margin: 0; background: var(--bg); padding-bottom: 110px; }
+        :root { --primary-green: #25d366; --bg-body: #f4f7f6; --text-main: #1a1a1a; --accent: #ff4757; }
+        body { font-family: 'Inter', sans-serif; margin: 0; background-color: var(--bg-body); color: var(--text-main); padding-bottom: 100px; }
         
-        /* Slide Sergel */
-        .slider { width: 100%; height: 200px; background: var(--sergel-blue); overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; color: #fff; text-align: center; }
-        .slider img { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0.5; }
-        .slider-content { position: relative; z-index: 10; padding: 20px; }
-        .slider h1 { margin: 0; font-size: 28px; font-weight: 900; text-transform: uppercase; }
+        /* Slider Sergel */
+        .slider-container { width: 100%; height: 200px; overflow: hidden; position: relative; background: #000; }
+        .slider-track { display: flex; width: 200%; height: 100%; animation: slide 10s infinite ease-in-out; }
+        .slide img { width: 100vw; height: 100%; object-fit: cover; filter: brightness(0.8); }
+        @keyframes slide { 0%, 45% { transform: translateX(0); } 55%, 100% { transform: translateX(-100vw); } }
 
-        /* Categorias */
-        .cats { display: flex; overflow-x: auto; padding: 20px; gap: 10px; scrollbar-width: none; }
-        .cat-btn { background: #fff; padding: 12px 20px; border-radius: 50px; font-size: 13px; font-weight: 700; white-space: nowrap; border: 1px solid #ddd; cursor: pointer; transition: 0.3s; }
-        .cat-btn.active { background: var(--sergel-blue); color: #fff; border-color: var(--sergel-blue); }
-
-        /* Grid de Produtos */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; }
-        .card { background: #fff; border-radius: 20px; padding: 12px; border: 1px solid #eee; display: flex; flex-direction: column; position: relative; }
-        .badge-atacado { position: absolute; top: 8px; right: 8px; background: var(--sergel-red); color: white; font-size: 9px; padding: 4px 8px; border-radius: 10px; font-weight: 800; }
-        .img-prod { width: 100%; height: 130px; border-radius: 15px; object-fit: cover; margin-bottom: 10px; }
-        .name-prod { font-size: 13px; font-weight: 700; line-height: 1.2; height: 32px; overflow: hidden; }
-        .price-prod { font-size: 17px; font-weight: 900; color: var(--sergel-blue); margin: 5px 0; }
+        /* Busca */
+        .search-area { padding: 0 20px; margin-top: -25px; position: relative; z-index: 10; }
+        .search-box { background: #fff; display: flex; align-items: center; padding: 12px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #e1e4e8; }
+        .search-box input { border: none; outline: none; width: 100%; font-size: 15px; }
         
-        /* Botões */
-        .btn-add { background: var(--sergel-blue); color: #fff; border: none; width: 100%; padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; }
-        .qty-controls { display: flex; align-items: center; justify-content: space-between; background: #f1f3f5; border-radius: 12px; padding: 5px; }
-        .btn-qty { background: #fff; border: none; width: 32px; height: 32px; border-radius: 8px; font-weight: 900; cursor: pointer; }
+        .categorias-bar { display: flex; overflow-x: auto; padding: 15px 20px; gap: 10px; scrollbar-width: none; }
+        .cat-item { background: #fff; padding: 8px 18px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; border: 1px solid #e1e4e8; }
+        .cat-item.active { background: #000; color: #fff; }
 
-        /* Checkout Footer */
-        .footer { position: fixed; bottom: 0; width: 100%; background: #fff; padding: 20px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; border-top: 2px solid #eee; z-index: 100; }
-        .total-box { line-height: 1.2; }
-        .btn-finalizar { background: var(--green); color: #fff; border: none; padding: 15px 25px; border-radius: 15px; font-weight: 800; font-size: 14px; cursor: pointer; }
+        /* Grid */
+        .loja-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 20px; }
+        .produto-card { background: #fff; border-radius: 12px; padding: 12px; text-align: center; border: 1px solid #e1e4e8; position: relative; }
+        .badge-atacado { position: absolute; top: 10px; right: 10px; background: #2ecc71; color: #fff; font-size: 9px; padding: 4px 8px; border-radius: 4px; font-weight: bold; }
+        .img-produto { width: 100%; height: 110px; object-fit: cover; border-radius: 8px; margin-bottom: 8px; }
+        .product-name { font-size: 12px; font-weight: 600; height: 32px; overflow: hidden; display: block; line-height: 1.2; }
+        .product-price { font-size: 14px; font-weight: 700; color: #000; margin: 5px 0; display: block; }
+        .atacado-info { font-size: 9px; color: #2ecc71; font-weight: bold; display: block; margin-bottom: 8px; }
 
-        /* Modal Formulário */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; z-index: 200; align-items: flex-end; }
-        .modal-body { background: #fff; width: 100%; border-radius: 25px 25px 0 0; padding: 25px; box-sizing: border-box; animation: slideUp 0.3s ease; }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        .input-form { width: 100%; padding: 15px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 12px; font-size: 15px; box-sizing: border-box; }
+        .qty-selector { display: flex; align-items: center; justify-content: center; gap: 10px; background: #f3f4f6; border-radius: 6px; padding: 5px; }
+        .btn-qty { background: #fff; border: 1px solid #ddd; width: 28px; height: 28px; border-radius: 4px; font-weight: bold; }
+        .btn-add-initial { background: #000; color: #fff; border: none; width: 100%; padding: 10px; border-radius: 6px; font-weight: 600; }
+
+        .footer-cart { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #e1e4e8; z-index: 100; }
+        .total-value { font-size: 18px; font-weight: 700; }
+
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 3000; }
+        .modal-body { position: absolute; bottom: 0; background: #fff; width: 100%; border-radius: 20px 20px 0 0; padding: 20px; box-sizing: border-box; }
+        .input-checkout { width: 100%; padding: 12px; margin-bottom: 8px; border: 1px solid #d1d5db; border-radius: 6px; }
+        .btn-zap { width: 100%; background: var(--primary-green); color: white; border: none; padding: 16px; border-radius: 8px; font-weight: 700; }
     </style>
 </head>
 <body>
 
-    <div class="slider">
-        <img src="https://images.unsplash.com/photo-1576506295286-5cda18df43c7?w=800" alt="Sorvete Sergel">
-        <div class="slider-content">
-            <h1>SERGEL SORVETES</h1>
-            <p>Qualidade que você já conhece!</p>
+    <div class="slider-container">
+        <div class="slider-track">
+            <div class="slide"><img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=800"></div>
+            <div class="slide"><img src="https://images.unsplash.com/photo-1501443762994-82bd5dabb892?w=800"></div>
         </div>
     </div>
 
-    <div class="cats">
-        <div class="cat-btn active" onclick="filter('Tudo', this)">Tudo</div>
-        <div class="cat-btn" onclick="filter('Potes 2L', this)">Potes Premium</div>
-        <div class="cat-btn" onclick="filter('Picolés', this)">Picolés</div>
-    </div>
-
-    <div id="grid" class="grid"></div>
-
-    <div class="footer">
-        <div class="total-box">
-            <span style="font-size: 11px; font-weight: 700; color: #888;">VALOR TOTAL</span><br>
-            <span style="font-size: 22px; font-weight: 900; color: var(--sergel-blue);">R$ <span id="total-val">0,00</span></span>
+    <div class="search-area">
+        <div class="search-box">
+            <input type="text" id="inputBusca" oninput="render()" placeholder="Qual sabor Sergel deseja?">
         </div>
-        <button class="btn-finalizar" onclick="openCheckout()">FINALIZAR PEDIDO</button>
     </div>
 
-    <div class="modal" id="modal">
+    <div class="categorias-bar">
+        <div class="cat-item active" onclick="filtrarCat('Tudo', this)">Tudo</div>
+        <div class="cat-item" onclick="filtrarCat('Potes', this)">Potes 2L</div>
+        <div class="cat-item" onclick="filtrarCat('Picolés', this)">Picolés</div>
+    </div>
+
+    <div id="vitrine" class="loja-grid"></div>
+
+    <div class="footer-cart">
+        <div>
+            <span style="font-size: 10px; color: #888; display: block;">SUBTOTAL</span>
+            <span class="total-value">R$ <span id="total-val">0,00</span></span>
+        </div>
+        <button onclick="toggleModal(true)" style="background:#000; color:#fff; border:none; padding:12px 25px; border-radius:6px; font-weight:700;">FINALIZAR</button>
+    </div>
+
+    <div class="modal" id="modalCart">
         <div class="modal-body">
-            <h2 style="margin-top: 0;">Finalizar Pedido</h2>
-            <div id="resumo" style="background: #f8f9fa; padding: 15px; border-radius: 12px; margin-bottom: 15px; font-size: 14px;"></div>
-            <input type="text" id="nome" class="input-form" placeholder="Nome Completo">
-            <input type="tel" id="cep" class="input-form" placeholder="CEP (Auto-preenche)" onblur="buscarCep()" maxlength="9">
-            <input type="text" id="endereco" class="input-form" placeholder="Rua e Número">
-            <input type="text" id="bairro" class="input-form" placeholder="Bairro">
-            <button class="btn-finalizar" style="width: 100%; padding: 20px;" onclick="enviarZap()">ENVIAR PARA O WHATSAPP DA LOJA</button>
-            <button onclick="closeModal()" style="width: 100%; border: none; background: none; color: #999; margin-top: 15px;">Voltar</button>
+            <h3 style="margin-top:0">Resumo do Pedido</h3>
+            <div id="cartItemsList" style="margin-bottom: 15px; font-size: 13px; max-height: 150px; overflow-y: auto;"></div>
+            <input type="text" id="nomeCliente" class="input-checkout" placeholder="Seu Nome">
+            <input type="tel" id="cepCliente" class="input-checkout" placeholder="Seu CEP" onblur="buscarCEP()" maxlength="9">
+            <input type="text" id="ruaCliente" class="input-checkout" placeholder="Endereço">
+            <button class="btn-zap" onclick="enviarZap()">ENVIAR WHATSAPP</button>
+            <button onclick="toggleModal(false)" style="width:100%; background:none; border:none; color:#999; margin-top:10px;">Voltar</button>
         </div>
     </div>
 
     <script>
         const produtos = [
-            { id: 1, cat: "Potes 2L", nome: "Leitinho Trufado (Premium)", preco: 50.0, atacado: 42.0, min: 10, img: "https://images.unsplash.com/photo-1501443762994-82bd5dabb892?w=400" },
-            { id: 2, cat: "Potes 2L", nome: "Delicielo de Avelã (Rafaello)", preco: 50.0, atacado: 42.0, min: 10, img: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400" },
-            { id: 3, cat: "Potes 2L", nome: "Iogurte com Amarena", preco: 50.0, atacado: 42.0, min: 10, img: "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=400" },
-            { id: 4, cat: "Potes 2L", nome: "Napolitano Clássico", preco: 45.0, atacado: 38.0, min: 10, img: "https://images.unsplash.com/photo-1560008581-09826d1de69e?w=400" },
-            { id: 5, cat: "Picolés", nome: "Picolé Skimo Chocolate", preco: 7.0, atacado: 2.8, min: 20, img: "https://images.unsplash.com/photo-1505394033323-424ebb43ef2e?w=400" },
-            { id: 6, cat: "Picolés", nome: "Picolé Fruta (Morango/Limão)", preco: 5.5, atacado: 2.2, min: 20, img: "https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=400" }
+            // POTES 2L - VAREJO 45 | ATACADO 38 (mínimo 10)
+            { id: 1, cat: "Potes", nome: "Pote Leitinho Trufado 2L", preco: 45.0, atacado: 38.0, min: 10, img: "https://images.unsplash.com/photo-1501443762994-82bd5dabb892?w=400" },
+            { id: 2, cat: "Potes", nome: "Pote Delicielo de Avelã 2L", preco: 45.0, atacado: 38.0, min: 10, img: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400" },
+            { id: 3, cat: "Potes", nome: "Pote Iogurte c/ Amarena 2L", preco: 45.0, atacado: 38.0, min: 10, img: "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=400" },
+            { id: 4, cat: "Potes", nome: "Pote Chocolate Belga 2L", preco: 45.0, atacado: 38.0, min: 10, img: "https://images.unsplash.com/photo-1557142046-c704a3adf364?w=400" },
+            // PICOLÉS - VAREJO 7 | ATACADO 2.80 (mínimo 20)
+            { id: 5, cat: "Picolés", nome: "Skimo Clássico Sergel", preco: 7.0, atacado: 2.8, min: 20, img: "https://images.unsplash.com/photo-1505394033323-424ebb43ef2e?w=400" },
+            { id: 6, cat: "Picolés", nome: "Picolé Chocolate Holandês", preco: 7.0, atacado: 2.8, min: 20, img: "https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=400" },
+            { id: 7, cat: "Picolés", nome: "Picolé Milho Verde", preco: 7.0, atacado: 2.8, min: 20, img: "https://images.unsplash.com/photo-1560008581-09826d1de69e?w=400" },
+            { id: 8, cat: "Picolés", nome: "Picolé Morango c/ Leite Cond.", preco: 7.0, atacado: 2.8, min: 20, img: "https://images.unsplash.com/photo-1502741126161-b048400d085d?w=400" }
         ];
 
-        let cart = [];
-        let currentCat = "Tudo";
+        let carrinho = [];
+        let categoriaAtual = "Tudo";
 
         function render() {
-            const grid = document.getElementById('grid');
-            grid.innerHTML = "";
-            produtos.filter(p => currentCat === "Tudo" || p.cat === currentCat).forEach(p => {
-                const inCart = cart.find(c => c.id === p.id);
-                grid.innerHTML += `
-                    <div class="card">
+            const v = document.getElementById('vitrine');
+            const busca = document.getElementById('inputBusca').value.toLowerCase();
+            v.innerHTML = "";
+            produtos.filter(p => (categoriaAtual === "Tudo" || p.cat === categoriaAtual) && p.nome.toLowerCase().includes(busca))
+            .forEach(p => {
+                const item = carrinho.find(i => i.id === p.id);
+                v.innerHTML += `
+                    <div class="produto-card">
                         <span class="badge-atacado">ATACADO R$ ${p.atacado.toFixed(2)}</span>
-                        <img src="${p.img}" class="img-prod">
-                        <span class="name-prod">${p.nome}</span>
-                        <span class="price-prod">R$ ${p.preco.toFixed(2)}</span>
-                        ${inCart ? `
-                            <div class="qty-controls">
-                                <button class="btn-qty" onclick="update(${p.id}, -1)">-</button>
-                                <strong>${inCart.qtd}</strong>
-                                <button class="btn-qty" onclick="update(${p.id}, 1)">+</button>
+                        <img src="${p.img}" class="img-produto">
+                        <span class="product-name">${p.nome}</span>
+                        <span class="product-price">R$ ${p.preco.toFixed(2).replace('.',',')}</span>
+                        <span class="atacado-info">A partir de ${p.min} unidades</span>
+                        ${item ? `
+                            <div class="qty-selector">
+                                <button class="btn-qty" onclick="changeQty(${p.id}, -1)">-</button>
+                                <strong>${item.qtd}</strong>
+                                <button class="btn-qty" onclick="changeQty(${p.id}, 1)">+</button>
                             </div>
-                        ` : `<button class="btn-add" onclick="update(${p.id}, 1)">ADICIONAR</button>`}
+                        ` : `<button class="btn-add-initial" onclick="changeQty(${p.id}, 1)">ADICIONAR</button>`}
                     </div>
                 `;
             });
-            calcTotal();
+            updateTotal();
         }
 
-        function update(id, d) {
-            const i = cart.findIndex(c => c.id === id);
-            if(i > -1) { cart[i].qtd += d; if(cart[i].qtd <= 0) cart.splice(i, 1); }
-            else { cart.push({...produtos.find(p => p.id === id), qtd: 1}); }
+        function changeQty(id, d) {
+            const idx = carrinho.findIndex(i => i.id === id);
+            if (idx > -1) { carrinho[idx].qtd += d; if (carrinho[idx].qtd <= 0) carrinho.splice(idx, 1); }
+            else { carrinho.push({...produtos.find(p => p.id === id), qtd: 1}); }
             render();
+            updateCartList();
         }
 
-        function calcTotal() {
-            const total = cart.reduce((acc, i) => acc + (i.qtd >= i.min ? i.atacado : i.preco) * i.qtd, 0);
+        function updateTotal() {
+            let total = carrinho.reduce((acc, i) => acc + (i.qtd >= i.min ? i.atacado : i.preco) * i.qtd, 0);
             document.getElementById('total-val').innerText = total.toFixed(2).replace('.',',');
         }
 
-        function filter(c, b) {
-            currentCat = c;
-            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
-            b.classList.add('active');
+        function updateCartList() {
+            const list = document.getElementById('cartItemsList');
+            list.innerHTML = carrinho.map(i => `• ${i.qtd}x ${i.nome} ${i.qtd >= i.min ? '<b>(ATACADO)</b>' : ''}`).join('<br>');
+        }
+
+        function filtrarCat(cat, el) {
+            categoriaAtual = cat;
+            document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active');
             render();
         }
 
-        function openCheckout() {
-            if(!cart.length) return alert("Carrinho vazio!");
-            document.getElementById('modal').style.display = 'flex';
-            document.getElementById('resumo').innerHTML = cart.map(i => `• ${i.qtd}x ${i.nome} ${i.qtd >= i.min ? '<b>(ATACADO)</b>' : ''}`).join('<br>');
-        }
-        function closeModal() { document.getElementById('modal').style.display = 'none'; }
-
-        function buscarCep() {
-            const cep = document.getElementById('cep').value.replace(/\D/g, '');
-            if(cep.length === 8) {
+        function buscarCEP() {
+            let cep = document.getElementById('cepCliente').value.replace(/\D/g, '');
+            if (cep.length === 8) {
                 fetch(`https://viacep.com.br/ws/${cep}/json/`).then(r => r.json()).then(d => {
-                    if(!d.erro) {
-                        document.getElementById('endereco').value = d.logradouro;
-                        document.getElementById('bairro').value = d.bairro;
-                    }
+                    if(!d.erro) document.getElementById('ruaCliente').value = `${d.logradouro}, ${d.bairro}`;
                 });
             }
         }
 
-        function enviarZap() {
-            const n = document.getElementById('nome').value;
-            const e = document.getElementById('endereco').value;
-            if(!n || !e) return alert("Preencha seus dados!");
-            let msg = `*PEDIDO SERGEL SORVETES*\n\n*CLIENTE:* ${n}\n*END:* ${e}\n\n*ITENS:*\n`;
-            cart.forEach(i => msg += `• ${i.qtd}x ${i.nome} (R$ ${(i.qtd >= i.min ? i.atacado : i.preco).toFixed(2)})\n`);
-            msg += `\n*TOTAL: R$ ${document.getElementById('total-val').innerText}*`;
-            window.open(`https://wa.me/5519999999999?text=${encodeURIComponent(msg)}`);
-        }
+        function toggleModal(s) { document.getElementById('modalCart').style.display = s ? 'block' : 'none'; }
 
+        function enviarZap() {
+            const n = document.getElementById('nomeCliente').value;
+            const r = document.getElementById('ruaCliente').value;
+            if(!n || !r || carrinho.length === 0) return alert("Preencha tudo!");
+            let msg = `*NOVO PEDIDO - ALLAN GELADOS*\n\n*CLIENTE:* ${n}\n*END:* ${r}\n\n*ITENS:*\n`;
+            carrinho.forEach(i => msg += `• ${i.qtd}x ${i.nome} (R$ ${(i.qtd >= i.min ? i.atacado : i.preco).toFixed(2)})\n`);
+            msg += `\n*TOTAL: R$ ${document.getElementById('total-val').innerText}*`;
+            window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(msg)}`);
+        }
         render();
     </script>
 </body>
