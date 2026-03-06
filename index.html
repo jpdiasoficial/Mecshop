@@ -3,205 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chris Gastronomia | Sistema de Pedidos</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Chris Gastronomia | Cardápio Digital</title>
     <style>
-        :root { --brand-red: #d91d2c; --text-main: #1a1a1a; --text-light: #666666; --bg-soft: #fcfcfc; --border-color: #eeeeee; }
-        body { font-family: 'Inter', sans-serif; margin: 0; background: #fff; color: var(--text-main); -webkit-font-smoothing: antialiased; }
+        :root { --ifood-red: #ea1d2c; --text-dark: #3e3e3e; --text-light: #717171; }
+        body { font-family: 'Helvetica Neue', Helvetica, sans-serif; margin: 0; background: #fff; color: var(--text-dark); padding-bottom: 100px; }
 
-        /* Header Minimalista */
-        .app-header { padding: 20px 24px; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; background: #fff; z-index: 1000; display: flex; align-items: center; justify-content: space-between; }
-        .logo-text { font-weight: 700; font-size: 18px; letter-spacing: -0.5px; text-transform: uppercase; }
+        /* Header */
+        .header { padding: 20px 15px; background: #fff; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #f2f2f2; }
+        .brand { font-weight: 700; font-size: 18px; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Banner Slider Profissional */
-        .hero-banner { width: 100%; height: 220px; overflow: hidden; position: relative; background: #111; }
-        .slider-track { display: flex; width: 300%; height: 100%; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        /* Banner Slider */
+        .banner-container { width: 100%; height: 180px; overflow: hidden; position: relative; background: #111; }
+        .slider { display: flex; width: 300%; height: 100%; transition: transform 0.6s ease-in-out; }
         .slide { width: 33.33%; height: 100%; position: relative; }
         .slide img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
-        .slide-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); display: flex; align-items: flex-end; padding: 24px; }
-        .slide-info h2 { color: #fff; margin: 0; font-size: 20px; font-weight: 600; }
+        .slide-txt { position: absolute; bottom: 20px; left: 15px; color: #fff; font-weight: 600; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); }
 
-        /* Categorias Clean */
-        .cat-nav { display: flex; overflow-x: auto; padding: 24px; gap: 12px; scrollbar-width: none; background: var(--bg-soft); }
-        .cat-nav::-webkit-scrollbar { display: none; }
-        .cat-pill { background: #fff; border: 1px solid var(--border-color); padding: 10px 24px; border-radius: 50px; font-size: 13px; font-weight: 600; color: var(--text-light); white-space: nowrap; cursor: pointer; transition: 0.2s; }
-        .cat-pill.active { background: var(--text-main); color: #fff; border-color: var(--text-main); }
+        /* Categorias Estilo iFood */
+        .cat-bar { display: flex; overflow-x: auto; padding: 20px 15px; gap: 15px; scrollbar-width: none; }
+        .cat-bar::-webkit-scrollbar { display: none; }
+        .cat-card { display: flex; flex-direction: column; align-items: center; min-width: 75px; border: none; background: none; cursor: pointer; }
+        .cat-img { width: 65px; height: 65px; background: #f8f8f8; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 8px; border: 2px solid transparent; }
+        .cat-card.active .cat-img { border-color: var(--ifood-red); background: #fff; }
+        .cat-name { font-size: 12px; font-weight: 600; color: var(--text-light); }
+        .cat-card.active .cat-name { color: var(--ifood-red); }
 
-        /* Listagem de Itens */
-        .menu-container { padding: 0 24px; }
-        .menu-item { display: flex; padding: 24px 0; border-bottom: 1px solid var(--border-color); gap: 16px; }
-        .item-details { flex: 1; }
-        .item-name { font-weight: 700; font-size: 16px; margin-bottom: 4px; }
-        .item-desc { font-size: 13px; color: var(--text-light); line-height: 1.5; margin-bottom: 12px; }
+        /* Menu */
+        .menu-item { padding: 20px 15px; border-bottom: 1px solid #f2f2f2; }
+        .item-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+        .item-desc { font-size: 13px; color: var(--text-light); line-height: 1.4; margin-bottom: 12px; }
         
-        /* Seletor de Tamanho Profissional */
-        .size-selector { display: flex; gap: 8px; margin-bottom: 16px; }
-        .size-btn { border: 1px solid var(--border-color); background: #fff; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        .size-btn.selected { border-color: var(--text-main); background: var(--text-main); color: #fff; }
+        /* Seletor de Tamanhos */
+        .size-box { display: flex; gap: 8px; margin-bottom: 15px; }
+        .size-btn { border: 1px solid #dcdcdc; background: #fff; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; }
+        .size-btn.active { border-color: var(--ifood-red); color: var(--ifood-red); background: #fff5f5; }
 
-        .price-tag { font-weight: 700; font-size: 15px; color: var(--text-main); }
+        .item-footer { display: flex; justify-content: space-between; align-items: center; }
+        .price { color: #2e7d32; font-weight: 700; font-size: 17px; }
+        .qty-box { display: flex; align-items: center; gap: 12px; background: #f2f2f2; border-radius: 20px; padding: 5px 12px; }
+        .btn-q { border: none; background: none; color: var(--ifood-red); font-size: 20px; font-weight: 700; cursor: pointer; width: 25px; }
+        .qty-val { font-weight: 700; font-size: 14px; }
 
-        /* Controles de Quantidade */
-        .qty-control { display: flex; align-items: center; background: var(--bg-soft); border-radius: 8px; padding: 4px; border: 1px solid var(--border-color); }
-        .qty-btn { border: none; background: none; width: 32px; height: 32px; font-size: 18px; cursor: pointer; color: var(--brand-red); font-weight: 600; }
-        .qty-val { width: 30px; text-align: center; font-size: 14px; font-weight: 700; }
-
-        /* Rodapé de Finalização */
-        .cart-bar { position: fixed; bottom: 0; width: 100%; background: #fff; padding: 20px 24px; box-shadow: 0 -10px 30px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; z-index: 1000; }
-        .total-info span { display: block; font-size: 11px; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; }
-        .total-info strong { font-size: 20px; font-weight: 700; }
-        .checkout-btn { background: var(--brand-red); color: #fff; border: none; padding: 16px 32px; border-radius: 8px; font-weight: 700; font-size: 14px; letter-spacing: 0.5px; cursor: pointer; }
-
-        @media (max-width: 480px) { .menu-item { flex-direction: column; } }
+        /* Footer */
+        .checkout-bar { position: fixed; bottom: 0; width: 100%; background: #fff; padding: 15px 20px; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; }
+        .btn-send { background: var(--ifood-red); color: #fff; border: none; padding: 14px 25px; border-radius: 6px; font-weight: 700; font-size: 15px; }
     </style>
 </head>
 <body>
 
-    <header class="app-header">
-        <div class="logo-text">Chris Gastronomia</div>
-        <div style="font-size: 11px; font-weight: 600; color: #2e7d32;">Aberto Agora</div>
-    </header>
+    <div class="header"><div class="brand">Chris Gastronomia</div></div>
 
-    <section class="hero-banner">
-        <div class="slider-track" id="slider">
+    <div class="banner-container">
+        <div class="slider" id="slider">
             <div class="slide">
-                <img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800" alt="Culinária Caseira">
-                <div class="slide-overlay"><div class="slide-info"><h2>Culinária Autêntica</h2></div></div>
+                <img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600">
+                <div class="slide-txt">Comida Caseira com Sabor e Carinho</div>
             </div>
             <div class="slide">
-                <img src="https://images.unsplash.com/photo-1594007654729-407eedc4be65?w=800" alt="Batatas Gourmet">
-                <div class="slide-overlay"><div class="slide-info"><h2>Batatas Gourmet</h2></div></div>
+                <img src="https://images.unsplash.com/photo-1594007654729-407eedc4be65?w=600">
+                <div class="slide-txt">Batatas Recheadas das 18h às 22h</div>
             </div>
             <div class="slide">
-                <img src="https://images.unsplash.com/photo-1563379091339-03b21bc4a4f8?w=800" alt="Ingredientes Selecionados">
-                <div class="slide-overlay"><div class="slide-info"><h2>Qualidade Superior</h2></div></div>
+                <img src="https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=600">
+                <div class="slide-txt">Av. Theodorico Cavalcante de Souza, 1305</div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <nav class="cat-nav">
-        <button class="cat-pill active" onclick="filterMenu('todos', this)">Cardápio Completo</button>
-        <button class="cat-pill" onclick="filterMenu('marmita', this)">Almoço Executivo</button>
-        <button class="cat-pill" onclick="filterMenu('batata', this)">Batatas Recheadas</button>
-        <button class="cat-pill" onclick="filterMenu('bebida', this)">Bebidas</button>
-    </nav>
+    <div class="cat-bar">
+        <button class="cat-card active" onclick="filter('todos', this)"><div class="cat-img">🌟</div><div class="cat-name">Início</div></button>
+        <button class="cat-card" onclick="filter('marmita', this)"><div class="cat-img">🍱</div><div class="cat-name">Marmitex</div></button>
+        <button class="cat-card" onclick="filter('batata', this)"><div class="cat-img">🥔</div><div class="cat-name">Batatas</div></button>
+    </div>
 
-    <main class="menu-container" id="menu-list"></main>
+    <div id="lista"></div>
 
-    <footer class="cart-bar">
-        <div class="total-info">
-            <span>Subtotal</span>
-            <strong id="cart-total">R$ 0,00</strong>
-        </div>
-        <button class="checkout-btn" onclick="checkout()">Finalizar Pedido</button>
-    </footer>
+    <div class="checkout-bar">
+        <div><div style="font-size: 11px; color: var(--text-light);">Subtotal</div><div style="font-size: 18px; font-weight: 700;">R$ <span id="total">0,00</span></div></div>
+        <button class="btn-send" onclick="finalizar()">Enviar Pedido</button>
+    </div>
 
     <script>
-        const menuData = [
-            { id: 1, cat: 'marmita', nome: "Marmitex Executiva", desc: "Arroz premium, feijão artesanal, guarnição do dia e proteína selecionada.", sizes: { "P": 17.00, "M": 22.00, "G": 27.00 } },
-            { id: 2, cat: 'batata', nome: "Batata Recheada Strogonoff", desc: "Batata selecionada, strogonoff de carne com creme de leite fresco e batata palha extra fina.", sizes: { "Padrão": 25.00 } },
-            { id: 3, cat: 'batata', nome: "Batata Recheada Frango", desc: "Frango desfiado temperado com ervas finas e requeijão cremoso.", sizes: { "Padrão": 25.00 } },
-            { id: 4, cat: 'bebida', nome: "Suco Natural de Laranja", desc: "Extraído na hora, sem conservantes. 500ml.", sizes: { "Copo": 8.00 } }
+        const produtos = [
+            { id: 1, cat: 'marmita', nome: "Marmitex Executiva", desc: "Arroz, feijão, mistura, guarnição, repolho e salada.", sizes: { "P": 17.00, "M": 22.00, "G": 27.00 } },
+            { id: 2, cat: 'batata', nome: "Batata Strogonoff de Carne", desc: "Batata recheada com muito amor e carinho.", sizes: { "Padrão": 25.00 } },
+            { id: 3, cat: 'batata', nome: "Batata Frango Desfiado", desc: "Recheio cremoso com temperos selecionados.", sizes: { "Padrão": 25.00 } },
+            { id: 4, cat: 'batata', nome: "Batata Calabresa / Bacon", desc: "A queridinha do cardápio noturno.", sizes: { "Padrão": 25.00 } }
         ];
 
         let cart = [];
+        let selection = {}; 
 
-        function renderMenu(items = menuData) {
-            const container = document.getElementById('menu-list');
-            container.innerHTML = items.map(item => {
-                const sizes = Object.keys(item.sizes);
-                const selectedSize = sizes[0];
-                const itemInCart = cart.find(c => c.id === item.id && c.size === selectedSize) || {qtd: 0};
+        function render(itens = produtos) {
+            const container = document.getElementById('lista');
+            container.innerHTML = itens.map(p => {
+                const sizes = Object.keys(p.sizes);
+                if (!selection[p.id]) selection[p.id] = sizes[0];
+                const currentSize = selection[p.id];
+                const itemCart = cart.find(i => i.id === p.id && i.size === currentSize) || {qtd: 0};
 
                 return `
                     <div class="menu-item">
-                        <div class="item-details">
-                            <div class="item-name">${item.nome}</div>
-                            <div class="item-desc">${item.desc}</div>
-                            
-                            <div class="size-selector" id="size-container-${item.id}">
-                                ${sizes.map((s, idx) => `
-                                    <button class="size-btn ${idx === 0 ? 'selected' : ''}" 
-                                            onclick="selectSize(${item.id}, '${s}', ${item.sizes[s]}, this)">
-                                        ${s}
-                                    </button>
-                                `).join('')}
-                            </div>
-
-                            <div class="price-tag" id="price-${item.id}">R$ ${item.sizes[selectedSize].toFixed(2).replace('.',',')}</div>
+                        <div class="item-title">${p.nome}</div>
+                        <div class="item-desc">${p.desc}</div>
+                        
+                        <div class="size-box">
+                            ${sizes.map(s => `
+                                <button class="size-btn ${s === currentSize ? 'active' : ''}" 
+                                        onclick="setSize(${p.id}, '${s}')">${s}</button>
+                            `).join('')}
                         </div>
-                        <div class="qty-control">
-                            <button class="qty-btn" onclick="updateQty(${item.id}, -1)">−</button>
-                            <span class="qty-val" id="qty-${item.id}">0</span>
-                            <button class="qty-btn" onclick="updateQty(${item.id}, 1)">+</button>
+
+                        <div class="item-footer">
+                            <div class="price">R$ ${p.sizes[currentSize].toFixed(2).replace('.',',')}</div>
+                            <div class="qty-box">
+                                <button class="btn-q" onclick="update(${p.id}, -1)">-</button>
+                                <span class="qty-val">${itemCart.qtd}</span>
+                                <button class="btn-q" onclick="update(${p.id}, 1)">+</button>
+                            </div>
                         </div>
                     </div>
                 `;
             }).join('');
         }
 
-        let selectedSizes = {}; 
-        menuData.forEach(p => selectedSizes[p.id] = { size: Object.keys(p.sizes)[0], price: p.sizes[Object.keys(p.sizes)[0]] });
+        function setSize(id, size) { selection[id] = size; render(); }
 
-        function selectSize(id, size, price, btn) {
-            const container = document.getElementById(`size-container-${id}`);
-            container.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
-            btn.classList.add('selected');
-            
-            selectedSizes[id] = { size, price };
-            document.getElementById(`price-${id}`).innerText = `R$ ${price.toFixed(2).replace('.',',')}`;
-            
-            // Atualiza a quantidade exibida baseada no tamanho selecionado
-            const itemInCart = cart.find(c => c.id === id && c.size === size);
-            document.getElementById(`qty-${id}`).innerText = itemInCart ? itemInCart.qtd : 0;
-        }
-
-        function updateQty(id, delta) {
-            const selection = selectedSizes[id];
-            const idx = cart.findIndex(c => c.id === id && c.size === selection.size);
+        function update(id, delta) {
+            const size = selection[id];
+            const p = produtos.find(x => x.id === id);
+            const idx = cart.findIndex(i => i.id === id && i.size === size);
 
             if (idx > -1) {
                 cart[idx].qtd += delta;
                 if (cart[idx].qtd <= 0) cart.splice(idx, 1);
             } else if (delta > 0) {
-                const item = menuData.find(m => m.id === id);
-                cart.push({ id, nome: item.nome, size: selection.size, price: selection.price, qtd: 1 });
+                cart.push({ id, nome: p.nome, size, preco: p.sizes[size], qtd: 1 });
             }
-
-            const itemInCart = cart.find(c => c.id === id && c.size === selection.size);
-            document.getElementById(`qty-${id}`).innerText = itemInCart ? itemInCart.qtd : 0;
-            updateTotal();
+            render();
+            const total = cart.reduce((acc, i) => acc + (i.preco * i.qtd), 0);
+            document.getElementById('total').innerText = total.toFixed(2).replace('.',',');
         }
 
-        function updateTotal() {
-            const total = cart.reduce((acc, i) => acc + (i.price * i.qtd), 0);
-            document.getElementById('cart-total').innerText = `R$ ${total.toFixed(2).replace('.',',')}`;
-        }
-
-        function filterMenu(cat, btn) {
-            document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+        function filter(cat, btn) {
+            document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('active'));
             btn.classList.add('active');
-            const filtered = cat === 'todos' ? menuData : menuData.filter(m => m.cat === cat);
-            renderMenu(filtered);
+            render(cat === 'todos' ? produtos : produtos.filter(p => p.cat === cat));
         }
 
-        function checkout() {
-            if (!cart.length) return alert("Por favor, selecione ao menos um item.");
-            let message = `*SOLICITAÇÃO DE PEDIDO - CHRIS GASTRONOMIA*\n\n`;
-            cart.forEach(i => message += `• ${i.qtd}x ${i.nome} (${i.size}) - R$ ${(i.price * i.qtd).toFixed(2)}\n`);
-            message += `\n*TOTAL: ${document.getElementById('cart-total').innerText}*`;
-            
-            window.open(`https://wa.me/5512997136890?text=${encodeURIComponent(message)}`);
+        function finalizar() {
+            if(!cart.length) return alert("Selecione um item!");
+            let msg = `*PEDIDO CHRIS GASTRONOMIA*\n\n`;
+            cart.forEach(i => msg += `• ${i.qtd}x ${i.nome} [${i.size}]\n`);
+            msg += `\n*TOTAL: R$ ${document.getElementById('total').innerText}*`;
+            window.open(`https://wa.me/5512997136890?text=${encodeURIComponent(msg)}`);
         }
 
-        // Slider Logic
         let cur = 0;
         setInterval(() => {
             cur = (cur + 1) % 3;
             document.getElementById('slider').style.transform = `translateX(-${cur * 33.33}%)`;
-        }, 5000);
+        }, 4000);
 
-        renderMenu();
+        render();
     </script>
 </body>
 </html>
