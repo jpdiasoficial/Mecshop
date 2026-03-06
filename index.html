@@ -7,12 +7,23 @@
     <style>
         :root { --red: #ea1d2c; --green: #25d366; --dark: #3e3e3e; --gray: #717171; }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #fff; color: var(--dark); padding-bottom: 110px; }
+        
+        /* HEADER & BANNER GRANDE */
         .header { padding: 15px; border-bottom: 1px solid #eee; font-weight: 800; text-transform: uppercase; text-align: center; color: var(--red); }
+        .banner { width: 100%; height: 160px; background: #111; overflow: hidden; position: relative; }
+        .banner img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; }
+        .banner-info { position: absolute; bottom: 10px; left: 15px; color: #fff; text-shadow: 1px 1px 4px #000; }
+        .banner-info span { font-size: 11px; font-weight: 600; background: rgba(0,0,0,0.5); padding: 2px 8px; border-radius: 4px; }
+
+        /* CATEGORIAS */
         .cat-bar { display: flex; overflow-x: auto; padding: 15px; gap: 12px; scrollbar-width: none; background: #fff; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .cat-card { display: flex; flex-direction: column; align-items: center; min-width: 75px; border: none; background: none; cursor: pointer; outline: none; }
         .cat-circle { width: 55px; height: 55px; background: #f2f2f2; border-radius: 50%; margin-bottom: 5px; border: 2px solid transparent; overflow: hidden; }
+        .cat-circle img { width: 100%; height: 100%; object-fit: cover; }
         .cat-card.active .cat-circle { border-color: var(--red); transform: scale(1.1); background: #fff; }
         .cat-name { font-size: 10px; font-weight: 700; color: var(--gray); text-transform: uppercase; }
+
+        /* ITENS DO MENU */
         .menu-item { padding: 15px; border-bottom: 1px solid #f2f2f2; }
         .item-info h3 { margin: 0 0 5px 0; font-size: 16px; font-weight: 700; }
         .size-selector { display: flex; gap: 8px; margin: 10px 0; }
@@ -20,20 +31,33 @@
         .btn-size.active { border-color: var(--red); color: var(--red); background: #fff5f5; }
         .item-footer { display: flex; justify-content: space-between; align-items: center; }
         .price { color: #2e7d32; font-weight: 700; font-size: 17px; }
+
+        /* CONTROLE DE QUANTIDADE */
         .qty-box { display: flex; align-items: center; gap: 12px; background: #f2f2f2; border-radius: 20px; padding: 5px 12px; }
         .btn-q { border: none; background: none; color: var(--red); font-size: 20px; font-weight: 900; cursor: pointer; width: 25px; }
+
+        /* MODAL */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; padding: 15px; }
         .modal-content { background: #fff; width: 100%; max-width: 400px; border-radius: 15px; padding: 20px; box-sizing: border-box; max-height: 90vh; overflow-y: auto; }
         .resumo-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #f9f9f9; }
         input, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; box-sizing: border-box; margin-bottom: 10px; font-family: inherit; }
         .btn-wa { display: block; background: var(--green); color: #fff; padding: 14px; border-radius: 8px; text-decoration: none; font-weight: 700; margin-bottom: 10px; text-align: center; }
-        .footer { position: fixed; bottom: 0; width: 100%; background: #fff; padding: 15px 20px; box-shadow: 0 -3px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; }
+        
+        /* RODAPÉ FIXO */
+        .footer { position: fixed; bottom: 0; width: 100%; background: #fff; padding: 15px 20px; box-shadow: 0 -3px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; z-index: 500; }
         .btn-fin { background: var(--red); color: #fff; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 700; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div class="header">Chris Gastronomia</div>
+
+    <div class="banner">
+        <img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800">
+        <div class="banner-info">
+            <span>Av. Theodorico Cavalcante de Souza, 1305</span>
+        </div>
+    </div>
 
     <div class="cat-bar">
         <button id="cat-todos" class="cat-card active" onclick="filter('todos')"><div class="cat-circle"><img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=100"></div><div class="cat-name">INÍCIO</div></button>
@@ -49,17 +73,25 @@
             <h3 style="margin-top:0">Revisão do Pedido</h3>
             <div id="resumo-final" style="margin-bottom:15px"></div>
             <div style="font-size:18px; font-weight:800; text-align:right; margin-bottom:15px; color:#2e7d32">Total: R$ <span id="total-modal">0,00</span></div>
-            <textarea id="obs" placeholder="Observações (Opcional)" rows="2"></textarea>
-            <div style="display:flex; gap:8px"><input type="text" id="cep" placeholder="CEP" onblur="buscarEndereco()"><input type="text" id="num" placeholder="Nº"></div>
-            <input type="text" id="rua" placeholder="Rua" readonly style="background:#f2f2f2">
-            <a href="#" class="btn-wa" onclick="enviar('5512997136890')">Enviar Pedido</a>
-            <button onclick="fecharModal()" style="border:none; background:none; color:var(--gray); cursor:pointer; width:100%; font-weight:700">Voltar</button>
+            
+            <textarea id="obs" placeholder="Alguma observação? (Opcional)" rows="2"></textarea>
+            
+            <div style="display:flex; gap:8px">
+                <input type="text" id="cep" placeholder="CEP" onblur="buscarEndereco()" maxlength="8">
+                <input type="text" id="num" placeholder="Nº">
+            </div>
+            <input type="text" id="rua" placeholder="Rua / Avenida" readonly style="background:#f2f2f2">
+
+            <a href="#" class="btn-wa" onclick="enviar('5512997136890')">Enviar WhatsApp 1</a>
+            <a href="#" class="btn-wa" style="background:#128c7e" onclick="enviar('5512981906835')">Enviar WhatsApp 2</a>
+            
+            <button onclick="fecharModal()" style="border:none; background:none; color:var(--gray); cursor:pointer; width:100%; font-weight:700; margin-top:5px">← Voltar</button>
         </div>
     </div>
 
     <div class="footer">
-        <div><div style="font-size:11px; color:var(--gray)">Total</div><div style="font-size:18px; font-weight:700">R$ <span id="total-p">0,00</span></div></div>
-        <button class="btn-fin" onclick="abrirModal()">Finalizar</button>
+        <div><div style="font-size:11px; color:var(--gray)">Subtotal</div><div style="font-size:18px; font-weight:700">R$ <span id="total-p">0,00</span></div></div>
+        <button class="btn-fin" onclick="abrirModal()">Concluir Pedido</button>
     </div>
 
     <script>
@@ -74,26 +106,23 @@
 
         let cart = []; 
         let selection = {};
-        let categoriaAtual = 'todos'; // Variável para travar a categoria
+        let categoriaAtual = 'todos';
 
         function render() {
-            const itensFiltrados = categoriaAtual === 'todos' ? produtos : produtos.filter(p => p.cat === categoriaAtual);
-            
-            document.getElementById('lista-p').innerHTML = itensFiltrados.map(p => {
+            const itens = categoriaAtual === 'todos' ? produtos : produtos.filter(p => p.cat === categoriaAtual);
+            document.getElementById('lista-p').innerHTML = itens.map(p => {
                 const s = selection[p.id] || Object.keys(p.sizes)[0]; 
                 selection[p.id] = s;
                 const i = cart.find(x => x.id == p.id && x.size == s) || {qtd:0};
                 return `
                 <div class="menu-item">
                     <h3>${p.nome}</h3>
-                    <div class="size-selector">
-                        ${Object.keys(p.sizes).map(z => `<button class="btn-size ${z==s?'active':''}" onclick="setSize(${p.id},'${z}')">${z}</button>`).join('')}
-                    </div>
+                    <div class="size-selector">${Object.keys(p.sizes).map(z => `<button class="btn-size ${z==s?'active':''}" onclick="setSize(${p.id},'${z}')">${z}</button>`).join('')}</div>
                     <div class="item-footer">
                         <div class="price">R$ ${p.sizes[s].toFixed(2).replace('.',',')}</div>
                         <div class="qty-box">
                             <button class="btn-q" onclick="update(${p.id},-1,'${s}')">-</button>
-                            <span>${i.qtd}</span>
+                            <span style="font-weight:700">${i.qtd}</span>
                             <button class="btn-q" onclick="update(${p.id},1,'${s}')">+</button>
                         </div>
                     </div>
@@ -134,7 +163,7 @@
                     <span><b>${i.nome}</b> (${i.size})</span>
                     <div class="qty-box" style="padding: 2px 10px">
                         <button class="btn-q" onclick="update(${i.id},-1,'${i.size}')">-</button>
-                        <span>${i.qtd}</span>
+                        <span style="font-weight:700">${i.qtd}</span>
                         <button class="btn-q" onclick="update(${i.id},1,'${i.size}')">+</button>
                     </div>
                 </div>`).join('');
@@ -145,18 +174,20 @@
             if (c.length == 8) fetch(`https://viacep.com.br/ws/${c}/json/`).then(r => r.json()).then(d => { if (!d.erro) document.getElementById('rua').value = d.logradouro; });
         }
 
-        function abrirModal() { if(!cart.length) return; renderResumo(); document.getElementById('modal-f').style.display = 'flex'; }
+        function abrirModal() { if(!cart.length) return alert("Carrinho vazio!"); renderResumo(); document.getElementById('modal-f').style.display = 'flex'; }
         function fecharModal() { document.getElementById('modal-f').style.display = 'none'; }
 
         function enviar(num) {
-            const r = document.getElementById('rua').value, n = document.getElementById('num').value, t = document.getElementById('total-p').innerText;
-            if(!r || !n) return alert("Preencha o endereço!");
-            let msg = `*PEDIDO CHRIS GASTRONOMIA*\n\n`;
+            const r = document.getElementById('rua').value, n = document.getElementById('num').value, t = document.getElementById('total-p').innerText, o = document.getElementById('obs').value;
+            if(!r || !n) return alert("Preencha o CEP e o Número!");
+            let msg = `*PEDIDO CHRIS GASTRONOMIA*\n--------------------------\n`;
             cart.forEach(i => msg += `✅ *${i.qtd}x* ${i.nome} (${i.size})\n`);
-            msg += `\n*OBS:* ${document.getElementById('obs').value}\n*ENTREGA:* ${r}, ${n}\n\n*TOTAL: R$ ${t}*`;
+            if(o) msg += `\n*OBS:* ${o}\n`;
+            msg += `\n*ENTREGA:* ${r}, ${n}\n\n*💰 TOTAL: R$ ${t}*`;
             window.open(`https://wa.me/${num}?text=${encodeURIComponent(msg)}`);
         }
         render();
     </script>
 </body>
-</html>
+    </html>
+    
