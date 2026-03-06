@@ -7,60 +7,92 @@
     <style>
         :root { --red: #ea1d2c; --green: #25d366; --dark: #3e3e3e; --gray: #717171; --light-bg: #f2f2f2; }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #fff; color: var(--dark); padding-bottom: 110px; }
+        
         .header { padding: 15px; border-bottom: 1px solid #eee; font-weight: 800; text-transform: uppercase; text-align: center; color: var(--red); }
         .banner { width: 100%; height: 160px; background: #111; overflow: hidden; position: relative; }
         .banner img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; }
         .banner-info { position: absolute; bottom: 10px; left: 15px; color: #fff; text-shadow: 1px 1px 4px #000; font-size: 11px; }
+
         .cat-bar { display: flex; overflow-x: auto; padding: 15px; gap: 12px; scrollbar-width: none; background: #fff; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .cat-card { display: flex; flex-direction: column; align-items: center; min-width: 75px; border: none; background: none; cursor: pointer; outline: none; }
         .cat-circle { width: 55px; height: 55px; background: var(--light-bg); border-radius: 50%; margin-bottom: 5px; border: 2px solid transparent; overflow: hidden; }
         .cat-circle img { width: 100%; height: 100%; object-fit: cover; }
         .cat-card.active .cat-circle { border-color: var(--red); transform: scale(1.1); background: #fff; }
         .cat-name { font-size: 10px; font-weight: 700; color: var(--gray); text-transform: uppercase; }
+
         .menu-item { padding: 15px; border-bottom: 1px solid #f2f2f2; }
         .size-selector { display: flex; gap: 8px; margin: 10px 0; }
         .btn-size { border: 1px solid #ddd; background: #fff; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; color: var(--gray); }
         .btn-size.active { border-color: var(--red); color: var(--red); background: #fff5f5; }
+        
         .price { color: #2e7d32; font-weight: 700; font-size: 17px; }
+        
+        /* O VISUAL BACANA QUE VOCÊ APROVOU */
         .qty-box { display: flex; align-items: center; gap: 12px; background: var(--light-bg); border-radius: 20px; padding: 5px 12px; }
         .btn-q { border: none; background: none; color: var(--red); font-size: 20px; font-weight: 900; cursor: pointer; width: 25px; }
+
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; padding: 15px; }
         .modal-content { background: #fff; width: 100%; max-width: 400px; border-radius: 15px; padding: 20px; box-sizing: border-box; max-height: 95vh; overflow-y: auto; }
+        
         input, textarea, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; box-sizing: border-box; margin-bottom: 10px; font-family: inherit; }
         .btn-wa { display: block; background: var(--green); color: #fff; padding: 14px; border-radius: 8px; text-decoration: none; font-weight: 700; margin-bottom: 10px; text-align: center; }
+        
         .footer { position: fixed; bottom: 0; width: 100%; background: #fff; padding: 15px 20px; box-shadow: 0 -3px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; z-index: 500; }
         .btn-fin { background: var(--red); color: #fff; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 700; cursor: pointer; }
     </style>
 </head>
 <body>
+
     <div class="header">Chris Gastronomia</div>
-    <div class="banner"><img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800"><div class="banner-info"><span>Av. Theodorico Cavalcante de Souza, 1305</span></div></div>
+    <div class="banner">
+        <img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800">
+        <div class="banner-info"><span>Av. Theodorico Cavalcante de Souza, 1305</span></div>
+    </div>
+
     <div class="cat-bar">
         <button id="cat-todos" class="cat-card active" onclick="filter('todos')"><div class="cat-circle"><img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=100"></div><div class="cat-name">INÍCIO</div></button>
         <button id="cat-marmita" class="cat-card" onclick="filter('marmita')"><div class="cat-circle"><img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?w=100"></div><div class="cat-name">MARMITAS</div></button>
         <button id="cat-batata" class="cat-card" onclick="filter('batata')"><div class="cat-circle"><img src="https://images.unsplash.com/photo-1594007654729-407eedc4be65?w=100"></div><div class="cat-name">BATATAS</div></button>
         <button id="cat-bebida" class="cat-card" onclick="filter('bebida')"><div class="cat-circle"><img src="https://images.unsplash.com/photo-1581009146145-b5ef03a7403f?w=100"></div><div class="cat-name">BEBIDAS</div></button>
     </div>
+
     <div id="lista-p"></div>
+
     <div id="modal-f" class="modal">
         <div class="modal-content">
             <h3 style="margin-top:0">Revisão do Pedido</h3>
             <div id="resumo-final" style="margin-bottom:15px"></div>
             <div style="font-size:18px; font-weight:800; text-align:right; margin-bottom:15px; color:#2e7d32">Total: R$ <span id="total-modal">0,00</span></div>
+            
             <label style="font-size:11px; font-weight:700">TIPO DE PEDIDO</label>
-            <select id="metodo" onchange="toggleEntrega()"><option value="delivery">Delivery</option><option value="retirada">Retirada</option></select>
+            <select id="metodo" onchange="toggleEntrega()">
+                <option value="delivery">Delivery</option>
+                <option value="retirada">Retirada</option>
+            </select>
+
             <div id="campos-entrega">
-                <div style="display:flex; gap:8px"><input type="text" id="cep" placeholder="CEP" onblur="buscarEndereco()" maxlength="8"><input type="text" id="num" placeholder="Nº"></div>
+                <div style="display:flex; gap:8px">
+                    <input type="text" id="cep" placeholder="CEP" onblur="buscarEndereco()" maxlength="8">
+                    <input type="text" id="num" placeholder="Nº">
+                </div>
                 <input type="text" id="rua" placeholder="Rua / Avenida" readonly style="background:#f2f2f2">
-                <input type="text" id="compl" placeholder="Complemento (Condomínio/Apto)">
+                <input type="text" id="compl" placeholder="Complemento (Apto, Bloco, Condomínio)">
             </div>
+
             <textarea id="obs" placeholder="Observações (Opcional)" rows="2"></textarea>
+
             <a href="#" class="btn-wa" onclick="enviar('5512997136890')">Enviar WhatsApp 1</a>
             <a href="#" class="btn-wa" style="background:#128c7e" onclick="enviar('5512981906835')">Enviar WhatsApp 2</a>
+            
             <button onclick="fecharModal()" style="border:none; background:none; color:var(--gray); cursor:pointer; width:100%; font-weight:700">← Voltar</button>
         </div>
     </div>
-    <div class="footer"><div><div style="font-size:11px; color:var(--gray)">Subtotal</div><div style="font-size:18px; font-weight:700">R$ <span id="total-p">0,00</span></div></div><button class="btn-fin" onclick="abrirModal()">Concluir</button></div>
+
+    <div class="footer">
+        <div><div style="font-size:11px; color:var(--gray)">Subtotal</div><div style="font-size:18px; font-weight:700">R$ <span id="total-p">0,00</span></div></div>
+        <button class="btn-fin" onclick="abrirModal()">Concluir</button>
+    </div>
+
     <script>
         const produtos = [
             { id: 1, cat: 'marmita', nome: "Marmitex Executiva", sizes: { "P": 17.00, "M": 22.00, "G": 27.00 } },
@@ -70,7 +102,9 @@
             { id: 5, cat: 'bebida', nome: "Coca-Cola", sizes: { "Lata": 6.50, "600ml": 9.00, "2L": 15.00 } },
             { id: 6, cat: 'bebida', nome: "Guaraná Antarctica", sizes: { "Lata": 6.00, "2L": 12.00 } }
         ];
+
         let cart = []; let selection = {}; let categoriaAtual = 'todos';
+
         function render() {
             const itens = categoriaAtual === 'todos' ? produtos : produtos.filter(p => p.cat === categoriaAtual);
             document.getElementById('lista-p').innerHTML = itens.map(p => {
@@ -80,20 +114,36 @@
             }).join('');
             atualizarValores();
         }
+
         function filter(cat) { categoriaAtual = cat; document.querySelectorAll('.cat-card').forEach(x => x.classList.remove('active')); document.getElementById('cat-' + cat).classList.add('active'); render(); }
         function setSize(id, s) { selection[id] = s; render(); }
+
         function update(id, d, sManual = null) {
-            const s = sManual || selection[id]; const idx = cart.findIndex(i => i.id == id && i.size == s);
+            const s = sManual || selection[id];
+            const idx = cart.findIndex(i => i.id == id && i.size == s);
             if (idx > -1) { cart[idx].qtd += d; if (cart[idx].qtd <= 0) cart.splice(idx, 1); }
             else if (d > 0) { const p = produtos.find(x => x.id == id); cart.push({ id, nome: p.nome, size: s, preco: p.sizes[s], qtd: 1 }); }
             render(); if(document.getElementById('modal-f').style.display === 'flex') renderResumo();
         }
-        function atualizarValores() { const t = cart.reduce((acc, i) => acc + (i.preco * i.qtd), 0).toFixed(2).replace('.', ','); document.getElementById('total-p').innerText = t; document.getElementById('total-modal').innerText = t; }
+
+        function atualizarValores() {
+            const t = cart.reduce((acc, i) => acc + (i.preco * i.qtd), 0).toFixed(2).replace('.', ',');
+            document.getElementById('total-p').innerText = t; document.getElementById('total-modal').innerText = t;
+        }
+
         function toggleEntrega() { document.getElementById('campos-entrega').style.display = document.getElementById('metodo').value === 'retirada' ? 'none' : 'block'; }
-        function buscarEndereco() { const c = document.getElementById('cep').value.replace(/\D/g, ''); if (c.length == 8) fetch(`https://viacep.com.br/ws/${c}/json/`).then(r => r.json()).then(d => { if (!d.erro) document.getElementById('rua').value = d.logradouro; }); }
-        function renderResumo() { document.getElementById('resumo-final').innerHTML = cart.map(i => `<div style="display:flex; justify-content:space-between; margin-bottom:12px"><span><b>${i.nome}</b> (${i.size})</span><div class="qty-box" style="padding: 2px 10px"><button class="btn-q" onclick="update(${i.id},-1,'${i.size}')">-</button><span>${i.qtd}</span><button class="btn-q" onclick="update(${i.id},1,'${i.size}')">+</button></div></div>`).join(''); }
+        function buscarEndereco() {
+            const c = document.getElementById('cep').value.replace(/\D/g, '');
+            if (c.length == 8) fetch(`https://viacep.com.br/ws/${c}/json/`).then(r => r.json()).then(d => { if (!d.erro) document.getElementById('rua').value = d.logradouro; });
+        }
+
+        function renderResumo() {
+            document.getElementById('resumo-final').innerHTML = cart.map(i => `<div style="display:flex; justify-content:space-between; margin-bottom:12px"><span><b>${i.nome}</b> (${i.size})</span><div class="qty-box" style="padding: 2px 10px"><button class="btn-q" onclick="update(${i.id},-1,'${i.size}')">-</button><span>${i.qtd}</span><button class="btn-q" onclick="update(${i.id},1,'${i.size}')">+</button></div></div>`).join('');
+        }
+
         function abrirModal() { if(!cart.length) return alert("Carrinho vazio!"); renderResumo(); document.getElementById('modal-f').style.display = 'flex'; }
         function fecharModal() { document.getElementById('modal-f').style.display = 'none'; }
+
         function enviar(num) {
             const m = document.getElementById('metodo').value, r = document.getElementById('rua').value, n = document.getElementById('num').value, c = document.getElementById('compl').value, t = document.getElementById('total-p').innerText, o = document.getElementById('obs').value;
             if(m === 'delivery' && (!r || !n)) return alert("Preencha o endereço!");
