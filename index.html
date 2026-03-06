@@ -5,58 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chris Gastronomia | Sistema de Pedidos</title>
     <style>
-        :root { --red: #ea1d2c; --green: #25d366; --dark: #3e3e3e; --gray: #717171; --bg: #f8f8f8; }
+        :root { --red: #ea1d2c; --green: #25d366; --dark: #3e3e3e; --gray: #717171; }
         body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; background: #fff; color: var(--dark); padding-bottom: 110px; }
-        
-        /* Header & Banner */
         .header { padding: 15px; border-bottom: 1px solid #eee; font-weight: 800; text-transform: uppercase; text-align: center; color: var(--red); }
-        .banner { width: 100%; height: 150px; background: #111; overflow: hidden; position: relative; }
+        .banner { width: 100%; height: 140px; background: #111; overflow: hidden; }
         .banner img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
-        .banner-txt { position: absolute; bottom: 10px; left: 15px; color: #fff; font-size: 12px; font-weight: 600; text-shadow: 1px 1px 3px #000; }
-
-        /* Categorias */
+        
         .cat-bar { display: flex; overflow-x: auto; padding: 15px; gap: 12px; scrollbar-width: none; background: #fff; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .cat-card { display: flex; flex-direction: column; align-items: center; min-width: 75px; border: none; background: none; cursor: pointer; outline: none; }
-        .cat-circle { width: 55px; height: 55px; background: #f2f2f2; border-radius: 50%; margin-bottom: 5px; border: 2px solid transparent; overflow: hidden; transition: 0.3s; }
-        .cat-circle img { width: 100%; height: 100%; object-fit: cover; }
+        .cat-card { display: flex; flex-direction: column; align-items: center; min-width: 75px; border: none; background: none; cursor: pointer; }
+        .cat-circle { width: 55px; height: 55px; background: #f2f2f2; border-radius: 50%; margin-bottom: 5px; border: 2px solid transparent; overflow: hidden; }
         .cat-card.active .cat-circle { border-color: var(--red); transform: scale(1.1); background: #fff; }
         .cat-name { font-size: 10px; font-weight: 700; color: var(--gray); text-transform: uppercase; }
 
-        /* Lista de Produtos */
-        .menu-item { padding: 15px; border-bottom: 1px solid #f2f2f2; display: flex; flex-direction: column; }
+        .menu-item { padding: 15px; border-bottom: 1px solid #f2f2f2; }
         .item-info h3 { margin: 0 0 5px 0; font-size: 16px; font-weight: 700; }
         .size-selector { display: flex; gap: 8px; margin: 10px 0; }
         .btn-size { border: 1px solid #ddd; background: #fff; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; color: var(--gray); }
         .btn-size.active { border-color: var(--red); color: var(--red); background: #fff5f5; }
-
-        .item-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 5px; }
+        .item-footer { display: flex; justify-content: space-between; align-items: center; }
         .price { color: #2e7d32; font-weight: 700; font-size: 17px; }
-        
-        /* Controle de Quantidade */
-        .qty-box { display: flex; align-items: center; gap: 15px; background: #f2f2f2; border-radius: 20px; padding: 5px 15px; }
+
+        .qty-box { display: flex; align-items: center; gap: 12px; background: #f2f2f2; border-radius: 20px; padding: 5px 12px; }
         .btn-q { border: none; background: none; color: var(--red); font-size: 20px; font-weight: 900; cursor: pointer; width: 25px; }
 
-        /* Modal de Finalização */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; padding: 15px; }
         .modal-content { background: #fff; width: 100%; max-width: 400px; border-radius: 15px; padding: 20px; box-sizing: border-box; max-height: 90vh; overflow-y: auto; }
-        .resumo-box { border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px; }
-        .input-group { display: flex; gap: 8px; margin-bottom: 10px; }
-        input, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; box-sizing: border-box; font-family: inherit; }
+        .resumo-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #f9f9f9; }
         
-        /* Botões de Envio */
+        input, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; box-sizing: border-box; margin-bottom: 10px; font-family: inherit; }
         .btn-wa { display: block; background: var(--green); color: #fff; padding: 14px; border-radius: 8px; text-decoration: none; font-weight: 700; margin-bottom: 10px; text-align: center; }
-        .footer { position: fixed; bottom: 0; width: 100%; background: #fff; padding: 15px 20px; box-shadow: 0 -3px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; z-index: 500; }
+        
+        .footer { position: fixed; bottom: 0; width: 100%; background: #fff; padding: 15px 20px; box-shadow: 0 -3px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; }
         .btn-fin { background: var(--red); color: #fff; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 700; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div class="header">Chris Gastronomia</div>
-
-    <div class="banner">
-        <img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800">
-        <div class="banner-txt">Av. Theodorico Cavalcante de Souza, 1305</div>
-    </div>
+    <div class="banner"><img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800"></div>
 
     <div class="cat-bar">
         <button class="cat-card active" onclick="filter('todos', this)"><div class="cat-circle"><img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=100"></div><div class="cat-name">INÍCIO</div></button>
@@ -65,38 +51,33 @@
         <button class="cat-card" onclick="filter('bebida', this)"><div class="cat-circle"><img src="https://images.unsplash.com/photo-1581009146145-b5ef03a7403f?w=100"></div><div class="cat-name">BEBIDAS</div></button>
     </div>
 
-    <div id="lista-produtos"></div>
+    <div id="lista-p"></div>
 
-    <div id="checkoutModal" class="modal">
+    <div id="modal-f" class="modal">
         <div class="modal-content">
-            <h3 style="margin-top:0">Seu Pedido</h3>
-            <div id="resumo-lista" class="resumo-box"></div>
+            <h3 style="margin-top:0">Revisão do Pedido</h3>
             
-            <div style="text-align:left; margin-bottom:15px">
-                <label style="font-size:11px; font-weight:700; color:var(--gray)">OBSERVAÇÕES / ADICIONAIS</label>
-                <textarea id="obs" placeholder="Ex: Sem cebola, gelo, troco p/ 50..." rows="2"></textarea>
-            </div>
-
-            <div class="input-group">
-                <input type="text" id="cep" placeholder="CEP" onblur="buscarEndereco()" maxlength="8">
-                <input type="text" id="num" placeholder="Nº">
-            </div>
-            <input type="text" id="rua" placeholder="Rua / Avenida" readonly style="background:#f2f2f2; margin-bottom:8px">
-            <input type="text" id="bairro" placeholder="Bairro" readonly style="background:#f2f2f2; margin-bottom:15px">
-
-            <a href="#" class="btn-wa" onclick="enviar('5512997136890')">Enviar Atendimento 1</a>
-            <a href="#" class="btn-wa" style="background:#128c7e" onclick="enviar('5512981906835')">Enviar Atendimento 2</a>
+            <div id="resumo-final" style="margin-bottom:15px"></div>
             
-            <button onclick="fecharModal()" style="border:none; background:none; color:var(--gray); cursor:pointer; width:100%; font-weight:700; margin-top:5px">← Voltar e Alterar</button>
+            <div style="font-size:18px; font-weight:800; text-align:right; margin-bottom:15px; color:#2e7d32">Total: R$ <span id="total-modal">0,00</span></div>
+
+            <label style="font-size:11px; font-weight:700; color:var(--gray); display:block; margin-bottom:5px">OBSERVAÇÕES (OPCIONAL)</label>
+            <textarea id="obs" placeholder="Ex: Sem cebola, tirar picles, troco para 50..." rows="2"></textarea>
+
+            <div style="display:flex; gap:8px">
+                <input type="text" id="cep" placeholder="CEP" onblur="buscarEndereco()">
+                <input type="text" id="num" placeholder="Nº" style="width:80px">
+            </div>
+            <input type="text" id="rua" placeholder="Rua / Avenida" readonly style="background:#f2f2f2">
+            
+            <a href="#" class="btn-wa" onclick="enviar('5512997136890')">Enviar Pedido para Chris</a>
+            <button onclick="fecharModal()" style="border:none; background:none; color:var(--gray); cursor:pointer; width:100%; font-weight:700; margin-top:5px">← Alterar Itens</button>
         </div>
     </div>
 
     <div class="footer">
-        <div>
-            <div style="font-size:11px; color:var(--gray)">Subtotal</div>
-            <div style="font-size:18px; font-weight:700">R$ <span id="total-geral">0,00</span></div>
-        </div>
-        <button class="btn-fin" onclick="abrirModal()">Concluir Pedido</button>
+        <div><div style="font-size:11px; color:var(--gray)">Subtotal</div><div style="font-size:18px; font-weight:700">R$ <span id="total-p">0,00</span></div></div>
+        <button class="btn-fin" onclick="abrirModal()">Finalizar Pedido</button>
     </div>
 
     <script>
@@ -112,56 +93,47 @@
         let cart = []; let selection = {};
 
         function render(itens = produtos) {
-            const container = document.getElementById('lista-produtos');
-            container.innerHTML = itens.map(p => {
-                const s = selection[p.id] || Object.keys(p.sizes)[0];
-                selection[p.id] = s;
+            document.getElementById('lista-p').innerHTML = itens.map(p => {
+                const s = selection[p.id] || Object.keys(p.sizes)[0]; selection[p.id] = s;
                 const i = cart.find(x => x.id == p.id && x.size == s) || {qtd:0};
-                return `
-                    <div class="menu-item">
-                        <div class="item-info">
-                            <h3>${p.nome}</h3>
-                            <div class="size-selector">${Object.keys(p.sizes).map(z => `<button class="btn-size ${z==s?'active':''}" onclick="setSize(${p.id},'${z}')">${z}</button>`).join('')}</div>
-                        </div>
-                        <div class="item-footer">
-                            <div class="price">R$ ${p.sizes[s].toFixed(2).replace('.', icon_separator)}</div>
-                            <div class="qty-box">
-                                <button class="btn-q" onclick="update(${p.id},-1)">-</button>
-                                <span style="font-weight:700">${i.qtd}</span>
-                                <button class="btn-q" onclick="update(${p.id},1)">+</button>
-                            </div>
-                        </div>
-                    </div>`;
+                return `<div class="menu-item"><h3>${p.nome}</h3><div class="size-selector">${Object.keys(p.sizes).map(z => `<button class="btn-size ${z==s?'active':''}" onclick="setSize(${p.id},'${z}')">${z}</button>`).join('')}</div><div class="item-footer"><div class="price">R$ ${p.sizes[s].toFixed(2).replace('.',',')}</div><div class="qty-box"><button class="btn-q" onclick="update(${p.id},-1)">-</button><span>${i.qtd}</span><button class="btn-q" onclick="update(${p.id},1)">+</button></div></div></div>`;
             }).join('');
-            atualizarTotal();
+            atualizarValores();
         }
-
-        const icon_separator = ",";
 
         function setSize(id, s) { selection[id] = s; render(); }
 
-        function update(id, d, isResumo = false) {
-            const s = selection[id], p = produtos.find(x => x.id == id), idx = cart.findIndex(i => i.id == id && i.size == s);
-            if (idx > -1) { cart[idx].qtd += d; if (cart[idx].qtd <= 0) cart.splice(idx, 1); }
-            else if (d > 0) cart.push({ id, nome: p.nome, size: s, preco: p.sizes[s], qtd: 1 });
+        function update(id, d, sizeFromModal = null) {
+            const s = sizeFromModal || selection[id];
+            const p = produtos.find(x => x.id == id);
+            const idx = cart.findIndex(i => i.id == id && i.size == s);
+            
+            if (idx > -1) { 
+                cart[idx].qtd += d; 
+                if (cart[idx].qtd <= 0) cart.splice(idx, 1); 
+            } else if (d > 0) {
+                cart.push({ id, nome: p.nome, size: s, preco: p.sizes[s], qtd: 1 });
+            }
+            
             render();
-            if(isResumo) renderResumo();
+            if(document.getElementById('modal-f').style.display === 'flex') renderResumo();
         }
 
-        function atualizarTotal() {
-            const total = cart.reduce((acc, i) => acc + (i.preco * i.qtd), 0).toFixed(2).replace('.', icon_separator);
-            document.getElementById('total-geral').innerText = total;
+        function atualizarValores() {
+            const total = cart.reduce((acc, i) => acc + (i.preco * i.qtd), 0).toFixed(2).replace('.', ',');
+            document.getElementById('total-p').innerText = total;
+            document.getElementById('total-modal').innerText = total;
         }
 
         function renderResumo() {
-            const container = document.getElementById('resumo-lista');
             if(!cart.length) { fecharModal(); return; }
-            container.innerHTML = cart.map(i => `
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px">
-                    <span style="font-size:14px"><b>${i.qtd}x</b> ${i.nome} (${i.size})</span>
-                    <div class="qty-box" style="padding: 2px 10px; gap: 8px;">
-                        <button class="btn-q" onclick="update(${i.id},-1, true)">-</button>
-                        <button class="btn-q" onclick="update(${i.id},1, true)">+</button>
+            document.getElementById('resumo-final').innerHTML = cart.map(i => `
+                <div class="resumo-item">
+                    <div style="font-size:14px"><b>${i.nome}</b> (${i.size})</div>
+                    <div class="qty-box" style="padding: 2px 10px">
+                        <button class="btn-q" onclick="update(${i.id},-1,'${i.size}')">-</button>
+                        <span style="font-weight:700">${i.qtd}</span>
+                        <button class="btn-q" onclick="update(${i.id},1,'${i.size}')">+</button>
                     </div>
                 </div>
             `).join('');
@@ -169,46 +141,24 @@
 
         function buscarEndereco() {
             const c = document.getElementById('cep').value.replace(/\D/g, '');
-            if (c.length == 8) {
-                fetch(`https://viacep.com.br/ws/${c}/json/`).then(r => r.json()).then(d => {
-                    if (!d.erro) { document.getElementById('rua').value = d.logradouro; document.getElementById('bairro').value = d.bairro; }
-                });
-            }
+            if (c.length == 8) fetch(`https://viacep.com.br/ws/${c}/json/`).then(r => r.json()).then(d => { if (!d.erro) { document.getElementById('rua').value = d.logradouro; } });
         }
 
-        function filter(c, b) {
-            document.querySelectorAll('.cat-card').forEach(x => x.classList.remove('active'));
-            b.classList.add('active');
-            render(c == 'todos' ? produtos : produtos.filter(p => p.cat == c));
-        }
-
-        function abrirModal() { if(!cart.length) return alert("Carrinho vazio!"); renderResumo(); document.getElementById('checkoutModal').style.display = 'flex'; }
-        function fecharModal() { document.getElementById('checkoutModal').style.display = 'none'; }
+        function filter(c, b) { document.querySelectorAll('.cat-card').forEach(x => x.classList.remove('active')); b.classList.add('active'); render(c == 'todos' ? produtos : produtos.filter(p => p.cat == c)); }
+        function abrirModal() { if(!cart.length) return alert("Adicione itens ao carrinho!"); renderResumo(); document.getElementById('modal-f').style.display = 'flex'; }
+        function fecharModal() { document.getElementById('modal-f').style.display = 'none'; }
 
         function enviar(num) {
-            const r = document.getElementById('rua').value, n = document.getElementById('num').value;
-            if(!r || !n) return alert("Preencha o endereço completo!");
+            const r = document.getElementById('rua').value, n = document.getElementById('num').value, t = document.getElementById('total-p').innerText, o = document.getElementById('obs').value;
+            if(!r || !n) return alert("Preencha o CEP e o Número da casa!");
             
-            const pedidoTxt = cart.map(i => `${i.qtd}x ${i.nome} (${i.size})`).join(", ");
-            const total = document.getElementById('total-geral').innerText;
-            const obs = document.getElementById('obs').value;
-
-            // INTEGRAÇÃO COM A PLANILHA (Substitua o link abaixo após criar no Google)
-            fetch('COLE_AQUI_O_LINK_DO_GOOGLE_SCRIPT', {
-                method: 'POST', mode: 'no-cors',
-                body: JSON.stringify({ pedido: pedidoTxt, obs: obs, endereco: r + ", " + n, total: total })
-            });
-
-            // WHATSAPP
-            let msg = `*PEDIDO CHRIS GASTRONOMIA*\n\n`;
-            cart.forEach(i => msg += `• *${i.qtd}x* ${i.nome} (${i.size})\n`);
-            if(obs) msg += `\n*OBS:* ${obs}`;
-            msg += `\n\n*ENTREGA:* ${r}, ${n}\n*BAIRRO:* ${document.getElementById('bairro').value}`;
-            msg += `\n\n*TOTAL: R$ ${total}*`;
+            let msg = `*PEDIDO CHRIS GASTRONOMIA*\n--------------------------\n`;
+            cart.forEach(i => msg += `✅ *${i.qtd}x* ${i.nome} (${i.size})\n`);
+            if(o) msg += `\n*OBS:* ${o}\n`;
+            msg += `\n*ENTREGA:* ${r}, ${n}\n\n*💰 TOTAL: R$ ${t}*`;
             
             window.open(`https://wa.me/${num}?text=${encodeURIComponent(msg)}`);
         }
-
         render();
     </script>
 </body>
