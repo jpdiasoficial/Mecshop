@@ -8,43 +8,46 @@
         :root { --ifood-red: #ea1d2c; --text-dark: #3e3e3e; --text-light: #717171; }
         body { font-family: 'Helvetica Neue', Helvetica, sans-serif; margin: 0; background: #fff; color: var(--text-dark); padding-bottom: 140px; }
 
-        .header { padding: 20px 15px; background: #fff; border-bottom: 1px solid #f2f2f2; font-weight: 700; text-transform: uppercase; }
+        .header { padding: 20px 15px; background: #fff; border-bottom: 1px solid #f2f2f2; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        
         .banner-container { width: 100%; height: 160px; overflow: hidden; position: relative; background: #111; }
         .slider { display: flex; width: 300%; height: 100%; transition: transform 0.6s ease; }
         .slide { width: 33.33%; height: 100%; position: relative; }
         .slide img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; }
 
         .cat-bar { display: flex; overflow-x: auto; padding: 20px 15px; gap: 15px; scrollbar-width: none; }
+        .cat-bar::-webkit-scrollbar { display: none; }
         .cat-card { display: flex; flex-direction: column; align-items: center; min-width: 80px; border: none; background: none; cursor: pointer; }
-        .cat-circle { width: 60px; height: 60px; background: #f8f8f8; border-radius: 50%; margin-bottom: 8px; border: 2px solid transparent; overflow: hidden; }
+        .cat-circle { width: 60px; height: 60px; background: #f8f8f8; border-radius: 50%; margin-bottom: 8px; border: 2px solid transparent; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .cat-circle img { width: 100%; height: 100%; object-fit: cover; }
         .cat-card.active .cat-circle { border-color: var(--ifood-red); }
-        .cat-name { font-size: 11px; font-weight: 700; color: var(--text-light); }
-
-        /* Estilo do Formulário de Endereço */
-        .address-section { padding: 20px 15px; background: #fdfdfd; border-top: 8px solid #f7f7f7; }
-        .section-title { font-size: 14px; font-weight: 700; margin-bottom: 15px; text-transform: uppercase; color: var(--text-dark); }
-        .input-group { display: flex; gap: 10px; margin-bottom: 10px; }
-        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; box-sizing: border-box; }
-        .cep-input { width: 40%; }
-        .readonly-input { background: #f2f2f2; cursor: not-allowed; }
+        .cat-name { font-size: 10px; font-weight: 700; color: var(--text-light); text-transform: uppercase; }
 
         .menu-item { padding: 20px 15px; border-bottom: 1px solid #f2f2f2; }
-        .item-title { font-size: 16px; font-weight: 700; }
+        .item-title { font-size: 16px; font-weight: 700; color: var(--text-dark); }
+        .item-desc { font-size: 13px; color: var(--text-light); margin: 8px 0; line-height: 1.4; }
+        
         .size-box { display: flex; gap: 8px; margin: 12px 0; }
-        .size-btn { border: 1px solid #dcdcdc; background: #fff; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; }
+        .size-btn { border: 1px solid #dcdcdc; background: #fff; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; color: var(--text-dark); }
         .size-btn.active { border-color: var(--ifood-red); color: var(--ifood-red); background: #fff5f5; }
 
         .item-footer { display: flex; justify-content: space-between; align-items: center; }
-        .price { color: #2e7d32; font-weight: 700; }
-        .qty-box { display: flex; align-items: center; gap: 12px; background: #f2f2f2; border-radius: 20px; padding: 5px 12px; }
+        .price { color: #2e7d32; font-weight: 700; font-size: 16px; }
+        .qty-box { display: flex; align-items: center; gap: 15px; background: #f2f2f2; border-radius: 20px; padding: 6px 14px; }
+        .btn-q { border: none; background: none; color: var(--ifood-red); font-size: 20px; font-weight: 700; cursor: pointer; padding: 0 5px; }
+        .qty-val { font-weight: 700; min-width: 15px; text-align: center; }
+
+        .address-section { padding: 20px 15px; background: #fdfdfd; border-top: 8px solid #f7f7f7; }
+        .input-group { display: flex; gap: 10px; margin-bottom: 10px; }
+        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; box-sizing: border-box; }
+        input:focus { border-color: var(--ifood-red); outline: none; }
 
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { background: #fff; width: 100%; max-width: 400px; border-radius: 12px; padding: 24px; text-align: center; }
-        .wa-option { display: block; background: #25d366; color: #fff; padding: 15px; border-radius: 8px; text-decoration: none; font-weight: 700; margin-bottom: 10px; }
+        .modal-content { background: #fff; width: 100%; max-width: 400px; border-radius: 12px; padding: 25px; text-align: center; }
+        .wa-option { display: block; background: #25d366; color: #fff; padding: 15px; border-radius: 8px; text-decoration: none; font-weight: 700; margin-bottom: 12px; }
 
         .footer { position: fixed; bottom: 0; width: 100%; background: #fff; padding: 15px 20px; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; z-index: 500; }
-        .btn-checkout { background: var(--ifood-red); color: #fff; border: none; padding: 14px 25px; border-radius: 6px; font-weight: 700; cursor: pointer; }
+        .btn-checkout { background: var(--ifood-red); color: #fff; border: none; padding: 15px 30px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 15px; }
     </style>
 </head>
 <body>
@@ -63,43 +66,46 @@
         <button class="cat-card active" onclick="filter('todos', this)"><div class="cat-circle"><img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=100"></div><div class="cat-name">INICIO</div></button>
         <button class="cat-card" onclick="filter('marmita', this)"><div class="cat-circle"><img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?w=100"></div><div class="cat-name">MARMITEX</div></button>
         <button class="cat-card" onclick="filter('batata', this)"><div class="cat-circle"><img src="https://images.unsplash.com/photo-1594007654729-407eedc4be65?w=100"></div><div class="cat-name">BATATAS</div></button>
+        <button class="cat-card" onclick="filter('bebida', this)"><div class="cat-circle"><img src="https://images.unsplash.com/photo-1581009146145-b5ef03a7403f?w=100"></div><div class="cat-name">BEBIDAS</div></button>
     </div>
 
     <div id="lista"></div>
 
     <section class="address-section">
-        <div class="section-title">Dados para Entrega</div>
+        <div style="font-weight:700; margin-bottom:12px; color: var(--text-dark);">DADOS PARA ENTREGA</div>
         <div class="input-group">
-            <input type="text" id="cep" class="cep-input" placeholder="Seu CEP" onblur="buscarEndereco()" maxlength="8">
-            <input type="text" id="rua" class="readonly-input" placeholder="Rua / Avenida" readonly>
+            <input type="text" id="cep" placeholder="CEP (ex: 13460000)" onblur="buscarEndereco()" maxlength="8">
+            <input type="text" id="rua" placeholder="Rua / Avenida" readonly style="background:#f9f9f9">
         </div>
         <div class="input-group">
-            <input type="text" id="bairro" class="readonly-input" placeholder="Bairro" readonly>
+            <input type="text" id="bairro" placeholder="Bairro" readonly style="background:#f9f9f9">
             <input type="text" id="numero" placeholder="Nº">
         </div>
-        <input type="text" id="complemento" placeholder="Complemento (Ap, Bloco, Referência)">
+        <input type="text" id="complemento" placeholder="Referência (ex: Casa amarela, Ap 12)">
     </section>
 
     <div id="waModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin:0 0 10px 0">Enviar pedido para:</h3>
+            <h3 style="margin:0 0 15px 0">Enviar pedido para:</h3>
             <a href="#" class="wa-option" onclick="enviar('5512997136890')">WhatsApp 1 (Final 6890)</a>
             <a href="#" class="wa-option" style="background:#128c7e" onclick="enviar('5512981906835')">WhatsApp 2 (Final 6835)</a>
-            <button onclick="fecharModal()" style="background:none; border:none; color:var(--text-light); margin-top:10px; cursor:pointer;">Voltar</button>
+            <button onclick="fecharModal()" style="background:none; border:none; color:var(--text-light); margin-top:10px; cursor:pointer;">Voltar ao cardápio</button>
         </div>
     </div>
 
     <div class="footer">
-        <div><div style="font-size: 11px; color: var(--text-light);">Total</div><div style="font-size: 18px; font-weight: 700;">R$ <span id="total">0,00</span></div></div>
-        <button class="btn-checkout" onclick="abrirModal()">Finalizar Pedido</button>
+        <div><div style="font-size: 11px; color: var(--text-light);">Subtotal</div><div style="font-size: 18px; font-weight: 700;">R$ <span id="total">0,00</span></div></div>
+        <button class="btn-checkout" onclick="abrirModal()">Concluir Pedido</button>
     </div>
 
     <script>
         const produtos = [
-            { id: 1, cat: 'marmita', nome: "Marmitex Executiva", desc: "Arroz, feijao, mistura, guarnicao, repolho e salada.", sizes: { "P": 17.00, "M": 22.00, "G": 27.00 } },
-            { id: 2, cat: 'batata', nome: "Batata Strogonoff", desc: "Batata premium com recheio cremoso.", sizes: { "Padrao": 25.00 } },
-            { id: 3, cat: 'batata', nome: "Batata Frango", desc: "Frango desfiado com requeijao.", sizes: { "Padrao": 25.00 } },
-            { id: 4, cat: 'batata', nome: "Batata Calabresa / Bacon", desc: "Recheio especial crocante.", sizes: { "Padrao": 25.00 } }
+            { id: 1, cat: 'marmita', nome: "Marmitex Executiva", desc: "Arroz, feijão, mistura, guarnição, repolho e salada.", sizes: { "P": 17.00, "M": 22.00, "G": 27.00 } },
+            { id: 2, cat: 'batata', nome: "Batata Strogonoff de Carne", desc: "Batata premium recheada com strogonoff cremoso.", sizes: { "Padrão": 25.00 } },
+            { id: 3, cat: 'batata', nome: "Batata Frango Desfiado", desc: "Recheio cremoso de frango com tempero da casa.", sizes: { "Padrão": 25.00 } },
+            { id: 4, cat: 'batata', nome: "Batata Calabresa / Bacon", desc: "Sabor tradicional crocante e muito recheio.", sizes: { "Padrão": 25.00 } },
+            { id: 5, cat: 'bebida', nome: "Coca-Cola", desc: "Refrigerante gelado.", sizes: { "Lata": 6.00, "600ml": 9.00, "2L": 14.00 } },
+            { id: 6, cat: 'bebida', nome: "Guaraná Antarctica", desc: "Refresco gelado.", sizes: { "Lata": 6.00, "2L": 12.00 } }
         ];
 
         let cart = [];
@@ -108,14 +114,12 @@
         function buscarEndereco() {
             const cep = document.getElementById('cep').value.replace(/\D/g, '');
             if (cep.length === 8) {
-                fetch(`https://viacep.com.br/ws/${cep}/json/`)
-                    .then(r => r.json())
-                    .then(d => {
-                        if (!d.erro) {
-                            document.getElementById('rua').value = d.logradouro;
-                            document.getElementById('bairro').value = d.bairro;
-                        } else { alert("CEP não encontrado."); }
-                    });
+                fetch(`https://viacep.com.br/ws/${cep}/json/`).then(r => r.json()).then(d => {
+                    if (!d.erro) {
+                        document.getElementById('rua').value = d.logradouro;
+                        document.getElementById('bairro').value = d.bairro;
+                    } else { alert("CEP não encontrado."); }
+                });
             }
         }
 
@@ -124,29 +128,40 @@
             container.innerHTML = itens.map(p => {
                 const sizes = Object.keys(p.sizes);
                 if (!selection[p.id]) selection[p.id] = sizes[0];
-                const currentSize = selection[p.id];
-                const itemCart = cart.find(i => i.id === p.id && i.size === currentSize) || {qtd: 0};
+                const s = selection[p.id];
+                const item = cart.find(i => i.id === p.id && i.size === s) || {qtd: 0};
                 return `
                     <div class="menu-item">
                         <div class="item-title">${p.nome}</div>
                         <div class="item-desc">${p.desc}</div>
-                        <div class="size-box">${sizes.map(s => `<button class="size-btn ${s === currentSize ? 'active' : ''}" onclick="setSize(${p.id}, '${s}')">${s}</button>`).join('')}</div>
+                        <div class="size-box">${sizes.map(sz => `<button class="size-btn ${sz === s ? 'active' : ''}" onclick="setSize(${p.id}, '${sz}')">${sz}</button>`).join('')}</div>
                         <div class="item-footer">
-                            <div class="price">R$ ${p.sizes[currentSize].toFixed(2).replace('.',',')}</div>
-                            <div class="qty-box"><button class="btn-q" onclick="update(${p.id}, -1)">-</button><span class="qty-val">${itemCart.qtd}</span><button class="btn-q" onclick="update(${p.id}, 1)">+</button></div>
+                            <div class="price">R$ ${p.sizes[s].toFixed(2).replace('.',',')}</div>
+                            <div class="qty-box">
+                                <button class="btn-q" onclick="update(${p.id}, -1)">-</button>
+                                <span class="qty-val">${item.qtd}</span>
+                                <button class="btn-q" onclick="update(${p.id}, 1)">+</button>
+                            </div>
                         </div>
                     </div>
                 `;
             }).join('');
         }
 
-        function setSize(id, s) { selection[id] = s; render(); }
+        function setSize(id, sz) { selection[id] = sz; render(); }
+        
         function update(id, d) {
             const s = selection[id];
             const p = produtos.find(x => x.id === id);
             const idx = cart.findIndex(i => i.id === id && i.size === s);
-            if (idx > -1) { cart[idx].qtd += d; if (cart[idx].qtd <= 0) cart.splice(idx, 1); }
-            else if (d > 0) cart.push({ id, nome: p.nome, size: s, preco: p.sizes[s], qtd: 1 });
+            
+            if (idx > -1) {
+                cart[idx].qtd += d;
+                if (cart[idx].qtd <= 0) cart.splice(idx, 1);
+            } else if (d > 0) {
+                cart.push({ id, nome: p.nome, size: s, preco: p.sizes[s], qtd: 1 });
+            }
+            
             render();
             const total = cart.reduce((acc, i) => acc + (i.preco * i.qtd), 0);
             document.getElementById('total').innerText = total.toFixed(2).replace('.',',');
@@ -159,21 +174,17 @@
         }
 
         function abrirModal() {
-            if(!cart.length) return alert("Adicione itens ao carrinho.");
-            if(!document.getElementById('numero').value) return alert("Informe o número do endereço.");
+            if(!cart.length) return alert("Adicione pelo menos um item ao carrinho.");
+            if(!document.getElementById('numero').value) return alert("Por favor, informe o número da entrega.");
             document.getElementById('waModal').style.display = 'flex';
         }
+
         function fecharModal() { document.getElementById('waModal').style.display = 'none'; }
 
         function enviar(num) {
-            const rua = document.getElementById('rua').value;
-            const n = document.getElementById('numero').value;
-            const b = document.getElementById('bairro').value;
-            const c = document.getElementById('complemento').value;
-            
-            let msg = `*PEDIDO - CHRIS GASTRONOMIA*\n\n`;
+            let msg = `*NOVO PEDIDO - CHRIS GASTRONOMIA*\n\n`;
             cart.forEach(i => msg += `• ${i.qtd}x ${i.nome} (${i.size})\n`);
-            msg += `\n*ENTREGA:* ${rua}, ${n} - ${b}\n*REF:* ${c}`;
+            msg += `\n*ENTREGA:* ${document.getElementById('rua').value}, ${document.getElementById('numero').value}\n*BAIRRO:* ${document.getElementById('bairro').value}\n*REF:* ${document.getElementById('complemento').value}`;
             msg += `\n\n*TOTAL: R$ ${document.getElementById('total').innerText}*`;
             window.open(`https://wa.me/${num}?text=${encodeURIComponent(msg)}`);
             fecharModal();
