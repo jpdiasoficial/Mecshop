@@ -17,15 +17,16 @@
         .slider { display: flex; width: 300%; height: 100%; transition: transform 0.6s ease-in-out; }
         .slide { width: 33.33%; height: 100%; position: relative; }
         .slide img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
-        .slide-txt { position: absolute; bottom: 20px; left: 15px; color: #fff; font-weight: 600; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); }
+        .slide-txt { position: absolute; bottom: 20px; left: 15px; color: #fff; font-weight: 600; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-size: 14px; }
 
-        /* Categorias Estilo iFood */
+        /* Categorias Estilo iFood (Sem Emojis) */
         .cat-bar { display: flex; overflow-x: auto; padding: 20px 15px; gap: 15px; scrollbar-width: none; }
         .cat-bar::-webkit-scrollbar { display: none; }
-        .cat-card { display: flex; flex-direction: column; align-items: center; min-width: 75px; border: none; background: none; cursor: pointer; }
-        .cat-img { width: 65px; height: 65px; background: #f8f8f8; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 8px; border: 2px solid transparent; }
-        .cat-card.active .cat-img { border-color: var(--ifood-red); background: #fff; }
-        .cat-name { font-size: 12px; font-weight: 600; color: var(--text-light); }
+        .cat-card { display: flex; flex-direction: column; align-items: center; min-width: 85px; border: none; background: none; cursor: pointer; }
+        .cat-circle { width: 65px; height: 65px; background: #f8f8f8; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 8px; border: 2px solid transparent; overflow: hidden; }
+        .cat-circle img { width: 100%; height: 100%; object-fit: cover; }
+        .cat-card.active .cat-circle { border-color: var(--ifood-red); background: #fff; }
+        .cat-name { font-size: 11px; font-weight: 700; color: var(--text-light); text-transform: uppercase; }
         .cat-card.active .cat-name { color: var(--ifood-red); }
 
         /* Menu */
@@ -71,9 +72,18 @@
     </div>
 
     <div class="cat-bar">
-        <button class="cat-card active" onclick="filter('todos', this)"><div class="cat-img">🌟</div><div class="cat-name">Início</div></button>
-        <button class="cat-card" onclick="filter('marmita', this)"><div class="cat-img">🍱</div><div class="cat-name">Marmitex</div></button>
-        <button class="cat-card" onclick="filter('batata', this)"><div class="cat-img">🥔</div><div class="cat-name">Batatas</div></button>
+        <button class="cat-card active" onclick="filter('todos', this)">
+            <div class="cat-circle"><img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=100"></div>
+            <div class="cat-name">Início</div>
+        </button>
+        <button class="cat-card" onclick="filter('marmita', this)">
+            <div class="cat-circle"><img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?w=100"></div>
+            <div class="cat-name">Marmitex</div>
+        </button>
+        <button class="cat-card" onclick="filter('batata', this)">
+            <div class="cat-circle"><img src="https://images.unsplash.com/photo-1594007654729-407eedc4be65?w=100"></div>
+            <div class="cat-name">Batatas</div>
+        </button>
     </div>
 
     <div id="lista"></div>
@@ -86,9 +96,9 @@
     <script>
         const produtos = [
             { id: 1, cat: 'marmita', nome: "Marmitex Executiva", desc: "Arroz, feijão, mistura, guarnição, repolho e salada.", sizes: { "P": 17.00, "M": 22.00, "G": 27.00 } },
-            { id: 2, cat: 'batata', nome: "Batata Strogonoff de Carne", desc: "Batata recheada com muito amor e carinho.", sizes: { "Padrão": 25.00 } },
-            { id: 3, cat: 'batata', nome: "Batata Frango Desfiado", desc: "Recheio cremoso com temperos selecionados.", sizes: { "Padrão": 25.00 } },
-            { id: 4, cat: 'batata', nome: "Batata Calabresa / Bacon", desc: "A queridinha do cardápio noturno.", sizes: { "Padrão": 25.00 } }
+            { id: 2, cat: 'batata', nome: "Batata Strogonoff de Carne", desc: "Batata recheada preparada com ingredientes selecionados.", sizes: { "Padrão": 25.00 } },
+            { id: 3, cat: 'batata', nome: "Batata Frango Desfiado", desc: "Recheio cremoso com temperos da casa.", sizes: { "Padrão": 25.00 } },
+            { id: 4, cat: 'batata', nome: "Batata Calabresa / Bacon", desc: "Uma combinação clássica e saborosa.", sizes: { "Padrão": 25.00 } }
         ];
 
         let cart = [];
