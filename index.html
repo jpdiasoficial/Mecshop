@@ -3,303 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>JP DIAS | PREMIUM LOGISTICS</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;900&family=Roboto+Mono:wght@300;400&family=Segoe+UI:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>JP DIAS | SUPREME ENTERPRISE V70</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;900&family=Roboto+Mono&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --slate-bg: #050505; /* Preto Profundo */
-            --card-glass: rgba(20, 20, 20, 0.8); /* Efeito Vidro Escuro */
-            --neon-orange: #ff9f0a; /* Laranja de Alerta Tesla */
-            --matrix-green: #32d74b; /* Verde Suave (Apple) */
-            --alert-red: #ff453a; /* Vermelho Alerta */
-            --text-main: #f5f5f7;
-            --text-muted: #86868b;
-            --border-color: rgba(255, 255, 255, 0.08);
-        }
+        :root { --orange: #ff9f0a; --bg: #050505; --glass: rgba(30, 30, 30, 0.9); --green: #32d74b; --red: #ff453a; --blue: #007aff; }
+        body { background: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; text-transform: uppercase; overflow-x: hidden; }
+        
+        /* --- PORTAL DE ACESSO (HIERARQUIA) --- */
+        #portal-entrada { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background: radial-gradient(circle, #1a1a1a 0%, #050505 100%); }
+        .btn-hierarquia { width: 300px; padding: 20px; margin: 10px; border: 1px solid rgba(255,255,255,0.1); background: var(--glass); color: #fff; border-radius: 15px; font-weight: 900; cursor: pointer; transition: 0.3s; letter-spacing: 2px; }
+        .btn-hierarquia:hover { border-color: var(--orange); box-shadow: 0 0 20px rgba(255, 159, 10, 0.2); }
 
-        body {
-            background-color: var(--slate-bg);
-            color: var(--text-main);
-            font-family: 'Segoe UI', -apple-system, sans-serif;
-            margin: 0;
-            padding: env(safe-area-inset-top) 15px env(safe-area-inset-bottom) 15px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            -webkit-font-smoothing: antialiased;
-        }
+        /* --- LOBBY (MENU PRINCIPAL) --- */
+        #lobby { display: none; padding: 20px; text-align: center; }
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; }
+        .menu-item { background: var(--glass); padding: 40px 20px; border-radius: 20px; border: 1px solid #333; cursor: pointer; transition: 0.3s; }
+        .menu-item:hover { border-color: var(--orange); transform: scale(1.02); }
 
-        /* --- HEADER REFINADO --- */
-        header {
-            padding: 20px 0;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            backdrop-filter: blur(10px);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        header h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            font-size: 22px;
-            color: var(--neon-orange);
-            margin: 0;
-            letter-spacing: 1px;
-        }
-
-        header .sys-status {
-            font-family: 'Roboto Mono', monospace;
-            font-size: 10px;
-            color: var(--matrix-green);
-            background: rgba(50, 215, 75, 0.1);
-            padding: 4px 10px;
-            border-radius: 20px;
-            border: 1px solid rgba(50, 215, 75, 0.3);
-        }
-
-        /* --- GRID E CARDS GLASSMORPHISM --- */
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 25px;
-        }
-
-        .card {
-            background-color: var(--card-glass);
-            border: 1px solid var(--border-color);
-            backdrop-filter: blur(5px);
-            padding: 25px;
-            border-radius: 16px; /* Borda Suave Apple */
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .card:hover {
-            border-color: rgba(255, 159, 10, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .full { grid-column: span 2; }
-
-        h2 {
-            font-family: 'Segoe UI', sans-serif;
-            font-weight: 600;
-            font-size: 13px;
-            color: var(--text-muted);
-            margin: 0 0 20px 0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* --- BOTÕES PREMIUM --- */
-        .btn {
-            background-color: transparent;
-            color: var(--neon-orange);
-            border: 1px solid var(--neon-orange);
-            padding: 18px;
-            font-family: 'Segoe UI', sans-serif;
-            font-weight: 600;
-            font-size: 14px;
-            text-transform: uppercase;
-            width: 100%;
-            cursor: pointer;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-            margin-bottom: 12px;
-            letter-spacing: 1px;
-            box-sizing: border-box;
-        }
-
-        .btn:active {
-            background-color: var(--neon-orange);
-            color: #000;
-            transform: scale(0.98);
-        }
-
-        .btn-red {
-            border-color: var(--alert-red);
-            color: var(--alert-red);
-        }
-
-        .btn-red:active {
-            background-color: var(--alert-red);
-            color: #fff;
-        }
-
-        .btn-ghost {
-            border-color: #333;
-            color: var(--text-muted);
-        }
-
-        .btn-ghost:active {
-            border-color: #555;
-            color: #fff;
-        }
-
-        /* --- INDICADORES TÉCNICOS --- */
-        .tech-list {
-            font-family: 'Roboto Mono', monospace;
-            font-size: 11px;
-            color: #666;
-            list-style: none;
-            padding: 0;
-            margin: 15px 0 0 0;
-        }
-
-        .tech-list li {
-            margin-bottom: 6px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .tech-list li::before {
-            content: "> ";
-            color: var(--matrix-green);
-        }
-
-        /* --- LOGS E AUDITORIA (ROBOTO MONO) --- */
-        .logs-section {
-            margin-top: 15px;
-        }
-
-        .logs {
-            background: #000;
-            color: var(--matrix-green);
-            font-family: 'Roboto Mono', monospace;
-            height: 100px;
-            overflow-y: scroll;
-            padding: 15px;
-            font-size: 10px;
-            border-radius: 8px;
-            border: 1px solid #1a1a1a;
-            line-height: 1.6;
-        }
-
-        /* Animação de Pulsar Status */
-        .status-pulse {
-            height: 6px;
-            width: 6px;
-            background: var(--matrix-green);
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 8px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(50, 215, 75, 0.4); }
-            70% { box-shadow: 0 0 0 6px rgba(50, 215, 75, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(50, 215, 75, 0); }
-        }
-
+        /* --- MÓDULOS ESPECÍFICOS --- */
+        .modulo { display: none; padding: 15px; }
+        .card { background: var(--glass); border-radius: 15px; padding: 20px; border-top: 4px solid var(--orange); margin-bottom: 15px; }
+        .btn-op { width: 100%; padding: 18px; margin-bottom: 10px; border-radius: 10px; border: 1px solid var(--orange); background: transparent; color: var(--orange); font-weight: 900; cursor: pointer; }
+        .btn-op:active { background: var(--orange); color: #000; }
+        
+        /* --- MONITORAMENTO & LOGS --- */
+        .logs { background: #000; color: var(--green); font-family: 'Roboto Mono', monospace; height: 150px; overflow-y: scroll; padding: 15px; font-size: 11px; border: 1px solid #222; border-radius: 10px; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #222; }
+        .mic-on { color: var(--red); font-size: 10px; font-weight: bold; animation: pulse 1s infinite; display: none; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.2; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>JP DIAS</h1>
-    <div class="sys-status">
-        <span class="status-pulse"></span>
-        <span>CORE V64 | PREMIER</span>
-    </div>
-</header>
+<div id="portal-entrada">
+    <h1 style="font-family:'Orbitron'; color:var(--orange); margin-bottom:40px; letter-spacing:5px;">JP DIAS CORE</h1>
+    <button class="btn-hierarquia" onclick="login('SHARK')">DONO / SHARK</button>
+    <button class="btn-hierarquia" onclick="login('ADMIN')">ADMIN / RH</button>
+    <button class="btn-hierarquia" onclick="login('OPERACIONAL')">OPERACIONAL</button>
+</div>
 
-<div class="grid">
-    <div class="card">
-        <h2>[01] WMS OPERATIONAL</h2>
-        <button class="btn" onclick="execPicking()">START PICKING</button>
-        <button class="btn btn-red" onclick="execAvaria('WMS')">REPORT_AVARIA</button>
-        <ul class="tech-list">
-            <li><span>TRAVA_SEGURANÇA</span><span>[ATIVO]</span></li>
-            <li><span>GESTÃO_ALTURA</span><span>[ATIVO]</span></li>
-        </ul>
-    </div>
-
-    <div class="card">
-        <h2>[02] CROSS DOCK FLOW</h2>
-        <button class="btn" onclick="execDoca()">DOCK_TRIAGEM</button>
-        <button class="btn btn-ghost" onclick="execCorte()">VALIDATE CUT-OFF</button>
-        <ul class="tech-list">
-            <li><span>ROTAS_MONITORADAS</span><span>[03]</span></li>
-            <li><span>STATUS_SAÍDA</span><span>[OK]</span></li>
-        </ul>
-    </div>
-
-    <div class="card full">
-        <h2>[03] TORRE_DE_CONTROLE_LOGS</h2>
-        <div class="logs" id="logBox">
-            > SISTEMA PREMIER V64 UNIFICADO INICIADO...<br>
-            > PROTOCOLO V1-V60 CONFIRMADO...<br>
-            > MONITORAMENTO HORTOLÂNDIA ONLINE...<br>
-        </div>
-        <button class="btn btn-ghost" style="margin-top:15px; border-color:var(--agency-blue)" onclick="execAuditoria()">ACESSAR_AUDITORIA_GESTOR</button>
+<div id="lobby">
+    <header>
+        <button onclick="logout()" style="background:none; border:none; color:#666; cursor:pointer;">⬅ SAIR</button>
+        <div id="status-user" style="color:var(--orange); font-weight:900;">GESTOR: ---</div>
+    </header>
+    <h2 style="margin-top:40px; font-family:'Orbitron';">SELECIONE O MÓDULO</h2>
+    <div class="menu-grid">
+        <div class="menu-item" onclick="abrirMod('ARMAZEM')">📦 ARMAZÉM<br><small style="color:#666">WMS & ESTOQUE</small></div>
+        <div class="menu-item" onclick="abrirMod('CROSSDOCK')">⚡ CROSS DOCK<br><small style="color:#666">TRIAGEM & CARGA</small></div>
     </div>
 </div>
 
+<div id="mod-armazem" class="modulo">
+    <header><button onclick="voltarLobby()">⬅ LOBBY</button> <span>ARMAZÉM WMS</span></header>
+    <div class="card">
+        <button class="btn-op" onclick="fluxoWMS()">INICIAR PICKING VOZ</button>
+        <button class="btn-op" style="border-color:var(--red); color:var(--red);" onclick="fAvaria()">REGISTRAR AVARIA</button>
+    </div>
+    <div class="logs" id="logWMS">> AGUARDANDO BIPI...</div>
+</div>
+
+<div id="mod-crossdock" class="modulo">
+    <header><button onclick="voltarLobby()">⬅ LOBBY</button> <span>CROSS DOCK FLOW</span></header>
+    <div class="card">
+        <button class="btn-op" onclick="fluxoDoca()">TRIAGEM DE DOCA</button>
+        <button class="btn-op" style="border-color:#fff; color:#fff;" onclick="fMonitor()">MONITORAR MOTORISTAS</button>
+    </div>
+    <div class="logs" id="logCross">> MONITORAMENTO DE CARGA ATIVO...</div>
+</div>
+
+<div id="mod-gestor" class="modulo">
+    <header><button onclick="voltarLobby()">⬅ LOBBY</button> <span>TORRE DE COMANDO</span></header>
+    <div class="card" style="border-color:var(--green)">
+        <h3>AUDITORIA EM TEMPO REAL</h3>
+        <div class="logs" id="logShark" style="height:250px;">> BUSCANDO DADOS DO GALPÃO...</div>
+        <button class="btn-op" style="margin-top:15px; border-color:var(--green); color:var(--green);" onclick="fAuditar()">AUDITAR TODOS OS PROCESSOS</button>
+    </div>
+</div>
+
+<div id="mic" class="mic-on" style="position:fixed; bottom:20px; left:50%; transform:translateX(-50%);">🎙 ESCUTANDO "OK"...</div>
+
 <script>
-    const falar = (t) => {
+    let cargo = "";
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = 'pt-BR';
+
+    function falar(t) {
         window.speechSynthesis.cancel();
         const m = new SpeechSynthesisUtterance(t);
         m.lang = 'pt-BR';
-        m.rate = 1.05; // Velocidade profissional, limpa.
+        m.rate = 1.1;
+        m.onend = () => { startMic(); };
         window.speechSynthesis.speak(m);
+    }
+
+    function startMic() {
+        document.getElementById('mic').style.display = 'block';
+        recognition.start();
+    }
+
+    recognition.onresult = (e) => {
+        const voz = e.results[0][0].transcript.toLowerCase();
+        if(voz.includes("ok")) {
+            falar("Confirmado. Prosseguindo etapa.");
+            addLog("VOZ: OPERADOR CONFIRMOU OK.");
+        }
+        document.getElementById('mic').style.display = 'none';
     };
 
-    function addLog(msg) {
-        const box = document.getElementById('logBox');
-        const agora = new Date().toLocaleTimeString();
-        box.innerHTML += `> [${agora}] ${msg}<br>`;
-        box.scrollTop = box.scrollHeight;
+    function login(tipo) {
+        if(tipo !== 'OPERACIONAL') {
+            let p = prompt("SENHA DE ACESSO HIERÁRQUICO:");
+            if(p !== "123") return;
+        }
+        cargo = tipo;
+        document.getElementById('portal-entrada').style.display = 'none';
+        document.getElementById('lobby').style.display = 'block';
+        document.getElementById('status-user').innerText = `ACESSO: ${tipo}`;
+        falar(`Bem vindo ao sistema JP Dias. Modo ${tipo} ativado.`);
     }
 
-    // ARMAZÉM
-    function execPicking() {
-        falar("Iniciando Picking V64. Vá para a Rua B. Nível 2. Separe o item e confirme o código.");
-        setTimeout(() => {
-            let bip = prompt("CONFIRME OS 3 DÍGITOS FINAIS:");
-            if(bip) {
-                falar("Código confirmado. Item movido para conferência.");
-                addLog(`WMS_PICKING: ITEM ${bip} CONCLUÍDO.`);
-            }
-        }, 300); // Pequeno delay para a voz terminar.
-    }
-
-    function execAvaria(setor) {
-        falar(`Avaria detectada no ${setor}. Bloqueio de inventário iniciado.`);
-        addLog(`ALERT: AVARIA NO ${setor}. AGUARDANDO GESTOR.`);
-    }
-
-    // CROSS DOCK
-    function execDoca() {
-        falar("Iniciando Doca Triagem. Verifique o box de saída no manifesto.");
-        addLog("CROSSDOCK: TRIAGEM INICIADA.");
-    }
-
-    function execCorte() {
-        falar("Validação de Cut-off. Rota São Paulo entra em horário de corte em dez minutos.");
-        addLog("SISTEMA: VALIDAÇÃO DE CORTE EXECUTADA.");
-    }
-
-    // GESTÃO
-    function execAuditoria() {
-        let pass = prompt("IDENTIFICAÇÃO DE SEGURANÇA GESTOR:");
-        if(pass === "123") {
-            falar("Acesso concedido. Painel de auditoria do gestor liberado.");
-            addLog("GESTOR_AUTH: ACESSO AO MÓDULO DE DECISÃO.");
+    function abrirMod(mod) {
+        document.getElementById('lobby').style.display = 'none';
+        if(cargo === 'SHARK' || cargo === 'ADMIN') {
+            document.getElementById('mod-gestor').style.display = 'block';
+            addLog(`SISTEMA: ${cargo} ACESSOU A TORRE DE COMANDO.`);
         } else {
-            falar("Acesso negado.");
-            addLog("SECURITY_ALERT: TENTATIVA DE ACESSO NÃO AUTORIZADA.");
+            if(mod === 'ARMAZEM') document.getElementById('mod-armazem').style.display = 'block';
+            if(mod === 'CROSSDOCK') document.getElementById('mod-crossdock').style.display = 'block';
         }
     }
 
-    window.onload = () => {
-        falar("Sistema JP Dias Premier ativado.");
-    };
+    // FLUXO ARMAZÉM PASSO A PASSO
+    function fluxoWMS() {
+        falar("Iniciando Picking. Rua B. Confirme os 3 dígitos do produto.");
+        let r = prompt("RUA B - DIGITE O CÓDIGO:");
+        if(r) {
+            falar("Código validado. Nível 2. Diga OK para finalizar.");
+            addLog(`WMS: ITEM ${r} SEPARADO COM SUCESSO.`);
+        }
+    }
+
+    // FLUXO CROSSDOCK MOTORISTAS
+    function fluxoDoca() {
+        falar("Triagem doca 4. Identifique o motorista e o manifesto.");
+        let m = prompt("NOME DO MOTORISTA / MANIFESTO:");
+        addLog(`CROSS: MOTORISTA ${m} EM CARREGAMENTO.`);
+    }
+
+    function addLog(msg) {
+        const agora = new Date().toLocaleTimeString();
+        const texto = `> [${agora}] ${msg}<br>`;
+        document.getElementById('logWMS').innerHTML += texto;
+        document.getElementById('logCross').innerHTML += texto;
+        document.getElementById('logShark').innerHTML += texto;
+    }
+
+    function voltarLobby() {
+        document.querySelectorAll('.modulo').forEach(m => m.style.display = 'none');
+        document.getElementById('lobby').style.display = 'block';
+    }
+
+    function logout() { location.reload(); }
 </script>
 
 </body>
