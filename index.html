@@ -3,218 +3,265 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ELITEBET | IA PREDICTIVE SYSTEM</title>
+    <title>ELITEBET | GESTÃO DE SISTEMAS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --primary: #00ff41; --accent: #ffd700; --danger: #ff4b4b; --bg: #0b0e11; --card: #161a1e; --border: #2b2f36; --text: #ffffff; --text-dim: #929292; --ai-glow: rgba(0, 255, 65, 0.1); }
+        :root { --primary: #00ff41; --accent: #ffd700; --danger: #ff4b4b; --bg: #0b0e11; --card: #161a1e; --border: #2b2f36; --text: #ffffff; --text-dim: #929292; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: var(--text); overflow-x: hidden; }
+        body { background: var(--bg); color: var(--text); overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
 
-        /* HEADER & FEED */
-        header { position: fixed; top: 0; width: 100%; height: 65px; background: var(--card); display: flex; align-items: center; padding: 0 20px; border-bottom: 1px solid var(--border); z-index: 1000; justify-content: space-between; }
-        .logo { font-weight: 900; font-size: 20px; letter-spacing: -1px; }
+        /* HEADER & NAVIGATION */
+        header { position: fixed; top: 0; width: 100%; height: 65px; background: var(--card); display: flex; align-items: center; padding: 0 15px; border-bottom: 1px solid var(--border); z-index: 1000; justify-content: space-between; }
+        .nav-left { display: flex; align-items: center; gap: 15px; }
+        .btn-icon { background: none; border: none; color: var(--text); font-size: 18px; cursor: pointer; display: flex; align-items: center; }
+        .logo { font-weight: 900; font-size: 18px; letter-spacing: -1px; }
         .logo span { color: var(--primary); }
-        
-        .live-feed { background: #080a0d; padding: 5px 0; font-size: 10px; color: var(--text-dim); border-bottom: 1px solid var(--border); position: fixed; top: 65px; width: 100%; z-index: 900; overflow: hidden; }
-        .feed-track { display: inline-block; white-space: nowrap; animation: scroll 25s linear infinite; }
-        @keyframes scroll { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
-        .feed-item { margin-right: 30px; }
-        .feed-item b { color: var(--primary); }
+        #h-saldo { color: var(--primary); font-weight: 800; font-size: 15px; }
 
-        .container { padding: 105px 15px 100px; max-width: 480px; margin: 0 auto; }
+        /* SIDE MENU */
+        .side-menu { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: var(--card); z-index: 1100; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-right: 1px solid var(--border); padding: 25px 20px; }
+        .side-menu.open { left: 0; }
+        .menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1050; display: none; }
+        .menu-overlay.show { display: block; }
+        .menu-list { list-style: none; margin-top: 30px; }
+        .menu-item { padding: 15px 0; border-bottom: 1px solid var(--border); color: var(--text-dim); cursor: pointer; font-size: 14px; transition: 0.2s; }
+        .menu-item:hover { color: var(--primary); }
+        .menu-footer { position: absolute; bottom: 20px; width: calc(100% - 40px); font-size: 11px; color: var(--text-dim); }
+
+        /* SCREENS & CARDS */
+        .container { padding: 85px 15px 100px; max-width: 480px; margin: 0 auto; }
         .screen { display: none; }
-        .active { display: block; animation: fadeUp 0.3s ease; }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .active { display: block; animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* UI CARDS */
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 15px; position: relative; }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 15px; }
         .label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; }
-        input, select { width: 100%; background: #000; border: 1px solid var(--border); padding: 15px; border-radius: 10px; color: #fff; margin-bottom: 12px; outline: none; font-size: 14px; }
+        input, select { width: 100%; background: #000; border: 1px solid var(--border); padding: 14px; border-radius: 8px; color: #fff; margin-bottom: 12px; outline: none; font-size: 13px; }
         
-        .btn { width: 100%; padding: 18px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 13px; }
-        .btn-primary { background: var(--primary); color: #000; box-shadow: 0 4px 15px rgba(0, 255, 65, 0.2); }
-        .btn-secondary { background: var(--accent); color: #000; }
-        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-dim); margin-top: 10px; }
+        /* BUTTONS */
+        .btn { width: 100%; padding: 16px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 12px; transition: 0.2s; }
+        .btn-primary { background: var(--primary); color: #000; }
+        .btn-secondary { background: var(--border); color: var(--text); }
+        .btn-link { background: none; color: var(--text-dim); font-size: 12px; text-decoration: none; display: block; margin: 10px auto; }
+        .btn-green-text { background: none; color: var(--primary); font-size: 13px; margin-top: 15px; width: 100%; text-align: center; border: none; cursor: pointer; font-weight: 600; }
 
-        /* IA ADMIN STYLES */
-        .ai-status { background: rgba(0, 255, 65, 0.05); border: 1px dashed var(--primary); padding: 10px; border-radius: 8px; font-size: 11px; margin-top: 10px; line-height: 1.4; }
-        .ai-pulse { display: inline-block; width: 8px; height: 8px; background: var(--primary); border-radius: 50%; margin-right: 5px; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } 100% { opacity: 0.3; transform: scale(1); } }
-        
-        /* GRÁFICO SIMULADO */
-        .chart-container { height: 100px; display: flex; align-items: flex-end; gap: 8px; margin: 15px 0; padding-bottom: 5px; border-bottom: 1px solid #333; }
-        .bar { flex: 1; background: var(--primary); border-top-left-radius: 4px; border-top-right-radius: 4px; opacity: 0.7; transition: 0.5s; }
-
-        /* ROLETA & CHAT */
+        /* WHEEL */
         .wheel-box { position: relative; width: 200px; height: 200px; margin: 20px auto; }
-        .wheel { width: 100%; height: 100%; border-radius: 50%; border: 6px solid #222; background: conic-gradient(#111 0% 12.5%, #1a1a1a 12.5% 25%, #111 25% 37.5%, #1a1a1a 37.5% 50%, #111 50% 62.5%, #1a1a1a 62.5% 75%, #111 75% 87.5%, #1a1a1a 87.5% 100%); transition: transform 4s cubic-bezier(0.1, 0.7, 0.1, 1); }
-        .pointer { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 25px solid var(--accent); z-index: 10; }
-        
-        .chat-area { height: 220px; overflow-y: auto; background: #080a0d; border-radius: 10px; padding: 15px; display: flex; flex-direction: column; border: 1px solid #111; margin-bottom: 10px; }
-        .msg { padding: 10px; border-radius: 10px; font-size: 12px; margin-bottom: 8px; max-width: 80%; }
-        .msg.bot { background: #1f2327; align-self: flex-start; }
-        .msg.user { background: var(--primary); color: #000; align-self: flex-end; font-weight: 600; }
+        .wheel { width: 100%; height: 100%; border-radius: 50%; border: 4px solid #333; background: conic-gradient(#111 0% 12.5%, #1a1a1a 12.5% 25%, #111 25% 37.5%, #1a1a1a 37.5% 50%, #111 50% 62.5%, #1a1a1a 62.5% 75%, #111 75% 87.5%, #1a1a1a 87.5% 100%); transition: 4s cubic-bezier(0.1, 0.7, 0.1, 1); }
+        .pointer { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 18px solid var(--accent); z-index: 10; }
 
-        /* STATS */
-        .stat-card { background: #080a0d; padding: 12px; border-radius: 10px; border: 1px solid var(--border); text-align: center; }
+        /* TABLE ADMIN (RH STYLE) */
+        .rh-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        .rh-table th { text-align: left; padding: 10px; color: var(--text-dim); border-bottom: 1px solid var(--border); }
+        .rh-table td { padding: 12px 10px; border-bottom: 1px solid #1f2327; }
+        .badge { padding: 3px 6px; border-radius: 4px; font-weight: 800; }
+        .badge-master { background: var(--danger); color: white; }
+        .badge-client { background: var(--border); color: var(--text-dim); }
 
-        /* NAV */
-        nav { position: fixed; bottom: 0; width: 100%; height: 70px; background: var(--card); border-top: 1px solid var(--border); display: none; justify-content: space-around; align-items: center; z-index: 1000; }
+        nav { position: fixed; bottom: 0; width: 100%; height: 65px; background: var(--card); border-top: 1px solid var(--border); display: none; justify-content: space-around; align-items: center; z-index: 1000; }
         .nav-item { text-align: center; color: var(--text-dim); font-size: 10px; cursor: pointer; flex: 1; }
-        .nav-item.active { color: var(--primary); font-weight: 800; }
+        .nav-item.active { color: var(--primary); }
     </style>
 </head>
 <body>
 
-    <header id="h-master" style="display:none;">
+    <div class="menu-overlay" id="overlay" onclick="toggleMenu()"></div>
+    
+    <div class="side-menu" id="side-menu">
         <div class="logo">ELITE<span>BET</span></div>
-        <div style="text-align:right;">
-            <span id="h-saldo" style="color:var(--primary); font-weight:800; font-size:16px;">R$ 0,00</span>
-            <div style="font-size:9px; color:var(--text-dim);" id="h-session">SESSÃO: 00:00</div>
+        <div class="menu-list">
+            <div class="menu-item" onclick="irPara('scr-lobby'); toggleMenu()">Dashboard</div>
+            <div class="menu-item" onclick="irPara('scr-roleta'); toggleMenu()">Roleta Premiada</div>
+            <div class="menu-item" onclick="alert('Suporte via WhatsApp...')">Suporte Operacional</div>
+            <div id="side-adm-btn" class="menu-item" onclick="irPara('scr-admin'); toggleMenu()" style="display:none; color:var(--accent);">Gestão Hierárquica</div>
+            <div class="menu-item" onclick="sair()" style="color:var(--danger); border:none;">Sair do Sistema</div>
         </div>
-    </header>
-
-    <div class="live-feed" id="feed-master" style="display:none;">
-        <div class="feed-track">
-            <span class="feed-item">pedro_vip ganhou <b>R$ 150,00</b></span>
-            <span class="feed-item">maria_elite ganhou <b>R$ 420,50</b></span>
-            <span class="feed-item">joao_afiliado ganhou <b>R$ 1.200,00</b></span>
-            <span class="feed-item">ana_2026 ganhou <b>R$ 80,00</b></span>
+        <div class="menu-footer">
+            <div id="m-data">Data: --/--/----</div>
+            <div id="m-hora">Hora: --:--:--</div>
+            <div id="m-tempo">Sessão: 00:00:00</div>
         </div>
     </div>
+
+    <header id="h-master" style="display:none;">
+        <div class="nav-left">
+            <button class="btn-icon" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
+            <button class="btn-icon" id="btn-voltar" onclick="voltar()" style="display:none;"><i class="fa-solid fa-chevron-left"></i></button>
+        </div>
+        <div class="logo">ELITE<span>BET</span></div>
+        <div id="h-saldo">R$ 0,00</div>
+    </header>
 
     <div class="container">
         
         <div id="scr-login" class="screen active">
-            <div class="card" style="margin-top: 30px; text-align:center;">
-                <h2 style="margin-bottom:20px;">ENTRAR NA ELITEBET</h2>
+            <div class="card" style="margin-top: 40px; text-align:center;">
+                <h2 style="margin-bottom:25px; letter-spacing:1px;">AUTENTICAÇÃO</h2>
                 <input type="text" id="l-user" placeholder="Usuário">
                 <input type="password" id="l-pass" placeholder="Senha">
-                <button class="btn btn-primary" onclick="fazerLogin()">ACESSAR CONTA</button>
-                <button class="btn btn-outline" onclick="irPara('scr-cadastro')">CRIAR CONTA</button>
-                <button class="btn btn-outline" style="border:none;" onclick="irPara('scr-recuperar')">Esqueci minha senha</button>
-            </div>
-        </div>
-
-        <div id="scr-recuperar" class="screen">
-            <div class="card">
-                <h2>RECUPERAR ACESSO</h2>
-                <input type="text" placeholder="CPF do Cadastro">
-                <button class="btn btn-primary" onclick="alert('Link enviado ao WhatsApp!'); irPara('scr-login')">ENVIAR LINK IA</button>
-                <button class="btn btn-outline" onclick="irPara('scr-login')">CANCELAR</button>
+                <button class="btn btn-primary" onclick="fazerLogin()">Acessar Painel</button>
+                <button class="btn-green-text" onclick="irPara('scr-cadastro')">Criar nova conta comercial</button>
+                <button class="btn-link" onclick="irPara('scr-recuperar')">Recuperar credenciais</button>
             </div>
         </div>
 
         <div id="scr-cadastro" class="screen">
             <div class="card">
-                <h2>NOVO REGISTRO</h2>
-                <input type="text" placeholder="CPF">
-                <input type="password" id="reg-p1" placeholder="Crie uma Senha">
-                <input type="password" id="reg-p2" placeholder="Repita a Senha">
-                <button class="btn btn-primary" onclick="irPara('scr-login')">FINALIZAR</button>
+                <h2 style="margin-bottom:20px;">CADASTRO OPERACIONAL</h2>
+                <input type="text" id="r-nome" placeholder="Nome Completo">
+                <input type="text" id="r-user" placeholder="Nome de Usuário">
+                <input type="tel" id="r-zap" placeholder="WhatsApp">
+                <input type="text" id="r-cpf" placeholder="CPF">
+                <input type="password" id="r-pass1" placeholder="Senha">
+                <input type="password" id="r-pass2" placeholder="Confirmar Senha">
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
+                    <input type="checkbox" id="r-age" style="width:20px; margin:0;">
+                    <label for="r-age" style="font-size:12px; color:var(--text-dim);">Declaro ter +18 anos</label>
+                </div>
+                <button class="btn btn-primary" onclick="validarRegistro()">Confirmar Cadastro</button>
+            </div>
+        </div>
+
+        <div id="scr-recuperar" class="screen">
+            <div class="card">
+                <h2>RECUPERAÇÃO</h2>
+                <p style="font-size:12px; color:var(--text-dim); margin-bottom:15px;">Insira o CPF para localizar sua conta.</p>
+                <input type="text" placeholder="000.000.000-00">
+                <button class="btn btn-primary" onclick="alert('Solicitação enviada!'); irPara('scr-login')">Localizar Conta</button>
             </div>
         </div>
 
         <div id="scr-lobby" class="screen">
             <div class="card" style="text-align:center; padding: 40px 20px;">
-                <span class="label">SALDO DISPONÍVEL</span>
-                <h1 id="main-saldo" style="font-size:45px; color:var(--primary); margin:10px 0;">R$ 0,00</h1>
-                <button class="btn btn-primary">ABRIR JOGOS</button>
+                <span class="label">Crédito Disponível</span>
+                <h1 id="main-saldo" style="font-size:42px; color:var(--primary);">R$ 0,00</h1>
             </div>
+            <button class="btn btn-primary" onclick="irPara('scr-roleta')">Acessar Roleta</button>
         </div>
 
         <div id="scr-roleta" class="screen">
             <div class="card" style="text-align:center;">
-                <h2 style="color:var(--accent);">ROLETA DA SORTE</h2>
-                <p id="rol-msg" style="font-size:11px; color:var(--text-dim); margin-bottom:15px;">Ganhe bônus de depósito agora!</p>
-                <div class="wheel-box">
-                    <div class="pointer"></div>
-                    <div class="wheel" id="wheel-obj"></div>
-                </div>
-                <button class="btn btn-secondary" id="btn-spin" onclick="girar()">GIRAR AGORA</button>
-            </div>
-        </div>
-
-        <div id="scr-chat" class="screen">
-            <div class="card">
-                <h2 style="font-size:14px; margin-bottom:10px;">SUPORTE VIP</h2>
-                <div class="chat-area" id="chat-box"><div class="msg bot">Olá! Como posso ajudar?</div></div>
-                <div style="display:flex; gap:8px;">
-                    <input type="text" id="chat-input" placeholder="Digite aqui..." style="margin-bottom:0; flex:1;">
-                    <button onclick="enviar()" style="width:50px; background:var(--primary); border:none; border-radius:10px; cursor:pointer;">🚀</button>
-                </div>
+                <h2 style="margin-bottom:10px;">ROLETA DE ATIVOS</h2>
+                <div class="wheel-box"><div class="pointer"></div><div class="wheel" id="wheel-obj"></div></div>
+                <button class="btn btn-secondary" onclick="girar()">Girar Unidade</button>
             </div>
         </div>
 
         <div id="scr-admin" class="screen">
-            <h2 style="color:var(--accent); margin-bottom:15px; font-size:14px;"><i class="fa-solid fa-brain"></i> ELITE AI GESTÃO</h2>
-            
-            <div class="card">
-                <span class="label">PERFORMANCE GGR (ÚLTIMOS 7 DIAS)</span>
-                <div class="chart-container" id="ggr-chart">
-                    <div class="bar" style="height: 40%;"></div>
-                    <div class="bar" style="height: 60%;"></div>
-                    <div class="bar" style="height: 35%;"></div>
-                    <div class="bar" style="height: 85%;"></div>
-                    <div class="bar" style="height: 50%;"></div>
-                    <div class="bar" style="height: 70%;"></div>
-                    <div class="bar" style="height: 95%;"></div>
-                </div>
-                <div class="ai-status">
-                    <div class="ai-pulse"></div>
-                    <b>INSIGHT IA:</b> O volume de apostas cresceu 22% nas últimas 24h.
-                </div>
-            </div>
-
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px;">
-                <div class="stat-card"><span class="label">LTV MÉDIO</span><span style="color:var(--primary); font-weight:800;">R$ 892,00</span></div>
-                <div class="stat-card"><span class="label">RISCO CHURN</span><span style="color:var(--danger); font-weight:800;">BAIXO (4%)</span></div>
+            <div class="card" style="border-left: 4px solid var(--danger);">
+                <span class="label">Controle Hierárquico Master</span>
+                <h2 style="font-size:14px;">GESTÃO DE COLABORADORES</h2>
             </div>
 
             <div class="card">
-                <span class="label">COMANDO CENTRAL</span>
-                <input type="text" id="adm-u" placeholder="Usuário">
-                <input type="number" id="adm-s" placeholder="Novo Saldo R$">
-                <button class="btn btn-secondary" onclick="salvarAdmin()">SINCRONIZAR IA</button>
+                <table class="rh-table">
+                    <thead>
+                        <tr><th>Usuário</th><th>Hierarquia</th><th>Ações</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>admin_master</td>
+                            <td><span class="badge badge-master">Master</span></td>
+                            <td style="color:var(--primary)">Editar</td>
+                        </tr>
+                        <tr>
+                            <td>cliente_01</td>
+                            <td><span class="badge badge-client">Cliente</span></td>
+                            <td style="color:var(--primary)">Editar</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <span class="label">Ajuste de Saldo de Rede</span>
+                <input type="number" id="adm-s" placeholder="Valor R$">
+                <button class="btn btn-primary" onclick="salvarAdmin()">Atualizar Banco</button>
             </div>
         </div>
 
     </div>
 
     <nav id="n-master">
-        <div class="nav-item active" onclick="irPara('scr-lobby')">🏠<br>Início</div>
-        <div class="nav-item" onclick="irPara('scr-roleta')">🎡<br>Roleta</div>
-        <div class="nav-item" onclick="irPara('scr-chat')">💬<br>Suporte</div>
-        <div id="n-adm-btn" class="nav-item" style="display:none; color:var(--accent);" onclick="irPara('scr-admin')">🛡️<br>Admin</div>
+        <div class="nav-item active" onclick="irPara('scr-lobby')">Dashboard</div>
+        <div class="nav-item" onclick="irPara('scr-roleta')">Roleta</div>
+        <div id="n-adm-btn" class="nav-item" onclick="irPara('scr-admin')" style="display:none; color:var(--accent);">Admin</div>
     </nav>
 
     <script>
         let saldo = 2500.00;
+        let historico = ['scr-login'];
         let start = Date.now();
-        let spinUsed = false;
+
+        function toggleMenu() {
+            document.getElementById('side-menu').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('show');
+        }
 
         function irPara(id) {
+            if(historico[historico.length - 1] !== id) historico.push(id);
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            
+            // Controle Seta Voltar
+            document.getElementById('btn-voltar').style.display = (id === 'scr-login' || id === 'scr-lobby') ? 'none' : 'block';
+            
+            // Controle Nav Ativa
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            if(id === 'scr-lobby') document.querySelectorAll('.nav-item')[0].classList.add('active');
+            if(id === 'scr-roleta') document.querySelectorAll('.nav-item')[1].classList.add('active');
+        }
+
+        function voltar() {
+            if(historico.length > 1) {
+                historico.pop();
+                irPara(historico.pop());
+            }
         }
 
         function fazerLogin() {
             const u = document.getElementById('l-user').value.toLowerCase();
+            if(!u) return alert("Insira o usuário.");
+            
             document.getElementById('h-master').style.display = 'flex';
             document.getElementById('n-master').style.display = 'flex';
-            document.getElementById('feed-master').style.display = 'block';
-            if(u === 'admin') { 
-                document.getElementById('n-adm-btn').style.display = 'block'; 
-                irPara('scr-admin'); 
-            } else { 
-                irPara('scr-lobby'); 
+            
+            if(u === 'admin') {
+                document.getElementById('n-adm-btn').style.display = 'block';
+                document.getElementById('side-adm-btn').style.display = 'block';
+                irPara('scr-admin');
+            } else {
+                irPara('scr-lobby');
             }
-            setInterval(() => {
-                let d = Math.floor((Date.now() - start) / 1000);
-                document.getElementById('h-session').innerText = `SESSÃO: ${Math.floor(d/60).toString().padStart(2,'0')}:${(d%60).toString().padStart(2,'0')}`;
-            }, 1000);
+            iniciarRelogio();
             updateUI();
+        }
+
+        function validarRegistro() {
+            const age = document.getElementById('r-age').checked;
+            const p1 = document.getElementById('r-pass1').value;
+            const p2 = document.getElementById('r-pass2').value;
+
+            if(!age) return alert("Você precisa ter mais de 18 anos.");
+            if(p1 !== p2) return alert("As senhas não coincidem.");
+            if(!document.getElementById('r-nome').value) return alert("Preencha o nome completo.");
+            
+            alert("Cadastro realizado com sucesso!");
+            irPara('scr-login');
+        }
+
+        function iniciarRelogio() {
+            setInterval(() => {
+                const agora = new Date();
+                document.getElementById('m-data').innerText = "Data: " + agora.toLocaleDateString('pt-BR');
+                document.getElementById('m-hora').innerText = "Hora: " + agora.toLocaleTimeString('pt-BR');
+                
+                let s = Math.floor((Date.now() - start) / 1000);
+                let h = Math.floor(s / 3600).toString().padStart(2, '0');
+                let m = Math.floor((s % 3600) / 60).toString().padStart(2, '0');
+                let sec = (s % 60).toString().padStart(2, '0');
+                document.getElementById('m-tempo').innerText = `Sessão: ${h}:${m}:${sec}`;
+            }, 1000);
         }
 
         function updateUI() {
@@ -224,38 +271,16 @@
         }
 
         function girar() {
-            if(spinUsed) return;
             const w = document.getElementById('wheel-obj');
-            const r = Math.floor(Math.random() * 3600) + 3600;
-            w.style.transform = `rotate(${r}deg)`;
-            spinUsed = true;
-            setTimeout(() => {
-                if(Math.random() > 0.5) {
-                    saldo += 50; updateUI();
-                    document.getElementById('rol-msg').innerHTML = "<b style='color:var(--primary)'>IA: GANHOU R$ 50,00!</b>";
-                } else {
-                    document.getElementById('rol-msg').innerHTML = "<b style='color:var(--danger)'>IA: SEM SORTE HOJE!</b>";
-                }
-                document.getElementById('btn-spin').innerText = "LIMITADO";
-            }, 4000);
-        }
-
-        function enviar() {
-            const inp = document.getElementById('chat-input');
-            const box = document.getElementById('chat-box');
-            if(!inp.value) return;
-            box.innerHTML += `<div class="msg user">${inp.value}</div>`;
-            inp.value = "";
-            setTimeout(() => {
-                box.innerHTML += `<div class="msg bot">Aguarde... Suporte IA sendo conectado.</div>`;
-                box.scrollTop = box.scrollHeight;
-            }, 800);
+            w.style.transform = `rotate(${Math.floor(Math.random() * 3600) + 3600}deg)`;
         }
 
         function salvarAdmin() {
             const v = parseFloat(document.getElementById('adm-s').value);
-            if(!isNaN(v)) { saldo = v; updateUI(); alert("IA: Banco de dados sincronizado!"); }
+            if(!isNaN(v)) { saldo = v; updateUI(); alert("Base de dados atualizada."); }
         }
+
+        function sair() { location.reload(); }
     </script>
 </body>
 </html>
