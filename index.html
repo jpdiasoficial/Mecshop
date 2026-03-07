@@ -2,215 +2,83 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ELITE OMNI V26 | SEGURANÇA TOTAL</title>
-    <script src="https://unpkg.com/@zxing/library@latest"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JP DIAS | Logística Full Control</title>
     <style>
-        :root { --p: #0052cc; --s: #36b37e; --d: #ff4b4b; --w: #ffab00; --bg: #f4f5f7; --text: #091e42; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: var(--text); padding-bottom: 90px; }
-
-        /* PAINEL DE ACESSO REFORÇADO */
-        #login-screen { position: fixed; inset: 0; background: var(--p); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 25px; color: white; }
-        .login-card { background: white; padding: 25px; border-radius: 20px; width: 100%; max-width: 380px; color: var(--text); box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
-
-        header { background: var(--p); color: white; padding: 20px; text-align: center; border-radius: 0 0 25px 25px; }
-        .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 15px; margin-top: -20px; }
-        .stat-box { background: white; padding: 10px 5px; border-radius: 12px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .stat-box b { display: block; font-size: 14px; color: var(--p); }
-        .stat-box span { font-size: 8px; font-weight: 800; color: #888; text-transform: uppercase; }
-
-        .content { padding: 15px; display: none; }
-        .content.active { display: block; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .card { background: white; border-radius: 18px; padding: 15px; margin-bottom: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.03); border-left: 5px solid transparent; }
-        input, select { width: 100%; padding: 14px; border: 2px solid #eee; border-radius: 10px; font-weight: 700; margin-bottom: 10px; }
-        
-        /* SCANNER INDUSTRIAL */
-        #v-container { width: 100%; height: 220px; background: #000; border-radius: 15px; overflow: hidden; position: relative; border: 4px solid var(--s); }
-        video { width: 100%; height: 100%; object-fit: cover; }
-        .laser { position: absolute; top: 50%; left: 10%; width: 80%; height: 2px; background: var(--d); box-shadow: 0 0 10px var(--d); animation: scan 2s infinite; }
-        @keyframes scan { 0%, 100% { top: 20%; } 50% { top: 80%; } }
-
-        .btn { border: none; padding: 16px; border-radius: 12px; width: 100%; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-p { background: var(--p); color: white; }
-        .btn-s { background: var(--s); color: white; }
-        .btn-d { background: var(--d); color: white; }
-
-        nav { position: fixed; bottom: 0; width: 100%; background: white; height: 75px; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid #ddd; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; color: #888; }
-        .nav-item.active { color: var(--p); border-top: 3px solid var(--p); }
+        body { font-family: 'Segoe UI', sans-serif; background: #121212; color: #e0e0e0; margin: 0; padding: 20px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .card { background: #1e1e1e; border: 1px solid #333; border-radius: 12px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .header-full { grid-column: span 2; text-align: center; border-bottom: 2px solid #f39c12; margin-bottom: 20px; }
+        h2 { color: #f39c12; margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .btn-avaria { background: #c0392b; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 15px; }
+        .btn-avaria:hover { background: #e74c3c; }
+        .monitor-item { background: #252525; padding: 10px; border-radius: 6px; margin-bottom: 8px; font-size: 14px; border-left: 4px solid #f39c12; }
+        .logs { background: #000; color: #00ff00; font-family: 'Courier New', monospace; height: 120px; overflow-y: scroll; padding: 10px; font-size: 12px; border-radius: 4px; }
     </style>
 </head>
 <body>
 
-<div id="login-screen">
-    <div class="login-card">
-        <h2 style="text-align:center; margin-bottom:15px">CONTROLE DE ACESSO</h2>
-        
-        <label>OPERADOR / CARGO</label>
-        <select id="user-role">
-            <option value="ADMIN">JP DIAS (DONO)</option>
-            <option value="CONFERENTE">CONFERENTE DE DOCA</option>
-            <option value="MOTORISTA">MOTORISTA / TRANSPORTADOR</option>
-        </select>
-
-        <label>NOME DO MOTORISTA (CADASTRO)</label>
-        <input type="text" id="driver-name" placeholder="Nome Completo">
-        
-        <label>PLACA DO VEÍCULO</label>
-        <input type="text" id="driver-plate" placeholder="Placa (Ex: ABC-1234)" style="text-transform:uppercase">
-
-        <button onclick="fazerLogin()" class="btn btn-p" style="margin-top:10px">INICIAR OPERAÇÃO SEGURA</button>
-    </div>
+<div class="header-full">
+    <h1>SISTEMA JP DIAS | <span style="color:white">CONTROLE HIERÁRQUICO</span></h1>
 </div>
 
-<header>
-    <h3 id="top-title">ELITE OMNI V26</h3>
-    <div id="session-info" style="font-size:10px; opacity:0.9; margin-top:5px"></div>
-</header>
-
-<div class="stats-bar">
-    <div class="stat-box"><b id="s-ent">0</b><span>Entrada</span></div>
-    <div class="stat-box"><b id="s-sai">0</b><span>Saída</span></div>
-    <div class="stat-box"><b id="s-wms">0</b><span>Estoque</span></div>
-    <div class="stat-box"><b id="s-sin" style="color:var(--d)">0</b><span>Sinistro</span></div>
-</div>
-
-<div class="container">
-    <div id="tab-cross" class="content active">
-        <div class="card" style="border-left-color: var(--p)">
-            <label>MODO DE CARGA</label>
-            <select id="cross-mode">
-                <option value="ENTRADA">📥 ENTRADA NO GALPÃO</option>
-                <option value="SAIDA">🚚 CARREGAMENTO P/ RUA</option>
-            </select>
-            <div id="v-container"><video id="video"></video><div class="laser"></div></div>
-            <button onclick="iniciarScan()" class="btn btn-s" style="margin-top:-20px; position:relative"><i class="fa-solid fa-barcode"></i> BIPAR VOLUME</button>
-        </div>
+<div class="grid">
+    <div class="card">
+        <h2>📦 MÓDULO ARMAZÉM</h2>
+        <div class="monitor-item">Estoque: 1.540 Itens</div>
+        <div class="monitor-item">Pedidos em Picking: 12</div>
+        <div class="monitor-item">Conferência: 08 Pendentes</div>
+        <button class="btn-avaria" onclick="registrarAvaria('ARMAZÉM')">🚨 REGISTRAR AVARIA ARMAZÉM</button>
     </div>
 
-    <div id="tab-wms" class="content">
-        <div class="card" style="border-left-color: var(--s)">
-            <label>ENDEREÇO DE ARMAZENAGEM</label>
-            <input type="text" id="wms-loc" placeholder="RUA / NÍVEL">
-            <button onclick="iniciarScan('WMS')" class="btn btn-p"><i class="fa-solid fa-boxes-stacked"></i> REGISTRAR NA PRATELEIRA</button>
-        </div>
+    <div class="card">
+        <h2>⚡ MÓDULO CROSS DOCK</h2>
+        <div class="monitor-item">Cargas em Transição: 42</div>
+        <div class="monitor-item">Próximo Corte: 14:30 (Rota SP)</div>
+        <div class="monitor-item">Doca Ocupada: Doca 04</div>
+        <button class="btn-avaria" onclick="registrarAvaria('CROSS DOCK')">🚨 REGISTRAR AVARIA CROSS DOCK</button>
     </div>
 
-    <div id="tab-sinistro" class="content">
-        <div class="card" style="border-left-color: var(--d)">
-            <h4 style="color:var(--d); margin-bottom:10px">CONTROLE DE PERDAS (SINISTRO)</h4>
-            <label>TIPO DE OCORRÊNCIA</label>
-            <select id="sinistro-type">
-                <option value="AVARIA">❌ PRODUTO DANIFICADO</option>
-                <option value="EXTRAVIO">⚠️ EXTRAVIO / NÃO LOCALIZADO</option>
-                <option value="ROUBO">🚨 CARGA ROUBADA / FURTO</option>
-                <option value="DEVOLUCAO">🔄 DEVOLUÇÃO DE CLIENTE</option>
-            </select>
-            <button onclick="iniciarScan('SINISTRO')" class="btn btn-d"><i class="fa-solid fa-shield-virus"></i> REGISTRAR OCORRÊNCIA</button>
+    <div class="card" style="grid-column: span 2;">
+        <h2>🛰️ MONITORAMENTO CENTRAL (TORRE DE CONTROLE)</h2>
+        <div id="statusGeral" style="margin-bottom: 15px; font-weight: bold; color: #2ecc71;">
+            SISTEMA OPERACIONAL - TUDO SOB CONTROLE
         </div>
-    </div>
-
-    <div id="tab-auditoria" class="content">
-        <div class="card">
-            <h4>TRILHA DE CUSTÓDIA (QUEM TOCOU?)</h4>
-            <div id="log-list" style="margin-top:10px; font-size:11px"></div>
+        <div class="logs" id="logBox">
+            [18:00] Painel de Gestão Iniciado...<br>
+            [18:02] Operador LOGADO: JP DIAS...<br>
         </div>
     </div>
 </div>
-
-<nav>
-    <div class="nav-item active" onclick="setTab('cross', this)"><i class="fa-solid fa-truck-ramp-box"></i><span>CROSS</span></div>
-    <div class="nav-item" onclick="setTab('wms', this)"><i class="fa-solid fa-warehouse"></i><span>ARMAZÉM</span></div>
-    <div class="nav-item" onclick="setTab('sinistro', this)"><i class="fa-solid fa-handcuffs"></i><span>SINISTRO</span></div>
-    <div class="nav-item" onclick="setTab('auditoria', this)"><i class="fa-solid fa-magnifying-glass-chart"></i><span>AUDITORIA</span></div>
-</nav>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('elite_v26_db')) || [];
-    let currentUser = {};
-    let activeTab = "cross";
-    const reader = new ZXing.BrowserMultiFormatReader();
-
-    function fazerLogin() {
-        const name = document.getElementById('driver-name').value;
-        const plate = document.getElementById('driver-plate').value;
-        const role = document.getElementById('user-role').value;
-
-        if(!name || !plate) return alert("ERRO: Identificação do Motorista e Placa é obrigatória para segurança!");
-
-        currentUser = { name, plate, role };
-        document.getElementById('session-info').innerHTML = `<b>${role}:</b> ${name} | <b>PLACA:</b> ${plate.toUpperCase()}`;
-        document.getElementById('login-screen').style.display = 'none';
-        vibrar(100);
-        render();
+    function falar(texto) {
+        const msg = new SpeechSynthesisUtterance(texto);
+        msg.lang = 'pt-BR';
+        window.speechSynthesis.speak(msg);
     }
 
-    function setTab(tab, el) {
-        activeTab = tab;
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        el.classList.add('active');
-        document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
-        document.getElementById('tab-' + tab).classList.add('active');
-        vibrar(30);
-    }
-
-    function iniciarScan(typeOverride = null) {
-        reader.decodeFromVideoDevice(null, 'video', (res) => {
-            if(res) processar(res.text, typeOverride);
-        });
-    }
-
-    function processar(barcode, typeOverride) {
-        let tipo = typeOverride || document.getElementById('cross-mode').value;
-        if(tipo === 'SINISTRO') tipo = document.getElementById('sinistro-type').value;
-
-        // TRAVA ANTI-FURTO: Bloqueia saída de itens com sinistro
-        if(tipo === 'SAIDA') {
-            const hasSinistro = db.find(i => i.barcode === barcode && (i.tipo === 'ROUBO' || i.tipo === 'AVARIA'));
-            if(hasSinistro) {
-                alert("🚨 ALERTA DE SEGURANÇA: Este pacote está bloqueado por SINISTRO!");
-                vibrar([200, 100, 200]);
-                return;
-            }
+    function registrarAvaria(setor) {
+        const item = prompt(`[SISTEMA ${setor}] Informe o código do item avariado:`);
+        if(item) {
+            const motivo = prompt("Motivo (1-Embalagem, 2-Temperatura, 3-Outros):");
+            falar(`Atenção. Registro de avaria no ${setor}. Item isolado para auditoria.`);
+            adicionarLog(`AVARIA DETECTADA: Setor ${setor} | Item: ${item} | Motivo: ${motivo}`);
+            alert(`Sucesso: Item ${item} bloqueado no ${setor}.`);
         }
-
-        const entry = {
-            barcode,
-            tipo,
-            motorista: currentUser.name,
-            placa: currentUser.plate.toUpperCase(),
-            role: currentUser.role,
-            hora: new Date().toLocaleTimeString(),
-            data: new Date().toLocaleDateString()
-        };
-
-        db.unshift(entry);
-        localStorage.setItem('elite_v26_db', JSON.stringify(db));
-        vibrar(60);
-        render();
     }
 
-    function render() {
-        document.getElementById('s-ent').innerText = db.filter(i => i.tipo === 'ENTRADA').length;
-        document.getElementById('s-sai').innerText = db.filter(i => i.tipo === 'SAIDA').length;
-        document.getElementById('s-wms').innerText = db.filter(i => i.tipo === 'WMS').length;
-        document.getElementById('s-sin').innerText = db.filter(i => ['ROUBO','AVARIA','EXTRAVIO'].includes(i.tipo)).length;
-
-        const list = document.getElementById('log-list');
-        list.innerHTML = db.slice(0, 10).map(i => `
-            <div style="padding:10px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; border-left:4px solid ${i.tipo === 'ROUBO' ? 'black' : 'var(--p)'}">
-                <span><b>${i.barcode}</b><br><small>${i.motorista} (${i.placa})</small></span>
-                <span style="font-size:9px; font-weight:900; color:${['ROUBO','AVARIA'].includes(i.tipo)?'red':'var(--p)'}">${i.tipo}</span>
-            </div>
-        `).join('');
+    function adicionarLog(mensagem) {
+        const box = document.getElementById('logBox');
+        const agora = new Date().toLocaleTimeString();
+        box.innerHTML += `[${agora}] ${mensagem}<br>`;
+        box.scrollTop = box.scrollHeight;
     }
 
-    function vibrar(ms) { if(navigator.vibrate) navigator.vibrate(ms); }
-    render();
+    window.onload = () => {
+        falar("Sistema JP Dias iniciado. Módulos Armazém e Cross Dock monitorados.");
+    };
 </script>
+
 </body>
 </html>
