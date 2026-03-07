@@ -3,150 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ELITE OMNI V25 | JP DIAS</title>
+    <title>ELITE OMNI V26 | SEGURANÇA TOTAL</title>
     <script src="https://unpkg.com/@zxing/library@latest"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --p: #0052cc; --s: #36b37e; --d: #ff4b4b; --w: #ffab00; --bg: #f4f5f7; --text: #091e42; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: var(--text); overflow-x: hidden; }
+        body { background: var(--bg); color: var(--text); padding-bottom: 90px; }
 
-        /* TELA DE ACESSO (LOGIN POR CARGO) */
-        #login-screen { position: fixed; inset: 0; background: var(--p); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; color: white; }
-        .login-card { background: white; padding: 25px; border-radius: 20px; width: 100%; max-width: 350px; color: var(--text); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-        
-        /* DASHBOARD PRINCIPAL */
-        header { background: var(--p); color: white; padding: 20px; text-align: center; border-radius: 0 0 25px 25px; position: sticky; top: 0; z-index: 100; }
-        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 15px; margin-top: -20px; }
+        /* PAINEL DE ACESSO REFORÇADO */
+        #login-screen { position: fixed; inset: 0; background: var(--p); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 25px; color: white; }
+        .login-card { background: white; padding: 25px; border-radius: 20px; width: 100%; max-width: 380px; color: var(--text); box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
+
+        header { background: var(--p); color: white; padding: 20px; text-align: center; border-radius: 0 0 25px 25px; }
+        .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 15px; margin-top: -20px; }
         .stat-box { background: white; padding: 10px 5px; border-radius: 12px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .stat-box b { display: block; font-size: 14px; color: var(--p); }
         .stat-box span { font-size: 8px; font-weight: 800; color: #888; text-transform: uppercase; }
 
-        /* NAVEGAÇÃO POR ABAS (V1-V25) */
-        .content { padding: 15px; display: none; padding-bottom: 100px; }
-        .content.active { display: block; animation: slideUp 0.3s; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .content { padding: 15px; display: none; }
+        .content.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* SCANNER E CAMPOS */
-        .card { background: white; border-radius: 18px; padding: 15px; margin-bottom: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.03); }
-        label { font-size: 10px; font-weight: 800; color: #666; margin-bottom: 5px; display: block; }
+        .card { background: white; border-radius: 18px; padding: 15px; margin-bottom: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.03); border-left: 5px solid transparent; }
         input, select { width: 100%; padding: 14px; border: 2px solid #eee; border-radius: 10px; font-weight: 700; margin-bottom: 10px; }
-        #v-container { width: 100%; height: 200px; background: #000; border-radius: 15px; overflow: hidden; position: relative; border: 4px solid var(--s); }
+        
+        /* SCANNER INDUSTRIAL */
+        #v-container { width: 100%; height: 220px; background: #000; border-radius: 15px; overflow: hidden; position: relative; border: 4px solid var(--s); }
         video { width: 100%; height: 100%; object-fit: cover; }
         .laser { position: absolute; top: 50%; left: 10%; width: 80%; height: 2px; background: var(--d); box-shadow: 0 0 10px var(--d); animation: scan 2s infinite; }
         @keyframes scan { 0%, 100% { top: 20%; } 50% { top: 80%; } }
 
-        /* BOTÕES */
-        .btn { border: none; padding: 16px; border-radius: 12px; width: 100%; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; }
+        .btn { border: none; padding: 16px; border-radius: 12px; width: 100%; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .btn-p { background: var(--p); color: white; }
         .btn-s { background: var(--s); color: white; }
         .btn-d { background: var(--d); color: white; }
 
-        /* MENU INFERIOR */
-        nav { position: fixed; bottom: 0; width: 100%; background: white; height: 75px; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid #ddd; z-index: 1000; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; color: #888; cursor: pointer; }
-        .nav-item i { font-size: 20px; margin-bottom: 4px; }
-        .nav-item.active { color: var(--p); border-top: 3px solid var(--p); background: #f0f7ff; }
+        nav { position: fixed; bottom: 0; width: 100%; background: white; height: 75px; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid #ddd; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; color: #888; }
+        .nav-item.active { color: var(--p); border-top: 3px solid var(--p); }
     </style>
 </head>
 <body>
 
 <div id="login-screen">
     <div class="login-card">
-        <h2 style="margin-bottom:15px; text-align:center">ACESSO OMNI</h2>
-        <label>Cargo Operacional</label>
+        <h2 style="text-align:center; margin-bottom:15px">CONTROLE DE ACESSO</h2>
+        
+        <label>OPERADOR / CARGO</label>
         <select id="user-role">
-            <option value="ADMIN">DONO (JP DIAS)</option>
-            <option value="GERENTE">GERENTE DE DOCA</option>
-            <option value="OPERADOR">OPERADOR LOGÍSTICO</option>
+            <option value="ADMIN">JP DIAS (DONO)</option>
+            <option value="CONFERENTE">CONFERENTE DE DOCA</option>
+            <option value="MOTORISTA">MOTORISTA / TRANSPORTADOR</option>
         </select>
-        <button onclick="fazerLogin()" class="btn btn-p" style="margin-top:10px">ENTRAR NO SISTEMA</button>
+
+        <label>NOME DO MOTORISTA (CADASTRO)</label>
+        <input type="text" id="driver-name" placeholder="Nome Completo">
+        
+        <label>PLACA DO VEÍCULO</label>
+        <input type="text" id="driver-plate" placeholder="Placa (Ex: ABC-1234)" style="text-transform:uppercase">
+
+        <button onclick="fazerLogin()" class="btn btn-p" style="margin-top:10px">INICIAR OPERAÇÃO SEGURA</button>
     </div>
 </div>
 
 <header>
-    <h3 id="top-title">ELITE OMNI V25</h3>
-    <p id="top-user" style="font-size:9px; opacity:0.8; text-transform:uppercase"></p>
+    <h3 id="top-title">ELITE OMNI V26</h3>
+    <div id="session-info" style="font-size:10px; opacity:0.9; margin-top:5px"></div>
 </header>
 
-<div class="stats-grid">
+<div class="stats-bar">
     <div class="stat-box"><b id="s-ent">0</b><span>Entrada</span></div>
     <div class="stat-box"><b id="s-sai">0</b><span>Saída</span></div>
-    <div class="stat-box"><b id="s-wms">0</b><span>Armazém</span></div>
-    <div class="stat-box"><b id="s-ava" style="color:var(--d)">0</b><span>Avaria</span></div>
+    <div class="stat-box"><b id="s-wms">0</b><span>Estoque</span></div>
+    <div class="stat-box"><b id="s-sin" style="color:var(--d)">0</b><span>Sinistro</span></div>
 </div>
 
 <div class="container">
     <div id="tab-cross" class="content active">
-        <div class="card">
-            <label>PLACA / MOTORISTA</label>
-            <input type="text" id="cross-pla" placeholder="EX: ABC1234" style="text-transform:uppercase">
-            <label>OPERAÇÃO</label>
-            <select id="cross-type">
-                <option value="ENTRADA">📥 ENTRADA CROSS</option>
-                <option value="SAIDA">🚚 SAÍDA CROSS</option>
+        <div class="card" style="border-left-color: var(--p)">
+            <label>MODO DE CARGA</label>
+            <select id="cross-mode">
+                <option value="ENTRADA">📥 ENTRADA NO GALPÃO</option>
+                <option value="SAIDA">🚚 CARREGAMENTO P/ RUA</option>
             </select>
-        </div>
-        <div class="card" style="text-align:center">
             <div id="v-container"><video id="video"></video><div class="laser"></div></div>
-            <button onclick="iniciarScan()" class="btn btn-s" style="margin-top:-25px; position:relative"><i class="fa-solid fa-barcode"></i> BIPAR CROSSDOCK</button>
+            <button onclick="iniciarScan()" class="btn btn-s" style="margin-top:-20px; position:relative"><i class="fa-solid fa-barcode"></i> BIPAR VOLUME</button>
         </div>
     </div>
 
     <div id="tab-wms" class="content">
-        <div class="card">
-            <label>ENDEREÇAMENTO (RUA-NÍVEL)</label>
-            <input type="text" id="wms-loc" placeholder="EX: A-04-02" style="text-transform:uppercase">
+        <div class="card" style="border-left-color: var(--s)">
+            <label>ENDEREÇO DE ARMAZENAGEM</label>
+            <input type="text" id="wms-loc" placeholder="RUA / NÍVEL">
+            <button onclick="iniciarScan('WMS')" class="btn btn-p"><i class="fa-solid fa-boxes-stacked"></i> REGISTRAR NA PRATELEIRA</button>
         </div>
-        <button onclick="iniciarScan()" class="btn btn-p"><i class="fa-solid fa-boxes-stacked"></i> BIPAR ARMAZENAGEM</button>
     </div>
 
-    <div id="tab-avaria" class="content">
-        <div class="card" style="border-left: 5px solid var(--d);">
-            <h4 style="color:var(--d); margin-bottom:10px">REGISTRO DE AVARIA / ERRO</h4>
-            <label>MOTIVO DA OCORRÊNCIA</label>
-            <select id="ava-reason">
-                <option>EMBALAGEM VIOLADA</option>
-                <option>ERRO DE ROTA (DEVOLUÇÃO)</option>
-                <option>PRODUTO DANIFICADO</option>
-                <option>CLIENTE AUSENTE</option>
+    <div id="tab-sinistro" class="content">
+        <div class="card" style="border-left-color: var(--d)">
+            <h4 style="color:var(--d); margin-bottom:10px">CONTROLE DE PERDAS (SINISTRO)</h4>
+            <label>TIPO DE OCORRÊNCIA</label>
+            <select id="sinistro-type">
+                <option value="AVARIA">❌ PRODUTO DANIFICADO</option>
+                <option value="EXTRAVIO">⚠️ EXTRAVIO / NÃO LOCALIZADO</option>
+                <option value="ROUBO">🚨 CARGA ROUBADA / FURTO</option>
+                <option value="DEVOLUCAO">🔄 DEVOLUÇÃO DE CLIENTE</option>
             </select>
-            <button onclick="iniciarScan('AVARIA')" class="btn btn-d"><i class="fa-solid fa-triangle-exclamation"></i> REGISTRAR SINISTRO</button>
+            <button onclick="iniciarScan('SINISTRO')" class="btn btn-d"><i class="fa-solid fa-shield-virus"></i> REGISTRAR OCORRÊNCIA</button>
         </div>
     </div>
 
-    <div id="tab-gestao" class="content">
+    <div id="tab-auditoria" class="content">
         <div class="card">
-            <h4>AUDITORIA DE FLUXO REAL</h4>
+            <h4>TRILHA DE CUSTÓDIA (QUEM TOCOU?)</h4>
             <div id="log-list" style="margin-top:10px; font-size:11px"></div>
         </div>
-        <button onclick="exportarDados()" class="btn btn-p" style="background:var(--dark)">GERAR RELATÓRIO DO DIA</button>
     </div>
 </div>
 
 <nav>
-    <div class="nav-item active" onclick="setTab('cross', this)"><i class="fa-solid fa-truck-fast"></i><span>CROSS</span></div>
+    <div class="nav-item active" onclick="setTab('cross', this)"><i class="fa-solid fa-truck-ramp-box"></i><span>CROSS</span></div>
     <div class="nav-item" onclick="setTab('wms', this)"><i class="fa-solid fa-warehouse"></i><span>ARMAZÉM</span></div>
-    <div class="nav-item" onclick="setTab('avaria', this)"><i class="fa-solid fa-ban"></i><span>AVARIA</span></div>
-    <div class="nav-item" onclick="setTab('gestao', this)"><i class="fa-solid fa-chart-line"></i><span>GESTÃO</span></div>
+    <div class="nav-item" onclick="setTab('sinistro', this)"><i class="fa-solid fa-handcuffs"></i><span>SINISTRO</span></div>
+    <div class="nav-item" onclick="setTab('auditoria', this)"><i class="fa-solid fa-magnifying-glass-chart"></i><span>AUDITORIA</span></div>
 </nav>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('elite_v25_db')) || [];
-    let role = "";
-    let abaAtual = "cross";
+    let db = JSON.parse(localStorage.getItem('elite_v26_db')) || [];
+    let currentUser = {};
+    let activeTab = "cross";
     const reader = new ZXing.BrowserMultiFormatReader();
 
     function fazerLogin() {
-        role = document.getElementById('user-role').value;
-        document.getElementById('top-user').innerText = "OPERANDO COMO: " + role;
+        const name = document.getElementById('driver-name').value;
+        const plate = document.getElementById('driver-plate').value;
+        const role = document.getElementById('user-role').value;
+
+        if(!name || !plate) return alert("ERRO: Identificação do Motorista e Placa é obrigatória para segurança!");
+
+        currentUser = { name, plate, role };
+        document.getElementById('session-info').innerHTML = `<b>${role}:</b> ${name} | <b>PLACA:</b> ${plate.toUpperCase()}`;
         document.getElementById('login-screen').style.display = 'none';
         vibrar(100);
         render();
     }
 
     function setTab(tab, el) {
-        abaAtual = tab;
+        activeTab = tab;
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         el.classList.add('active');
         document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
@@ -154,36 +158,38 @@
         vibrar(30);
     }
 
-    function iniciarScan(forcedType = null) {
+    function iniciarScan(typeOverride = null) {
         reader.decodeFromVideoDevice(null, 'video', (res) => {
-            if(res) processar(res.text, forcedType);
+            if(res) processar(res.text, typeOverride);
         });
     }
 
-    function processar(code, forcedType) {
-        let tipo = forcedType || (abaAtual === 'cross' ? document.getElementById('cross-type').value : 'ARMAZEM');
-        let info = abaAtual === 'cross' ? document.getElementById('cross-pla').value : document.getElementById('wms-loc').value;
+    function processar(barcode, typeOverride) {
+        let tipo = typeOverride || document.getElementById('cross-mode').value;
+        if(tipo === 'SINISTRO') tipo = document.getElementById('sinistro-type').value;
 
-        // TRAVA ANTI-ERRO (V25): Se for Avaria, bloqueia entrada no WMS
-        if(tipo === 'ARMAZEM') {
-            const hasAvaria = db.find(i => i.code === code && i.tipo === 'AVARIA');
-            if(hasAvaria) {
-                alert("🛑 ERRO DE GESTÃO: Produto com AVARIA detectada! Encaminhe para o setor de sinistro.");
-                vibrar([100,50,100]);
+        // TRAVA ANTI-FURTO: Bloqueia saída de itens com sinistro
+        if(tipo === 'SAIDA') {
+            const hasSinistro = db.find(i => i.barcode === barcode && (i.tipo === 'ROUBO' || i.tipo === 'AVARIA'));
+            if(hasSinistro) {
+                alert("🚨 ALERTA DE SEGURANÇA: Este pacote está bloqueado por SINISTRO!");
+                vibrar([200, 100, 200]);
                 return;
             }
         }
 
-        const data = {
-            code: code,
-            tipo: tipo,
-            info: info || "GERAL",
+        const entry = {
+            barcode,
+            tipo,
+            motorista: currentUser.name,
+            placa: currentUser.plate.toUpperCase(),
+            role: currentUser.role,
             hora: new Date().toLocaleTimeString(),
-            role: role
+            data: new Date().toLocaleDateString()
         };
 
-        db.unshift(data);
-        localStorage.setItem('elite_v25_db', JSON.stringify(db));
+        db.unshift(entry);
+        localStorage.setItem('elite_v26_db', JSON.stringify(db));
         vibrar(60);
         render();
     }
@@ -191,20 +197,20 @@
     function render() {
         document.getElementById('s-ent').innerText = db.filter(i => i.tipo === 'ENTRADA').length;
         document.getElementById('s-sai').innerText = db.filter(i => i.tipo === 'SAIDA').length;
-        document.getElementById('s-wms').innerText = db.filter(i => i.tipo === 'ARMAZEM').length;
-        document.getElementById('s-ava').innerText = db.filter(i => i.tipo === 'AVARIA').length;
+        document.getElementById('s-wms').innerText = db.filter(i => i.tipo === 'WMS').length;
+        document.getElementById('s-sin').innerText = db.filter(i => ['ROUBO','AVARIA','EXTRAVIO'].includes(i.tipo)).length;
 
         const list = document.getElementById('log-list');
-        list.innerHTML = db.slice(0, 8).map(i => `
-            <div style="padding:10px; border-bottom:1px solid #eee; display:flex; justify-content:space-between">
-                <span><b>${i.code}</b><br><small>${i.info} - ${i.hora}</small></span>
-                <span style="font-size:9px; font-weight:900; color:${i.tipo==='AVARIA'?'red':'var(--p)'}">${i.tipo}</span>
+        list.innerHTML = db.slice(0, 10).map(i => `
+            <div style="padding:10px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; border-left:4px solid ${i.tipo === 'ROUBO' ? 'black' : 'var(--p)'}">
+                <span><b>${i.barcode}</b><br><small>${i.motorista} (${i.placa})</small></span>
+                <span style="font-size:9px; font-weight:900; color:${['ROUBO','AVARIA'].includes(i.tipo)?'red':'var(--p)'}">${i.tipo}</span>
             </div>
         `).join('');
     }
 
     function vibrar(ms) { if(navigator.vibrate) navigator.vibrate(ms); }
-    function exportarDados() { alert("Relatório gerado e enviado para o Google Sheets do Dono!"); }
+    render();
 </script>
 </body>
 </html>
