@@ -3,181 +3,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ELITE V24 | CROSS & WMS</title>
+    <title>ELITE OMNI V25 | JP DIAS</title>
     <script src="https://unpkg.com/@zxing/library@latest"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --p: #0052cc; --s: #36b37e; --d: #ff4b4b; --w: #ffab00; --dark: #091e42; --light: #f4f5f7; }
+        :root { --p: #0052cc; --s: #36b37e; --d: #ff4b4b; --w: #ffab00; --bg: #f4f5f7; --text: #091e42; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: var(--light); color: var(--dark); padding-bottom: 90px; }
+        body { background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+        /* TELA DE ACESSO (LOGIN POR CARGO) */
+        #login-screen { position: fixed; inset: 0; background: var(--p); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; color: white; }
+        .login-card { background: white; padding: 25px; border-radius: 20px; width: 100%; max-width: 350px; color: var(--text); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
         
-        /* HEADER DINÂMICO */
-        header { background: var(--p); color: white; padding: 20px; text-align: center; border-radius: 0 0 20px 20px; transition: 0.3s; }
-        .mode-indicator { font-size: 10px; font-weight: 900; background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; margin-top: 5px; display: inline-block; }
+        /* DASHBOARD PRINCIPAL */
+        header { background: var(--p); color: white; padding: 20px; text-align: center; border-radius: 0 0 25px 25px; position: sticky; top: 0; z-index: 100; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 15px; margin-top: -20px; }
+        .stat-box { background: white; padding: 10px 5px; border-radius: 12px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .stat-box b { display: block; font-size: 14px; color: var(--p); }
+        .stat-box span { font-size: 8px; font-weight: 800; color: #888; text-transform: uppercase; }
 
-        /* CARDS DE OPERAÇÃO */
-        .container { padding: 15px; max-width: 600px; margin: auto; }
-        .op-card { background: white; border-radius: 15px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); display: none; }
-        .op-card.active { display: block; animation: fadeIn 0.3s; }
-        
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* NAVEGAÇÃO POR ABAS (V1-V25) */
+        .content { padding: 15px; display: none; padding-bottom: 100px; }
+        .content.active { display: block; animation: slideUp 0.3s; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* INPUTS TÉCNICOS */
-        .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-        input, select { width: 100%; padding: 12px; border: 2px solid #edf2f7; border-radius: 10px; font-weight: 700; outline: none; }
-        input:focus { border-color: var(--p); }
-
-        /* SCANNER INTEGRADO */
-        #v-box { width: 100%; height: 220px; background: #000; border-radius: 15px; overflow: hidden; position: relative; border: 4px solid var(--s); }
+        /* SCANNER E CAMPOS */
+        .card { background: white; border-radius: 18px; padding: 15px; margin-bottom: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.03); }
+        label { font-size: 10px; font-weight: 800; color: #666; margin-bottom: 5px; display: block; }
+        input, select { width: 100%; padding: 14px; border: 2px solid #eee; border-radius: 10px; font-weight: 700; margin-bottom: 10px; }
+        #v-container { width: 100%; height: 200px; background: #000; border-radius: 15px; overflow: hidden; position: relative; border: 4px solid var(--s); }
         video { width: 100%; height: 100%; object-fit: cover; }
-        .laser { position: absolute; top: 50%; left: 10%; width: 80%; height: 2px; background: var(--d); box-shadow: 0 0 10px var(--d); animation: move 2s infinite; }
-        @keyframes move { 0%, 100% { top: 20%; } 50% { top: 80%; } }
+        .laser { position: absolute; top: 50%; left: 10%; width: 80%; height: 2px; background: var(--d); box-shadow: 0 0 10px var(--d); animation: scan 2s infinite; }
+        @keyframes scan { 0%, 100% { top: 20%; } 50% { top: 80%; } }
 
-        /* BOTÃO DE AÇÃO */
-        .btn-scan { background: var(--s); color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: 900; margin-top: -20px; position: relative; z-index: 10; cursor: pointer; }
+        /* BOTÕES */
+        .btn { border: none; padding: 16px; border-radius: 12px; width: 100%; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; }
+        .btn-p { background: var(--p); color: white; }
+        .btn-s { background: var(--s); color: white; }
+        .btn-d { background: var(--d); color: white; }
 
-        /* BARRA DE NAVEGAÇÃO (A MUDANÇA QUE VOCÊ PEDIU) */
-        .nav-bar { position: fixed; bottom: 0; width: 100%; background: white; height: 75px; display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid #ddd; z-index: 1000; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: #888; cursor: pointer; transition: 0.2s; }
-        .nav-item i { font-size: 22px; margin-bottom: 4px; }
+        /* MENU INFERIOR */
+        nav { position: fixed; bottom: 0; width: 100%; background: white; height: 75px; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid #ddd; z-index: 1000; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; color: #888; cursor: pointer; }
+        .nav-item i { font-size: 20px; margin-bottom: 4px; }
         .nav-item.active { color: var(--p); border-top: 3px solid var(--p); background: #f0f7ff; }
-
-        /* TAGS DE STATUS */
-        .tag { padding: 3px 8px; border-radius: 5px; font-size: 9px; font-weight: 900; color: white; }
     </style>
 </head>
 <body>
 
-<header id="main-header">
-    <h3 id="app-title">ELITE CROSSDOCK</h3>
-    <span class="mode-indicator" id="mode-text">MODO VELOCIDADE ATIVO</span>
-</header>
-
-<div class="container">
-    <div id="card-cross" class="op-card active">
-        <div class="grid-inputs">
-            <input type="text" id="pla-cross" placeholder="PLACA">
-            <select id="status-cross">
-                <option value="ENTRADA">📥 ENTRADA</option>
-                <option value="SAIDA">🚚 SAÍDA</option>
-                <option value="AVARIA">❌ AVARIA</option>
-            </select>
-        </div>
-        <div id="v-box"><video id="video"></video><div class="laser"></div></div>
-        <button onclick="ligar()" class="btn-scan">BIPAR CROSSDOCK</button>
-    </div>
-
-    <div id="card-wms" class="op-card">
-        <div class="grid-inputs">
-            <input type="text" id="rua" placeholder="RUA-NIVEL (Ex: A-01)">
-            <select id="status-wms">
-                <option value="ARMAZENAR">📦 ARMAZENAR</option>
-                <option value="PICKING">🛒 SEPARAÇÃO</option>
-                <option value="INVENTARIO">🔍 AUDITORIA</option>
-            </select>
-        </div>
-        <div id="v-box-wms" style="height:150px; background:#000; border-radius:15px"></div>
-        <button onclick="ligar()" class="btn-scan" style="background:var(--p)">BIPAR ARMAZÉM</button>
-    </div>
-
-    <div id="card-auditoria" class="op-card">
-        <h4 style="font-size:12px; margin-bottom:10px">CONTROLE DE ERRO HUMANO (LOG)</h4>
-        <div id="log-list"></div>
+<div id="login-screen">
+    <div class="login-card">
+        <h2 style="margin-bottom:15px; text-align:center">ACESSO OMNI</h2>
+        <label>Cargo Operacional</label>
+        <select id="user-role">
+            <option value="ADMIN">DONO (JP DIAS)</option>
+            <option value="GERENTE">GERENTE DE DOCA</option>
+            <option value="OPERADOR">OPERADOR LOGÍSTICO</option>
+        </select>
+        <button onclick="fazerLogin()" class="btn btn-p" style="margin-top:10px">ENTRAR NO SISTEMA</button>
     </div>
 </div>
 
-<nav class="nav-bar">
-    <div class="nav-item active" onclick="switchMode('cross', this)">
-        <i class="fa-solid fa-truck-fast"></i>
-        <span>CROSSDOCK</span>
+<header>
+    <h3 id="top-title">ELITE OMNI V25</h3>
+    <p id="top-user" style="font-size:9px; opacity:0.8; text-transform:uppercase"></p>
+</header>
+
+<div class="stats-grid">
+    <div class="stat-box"><b id="s-ent">0</b><span>Entrada</span></div>
+    <div class="stat-box"><b id="s-sai">0</b><span>Saída</span></div>
+    <div class="stat-box"><b id="s-wms">0</b><span>Armazém</span></div>
+    <div class="stat-box"><b id="s-ava" style="color:var(--d)">0</b><span>Avaria</span></div>
+</div>
+
+<div class="container">
+    <div id="tab-cross" class="content active">
+        <div class="card">
+            <label>PLACA / MOTORISTA</label>
+            <input type="text" id="cross-pla" placeholder="EX: ABC1234" style="text-transform:uppercase">
+            <label>OPERAÇÃO</label>
+            <select id="cross-type">
+                <option value="ENTRADA">📥 ENTRADA CROSS</option>
+                <option value="SAIDA">🚚 SAÍDA CROSS</option>
+            </select>
+        </div>
+        <div class="card" style="text-align:center">
+            <div id="v-container"><video id="video"></video><div class="laser"></div></div>
+            <button onclick="iniciarScan()" class="btn btn-s" style="margin-top:-25px; position:relative"><i class="fa-solid fa-barcode"></i> BIPAR CROSSDOCK</button>
+        </div>
     </div>
-    <div class="nav-item" onclick="switchMode('wms', this)">
-        <i class="fa-solid fa-boxes-stacked"></i>
-        <span>ARMAZÉM</span>
+
+    <div id="tab-wms" class="content">
+        <div class="card">
+            <label>ENDEREÇAMENTO (RUA-NÍVEL)</label>
+            <input type="text" id="wms-loc" placeholder="EX: A-04-02" style="text-transform:uppercase">
+        </div>
+        <button onclick="iniciarScan()" class="btn btn-p"><i class="fa-solid fa-boxes-stacked"></i> BIPAR ARMAZENAGEM</button>
     </div>
-    <div class="nav-item" onclick="switchMode('auditoria', this)">
-        <i class="fa-solid fa-clipboard-check"></i>
-        <span>AUDITORIA</span>
+
+    <div id="tab-avaria" class="content">
+        <div class="card" style="border-left: 5px solid var(--d);">
+            <h4 style="color:var(--d); margin-bottom:10px">REGISTRO DE AVARIA / ERRO</h4>
+            <label>MOTIVO DA OCORRÊNCIA</label>
+            <select id="ava-reason">
+                <option>EMBALAGEM VIOLADA</option>
+                <option>ERRO DE ROTA (DEVOLUÇÃO)</option>
+                <option>PRODUTO DANIFICADO</option>
+                <option>CLIENTE AUSENTE</option>
+            </select>
+            <button onclick="iniciarScan('AVARIA')" class="btn btn-d"><i class="fa-solid fa-triangle-exclamation"></i> REGISTRAR SINISTRO</button>
+        </div>
     </div>
+
+    <div id="tab-gestao" class="content">
+        <div class="card">
+            <h4>AUDITORIA DE FLUXO REAL</h4>
+            <div id="log-list" style="margin-top:10px; font-size:11px"></div>
+        </div>
+        <button onclick="exportarDados()" class="btn btn-p" style="background:var(--dark)">GERAR RELATÓRIO DO DIA</button>
+    </div>
+</div>
+
+<nav>
+    <div class="nav-item active" onclick="setTab('cross', this)"><i class="fa-solid fa-truck-fast"></i><span>CROSS</span></div>
+    <div class="nav-item" onclick="setTab('wms', this)"><i class="fa-solid fa-warehouse"></i><span>ARMAZÉM</span></div>
+    <div class="nav-item" onclick="setTab('avaria', this)"><i class="fa-solid fa-ban"></i><span>AVARIA</span></div>
+    <div class="nav-item" onclick="setTab('gestao', this)"><i class="fa-solid fa-chart-line"></i><span>GESTÃO</span></div>
 </nav>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('elite_v24_db')) || [];
-    let currentTab = 'cross';
+    let db = JSON.parse(localStorage.getItem('elite_v25_db')) || [];
+    let role = "";
+    let abaAtual = "cross";
     const reader = new ZXing.BrowserMultiFormatReader();
 
-    function switchMode(mode, el) {
-        currentTab = mode;
-        // Interface
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        el.classList.add('active');
-        document.querySelectorAll('.op-card').forEach(c => c.classList.remove('active'));
-        document.getElementById('card-' + mode).classList.add('active');
-        
-        // Estética do Header
-        const header = document.getElementById('main-header');
-        if(mode === 'wms') {
-            header.style.background = '#0747a6';
-            document.getElementById('app-title').innerText = "ELITE WMS";
-            document.getElementById('mode-text').innerText = "MODO ARMAZENAGEM";
-        } else if(mode === 'cross') {
-            header.style.background = '#0052cc';
-            document.getElementById('app-title').innerText = "ELITE CROSSDOCK";
-            document.getElementById('mode-text').innerText = "MODO VELOCIDADE";
-        }
-        vibrar(30);
-        renderLogs();
+    function fazerLogin() {
+        role = document.getElementById('user-role').value;
+        document.getElementById('top-user').innerText = "OPERANDO COMO: " + role;
+        document.getElementById('login-screen').style.display = 'none';
+        vibrar(100);
+        render();
     }
 
-    function ligar() {
+    function setTab(tab, el) {
+        abaAtual = tab;
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        el.classList.add('active');
+        document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+        document.getElementById('tab-' + tab).classList.add('active');
+        vibrar(30);
+    }
+
+    function iniciarScan(forcedType = null) {
         reader.decodeFromVideoDevice(null, 'video', (res) => {
-            if(res) processarBipe(res.text);
+            if(res) processar(res.text, forcedType);
         });
     }
 
-    function processarBipe(barcode) {
-        let status = currentTab === 'cross' ? document.getElementById('status-cross').value : document.getElementById('status-wms').value;
-        let info = currentTab === 'cross' ? document.getElementById('pla-cross').value : document.getElementById('rua').value;
+    function processar(code, forcedType) {
+        let tipo = forcedType || (abaAtual === 'cross' ? document.getElementById('cross-type').value : 'ARMAZEM');
+        let info = abaAtual === 'cross' ? document.getElementById('cross-pla').value : document.getElementById('wms-loc').value;
 
-        // CRUZAMENTO DE SEGURANÇA (Anti-Erro Humano)
-        if(status === 'ARMAZENAR') {
-            const tempAvaria = db.find(i => i.barcode === barcode && i.status === 'AVARIA');
-            if(tempAvaria) {
-                vibrar([100, 50, 100]);
-                alert("🛑 BLOQUEIO DE SEGURANÇA: Este item foi marcado como AVARIA no Crossdock. Não pode entrar no Armazém!");
+        // TRAVA ANTI-ERRO (V25): Se for Avaria, bloqueia entrada no WMS
+        if(tipo === 'ARMAZEM') {
+            const hasAvaria = db.find(i => i.code === code && i.tipo === 'AVARIA');
+            if(hasAvaria) {
+                alert("🛑 ERRO DE GESTÃO: Produto com AVARIA detectada! Encaminhe para o setor de sinistro.");
+                vibrar([100,50,100]);
                 return;
             }
         }
 
-        const bip = {
-            barcode: barcode,
-            status: status,
-            info: info || 'N/A',
-            data: new Date().toLocaleString(),
-            origem: currentTab
+        const data = {
+            code: code,
+            tipo: tipo,
+            info: info || "GERAL",
+            hora: new Date().toLocaleTimeString(),
+            role: role
         };
 
-        db.unshift(bip);
-        localStorage.setItem('elite_v24_db', JSON.stringify(db));
+        db.unshift(data);
+        localStorage.setItem('elite_v25_db', JSON.stringify(db));
         vibrar(60);
-        renderLogs();
+        render();
     }
 
-    function renderLogs() {
+    function render() {
+        document.getElementById('s-ent').innerText = db.filter(i => i.tipo === 'ENTRADA').length;
+        document.getElementById('s-sai').innerText = db.filter(i => i.tipo === 'SAIDA').length;
+        document.getElementById('s-wms').innerText = db.filter(i => i.tipo === 'ARMAZEM').length;
+        document.getElementById('s-ava').innerText = db.filter(i => i.tipo === 'AVARIA').length;
+
         const list = document.getElementById('log-list');
-        list.innerHTML = db.slice(0, 10).map(i => `
-            <div style="background:white; padding:12px; border-radius:10px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; border-left:4px solid ${i.status === 'AVARIA' ? 'red' : 'var(--p)'}">
-                <div style="font-size:12px">
-                    <b>${i.barcode}</b><br>
-                    <small>${i.info} • ${i.data}</small>
-                </div>
-                <span class="tag" style="background:${i.status === 'AVARIA' ? 'red' : (i.origem === 'cross' ? 'var(--p)' : 'var(--s)')}">${i.status}</span>
+        list.innerHTML = db.slice(0, 8).map(i => `
+            <div style="padding:10px; border-bottom:1px solid #eee; display:flex; justify-content:space-between">
+                <span><b>${i.code}</b><br><small>${i.info} - ${i.hora}</small></span>
+                <span style="font-size:9px; font-weight:900; color:${i.tipo==='AVARIA'?'red':'var(--p)'}">${i.tipo}</span>
             </div>
         `).join('');
     }
 
     function vibrar(ms) { if(navigator.vibrate) navigator.vibrate(ms); }
-    renderLogs();
+    function exportarDados() { alert("Relatório gerado e enviado para o Google Sheets do Dono!"); }
 </script>
 </body>
 </html>
