@@ -3,77 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ELITEBET | SISTEMA INTEGRADO</title>
+    <title>ELITEBET | PREMIUM APP</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --primary: #00ff41; --accent: #ffd700; --danger: #ff4b4b; --bg: #0b0e11; --card: #161a1e; --border: #2b2f36; --text: #ffffff; --text-dim: #929292; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background: var(--bg); color: var(--text); overflow: hidden; }
 
-        /* HEADER & NAVIGATION */
+        /* HEADER & MENU */
         header { position: fixed; top: 0; width: 100%; height: 65px; background: var(--card); display: flex; align-items: center; padding: 0 15px; border-bottom: 1px solid var(--border); z-index: 1000; justify-content: space-between; }
-        .back-btn { font-size: 20px; color: var(--text); cursor: pointer; width: 40px; display: none; }
-        .logo { font-weight: 900; font-size: 18px; flex: 1; text-align: center; letter-spacing: -1px; }
+        .menu-icon { font-size: 22px; color: var(--text); cursor: pointer; width: 40px; }
+        .logo { font-weight: 900; font-size: 18px; letter-spacing: -1px; text-align: center; flex: 1; }
         .logo span { color: var(--primary); }
         #h-saldo { color: var(--primary); font-weight: 800; font-size: 14px; }
 
+        /* SIDE MENU (BARRINHAS) */
+        .side-menu { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: var(--card); z-index: 1100; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); border-right: 1px solid var(--border); padding: 20px; box-shadow: 10px 0 30px rgba(0,0,0,0.5); }
+        .side-menu.open { left: 0; }
+        .menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1050; display: none; }
+        .menu-overlay.show { display: block; }
+        .menu-item { padding: 15px; border-bottom: 1px solid #222; display: flex; align-items: center; gap: 12px; cursor: pointer; color: var(--text-dim); transition: 0.3s; }
+        .menu-item:hover { color: var(--primary); background: rgba(0,255,65,0.05); }
+        .menu-item.logout { color: var(--danger); border-top: 1px solid #333; margin-top: 20px; }
+
+        /* FEED */
         .live-feed { background: #080a0d; padding: 5px 0; font-size: 10px; color: var(--text-dim); border-bottom: 1px solid var(--border); position: fixed; top: 65px; width: 100%; z-index: 900; overflow: hidden; }
         .feed-track { display: inline-block; white-space: nowrap; animation: scroll 25s linear infinite; }
         @keyframes scroll { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
-        .feed-item { margin-right: 30px; }
-        .feed-item b { color: var(--primary); }
 
-        /* CONTAINER & SCREENS */
-        .container { padding: 105px 15px 100px; max-width: 480px; margin: 0 auto; height: 100vh; overflow-y: auto; }
+        /* UI ELEMENTS */
+        .container { padding: 105px 15px 30px; max-width: 480px; margin: 0 auto; height: 100vh; overflow-y: auto; }
         .screen { display: none; }
         .active { display: block; animation: fadeUp 0.3s ease; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* UI COMPONENTS */
         .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 15px; }
         .label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; }
-        input, select { width: 100%; background: #000; border: 1px solid var(--border); padding: 15px; border-radius: 10px; color: #fff; margin-bottom: 12px; outline: none; }
+        input { width: 100%; background: #000; border: 1px solid var(--border); padding: 15px; border-radius: 10px; color: #fff; margin-bottom: 12px; outline: none; }
         
         .btn { width: 100%; padding: 18px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 13px; margin-bottom: 10px; }
-        .btn-primary { background: var(--primary); color: #000; box-shadow: 0 4px 15px rgba(0,255,65,0.2); }
+        .btn-primary { background: var(--primary); color: #000; }
         .btn-secondary { background: var(--accent); color: #000; }
         .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-dim); }
 
-        /* ADMIN IA & CHARTS */
-        .chart-container { height: 80px; display: flex; align-items: flex-end; gap: 5px; margin: 15px 0; }
-        .bar { flex: 1; background: var(--primary); opacity: 0.6; border-radius: 3px 3px 0 0; transition: 0.5s; }
-        .ai-box { background: rgba(0,255,65,0.05); border: 1px dashed var(--primary); padding: 10px; border-radius: 8px; font-size: 11px; margin-top: 10px; }
-
-        /* CHAT & WHEEL */
-        .chat-view { height: 200px; overflow-y: auto; background: #080a0d; border-radius: 10px; padding: 12px; display: flex; flex-direction: column; border: 1px solid #111; margin-bottom: 10px; }
-        .msg { padding: 8px 12px; border-radius: 10px; font-size: 12px; margin-bottom: 6px; max-width: 80%; }
+        /* CHAT E IA */
+        .chat-box { height: 180px; overflow-y: auto; background: #080a0d; border-radius: 10px; padding: 12px; border: 1px solid #111; margin-bottom: 10px; }
+        .msg { padding: 8px; border-radius: 8px; font-size: 12px; margin-bottom: 5px; max-width: 80%; }
         .msg.bot { background: #2b2f36; align-self: flex-start; }
-        .msg.user { background: var(--primary); color: #000; align-self: flex-end; font-weight: 600; }
-        
-        .wheel-box { position: relative; width: 180px; height: 180px; margin: 20px auto; }
-        .wheel { width: 100%; height: 100%; border-radius: 50%; border: 5px solid #222; background: conic-gradient(#111 0% 12.5%, #1a1a1a 12.5% 25%, #111 25% 37.5%, #1a1a1a 37.5% 50%, #111 50% 62.5%, #1a1a1a 62.5% 75%, #111 75% 87.5%, #1a1a1a 87.5% 100%); transition: transform 4s cubic-bezier(0.1, 0.7, 0.1, 1); }
-        .pointer { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 20px solid var(--accent); z-index: 10; }
-
-        /* NAV */
-        nav { position: fixed; bottom: 0; width: 100%; height: 70px; background: var(--card); border-top: 1px solid var(--border); display: none; justify-content: space-around; align-items: center; z-index: 1000; }
-        .nav-item { text-align: center; color: var(--text-dim); font-size: 10px; cursor: pointer; flex: 1; }
-        .nav-item.active { color: var(--primary); font-weight: 800; }
+        .msg.user { background: var(--primary); color: #000; align-self: flex-end; }
     </style>
 </head>
 <body>
 
+    <div class="menu-overlay" id="overlay" onclick="toggleMenu()"></div>
+    <div class="side-menu" id="side-menu">
+        <h2 style="margin-bottom: 25px;">Menu ELITE<span>BET</span></h2>
+        <div class="menu-item" onclick="irPara('scr-lobby'); toggleMenu()"><i class="fa-solid fa-house"></i> Início</div>
+        <div class="menu-item" onclick="irPara('scr-deposito'); toggleMenu()"><i class="fa-solid fa-wallet"></i> Depositar</div>
+        <div class="menu-item" onclick="irPara('scr-saque'); toggleMenu()"><i class="fa-solid fa-hand-holding-dollar"></i> Sacar</div>
+        <div class="menu-item" onclick="irPara('scr-roleta'); toggleMenu()"><i class="fa-solid fa-dharmachakra"></i> Roleta Diária</div>
+        <div class="menu-item" onclick="irPara('scr-chat'); toggleMenu()"><i class="fa-solid fa-comment-dots"></i> Suporte VIP</div>
+        <div class="menu-item" id="menu-adm-btn" style="display:none;" onclick="irPara('scr-admin'); toggleMenu()"><i class="fa-solid fa-brain"></i> Painel IA</div>
+        <div class="menu-item logout" onclick="sair()"><i class="fa-solid fa-right-from-bracket"></i> SAIR DA CONTA</div>
+    </div>
+
     <header id="h-master" style="display:none;">
-        <div class="back-btn" id="btn-voltar" onclick="voltar()"><i class="fa-solid fa-chevron-left"></i></div>
+        <div class="menu-icon" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></div>
         <div class="logo">ELITE<span>BET</span></div>
         <div style="text-align:right;"><span id="h-saldo">R$ 0,00</span></div>
     </header>
 
     <div class="live-feed" id="feed-master" style="display:none;">
         <div class="feed-track">
-            <span class="feed-item">pedro_vip ganhou <b>R$ 150,00</b></span>
-            <span class="feed-item">maria_elite ganhou <b>R$ 420,50</b></span>
+            <span class="feed-item">pedro_vip ganhou <b>R$ 150,00</b> • </span>
+            <span class="feed-item">maria_elite ganhou <b>R$ 420,50</b> • </span>
             <span class="feed-item">joao_afiliado ganhou <b>R$ 1.200,00</b></span>
-            <span class="feed-item">ana_2026 ganhou <b>R$ 80,00</b></span>
         </div>
     </div>
 
@@ -81,148 +85,77 @@
         
         <div id="scr-login" class="screen active">
             <div class="card" style="margin-top: 30px; text-align:center;">
-                <h2 style="margin-bottom:20px;">ACESSO ELITEBET</h2>
+                <h2 style="margin-bottom:20px;">ACESSO VIP</h2>
                 <input type="text" id="l-user" placeholder="Usuário">
                 <input type="password" id="l-pass" placeholder="Senha">
-                <button class="btn btn-primary" onclick="fazerLogin()">CONECTAR</button>
+                <button class="btn btn-primary" onclick="fazerLogin()">CONECTAR AGORA</button>
                 <button class="btn btn-outline" onclick="irPara('scr-cadastro')">CRIAR CONTA</button>
-                <button class="btn btn-outline" style="border:none;" onclick="irPara('scr-recuperar')">Esqueci a senha</button>
-            </div>
-        </div>
-
-        <div id="scr-recuperar" class="screen">
-            <div class="card">
-                <h2>RECUPERAR CONTA</h2>
-                <p class="label">Informe seu CPF cadastrado</p>
-                <input type="text" placeholder="000.000.000-00">
-                <button class="btn btn-primary" onclick="alert('Link enviado!'); voltar()">ENVIAR LINK</button>
-                <button class="btn btn-outline" onclick="voltar()">CANCELAR</button>
-            </div>
-        </div>
-
-        <div id="scr-cadastro" class="screen">
-            <div class="card">
-                <h2>NOVO REGISTRO</h2>
-                <input type="text" placeholder="CPF">
-                <input type="password" id="reg-p1" placeholder="Senha">
-                <input type="password" id="reg-p2" placeholder="Repita a Senha">
-                <button class="btn btn-primary" onclick="irPara('scr-login')">FINALIZAR</button>
+                <button class="btn btn-outline" style="border:none;" onclick="irPara('scr-recuperar')">Recuperar acesso</button>
             </div>
         </div>
 
         <div id="scr-lobby" class="screen">
             <div class="card" style="text-align:center; padding: 40px 20px;">
-                <span class="label">SALDO DISPONÍVEL</span>
+                <span class="label">SALDO EM CARTEIRA</span>
                 <h1 id="main-saldo" style="font-size:45px; color:var(--primary); margin:10px 0;">R$ 0,00</h1>
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                     <button class="btn btn-primary" onclick="irPara('scr-deposito')">DEPÓSITO</button>
                     <button class="btn btn-secondary" onclick="irPara('scr-saque')">SAQUE</button>
                 </div>
             </div>
-            <div class="card" onclick="irPara('scr-roleta')" style="cursor:pointer; display:flex; align-items:center; gap:15px;">
-                <div style="font-size:30px;">🎡</div>
-                <div>
-                    <b style="display:block;">Giro Diário Premiado</b>
-                    <small style="color:var(--text-dim);">Sua chance de ganhar bônus agora.</small>
-                </div>
+            <div class="card" style="background: linear-gradient(45deg, #161a1e, #0b0e11); border: 1px solid var(--primary);">
+                <span class="label">STATUS DA IA</span>
+                <p style="font-size:12px;"><i class="fa-solid fa-bolt" style="color:var(--primary);"></i> Algoritmo ativo: <b>Oportunidade de Ganho em 88%</b></p>
             </div>
         </div>
 
         <div id="scr-deposito" class="screen">
             <div class="card">
-                <h2>DEPÓSITO PIX</h2>
-                <input type="number" id="dep-val" placeholder="Valor R$">
-                <button class="btn btn-primary" onclick="document.getElementById('pix-qr').style.display='block'">GERAR QR CODE</button>
-                <div id="pix-qr" style="display:none; text-align:center; margin-top:15px; background:#fff; padding:15px; border-radius:10px; color:#000;">
-                    <div style="width:120px; height:120px; background:#ddd; margin:0 auto 10px; display:flex; align-items:center; justify-content:center; border:2px dashed #999;">QR CODE</div>
-                    <small>Copia e Cola: 00020101021226870014br.gov.bcb.pix...</small>
-                </div>
+                <h2>ADICIONAR SALDO</h2>
+                <input type="number" id="dep-val" placeholder="R$ Valor">
+                <button class="btn btn-primary" onclick="alert('QR Code PIX Gerado!')">GERAR PIX</button>
+                <button class="btn btn-outline" onclick="irPara('scr-lobby')">VOLTAR</button>
             </div>
         </div>
 
         <div id="scr-saque" class="screen">
             <div class="card">
-                <h2>SAQUE RÁPIDO</h2>
-                <span class="label">CHAVE PIX</span>
-                <input type="text" placeholder="Chave ou CPF">
-                <input type="number" id="saq-val" placeholder="Valor R$">
-                <button class="btn btn-secondary" onclick="processarSaque()">SOLICITAR SAQUE</button>
-            </div>
-        </div>
-
-        <div id="scr-roleta" class="screen">
-            <div class="card" style="text-align:center;">
-                <h2>SORTEIO ELITE</h2>
-                <div class="wheel-box">
-                    <div class="pointer"></div>
-                    <div class="wheel" id="wheel-obj"></div>
-                </div>
-                <button class="btn btn-secondary" id="btn-spin" onclick="girar()">GIRAR AGORA</button>
-            </div>
-        </div>
-
-        <div id="scr-chat" class="screen">
-            <div class="card">
-                <h2 style="font-size:14px; margin-bottom:10px;">SUPORTE AO VIVO</h2>
-                <div class="chat-view" id="chat-box"><div class="msg bot">Olá! Como podemos ajudar?</div></div>
-                <div style="display:flex; gap:8px;">
-                    <input type="text" id="chat-input" placeholder="Digite..." style="margin-bottom:0; flex:1;">
-                    <button onclick="enviar()" style="width:50px; background:var(--primary); border:none; border-radius:10px; cursor:pointer;">🚀</button>
-                </div>
+                <h2>RETIRADA PIX</h2>
+                <input type="text" placeholder="Sua Chave PIX">
+                <input type="number" id="saq-val" placeholder="Valor do Saque">
+                <button class="btn btn-secondary" onclick="processarSaque()">SOLICITAR AGORA</button>
+                <button class="btn btn-outline" onclick="irPara('scr-lobby')">CANCELAR</button>
             </div>
         </div>
 
         <div id="scr-admin" class="screen">
-            <h2 style="color:var(--accent); margin-bottom:15px; font-size:14px;"><i class="fa-solid fa-brain"></i> ELITE AI GESTÃO</h2>
+            <h2 style="color:var(--accent); margin-bottom:15px; font-size:14px;"><i class="fa-solid fa-brain"></i> IA PREDICTIVE ADMIN</h2>
             <div class="card">
-                <span class="label">PERFORMANCE GGR (IA ANALYTICS)</span>
-                <div class="chart-container">
-                    <div class="bar" style="height: 40%;"></div>
-                    <div class="bar" style="height: 70%;"></div>
-                    <div class="bar" style="height: 50%;"></div>
-                    <div class="bar" style="height: 90%;"></div>
-                    <div class="bar" style="height: 60%;"></div>
+                <span class="label">GGR OPERACIONAL</span>
+                <div style="height:60px; display:flex; align-items:flex-end; gap:5px; margin-bottom:10px;">
+                    <div style="flex:1; background:var(--primary); height:40%; opacity:0.5;"></div>
+                    <div style="flex:1; background:var(--primary); height:80%;"></div>
+                    <div style="flex:1; background:var(--primary); height:60%;"></div>
+                    <div style="flex:1; background:var(--primary); height:95%;"></div>
                 </div>
-                <div class="ai-box"><b>IA INSIGHT:</b> Volume de depósitos acima da média. Risco de saque atual: <b>BAIXO</b>.</div>
-            </div>
-            <div class="card">
-                <span class="label">EDITOR DE SALDO</span>
-                <input type="number" id="adm-s" placeholder="Novo Valor R$">
-                <button class="btn btn-secondary" onclick="salvarAdmin()">SINCRONIZAR</button>
+                <input type="number" id="adm-s" placeholder="Ajustar Saldo Global">
+                <button class="btn btn-secondary" onclick="salvarAdmin()">SINCRONIZAR IA</button>
             </div>
         </div>
 
     </div>
 
-    <nav id="n-master">
-        <div class="nav-item active" onclick="irPara('scr-lobby')">🏠<br>Início</div>
-        <div class="nav-item" onclick="irPara('scr-chat')">💬<br>Suporte</div>
-        <div id="n-adm-btn" class="nav-item" style="display:none; color:var(--accent);" onclick="irPara('scr-admin')">🛡️<br>Admin</div>
-    </nav>
-
     <script>
         let saldo = 2500.00;
-        let history = ['scr-login'];
-        let spinDone = false;
 
-        function irPara(id) {
-            history.push(id);
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            
-            // Controle da Seta e Nav
-            document.getElementById('btn-voltar').style.display = (id === 'scr-login' || id === 'scr-lobby') ? 'none' : 'block';
-            document.getElementById('n-master').style.display = (id === 'scr-login' || id === 'scr-cadastro' || id === 'scr-recuperar') ? 'none' : 'flex';
+        function toggleMenu() {
+            document.getElementById('side-menu').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('show');
         }
 
-        function voltar() {
-            if(history.length > 1) {
-                history.pop();
-                let last = history[history.length - 1];
-                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-                document.getElementById(last).classList.add('active');
-                document.getElementById('btn-voltar').style.display = (last === 'scr-login' || last === 'scr-lobby') ? 'none' : 'block';
-            }
+        function irPara(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
         }
 
         function fazerLogin() {
@@ -230,12 +163,18 @@
             document.getElementById('h-master').style.display = 'flex';
             document.getElementById('feed-master').style.display = 'block';
             if(u === 'admin') { 
-                document.getElementById('n-adm-btn').style.display = 'block'; 
+                document.getElementById('menu-adm-btn').style.display = 'flex'; 
                 irPara('scr-admin'); 
             } else { 
                 irPara('scr-lobby'); 
             }
             updateUI();
+        }
+
+        function sair() {
+            if(confirm("Deseja realmente sair da EliteBet?")) {
+                location.reload(); // Reseta o estado e volta pro login
+            }
         }
 
         function updateUI() {
@@ -248,30 +187,13 @@
             const v = parseFloat(document.getElementById('saq-val').value);
             if(v > saldo) return alert("Saldo insuficiente!");
             saldo -= v; updateUI();
-            alert("Saque solicitado via PIX!"); voltar();
-        }
-
-        function girar() {
-            if(spinDone) return;
-            const w = document.getElementById('wheel-obj');
-            const d = Math.floor(Math.random() * 3600) + 3600;
-            w.style.transform = `rotate(${d}deg)`;
-            spinDone = true;
-            setTimeout(() => { alert("Você ganhou um bônus de R$ 50!"); saldo += 50; updateUI(); }, 4000);
-        }
-
-        function enviar() {
-            const inp = document.getElementById('chat-input');
-            const box = document.getElementById('chat-box');
-            if(!inp.value) return;
-            box.innerHTML += `<div class="msg user">${inp.value}</div>`;
-            inp.value = "";
-            setTimeout(() => { box.innerHTML += `<div class="msg bot">IA: Um atendente humano está a caminho.</div>`; box.scrollTop = box.scrollHeight; }, 800);
+            alert("Solicitação enviada!");
+            irPara('scr-lobby');
         }
 
         function salvarAdmin() {
             const v = parseFloat(document.getElementById('adm-s').value);
-            if(!isNaN(v)) { saldo = v; updateUI(); alert("Sincronizado!"); }
+            if(!isNaN(v)) { saldo = v; updateUI(); alert("IA Sincronizada!"); }
         }
     </script>
 </body>
