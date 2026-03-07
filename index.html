@@ -3,200 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SISTEMA MASTER UNIFICADO 2026</title>
+    <title>SISTEMA OMNI-GESTÃO | 2026</title>
     <style>
-        :root { --bg: #05070a; --green: #00ff41; --gold: #ffd700; --red: #ff4b4b; --glass: rgba(255, 255, 255, 0.05); --border: rgba(255, 255, 255, 0.1); }
+        :root { --bg: #030508; --green: #00ff41; --gold: #ffd700; --red: #ff4b4b; --glass: rgba(255, 255, 255, 0.03); --border: rgba(255, 255, 255, 0.08); }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: #fff; }
+        body { background: var(--bg); color: #fff; overflow-x: hidden; }
         
-        /* HEADER */
-        header { position: fixed; top: 0; width: 100%; height: 65px; background: rgba(10, 15, 25, 0.95); backdrop-filter: blur(15px); display: flex; align-items: center; padding: 0 20px; border-bottom: 1px solid var(--border); z-index: 1000; }
-        .container { padding: 90px 15px 30px; max-width: 450px; margin: 0 auto; }
-        
-        /* NAV & SCREENS */
-        .screen { display: none; }
-        .active { display: block; animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* UI ELEMENTS */
-        .card { background: var(--glass); padding: 20px; border-radius: 18px; border: 1px solid var(--border); margin-bottom: 15px; }
-        input, select { width: 100%; background: #000; border: 1px solid #333; padding: 15px; border-radius: 10px; color: #fff; margin-bottom: 12px; font-size: 14px; outline: none; }
-        input:focus { border-color: var(--green); }
-        .btn { width: 100%; padding: 18px; border-radius: 12px; border: none; font-weight: 900; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
-        .btn-green { background: var(--green); color: #000; }
-        .btn-gold { background: var(--gold); color: #000; }
-        .btn-outline { background: transparent; border: 1px solid #333; color: #888; margin-top: 10px; }
-        
-        /* MENU LATERAL */
-        .side-menu { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: #0a0f19; z-index: 2000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 30px; border-right: 1px solid var(--border); }
-        .side-menu.open { left: 0; }
-        .menu-item { padding: 18px 0; color: #ccc; border-bottom: 1px solid #111; cursor: pointer; font-size: 14px; font-weight: 500; }
+        /* HEADER INTELIGENTE */
+        header { position: fixed; top: 0; width: 100%; height: 70px; background: rgba(5, 8, 15, 0.9); backdrop-filter: blur(15px); display: flex; align-items: center; padding: 0 20px; border-bottom: 1px solid var(--border); z-index: 1000; }
+        .user-info-bar { margin-left: auto; text-align: right; line-height: 1.2; }
+        .session-timer { font-size: 9px; color: #555; font-family: monospace; }
 
-        /* CHAT BOX */
-        .chat-box { background: #000; border-radius: 12px; height: 280px; overflow-y: auto; padding: 15px; margin-bottom: 15px; border: 1px solid #222; display: flex; flex-direction: column; }
-        .msg { padding: 12px; border-radius: 12px; font-size: 12px; margin-bottom: 10px; max-width: 85%; line-height: 1.5; }
-        .msg.bot { background: #1a1a1a; align-self: flex-start; border-bottom-left-radius: 2px; }
-        .msg.user { background: var(--green); color: #000; align-self: flex-end; border-bottom-right-radius: 2px; font-weight: 700; }
+        .container { padding: 90px 15px 30px; max-width: 480px; margin: 0 auto; }
+        .screen { display: none; }
+        .active { display: block; animation: slideUp 0.4s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card { background: var(--glass); padding: 20px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 15px; }
+        input, select { width: 100%; background: #000; border: 1px solid #222; padding: 16px; border-radius: 12px; color: #fff; margin-bottom: 12px; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--green); box-shadow: 0 0 10px rgba(0,255,65,0.1); }
+        
+        .btn { width: 100%; padding: 18px; border-radius: 14px; border: none; font-weight: 900; cursor: pointer; text-transform: uppercase; }
+        .btn-green { background: var(--green); color: #000; box-shadow: 0 4px 15px rgba(0,255,65,0.2); }
+        .btn-gold { background: var(--gold); color: #000; }
+        .btn-outline { background: transparent; border: 1px solid #333; color: #777; margin-top: 10px; }
+
+        /* PAINEL INTELIGENTE (BI) */
+        .bi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .bi-card { background: #080c14; padding: 15px; border-radius: 15px; border: 1px solid #111; }
+        .bi-val { font-size: 18px; font-weight: 900; color: var(--green); display: block; }
+        .bi-label { font-size: 9px; color: #444; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* MENU PERSISTENTE */
+        .nav-bottom { position: fixed; bottom: 0; width: 100%; height: 65px; background: #05080f; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid var(--border); z-index: 1000; display: none; }
+        .nav-item { text-align: center; font-size: 10px; color: #555; cursor: pointer; }
+        .nav-item.active { color: var(--green); }
     </style>
 </head>
 <body>
 
     <header>
-        <div id="btn-menu-icon" style="display:none; cursor:pointer; font-size:26px; color:var(--green);" onclick="toggleMenu()">☰</div>
-        <div id="header-data" style="margin-left:auto; text-align:right; display:none;">
-            <div id="h-cargo" style="font-size:10px; color:var(--gold); font-weight:bold; letter-spacing:1px;">...</div>
-            <div id="h-saldo" style="font-size:18px; font-weight:900; color:var(--green);">R$ 0,00</div>
+        <div id="btn-menu-top" style="display:none; cursor:pointer; font-size:24px; color:var(--green);" onclick="irPara('scr-dash')">💠</div>
+        <div class="user-info-bar" id="header-data" style="display:none;">
+            <div id="h-user" style="font-size:12px; font-weight:bold; color:var(--gold);">USUÁRIO</div>
+            <div id="h-saldo" style="font-size:16px; font-weight:900; color:var(--green);">R$ 0,00</div>
+            <div class="session-timer">SESSÃO: <span id="timer">00:00:00</span> | IP: 187.XX.XX.4</div>
         </div>
     </header>
-
-    <div class="side-menu" id="side-menu">
-        <h2 style="color:var(--gold); margin-bottom:25px; font-size:18px;">PLATAFORMA 2026</h2>
-        <div class="menu-item" onclick="irPara('scr-dash'); toggleMenu()">🏠 Início / Lobby</div>
-        <div class="menu-item" onclick="irPara('scr-deposito'); toggleMenu()">💰 Depositar PIX</div>
-        <div class="menu-item" onclick="irPara('scr-saque'); toggleMenu()">💸 Solicitar Saque</div>
-        <div class="menu-item" id="menu-adm" style="display:none; color:var(--gold); font-weight:bold;" onclick="irPara('scr-admin'); toggleMenu()">🛡️ PAINEL DE GESTÃO</div>
-        <div class="menu-item" style="color:var(--green);" onclick="irPara('scr-chat'); toggleMenu()">💬 SUPORTE VIP</div>
-        <div class="menu-item" style="color:var(--red); margin-top:50px;" onclick="location.reload()">🚪 SAIR</div>
-    </div>
 
     <div class="container">
         
         <div id="scr-login" class="screen active">
-            <div class="card">
-                <h1 style="text-align:center; color:var(--green); margin-bottom:20px;">ACESSO VIP</h1>
+            <div class="card" style="text-align:center;">
+                <h1 style="margin-bottom:20px; letter-spacing:-1px;">ENTRAR</h1>
                 <input type="text" id="l-user" placeholder="Usuário">
                 <input type="password" id="l-pass" placeholder="Senha">
-                <button class="btn btn-green" onclick="fazerLogin()">ENTRAR NO SISTEMA</button>
-                <button class="btn btn-outline" onclick="irPara('scr-cadastro')">CRIAR NOVA CONTA</button>
-                <p style="text-align:center; margin-top:20px; font-size:12px; color:#555;" onclick="irPara('scr-recuperar')">Esqueceu a senha? <u>Recuperar</u></p>
+                <button class="btn btn-green" onclick="fazerLogin()">ACESSAR PAINEL</button>
+                <button class="btn btn-outline" onclick="irPara('scr-cadastro')">CRIAR CONTA</button>
+                <p style="margin-top:20px; font-size:11px; color:#444;" onclick="irPara('scr-recuperar')">RECUPERAR ACESSO</p>
             </div>
         </div>
 
         <div id="scr-cadastro" class="screen">
             <div class="card">
-                <h2>CRIAR CONTA</h2>
+                <h2>NOVO CLIENTE</h2>
                 <input type="text" placeholder="Nome Completo">
                 <input type="text" placeholder="CPF">
-                <input type="text" placeholder="WhatsApp (DDD + Número)">
-                <input type="text" placeholder="Escolha um Usuário">
-                <input type="password" placeholder="Crie uma Senha">
-                <input type="password" placeholder="Repita a Senha">
-                <button class="btn btn-green" onclick="alert('Cadastro enviado para análise!'); irPara('scr-login')">FINALIZAR E ENTRAR</button>
-                <button class="btn btn-outline" onclick="irPara('scr-login')">VOLTAR AO LOGIN</button>
-            </div>
-        </div>
-
-        <div id="scr-recuperar" class="screen">
-            <div class="card">
-                <h2>RECUPERAR ACESSO</h2>
-                <p style="font-size:12px; color:#888; margin-bottom:15px;">Informe seu CPF ou Usuário para receber o link via WhatsApp.</p>
-                <input type="text" placeholder="CPF ou Usuário">
-                <button class="btn btn-green" onclick="alert('Link de recuperação enviado!'); irPara('scr-login')">ENVIAR AGORA</button>
+                <input type="text" placeholder="WhatsApp">
+                <input type="password" id="c-pass" placeholder="Crie uma Senha">
+                <input type="password" id="c-pass2" placeholder="Repita a Senha">
+                <button class="btn btn-green" onclick="validarCadastro()">FINALIZAR CADASTRO</button>
                 <button class="btn btn-outline" onclick="irPara('scr-login')">VOLTAR</button>
             </div>
         </div>
 
         <div id="scr-dash" class="screen">
-            <div class="card" style="text-align:center; padding:50px 20px;">
-                <p style="font-size:12px; color:#888;">SALDO DISPONÍVEL</p>
-                <h1 id="d-saldo" style="font-size:50px; color:var(--green); margin:15px 0;">R$ 0,00</h1>
-                <button class="btn btn-green">LANÇAR JOGO</button>
+            <div class="bi-grid">
+                <div class="bi-card"><span class="bi-label">STATUS</span><span class="bi-val" style="color:var(--gold); font-size:12px;">CONTA VIP</span></div>
+                <div class="bi-card"><span class="bi-label">PONTOS</span><span class="bi-val">1.250</span></div>
+            </div>
+            <div class="card" style="text-align:center; padding:40px 20px;">
+                <p style="font-size:12px; color:#555;">SALDO ATUAL DISPONÍVEL</p>
+                <h1 id="d-saldo" style="font-size:48px; color:var(--green); margin:10px 0;">R$ 0,00</h1>
+                <button class="btn btn-green">JOGAR AGORA</button>
+            </div>
+            <div class="card">
+                <h3 style="font-size:12px; margin-bottom:10px; color:#555;">ÚLTIMAS ATIVIDADES</h3>
+                <div style="font-size:11px; color:#888;">• Depósito PIX: <span style="color:var(--green);">+R$ 500,00</span></div>
+                <div style="font-size:11px; color:#888;">• Saque Efetuado: <span style="color:var(--red);">-R$ 150,00</span></div>
             </div>
         </div>
 
         <div id="scr-admin" class="screen">
-            <div class="card" style="border-color:var(--gold);">
-                <h2 style="color:var(--gold); margin-bottom:20px;">🛡️ PAINEL DE CONTROLE</h2>
-                
-                <p style="font-size:11px; color:#888;">GERENCIAR USUÁRIO:</p>
-                <select id="adm-user-list"><option value="cliente_vip">cliente_vip</option></select>
-                
-                <p style="font-size:11px; color:#888;">AJUSTAR SALDO (R$):</p>
-                <input type="number" id="adm-val" placeholder="Ex: 5000.00">
-                
-                <p style="font-size:11px; color:#888;">ALTERAR CARGO HIERÁRQUICO:</p>
-                <select id="adm-cargo-opt">
+            <h2 style="color:var(--gold); font-size:14px; margin-bottom:15px;">🛡️ PAINEL INTELIGENTE MASTER</h2>
+            <div class="bi-grid">
+                <div class="bi-card"><span class="bi-label">VOLUME TOTAL (GGR)</span><span class="bi-val">R$ 45.890</span></div>
+                <div class="bi-card"><span class="bi-label">USUÁRIOS ATIVOS</span><span class="bi-val">128</span></div>
+                <div class="bi-card"><span class="bi-label">PENDENTE SAQUE</span><span class="bi-val" style="color:var(--red);">R$ 1.200</span></div>
+                <div class="bi-card"><span class="bi-label">LTV MÉDIO</span><span class="bi-val" style="color:var(--gold);">R$ 350,00</span></div>
+            </div>
+            
+            <div class="card" style="border-left: 4px solid var(--gold);">
+                <h3>AJUSTE RÁPIDO</h3>
+                <input type="text" id="adm-user" placeholder="Usuário">
+                <input type="number" id="adm-val" placeholder="Novo Saldo R$">
+                <select id="adm-cargo">
                     <option value="CLIENTE">CLIENTE</option>
                     <option value="SUPORTE">SUPORTE</option>
                     <option value="GERENTE">GERENTE</option>
                     <option value="ADMIN">ADMIN MASTER</option>
                 </select>
-                <button class="btn btn-gold" onclick="salvarAdmin()">APLICAR MUDANÇAS AGORA</button>
+                <button class="btn btn-gold" onclick="aplicarAdmin()">SALVAR MUDANÇAS</button>
             </div>
         </div>
 
-        <div id="scr-chat" class="screen">
-            <div class="card">
-                <h2>SUPORTE VIP</h2>
-                <div class="chat-box" id="chat-content">
-                    <div class="msg bot">Olá! Como posso ajudar sua conta hoje? Selecione uma opção rápida.</div>
-                </div>
-                <div id="chat-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-                    <button class="btn btn-outline" style="font-size:11px; color:#fff;" onclick="msgBot('Depósito não caiu', 'PIX leva até 5 min. Verifique se o comprovante é o mesmo do titular da conta.')">💳 Depósito</button>
-                    <button class="btn btn-outline" style="font-size:11px; color:#fff;" onclick="msgBot('Prazo de Saque', 'Nossa mesa paga saques a cada 15 min. Aguarde a notificação no app!')">💸 Saque</button>
-                    <button class="btn btn-gold" style="grid-column: span 2;" onclick="entrarFila()">🤝 FALAR COM ATENDENTE</button>
-                </div>
-                <div id="fila" style="display:none; text-align:center; margin-top:20px; color:var(--gold);">
-                    ⏳ <b>Posição na Fila: <span id="pos">15</span>º</b><br><small>Tempo médio: 30s por posição</small>
-                </div>
-            </div>
-        </div>
+        <div id="scr-deposito" class="screen"><div class="card"><h2>DEPOSITAR</h2><input type="number" placeholder="Valor R$"><button class="btn btn-green">GERAR QR CODE PIX</button></div></div>
+        <div id="scr-saque" class="screen"><div class="card"><h2>SOLICITAR SAQUE</h2><input type="number" placeholder="Valor R$"><input type="text" placeholder="Chave PIX"><button class="btn btn-green">PEDIR RESGATE</button></div></div>
 
     </div>
 
-    <script>
-        let uSaldo = 1250.00;
-        let uCargo = "CLIENTE";
+    <nav class="nav-bottom" id="nav-master">
+        <div class="nav-item active" onclick="irPara('scr-dash')">🏠<br>Home</div>
+        <div class="nav-item" onclick="irPara('scr-deposito')">💰<br>Depósito</div>
+        <div class="nav-item" onclick="irPara('scr-saque')">💸<br>Saque</div>
+        <div id="nav-admin-btn" class="nav-item" style="display:none; color:var(--gold);" onclick="irPara('scr-admin')">🛡️<br>Admin</div>
+    </nav>
 
-        function irPara(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-        function toggleMenu() { document.getElementById('side-menu').classList.toggle('open'); }
+    <script>
+        let saldo = 1250.00;
+        let cargo = "CLIENTE";
+        let startTime = Date.now();
+
+        function irPara(id) { 
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); 
+            document.getElementById(id).classList.add('active'); 
+            // Atualizar cor do menu
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        }
 
         function fazerLogin() {
             const u = document.getElementById('l-user').value.toLowerCase();
-            document.getElementById('btn-menu-icon').style.display = 'block';
             document.getElementById('header-data').style.display = 'block';
-
+            document.getElementById('nav-master').style.display = 'flex';
+            document.getElementById('btn-menu-top').style.display = 'block';
+            
             if(u === "admin") {
-                uCargo = "ADMIN MASTER";
-                document.getElementById('menu-adm').style.display = 'block';
+                cargo = "ADMIN MASTER";
+                document.getElementById('nav-admin-btn').style.display = 'block';
                 irPara('scr-admin');
             } else {
-                uCargo = "CLIENTE VIP";
-                document.getElementById('menu-adm').style.display = 'none';
+                cargo = "CLIENTE VIP";
                 irPara('scr-dash');
             }
+            document.getElementById('h-user').innerText = u.toUpperCase();
+            setInterval(updateTimer, 1000);
             refreshUI();
         }
 
         function refreshUI() {
-            document.getElementById('h-cargo').innerText = uCargo;
-            document.getElementById('h-saldo').innerText = "R$ " + uSaldo.toFixed(2);
-            document.getElementById('d-saldo').innerText = "R$ " + uSaldo.toFixed(2);
+            document.getElementById('h-saldo').innerText = "R$ " + saldo.toFixed(2);
+            document.getElementById('d-saldo').innerText = "R$ " + saldo.toFixed(2);
+            document.getElementById('h-cargo').innerText = cargo;
         }
 
-        function salvarAdmin() {
-            const s = parseFloat(document.getElementById('adm-val').value);
-            const c = document.getElementById('adm-cargo-opt').value;
-            if(!isNaN(s)) {
-                uSaldo = s;
-                uCargo = c === "ADMIN" ? "ADMIN MASTER" : c + " VIP";
-                alert("SISTEMA SINCRONIZADO: Alterações enviadas para a Planilha!");
+        function updateTimer() {
+            let diff = Math.floor((Date.now() - startTime) / 1000);
+            let h = Math.floor(diff / 3600).toString().padStart(2, '0');
+            let m = Math.floor((diff % 3600) / 60).toString().padStart(2, '0');
+            let s = Math.floor(diff % 60).toString().padStart(2, '0');
+            document.getElementById('timer').innerText = `${h}:${m}:${s}`;
+        }
+
+        function validarCadastro() {
+            const p1 = document.getElementById('c-pass').value;
+            const p2 = document.getElementById('c-pass2').value;
+            if(p1 !== p2) { alert("As senhas não conferem!"); return; }
+            alert("Cadastro realizado com sucesso!");
+            irPara('scr-login');
+        }
+
+        function aplicarAdmin() {
+            const nv = parseFloat(document.getElementById('adm-val').value);
+            if(!isNaN(nv)) {
+                saldo = nv;
+                cargo = document.getElementById('adm-cargo').value + " VIP";
+                alert("Sincronizado com a Planilha Mestra!");
                 refreshUI();
             }
         }
-
-        function msgBot(q, r) {
-            const c = document.getElementById('chat-content');
-            c.innerHTML += `<div class="msg user">${q}</div><div class="msg bot">${r}</div>`;
-            c.scrollTop = c.scrollHeight;
-        }
-
-        function entrarFila() {
-            document.getElementById('chat-grid').style.display = 'none';
-            document.getElementById('fila').style.display = 'block';
-            let p = 15;
-            let t = setInterval(() => { if(p > 1) { p--; document.getElementById('pos').innerText = p; } else { clearInterval(t); } }, 30000);
-        }
     </script>
 </body>
-</html>
+            </html>
+            
