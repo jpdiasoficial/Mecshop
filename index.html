@@ -3,184 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ELITEBET | OFFICIAL PLATFORM</title>
+    <title>ELITEBET | IA PREDICTIVE SYSTEM</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --primary: #00ff41; --accent: #ffd700; --danger: #ff4b4b; --bg: #05070a; --card: #0e1217; --border: #1c2229; --text: #ffffff; --text-dim: #6c757d; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, sans-serif; }
-        body { background: var(--bg); color: var(--text); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+        :root { --primary: #00ff41; --accent: #ffd700; --danger: #ff4b4b; --bg: #0b0e11; --card: #161a1e; --border: #2b2f36; --text: #ffffff; --text-dim: #929292; --ai-glow: rgba(0, 255, 65, 0.1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg); color: var(--text); overflow-x: hidden; }
 
         /* HEADER & FEED */
-        header { position: fixed; top: 0; width: 100%; height: 70px; background: rgba(14, 18, 23, 0.98); backdrop-filter: blur(15px); display: flex; align-items: center; padding: 0 20px; border-bottom: 1px solid var(--border); z-index: 1000; justify-content: space-between; }
-        .secure-tag { font-size: 8px; color: var(--primary); border: 1px solid var(--primary); padding: 2px 6px; border-radius: 4px; letter-spacing: 1px; font-weight: 800; }
+        header { position: fixed; top: 0; width: 100%; height: 65px; background: var(--card); display: flex; align-items: center; padding: 0 20px; border-bottom: 1px solid var(--border); z-index: 1000; justify-content: space-between; }
+        .logo { font-weight: 900; font-size: 20px; letter-spacing: -1px; }
+        .logo span { color: var(--primary); }
         
-        .live-feed { background: #080a0d; padding: 6px 0; font-size: 10px; color: var(--text-dim); border-bottom: 1px solid var(--border); position: fixed; top: 70px; width: 100%; z-index: 900; overflow: hidden; white-space: nowrap; }
-        .feed-track { display: inline-block; animation: scrollFeed 30s linear infinite; }
-        @keyframes scrollFeed { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
-        .feed-item { margin-right: 50px; font-weight: 500; }
+        .live-feed { background: #080a0d; padding: 5px 0; font-size: 10px; color: var(--text-dim); border-bottom: 1px solid var(--border); position: fixed; top: 65px; width: 100%; z-index: 900; overflow: hidden; }
+        .feed-track { display: inline-block; white-space: nowrap; animation: scroll 25s linear infinite; }
+        @keyframes scroll { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
+        .feed-item { margin-right: 30px; }
         .feed-item b { color: var(--primary); }
 
-        .container { padding: 115px 15px 100px; max-width: 480px; margin: 0 auto; }
+        .container { padding: 105px 15px 100px; max-width: 480px; margin: 0 auto; }
         .screen { display: none; }
-        .active { display: block; animation: slideIn 0.4s cubic-bezier(0, 0, 0.2, 1); }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .active { display: block; animation: fadeUp 0.3s ease; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* UI ELITEBET */
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 22px; margin-bottom: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .label { font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px; display: block; }
-        input, select { width: 100%; background: #000; border: 1px solid #222; padding: 16px; border-radius: 10px; color: #fff; margin-bottom: 14px; outline: none; transition: 0.3s; }
-        input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(0,255,65,0.1); }
+        /* UI CARDS */
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 15px; position: relative; }
+        .label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; }
+        input, select { width: 100%; background: #000; border: 1px solid var(--border); padding: 15px; border-radius: 10px; color: #fff; margin-bottom: 12px; outline: none; font-size: 14px; }
         
-        .btn { width: 100%; padding: 18px; border-radius: 12px; border: none; font-weight: 900; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.2s; }
-        .btn-primary { background: var(--primary); color: #000; }
+        .btn { width: 100%; padding: 18px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 13px; }
+        .btn-primary { background: var(--primary); color: #000; box-shadow: 0 4px 15px rgba(0, 255, 65, 0.2); }
         .btn-secondary { background: var(--accent); color: #000; }
-        .btn-outline { background: transparent; border: 1px solid #333; color: var(--text-dim); margin-top: 10px; }
-        .btn:active { transform: scale(0.98); }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-dim); margin-top: 10px; }
 
-        /* ROLETA ELITE */
-        .wheel-wrap { position: relative; width: 230px; height: 230px; margin: 25px auto; }
-        .wheel { width: 100%; height: 100%; border-radius: 50%; border: 10px solid #1c2229; background: conic-gradient(#000 0% 12.5%, #151515 12.5% 25%, #000 25% 37.5%, #151515 37.5% 50%, #000 50% 62.5%, #151515 62.5% 75%, #000 75% 87.5%, #151515 87.5% 100%); transition: transform 4s cubic-bezier(0.1, 0.7, 0.1, 1); box-shadow: 0 0 40px rgba(0,0,0,0.8); }
-        .pointer { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 16px solid transparent; border-right: 16px solid transparent; border-top: 28px solid var(--accent); z-index: 10; filter: drop-shadow(0 0 8px var(--accent)); }
+        /* IA ADMIN STYLES */
+        .ai-status { background: rgba(0, 255, 65, 0.05); border: 1px dashed var(--primary); padding: 10px; border-radius: 8px; font-size: 11px; margin-top: 10px; line-height: 1.4; }
+        .ai-pulse { display: inline-block; width: 8px; height: 8px; background: var(--primary); border-radius: 50%; margin-right: 5px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } 100% { opacity: 0.3; transform: scale(1); } }
+        
+        /* GRÁFICO SIMULADO */
+        .chart-container { height: 100px; display: flex; align-items: flex-end; gap: 8px; margin: 15px 0; padding-bottom: 5px; border-bottom: 1px solid #333; }
+        .bar { flex: 1; background: var(--primary); border-top-left-radius: 4px; border-top-right-radius: 4px; opacity: 0.7; transition: 0.5s; }
 
-        /* CHAT FULL KEYBOARD */
-        .chat-wrap { display: flex; flex-direction: column; height: 380px; }
-        .chat-view { flex: 1; overflow-y: auto; background: #07090c; border-radius: 12px; padding: 18px; border: 1px solid #111; margin-bottom: 12px; display: flex; flex-direction: column; }
-        .msg { padding: 12px; border-radius: 12px; font-size: 13px; margin-bottom: 10px; max-width: 85%; line-height: 1.4; }
-        .msg.bot { background: #1a1e23; align-self: flex-start; color: #ddd; border-bottom-left-radius: 2px; }
-        .msg.user { background: var(--primary); color: #000; align-self: flex-end; font-weight: 700; border-bottom-right-radius: 2px; }
-        .input-group { display: flex; gap: 10px; }
-        .input-group input { margin-bottom: 0; flex: 1; font-size: 13px; background: #000; border: 1px solid var(--border); }
-        .btn-send { width: 55px; background: var(--primary); border: none; border-radius: 10px; cursor: pointer; font-size: 18px; }
+        /* ROLETA & CHAT */
+        .wheel-box { position: relative; width: 200px; height: 200px; margin: 20px auto; }
+        .wheel { width: 100%; height: 100%; border-radius: 50%; border: 6px solid #222; background: conic-gradient(#111 0% 12.5%, #1a1a1a 12.5% 25%, #111 25% 37.5%, #1a1a1a 37.5% 50%, #111 50% 62.5%, #1a1a1a 62.5% 75%, #111 75% 87.5%, #1a1a1a 87.5% 100%); transition: transform 4s cubic-bezier(0.1, 0.7, 0.1, 1); }
+        .pointer { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 25px solid var(--accent); z-index: 10; }
+        
+        .chat-area { height: 220px; overflow-y: auto; background: #080a0d; border-radius: 10px; padding: 15px; display: flex; flex-direction: column; border: 1px solid #111; margin-bottom: 10px; }
+        .msg { padding: 10px; border-radius: 10px; font-size: 12px; margin-bottom: 8px; max-width: 80%; }
+        .msg.bot { background: #1f2327; align-self: flex-start; }
+        .msg.user { background: var(--primary); color: #000; align-self: flex-end; font-weight: 600; }
 
-        /* BI ADMIN GRID */
-        .bi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
-        .bi-item { background: #0a0d11; padding: 15px; border-radius: 12px; border: 1px solid #161b22; }
-        .bi-val { font-size: 17px; font-weight: 900; color: #fff; }
-
-        /* NAV INFERIOR */
-        nav { position: fixed; bottom: 0; width: 100%; height: 75px; background: #0e1217; border-top: 1px solid #1c2229; display: none; justify-content: space-around; align-items: center; z-index: 1000; padding-bottom: 15px; }
-        .nav-link { text-align: center; color: var(--text-dim); font-size: 10px; flex: 1; text-decoration: none; cursor: pointer; }
-        .nav-link.active { color: var(--primary); font-weight: 900; }
+        /* NAV */
+        nav { position: fixed; bottom: 0; width: 100%; height: 70px; background: var(--card); border-top: 1px solid var(--border); display: none; justify-content: space-around; align-items: center; z-index: 1000; }
+        .nav-item { text-align: center; color: var(--text-dim); font-size: 10px; cursor: pointer; flex: 1; }
+        .nav-item.active { color: var(--primary); font-weight: 800; }
     </style>
 </head>
 <body>
 
     <header id="h-master" style="display:none;">
-        <div>
-            <div style="font-weight:900; font-size:20px; letter-spacing:-1.5px;">ELITE<span style="color:var(--primary);">BET</span></div>
-            <div class="secure-tag">ENCRYPTED: AES-256</div>
-        </div>
+        <div class="logo">ELITE<span>BET</span></div>
         <div style="text-align:right;">
-            <span id="h-saldo" style="color:var(--primary); font-weight:900; font-size:20px;">R$ 0,00</span>
-            <div id="h-session" style="font-size:9px; color:var(--text-dim); font-family:monospace;">SESSION: 00:00</div>
+            <span id="h-saldo" style="color:var(--primary); font-weight:800; font-size:16px;">R$ 0,00</span>
+            <div style="font-size:9px; color:var(--text-dim);" id="h-session">SESSÃO: 00:00</div>
         </div>
     </header>
 
     <div class="live-feed" id="feed-master" style="display:none;">
         <div class="feed-track">
-            <span class="feed-item">pedro_vip ganhou <b>R$ 150,00</b> no Aviator</span>
-            <span class="feed-item">maria_elite ganhou <b>R$ 420,50</b> na Roleta</span>
-            <span class="feed-item">joao_afiliado ganhou <b>R$ 1.200,00</b> no Tiger</span>
-            <span class="feed-item">ana_2026 ganhou <b>R$ 80,00</b> no Mines</span>
-            <span class="feed-item">lucas_black ganhou <b>R$ 310,00</b> no Double</span>
+            <span class="feed-item">pedro_vip ganhou <b>R$ 150,00</b></span>
+            <span class="feed-item">maria_elite ganhou <b>R$ 420,50</b></span>
+            <span class="feed-item">joao_afiliado ganhou <b>R$ 1.200,00</b></span>
+            <span class="feed-item">ana_2026 ganhou <b>R$ 80,00</b></span>
         </div>
     </div>
 
     <div class="container">
         
         <div id="scr-login" class="screen active">
-            <div class="card" style="margin-top: 40px; text-align:center;">
-                <h2 style="margin-bottom:25px; letter-spacing:-1px;">SISTEMA DE ACESSO</h2>
-                <input type="text" id="l-user" placeholder="Usuário ELITEBET">
-                <input type="password" id="l-pass" placeholder="Senha de Segurança">
-                <button class="btn btn-primary" onclick="fazerLogin()">CONECTAR À BANCA</button>
-                <button class="btn btn-outline" onclick="irPara('scr-cadastro')">REGISTRAR NOVA CONTA</button>
+            <div class="card" style="margin-top: 30px; text-align:center;">
+                <h2 style="margin-bottom:20px;">ENTRAR NA ELITEBET</h2>
+                <input type="text" id="l-user" placeholder="Usuário">
+                <input type="password" id="l-pass" placeholder="Senha">
+                <button class="btn btn-primary" onclick="fazerLogin()">ACESSAR CONTA</button>
+                <button class="btn btn-outline" onclick="irPara('scr-cadastro')">CRIAR CONTA</button>
+                <button class="btn btn-outline" style="border:none;" onclick="irPara('scr-recuperar')">Esqueci minha senha</button>
+            </div>
+        </div>
+
+        <div id="scr-recuperar" class="screen">
+            <div class="card">
+                <h2>RECUPERAR ACESSO</h2>
+                <input type="text" placeholder="CPF do Cadastro">
+                <button class="btn btn-primary" onclick="alert('Link enviado ao WhatsApp!'); irPara('scr-login')">ENVIAR LINK IA</button>
+                <button class="btn btn-outline" onclick="irPara('scr-login')">CANCELAR</button>
             </div>
         </div>
 
         <div id="scr-cadastro" class="screen">
             <div class="card">
-                <h2>CADASTRO ELITEBET</h2>
-                <input type="text" placeholder="Nome Completo">
-                <input type="text" placeholder="CPF Validado">
-                <input type="password" id="reg-p1" placeholder="Crie sua Senha">
-                <input type="password" id="reg-p2" placeholder="Confirme a Senha">
-                <button class="btn btn-primary" onclick="validarReg()">FINALIZAR REGISTRO</button>
-                <button class="btn btn-outline" onclick="irPara('scr-login')">VOLTAR AO LOGIN</button>
+                <h2>NOVO REGISTRO</h2>
+                <input type="text" placeholder="CPF">
+                <input type="password" id="reg-p1" placeholder="Crie uma Senha">
+                <input type="password" id="reg-p2" placeholder="Repita a Senha">
+                <button class="btn btn-primary" onclick="irPara('scr-login')">FINALIZAR</button>
             </div>
         </div>
 
         <div id="scr-lobby" class="screen">
-            <div class="card" style="text-align:center; padding: 50px 20px; border-bottom: 4px solid var(--primary);">
-                <span class="label">SALDO EM CARTEIRA</span>
-                <h1 id="main-saldo" style="font-size:52px; color:var(--primary); font-weight:900; letter-spacing:-3px; margin:10px 0;">R$ 0,00</h1>
-                <button class="btn btn-primary" style="padding:22px; font-size:15px;">ABRIR LOBBY DE JOGOS</button>
+            <div class="card" style="text-align:center; padding: 40px 20px;">
+                <span class="label">SALDO DISPONÍVEL</span>
+                <h1 id="main-saldo" style="font-size:45px; color:var(--primary); margin:10px 0;">R$ 0,00</h1>
+                <button class="btn btn-primary">ABRIR JOGOS</button>
             </div>
         </div>
 
         <div id="scr-roleta" class="screen">
             <div class="card" style="text-align:center;">
-                <h2 style="color:var(--accent);">GIRO DA SORTE</h2>
-                <p id="rol-msg" style="font-size:11px; color:var(--text-dim); margin-bottom:20px;">Teste sua sorte diária agora!</p>
-                <div class="wheel-wrap">
+                <h2 style="color:var(--accent);">ROLETA DA SORTE</h2>
+                <p id="rol-msg" style="font-size:11px; color:var(--text-dim); margin-bottom:15px;">Ganhe bônus de depósito agora!</p>
+                <div class="wheel-box">
                     <div class="pointer"></div>
                     <div class="wheel" id="wheel-obj"></div>
                 </div>
-                <button class="btn btn-secondary" id="btn-spin" onclick="girarRoleta()">INICIAR GIRO</button>
+                <button class="btn btn-secondary" id="btn-spin" onclick="girar()">GIRAR AGORA</button>
             </div>
         </div>
 
         <div id="scr-chat" class="screen">
             <div class="card">
-                <h2 style="font-size:15px; margin-bottom:12px;">SUPORTE ELITEBET 24H</h2>
-                <div class="chat-wrap">
-                    <div class="chat-view" id="chat-content">
-                        <div class="msg bot">Bem-vindo ao suporte ELITEBET. Digite sua dúvida abaixo.</div>
-                    </div>
-                    <div class="input-group">
-                        <input type="text" id="chat-input" placeholder="Escreva aqui...">
-                        <button class="btn-send" onclick="enviarMsg()">🚀</button>
-                    </div>
+                <h2 style="font-size:14px; margin-bottom:10px;">SUPORTE VIP</h2>
+                <div class="chat-area" id="chat-box"><div class="msg bot">Olá! Como posso ajudar?</div></div>
+                <div style="display:flex; gap:8px;">
+                    <input type="text" id="chat-input" placeholder="Digite aqui..." style="margin-bottom:0; flex:1;">
+                    <button class="btn-send" onclick="enviar()" style="width:50px; background:var(--primary); border:none; border-radius:10px; cursor:pointer;">🚀</button>
                 </div>
             </div>
         </div>
 
         <div id="scr-admin" class="screen">
-            <h3 style="color:var(--accent); font-size:14px; margin-bottom:15px; letter-spacing:1px;">🛡️ PAINEL GESTÃO ELITEBET</h3>
-            <div class="bi-grid">
-                <div class="bi-item"><span class="label">GGR TOTAL</span><span class="bi-val">R$ 452.900</span></div>
-                <div class="bi-item"><span class="label">LTV MÉDIO</span><span class="bi-val" style="color:var(--primary);">R$ 890,00</span></div>
-                <div class="bi-item"><span class="label">PENDENTE</span><span class="bi-val" style="color:var(--danger);">R$ 4.250</span></div>
-                <div class="bi-item"><span class="label">RETENÇÃO</span><span class="bi-val" style="color:var(--accent);">72%</span></div>
-            </div>
+            <h2 style="color:var(--accent); margin-bottom:15px; font-size:14px;"><i class="fa-solid fa-brain"></i> ELITE AI GESTÃO</h2>
+            
             <div class="card">
-                <span class="label">AJUSTE RÁPIDO</span>
+                <span class="label">PERFORMANCE GGR (ÚLTIMOS 7 DIAS)</span>
+                <div class="chart-container" id="ggr-chart">
+                    <div class="bar" style="height: 40%;"></div>
+                    <div class="bar" style="height: 60%;"></div>
+                    <div class="bar" style="height: 35%;"></div>
+                    <div class="bar" style="height: 85%;"></div>
+                    <div class="bar" style="height: 50%;"></div>
+                    <div class="bar" style="height: 70%;"></div>
+                    <div class="bar" style="height: 95%;"></div>
+                </div>
+                <div class="ai-status">
+                    <div class="ai-pulse"></div>
+                    <b>INSIGHT IA:</b> O volume de apostas cresceu 22% nas últimas 24h. Sugestão: Manter bônus de 50% para novos depósitos.
+                </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px;">
+                <div class="stat-card"><span class="label">LTV MÉDIO</span><span style="color:var(--primary); font-weight:800;">R$ 892,00</span></div>
+                <div class="stat-card"><span class="label">RISCO CHURN</span><span style="color:var(--danger); font-weight:800;">BAIXO (4%)</span></div>
+            </div>
+
+            <div class="card">
+                <span class="label">COMANDO CENTRAL</span>
                 <input type="text" id="adm-u" placeholder="Usuário">
                 <input type="number" id="adm-s" placeholder="Novo Saldo R$">
-                <button class="btn btn-secondary" onclick="salvarAdmin()">APLICAR ALTERAÇÕES</button>
+                <button class="btn btn-secondary" onclick="salvarAdmin()">SINCRONIZAR IA</button>
             </div>
         </div>
 
     </div>
 
     <nav id="n-master">
-        <div class="nav-link active" onclick="irPara('scr-lobby')">🏠<br>Início</div>
-        <div class="nav-link" onclick="irPara('scr-roleta')">🎡<br>Roleta</div>
-        <div class="nav-link" onclick="irPara('scr-chat')">💬<br>Suporte</div>
-        <div id="n-adm-btn" class="nav-link" style="display:none; color:var(--accent);" onclick="irPara('scr-admin')">🛡️<br>Admin</div>
+        <div class="nav-item active" onclick="irPara('scr-lobby')">🏠<br>Início</div>
+        <div class="nav-item" onclick="irPara('scr-roleta')">🎡<br>Roleta</div>
+        <div class="nav-item" onclick="irPara('scr-chat')">💬<br>Suporte</div>
+        <div id="n-adm-btn" class="nav-item" style="display:none; color:var(--accent);" onclick="irPara('scr-admin')">🛡️<br>Admin</div>
     </nav>
 
     <script>
         let saldo = 2500.00;
         let start = Date.now();
-        let spinDone = false;
+        let spinUsed = false;
 
         function irPara(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            if(id === 'scr-lobby') document.querySelector('.nav-link:nth-child(1)').classList.add('active');
-            if(id === 'scr-roleta') document.querySelector('.nav-link:nth-child(2)').classList.add('active');
-            if(id === 'scr-chat') document.querySelector('.nav-link:nth-child(3)').classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
         }
 
         function fazerLogin() {
@@ -188,75 +201,57 @@
             document.getElementById('h-master').style.display = 'flex';
             document.getElementById('n-master').style.display = 'flex';
             document.getElementById('feed-master').style.display = 'block';
-            
             if(u === 'admin') { 
                 document.getElementById('n-adm-btn').style.display = 'block'; 
                 irPara('scr-admin'); 
             } else { 
                 irPara('scr-lobby'); 
             }
-            setInterval(updateSession, 1000);
+            setInterval(() => {
+                let d = Math.floor((Date.now() - start) / 1000);
+                document.getElementById('h-session').innerText = `SESSÃO: ${Math.floor(d/60).toString().padStart(2,'0')}:${(d%60).toString().padStart(2,'0')}`;
+            }, 1000);
             updateUI();
         }
 
         function updateUI() {
-            const fmt = "R$ " + saldo.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-            document.getElementById('h-saldo').innerText = fmt;
-            document.getElementById('main-saldo').innerText = fmt;
+            const f = "R$ " + saldo.toFixed(2).replace('.', ',');
+            document.getElementById('h-saldo').innerText = f;
+            document.getElementById('main-saldo').innerText = f;
         }
 
-        function updateSession() {
-            let d = Math.floor((Date.now() - start) / 1000);
-            let m = Math.floor(d / 60).toString().padStart(2, '0');
-            let s = (d % 60).toString().padStart(2, '0');
-            document.getElementById('h-session').innerText = `SESSION: ${m}:${s}`;
-        }
-
-        function validarReg() {
-            if(document.getElementById('reg-p1').value !== document.getElementById('reg-p2').value) {
-                alert("As senhas não coincidem!"); return;
-            }
-            alert("Cadastro ELITEBET realizado com sucesso!");
-            irPara('scr-login');
-        }
-
-        function girarRoleta() {
-            if(spinDone) return;
+        function girar() {
+            if(spinUsed) return;
             const w = document.getElementById('wheel-obj');
-            const deg = Math.floor(Math.random() * 3600) + 3600;
-            w.style.transform = `rotate(${deg}deg)`;
-            spinDone = true;
-            document.getElementById('btn-spin').innerText = "SORTEANDO...";
-            
+            const r = Math.floor(Math.random() * 3600) + 3600;
+            w.style.transform = `rotate(${r}deg)`;
+            spinUsed = true;
             setTimeout(() => {
-                if(Math.random() > 0.5) { 
-                    saldo += 50; updateUI(); 
-                    document.getElementById('rol-msg').innerHTML = "<b style='color:var(--primary)'>PARABÉNS! + R$ 50,00 DE BÔNUS!</b>";
-                } else { 
-                    document.getElementById('rol-msg').innerHTML = "<b style='color:var(--danger)'>NÃO FOI DESSA VEZ!</b>";
+                if(Math.random() > 0.5) {
+                    saldo += 50; updateUI();
+                    document.getElementById('rol-msg').innerHTML = "<b style='color:var(--primary)'>IA: GANHOU R$ 50,00!</b>";
+                } else {
+                    document.getElementById('rol-msg').innerHTML = "<b style='color:var(--danger)'>IA: SEM SORTE HOJE!</b>";
                 }
-                document.getElementById('btn-spin').innerText = "GIRO ESGOTADO";
+                document.getElementById('btn-spin').innerText = "LIMITADO";
             }, 4000);
         }
 
-        function enviarMsg() {
+        function enviar() {
             const inp = document.getElementById('chat-input');
-            const box = document.getElementById('chat-content');
+            const box = document.getElementById('chat-box');
             if(!inp.value) return;
             box.innerHTML += `<div class="msg user">${inp.value}</div>`;
-            const txt = inp.value.toLowerCase();
             inp.value = "";
             setTimeout(() => {
-                let r = "Aguarde... Conectando com Atendente Humano VIP.";
-                if(txt.includes("pix")) r = "Depósitos via PIX são automáticos. Verifique o status na sua conta bancária.";
-                box.innerHTML += `<div class="msg bot">${r}</div>`;
+                box.innerHTML += `<div class="msg bot">Aguarde... Atendimento Elite Bet sendo conectado.</div>`;
                 box.scrollTop = box.scrollHeight;
             }, 800);
         }
 
         function salvarAdmin() {
             const v = parseFloat(document.getElementById('adm-s').value);
-            if(!isNaN(v)) { saldo = v; updateUI(); alert("SALDO ELITEBET SINCRONIZADO!"); }
+            if(!isNaN(v)) { saldo = v; updateUI(); alert("IA: Banco de dados sincronizado!"); }
         }
     </script>
 </body>
