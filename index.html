@@ -3,147 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ELITE LOG V20 | GESTÃO INDUSTRIAL</title>
+    <title>ELITE LOG V21 | FLOW CONTROL</title>
     <script src="https://unpkg.com/@zxing/library@latest"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --p: #0052cc; --s: #36b37e; --d: #ff4b4b; --bg: #f4f7fa; --dark: #091e42; }
+        :root { --p: #0052cc; --s: #36b37e; --d: #ff4b4b; --w: #ffab00; --bg: #f4f7fa; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: var(--dark); padding-bottom: 50px; }
+        body { background: var(--bg); padding-bottom: 40px; }
+        header { background: var(--p); color: white; padding: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         
-        /* HEADER OPERACIONAL */
-        header { background: var(--p); color: white; padding: 25px 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .status-bar { display: flex; background: white; border-bottom: 2px solid #eee; padding: 12px; gap: 10px; sticky; top: 0; }
-        .stat { flex: 1; padding: 10px; border-radius: 10px; text-align: center; font-size: 10px; font-weight: 900; text-transform: uppercase; }
+        .status-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 15px; }
+        .stat-card { background: white; padding: 12px; border-radius: 12px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .stat-val { display: block; font-size: 18px; font-weight: 900; color: var(--p); }
+        .stat-lab { font-size: 10px; font-weight: 700; color: #888; text-transform: uppercase; }
 
-        /* INTERFACE DE DOCA */
-        .container { padding: 15px; max-width: 600px; margin: auto; }
-        .card { background: white; border-radius: 20px; padding: 20px; margin-bottom: 15px; box-shadow: 0 8px 30px rgba(0,0,0,0.04); }
-        label { font-size: 11px; font-weight: 800; color: #888; text-transform: uppercase; display: block; margin-bottom: 5px; }
-        input, select { width: 100%; padding: 15px; border: 2px solid #f0f2f5; border-radius: 12px; margin-bottom: 12px; font-size: 15px; font-weight: 600; outline: none; }
-        input:focus { border-color: var(--p); }
+        .container { padding: 0 15px; max-width: 600px; margin: auto; }
+        .card { background: white; border-radius: 20px; padding: 20px; margin-bottom: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.03); }
+        
+        /* SELETOR DE MODO PROFISSIONAL */
+        .mode-selector { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 15px; }
+        .mode-btn { padding: 12px; border: 2px solid #eee; border-radius: 10px; cursor: pointer; text-align: center; font-weight: 800; font-size: 11px; transition: 0.3s; background: white; }
+        .mode-btn.active { border-color: var(--p); background: #e3f2fd; color: var(--p); }
 
-        /* SCANNER INDUSTRIAL */
-        #scanner-box { width: 100%; height: 280px; background: #000; border-radius: 15px; overflow: hidden; position: relative; border: 4px solid var(--s); }
+        #scanner-box { width: 100%; height: 260px; background: #000; border-radius: 15px; overflow: hidden; position: relative; border: 4px solid var(--s); }
         video { width: 100%; height: 100%; object-fit: cover; }
         .laser { position: absolute; top: 50%; left: 10%; width: 80%; height: 2px; background: var(--d); box-shadow: 0 0 10px var(--d); animation: move 2s infinite; }
         @keyframes move { 0%, 100% { top: 20%; } 50% { top: 80%; } }
 
-        /* BOTÕES DE AÇÃO */
-        .btn { border: none; padding: 18px; border-radius: 12px; width: 100%; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 14px; transition: 0.2s; }
+        .btn { border: none; padding: 18px; border-radius: 12px; width: 100%; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 10px; }
         .btn-p { background: var(--p); color: white; }
-        .btn-s { background: var(--s); color: white; margin-top: 10px; }
-        .btn:active { transform: scale(0.96); }
+        .btn-s { background: var(--s); color: white; }
 
-        /* LOG DE AUDITORIA (DONO/GERENTE) */
-        .log-list { margin-top: 15px; max-height: 150px; overflow-y: auto; border-top: 1px solid #eee; padding-top: 10px; }
-        .log-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #fafafa; font-size: 12px; }
-        .sync-on { color: var(--s); font-weight: bold; }
-        .sync-off { color: orange; font-weight: bold; }
+        .log-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #f0f0f0; font-size: 12px; }
+        .badge { padding: 4px 8px; border-radius: 5px; font-size: 9px; font-weight: 900; color: white; }
     </style>
 </head>
 <body>
 
 <header>
-    <h2 style="letter-spacing: -1px;">ELITE LOG V20</h2>
-    <p style="font-size: 10px; opacity: 0.7;">GESTOR OPERACIONAL: <b>JP DIAS</b></p>
+    <h2 style="letter-spacing:-1px">ELITE LOG V21</h2>
+    <p style="font-size:10px; opacity:0.8">HORTOLÂNDIA HUB | OPERAÇÃO TOTAL</p>
 </header>
 
-<div class="status-bar">
-    <div class="stat" style="background:#e3f2fd; color:#1565c0;">FILA: <span id="q">0</span></div>
-    <div class="stat" style="background:#e8f5e9; color:#2e7d32;">NUVEM: <span id="n">0</span></div>
-    <div class="stat" style="background:#fff3e0; color:#ef6c00;">SINAL: <span id="sig">OK</span></div>
+<div class="status-grid">
+    <div class="stat-card"><span id="c-ent" class="stat-val">0</span><span class="stat-lab">Entradas</span></div>
+    <div class="stat-card"><span id="c-sai" class="stat-val">0</span><span class="stat-lab">Saídas</span></div>
+    <div class="stat-card"><span id="c-ok" class="stat-val">0</span><span class="stat-lab" style="color:var(--s)">Entregues</span></div>
+    <div class="stat-card"><span id="c-err" class="stat-val">0</span><span class="stat-lab" style="color:var(--d)">Paradas/Erro</span></div>
 </div>
 
 <div class="container">
     <div class="card">
-        <label>Selecione o Cliente Shark</label>
-        <select id="cli">
-            <option>CLIENTE SHARK 01</option>
-            <option>CLIENTE SHARK 02</option>
-            <option>AGÊNCIA PARCEIRA</option>
-        </select>
-        
-        <label>Controle de Placa (Logística)</label>
-        <input type="text" id="pla" placeholder="PLACA DO VEÍCULO" style="text-transform: uppercase;">
+        <label style="font-size:10px; font-weight:800; color:#666">SELECIONE O TIPO DE OPERAÇÃO:</label>
+        <div class="mode-selector">
+            <div class="mode-btn active" onclick="setMode('ENTRADA', this)">📥 ENTRADA</div>
+            <div class="mode-btn" onclick="setMode('SAIDA', this)">🚚 SAÍDA</div>
+            <div class="mode-btn" onclick="setMode('ENTREGA', this)">✅ ENTREGA</div>
+            <div class="mode-btn" onclick="setMode('PARADA', this)">⚠️ PARADA/ERRO</div>
+        </div>
+        <input type="text" id="pla" placeholder="PLACA OU MOTORISTA" style="width:100%; padding:15px; border-radius:10px; border:2px solid #eee; font-weight:700; text-transform:uppercase">
     </div>
 
-    <div class="card" style="text-align: center;">
+    <div class="card" style="text-align:center">
         <div id="scanner-box">
             <video id="video"></video>
             <div class="laser"></div>
         </div>
-        <button onclick="ativarScanner()" id="btn-scan" class="btn btn-s"><i class="fa-solid fa-barcode"></i> LIGAR SCANNER LASER</button>
-        <p id="res" style="margin-top:15px; font-weight: 800; color: var(--p);">AGUARDANDO BIPAGEM...</p>
+        <button onclick="ativar()" id="btn-at" class="btn btn-s"><i class="fa-solid fa-barcode"></i> LIGAR SCANNER</button>
+        <p id="res" style="margin-top:15px; font-weight:900; color:var(--p)">AGUARDANDO...</p>
     </div>
 
     <div class="card">
-        <button onclick="syncNow()" class="btn btn-p"><i class="fa-solid fa-cloud-arrow-up"></i> FORÇAR SINCRONIA GOOGLE</button>
-        <div class="log-list" id="logs"></div>
-        <button onclick="limpar()" class="btn" style="background:#eee; color:#666; font-size:10px; margin-top:15px; padding:10px;">LIMPAR SESSÃO (Zerar Tudo)</button>
+        <h4 style="font-size:11px; margin-bottom:10px">ÚLTIMOS MOVIMENTOS (AUDITORIA)</h4>
+        <div id="logs"></div>
+        <button onclick="exportar()" class="btn btn-p" style="margin-top:20px; font-size:12px; height:45px">GERAR RELATÓRIO PDF</button>
     </div>
 </div>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('elite_v20_db')) || [];
+    let db = JSON.parse(localStorage.getItem('elite_v21_db')) || [];
+    let currentMode = 'ENTRADA';
     const reader = new ZXing.BrowserMultiFormatReader();
 
-    function ativarScanner() {
+    function setMode(mode, btn) {
+        currentMode = mode;
+        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        vibrar(30);
+    }
+
+    function ativar() {
         const p = document.getElementById('pla').value;
-        if(!p) return alert("ERRO: Digite a PLACA para auditoria!");
-        document.getElementById('btn-scan').style.display = 'none';
+        if(!p) return alert("Erro: Identifique a Placa/Motorista!");
+        document.getElementById('btn-at').style.display = 'none';
 
         reader.decodeFromVideoDevice(null, 'video', (res) => {
             if (res) {
-                if(db.find(i => i.id === res.text)) {
-                    vibrar(200);
-                    document.getElementById('res').innerHTML = "<span style='color:var(--d)'>DUPLICADO!</span>";
-                    return;
-                }
-                
-                const item = {
-                    id: res.text,
-                    cli: document.getElementById('cli').value,
-                    pla: p.toUpperCase(),
-                    h: new Date().toLocaleTimeString(),
-                    s: false
-                };
-
-                db.unshift(item);
-                vibrar(50);
-                save();
+                // Auditoria de Fluxo: Não deixa 'Entregar' algo que não 'Entrou'
+                processar(res.text, p.toUpperCase());
             }
         });
     }
 
-    function save() {
-        localStorage.setItem('elite_v20_db', JSON.stringify(db));
-        render();
-        if(navigator.onLine) syncNow();
-    }
+    function processar(id, info) {
+        const item = {
+            id: id,
+            tipo: currentMode,
+            info: info,
+            h: new Date().toLocaleTimeString(),
+            d: new Date().toLocaleDateString()
+        };
 
-    function syncNow() {
-        // Simulação de Sincronia com Google Sheets
-        db.forEach(i => i.s = true);
-        localStorage.setItem('elite_v20_db', JSON.stringify(db));
-        document.getElementById('sig').innerText = "SINCRONIZADO";
+        db.unshift(item);
+        localStorage.setItem('elite_v21_db', JSON.stringify(db));
+        vibrar(50);
+        document.getElementById('res').innerHTML = `OK: ${currentMode} - ${id}`;
         render();
     }
 
     function render() {
-        document.getElementById('q').innerText = db.filter(i => !i.s).length;
-        document.getElementById('n').innerText = db.filter(i => i.s).length;
-        
+        document.getElementById('c-ent').innerText = db.filter(i => i.tipo === 'ENTRADA').length;
+        document.getElementById('c-sai').innerText = db.filter(i => i.tipo === 'SAIDA').length;
+        document.getElementById('c-ok').innerText = db.filter(i => i.tipo === 'ENTREGA').length;
+        document.getElementById('c-err').innerText = db.filter(i => i.tipo === 'PARADA').length;
+
         const logs = document.getElementById('logs');
-        logs.innerHTML = db.slice(0,5).map(i => `
-            <div class="log-item">
-                <b>${i.id}</b>
-                <span class="${i.s ? 'sync-on' : 'sync-off'}">${i.s ? 'OK' : 'FILA'}</span>
-            </div>
-        `).join('');
+        logs.innerHTML = db.slice(0, 5).map(i => {
+            let color = i.tipo === 'ENTRADA' ? 'var(--p)' : (i.tipo === 'ENTREGA' ? 'var(--s)' : 'var(--d)');
+            return `
+                <div class="log-item">
+                    <span><b>${i.id}</b><br><small>${i.info}</small></span>
+                    <span class="badge" style="background:${color}">${i.tipo}</span>
+                </div>
+            `;
+        }).join('');
     }
 
-    function limpar() { if(confirm("Zerar banco de dados?")) { db = []; save(); location.reload(); } }
     function vibrar(ms) { if(navigator.vibrate) navigator.vibrate(ms); }
     render();
 </script>
