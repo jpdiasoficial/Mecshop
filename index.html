@@ -6,45 +6,62 @@
     <title>ELITEBET | DASHBOARD</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --primary: #00ff41; --bg-dark: #050709; --card-bg: #12151a; --border-color: #23272e; --text-main: #ffffff; --text-muted: #8a939e; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        :root { --primary: #00ff41; --bg-dark: #050709; --card-bg: #12151a; --border-color: #23272e; --text-main: #ffffff; --text-muted: #8a939e; --accent-orange: #ff5e00; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, sans-serif; }
         body { background: var(--bg-dark); color: var(--text-main); overflow-x: hidden; }
 
         /* HEADER */
         header { position: fixed; top: 0; width: 100%; height: 60px; background: var(--card-bg); display: flex; align-items: center; padding: 0 15px; border-bottom: 1px solid var(--border-color); z-index: 1000; justify-content: space-between; }
-        .logo-box { font-weight: 800; font-size: 18px; text-transform: uppercase; }
+        .logo-box { font-weight: 800; font-size: 18px; letter-spacing: -0.5px; text-transform: uppercase; }
         .logo-box span { color: var(--primary); }
-        .balance-chip { background: #1c2128; padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border-color); font-weight: 700; color: var(--primary); }
+        .balance-chip { background: #1c2128; padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border-color); font-weight: 700; font-size: 14px; color: var(--primary); }
 
-        /* CONTAINER & SCREENS */
-        .main-container { padding: 80px 16px 100px; max-width: 500px; margin: 0 auto; }
+        /* SIDE NAVIGATION */
+        .side-nav { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: var(--card-bg); z-index: 1100; transition: 0.3s; border-right: 1px solid var(--border-color); padding: 20px; }
+        .side-nav.open { left: 0; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1050; display: none; }
+        .overlay.active { display: block; }
+
+        /* SCREENS */
+        .main-container { padding: 80px 16px 100px; max-width: 500px; margin: 0 auto; min-height: 100vh; }
         .screen { display: none; }
-        .screen.active { display: block; animation: fadeIn 0.3s ease; }
+        .screen.active { display: block; animation: fadeIn 0.25s ease-out; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         /* CARDS */
         .form-card { background: var(--card-bg); border-radius: 12px; padding: 24px; border: 1px solid var(--border-color); margin-bottom: 16px; }
-        .field-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; display: block; }
+        .field-label { font-size: 11px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; display: block; }
         input { width: 100%; background: #0a0c10; border: 1px solid var(--border-color); padding: 14px; border-radius: 8px; color: #fff; margin-bottom: 16px; outline: none; }
         
-        .btn-action { width: 100%; padding: 16px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; text-transform: uppercase; }
+        .btn-action { width: 100%; padding: 16px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 13px; }
         .btn-confirm { background: var(--primary); color: #000; }
-        .btn-disabled { background: #1c2128; color: var(--text-muted); cursor: not-allowed; }
 
-        /* ROLETA */
-        .wheel-wrapper { position: relative; width: 230px; height: 230px; margin: 25px auto; }
+        /* WHEEL */
+        .wheel-wrapper { position: relative; width: 220px; height: 220px; margin: 25px auto; }
         .wheel-body { width: 100%; height: 100%; border-radius: 50%; border: 6px solid #1c2128; background: conic-gradient(#000 0% 12.5%, #15191f 12.5% 25%, #000 25% 37.5%, #15191f 37.5% 50%, #000 50% 62.5%, #15191f 62.5% 75%, #000 75% 87.5%, #15191f 87.5% 100%); transition: 4s cubic-bezier(0.15, 0, 0.15, 1); }
-        .wheel-pointer { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 25px solid var(--primary); z-index: 10; }
 
-        /* NAV */
+        /* BOTTOM TAB NAV */
         .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 65px; background: var(--card-bg); border-top: 1px solid var(--border-color); display: none; align-items: center; z-index: 1000; }
-        .tab-item { flex: 1; text-align: center; color: var(--text-muted); font-size: 10px; cursor: pointer; }
+        .tab-item { flex: 1; text-align: center; color: var(--text-muted); font-size: 10px; font-weight: 600; cursor: pointer; display: flex; flex-direction: column; gap: 4px; }
         .tab-item.active { color: var(--primary); }
     </style>
 </head>
 <body>
 
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+    
+    <div class="side-nav" id="side-nav">
+        <div class="logo-box">ELITE<span>BET</span></div>
+        <div style="margin-top: 30px;">
+            <div style="padding: 15px 0; border-bottom: 1px solid #1c2128; cursor: pointer;" onclick="irPara('scr-lobby'); toggleMenu()">Lobby</div>
+            <div style="padding: 15px 0; border-bottom: 1px solid #1c2128; cursor: pointer;" onclick="irPara('scr-roleta'); toggleMenu()">Roleta</div>
+            <div id="side-admin" style="padding: 15px 0; color: var(--accent-orange); display:none;" onclick="irPara('scr-admin'); toggleMenu()">Admin</div>
+            <div style="padding: 15px 0; color: #ff4b4b; margin-top: 20px;" onclick="location.reload()">Sair</div>
+        </div>
+    </div>
+
     <header id="main-header" style="display:none;">
+        <button class="header-btn" onclick="toggleMenu()" style="background:none; border:none; color:white;"><i class="fa-solid fa-bars"></i></button>
         <div class="logo-box">ELITE<span>BET</span></div>
         <div class="balance-chip" id="top-balance">R$ 0,00</div>
     </header>
@@ -52,45 +69,42 @@
     <div class="main-container">
         
         <div id="scr-login" class="screen active">
-            <div class="form-card" style="margin-top: 40px;">
-                <h2 style="text-align:center; margin-bottom:25px;">ACESSO</h2>
+            <div class="form-card">
+                <h2 style="text-align:center; margin-bottom:20px;">ENTRAR</h2>
                 <span class="field-label">Usuário</span>
                 <input type="text" id="l-user">
                 <span class="field-label">Senha</span>
                 <input type="password" id="l-pass">
-                <button class="btn-action btn-confirm" onclick="fazerLogin()">Entrar</button>
+                <button class="btn-action btn-confirm" onclick="fazerLogin()">Acessar Conta</button>
             </div>
         </div>
 
         <div id="scr-lobby" class="screen">
             <div class="form-card" style="text-align:center;">
-                <span class="field-label">Disponível para Operar</span>
-                <h1 id="lobby-balance" style="font-size:38px;">R$ 0,00</h1>
+                <span class="field-label">Saldo em Conta</span>
+                <h1 id="lobby-balance" style="font-size:36px;">R$ 0,00</h1>
             </div>
-            <div class="form-card" onclick="irPara('scr-roleta')" style="cursor:pointer; background: linear-gradient(135deg, #12151a, #1c2128); border-left: 4px solid var(--primary);">
-                <div style="font-weight:700; color:var(--primary);">🎡 ROLETA DE BÔNUS DIÁRIO</div>
-                <p style="font-size:11px; color:var(--text-muted); margin-top:5px;">Gire hoje e ganhe créditos na sua banca.</p>
+            <div class="form-card" onclick="irPara('scr-roleta')" style="cursor:pointer; background: linear-gradient(90deg, #12151a, #1c2128);">
+                <div style="font-weight:700;">🎡 ROLETA DIÁRIA</div>
+                <div style="font-size:11px; color:var(--text-muted);">Clique para girar seu bônus.</div>
             </div>
         </div>
 
         <div id="scr-roleta" class="screen">
             <div class="form-card" style="text-align:center;">
-                <h3 style="margin-bottom:10px;">SORTEIO DE CRÉDITOS</h3>
+                <h2>SORTEIO</h2>
                 <div class="wheel-wrapper">
-                    <div class="wheel-pointer"></div>
                     <div class="wheel-body" id="wheel-obj"></div>
                 </div>
-                <button id="spin-button" class="btn-action btn-confirm" onclick="executarGiro()">Girar Roleta</button>
-                <p id="spin-msg" style="font-size:12px; margin-top:15px; color:var(--text-muted);"></p>
+                <button class="btn-action btn-confirm" onclick="girar()">Girar Agora</button>
             </div>
         </div>
 
         <div id="scr-admin" class="screen">
             <div class="form-card">
-                <h2 style="font-size:16px; margin-bottom:15px;">PAINEL MASTER</h2>
-                <span class="field-label">Sincronizar Saldo (R$)</span>
-                <input type="number" id="adm-s" placeholder="Ex: 5000.00">
-                <button class="btn-action btn-confirm" onclick="salvarAdmin()">Atualizar Servidor</button>
+                <h2 style="color:var(--accent-orange);">GERENCIAMENTO</h2>
+                <input type="number" id="adm-s" placeholder="Novo Saldo R$">
+                <button class="btn-action btn-confirm" onclick="salvarAdmin()">Atualizar Saldo</button>
             </div>
         </div>
 
@@ -98,25 +112,21 @@
 
     <nav class="bottom-nav" id="bottom-bar">
         <div class="tab-item active" onclick="irPara('scr-lobby')"><i class="fa-solid fa-house"></i><br>Início</div>
-        <div class="tab-item" onclick="irPara('scr-roleta')"><i class="fa-solid fa-spinner"></i><br>Roleta</div>
+        <div class="tab-item" onclick="irPara('scr-roleta')"><i class="fa-solid fa-circle-dot"></i><br>Roleta</div>
         <div id="nav-adm-btn" class="tab-item" onclick="irPara('scr-admin')" style="display:none;"><i class="fa-solid fa-lock"></i><br>Admin</div>
     </nav>
 
     <script>
-        let saldo = 0.00;
-        let ultimaDataGiro = null;
+        let saldo = 2500.00;
+
+        function toggleMenu() {
+            document.getElementById('side-nav').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('active');
+        }
 
         function irPara(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            
-            // Controle de Tabs
-            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-            if(id === 'scr-lobby') document.querySelectorAll('.tab-item')[0].classList.add('active');
-            if(id === 'scr-roleta') {
-                document.querySelectorAll('.tab-item')[1].classList.add('active');
-                verificarGiro();
-            }
         }
 
         function fazerLogin() {
@@ -126,60 +136,21 @@
             
             if(user === 'admin') {
                 document.getElementById('nav-adm-btn').style.display = 'flex';
-                saldo = 1000.00; // Saldo inicial demo para admin
+                document.getElementById('side-admin').style.display = 'block';
             }
             irPara('scr-lobby');
             updateUI();
         }
 
-        function verificarGiro() {
-            const btn = document.getElementById('spin-button');
-            const msg = document.getElementById('spin-msg');
-            
-            if (ultimaDataGiro) {
-                const agora = new Date();
-                const diff = agora - ultimaDataGiro;
-                const horasRestantes = 24 - (diff / (1000 * 60 * 60));
-
-                if (horasRestantes > 0) {
-                    btn.disabled = true;
-                    btn.className = "btn-action btn-disabled";
-                    btn.innerText = "GIRO USADO";
-                    msg.innerText = `Volte em ${Math.floor(horasRestantes)}h para girar novamente.`;
-                    return false;
-                }
-            }
-            btn.disabled = false;
-            btn.className = "btn-action btn-confirm";
-            btn.innerText = "GIRAR AGORA";
-            msg.innerText = "Você tem 1 giro disponível!";
-            return true;
-        }
-
-        function executarGiro() {
-            if (!verificarGiro()) return;
-
-            const wheel = document.getElementById('wheel-obj');
-            const sorteio = (Math.random() * 50) + 10; // Ganho entre 10 e 60 reais
-            
-            const randomDeg = Math.floor(Math.random() * 3600) + 3600;
-            wheel.style.transform = `rotate(${randomDeg}deg)`;
-            
-            document.getElementById('spin-button').disabled = true;
-
-            setTimeout(() => {
-                saldo += sorteio;
-                ultimaDataGiro = new Date();
-                updateUI();
-                alert(`PARABÉNS! Você ganhou R$ ${sorteio.toFixed(2)} de bônus diário.`);
-                verificarGiro();
-            }, 4000);
-        }
-
         function updateUI() {
-            const valorFormatado = "R$ " + saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
-            document.getElementById('top-balance').innerText = valorFormatado;
-            document.getElementById('lobby-balance').innerText = valorFormatado;
+            const valor = "R$ " + saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+            document.getElementById('top-balance').innerText = valor;
+            document.getElementById('lobby-balance').innerText = valor;
+        }
+
+        function girar() {
+            const w = document.getElementById('wheel-obj');
+            w.style.transform = `rotate(${Math.floor(Math.random() * 3600) + 7200}deg)`;
         }
 
         function salvarAdmin() {
@@ -187,7 +158,7 @@
             if(!isNaN(novo)) {
                 saldo = novo;
                 updateUI();
-                alert("Dados sincronizados com o Master.");
+                alert("Sincronizado!");
             }
         }
     </script>
