@@ -3,82 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JP DIAS | Logística Full Control</title>
+    <title>TESTE EM TEMPO REAL | JP DIAS V60</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #121212; color: #e0e0e0; margin: 0; padding: 20px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .card { background: #1e1e1e; border: 1px solid #333; border-radius: 12px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        .header-full { grid-column: span 2; text-align: center; border-bottom: 2px solid #f39c12; margin-bottom: 20px; }
-        h2 { color: #f39c12; margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .btn-avaria { background: #c0392b; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 15px; }
-        .btn-avaria:hover { background: #e74c3c; }
-        .monitor-item { background: #252525; padding: 10px; border-radius: 6px; margin-bottom: 8px; font-size: 14px; border-left: 4px solid #f39c12; }
-        .logs { background: #000; color: #00ff00; font-family: 'Courier New', monospace; height: 120px; overflow-y: scroll; padding: 10px; font-size: 12px; border-radius: 4px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #000; color: #fff; text-align: center; padding: 20px; }
+        .box-teste { border: 2px solid #f39c12; border-radius: 15px; padding: 20px; background: #1a1a1a; max-width: 400px; margin: auto; }
+        .btn-teste { background: #f39c12; color: #000; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; margin-bottom: 10px; cursor: pointer; font-size: 16px; }
+        .btn-avaria { background: #e74c3c; color: white; }
+        .painel-gestor { margin-top: 20px; background: #222; padding: 10px; border-radius: 8px; font-size: 12px; text-align: left; border-left: 5px solid #2ecc71; }
+        .log-linha { border-bottom: 1px solid #333; padding: 5px; color: #2ecc71; font-family: monospace; }
     </style>
 </head>
 <body>
 
-<div class="header-full">
-    <h1>SISTEMA JP DIAS | <span style="color:white">CONTROLE HIERÁRQUICO</span></h1>
-</div>
+    <div class="box-teste">
+        <h2 style="color:#f39c12">JP DIAS LOG</h2>
+        <p>Simulação de Operação Real</p>
+        
+        <button class="btn-teste" onclick="testeArmazem()">1. TESTAR ARMAZÉM (VOZ)</button>
+        <button class="btn-teste" onclick="testeCrossDock()">2. TESTAR CROSS DOCK</button>
+        <button class="btn-teste btn-avaria" onclick="testeAvaria()">3. TESTAR AVARIA (TRAVA)</button>
 
-<div class="grid">
-    <div class="card">
-        <h2>📦 MÓDULO ARMAZÉM</h2>
-        <div class="monitor-item">Estoque: 1.540 Itens</div>
-        <div class="monitor-item">Pedidos em Picking: 12</div>
-        <div class="monitor-item">Conferência: 08 Pendentes</div>
-        <button class="btn-avaria" onclick="registrarAvaria('ARMAZÉM')">🚨 REGISTRAR AVARIA ARMAZÉM</button>
-    </div>
-
-    <div class="card">
-        <h2>⚡ MÓDULO CROSS DOCK</h2>
-        <div class="monitor-item">Cargas em Transição: 42</div>
-        <div class="monitor-item">Próximo Corte: 14:30 (Rota SP)</div>
-        <div class="monitor-item">Doca Ocupada: Doca 04</div>
-        <button class="btn-avaria" onclick="registrarAvaria('CROSS DOCK')">🚨 REGISTRAR AVARIA CROSS DOCK</button>
-    </div>
-
-    <div class="card" style="grid-column: span 2;">
-        <h2>🛰️ MONITORAMENTO CENTRAL (TORRE DE CONTROLE)</h2>
-        <div id="statusGeral" style="margin-bottom: 15px; font-weight: bold; color: #2ecc71;">
-            SISTEMA OPERACIONAL - TUDO SOB CONTROLE
-        </div>
-        <div class="logs" id="logBox">
-            [18:00] Painel de Gestão Iniciado...<br>
-            [18:02] Operador LOGADO: JP DIAS...<br>
+        <div class="painel-gestor">
+            <strong>🛰️ TORRE DE CONTROLE (LOGS):</strong>
+            <div id="log-espaco">
+                <div class="log-linha">[18:23] Sistema V60 Pronto...</div>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-    function falar(texto) {
-        const msg = new SpeechSynthesisUtterance(texto);
-        msg.lang = 'pt-BR';
-        window.speechSynthesis.speak(msg);
-    }
+    <script>
+        const falar = (t) => {
+            window.speechSynthesis.cancel();
+            const m = new SpeechSynthesisUtterance(t);
+            m.lang = 'pt-BR';
+            window.speechSynthesis.speak(m);
+        };
 
-    function registrarAvaria(setor) {
-        const item = prompt(`[SISTEMA ${setor}] Informe o código do item avariado:`);
-        if(item) {
-            const motivo = prompt("Motivo (1-Embalagem, 2-Temperatura, 3-Outros):");
-            falar(`Atenção. Registro de avaria no ${setor}. Item isolado para auditoria.`);
-            adicionarLog(`AVARIA DETECTADA: Setor ${setor} | Item: ${item} | Motivo: ${motivo}`);
-            alert(`Sucesso: Item ${item} bloqueado no ${setor}.`);
+        function registrar(msg) {
+            const log = document.getElementById('log-espaco');
+            const hora = new Date().toLocaleTimeString();
+            log.innerHTML = `<div class="log-linha">[${hora}] ${msg}</div>` + log.innerHTML;
         }
-    }
 
-    function adicionarLog(mensagem) {
-        const box = document.getElementById('logBox');
-        const agora = new Date().toLocaleTimeString();
-        box.innerHTML += `[${agora}] ${mensagem}<br>`;
-        box.scrollTop = box.scrollHeight;
-    }
+        // TESTE 01: ARMAZÉM + TRAVA 3 DÍGITOS
+        function testeArmazem() {
+            falar("Iniciando teste de Armazém. Vá para a Rua B e separe Alcatra. O código final é 789.");
+            setTimeout(() => {
+                let bip = prompt("DIGITE OS 3 ÚLTIMOS DÍGITOS DO PRODUTO (Dica: 789):");
+                if(bip === "789") {
+                    falar("Bipe confirmado. Item enviado para conferência.");
+                    registrar("ARMAZÉM: Separação concluída com sucesso.");
+                } else {
+                    falar("Erro de separação! O código não confere.");
+                    registrar("ERRO: Tentativa de separação incorreta.");
+                }
+            }, 500);
+        }
 
-    window.onload = () => {
-        falar("Sistema JP Dias iniciado. Módulos Armazém e Cross Dock monitorados.");
-    };
-</script>
+        // TESTE 02: CROSS DOCK + CORTE
+        function testeCrossDock() {
+            falar("Alerta de Cross Dock. Rota Campinas entra em horário de corte em 5 minutos. Priorize o carregamento.");
+            registrar("CROSSDOCK: Alerta de Cut-off disparado para Rota Campinas.");
+            alert("⚠️ ALERTA: Rota fecha em breve!");
+        }
 
+        // TESTE 03: AVARIA + HIERARQUIA
+        function testeAvaria() {
+            falar("Avaria detectada. Item bloqueado. Somente o Gestor pode autorizar.");
+            let senha = prompt("SENHA DO GESTOR PARA BAIXA:");
+            if(senha === "123") {
+                falar("Acesso autorizado. Baixa de avaria registrada no histórico.");
+                registrar("AUDITORIA: Gestor autorizou descarte de item.");
+            } else {
+                falar("Senha incorreta. O item permanece travado no estoque.");
+                registrar("BLOQUEIO: Tentativa de baixa sem autorização.");
+            }
+        }
+    </script>
 </body>
 </html>
