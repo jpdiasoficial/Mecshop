@@ -2,318 +2,71 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ELITEBET | ENTERPRISE V3</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELITE SYSTEM | LOGIN UNIFICADO</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --primary: #ff5e00; --secondary: #00ff41; --bg: #0b0e11; --card: #161a1e; --border: #2b3139; --text: #ffffff; --muted: #929aa5; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: var(--text); overflow-x: hidden; }
-
-        /* HEADER E SIDEBAR */
-        header { position: fixed; top: 0; width: 100%; height: 65px; background: #1e2329; display: flex; align-items: center; padding: 0 20px; border-bottom: 2px solid var(--primary); z-index: 1000; justify-content: space-between; }
-        .logo { font-weight: 900; font-style: italic; font-size: 18px; }
+        :root { --primary: #0052cc; --dark: #091e42; --bg: #f4f5f7; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        
+        .login-card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
+        .logo { font-size: 24px; font-weight: 900; color: var(--dark); margin-bottom: 30px; }
         .logo span { color: var(--primary); }
         
-        /* MENU LATERAL DO USUÁRIO */
-        .side-menu { position: fixed; top: 0; right: -100%; width: 85%; height: 100%; background: var(--card); z-index: 2000; transition: 0.4s cubic-bezier(0.1, 0.7, 0.1, 1); padding: 30px; border-left: 2px solid var(--primary); }
-        .side-menu.active { right: 0; }
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1999; display: none; }
-
-        /* TELAS E CONTEÚDO */
-        .app-content { padding: 85px 15px 100px; max-width: 500px; margin: 0 auto; min-height: 100vh; }
-        .screen { display: none; }
-        .active { display: block; animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* COMPONENTES */
-        .card { background: var(--card); border-radius: 12px; padding: 20px; border: 1px solid var(--border); margin-bottom: 15px; position: relative; }
-        .btn { width: 100%; padding: 16px; border-radius: 8px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 12px; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-main { background: var(--primary); color: #fff; box-shadow: 0 4px 0px #b84300; }
-        .btn-main:active { transform: translateY(2px); box-shadow: 0 2px 0px #b84300; }
-        .btn-sec { background: var(--border); color: #fff; }
+        select, input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #dfe1e6; border-radius: 6px; outline: none; font-size: 14px; }
+        .btn-login { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .btn-login:hover { background: #0747a6; }
         
-        input, select { width: 100%; background: #0b0e11; border: 1px solid var(--border); padding: 14px; border-radius: 8px; color: #fff; margin-bottom: 12px; font-size: 14px; }
-        input:focus { border-color: var(--primary); outline: none; }
-
-        /* TABELAS ADMIN */
-        .admin-table-container { overflow-x: auto; width: 100%; }
-        table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 10px; }
-        th { color: var(--muted); text-align: left; padding: 10px; border-bottom: 1px solid var(--border); text-transform: uppercase; }
-        td { padding: 12px 10px; border-bottom: 1px solid #1e2329; vertical-align: middle; }
-        .badge { padding: 4px 8px; border-radius: 4px; font-weight: 900; font-size: 9px; }
-        .badge-admin { background: var(--primary); color: #fff; }
-        .badge-user { background: var(--muted); color: #000; }
-
-        /* ROLETA */
-        .wheel-box { position: relative; width: 220px; height: 220px; margin: 20px auto; border: 6px solid #1e2329; border-radius: 50%; }
-        .wheel-img { width: 100%; height: 100%; border-radius: 50%; background: conic-gradient(#111 0% 12.5%, #ff5e00 12.5% 25%, #111 25% 37.5%, #ff5e00 37.5% 50%, #111 50% 62.5%, #ff5e00 62.5% 75%, #111 75% 87.5%, #ff5e00 87.5% 100%); transition: 4s cubic-bezier(0.1, 0, 0.1, 1); }
-
-        /* NAV INFERIOR */
-        nav { position: fixed; bottom: 0; width: 100%; height: 70px; background: #1e2329; display: none; border-top: 1px solid var(--border); z-index: 1000; box-shadow: 0 -5px 15px rgba(0,0,0,0.3); }
-        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 9px; color: var(--muted); font-weight: 700; }
-        .nav-item i { font-size: 20px; margin-bottom: 4px; }
-        .nav-item.active { color: var(--primary); }
+        .role-info { font-size: 12px; color: #6b778c; margin-top: 20px; text-align: left; background: #f4f5f7; padding: 10px; border-radius: 6px; }
     </style>
 </head>
 <body>
 
-    <div class="overlay" id="overlay" onclick="toggleUserMenu()"></div>
-
-    <div class="side-menu" id="side-menu">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:40px;">
-            <h2 style="font-size:18px;">GERENCIAR CONTA</h2>
-            <i class="fa-solid fa-xmark" style="font-size:24px;" onclick="toggleUserMenu()"></i>
-        </div>
+    <div class="login-card">
+        <div class="logo">ELITE<span>ENTERPRISE</span></div>
+        <p style="color: #6b778c; margin-bottom: 25px;">Acesse sua estação de trabalho</p>
         
-        <div class="card" style="background:#0b0e11; border-left: 4px solid var(--primary);">
-            <p style="font-size:11px; color:var(--muted); text-transform:uppercase;">Bem-vindo</p>
-            <p id="u-name" style="font-weight:900; font-size:20px; margin-bottom:5px;">Visitante</p>
-            <span class="badge badge-user" id="u-badge">MEMBRO VIP</span>
-        </div>
+        <form id="loginForm">
+            <select id="userRole" required>
+                <option value="" disabled selected>Selecione seu Cargo</option>
+                <option value="admin">Gestor Master (Torre de Controle)</option>
+                <option value="operador">Operador de Doca (Bipagem)</option>
+                <option value="motorista">Motorista (Rotas/Last Mile)</option>
+                <option value="rh">Recursos Humanos (Performance)</option>
+            </select>
+            
+            <input type="text" placeholder="Matrícula ou Usuário" required>
+            <input type="password" placeholder="Senha de Acesso" required>
+            
+            <button type="submit" class="btn-login">ACESSAR SISTEMA</button>
+        </form>
 
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px;">
-            <button class="btn btn-sec" style="font-size:10px;" onclick="irPara('scr-lobby'); toggleUserMenu()">DEPÓSITO</button>
-            <button class="btn btn-sec" style="font-size:10px;" onclick="irPara('scr-suporte'); toggleUserMenu()">SAQUE</button>
+        <div class="role-info" id="info">
+            <i class="fa-solid fa-circle-info"></i> Selecione um cargo para ver suas permissões.
         </div>
-
-        <div class="card" style="padding:10px; cursor:pointer;" onclick="alert('Funcionalidade de troca de senha aberta!')">
-            <i class="fa-solid fa-lock" style="color:var(--primary); margin-right:10px;"></i> Alterar Senha
-        </div>
-
-        <button class="btn" style="background:#ff4b4b; color:#fff; margin-top:30px;" onclick="location.reload()">SAIR DA PLATAFORMA</button>
     </div>
-
-    <header id="h-master" style="display:none;">
-        <div class="logo">ELITE<span>BET</span></div>
-        <div style="display:flex; align-items:center; gap:15px;">
-            <div id="h-saldo" style="font-weight:900; color:var(--secondary); background:#2b3139; padding:6px 12px; border-radius:6px; font-size:14px;">R$ 0,00</div>
-            <i class="fa-solid fa-circle-user" style="font-size:28px; color:var(--primary); cursor:pointer;" onclick="toggleUserMenu()"></i>
-        </div>
-    </header>
-
-    <div class="app-content">
-
-        <div id="scr-login" class="screen active">
-            <div style="text-align:center; margin-bottom:40px;">
-                <h1 style="font-size:32px; font-weight:900;">ACESSO</h1>
-                <p style="color:var(--muted);">Entre na elite das apostas.</p>
-            </div>
-            <div class="card">
-                <input type="text" id="l-user" placeholder="Usuário ou CPF">
-                <input type="password" id="l-pass" placeholder="Palavra-passe">
-                <button class="btn btn-main" onclick="entrar()">ENTRAR NO SISTEMA</button>
-                <div style="display:flex; justify-content:space-between; margin-top:20px; font-size:11px;">
-                    <span style="color:var(--muted);" onclick="irPara('scr-cadastro')">Novo aqui? <b style="color:var(--primary);">Criar Conta</b></span>
-                    <span style="color:var(--muted);" onclick="irPara('scr-recuperar')">Esqueci a senha</span>
-                </div>
-            </div>
-        </div>
-
-        <div id="scr-cadastro" class="screen">
-            <h2 style="margin-bottom:20px; text-align:center;">CADASTRO</h2>
-            <div class="card">
-                <input type="text" id="r-name" placeholder="Nome Completo">
-                <input type="text" id="r-user" placeholder="Nome de Usuário">
-                <input type="text" placeholder="CPF">
-                <input type="password" id="r-pass" placeholder="Crie uma Senha">
-                <button class="btn btn-main" onclick="alert('Cadastro enviado!'); irPara('scr-login')">CRIAR CONTA AGORA</button>
-                <button class="btn btn-sec" style="margin-top:10px;" onclick="irPara('scr-login')">VOLTAR AO LOGIN</button>
-            </div>
-        </div>
-
-        <div id="scr-recuperar" class="screen">
-            <div class="card">
-                <h3>RECUPERAR CONTA</h3>
-                <p style="font-size:12px; color:var(--muted); margin:10px 0;">Enviaremos um link de recuperação para o e-mail cadastrado.</p>
-                <input type="email" placeholder="Seu e-mail de registo">
-                <button class="btn btn-main" onclick="alert('Link enviado!'); irPara('scr-login')">ENVIAR LINK</button>
-                <button class="btn btn-sec" style="margin-top:10px;" onclick="irPara('scr-login')">VOLTAR</button>
-            </div>
-        </div>
-
-        <div id="scr-lobby" class="screen">
-            <div class="card" style="text-align:center; background: radial-gradient(circle, #1e2329 0%, #0b0e11 100%);">
-                <span style="font-size:11px; color:var(--muted); font-weight:800;">BANCA ATUAL</span>
-                <h1 id="m-saldo" style="font-size:45px; color:var(--primary); margin:10px 0;">R$ 0,00</h1>
-                <div style="display:flex; gap:10px; margin-top:10px;">
-                    <button class="btn btn-main" style="flex:1;">DEPÓSITO PIX</button>
-                </div>
-            </div>
-
-            <div class="card" onclick="irPara('scr-roleta')" style="cursor:pointer; border-left:4px solid var(--primary);">
-                <div style="display:flex; align-items:center; gap:15px;">
-                    <i class="fa-solid fa-dharmachakra" style="font-size:30px; color:var(--primary);"></i>
-                    <div>
-                        <h3 style="font-size:14px;">ROLETA DIÁRIA</h3>
-                        <p style="font-size:10px; color:var(--muted);">Gire e ganhe créditos hoje!</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="scr-roleta" class="screen">
-            <div class="card" style="text-align:center;">
-                <h2 style="font-size:18px;">SORTEIO ELITE</h2>
-                <div class="wheel-box">
-                    <div id="wheel" class="wheel-img"></div>
-                </div>
-                <button class="btn btn-main" onclick="girarRoleta()">GIRAR AGORA</button>
-                
-                <div style="margin-top:30px; border-top: 1px solid var(--border); padding-top:20px;">
-                    <h4 style="font-size:11px; color:var(--primary); margin-bottom:10px;">HISTÓRICO DE PRÊMIOS</h4>
-                    <table>
-                        <tbody id="ganhos-recentes">
-                            <tr><td>gabriel_***</td><td style="color:var(--secondary);">R$ 45,00</td><td>Agora</td></tr>
-                            <tr><td>felipe_***</td><td style="color:var(--secondary);">R$ 10,00</td><td>Há 2 min</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div id="scr-suporte" class="screen">
-            <div class="card" style="height:450px; display:flex; flex-direction:column;">
-                <h3 style="font-size:14px; margin-bottom:20px;"><i class="fa-solid fa-headset" style="color:var(--primary);"></i> CHAT DE ATENDIMENTO</h3>
-                <div id="chat-box" style="flex:1; overflow-y:auto; background:#0b0e11; border-radius:8px; padding:15px; font-size:12px;">
-                    <p style="color:var(--primary); margin-bottom:10px;"><b>[SUPORTE]:</b> Olá! Como podemos ajudar na sua operação hoje?</p>
-                </div>
-                <div style="margin-top:15px; display:flex; gap:5px;">
-                    <input type="text" id="chat-msg" placeholder="Sua dúvida..." style="margin:0;">
-                    <button class="btn btn-main" style="width:60px; padding:0;" onclick="enviarMensagem()"><i class="fa-solid fa-paper-plane"></i></button>
-                </div>
-            </div>
-        </div>
-
-        <div id="scr-admin" class="screen">
-            <div class="card" style="border-top:4px solid var(--primary);">
-                <h3 style="margin-bottom:15px;">MONITORAMENTO MASTER</h3>
-                <div class="admin-table-container">
-                    <table>
-                        <thead>
-                            <tr><th>User</th><th>Saldo</th><th>Cargo</th><th>-</th></tr>
-                        </thead>
-                        <tbody id="admin-user-list">
-                            </tbody>
-                    </table>
-                </div>
-                <button class="btn btn-sec" style="margin-top:20px; font-size:10px;" onclick="alert('Logs salvos!')">DESCARREGAR LOGS</button>
-            </div>
-        </div>
-
-    </div>
-
-    <nav id="navbar">
-        <div class="nav-item active" onclick="irPara('scr-lobby')"><i class="fa-solid fa-house"></i>Início</div>
-        <div class="nav-item" onclick="irPara('scr-roleta')"><i class="fa-solid fa-dharmachakra"></i>Roleta</div>
-        <div class="nav-item" onclick="irPara('scr-suporte')"><i class="fa-solid fa-headset"></i>Suporte</div>
-        <div id="n-adm" class="nav-item" onclick="irPara('scr-admin')" style="display:none; color:var(--primary);"><i class="fa-solid fa-shield-halved"></i>ADMIN</div>
-    </nav>
 
     <script>
-        let saldo = 0.00;
-        let userAtual = "Visitante";
-        let isAdmin = false;
+        const roleSelect = document.getElementById('userRole');
+        const infoBox = document.getElementById('info');
 
-        // Simulando banco de dados de usuários para o Admin
-        let dbUsers = [
-            {id: 1, nome: "Marcos_Bet", saldo: 250.00, cargo: "Usuário"},
-            {id: 2, nome: "Ana_Luck", saldo: 1200.50, cargo: "VIP"},
-            {id: 3, nome: "Admin_Elite", saldo: 9999.00, cargo: "Admin"}
-        ];
+        const permissions = {
+            admin: "Acesso total: Financeiro, Frota, RH e Dashboards de Atraso.",
+            operador: "Acesso restrito: Terminal de Bipagem e Conferência de Carga.",
+            motorista: "Acesso mobile: GPS, Ordem de Entrega e Assinatura Digital.",
+            rh: "Acesso administrativo: Folha de Ponto e Score de Produtividade."
+        };
 
-        function toggleUserMenu() {
-            const menu = document.getElementById('side-menu');
-            const overlay = document.getElementById('overlay');
-            menu.classList.toggle('active');
-            overlay.style.display = menu.classList.contains('active') ? 'block' : 'none';
-        }
+        roleSelect.addEventListener('change', () => {
+            infoBox.innerHTML = `<i class="fa-solid fa-shield-halved"></i> <b>Nível:</b> ${permissions[roleSelect.value]}`;
+        });
 
-        function irPara(id) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            if(id === 'scr-lobby') document.querySelectorAll('.nav-item')[0].classList.add('active');
-            if(id === 'scr-roleta') document.querySelectorAll('.nav-item')[1].classList.add('active');
-            if(id === 'scr-suporte') document.querySelectorAll('.nav-item')[2].classList.add('active');
-            if(id === 'scr-admin') document.querySelectorAll('.nav-item')[3].classList.add('active');
-        }
-
-        function entrar() {
-            userAtual = document.getElementById('l-user').value || "Usuário Elite";
-            document.getElementById('u-name').innerText = userAtual;
-            document.getElementById('h-master').style.display = 'flex';
-            document.getElementById('navbar').style.display = 'flex';
-            
-            if(userAtual.toLowerCase() === 'admin') {
-                isAdmin = true;
-                document.getElementById('n-adm').style.display = 'flex';
-                document.getElementById('u-badge').innerText = "ADMINISTRADOR MASTER";
-                document.getElementById('u-badge').className = "badge badge-admin";
-                renderAdminUsers();
-            }
-
-            irPara('scr-lobby');
-            updateUI();
-        }
-
-        function girarRoleta() {
-            const wheel = document.getElementById('wheel');
-            const sorteio = (Math.random() * 50).toFixed(2);
-            const deg = Math.floor(Math.random() * 3600) + 7200;
-            wheel.style.transform = `rotate(${deg}deg)`;
-            
-            setTimeout(() => {
-                alert(`GANHOU! R$ ${sorteio} adicionados à sua banca.`);
-                saldo += parseFloat(sorteio);
-                updateUI();
-                // Adiciona na tabela de ganhos
-                const table = document.getElementById('ganhos-recentes');
-                table.innerHTML = `<tr><td>${userAtual}***</td><td style="color:var(--secondary);">R$ ${sorteio}</td><td>Agora</td></tr>` + table.innerHTML;
-            }, 4000);
-        }
-
-        function enviarMensagem() {
-            const input = document.getElementById('chat-msg');
-            const chat = document.getElementById('chat-box');
-            if(input.value) {
-                chat.innerHTML += `<p style="text-align:right; margin-bottom:10px;">${input.value}</p>`;
-                setTimeout(() => {
-                    chat.innerHTML += `<p style="color:var(--primary); margin-bottom:10px;"><b>[SUPORTE]:</b> Entendido. O seu pedido de análise foi encaminhado para o financeiro.</p>`;
-                    chat.scrollTop = chat.scrollHeight;
-                }, 800);
-                input.value = "";
-            }
-        }
-
-        function renderAdminUsers() {
-            const list = document.getElementById('admin-user-list');
-            list.innerHTML = "";
-            dbUsers.forEach(u => {
-                list.innerHTML += `
-                    <tr>
-                        <td><b>${u.nome}</b></td>
-                        <td><input type="number" value="${u.saldo}" style="width:70px; padding:5px; margin:0; font-size:10px;"></td>
-                        <td>
-                            <select style="width:80px; padding:5px; margin:0; font-size:9px;">
-                                <option ${u.cargo==='Usuário'?'selected':''}>Usuário</option>
-                                <option ${u.cargo==='VIP'?'selected':''}>VIP</option>
-                                <option ${u.cargo==='Admin'?'selected':''}>Admin</option>
-                            </select>
-                        </td>
-                        <td><i class="fa-solid fa-rotate" style="color:var(--secondary); cursor:pointer;" onclick="alert('Salvo!')"></i></td>
-                    </tr>
-                `;
-            });
-        }
-
-        function updateUI() {
-            const fmt = "R$ " + saldo.toFixed(2).replace('.', ',');
-            document.getElementById('h-saldo').innerText = fmt;
-            document.getElementById('m-saldo').innerText = fmt;
-        }
+        document.getElementById('loginForm').onsubmit = (e) => {
+            e.preventDefault();
+            const role = roleSelect.value;
+            alert(`Redirecionando para o Painel de ${role.toUpperCase()}... \n(Aqui o sistema carrega o módulo específico que criamos nas mensagens anteriores)`);
+            // Lógica Real: window.location.href = `dashboard_${role}.html`;
+        };
     </script>
 </body>
 </html>
