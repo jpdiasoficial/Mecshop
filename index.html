@@ -2,74 +2,242 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JP DIAS | ELITE LOGISTICS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>JP DIAS | PREMIUM LOGISTICS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;900&family=Roboto+Mono:wght@300;400&family=Segoe+UI:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --neon-orange: #ff9f0a; --dark-bg: #0b0b0b; --card-bg: #151515; --matrix-green: #00ff41; --alert-red: #ff3b30; }
-        
-        body { background: var(--dark-bg); color: #fff; font-family: 'Orbitron', 'Segoe UI', sans-serif; margin: 0; padding: 15px; text-transform: uppercase; }
-        header { border-bottom: 2px solid var(--neon-orange); padding: 10px; text-align: left; display: flex; justify-content: space-between; align-items: center; }
-        
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .card { background: var(--card-bg); border: 1px solid #333; padding: 20px; position: relative; clip-path: polygon(0 0, 95% 0, 100% 15%, 100% 100%, 5% 100%, 0 85%); border-left: 4px solid var(--neon-orange); }
+        :root {
+            --slate-bg: #050505; /* Preto Profundo */
+            --card-glass: rgba(20, 20, 20, 0.8); /* Efeito Vidro Escuro */
+            --neon-orange: #ff9f0a; /* Laranja de Alerta Tesla */
+            --matrix-green: #32d74b; /* Verde Suave (Apple) */
+            --alert-red: #ff453a; /* Vermelho Alerta */
+            --text-main: #f5f5f7;
+            --text-muted: #86868b;
+            --border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        body {
+            background-color: var(--slate-bg);
+            color: var(--text-main);
+            font-family: 'Segoe UI', -apple-system, sans-serif;
+            margin: 0;
+            padding: env(safe-area-inset-top) 15px env(safe-area-inset-bottom) 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- HEADER REFINADO --- */
+        header {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 22px;
+            color: var(--neon-orange);
+            margin: 0;
+            letter-spacing: 1px;
+        }
+
+        header .sys-status {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10px;
+            color: var(--matrix-green);
+            background: rgba(50, 215, 75, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(50, 215, 75, 0.3);
+        }
+
+        /* --- GRID E CARDS GLASSMORPHISM --- */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .card {
+            background-color: var(--card-glass);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(5px);
+            padding: 25px;
+            border-radius: 16px; /* Borda Suave Apple */
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card:hover {
+            border-color: rgba(255, 159, 10, 0.2);
+            transform: translateY(-2px);
+        }
+
         .full { grid-column: span 2; }
 
-        h2 { color: var(--neon-orange); font-size: 14px; margin: 0 0 15px 0; letter-spacing: 2px; }
-        
-        /* BOTÕES ESTILO INDUSTRIAL */
-        .btn { background: var(--neon-orange); color: #000; border: none; padding: 15px; font-weight: 900; width: 100%; cursor: pointer; margin-bottom: 10px; clip-path: polygon(5% 0, 100% 0, 95% 100%, 0% 100%); transition: 0.3s; }
-        .btn:active { transform: scale(0.95); opacity: 0.8; }
-        .btn-red { background: var(--alert-red); color: #fff; }
+        h2 {
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-muted);
+            margin: 0 0 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-        /* PAINEL DE MONITORAMENTO */
-        .monitor-list { font-size: 12px; color: var(--matrix-green); list-style: none; padding: 0; }
-        .monitor-list li { margin-bottom: 8px; border-bottom: 1px solid #222; padding-bottom: 5px; }
-        
-        .logs { background: #000; color: var(--matrix-green); font-family: monospace; height: 100px; overflow-y: scroll; padding: 10px; font-size: 11px; border: 1px solid #333; }
-        .status-pulse { height: 10px; width: 10px; background: var(--matrix-green); border-radius: 50%; display: inline-block; animation: pulse 1.5s infinite; }
-        
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+        /* --- BOTÕES PREMIUM --- */
+        .btn {
+            background-color: transparent;
+            color: var(--neon-orange);
+            border: 1px solid var(--neon-orange);
+            padding: 18px;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            width: 100%;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+            box-sizing: border-box;
+        }
+
+        .btn:active {
+            background-color: var(--neon-orange);
+            color: #000;
+            transform: scale(0.98);
+        }
+
+        .btn-red {
+            border-color: var(--alert-red);
+            color: var(--alert-red);
+        }
+
+        .btn-red:active {
+            background-color: var(--alert-red);
+            color: #fff;
+        }
+
+        .btn-ghost {
+            border-color: #333;
+            color: var(--text-muted);
+        }
+
+        .btn-ghost:active {
+            border-color: #555;
+            color: #fff;
+        }
+
+        /* --- INDICADORES TÉCNICOS --- */
+        .tech-list {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 11px;
+            color: #666;
+            list-style: none;
+            padding: 0;
+            margin: 15px 0 0 0;
+        }
+
+        .tech-list li {
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .tech-list li::before {
+            content: "> ";
+            color: var(--matrix-green);
+        }
+
+        /* --- LOGS E AUDITORIA (ROBOTO MONO) --- */
+        .logs-section {
+            margin-top: 15px;
+        }
+
+        .logs {
+            background: #000;
+            color: var(--matrix-green);
+            font-family: 'Roboto Mono', monospace;
+            height: 100px;
+            overflow-y: scroll;
+            padding: 15px;
+            font-size: 10px;
+            border-radius: 8px;
+            border: 1px solid #1a1a1a;
+            line-height: 1.6;
+        }
+
+        /* Animação de Pulsar Status */
+        .status-pulse {
+            height: 6px;
+            width: 6px;
+            background: var(--matrix-green);
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(50, 215, 75, 0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(50, 215, 75, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(50, 215, 75, 0); }
+        }
+
     </style>
 </head>
 <body>
 
 <header>
-    <div>
-        <span style="font-size: 20px; font-weight: 900; color: var(--neon-orange);">JP DIAS</span>
-        <span style="font-size: 14px; color: #666; margin-left: 10px;">CORE V61_ELITE</span>
+    <h1>JP DIAS</h1>
+    <div class="sys-status">
+        <span class="status-pulse"></span>
+        <span>CORE V64 | PREMIER</span>
     </div>
-    <div class="status-pulse"></div>
 </header>
 
 <div class="grid">
     <div class="card">
-        <h2>[01] WMS_ARMAZÉM</h2>
-        <button class="btn" onclick="opArmazem()">INICIAR PICKING_VOZ</button>
-        <button class="btn btn-red" onclick="triggerAvaria('ARMAZÉM')">REGISTRAR_AVARIA</button>
-        <ul class="monitor-list">
-            <li>> RUA A: OCUPAÇÃO 92%</li>
-            <li>> PENDÊNCIA_CONFERÊNCIA: 04</li>
+        <h2>[01] WMS OPERATIONAL</h2>
+        <button class="btn" onclick="execPicking()">START PICKING</button>
+        <button class="btn btn-red" onclick="execAvaria('WMS')">REPORT_AVARIA</button>
+        <ul class="tech-list">
+            <li><span>TRAVA_SEGURANÇA</span><span>[ATIVO]</span></li>
+            <li><span>GESTÃO_ALTURA</span><span>[ATIVO]</span></li>
         </ul>
     </div>
 
     <div class="card">
-        <h2>[02] CROSSDOCK_FLOW</h2>
-        <button class="btn" onclick="opCross()">TRIAGEM_DOCA</button>
-        <button class="btn" onclick="checkCorte()">HORÁRIO_CORTE</button>
-        <ul class="monitor-list">
-            <li>> ROTA_SP: STATUS_OK</li>
-            <li>> ROTA_HORT: <span style="color:var(--alert-red)">CRÍTICO</span></li>
+        <h2>[02] CROSS DOCK FLOW</h2>
+        <button class="btn" onclick="execDoca()">DOCK_TRIAGEM</button>
+        <button class="btn btn-ghost" onclick="execCorte()">VALIDATE CUT-OFF</button>
+        <ul class="tech-list">
+            <li><span>ROTAS_MONITORADAS</span><span>[03]</span></li>
+            <li><span>STATUS_SAÍDA</span><span>[OK]</span></li>
         </ul>
     </div>
 
     <div class="card full">
         <h2>[03] TORRE_DE_CONTROLE_LOGS</h2>
         <div class="logs" id="logBox">
-            > INICIALIZANDO JP_DIAS_CORE...<br>
-            > PROTOCOLO V1-V60 CARREGADO...<br>
+            > SISTEMA PREMIER V64 UNIFICADO INICIADO...<br>
+            > PROTOCOLO V1-V60 CONFIRMADO...<br>
             > MONITORAMENTO HORTOLÂNDIA ONLINE...<br>
         </div>
-        <button class="btn" style="background:#444; color:#fff; margin-top:15px;" onclick="auditoria()">ACESSAR_AUDITORIA_GESTOR</button>
+        <button class="btn btn-ghost" style="margin-top:15px; border-color:var(--agency-blue)" onclick="execAuditoria()">ACESSAR_AUDITORIA_GESTOR</button>
     </div>
 </div>
 
@@ -78,7 +246,7 @@
         window.speechSynthesis.cancel();
         const m = new SpeechSynthesisUtterance(t);
         m.lang = 'pt-BR';
-        m.rate = 1.1; // Voz um pouco mais rápida e profissional
+        m.rate = 1.05; // Velocidade profissional, limpa.
         window.speechSynthesis.speak(m);
     };
 
@@ -89,39 +257,48 @@
         box.scrollTop = box.scrollHeight;
     }
 
-    // LÓGICA DE OPERAÇÃO
-    function opArmazem() {
-        falar("Iniciando Picking. Rua B. Nível 2. Separação de lote premium.");
-        let check = prompt("CONFIRME OS 3 DÍGITOS FINAIS:");
-        if(check) {
-            falar("Confirmado. Movendo item para mesa de conferência.");
-            addLog(`PICKING_SUCCESS: ITEM ${check} SEPARADO.`);
-        }
+    // ARMAZÉM
+    function execPicking() {
+        falar("Iniciando Picking V64. Vá para a Rua B. Nível 2. Separe o item e confirme o código.");
+        setTimeout(() => {
+            let bip = prompt("CONFIRME OS 3 DÍGITOS FINAIS:");
+            if(bip) {
+                falar("Código confirmado. Item movido para conferência.");
+                addLog(`WMS_PICKING: ITEM ${bip} CONCLUÍDO.`);
+            }
+        }, 300); // Pequeno delay para a voz terminar.
     }
 
-    function checkCorte() {
-        falar("Atenção. Rota Hortolândia atinge limite de corte em dez minutos.");
-        addLog("ALERTA_CUTOFF: ROTA_HORTOLANDIA EM RISCO.");
-    }
-
-    function triggerAvaria(setor) {
+    function execAvaria(setor) {
         falar(`Avaria detectada no ${setor}. Bloqueio de inventário iniciado.`);
-        addLog(`AVARIA_LOCK: SETOR ${setor} AGUARDANDO GESTOR.`);
+        addLog(`ALERT: AVARIA NO ${setor}. AGUARDANDO GESTOR.`);
     }
 
-    function auditoria() {
-        let pass = prompt("IDENTIFICAÇÃO_SHARK:");
+    // CROSS DOCK
+    function execDoca() {
+        falar("Iniciando Doca Triagem. Verifique o box de saída no manifesto.");
+        addLog("CROSSDOCK: TRIAGEM INICIADA.");
+    }
+
+    function execCorte() {
+        falar("Validação de Cut-off. Rota São Paulo entra em horário de corte em dez minutos.");
+        addLog("SISTEMA: VALIDAÇÃO DE CORTE EXECUTADA.");
+    }
+
+    // GESTÃO
+    function execAuditoria() {
+        let pass = prompt("IDENTIFICAÇÃO DE SEGURANÇA GESTOR:");
         if(pass === "123") {
-            falar("Acesso concedido. Painel de auditoria liberado.");
-            addLog("GESTOR_AUTH: ACESSO AO NÚCLEO DE DECISÃO.");
+            falar("Acesso concedido. Painel de auditoria do gestor liberado.");
+            addLog("GESTOR_AUTH: ACESSO AO MÓDULO DE DECISÃO.");
         } else {
-            falar("Acesso negado. Tentativa registrada.");
+            falar("Acesso negado.");
             addLog("SECURITY_ALERT: TENTATIVA DE ACESSO NÃO AUTORIZADA.");
         }
     }
 
     window.onload = () => {
-        falar("Sistema JP Dias Elite ativado.");
+        falar("Sistema JP Dias Premier ativado.");
     };
 </script>
 
