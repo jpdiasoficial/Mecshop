@@ -1,153 +1,161 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ELITE LOGISTICS OS | ENTERPRISE</title>
+    <title>ELITE LOGISTICS OS | SISTEMA INTEGRADO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --p: #0052cc; --s: #36b37e; --d: #ff4b4b; --w: #ffab00; --bg: #f4f5f7; --dark: #091e42; --card: #ffffff; }
+        :root { --p: #0052cc; --s: #36b37e; --d: #ff4b4b; --w: #ffab00; --bg: #f4f5f7; --dark: #091e42; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: var(--dark); display: flex; height: 100vh; overflow: hidden; }
+        body { background: var(--bg); color: var(--dark); height: 100vh; overflow: hidden; display: flex; }
 
-        /* MENU LATERAL */
-        aside { width: 260px; background: var(--dark); color: white; display: flex; flex-direction: column; padding: 20px; transition: 0.3s; }
-        .logo { font-size: 20px; font-weight: 800; margin-bottom: 35px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
-        .logo span { color: var(--p); }
-        .nav-link { padding: 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 12px; color: #b3bac5; transition: 0.2s; margin-bottom: 5px; text-decoration: none; }
+        /* TELA DE LOGIN (INICIAL) */
+        #login-screen { position: fixed; inset: 0; background: var(--dark); z-index: 1000; display: flex; align-items: center; justify-content: center; }
+        .login-card { background: white; padding: 40px; border-radius: 12px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        
+        /* SIDEBAR */
+        aside { width: 260px; background: var(--dark); color: white; display: none; flex-direction: column; padding: 20px; }
+        .nav-link { padding: 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 12px; color: #b3bac5; transition: 0.2s; margin-bottom: 5px; }
         .nav-link:hover, .nav-link.active { background: var(--p); color: white; }
 
         /* ÁREA PRINCIPAL */
-        main { flex: 1; display: flex; flex-direction: column; overflow-y: auto; }
-        header { background: var(--card); height: 65px; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; border-bottom: 1px solid #dfe1e6; }
-        .status-dot { width: 10px; height: 10px; background: var(--s); border-radius: 50%; display: inline-block; margin-right: 5px; box-shadow: 0 0 8px var(--s); }
-
+        main { flex: 1; display: none; flex-direction: column; overflow-y: auto; }
+        header { background: white; height: 65px; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; border-bottom: 1px solid #dfe1e6; }
         .content { padding: 25px; }
-        .screen { display: none; animation: fadeIn 0.3s ease; }
+
+        /* COMPONENTES */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .card { background: white; padding: 20px; border-radius: 12px; border: 1px solid #dfe1e6; }
+        .card b { font-size: 28px; display: block; }
+        
+        .screen { display: none; }
         .screen.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* CARDS E KPI */
-        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .card { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid #dfe1e6; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-        .card h4 { color: #6b778c; font-size: 11px; text-transform: uppercase; margin-bottom: 10px; }
-        .card .val { font-size: 28px; font-weight: 800; display: block; }
-        .card .trend { font-size: 12px; font-weight: 600; margin-top: 5px; }
-
-        /* TABELAS OPERACIONAIS */
-        .table-container { background: white; border-radius: 12px; border: 1px solid #dfe1e6; overflow: hidden; margin-top: 20px; }
-        table { width: 100%; border-collapse: collapse; }
-        th { background: #f8f9fa; padding: 15px; text-align: left; font-size: 12px; color: #6b778c; text-transform: uppercase; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; }
+        th { background: #f8f9fa; padding: 15px; text-align: left; font-size: 11px; color: #6b778c; }
         td { padding: 15px; border-top: 1px solid #f1f3f5; font-size: 14px; }
-        .badge { padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; }
-        .badge-warning { background: #fff0b3; color: #856608; }
-        .badge-danger { background: #ffebe6; color: #bf2600; }
-        .badge-success { background: #e3fcef; color: #006644; }
 
-        /* TERMINAL DE BIPAGEM */
-        .bip-input { width: 100%; padding: 15px; border: 2px solid var(--p); border-radius: 8px; font-size: 18px; margin-bottom: 15px; outline: none; }
-        .terminal { background: #172b4d; color: #36b37e; padding: 20px; border-radius: 8px; font-family: 'Courier New', monospace; height: 250px; overflow-y: auto; }
+        .terminal { background: #172b4d; color: #36b37e; padding: 20px; border-radius: 8px; font-family: monospace; height: 250px; overflow-y: auto; margin-top: 15px; }
+        .badge { padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; }
+        .bg-d { background: #ffebe6; color: #bf2600; }
+        .bg-s { background: #e3fcef; color: #006644; }
+
+        input, select { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 6px; border: 1px solid #ddd; }
+        .btn { background: var(--p); color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; font-weight: 700; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <aside>
-        <div class="logo"><i class="fa-solid fa-bolt"></i> ELITE<span>LOG</span></div>
-        <div class="nav-link active" onclick="show('dash')"><i class="fa-solid fa-chart-pie"></i> Torre de Controle</div>
-        <div class="nav-link" onclick="show('oper')"><i class="fa-solid fa-barcode"></i> Bipagem/Doca</div>
-        <div class="nav-link" onclick="show('frota')"><i class="fa-solid fa-truck-fast"></i> Frota/Entregas</div>
-        <div class="nav-link" onclick="show('rh')"><i class="fa-solid fa-users-gear"></i> Gestão de Equipe</div>
-        <div style="margin-top: auto; font-size: 11px; color: #6b778c; text-align: center;">V3.5.2 - Módulo Hortolândia</div>
+    <div id="login-screen">
+        <div class="login-card">
+            <h2 style="margin-bottom: 10px;">ELITE<span>LOG</span></h2>
+            <p style="font-size: 12px; color: #666; margin-bottom: 20px;">CONTROLO OPERACIONAL 2026</p>
+            <select id="user-role">
+                <option value="gestor">Gestor (Visão Total)</option>
+                <option value="operador">Operador (Bipagem)</option>
+                <option value="motorista">Motorista (Roteirização)</option>
+            </select>
+            <input type="password" placeholder="Chave de Acesso" value="123456">
+            <button class="btn" onclick="fazerLogin()">ENTRAR NO SISTEMA</button>
+        </div>
+    </div>
+
+    <aside id="sidebar">
+        <div style="font-size: 20px; font-weight: 900; margin-bottom: 40px;"><i class="fa-solid fa-bolt"></i> ELITE OS</div>
+        <div class="nav-link active" onclick="nav('dash')"><i class="fa-solid fa-chart-line"></i> Torre de Controlo</div>
+        <div class="nav-link" onclick="nav('bip')"><i class="fa-solid fa-barcode"></i> Bipagem/Doca</div>
+        <div class="nav-link" onclick="nav('entregas')"><i class="fa-solid fa-truck-fast"></i> Gestão de Entregas</div>
+        <div class="nav-link" onclick="nav('rh')"><i class="fa-solid fa-users"></i> Performance RH</div>
+        <div style="margin-top: auto; font-size: 10px; opacity: 0.5;">STATUS: 100% OPERACIONAL</div>
     </aside>
 
-    <main>
+    <main id="main-content">
         <header>
-            <div style="font-weight: 700;"><span class="status-dot"></span> SISTEMA OPERACIONAL ONLINE</div>
-            <div style="display:flex; gap: 20px; align-items:center;">
-                <i class="fa-regular fa-bell"></i>
-                <img src="https://ui-avatars.com/api/?name=Admin+Elite&background=0052cc&color=fff" style="width:35px; border-radius:50%;">
-            </div>
+            <div id="display-role"><b>ACESSO:</b> GESTOR MASTER</div>
+            <div style="color: var(--p); font-weight: 800;">HORTOLÂNDIA CD <i class="fa-solid fa-location-dot"></i></div>
         </header>
 
         <div class="content">
             
             <div id="dash" class="screen active">
-                <div class="stats">
-                    <div class="card"><h4>Saídas/Hora</h4><span class="val">1.240</span><div class="trend" style="color:var(--s)">↑ 14% Eficiência</div></div>
-                    <div class="card"><h4>Cargas Atrasadas</h4><span class="val" style="color:var(--d)">04</span><div class="trend" style="color:var(--d)">Ação Requerida</div></div>
-                    <div class="card"><h4>Tempo Médio Doca</h4><span class="val">18m</span><div class="trend" style="color:var(--s)">Meta: 20m</div></div>
-                    <div class="card"><h4>Nível de Serviço (SLA)</h4><span class="val">99.4%</span><div class="trend" style="color:var(--p)">Elite Tier</div></div>
+                <div class="grid">
+                    <div class="card"><h4>Cargas Hoje</h4><b>1.240</b></div>
+                    <div class="card"><h4>Atrasos Críticos</h4><b style="color:var(--d)">03</b></div>
+                    <div class="card"><h4>Eficiência Doca</h4><b style="color:var(--s)">99.1%</b></div>
                 </div>
-
-                <h3>Alertas de Risco em Tempo Real</h3>
-                <div class="table-container">
-                    <table>
-                        <thead><tr><th>Manifesto</th><th>Motorista</th><th>Localização</th><th>Status</th><th>Tempo Parado</th></tr></thead>
-                        <tbody>
-                            <tr><td>#ML-9021</td><td>Ricardo Souza</td><td>Rod. Anhanguera</td><td><span class="badge badge-danger">DESVIO DE ROTA</span></td><td>04 min</td></tr>
-                            <tr><td>#MOT-112</td><td>João Silva</td><td>Zona Sul SP</td><td><span class="badge badge-warning">PARADA LONGA</span></td><td>22 min</td></tr>
-                        </tbody>
-                    </table>
-                </div>
+                <h3>Alertas de Risco</h3>
+                <table>
+                    <thead><tr><th>ID</th><th>Motorista</th><th>Ocorrência</th><th>Tempo</th></tr></thead>
+                    <tbody>
+                        <tr><td>#ML-882</td><td>Ricardo S.</td><td><span class="badge bg-d">DESVIO DE ROTA</span></td><td>5 min</td></tr>
+                        <tr><td>#MOT-12</td><td>João P.</td><td><span class="badge bg-d">PARADA SUSPEITA</span></td><td>18 min</td></tr>
+                    </tbody>
+                </table>
             </div>
 
-            <div id="oper" class="screen">
+            <div id="bip" class="screen">
                 <div class="card">
-                    <h3>Terminal Inteligente de Triagem</h3>
-                    <p style="margin-bottom: 15px; color:#6b778c;">Bipe o código do produto para roteirização automática.</p>
-                    <input type="text" id="bipIn" class="bip-input" placeholder="Aguardando Scanner..." onkeypress="handleBip(event)">
-                    <div class="terminal" id="termLog">[SISTEMA]: Aguardando entrada de dados na Doca 01...</div>
+                    <h3>Bipagem de Recebimento & Triagem</h3>
+                    <p style="color: #666; margin-bottom: 15px;">Aponte o scanner ou digite o código do QR Code.</p>
+                    <input type="text" id="bip-in" placeholder="Aguardando bipagem..." onkeypress="processarBip(event)">
+                    <div class="terminal" id="log-bip">[SISTEMA]: Aguardando leitura na Doca 04...</div>
                 </div>
             </div>
 
-            <div id="frota" class="screen">
-                <h3>Monitoramento "Porta a Motorista"</h3>
-                <div class="grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-top:20px;">
+            <div id="entregas" class="screen">
+                <h3>Monitor de Roteirização Porta-a-Porta</h3>
+                <div class="grid" style="margin-top: 20px;">
                     <div class="card" style="border-left: 5px solid var(--s);">
-                        <b>VEÍCULO #XP-2022 (Fiorino)</b>
-                        <p>Motorista: Marcos L.</p>
-                        <p>Carga: 45/45 Entregas Concluídas</p>
-                        <span class="badge badge-success">RETORNANDO À BASE</span>
+                        <b>MARCOS L. (#XP-20)</b>
+                        <p>Status: Em entrega (12/15)</p>
+                        <progress value="80" max="100" style="width:100%"></progress>
                     </div>
                     <div class="card" style="border-left: 5px solid var(--w);">
-                        <b>VEÍCULO #ML-4040 (VUC)</b>
-                        <p>Motorista: Paulo H.</p>
-                        <p>Carga: 12/38 Entregas Concluídas</p>
-                        <span class="badge badge-warning">EM ROTA DE ENTREGA</span>
+                        <b>PAULO H. (#ML-40)</b>
+                        <p>Status: Carregamento Doca 2</p>
+                        <progress value="20" max="100" style="width:100%"></progress>
                     </div>
                 </div>
             </div>
 
             <div id="rh" class="screen">
-                <h3>Ranking de Produtividade (RH)</h3>
-                <div class="table-container">
-                    <table>
-                        <thead><tr><th>Colaborador</th><th>Cargo</th><th>Bipagens/Dia</th><th>Score Eficiência</th></tr></thead>
-                        <tbody>
-                            <tr><td>Carlos Alberto</td><td>Operador Doca 1</td><td>1.450</td><td><b style="color:var(--s)">9.8/10</b></td></tr>
-                            <tr><td>Juliana Mendes</td><td>Triagem Setor A</td><td>1.120</td><td><b style="color:var(--p)">8.5/10</b></td></tr>
-                        </tbody>
-                    </table>
-                </div>
+                <h3>Ranking de Eficiência Operacional</h3>
+                <table>
+                    <thead><tr><th>Colaborador</th><th>Função</th><th>Bipagens/Dia</th><th>Score</th></tr></thead>
+                    <tbody>
+                        <tr><td><b>Carlos Silva</b></td><td>Operador Doca</td><td>1.450</td><td><span class="badge bg-s">ELITE 9.8</span></td></tr>
+                        <tr><td><b>Ana Mendes</b></td><td>Conferente</td><td>1.120</td><td><span class="badge bg-s">TOP 8.5</span></td></tr>
+                    </tbody>
+                </table>
             </div>
 
         </div>
     </main>
 
     <script>
-        function show(id) {
+        function fazerLogin() {
+            const role = document.getElementById('user-role').value;
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('sidebar').style.display = 'flex';
+            document.getElementById('main-content').style.display = 'flex';
+            document.getElementById('display-role').innerHTML = `<b>ACESSO:</b> ${role.toUpperCase()}`;
+            nav('dash');
+        }
+
+        function nav(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
             event.currentTarget.classList.add('active');
         }
 
-        function handleBip(e) {
+        function processarBip(e) {
             if(e.key === 'Enter') {
-                const input = document.getElementById('bipIn');
-                const log = document.getElementById('termLog');
+                const input = document.getElementById('bip-in');
+                const log = document.getElementById('log-bip');
                 const time = new Date().toLocaleTimeString();
-                log.innerHTML = `[${time}] ITEM ${input.value} RECONHECIDO -> DOCA 04 (ZONA OESTE)<br>` + log.innerHTML;
+                log.innerHTML = `[${time}] ITEM ${input.value} -> ROTA SUL / DOCA 02 OK!<br>` + log.innerHTML;
                 input.value = "";
             }
         }
