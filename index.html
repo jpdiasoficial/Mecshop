@@ -3,112 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>JP DIAS | GENESIS V115 GOLD</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono&family=Orbitron:wght@800&display=swap" rel="stylesheet">
+    <title>JP DIAS | GENESIS V160</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=JetBrains+Mono&family=Orbitron:wght@800&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --primary: #ff9f0a; --bg: #050505; --surface: rgba(28, 28, 30, 0.8);
-            --border: rgba(255, 159, 10, 0.25); --green: #32d74b; --blue: #0a84ff; --red: #ff375f;
-        }
-        body { 
-            background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; 
-            margin: 0; text-transform: uppercase; overflow-x: hidden;
-            background-image: radial-gradient(circle at 2px 2px, rgba(255,159,10,0.05) 1px, transparent 0);
-            background-size: 40px 40px;
-        }
-
-        /* --- PORTAL DE ACESSO --- */
-        #portal { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .logo-main { text-align: center; margin-bottom: 40px; filter: drop-shadow(0 0 10px rgba(255,159,10,0.3)); }
-        .logo-main h1 { font-family: 'Orbitron'; font-size: 42px; letter-spacing: 15px; margin: 0; }
+        :root { --primary: #ff9f0a; --bg: #050505; --surface: #121212; --border: rgba(255,159,10,0.3); --green: #32d74b; --red: #ff375f; --blue: #0a84ff; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; text-transform: uppercase; overflow: hidden; }
         
-        .auth-grid { display: grid; grid-template-columns: 1fr; gap: 12px; width: 340px; }
-        .btn-access { 
-            padding: 20px; background: var(--surface); border: 1px solid var(--border); 
-            color: #fff; font-family: 'JetBrains Mono'; font-size: 11px; font-weight: bold; 
-            cursor: pointer; transition: 0.3s; border-radius: 4px; backdrop-filter: blur(10px);
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .btn-access:hover { border-color: var(--primary); box-shadow: 0 0 20px rgba(255,159,10,0.2); transform: translateX(5px); }
-
-        /* --- LOBBY REFINADO --- */
-        #lobby { display: none; padding: 20px; animation: slideUp 0.6s ease; }
-        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: var(--surface); border-radius: 8px; border: 1px solid var(--border); margin-bottom: 25px; }
+        /* PORTAL & HIERARQUIA */
+        #portal { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background: radial-gradient(circle, #111 0%, #000 100%); }
+        .btn-access { width: 300px; padding: 18px; margin: 8px; background: var(--surface); border: 1px solid var(--border); color: #fff; font-family: 'JetBrains Mono'; font-weight: bold; cursor: pointer; display: flex; justify-content: space-between; border-radius: 4px; }
         
-        .dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
-        .module-card { 
-            background: var(--surface); border: 1px solid var(--border); border-radius: 12px; 
-            padding: 25px; border-top: 4px solid var(--primary); position: relative;
-            backdrop-filter: blur(15px);
-        }
-        .module-card h3 { font-family: 'Orbitron'; font-size: 13px; color: var(--primary); margin: 0 0 20px 0; display: flex; align-items: center; gap: 10px; }
+        /* PAINEL DIRETORIA (GOD/SHARK) */
+        #lobby { display: none; padding: 20px; animation: fadeIn 0.5s; overflow-y: auto; height: 100vh; }
+        .card-adm { background: var(--surface); border: 1px solid var(--primary); padding: 15px; border-radius: 8px; margin-bottom: 20px; }
 
-        /* --- ESTADO OPERACIONAL --- */
-        .status-pill { padding: 4px 12px; border-radius: 20px; font-size: 9px; font-family: 'JetBrains Mono'; border: 1px solid #444; }
-        .online { border-color: var(--green); color: var(--green); animation: glow 1.5s infinite alternate; }
-
-        /* --- CÂMERA E AÇÕES --- */
-        .modulo-view { display: none; padding: 20px; animation: fadeIn 0.4s; }
-        .scanner-container { width: 100%; height: 280px; background: #000; border: 1px solid var(--primary); border-radius: 15px; position: relative; overflow: hidden; margin-bottom: 20px; }
-        video { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
-        .laser { position: absolute; width: 100%; height: 2px; background: var(--primary); box-shadow: 0 0 15px var(--primary); top: 0; animation: laserMove 2.5s infinite linear; }
-
-        .action-btn { 
-            width: 100%; padding: 20px; background: transparent; border: 1px solid var(--primary); 
-            color: var(--primary); font-weight: 900; font-family: 'JetBrains Mono'; cursor: pointer; border-radius: 8px;
-            margin-bottom: 15px; transition: 0.2s;
-        }
-        .action-btn:active { background: var(--primary); color: #000; }
-
-        @keyframes laserMove { 0% { top: 0; } 100% { top: 100%; } }
-        @keyframes glow { from { box-shadow: 0 0 2px var(--green); } to { box-shadow: 0 0 10px var(--green); } }
-        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        /* MÓDULOS OPERACIONAIS */
+        .modulo { display: none; padding: 20px; height: 100vh; animation: fadeIn 0.4s; }
+        .camera-box { width: 100%; height: 220px; background: #000; border: 2px solid var(--primary); border-radius: 12px; position: relative; overflow: hidden; }
+        .scan-line { position: absolute; top: 0; width: 100%; height: 2px; background: var(--primary); box-shadow: 0 0 15px var(--primary); animation: scan 3s infinite linear; }
+        
+        /* INTERFACE DE VOZ & LISTA */
+        .terminal { background: #000; color: #666; padding: 15px; height: 180px; overflow-y: auto; font-family: 'JetBrains Mono'; font-size: 11px; border: 1px solid #222; margin-top: 15px; border-radius: 5px; }
+        .display-instrucao { background: #111; padding: 15px; text-align: center; color: var(--primary); font-family: 'Orbitron'; font-size: 14px; border: 1px solid var(--border); margin-top: 10px; }
+        
+        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
 <div id="portal">
-    <div class="logo-main">
-        <h1>JP DIAS</h1>
-        <p style="color:var(--primary); font-size:9px; letter-spacing:6px; margin-top:10px;">INDUSTRIAL LOGISTICS V115</p>
-    </div>
-    <div class="auth-grid">
-        <button class="btn-access" onclick="acesso('DONO')">01. PROPRIETÁRIO <span>[👑]</span></button>
-        <button class="btn-access" onclick="acesso('SHARK')">02. ADMIN (SHARK) <span>[🦈]</span></button>
-        <button class="btn-access" onclick="acesso('SUPERVISOR')">03. SUPERVISOR <span>[🛡️]</span></button>
-        <button class="btn-access" onclick="acesso('OPERACIONAL')">04. OPERACIONAL <span>[📦]</span></button>
-        <button class="btn-access" onclick="acesso('MOTORISTA')" style="border-color:var(--blue);">05. MOTORISTA <span>[🚚]</span></button>
-    </div>
+    <h1 style="font-family:'Orbitron'; letter-spacing:8px; margin-bottom:30px;">JP DIAS</h1>
+    <button class="btn-access" onclick="acesso('GOD')">GOD (OWNER) <span>⚡</span></button>
+    <button class="btn-access" onclick="acesso('SHARK')">SHARK (CLIENT) <span>🦈</span></button>
+    <button class="btn-access" onclick="acesso('SUPERVISOR')">SUPERVISOR <span>🛡️</span></button>
+    <button class="btn-access" onclick="acesso('OPERACIONAL')">OPERACIONAL <span>📦</span></button>
+    <button class="btn-access" onclick="acesso('MOTORISTA')" style="border-color:var(--blue);">MOTORISTA <span>🚚</span></button>
 </div>
 
 <div id="lobby">
-    <div class="top-bar">
-        <div id="user-info" class="status-pill online">CARREGANDO...</div>
-        <button onclick="location.reload()" style="background:none; border:none; color:var(--red); font-weight:bold; cursor:pointer;">DISCONNECT_</button>
+    <div id="adm-controls" class="card-adm" style="display:none;">
+        <h3 style="font-family:'Orbitron'; font-size:12px; color:var(--primary); margin:0;">DIRETORIA ESTRATÉGICA</h3>
+        <hr style="border:0; border-top:1px solid #333; margin:10px 0;">
+        <label style="font-size:10px;">LIBERAR MOTORISTA: <input type="checkbox" id="check-mot" checked></label><br><br>
+        <label style="font-size:10px;">DEFINIR SETOR OP: 
+            <select id="select-setor">
+                <option value="ARMAZÉM">ARMAZÉM (VOZ ATIVA)</option>
+                <option value="CROSSDOCK">CROSSDOCK (LISTA TÉCNICA)</option>
+            </select>
+        </label>
     </div>
-
-    <div class="dash-grid" id="dash-main">
-        </div>
+    <div id="botoes-dinamicos"></div>
 </div>
 
-<div id="modulo-exec" class="modulo-view">
-    <header class="top-bar">
-        <button onclick="voltarLobby()" style="background:none; border:none; color:var(--primary); font-weight:bold; cursor:pointer;">⬅ CANCELAR</button>
-        <span id="mod-name" style="font-family:'Orbitron'; font-size:11px;">ESTAÇÃO</span>
-    </header>
+<div id="mod-armazem" class="modulo">
+    <h2 style="font-family:'Orbitron'; color:var(--primary); font-size:14px;">ARMAZÉM SÉRIE V</h2>
+    <div class="display-instrucao" id="display-voz">DIGA "ATIVAR" 3X PARA INICIAR</div>
+    <div class="terminal" id="term-armazem">> AGUARDANDO ATIVAÇÃO TRIPLA...</div>
+    <button onclick="voltar()" style="width:100%; padding:15px; margin-top:20px; background:transparent; border:1px solid var(--red); color:var(--red); font-weight:bold;">SAIR</button>
+</div>
 
-    <div class="scanner-container">
-        <video id="camera" autoplay playsinline></video>
-        <div class="laser"></div>
+<div id="mod-motorista" class="modulo">
+    <h2 style="font-family:'Orbitron'; color:var(--blue); font-size:14px;">ROTA INTELIGENTE</h2>
+    <div class="terminal" style="height:120px; border-color:var(--blue);">
+        > CARGA: #9902-B | ROTA: SUL 01<br>
+        > BIPAGEM DE CAIXA: PENDENTE
     </div>
-
-    <button class="action-btn" onclick="iniciarBipagem()">BIPAR CÓDIGO (VOZ)</button>
-    <button class="action-btn" style="border-color:var(--red); color:var(--red);" onclick="alert('Avaria enviada ao Shark')">REPORTAR AVARIA</button>
+    <div style="width:100%; height:200px; background:#111; border:1px solid var(--blue); border-radius:8px; display:flex; align-items:center; justify-content:center;">
+        <span style="color:var(--blue); font-size:10px;">[ GPS INTERATIVO ATIVO ]</span>
+    </div>
+    <button onclick="voltar()" style="width:100%; padding:15px; margin-top:20px; background:transparent; border:1px solid var(--blue); color:var(--blue); font-weight:bold;">CONCLUIR ROTA</button>
 </div>
 
 <script>
     let roleAtiva = "";
-    let mediaStream = null;
+    let countAtivar = 0;
+    let countDesativar = 0;
+    let etapa = "STANDBY"; // STANDBY, CODIGO, QUANTIDADE, OK
+
+    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const voice = Recognition ? new Recognition() : null;
+
+    if(voice) {
+        voice.continuous = true;
+        voice.lang = 'pt-BR';
+        voice.onresult = (e) => {
+            const fala = e.results[e.results.length - 1][0].transcript.toLowerCase();
+            processarVoz(fala);
+        };
+        voice.onend = () => { if(etapa !== "STANDBY") voice.start(); };
+    }
+
+    function acesso(r) {
+        if(!['OPERACIONAL', 'MOTORISTA'].includes(r)) {
+            if(prompt("CHAVE MESTRE DIRETORIA:") !== "123") return;
+        }
+        roleAtiva = r;
+        document.getElementById('portal').style.display = 'none';
+        document.getElementById('lobby').style.display = 'block';
+        if(['GOD', 'SHARK', 'SUPERVISOR'].includes(r)) document.getElementById('adm-controls').style.display = 'block';
+        montarLobby();
+    }
+
+    function montarLobby() {
+        const bot = document.getElementById('botoes-dinamicos');
+        bot.innerHTML = "";
+        if(roleAtiva === 'MOTORISTA') {
+            if(!document.getElementById('check-mot').checked) return alert("ACESSO BLOQUEADO PELA DIRETORIA");
+            bot.innerHTML = `<button class="btn-access" style="width:100%; border-color:var(--blue)" onclick="abrirMod('mod-motorista')">INICIAR ROTA 🚚</button>`;
+        } else {
+            const setor = document.getElementById('select-setor').value;
+            bot.innerHTML = `<button class="btn-access" style="width:100%" onclick="abrirMod('mod-armazem')">ENTRAR EM ${setor} 📦</button>`;
+        }
+    }
+
+    function abrirMod(id) {
+        document.getElementById('lobby').style.display = 'none';
+        document.getElementById(id).style.display = 'block';
+        if(id === 'mod-armazem') {
+            etapa = "ESPERA_ATIVAR";
+            if(voice) voice.start();
+        }
+    }
+
+    function processarVoz(txt) {
+        // ATIVAÇÃO
+        if(etapa === "ESPERA_ATIVAR" && txt.includes("ativar")) {
+            countAtivar++;
+            falar(countAtivar);
+            if(countAtivar === 3) {
+                etapa = "CONFIRM_CODIGO";
+                countAtivar = 0;
+                falar("Ativado. Vá para a Casa A-12. Código final 4-8-2.");
+                document.getElementById('display-voz').innerText = "CASA A-12 | FINAL 482";
+            }
+        }
+        // DESATIVAÇÃO
+        else if(txt.includes("desativar")) {
+            countDesativar++;
+            falar(countDesativar);
+            if(countDesativar === 3) {
+                etapa = "STANDBY";
+                countDesativar = 0;
+                falar("Sistema desativado.");
+                voltar();
+            }
+        }
+        // FLUXO DE TRABALHO (OK)
+        else if(etapa === "CONFIRM_CODIGO" && txt.includes("482")) {
+            falar("Código correto. Informe a quantidade.");
+            etapa = "CONFIRM_QTD";
+            document.getElementById('display-voz').innerText = "INFORME A QUANTIDADE";
+        }
+        else if(etapa === "CONFIRM_QTD" && (txt.includes("ok") || !isNaN(parseInt(txt)))) {
+            falar("Confirmado. Diga OK para finalizar item.");
+            etapa = "CONFIRM_OK";
+        }
+        else if(etapa === "CONFIRM_OK" && txt.includes("ok")) {
+            falar("Item registrado. Próximo.");
+            document.getElementById('term-armazem').innerHTML += "> ITEM 482 FINALIZADO POR VOZ.<br>";
+            etapa = "CONFIRM_CODIGO"; // Reinicia o ciclo
+        }
+    }
+
+    function voltar() {
+        if(voice) voice.stop();
+        document.querySelectorAll('.modulo').forEach(m => m.style.display = 'none');
+        document.getElementById('lobby').style.display = 'block';
+        etapa = "STANDBY";
+    }
 
     function falar(t) {
         window.speechSynthesis.cancel();
@@ -116,81 +179,6 @@
         m.lang = 'pt-BR';
         window.speechSynthesis.speak(m);
     }
-
-    function acesso(role) {
-        if(role !== 'OPERACIONAL' && role !== 'MOTORISTA') {
-            if(prompt(`CREDENCIAIS ${role}:`) !== "123") return;
-        }
-        roleAtiva = role;
-        document.getElementById('portal').style.display = 'none';
-        document.getElementById('lobby').style.display = 'block';
-        document.getElementById('user-info').innerText = `${role} | ID: GHOST-${Math.floor(Math.random()*9999)}`;
-        
-        falar(`Bem vindo à Gênesis. Nível ${role} operacional.`);
-        renderizarDash();
-    }
-
-    function renderizarDash() {
-        const grid = document.getElementById('dash-main');
-        grid.innerHTML = "";
-
-        // VISÃO GESTOR (DONO/SHARK)
-        if(['DONO', 'SHARK', 'SUPERVISOR'].includes(roleAtiva)) {
-            grid.innerHTML += `
-                <div class="module-card">
-                    <h3>🛰️ MONITORAMENTO STAFF</h3>
-                    <div style="font-family:'JetBrains Mono'; font-size:10px;">
-                        <p>● OP-GHOST-22 [ARMAZÉM] - BIPANDO</p>
-                        <p>● OP-GHOST-09 [CROSSDOCK] - STANDBY</p>
-                        <p style="color:var(--blue)">● MOT-TRUCK-88 [ROTA] - KM 402</p>
-                    </div>
-                    <button class="action-btn" style="margin-top:15px; font-size:10px; padding:10px;" onclick="alert('Auditoria iniciada')">AUDITAR GERAL</button>
-                </div>
-            `;
-        }
-
-        // VISÃO OPERACIONAL
-        grid.innerHTML += `
-            <div class="module-card">
-                <h3>📦 OPERAÇÕES DE CAMPO</h3>
-                <button class="action-btn" onclick="abrirModulo('ARMAZÉM')">ENTRAR NO ARMAZÉM</button>
-                <button class="action-btn" onclick="abrirModulo('CROSSDOCK')">ENTRAR NO CROSSDOCK</button>
-            </div>
-        `;
-
-        if(roleAtiva === 'MOTORISTA') {
-            grid.innerHTML += `
-                <div class="module-card" style="border-top-color:var(--blue)">
-                    <h3>🚚 PAINEL DE VIAGEM</h3>
-                    <p style="font-size:11px;">DESTINO: CD-INTERIOR</p>
-                    <button class="action-btn" style="border-color:var(--blue); color:var(--blue);">INICIAR GPS ROTA</button>
-                </div>
-            `;
-        }
-    }
-
-    async function abrirModulo(nome) {
-        document.getElementById('lobby').style.display = 'none';
-        document.getElementById('modulo-exec').style.display = 'block';
-        document.getElementById('mod-name').innerText = nome;
-        try {
-            mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-            document.getElementById('camera').srcObject = mediaStream;
-        } catch(e) { console.log("Câmera OFF"); }
-    }
-
-    function iniciarBipagem() {
-        falar("Iniciando. Informe o código do produto.");
-        let c = prompt("CÓDIGO:");
-        if(c) { falar("Confirmado. Bipagem registrada."); }
-    }
-
-    function voltarLobby() {
-        if(mediaStream) mediaStream.getTracks().forEach(t => t.stop());
-        document.getElementById('modulo-exec').style.display = 'none';
-        document.getElementById('lobby').style.display = 'block';
-    }
 </script>
-
 </body>
 </html>
