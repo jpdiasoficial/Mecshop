@@ -3,174 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>JP DIAS | GENESIS V160</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=JetBrains+Mono&family=Orbitron:wght@800&display=swap" rel="stylesheet">
+    <title>JP DIAS | CENTRAL CONTROL V160</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono:wght@500&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #ff9f0a; --bg: #050505; --surface: #121212; --border: rgba(255,159,10,0.3); --green: #32d74b; --red: #ff375f; --blue: #0a84ff; }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; text-transform: uppercase; overflow: hidden; }
+        :root { 
+            --primary: #ff9f0a; --bg: #050505; --surface: rgba(25, 25, 25, 0.9);
+            --border: rgba(255, 159, 10, 0.3); --green: #30d158; --red: #ff453a; --blue: #0a84ff;
+        }
+        body { background: var(--bg); color: #f5f5f7; font-family: 'Inter', sans-serif; margin: 0; text-transform: uppercase; overflow: hidden; }
         
-        /* PORTAL & HIERARQUIA */
-        #portal { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background: radial-gradient(circle, #111 0%, #000 100%); }
-        .btn-access { width: 300px; padding: 18px; margin: 8px; background: var(--surface); border: 1px solid var(--border); color: #fff; font-family: 'JetBrains Mono'; font-weight: bold; cursor: pointer; display: flex; justify-content: space-between; border-radius: 4px; }
+        /* --- PAINEL DE CONTROLE DETALHADO (GOD/SHARK) --- */
+        #painel-mestre { height: 100vh; display: none; flex-direction: column; padding: 20px; box-sizing: border-box; overflow-y: auto; }
         
-        /* PAINEL DIRETORIA (GOD/SHARK) */
-        #lobby { display: none; padding: 20px; animation: fadeIn 0.5s; overflow-y: auto; height: 100vh; }
-        .card-adm { background: var(--surface); border: 1px solid var(--primary); padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        .header-status { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 20px; }
+        .grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 20px; }
+        .stat-card { background: var(--surface); padding: 15px; border-radius: 8px; border-left: 4px solid var(--primary); }
+        .stat-card small { font-size: 9px; color: #666; }
+        .stat-card b { display: block; font-size: 18px; font-family: 'Orbitron'; color: var(--primary); }
 
-        /* MÓDULOS OPERACIONAIS */
-        .modulo { display: none; padding: 20px; height: 100vh; animation: fadeIn 0.4s; }
-        .camera-box { width: 100%; height: 220px; background: #000; border: 2px solid var(--primary); border-radius: 12px; position: relative; overflow: hidden; }
-        .scan-line { position: absolute; top: 0; width: 100%; height: 2px; background: var(--primary); box-shadow: 0 0 15px var(--primary); animation: scan 3s infinite linear; }
+        /* --- MONITORAMENTO EM TEMPO REAL --- */
+        .monitor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .monitor-box { background: rgba(0,0,0,0.5); border: 1px solid #333; border-radius: 10px; padding: 15px; height: 300px; overflow-y: auto; }
+        .monitor-box h4 { font-family: 'Orbitron'; font-size: 10px; margin-top: 0; color: #aaa; border-bottom: 1px solid #222; padding-bottom: 5px; }
         
-        /* INTERFACE DE VOZ & LISTA */
-        .terminal { background: #000; color: #666; padding: 15px; height: 180px; overflow-y: auto; font-family: 'JetBrains Mono'; font-size: 11px; border: 1px solid #222; margin-top: 15px; border-radius: 5px; }
-        .display-instrucao { background: #111; padding: 15px; text-align: center; color: var(--primary); font-family: 'Orbitron'; font-size: 14px; border: 1px solid var(--border); margin-top: 10px; }
+        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #1a1a1a; font-family: 'JetBrains Mono'; font-size: 10px; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 5px; }
         
-        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* --- COMANDOS DE ACESSO --- */
+        .control-group { margin-top: 20px; background: var(--surface); padding: 20px; border-radius: 12px; border: 1px solid var(--border); }
+        .switch-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 10px; background: #000; border-radius: 5px; }
+        
+        .btn-master { width: 100%; padding: 15px; background: var(--primary); color: #000; border: none; border-radius: 5px; font-weight: 900; font-family: 'Orbitron'; cursor: pointer; margin-top: 10px; }
+        .btn-danger { background: var(--red); color: #fff; }
+
+        /* --- MODOS OPERACIONAIS (VOZ/LISTA) --- */
+        #mod-op { display: none; height: 100vh; padding: 20px; }
+        .display-voice { height: 200px; border: 1px solid var(--primary); display: flex; align-items: center; justify-content: center; font-size: 20px; font-family: 'Orbitron'; color: var(--primary); text-align: center; background: #000; border-radius: 10px; margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
-<div id="portal">
-    <h1 style="font-family:'Orbitron'; letter-spacing:8px; margin-bottom:30px;">JP DIAS</h1>
-    <button class="btn-access" onclick="acesso('GOD')">GOD (OWNER) <span>⚡</span></button>
-    <button class="btn-access" onclick="acesso('SHARK')">SHARK (CLIENT) <span>🦈</span></button>
-    <button class="btn-access" onclick="acesso('SUPERVISOR')">SUPERVISOR <span>🛡️</span></button>
-    <button class="btn-access" onclick="acesso('OPERACIONAL')">OPERACIONAL <span>📦</span></button>
-    <button class="btn-access" onclick="acesso('MOTORISTA')" style="border-color:var(--blue);">MOTORISTA <span>🚚</span></button>
+<div id="portal" style="height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+    <h1 style="font-family:'Orbitron'; letter-spacing:10px;">JP DIAS</h1>
+    <button onclick="entrar('GOD')" style="width:280px; padding:20px; margin:10px; background:#111; border:1px solid var(--primary); color:#fff; cursor:pointer; font-weight:bold;">ACESSAR CENTRAL CONTROL</button>
 </div>
 
-<div id="lobby">
-    <div id="adm-controls" class="card-adm" style="display:none;">
-        <h3 style="font-family:'Orbitron'; font-size:12px; color:var(--primary); margin:0;">DIRETORIA ESTRATÉGICA</h3>
-        <hr style="border:0; border-top:1px solid #333; margin:10px 0;">
-        <label style="font-size:10px;">LIBERAR MOTORISTA: <input type="checkbox" id="check-mot" checked></label><br><br>
-        <label style="font-size:10px;">DEFINIR SETOR OP: 
-            <select id="select-setor">
-                <option value="ARMAZÉM">ARMAZÉM (VOZ ATIVA)</option>
-                <option value="CROSSDOCK">CROSSDOCK (LISTA TÉCNICA)</option>
+<div id="painel-mestre">
+    <div class="header-status">
+        <div>
+            <span style="font-family:'Orbitron'; color:var(--primary);">GENESIS MASTER CONTROL</span><br>
+            <small style="font-size:9px; color:#555;">ID: GOD_MODE_JP_DIAS_2026</small>
+        </div>
+        <button onclick="location.reload()" class="btn-exit" style="background:none; border:1px solid var(--red); color:var(--red); padding:5px 15px; font-size:10px; cursor:pointer;">LOGOUT</button>
+    </div>
+
+    <div class="grid-stats">
+        <div class="stat-card"><b>12</b><small>USUÁRIOS ATIVOS</small></div>
+        <div class="stat-card" style="border-left-color:var(--blue);"><b>04</b><small>MOTOS EM ROTA</small></div>
+        <div class="stat-card" style="border-left-color:var(--green);"><b>89%</b><small>ROI OPERACIONAL</small></div>
+        <div class="stat-card" style="border-left-color:var(--red);"><b>02</b><small>ALERTAS AVARIA</small></div>
+    </div>
+
+    <div class="monitor-grid">
+        <div class="monitor-box">
+            <h4>📡 ATIVIDADE DE CAMPO (LIVE)</h4>
+            <div class="user-row"><span><span class="dot" style="background:var(--green)"></span>GHOST-01 [ARMAZÉM]</span> <span>BIPANDO...</span></div>
+            <div class="user-row"><span><span class="dot" style="background:var(--green)"></span>GHOST-05 [ARMAZÉM]</span> <span>VOZ ATIVA</span></div>
+            <div class="user-row"><span><span class="dot" style="background:var(--blue)"></span>TRUCK-88 [ROTA]</span> <span>KM 122</span></div>
+            <div class="user-row"><span><span class="dot" style="background:var(--red)"></span>GHOST-09 [CROSS]</span> <span>AVARIA!</span></div>
+            <div class="user-row" style="opacity:0.4;"><span><span class="dot" style="background:#555"></span>GHOST-12 [OFFLINE]</span> <span>---</span></div>
+        </div>
+        <div class="monitor-box">
+            <h4>📝 LOGS DO SISTEMA</h4>
+            <div id="log-system" style="font-family:'JetBrains Mono'; font-size:9px; color:#666;">
+                > 20:15: [GOD] ACESSO AO PAINEL<br>
+                > 20:12: [MOT-88] ROTA INICIADA<br>
+                > 20:05: [OP-01] ATIVAÇÃO VOZ (OK,OK,OK)<br>
+                > 19:50: [SHARK] RELATÓRIO GERADO
+            </div>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <h4 style="font-family:'Orbitron'; font-size:10px; margin-bottom:15px;">GERENCIAMENTO DE PERMISSÕES</h4>
+        
+        <div class="switch-row">
+            <span>LIBERAR LOGIN MOTORISTAS</span>
+            <input type="checkbox" id="sw-mot" checked onchange="alert('Status de Motoristas Atualizado')">
+        </div>
+
+        <div class="switch-row">
+            <span>ATIVAR MODO VOZ (ARMAZÉM)</span>
+            <input type="checkbox" id="sw-voice" checked>
+        </div>
+
+        <div class="switch-row" style="flex-direction:column; align-items:flex-start;">
+            <span style="margin-bottom:10px;">DEFINIR FUNÇÃO DO PRÓXIMO LOGIN:</span>
+            <select style="width:100%; padding:10px; background:#111; color:var(--primary); border:1px solid var(--border);">
+                <option>ARMAZÉM - SEPARAÇÃO POR VOZ</option>
+                <option>CROSSDOCK - BIPAGEM TÉCNICA</option>
+                <option>AUDITORIA - CONFERÊNCIA FINAL</option>
             </select>
-        </label>
-    </div>
-    <div id="botoes-dinamicos"></div>
-</div>
+        </div>
 
-<div id="mod-armazem" class="modulo">
-    <h2 style="font-family:'Orbitron'; color:var(--primary); font-size:14px;">ARMAZÉM SÉRIE V</h2>
-    <div class="display-instrucao" id="display-voz">DIGA "ATIVAR" 3X PARA INICIAR</div>
-    <div class="terminal" id="term-armazem">> AGUARDANDO ATIVAÇÃO TRIPLA...</div>
-    <button onclick="voltar()" style="width:100%; padding:15px; margin-top:20px; background:transparent; border:1px solid var(--red); color:var(--red); font-weight:bold;">SAIR</button>
-</div>
-
-<div id="mod-motorista" class="modulo">
-    <h2 style="font-family:'Orbitron'; color:var(--blue); font-size:14px;">ROTA INTELIGENTE</h2>
-    <div class="terminal" style="height:120px; border-color:var(--blue);">
-        > CARGA: #9902-B | ROTA: SUL 01<br>
-        > BIPAGEM DE CAIXA: PENDENTE
+        <button class="btn-master btn-danger" onclick="alert('PROTOCOLO LOCKDOWN ATIVADO!')">BLOQUEIO TOTAL DO SISTEMA</button>
     </div>
-    <div style="width:100%; height:200px; background:#111; border:1px solid var(--blue); border-radius:8px; display:flex; align-items:center; justify-content:center;">
-        <span style="color:var(--blue); font-size:10px;">[ GPS INTERATIVO ATIVO ]</span>
-    </div>
-    <button onclick="voltar()" style="width:100%; padding:15px; margin-top:20px; background:transparent; border:1px solid var(--blue); color:var(--blue); font-weight:bold;">CONCLUIR ROTA</button>
 </div>
 
 <script>
-    let roleAtiva = "";
-    let countAtivar = 0;
-    let countDesativar = 0;
-    let etapa = "STANDBY"; // STANDBY, CODIGO, QUANTIDADE, OK
-
-    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const voice = Recognition ? new Recognition() : null;
-
-    if(voice) {
-        voice.continuous = true;
-        voice.lang = 'pt-BR';
-        voice.onresult = (e) => {
-            const fala = e.results[e.results.length - 1][0].transcript.toLowerCase();
-            processarVoz(fala);
-        };
-        voice.onend = () => { if(etapa !== "STANDBY") voice.start(); };
-    }
-
-    function acesso(r) {
-        if(!['OPERACIONAL', 'MOTORISTA'].includes(r)) {
-            if(prompt("CHAVE MESTRE DIRETORIA:") !== "123") return;
+    function entrar(r) {
+        if(prompt("CHAVE GOD:") === "123") {
+            document.getElementById('portal').style.display = 'none';
+            document.getElementById('painel-mestre').style.display = 'flex';
+            falar("Bem vindo, Senhor J P Dias. Central de controle Genesis ativa.");
         }
-        roleAtiva = r;
-        document.getElementById('portal').style.display = 'none';
-        document.getElementById('lobby').style.display = 'block';
-        if(['GOD', 'SHARK', 'SUPERVISOR'].includes(r)) document.getElementById('adm-controls').style.display = 'block';
-        montarLobby();
-    }
-
-    function montarLobby() {
-        const bot = document.getElementById('botoes-dinamicos');
-        bot.innerHTML = "";
-        if(roleAtiva === 'MOTORISTA') {
-            if(!document.getElementById('check-mot').checked) return alert("ACESSO BLOQUEADO PELA DIRETORIA");
-            bot.innerHTML = `<button class="btn-access" style="width:100%; border-color:var(--blue)" onclick="abrirMod('mod-motorista')">INICIAR ROTA 🚚</button>`;
-        } else {
-            const setor = document.getElementById('select-setor').value;
-            bot.innerHTML = `<button class="btn-access" style="width:100%" onclick="abrirMod('mod-armazem')">ENTRAR EM ${setor} 📦</button>`;
-        }
-    }
-
-    function abrirMod(id) {
-        document.getElementById('lobby').style.display = 'none';
-        document.getElementById(id).style.display = 'block';
-        if(id === 'mod-armazem') {
-            etapa = "ESPERA_ATIVAR";
-            if(voice) voice.start();
-        }
-    }
-
-    function processarVoz(txt) {
-        // ATIVAÇÃO
-        if(etapa === "ESPERA_ATIVAR" && txt.includes("ativar")) {
-            countAtivar++;
-            falar(countAtivar);
-            if(countAtivar === 3) {
-                etapa = "CONFIRM_CODIGO";
-                countAtivar = 0;
-                falar("Ativado. Vá para a Casa A-12. Código final 4-8-2.");
-                document.getElementById('display-voz').innerText = "CASA A-12 | FINAL 482";
-            }
-        }
-        // DESATIVAÇÃO
-        else if(txt.includes("desativar")) {
-            countDesativar++;
-            falar(countDesativar);
-            if(countDesativar === 3) {
-                etapa = "STANDBY";
-                countDesativar = 0;
-                falar("Sistema desativado.");
-                voltar();
-            }
-        }
-        // FLUXO DE TRABALHO (OK)
-        else if(etapa === "CONFIRM_CODIGO" && txt.includes("482")) {
-            falar("Código correto. Informe a quantidade.");
-            etapa = "CONFIRM_QTD";
-            document.getElementById('display-voz').innerText = "INFORME A QUANTIDADE";
-        }
-        else if(etapa === "CONFIRM_QTD" && (txt.includes("ok") || !isNaN(parseInt(txt)))) {
-            falar("Confirmado. Diga OK para finalizar item.");
-            etapa = "CONFIRM_OK";
-        }
-        else if(etapa === "CONFIRM_OK" && txt.includes("ok")) {
-            falar("Item registrado. Próximo.");
-            document.getElementById('term-armazem').innerHTML += "> ITEM 482 FINALIZADO POR VOZ.<br>";
-            etapa = "CONFIRM_CODIGO"; // Reinicia o ciclo
-        }
-    }
-
-    function voltar() {
-        if(voice) voice.stop();
-        document.querySelectorAll('.modulo').forEach(m => m.style.display = 'none');
-        document.getElementById('lobby').style.display = 'block';
-        etapa = "STANDBY";
     }
 
     function falar(t) {
@@ -179,6 +125,21 @@
         m.lang = 'pt-BR';
         window.speechSynthesis.speak(m);
     }
+
+    // Simulação de Logs em Tempo Real
+    setInterval(() => {
+        const log = document.getElementById('log-system');
+        const time = new Date().toLocaleTimeString();
+        const events = [
+            "ITEM CONFIRMADO NA CASA A-12",
+            "MOTORISTA EM MOVIMENTO (ROTA 01)",
+            "SINAL DE PRONTIDÃO RECEBIDO",
+            "SCANNER ATIVO SETOR SUL"
+        ];
+        const randomEvent = events[Math.floor(Math.random() * events.length)];
+        log.innerHTML = `> ${time}: ${randomEvent}<br>` + log.innerHTML;
+    }, 5000);
 </script>
+
 </body>
 </html>
