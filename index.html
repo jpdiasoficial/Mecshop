@@ -3,182 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>JP DIAS | GENESIS V170</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono:wght@500&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    <title>JP DIAS | GENESIS V190</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=JetBrains+Mono:wght@500&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --primary: #ff9f0a; --bg: #050505; --surface: rgba(28, 28, 30, 0.8);
-            --border: rgba(255, 159, 10, 0.2); --green: #30d158; --red: #ff453a; --blue: #0a84ff;
-        }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; height: 100vh; text-transform: uppercase; }
+        :root { --primary: #ff9f0a; --bg: #050505; --surface: #121212; --border: rgba(255,159,10,0.2); --green: #30d158; --blue: #0a84ff; --red: #ff453a; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; text-transform: uppercase; overflow: hidden; height: 100vh; }
+        .glass { background: rgba(25, 25, 25, 0.9); backdrop-filter: blur(15px); border: 1px solid var(--border); border-radius: 12px; }
         
-        /* --- ESTÉTICA GLASSMORPHISM --- */
-        .glass { background: var(--surface); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 16px; }
-        
-        /* --- PORTAL DE ACESSO --- */
-        #portal { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background: radial-gradient(circle at center, #1c1c1e, #000); }
-        .logo { font-family: 'Orbitron'; font-size: 32px; letter-spacing: 10px; margin-bottom: 40px; background: linear-gradient(to bottom, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .btn-access { width: 300px; padding: 20px; margin: 10px; cursor: pointer; color: #fff; font-family: 'JetBrains Mono'; font-weight: bold; display: flex; justify-content: space-between; transition: 0.3s; }
-        .btn-access:hover { border-color: var(--primary); transform: scale(1.02); }
+        /* --- PORTAL GHOST --- */
+        #portal { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        #ghost-trigger { font-family: 'Orbitron'; letter-spacing: 12px; color: #151515; cursor: default; transition: 0.5s; user-select: none; }
+        .login-card { width: 300px; padding: 25px; margin-top: 20px; text-align: center; }
+        input { width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 1px solid #333; color: #fff; border-radius: 5px; box-sizing: border-box; }
+        .btn-access { width: 100%; padding: 15px; margin-top: 10px; cursor: pointer; background: var(--surface); color: #fff; border: 1px solid var(--border); font-weight: bold; border-radius: 8px; }
 
-        /* --- PAINEL MASTER (GOD/SHARK) --- */
+        /* --- PAINEL INTERNO (SHARK / MASTER) --- */
         #painel-master { display: none; padding: 20px; height: 100vh; overflow-y: auto; box-sizing: border-box; }
-        .grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
-        .stat-card { padding: 15px; border-left: 4px solid var(--primary); }
-        .stat-card b { display: block; font-size: 20px; font-family: 'Orbitron'; color: var(--primary); }
-        .stat-card small { font-size: 9px; color: #888; }
+        .section { padding: 15px; margin-bottom: 20px; border-left: 4px solid var(--primary); }
+        .grid-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .stat-card { background: #111; padding: 10px; border-radius: 5px; border: 1px solid #222; }
+        .stat-card b { display: block; color: var(--primary); font-family: 'Orbitron'; font-size: 16px; }
 
-        /* --- MÓDULO OPERACIONAL (VOZ) --- */
-        #mod-op { display: none; height: 100vh; flex-direction: column; padding: 20px; box-sizing: border-box; }
-        .display-voice { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; border: 1px solid var(--border); border-radius: 20px; background: rgba(0,0,0,0.4); margin-bottom: 20px; }
-        .instruction { font-family: 'Orbitron'; font-size: 22px; color: var(--primary); padding: 20px; }
-        .visual-indicator { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; margin-top: 20px; }
-        .pulse { width: 20px; height: 20px; background: var(--primary); border-radius: 50%; animation: pulse 1.5s infinite; }
-
-        .terminal { height: 120px; background: rgba(0,0,0,0.6); border: 1px solid #333; border-radius: 10px; padding: 15px; font-family: 'JetBrains Mono'; font-size: 10px; color: #666; overflow-y: auto; }
-        
-        @keyframes pulse { 0% { transform: scale(0.8); opacity: 1; } 100% { transform: scale(2); opacity: 0; } }
-        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+        /* --- MODULOS OPERACIONAIS --- */
+        .mod-op { display: none; height: 100vh; flex-direction: column; padding: 20px; box-sizing: border-box; }
+        .display-v { flex: 1; border: 2px solid var(--primary); border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: rgba(255,159,10,0.03); }
     </style>
 </head>
 <body>
 
 <div id="portal">
-    <div class="logo">JP DIAS</div>
-    <div class="glass" style="padding: 20px; display: flex; flex-direction: column;">
-        <button class="btn-access glass" onclick="acesso('GOD')">01. MASTER GOD <span>⚡</span></button>
-        <button class="btn-access glass" onclick="acesso('SHARK')">02. CLIENT SHARK <span>🦈</span></button>
-        <button class="btn-access glass" onclick="acesso('OPERACIONAL')">03. OPERACIONAL <span>📦</span></button>
+    <h1 id="ghost-trigger">JP DIAS</h1>
+    <div class="login-card glass">
+        <p style="font-size: 9px; color: #555; letter-spacing: 2px;">AUTENTICAÇÃO DE ACESSO</p>
+        <input type="text" id="user-login" placeholder="USUÁRIO">
+        <input type="password" id="user-pass" placeholder="SENHA">
+        <button class="btn-access" onclick="validarAcesso()">ENTRAR NO SISTEMA</button>
     </div>
 </div>
 
 <div id="painel-master">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
-        <h2 style="font-family:'Orbitron'; font-size:14px; color:var(--primary);">CENTRAL CONTROL V170</h2>
-        <button onclick="location.reload()" class="glass" style="padding:8px 15px; color:var(--red); border-color:var(--red); font-size:10px; font-weight:bold;">LOGOUT</button>
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h2 style="font-family:'Orbitron'; font-size:12px; color:var(--primary);">MASTER CONTROL | JP DIAS</h2>
+        <button onclick="location.reload()" style="background:none; border:1px solid var(--red); color:var(--red); font-size:10px;">LOGOUT</button>
     </div>
 
-    <div class="grid-stats">
-        <div class="glass stat-card"><b>R$ 1.850</b><small>ROI ECONOMIA (MÊS)</small></div>
-        <div class="glass stat-card" style="border-left-color:var(--green);"><b>94%</b><small>EFICIÊNCIA GERAL</small></div>
-        <div class="glass stat-card" style="border-left-color:var(--blue);"><b>12ms</b><small>LATÊNCIA REDE</small></div>
+    <div class="grid-stats" style="margin-top:20px;">
+        <div class="stat-card"><b>R$ 1.420</b><small>ECONOMIA ROI</small></div>
+        <div class="stat-card"><b>14ms</b><small>REDE SUL</small></div>
     </div>
 
-    <div class="glass" style="padding:20px; margin-bottom:20px;">
-        <h4 style="font-family:'Orbitron'; font-size:10px; margin-top:0;">📡 MONITORAMENTO SILENCIOSO (GHOSTS)</h4>
-        <div id="lista-latencia" style="font-family:'JetBrains Mono'; font-size:11px;">
-            <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #222;">
-                <span>GHOST-01 (ARMAZÉM)</span><span style="color:var(--green);">MÉDIA 22s</span>
-            </div>
-            <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #222;">
-                <span>GHOST-05 (ARMAZÉM)</span><span style="color:var(--red);">MÉDIA 88s (ATRASO)</span>
-            </div>
+    <div class="section glass">
+        <h4 style="font-family:'Orbitron'; font-size:10px; margin:0 0 10px 0;">GERENCIAR EQUIPE (GHOSTS)</h4>
+        <input type="text" id="new-user" placeholder="NOME DO FUNCIONÁRIO">
+        <input type="password" id="new-pass" placeholder="DEFINIR SENHA">
+        <select id="set-funcao" style="width:100%; padding:10px; background:#000; color:#fff; border:1px solid #333; margin-bottom:10px;">
+            <option value="ARMAZEM">MODO ARMAZÉM (VOZ)</option>
+            <option value="CROSSDOCK">MODO CROSSDOCK (LISTA)</option>
+        </select>
+        <button class="btn-access" style="background:var(--green); color:#000; border:none;" onclick="alert('Usuário Criado e Liberado!')">LIBERAR ACESSO</button>
+    </div>
+
+    <div class="section glass" style="border-left-color:var(--blue);">
+        <h4 style="font-family:'Orbitron'; font-size:10px; margin:0 0 10px 0;">LATÊNCIA DE SEPARAÇÃO (SILENT)</h4>
+        <div id="log-latencia" style="font-family:'JetBrains Mono'; font-size:10px; color:#666;">
+            > GHOST-01: 22s (ELITE)<br>
+            > GHOST-05: 89s (ATENÇÃO)
         </div>
     </div>
 </div>
 
-<div id="mod-op" class="modulo-full">
-    <div class="display-voice glass">
-        <div id="instrucao" class="instruction">DIGA "ATIVAR" 3X<br><small style="font-size:10px; color:#555;">SINAL DE PRONTIDÃO</small></div>
-        <div class="visual-indicator"><div class="pulse"></div></div>
+<div id="mod-armazem" class="mod-op">
+    <div class="display-v">
+        <div id="voz-status" style="font-family:'Orbitron'; font-size:20px; color:var(--primary);">DIGA "ATIVAR" 3X</div>
+        <div style="font-size:10px; color:#444; margin-top:15px;">MÃOS LIVRES ATIVADO</div>
     </div>
-    <div id="terminal" class="terminal">> INICIALIZANDO CORE DE VOZ V170...<br></div>
-    <button onclick="sair()" class="glass" style="width:100%; padding:20px; margin-top:20px; color:var(--red); border-color:var(--red); font-weight:bold;">ENCERRAR TURNO</button>
+</div>
+
+<div id="mod-crossdock" class="mod-op">
+    <h3 style="font-family:'Orbitron'; font-size:12px; color:var(--blue);">LISTA CROSSDOCK</h3>
+    <div style="background:#111; flex:1; border-radius:10px; padding:15px; border:1px solid #222;">
+        <div style="display:flex; justify-content:space-between; border-bottom:1px solid #222; padding:10px 0;">
+            <span>CARGA #998</span> <span style="color:var(--blue);">BIPAR CAIXA</span>
+        </div>
+    </div>
+    <button class="btn-access" style="border-color:var(--blue); color:var(--blue);">ABRIR SCANNER</button>
 </div>
 
 <script>
-    let role = "";
-    let counts = { ativar: 0, desativar: 0 };
-    let etapa = "STANDBY"; // STANDBY, CODIGO, QTD, OK
-    let tempoInicio = 0;
+    let clicks = 0;
+    const ghostTrigger = document.getElementById('ghost-trigger');
 
-    const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const voice = Speech ? new Speech() : null;
-
-    if(voice) {
-        voice.continuous = true;
-        voice.lang = 'pt-BR';
-        voice.onresult = (e) => {
-            const fala = e.results[e.results.length - 1][0].transcript.toLowerCase();
-            processarVoz(fala);
-        };
-        voice.onend = () => { if(etapa !== "STANDBY") voice.start(); };
-    }
-
-    function acesso(r) {
-        if(r !== 'OPERACIONAL' && prompt("CHAVE DIRETORIA:") !== "123") return;
-        role = r;
-        document.getElementById('portal').style.display = 'none';
-        if(r === 'OPERACIONAL') {
-            document.getElementById('mod-op').style.display = 'flex';
-            etapa = "AGUARDANDO_ATIVACAO";
-            if(voice) voice.start();
-        } else {
-            document.getElementById('painel-master').style.display = 'block';
-        }
-        falar("Genesis V1 70 Iniciada.");
-    }
-
-    function processarVoz(txt) {
-        addLog(`OUVIDO: "${txt}"`);
-
-        // 1. ATIVAÇÃO (3X)
-        if(etapa === "AGUARDANDO_ATIVACAO" && txt.includes("ativar")) {
-            counts.ativar++;
-            falar(counts.ativar);
-            if(counts.ativar === 3) {
-                counts.ativar = 0;
-                iniciarFluxo();
+    // 1. GATILHO OCULTO (MODO DONO)
+    ghostTrigger.onclick = () => {
+        clicks++;
+        if(clicks === 5) {
+            const secret = prompt("KEY:");
+            if(secret === "9910") {
+                document.getElementById('portal').style.display = 'none';
+                document.getElementById('painel-master').style.display = 'block';
+                falar("Acesso mestre concedido, J P.");
             }
+            clicks = 0;
         }
-        // 2. FLUXO TÉCNICO (CASA -> CÓDIGO -> QTD -> OK)
-        else if(etapa === "CODIGO" && txt.includes("482")) {
-            falar("Código correto. Diga a quantidade.");
-            etapa = "QUANTIDADE";
-            updateDisplay("INFORME A QUANTIDADE");
-        }
-        else if(etapa === "QUANTIDADE" && !isNaN(parseInt(txt))) {
-            falar(txt + " unidades. Diga OK para finalizar.");
-            etapa = "CONCLUIR";
-            updateDisplay("Diga OK para concluir");
-        }
-        else if(etapa === "CONCLUIR" && txt.includes("ok")) {
-            registrarLatencia();
-            falar("Sucesso. Próximo item.");
-            iniciarFluxo();
+    };
+
+    // 2. VALIDAÇÃO DE ACESSO (SHARK/FUNCIONÁRIO)
+    function validarAcesso() {
+        const u = document.getElementById('user-login').value.toLowerCase();
+        const p = document.getElementById('user-pass').value;
+
+        document.getElementById('portal').style.display = 'none';
+        
+        if(u === "shark") {
+            document.getElementById('painel-master').style.display = 'block';
+        } else if (u === "op") {
+            // Se for operador, decide o modo (simulado aqui)
+            document.getElementById('mod-armazem').style.display = 'flex';
+            iniciarVoz();
+        } else {
+            document.getElementById('mod-crossdock').style.display = 'flex';
         }
     }
 
-    function iniciarFluxo() {
-        tempoInicio = Date.now();
-        etapa = "CODIGO";
-        falar("Vá para a Casa A-12. Código final 4-8-2.");
-        updateDisplay("CASA A-12<br><small>CÓDIGO: 482</small>");
-    }
+    // 3. MOTOR DE VOZ (ARMAZÉM)
+    const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const voiceEngine = Speech ? new Speech() : null;
+    let ativarCount = 0;
 
-    function registrarLatencia() {
-        let seg = Math.floor((Date.now() - tempoInicio) / 1000);
-        addLog(`<b>[LATÊNCIA: ${seg}s]</b> ITEM REGISTRADO NO BANCO.`);
-        // Aqui o dado subiria silenciosamente para o painel do Shark
-    }
-
-    function updateDisplay(h) { document.getElementById('instrucao').innerHTML = h; }
-    function addLog(m) { 
-        const t = document.getElementById('terminal');
-        t.innerHTML += `> ${m}<br>`;
-        t.scrollTop = t.scrollHeight;
-    }
-
-    function sair() {
-        if(voice) voice.stop();
-        location.reload();
+    function iniciarVoz() {
+        if(voiceEngine) {
+            voiceEngine.continuous = true;
+            voiceEngine.lang = 'pt-BR';
+            voiceEngine.onresult = (e) => {
+                const txt = e.results[e.results.length-1][0].transcript.toLowerCase();
+                if(txt.includes("ativar")) {
+                    ativarCount++;
+                    falar(ativarCount);
+                    if(ativarCount === 3) {
+                        document.getElementById('voz-status').innerHTML = "CASA A-12<br>FINAL: 482";
+                        falar("Ativado. Casa A-12. Código final 482.");
+                        ativarCount = 0;
+                    }
+                }
+            };
+            voiceEngine.start();
+        }
     }
 
     function falar(t) {
         window.speechSynthesis.cancel();
         const m = new SpeechSynthesisUtterance(t);
         m.lang = 'pt-BR';
-        m.rate = 1.1;
         window.speechSynthesis.speak(m);
     }
 </script>
