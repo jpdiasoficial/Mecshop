@@ -3,173 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ELITE LOG | OPERAÇÃO 360</title>
+    <title>ELITE LOG | SISTEMA OPERACIONAL</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/@zxing/library@latest"></script>
     <style>
-        :root { --p: #0052cc; --s: #36b37e; --d: #ff4b4b; --bg: #f4f5f7; --dark: #091e42; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); display: flex; height: 100vh; overflow: hidden; }
+        :root { --p: #0052cc; --s: #36b37e; --d: #ff4b4b; --bg: #f4f5f7; --dark: #0747a6; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: var(--bg); height: 100vh; overflow: hidden; }
 
-        /* LOGIN & LOBBY */
-        .overlay { position: fixed; inset: 0; background: var(--dark); z-index: 3000; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .card-auth { background: white; padding: 35px; border-radius: 15px; width: 100%; max-width: 450px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-        
-        /* SIDEBAR */
-        aside { width: 260px; background: var(--dark); color: white; display: none; flex-direction: column; padding: 20px; border-right: 4px solid var(--p); }
-        .nav-link { padding: 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 12px; color: #b3bac5; margin-bottom: 5px; transition: 0.3s; }
-        .nav-link.active, .nav-link:hover { background: var(--p); color: white; }
-        .btn-exit { margin-top: auto; color: #ff8f8f; padding: 15px; cursor: pointer; border-top: 1px solid rgba(255,255,255,0.1); font-weight: bold; }
+        /* 1. LOGIN & LOBBY */
+        .overlay { position: fixed; inset: 0; background: #091e42; z-index: 5000; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .auth-card { background: white; padding: 30px; border-radius: 12px; width: 100%; max-width: 400px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); text-align: center; }
+        .info-box { background: #f0f4ff; padding: 15px; border-radius: 8px; text-align: left; margin: 20px 0; border-left: 5px solid var(--p); }
 
-        /* MAIN */
-        main { flex: 1; display: none; flex-direction: column; overflow-y: auto; }
-        header { background: white; height: 65px; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; border-bottom: 1px solid #ddd; }
-        .content { padding: 25px; }
+        /* 2. BARRA SUPERIOR (AZUL) */
+        .top-bar { background: var(--dark); height: 60px; display: none; align-items: center; justify-content: space-between; padding: 0 20px; color: white; position: fixed; top: 0; width: 100%; z-index: 1000; }
+        .menu-btn { font-size: 24px; cursor: pointer; }
+        .logo-txt { font-weight: 900; letter-spacing: 1px; }
 
-        /* COMPONENTES OPERACIONAIS */
-        .screen { display: none; }
+        /* 3. MENU LATERAL (DRAWER) */
+        .drawer { position: fixed; top: 60px; left: -280px; width: 280px; height: calc(100vh - 60px); background: white; box-shadow: 5px 0 15px rgba(0,0,0,0.1); transition: 0.3s; z-index: 999; display: flex; flex-direction: column; }
+        .drawer.open { left: 0; }
+        .nav-link { padding: 15px 25px; display: flex; align-items: center; gap: 15px; color: #444; text-decoration: none; border-bottom: 1px solid #f0f0f0; cursor: pointer; }
+        .nav-link:hover { background: #f8f9fa; color: var(--p); }
+        .nav-link i { width: 20px; color: var(--p); }
+        .exit-link { margin-top: auto; background: #fff1f0; color: var(--d); font-weight: bold; border-top: 1px solid #ffa39e; }
+
+        /* 4. ÁREA DE CONTEÚDO */
+        main { margin-top: 60px; height: calc(100vh - 60px); overflow-y: auto; padding: 20px; display: none; }
+        .screen { display: none; animation: fadeIn 0.3s; }
         .screen.active { display: block; }
-        .grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 25px; }
-        .stat-card { background: white; padding: 20px; border-radius: 12px; border-bottom: 4px solid var(--p); }
-        
-        #scanner-box { width: 100%; max-width: 450px; height: 280px; background: #000; border-radius: 12px; margin: 15px auto; overflow: hidden; position: relative; border: 4px solid var(--s); }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* ELEMENTOS OPERACIONAIS */
+        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        #cam-box { width: 100%; max-width: 400px; height: 280px; background: #000; margin: 15px auto; border-radius: 10px; overflow: hidden; border: 4px solid var(--s); }
         video { width: 100%; height: 100%; object-fit: cover; }
+        
+        table { width: 100%; border-collapse: collapse; background: white; margin-top: 10px; }
+        th { background: #f4f4f4; padding: 12px; text-align: left; font-size: 11px; color: #777; }
+        td { padding: 12px; border-bottom: 1px solid #eee; font-size: 13px; }
 
-        table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; margin-top: 15px; }
-        th { background: #f8f9fa; padding: 12px; text-align: left; font-size: 11px; color: #666; text-transform: uppercase; }
-        td { padding: 12px; border-top: 1px solid #eee; font-size: 13px; }
-
-        .btn-p { background: var(--p); color: white; border: none; padding: 15px; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .badge { padding: 4px 10px; border-radius: 5px; font-size: 10px; font-weight: bold; }
-        .bg-s { background: #e3fcef; color: #006644; }
-        .bg-w { background: #fff0b3; color: #856608; }
+        .btn { width: 100%; padding: 12px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn-p { background: var(--p); color: white; }
+        .btn-s { background: var(--s); color: white; }
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; background: #e3fcef; color: #006644; }
     </style>
 </head>
 <body>
 
     <div id="login-screen" class="overlay">
-        <div class="card-auth">
-            <h1 style="color: var(--dark); font-weight: 900; margin-bottom: 5px;">ELITE<span>LOG</span></h1>
-            <p style="color: #666; margin-bottom: 25px; font-size: 14px;">Logística Hortolândia 2026</p>
-            <input type="text" id="in-name" placeholder="Usuário / Matrícula" style="width:100%; padding:14px; margin-bottom:12px; border-radius:8px; border:1px solid #ddd;">
-            <select id="in-role" style="width:100%; padding:14px; margin-bottom:20px; border-radius:8px; border:1px solid #ddd;">
-                <option value="Gestor">Gestor (Visão Total)</option>
-                <option value="Operador">Operador (Doca/Bipagem)</option>
-                <option value="Motorista">Motorista (Entrega/Roteiro)</option>
+        <div class="auth-card">
+            <h2 style="color: var(--dark)">ELITE<span>LOG</span></h2>
+            <p style="font-size: 12px; color: #777; margin-bottom: 20px;">HORTOLÂNDIA CD-01</p>
+            <input type="text" id="in-name" placeholder="Seu Nome ou ID" style="width:100%; padding:12px; margin-bottom:10px; border:1px solid #ddd; border-radius:6px;">
+            <select id="in-role" style="width:100%; padding:12px; margin-bottom:20px; border:1px solid #ddd; border-radius:6px;">
+                <option value="Gestor">Gestor Master</option>
+                <option value="Operador">Operador de Doca</option>
+                <option value="Motorista">Motorista Externo</option>
             </select>
-            <button onclick="irParaLobby()" class="btn-p">AUTENTICAR</button>
+            <button onclick="validaLobby()" class="btn btn-p">VERIFICAR ACESSO</button>
         </div>
     </div>
 
     <div id="lobby-screen" class="overlay" style="display: none;">
-        <div class="card-auth" style="max-width: 550px; text-align: left;">
-            <h2 style="color: var(--p); margin-bottom: 15px;"><i class="fa-solid fa-user-shield"></i> Lobby de Segurança</h2>
-            <div style="background: #f0f4ff; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+        <div class="auth-card" style="max-width: 450px;">
+            <h3 style="color: var(--p)">Lobby Operacional</h3>
+            <div class="info-box">
                 <p><b>Colaborador:</b> <span id="lb-name"></span></p>
-                <p><b>Função:</b> <span id="lb-role"></span></p>
-                <p><b>Acesso:</b> Hortolândia CD-01</p>
-                <p><b>Horário:</b> <span id="lb-time"></span></p>
+                <p><b>Cargo:</b> <span id="lb-role"></span></p>
+                <p><b>Data:</b> <span id="lb-date"></span></p>
+                <p><b>Status:</b> <i class="fa-solid fa-circle-check" style="color:var(--s)"></i> Pronto para Turno</p>
             </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <button onclick="entrarNoSistema()" class="btn-p">INICIAR TURNO</button>
-                <button onclick="location.reload()" class="btn-p" style="background: #6c757d;">CANCELAR / SAIR</button>
+            <div style="display: flex; gap: 10px;">
+                <button onclick="entrar()" class="btn btn-p">ENTRAR NO SISTEMA</button>
+                <button onclick="location.reload()" class="btn" style="background:#eee">SAIR</button>
             </div>
         </div>
     </div>
 
-    <aside id="sidebar">
-        <div style="font-size: 20px; font-weight: 900; margin-bottom: 30px;"><i class="fa-solid fa-bolt"></i> ELITE OS</div>
-        <div class="nav-link active" onclick="nav('dash')"><i class="fa-solid fa-gauge-high"></i> Painel Geral</div>
-        <div class="nav-link" onclick="nav('bip')"><i class="fa-solid fa-camera"></i> Leitor (Câmera)</div>
-        <div class="nav-link" onclick="nav('carga')"><i class="fa-solid fa-list-ul"></i> Lista de Carga</div>
-        <div class="nav-link" id="menu-rh" onclick="nav('rh')"><i class="fa-solid fa-users-gear"></i> Gestão RH</div>
+    <div class="top-bar" id="top-bar">
+        <div class="menu-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></div>
+        <div class="logo-txt">ELITE LOG</div>
+        <div id="header-user" style="font-size: 12px; opacity: 0.8;"></div>
+    </div>
+
+    <nav class="drawer" id="drawer">
+        <div class="nav-link active" onclick="nav('home')"><i class="fa-solid fa-house"></i> Início</div>
+        <div class="nav-link" onclick="nav('cam')"><i class="fa-solid fa-camera"></i> Leitor de Carga</div>
+        <div class="nav-link" onclick="nav('lista')"><i class="fa-solid fa-list-check"></i> Manifesto/Entrega</div>
+        <div id="m-gestao" class="nav-link" onclick="nav('gestao')"><i class="fa-solid fa-users-gear"></i> Gestão Master</div>
         
-        <div class="btn-exit" onclick="location.reload()"><i class="fa-solid fa-power-off"></i> SAIR DO SISTEMA</div>
-    </aside>
+        <div class="nav-link exit-link" onclick="location.reload()">
+            <i class="fa-solid fa-power-off"></i> SAIR DO SISTEMA
+        </div>
+    </nav>
 
-    <main id="main-content">
-        <header>
-            <div id="user-display"></div>
-            <div id="live-clock" style="font-weight: 800; color: var(--p);"></div>
-        </header>
-
-        <div class="content">
-            <div id="dash" class="screen active">
-                <div class="grid-stats">
-                    <div class="stat-card">Produção <b id="st-bip">0</b></div>
-                    <div class="stat-card">Entregas <b id="st-ent">12</b></div>
-                    <div class="stat-card">SLA <b>100%</b></div>
-                </div>
-                <h3>Status Operacional</h3>
-                <div style="background:white; padding:15px; border-radius:10px; margin-top:10px;">
-                    <p><i class="fa-solid fa-circle" style="color:var(--s)"></i> Sistema conectado à Doca 04 em Hortolândia.</p>
+    <main id="main">
+        <div id="home" class="screen active">
+            <div class="card">
+                <h3>Resumo Operacional</h3>
+                <p style="font-size: 14px; color: #666;">Bem-vindo ao turno de hoje em Hortolândia.</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;">
+                    <div style="background:#f0f4ff; padding:15px; border-radius:8px;">Bipagens: <b id="st-bip">0</b></div>
+                    <div style="background:#f0fff4; padding:15px; border-radius:8px;">Status: <b>Ativo</b></div>
                 </div>
             </div>
+        </div>
 
-            <div id="bip" class="screen">
-                <div style="text-align: center;">
-                    <h3>Scanner de Alta Precisão</h3>
-                    <div id="scanner-box"><video id="video"></video></div>
-                    <button onclick="ligarCamera()" class="btn-p" style="max-width:300px; background:var(--s)"><i class="fa-solid fa-video"></i> ATIVAR CÂMERA</button>
-                    <div id="res-scan" style="margin-top:20px; font-weight:bold; color:var(--p); font-size:18px;">Lendo...</div>
-                </div>
+        <div id="cam" class="screen">
+            <div class="card" style="text-align: center;">
+                <h3>Scanner Digital</h3>
+                <div id="cam-box"><video id="video"></video></div>
+                <button onclick="ativarCam()" class="btn btn-s" style="max-width: 250px;">LIGAR CÂMERA</button>
+                <div id="scan-res" style="margin-top:15px; font-weight:bold; color:var(--p)">Aguardando Bipagem...</div>
             </div>
+        </div>
 
-            <div id="carga" class="screen">
-                <h3>Manifesto de Carga & Entregas</h3>
+        <div id="lista" class="screen">
+            <h3>Manifesto de Entrega</h3>
+            <div class="card" style="padding: 0;">
                 <table>
-                    <thead><tr><th>ID Carga</th><th>Status</th><th>Local</th><th>Responsável</th></tr></thead>
+                    <thead><tr><th>ID</th><th>Status</th><th>Hora</th></tr></thead>
                     <tbody id="lista-corpo">
-                        <tr><td>#88291</td><td><span class="badge bg-w">EM SEPARAÇÃO</span></td><td>Doca 1</td><td>-</td></tr>
-                        <tr><td>#88290</td><td><span class="badge bg-s">ENTREGUE</span></td><td>Zona Sul</td><td>Ricardo M.</td></tr>
+                        <tr><td>#88210</td><td><span class="badge">ENTREGUE</span></td><td>10:30</td></tr>
                     </tbody>
                 </table>
             </div>
+        </div>
 
-            <div id="rh" class="screen">
-                <h3>Produtividade da Equipe</h3>
-                <table>
-                    <thead><tr><th>Colaborador</th><th>Cargo</th><th>Eficiência</th></tr></thead>
-                    <tbody>
-                        <tr><td>Carlos Silva</td><td>Operador</td><td><b style="color:var(--s)">98.5%</b></td></tr>
-                    </tbody>
-                </table>
+        <div id="gestao" class="screen">
+            <h3>Controle de Performance</h3>
+            <div class="card">
+                <p>Relatório de produtividade da equipe e controle de docas.</p>
+                <button class="btn btn-p" style="margin-top: 10px;">GERAR RELATÓRIO PDF</button>
             </div>
         </div>
     </main>
 
     <script>
-        let session = {};
-        const codeReader = new ZXing.BrowserMultiFormatReader();
+        let user = {};
+        const reader = new ZXing.BrowserMultiFormatReader();
 
-        // Relógio
-        setInterval(() => {
-            document.getElementById('live-clock').innerText = new Date().toLocaleString('pt-br');
-        }, 1000);
-
-        function irParaLobby() {
+        function validaLobby() {
             const name = document.getElementById('in-name').value;
             const role = document.getElementById('in-role').value;
-            if(!name) return alert("Identifique-se!");
+            if(!name) return alert("Por favor, digite seu nome.");
 
-            session = { name, role, time: new Date().toLocaleTimeString() };
+            user = { name, role, date: new Date().toLocaleString('pt-br') };
             
             document.getElementById('lb-name').innerText = name;
             document.getElementById('lb-role').innerText = role;
-            document.getElementById('lb-time').innerText = session.time;
+            document.getElementById('lb-date').innerText = user.date;
 
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('lobby-screen').style.display = 'flex';
         }
 
-        function entrarNoSistema() {
+        function entrar() {
             document.getElementById('lobby-screen').style.display = 'none';
-            document.getElementById('sidebar').style.display = 'flex';
-            document.getElementById('main-content').style.display = 'flex';
-            document.getElementById('user-display').innerHTML = `<b>${session.role}:</b> ${session.name}`;
+            document.getElementById('top-bar').style.display = 'flex';
+            document.getElementById('main').style.display = 'block';
+            document.getElementById('header-user').innerText = user.name + " | " + user.role;
 
-            // Restrição RH
-            if(session.role !== 'Gestor') document.getElementById('menu-rh').style.display = 'none';
+            // Função por Cargo: Se não for Gestor, esconde menu de gestão
+            if(user.role !== 'Gestor') {
+                document.getElementById('m-gestao').style.display = 'none';
+            }
+        }
+
+        function toggleMenu() {
+            document.getElementById('drawer').classList.toggle('open');
         }
 
         function nav(id) {
@@ -177,23 +181,22 @@
             document.getElementById(id).classList.add('active');
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
             event.currentTarget.classList.add('active');
-            codeReader.reset();
+            toggleMenu(); // Fecha menu ao clicar
+            reader.reset();
         }
 
-        function ligarCamera() {
-            codeReader.decodeFromVideoDevice(null, 'video', (res, err) => {
+        function ativarCam() {
+            reader.decodeFromVideoDevice(null, 'video', (res, err) => {
                 if (res) {
-                    document.getElementById('res-scan').innerText = "CÓDIGO: " + res.text;
-                    const bips = parseInt(document.getElementById('st-bip').innerText) + 1;
-                    document.getElementById('st-bip').innerText = bips;
+                    document.getElementById('scan-res').innerText = "BIPADO: " + res.text;
+                    document.getElementById('st-bip').innerText = parseInt(document.getElementById('st-bip').innerText) + 1;
                     
-                    // Adiciona na Lista de Carga Automaticamente
+                    // Adiciona na lista
                     const lista = document.getElementById('lista-corpo');
-                    lista.innerHTML = `<tr><td>#${res.text}</td><td><span class="badge bg-s">BIPADO</span></td><td>Hortolândia</td><td>${session.name}</td></tr>` + lista.innerHTML;
+                    lista.innerHTML = `<tr><td>#${res.text}</td><td><span class="badge">BIPADO</span></td><td>${new Date().toLocaleTimeString()}</td></tr>` + lista.innerHTML;
                 }
             });
         }
     </script>
 </body>
-            </html>
-                                                                                                
+</html>
