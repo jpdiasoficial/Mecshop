@@ -2,188 +2,246 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEC SHOP | ALTA CONVERSÃO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SISTEMA GESTÃO MASTER | INFRA VIP</title>
     <style>
-        :root { --primary-green: #25d366; --bg-body: #f4f7f6; --text-main: #1a1a1a; --border-color: #e1e4e8; }
-        body { font-family: 'Inter', sans-serif; margin: 0; background-color: var(--bg-body); color: var(--text-main); padding-bottom: 100px; }
+        :root { --bg: #05070a; --green: #00ff41; --gold: #ffd700; --glass: rgba(255, 255, 255, 0.05); --card-border: rgba(255, 255, 255, 0.1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg); color: #fff; overflow-x: hidden; }
+        header { position: fixed; top: 0; width: 100%; height: 60px; background: rgba(10, 15, 25, 0.95); backdrop-filter: blur(10px); display: flex; align-items: center; padding: 0 20px; border-bottom: 1px solid var(--card-border); z-index: 1000; }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .menu-icon { font-size: 24px; cursor: pointer; display: none; color: var(--green); }
+        .balance-header { color: #fff; font-weight: 900; font-size: 14px; display: none; background: var(--glass); padding: 4px 12px; border-radius: 20px; border: 1px solid var(--card-border); }
+        .container { padding: 80px 15px 30px; max-width: 450px; margin: 0 auto; }
+        .screen { display: none; }
+        .screen.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .card { background: var(--glass); padding: 25px; border-radius: 15px; border: 1px solid var(--card-border); }
+        h1 { font-size: 18px; margin-bottom: 20px; color: var(--green); text-align: center; text-transform: uppercase; }
+        input { width: 100%; background: #000; border: 1px solid #333; padding: 14px; border-radius: 10px; color: #fff; margin-bottom: 10px; outline: none; font-size: 14px; }
+        .btn-green { width: 100%; background: var(--green); color: #000; border: none; padding: 18px; border-radius: 10px; font-weight: 900; text-transform: uppercase; cursor: pointer; margin-top: 10px; }
         
-        /* Slider Visual */
-        .slider-container { width: 100%; height: 200px; overflow: hidden; position: relative; background: #000; }
-        .slider-track { display: flex; width: 300%; height: 100%; animation: slide 15s infinite ease-in-out; }
-        .slide { width: 100vw; height: 100%; }
-        .slide img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.7); }
-        @keyframes slide { 0%, 25% { transform: translateX(0); } 33%, 58% { transform: translateX(-100vw); } 66%, 91% { transform: translateX(-200vw); } 100% { transform: translateX(0); } }
+        /* CHAT E FILA VIP */
+        .chat-box { background: #000; border-radius: 10px; height: 300px; overflow-y: auto; padding: 15px; margin-bottom: 15px; border: 1px solid #222; display: flex; flex-direction: column; gap: 10px; }
+        .msg { padding: 10px 14px; border-radius: 12px; font-size: 12px; max-width: 85%; line-height: 1.4; }
+        .msg.bot { background: #111; color: #fff; align-self: flex-start; border-bottom-left-radius: 2px; border: 1px solid #222; }
+        .msg.user { background: var(--green); color: #000; align-self: flex-end; border-bottom-right-radius: 2px; font-weight: 600; }
+        .waiting-box { background: rgba(255, 215, 0, 0.1); border: 1px solid var(--gold); padding: 15px; border-radius: 8px; text-align: center; font-size: 12px; color: var(--gold); display: none; margin-top: 10px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 0.7; } 50% { opacity: 1; } 100% { opacity: 0.7; } }
 
-        /* Busca e Categorias Estilo Original */
-        .search-area { padding: 0 20px; margin-top: -25px; position: relative; z-index: 10; }
-        .search-box { background: #fff; display: flex; align-items: center; padding: 12px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid var(--border-color); }
-        .search-box input { border: none; outline: none; width: 100%; font-size: 15px; }
-        
-        .categorias-bar { display: flex; overflow-x: auto; padding: 15px 20px; gap: 10px; scrollbar-width: none; }
-        .cat-item { background: #fff; padding: 8px 18px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; border: 1px solid var(--border-color); color: #666; }
-        .cat-item.active { background: #000; color: #fff; border-color: #000; }
+        /* PAINEL ADMIN E ALERTAS */
+        .admin-card { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 10px; border-left: 4px solid var(--green); margin-bottom: 10px; }
+        .alert-red { border-left: 4px solid #ff4b4b; background: rgba(255, 75, 75, 0.1); animation: blink 1.5s infinite; }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
 
-        /* Vitrine */
-        .loja-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 20px; }
-        .produto-card { background: #fff; border-radius: 12px; padding: 12px; text-align: center; border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: space-between; }
-        .img-produto { width: 100%; height: 110px; object-fit: contain; margin-bottom: 8px; }
-        .product-name { font-size: 12px; font-weight: 500; height: 32px; overflow: hidden; margin-bottom: 5px; }
-        .product-price { font-size: 15px; font-weight: 700; color: #000; margin-bottom: 10px; display: block;}
-
-        /* Controles */
-        .qty-selector { display: flex; align-items: center; justify-content: center; gap: 10px; background: #f3f4f6; border-radius: 6px; padding: 5px; }
-        .btn-qty { background: #fff; border: 1px solid #ddd; width: 28px; height: 28px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        .btn-add-initial { background: #000; color: #fff; border: none; width: 100%; padding: 10px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 11px; }
-
-        /* Footer e Modal */
-        .footer-cart { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border-color); z-index: 100; }
-        .total-value { font-size: 18px; font-weight: 700; }
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 3000; }
-        .modal-body { position: absolute; bottom: 0; background: #fff; width: 100%; border-radius: 20px 20px 0 0; padding: 20px; box-sizing: border-box; max-height: 90vh; overflow-y: auto; }
-        
-        .cupom-box { background: #f9fafb; border: 1px dashed #d1d5db; border-radius: 6px; padding: 10px; margin-bottom: 15px; display: flex; gap: 8px; }
-        .input-cupom { flex: 1; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 12px; text-transform: uppercase; }
-        .input-checkout { width: 100%; padding: 12px; margin-bottom: 8px; border: 1px solid #d1d5db; border-radius: 6px; box-sizing: border-box; }
-        .btn-zap { width: 100%; background: var(--primary-green); color: white; border: none; padding: 16px; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; }
+        /* MENU LATERAL */
+        .side-menu { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: #0a0f19; z-index: 2000; transition: 0.3s; padding: 25px; border-right: 1px solid var(--card-border); }
+        .side-menu.open { left: 0; }
+        .user-box { background: var(--glass); padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 3px solid var(--green); }
+        .menu-item { padding: 15px 0; color: #ccc; border-bottom: 1px solid #111; cursor: pointer; font-size: 14px; }
+        .overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); display:none; z-index:1500; }
+        .val-btn { background: #111; border: 1px solid #333; padding: 12px; border-radius: 8px; text-align: center; cursor: pointer; font-size: 11px; margin-bottom: 5px; color: #fff; }
     </style>
 </head>
 <body>
 
-    <div class="slider-container">
-        <div class="slider-track">
-            <div class="slide"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800"></div>
-            <div class="slide"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800"></div>
-            <div class="slide"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800"></div>
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <header>
+        <div class="header-left">
+            <div class="menu-icon" id="btn-menu" onclick="toggleMenu()">☰</div>
+            <div class="balance-header" id="header-balance">R$ 0,00</div>
         </div>
-    </div>
+        <div id="badge-cargo" style="margin-left: auto; font-weight: 900; font-size: 10px; color: var(--gold); letter-spacing: 1px;">SISTEMA VIP</div>
+    </header>
 
-    <div class="search-area">
-        <div class="search-box">
-            <input type="text" id="inputBusca" oninput="render()" placeholder="O que você está procurando?">
+    <div class="side-menu" id="side-menu">
+        <div class="user-box">
+            <p style="font-size: 10px; color: #888;">USUÁRIO ATIVO</p><b id="menu-user">...</b>
+            <p style="font-size: 10px; color: #888; margin-top: 8px;">SALDO DISPONÍVEL</p><b id="menu-saldo" style="color: var(--green);">R$ 0,00</b>
         </div>
+        <div class="menu-item" onclick="irPara('screen-dash'); toggleMenu()">🏠 Início / Lobby</div>
+        <div class="menu-item" id="menu-admin-only" style="display:none; color: var(--gold); font-weight: bold;" onclick="irPara('screen-admin'); toggleMenu()">🛡️ Painel Master Auditor</div>
+        <div class="menu-item" style="color:var(--green); font-weight:bold;" onclick="irPara('screen-chat'); toggleMenu()">💬 Suporte Online 24h</div>
+        <div class="menu-item" onclick="irPara('screen-edit'); toggleMenu()">🔑 Alterar Minha Senha</div>
+        <div class="menu-item" style="color: #ff4b4b; margin-top: 40px;" onclick="sairDaConta()">🚪 Sair do Sistema</div>
     </div>
 
-    <div class="categorias-bar">
-        <div class="cat-item active" onclick="filtrarCat('Tudo', this)">Tudo</div>
-        <div class="cat-item" onclick="filtrarCat('Tech', this)">Tecnologia</div>
-        <div class="cat-item" onclick="filtrarCat('Moda', this)">Moda</div>
-    </div>
-
-    <div id="vitrine" class="loja-grid"></div>
-
-    <div class="footer-cart">
-        <div>
-            <span style="font-size: 11px; color: #888;">SUBTOTAL</span><br>
-            <span class="total-value">R$ <span id="total-val">0,00</span></span>
-        </div>
-        <button onclick="toggleModal(true)" style="background:#000; color:#fff; border:none; padding:12px 20px; border-radius:6px; font-weight:600;">CONFERIR</button>
-    </div>
-
-    <div class="modal" id="modalCart">
-        <div class="modal-body">
-            <h3 style="margin-bottom:15px">Carrinho</h3>
-            <div id="cartItemsList"></div>
-            
-            <div class="cupom-box">
-                <input type="text" id="cupomInput" class="input-cupom" placeholder="CUPOM (OPCIONAL)">
-                <button onclick="updateTotal()" style="background:#000; color:#fff; border:none; padding:0 10px; border-radius:4px; font-size:10px;">APLICAR</button>
+    <div class="container">
+        
+        <div id="screen-login" class="screen active">
+            <div class="card">
+                <h1>Acesso à Infraestrutura</h1>
+                <p style="font-size: 11px; color: #555; text-align: center; margin-bottom: 15px;">Use 'admin' para ver o Painel Master ou qualquer nome para Cliente.</p>
+                <input type="text" id="l-user" placeholder="Usuário ou CPF">
+                <input type="password" id="l-pass" placeholder="Senha de Acesso">
+                <button class="btn-green" onclick="processarLogin()">ENTRAR NO SISTEMA</button>
             </div>
-
-            <input type="text" id="nomeCliente" class="input-checkout" placeholder="Seu Nome">
-            <input type="tel" id="cepCliente" class="input-checkout" placeholder="CEP" oninput="mascaraCEP(this)">
-            <input type="text" id="ruaCliente" class="input-checkout" placeholder="Endereço Completo">
-            
-            <button class="btn-zap" onclick="enviarZap()">FINALIZAR NO WHATSAPP</button>
-            <button onclick="toggleModal(false)" style="width:100%; background:none; border:none; color:#999; margin-top:10px; font-size:12px;">Voltar</button>
         </div>
+
+        <div id="screen-dash" class="screen">
+            <div class="card" style="text-align: center; padding: 40px 20px;">
+                <p style="font-size: 11px; color: #888;">SALDO EM CONTA</p>
+                <div style="font-size: 42px; font-weight: 900; color: var(--green); margin: 5px 0;">R$ <span id="val-saldo">0,00</span></div>
+                <button class="btn-green" style="background: var(--gold);">DEPOSITAR AGORA (PIX)</button>
+                <button class="btn-green" style="background: transparent; border: 1px solid #333; color: #fff;">SOLICITAR SAQUE</button>
+            </div>
+        </div>
+
+        <div id="screen-admin" class="screen">
+            <div class="card">
+                <h1 style="color: var(--gold);">🛡️ AUDITORIA & GESTÃO</h1>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+                    <div class="admin-card"><p style="font-size:9px; color: #888;">HOJE</p><b style="color: var(--green);">R$ 1.450,00</b></div>
+                    <div class="admin-card"><p style="font-size:9px; color: #888;">SEMANAL</p><b style="color: var(--gold);">R$ 12.800,00</b></div>
+                </div>
+
+                <div class="admin-card" style="border-left: 4px solid #fff; margin-bottom: 20px;">
+                    <p style="font-size:9px; color: #888;">FECHAMENTO MENSAL</p><b>R$ 45.200,00</b>
+                </div>
+
+                <h2 style="font-size: 11px; margin-bottom: 10px; color: #ff4b4b; text-transform: uppercase;">🚨 Atividades Suspeitas (Cargos)</h2>
+                <div id="lista-alertas">
+                    <div class="admin-card alert-red">
+                        <p style="font-size:11px;"><b>🚫 RISCO CRÍTICO:</b> Suporte (ana_sup) tentou editar Saldo Master sem autorização.</p>
+                        <small style="color: #ffbaba;">Ocorrência registrada às 23:51 | IP: 189.22.XX</small>
+                    </div>
+                </div>
+                
+                <button class="btn-green" style="background:none; color:#555; border:1px solid #333" onclick="irPara('screen-dash')">VOLTAR AO LOBBY</button>
+            </div>
+        </div>
+
+        <div id="screen-chat" class="screen">
+            <div class="card">
+                <h1>Suporte VIP 24h</h1>
+                <div class="chat-box" id="chat-content">
+                    <div class="msg bot"><b>Assistente:</b> Olá! Sou o seu assistente VIP. Como posso resolver seu problema agora?</div>
+                </div>
+                
+                <div id="chat-options">
+                    <div class="val-btn" onclick="botReply('Meu depósito não caiu', 'Verifique o comprovante. O PIX cai em até 2 minutos. Se demorar, nossa auditoria processa manualmente em instantes.')">Meu depósito não caiu</div>
+                    <div class="val-btn" onclick="botReply('Prazo de Saque', 'Saques PIX levam de 5 a 20 minutos para processamento padrão.')">Prazo de Saque</div>
+                    <div class="val-btn" style="border:1px solid var(--green); color:var(--green); font-weight: bold; margin-top: 10px;" onclick="entrarNaFila()">Falar com Atendente (Fila VIP)</div>
+                </div>
+
+                <div class="waiting-box" id="fila-box">
+                    ⏳ <b>Você está na Fila de Atendimento VIP</b><br>
+                    Posição Atual: <span id="pos-fila">--</span>º<br>
+                    <small>Tempo estimado: 30s por posição.</small>
+                </div>
+
+                <button class="btn-green" style="background:none; color:#555" onclick="resetarChatEVoltar()">CANCELAR E VOLTAR</button>
+            </div>
+        </div>
+
+        <div id="screen-edit" class="screen">
+            <div class="card">
+                <h1>Segurança da Conta</h1>
+                <p style="font-size: 11px; color: #888; margin-bottom: 15px; text-align: center;">Para sua segurança, a troca é validada via Suporte.</p>
+                <input type="password" id="edit-atual" placeholder="Senha Atual">
+                <input type="password" id="edit-nova" placeholder="Nova Senha">
+                <input type="password" id="edit-confirma" placeholder="Confirme a Nova Senha">
+                <button class="btn-green" onclick="enviarTrocaSenha()">SOLICITAR TROCA (WHATSAPP)</button>
+                <button class="btn-green" style="background:none; color:#555" onclick="irPara('screen-dash')">VOLTAR</button>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        const produtos = [
-            { id: 1, cat: "Tech", nome: "Smartwatch Ultra 9", preco: 289.90, img: "https://m.media-amazon.com/images/I/71Yp-H-O8rL._AC_SL1500_.jpg" },
-            { id: 2, cat: "Tech", nome: "Headset Wireless", preco: 159.00, img: "https://m.media-amazon.com/images/I/61CGHv6kmWL._AC_SL1500_.jpg" },
-            { id: 3, cat: "Moda", nome: "Tênis Running Nitro", preco: 197.00, img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400" }
-        ];
+        let timerFila;
 
-        let carrinho = [];
-        let categoriaAtual = "Tudo";
-
-        function render() {
-            const v = document.getElementById('vitrine');
-            const busca = document.getElementById('inputBusca').value.toLowerCase();
-            v.innerHTML = "";
-
-            produtos.filter(p => (categoriaAtual === "Tudo" || p.cat === categoriaAtual) && p.nome.toLowerCase().includes(busca))
-            .forEach(p => {
-                const item = carrinho.find(i => i.id === p.id);
-                v.innerHTML += `
-                    <div class="produto-card">
-                        <img src="${p.img}" class="img-produto">
-                        <span class="product-name">${p.nome}</span>
-                        <span class="product-price">R$ ${p.preco.toFixed(2).replace('.',',')}</span>
-                        ${item ? `
-                            <div class="qty-selector">
-                                <button class="btn-qty" onclick="changeQty(${p.id}, -1)">-</button>
-                                <span>${item.qtd}</span>
-                                <button class="btn-qty" onclick="changeQty(${p.id}, 1)">+</button>
-                            </div>
-                        ` : `<button class="btn-add-initial" onclick="changeQty(${p.id}, 1)">ADICIONAR</button>`}
-                    </div>`;
-            });
-            updateTotal();
+        function irPara(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo(0,0);
         }
 
-        function changeQty(id, delta) {
-            const idx = carrinho.findIndex(i => i.id === id);
-            if(idx > -1) {
-                carrinho[idx].qtd += delta;
-                if(carrinho[idx].qtd <= 0) carrinho.splice(idx, 1);
+        function toggleMenu() {
+            const menu = document.getElementById('side-menu');
+            const overlay = document.getElementById('overlay');
+            menu.classList.toggle('open');
+            overlay.style.display = menu.classList.contains('open') ? 'block' : 'none';
+        }
+
+        function processarLogin() {
+            const user = document.getElementById('l-user').value.toLowerCase();
+            
+            document.getElementById('btn-menu').style.display = 'block';
+            document.getElementById('header-balance').style.display = 'block';
+            document.getElementById('header-balance').innerText = "R$ 1.250,00";
+            document.getElementById('menu-user').innerText = user.toUpperCase();
+            document.getElementById('menu-saldo').innerText = "R$ 1.250,00";
+            document.getElementById('val-saldo').innerText = "1.250,00";
+
+            if(user === "admin") {
+                document.getElementById('menu-admin-only').style.display = 'block';
+                document.getElementById('badge-cargo').innerText = "🛡️ ADMIN MASTER";
+                document.getElementById('badge-cargo').style.color = "var(--gold)";
+                irPara('screen-admin');
             } else {
-                carrinho.push({...produtos.find(p => p.id === id), qtd: 1});
+                document.getElementById('menu-admin-only').style.display = 'none';
+                document.getElementById('badge-cargo').innerText = "👤 CLIENTE VIP";
+                document.getElementById('badge-cargo').style.color = "var(--green)";
+                irPara('screen-dash');
             }
-            render();
-            updateCartList();
         }
 
-        function updateTotal() {
-            let total = carrinho.reduce((acc, i) => acc + (i.preco * i.qtd), 0);
-            if(document.getElementById('cupomInput').value.toUpperCase() === "MEC10") total *= 0.9;
-            document.getElementById('total-val').innerText = total.toFixed(2).replace('.',',');
+        // LÓGICA DE BOT RESOLUTIVO
+        function botReply(q, r) {
+            const chat = document.getElementById('chat-content');
+            chat.innerHTML += `<div class="msg user">${q}</div>`;
+            setTimeout(() => {
+                chat.innerHTML += `<div class="msg bot"><b>Assistente:</b> ${r}</div>`;
+                chat.scrollTop = chat.scrollHeight;
+                setTimeout(() => {
+                    chat.innerHTML += `<div class="msg bot">Isso resolveu? Se não, entre na fila para falar com um humano.</div>`;
+                    chat.scrollTop = chat.scrollHeight;
+                }, 800);
+            }, 600);
         }
 
-        function updateCartList() {
-            const list = document.getElementById('cartItemsList');
-            list.innerHTML = "";
-            carrinho.forEach(i => {
-                list.innerHTML += `<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px;">
-                    <span>${i.nome} (x${i.qtd})</span>
-                    <b>R$ ${(i.preco * i.qtd).toFixed(2).replace('.',',')}</b>
-                </div>`;
-            });
+        // FILA DE ESPERA 30S
+        function entrarNaFila() {
+            document.getElementById('chat-options').style.display = 'none';
+            document.getElementById('fila-box').style.display = 'block';
+            let pos = Math.floor(Math.random() * (20 - 16 + 1)) + 16;
+            document.getElementById('pos-fila').innerText = pos;
+
+            timerFila = setInterval(() => {
+                pos--;
+                if(pos > 0) {
+                    document.getElementById('pos-fila').innerText = pos;
+                } else {
+                    document.getElementById('pos-fila').innerText = "1";
+                    document.getElementById('fila-box').innerHTML = "⏳ <b>Localizando Atendente...</b><br>Verificando sua conta nos logs. Aguarde.";
+                    clearInterval(timerFila);
+                }
+            }, 30000); // 30 segundos conforme comando
         }
 
-        function filtrarCat(cat, el) {
-            categoriaAtual = cat;
-            document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
-            el.classList.add('active');
-            render();
+        // RESET AUTOMÁTICO DO CHAT AO SAIR
+        function resetarChatEVoltar() {
+            clearInterval(timerFila);
+            document.getElementById('chat-content').innerHTML = `<div class="msg bot"><b>Assistente:</b> Olá! Sou o seu assistente VIP. Como posso agilizar seu atendimento hoje?</div>`;
+            document.getElementById('chat-options').style.display = 'block';
+            document.getElementById('fila-box').style.display = 'none';
+            irPara('screen-dash');
         }
 
-        function mascaraCEP(i) { i.value = i.value.replace(/\D/g, "").replace(/^(\d{5})(\d)/, "$1-$2"); }
-        function toggleModal(s) { document.getElementById('modalCart').style.display = s ? 'block' : 'none'; }
-
-        function enviarZap() {
-            const n = document.getElementById('nomeCliente').value;
-            const r = document.getElementById('ruaCliente').value;
-            if(!n || !r || carrinho.length === 0) return alert("Preencha os dados!");
-            let msg = `*PEDIDO MEC SHOP*\n\n*CLIENTE:* ${n}\n*ENDEREÇO:* ${r}\n---\n`;
-            carrinho.forEach(i => msg += `• ${i.qtd}x ${i.nome}\n`);
-            msg += `\n*TOTAL: R$ ${document.getElementById('total-val').innerText}*`;
-            window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(msg)}`);
+        function enviarTrocaSenha() {
+            const user = document.getElementById('menu-user').innerText;
+            const nova = document.getElementById('edit-nova').value;
+            const tel = "5511999999999"; // SEU WHATSAPP DE SUPORTE
+            const txt = `*PEDIDO DE ALTERAÇÃO DE SENHA*%0A%0A*Usuário:* ${user}%0A*Nova Senha:* ${nova}`;
+            window.open(`https://wa.me/${tel}?text=${txt}`, '_blank');
         }
 
-        render();
+        function sairDaConta() {
+            location.reload();
+        }
     </script>
 </body>
 </html>
