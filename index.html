@@ -2,119 +2,198 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LABORATÓRIO DE TESTE - SISTEMA GESTÃO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SISTEMA GESTÃO TOTAL | 2026</title>
     <style>
-        :root { --bg: #05070a; --green: #00ff41; --gold: #ffd700; --red: #ff4b4b; --card: rgba(255,255,255,0.05); }
+        :root { --bg: #05070a; --green: #00ff41; --gold: #ffd700; --red: #ff4b4b; --glass: rgba(255, 255, 255, 0.05); --border: rgba(255, 255, 255, 0.1); }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: #fff; padding: 20px; }
-        .screen { display: none; max-width: 400px; margin: 0 auto; }
-        .active { display: block; }
-        .card { background: var(--card); border: 1px solid rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; margin-bottom: 15px; }
-        input, select { width: 100%; padding: 12px; margin: 10px 0; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; }
-        .btn { width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
+        body { background: var(--bg); color: #fff; overflow-x: hidden; }
+        header { position: fixed; top: 0; width: 100%; height: 60px; background: rgba(10, 15, 25, 0.95); backdrop-filter: blur(10px); display: flex; align-items: center; padding: 0 20px; border-bottom: 1px solid var(--border); z-index: 1000; }
+        .container { padding: 80px 15px 30px; max-width: 450px; margin: 0 auto; }
+        .screen { display: none; }
+        .active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .card { background: var(--glass); padding: 20px; border-radius: 15px; border: 1px solid var(--border); margin-bottom: 15px; }
+        input, select { width: 100%; background: #000; border: 1px solid #333; padding: 14px; border-radius: 10px; color: #fff; margin-bottom: 10px; font-size: 14px; }
+        .btn { width: 100%; padding: 18px; border-radius: 10px; border: none; font-weight: 900; cursor: pointer; text-transform: uppercase; transition: 0.2s; }
         .btn-green { background: var(--green); color: #000; }
         .btn-gold { background: var(--gold); color: #000; }
-        .badge { font-size: 10px; padding: 3px 8px; border-radius: 4px; font-weight: bold; margin-bottom: 10px; display: inline-block; }
+        .btn-outline { background: transparent; border: 1px solid #333; color: #888; margin-top: 10px; }
+        
+        /* CHAT HUMANIZADO */
+        .chat-box { background: #000; border-radius: 10px; height: 250px; overflow-y: auto; padding: 15px; margin-bottom: 15px; border: 1px solid #222; display: flex; flex-direction: column; }
+        .msg { padding: 10px; border-radius: 10px; font-size: 12px; margin-bottom: 8px; max-width: 85%; }
+        .msg.bot { background: #111; align-self: flex-start; }
+        .msg.user { background: var(--green); color: #000; align-self: flex-end; font-weight: 600; }
+        
+        /* MENU LATERAL */
+        .side-menu { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: #0a0f19; z-index: 2000; transition: 0.3s; padding: 25px; border-right: 1px solid var(--border); }
+        .side-menu.open { left: 0; }
+        .menu-item { padding: 15px 0; color: #ccc; border-bottom: 1px solid #111; cursor: pointer; font-size: 14px; }
     </style>
 </head>
 <body>
 
-    <div id="scr-login" class="screen active">
-        <div class="card" style="text-align: center;">
-            <h1 style="color: var(--green); margin-bottom: 20px;">TESTE DE ACESSOS</h1>
-            <p style="font-size: 11px; color: #888;">Digite os usuários de teste abaixo:</p>
-            <input type="text" id="u" placeholder="Usuário (admin, suporte ou cliente)">
-            <input type="password" id="s" placeholder="Senha">
-            <button class="btn btn-green" onclick="logar()">ENTRAR NO SISTEMA</button>
-            <div style="margin-top: 20px; font-size: 10px; color: #555; text-align: left; line-height: 1.6;">
-                <b>LOGINS PARA TESTAR:</b><br>
-                • admin / admin (Poder Total)<br>
-                • suporte / 123 (Funcionário)<br>
-                • cliente / 123 (Jogador)
-            </div>
+    <header>
+        <div id="btn-menu-icon" style="display:none; cursor:pointer; font-size:24px; color:var(--green);" onclick="toggleMenu()">☰</div>
+        <div id="header-vals" style="margin-left:auto; text-align:right; display:none;">
+            <div id="header-cargo" style="font-size:9px; color:var(--gold); font-weight:bold;">CLIENTE</div>
+            <div id="header-saldo" style="font-weight:900; color:var(--green);">R$ 0,00</div>
         </div>
+    </header>
+
+    <div class="side-menu" id="side-menu">
+        <h2 style="color:var(--gold); margin-bottom:20px;">SISTEMA MASTER</h2>
+        <div class="menu-item" onclick="irPara('scr-dash'); toggleMenu()">🏠 Início / Jogar</div>
+        <div class="menu-item" onclick="irPara('scr-deposito'); toggleMenu()">💰 Depositar PIX</div>
+        <div class="menu-item" onclick="irPara('scr-saque'); toggleMenu()">💸 Solicitar Saque</div>
+        <div class="menu-item" id="menu-admin" style="display:none; color:var(--gold); font-weight:bold;" onclick="irPara('scr-admin'); toggleMenu()">🛡️ GESTÃO MASTER</div>
+        <div class="menu-item" style="color:var(--green);" onclick="irPara('scr-chat'); toggleMenu()">💬 SUPORTE VIP</div>
+        <div class="menu-item" style="color:var(--red); margin-top:40px;" onclick="location.reload()">🚪 SAIR</div>
     </div>
 
-    <div id="scr-main" class="screen">
-        <header style="display: flex; justify-content: space-between; margin-bottom: 20px;">
-            <div id="cargo-tag"></div>
-            <div style="color: var(--green); font-weight: 900;" id="saldo-tag">R$ 500,00</div>
-        </header>
-
-        <div id="view-cliente" class="view">
-            <div class="card" style="text-align: center;">
-                <h2>BEM-VINDO AO JOGO</h2>
-                <button class="btn btn-green" style="margin-top: 15px;">ABRIR LOBBY</button>
-                <button class="btn" style="background: none; color: var(--gold); margin-top: 10px;" onclick="irChat()">💬 SUPORTE VIP</button>
+    <div class="container">
+        
+        <div id="scr-login" class="screen active">
+            <div class="card" style="text-align:center;">
+                <h1 style="color:var(--green); margin-bottom:20px;">ENTRAR</h1>
+                <input type="text" id="l-user" placeholder="Usuário">
+                <input type="password" id="l-pass" placeholder="Senha">
+                <button class="btn btn-green" onclick="fazerLogin()">ACESSAR CONTA</button>
+                <button class="btn btn-outline" onclick="irPara('scr-cadastro')">CRIAR CONTA</button>
+                <p style="margin-top:15px; font-size:11px; color:#555;" onclick="irPara('scr-recuperar')">Esqueceu a senha? <u>Recuperar</u></p>
             </div>
         </div>
 
-        <div id="view-admin" class="view" style="display: none;">
-            <div class="card" style="border-color: var(--gold);">
-                <h3 style="color: var(--gold); margin-bottom: 15px;">🛡️ TERMINAL DE GESTÃO</h3>
-                <label style="font-size: 11px;">AJUSTAR SALDO DO CLIENTE:</label>
-                <input type="number" id="new-saldo" placeholder="R$ 0,00">
-                <button class="btn btn-gold" onclick="ajustarSaldo()">SALVAR NOVO SALDO</button>
-                
-                <div id="auditoria" style="margin-top: 15px; border-top: 1px solid #333; padding-top: 15px;">
-                    <p style="font-size: 10px; color: var(--red);"><b>🚨 AUDITORIA EM TEMPO REAL:</b></p>
-                    <p style="font-size: 11px; margin-top: 5px;">- IP 192.168.1.1 Verificado (Seguro)</p>
-                    <p style="font-size: 11px; color: var(--green);">- Sem divergência de saldo detectada.</p>
-                </div>
-            </div>
-
+        <div id="scr-cadastro" class="screen">
             <div class="card">
-                <h3 style="font-size: 12px; margin-bottom: 10px;">👔 GESTÃO DE RH</h3>
-                <p style="font-size: 11px;">Suporte Online: <b>Ana (Ativa)</b></p>
-                <p style="font-size: 11px;">Comissão Acumulada: <b style="color: var(--green);">R$ 145,50</b></p>
+                <h2>CADASTRO VIP</h2>
+                <p style="font-size:11px; color:#888; margin-bottom:15px;">Preencha todos os dados para ativar sua conta.</p>
+                <input type="text" placeholder="Nome Completo">
+                <input type="text" placeholder="CPF">
+                <input type="text" placeholder="WhatsApp">
+                <input type="text" placeholder="Usuário Desejado">
+                <input type="password" placeholder="Senha">
+                <button class="btn btn-green" onclick="alert('Cadastro enviado para aprovação!'); irPara('scr-login')">FINALIZAR CADASTRO</button>
+                <button class="btn btn-outline" onclick="irPara('scr-login')">VOLTAR</button>
             </div>
         </div>
 
-        <button class="btn" style="background: none; color: #555; font-size: 11px;" onclick="location.reload()">SAIR / DESLOGAR</button>
+        <div id="scr-recuperar" class="screen">
+            <div class="card">
+                <h2>RECUPERAR</h2>
+                <p style="font-size:11px; color:#888; margin-bottom:15px;">Informe seu usuário ou CPF cadastrado.</p>
+                <input type="text" placeholder="Usuário ou CPF">
+                <button class="btn btn-green" onclick="alert('Link de recuperação enviado ao seu WhatsApp cadastrado!'); irPara('scr-login')">ENVIAR LINK</button>
+                <button class="btn btn-outline" onclick="irPara('scr-login')">VOLTAR</button>
+            </div>
+        </div>
+
+        <div id="scr-dash" class="screen">
+            <div class="card" style="text-align:center; padding:40px 20px;">
+                <p style="font-size:11px; color:#888;">SALDO EM CONTA</p>
+                <h1 id="main-saldo" style="font-size:48px; color:var(--green); margin:10px 0;">R$ 0,00</h1>
+                <button class="btn btn-green">ABRIR LOBBY DE JOGOS</button>
+            </div>
+        </div>
+
+        <div id="scr-admin" class="screen">
+            <div class="card" style="border-color:var(--gold);">
+                <h2 style="color:var(--gold); margin-bottom:15px;">🛡️ PAINEL DE CONTROLE</h2>
+                <p style="font-size:11px;">BUSCAR USUÁRIO:</p>
+                <select id="adm-user-list"><option value="cliente_teste">cliente_teste</option></select>
+                <p style="font-size:11px;">NOVO SALDO:</p>
+                <input type="number" id="adm-saldo" placeholder="R$ 0,00">
+                <p style="font-size:11px;">DEFINIR CARGO:</p>
+                <select id="adm-cargo">
+                    <option value="CLIENTE">CLIENTE</option>
+                    <option value="SUPORTE">SUPORTE</option>
+                    <option value="GERENTE">GERENTE</option>
+                    <option value="ADMIN">ADMIN</option>
+                </select>
+                <button class="btn btn-gold" onclick="aplicarAdmin()">SALVAR ALTERAÇÕES</button>
+            </div>
+        </div>
+
+        <div id="scr-chat" class="screen">
+            <div class="card">
+                <h2>SUPORTE VIP</h2>
+                <div class="chat-box" id="chat-content">
+                    <div class="msg bot">Olá! Como posso ajudar sua conta hoje? Selecione uma dúvida ou chame um humano.</div>
+                </div>
+                <div id="chat-btns" style="display:grid; grid-template-columns:1fr 1fr; gap:5px;">
+                    <button class="btn btn-outline" style="font-size:10px; color:#fff;" onclick="msgBot('Pix não caiu', 'O PIX leva até 5 minutos em horários de pico. Verifique se o valor saiu do seu banco.')">💳 Depósito</button>
+                    <button class="btn btn-outline" style="font-size:10px; color:#fff;" onclick="msgBot('Saque pendente', 'Nossa equipe paga saques a cada 15 min. Se o seu pedido tem menos de 30 min, ele já está na fila!')">💸 Saque</button>
+                    <button class="btn btn-outline" style="font-size:10px; color:#fff;" onclick="msgBot('Como ganhar bônus', 'Temos bônus de 100% no primeiro depósito do dia! Veja as regras no menu.')">🎁 Bônus</button>
+                    <button class="btn btn-gold" style="font-size:10px; grid-column: span 2;" onclick="entrarFila()">🤝 ATENDENTE HUMANO</button>
+                </div>
+                <div id="fila-espera" style="display:none; text-align:center; margin-top:15px; color:var(--gold);">
+                    ⏳ <b>Sua posição: <span id="pos-fila">14</span>º</b><br><small>Aguarde 30s por posição</small>
+                </div>
+                <button class="btn btn-outline" onclick="irPara('scr-dash')">VOLTAR</button>
+            </div>
+        </div>
+
+        <div id="scr-deposito" class="screen"><div class="card"><h2>DEPOSITAR</h2><input type="number" placeholder="Valor PIX R$"><button class="btn btn-green">GERAR QR CODE</button></div></div>
+        <div id="scr-saque" class="screen"><div class="card"><h2>SAQUE</h2><input type="number" placeholder="Valor R$"><input type="text" placeholder="Chave PIX"><button class="btn btn-green">SOLICITAR SAQUE</button></div></div>
+
     </div>
 
     <script>
-        function logar() {
-            const u = document.getElementById('u').value.toLowerCase();
-            const s = document.getElementById('s').value;
+        let saldo = 500.00;
+        let cargoAtual = "CLIENTE";
 
-            if(u === 'admin' && s === 'admin') {
-                abrirPainel('ADMIN', 'var(--gold)', true);
-            } else if (u === 'suporte' && s === '123') {
-                abrirPainel('SUPORTE', 'var(--green)', true);
-                document.getElementById('auditoria').style.display = 'none'; // Suporte não vê auditoria
-            } else if (u === 'cliente' && s === '123') {
-                abrirPainel('CLIENTE', '#fff', false);
+        function irPara(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+        function toggleMenu() { document.getElementById('side-menu').classList.toggle('open'); }
+
+        function fazerLogin() {
+            const u = document.getElementById('l-user').value.toLowerCase();
+            document.getElementById('btn-menu-icon').style.display = 'block';
+            document.getElementById('header-vals').style.display = 'block';
+            atualizarUI();
+
+            if(u === "admin") {
+                cargoAtual = "ADMIN";
+                document.getElementById('menu-admin').style.display = 'block';
+                irPara('scr-admin');
+            } else if (u === "suporte") {
+                cargoAtual = "SUPORTE";
+                document.getElementById('menu-admin').style.display = 'block'; // Suporte vê mas com restrições
+                irPara('scr-chat');
             } else {
-                alert('Login inválido!');
+                cargoAtual = "CLIENTE";
+                document.getElementById('menu-admin').style.display = 'none';
+                irPara('scr-dash');
+            }
+            atualizarUI();
+        }
+
+        function atualizarUI() {
+            document.getElementById('header-cargo').innerText = cargoAtual;
+            document.getElementById('header-saldo').innerText = "R$ " + saldo.toFixed(2);
+            document.getElementById('main-saldo').innerText = "R$ " + saldo.toFixed(2);
+        }
+
+        function aplicarAdmin() {
+            const s = parseFloat(document.getElementById('adm-saldo').value);
+            if(!isNaN(s)) {
+                saldo = s;
+                alert("Alterações salvas com sucesso!");
+                atualizarUI();
             }
         }
 
-        function abrirPainel(cargo, cor, isAdmin) {
-            document.getElementById('scr-login').classList.remove('active');
-            document.getElementById('scr-main').classList.add('active');
-            document.getElementById('cargo-tag').innerHTML = `<span class="badge" style="background:${cor}; color:#000">${cargo}</span>`;
-            
-            if(isAdmin) {
-                document.getElementById('view-admin').style.display = 'block';
-                document.getElementById('view-cliente').style.display = 'none';
-            } else {
-                document.getElementById('view-admin').style.display = 'none';
-                document.getElementById('view-cliente').style.display = 'block';
-            }
+        function msgBot(q, r) {
+            const c = document.getElementById('chat-content');
+            c.innerHTML += `<div class="msg user">${q}</div><div class="msg bot">${r}</div>`;
+            c.scrollTop = c.scrollHeight;
         }
 
-        function ajustarSaldo() {
-            const val = document.getElementById('new-saldo').value;
-            if(val) {
-                document.getElementById('saldo-tag').innerText = "R$ " + parseFloat(val).toFixed(2);
-                alert("Saldo ajustado com sucesso na base de dados!");
-            }
-        }
-
-        function irChat() {
-            alert("Você entrou na FILA VIP.\nSua posição: 12º\nTempo estimado: 30 segundos.");
+        function entrarFila() {
+            document.getElementById('chat-btns').style.display = 'none';
+            document.getElementById('fila-espera').style.display = 'block';
+            let p = 14;
+            let t = setInterval(() => { if(p > 1) { p--; document.getElementById('pos-fila').innerText = p; } else { clearInterval(t); } }, 30000);
         }
     </script>
 </body>
