@@ -3,144 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ELITE LOG V21 | FLOW CONTROL</title>
+    <title>ELITE V24 | CROSS & WMS</title>
     <script src="https://unpkg.com/@zxing/library@latest"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --p: #0052cc; --s: #36b37e; --d: #ff4b4b; --w: #ffab00; --bg: #f4f7fa; }
+        :root { --p: #0052cc; --s: #36b37e; --d: #ff4b4b; --w: #ffab00; --dark: #091e42; --light: #f4f5f7; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); padding-bottom: 40px; }
-        header { background: var(--p); color: white; padding: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        body { background: var(--light); color: var(--dark); padding-bottom: 90px; }
         
-        .status-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 15px; }
-        .stat-card { background: white; padding: 12px; border-radius: 12px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .stat-val { display: block; font-size: 18px; font-weight: 900; color: var(--p); }
-        .stat-lab { font-size: 10px; font-weight: 700; color: #888; text-transform: uppercase; }
+        /* HEADER DINÂMICO */
+        header { background: var(--p); color: white; padding: 20px; text-align: center; border-radius: 0 0 20px 20px; transition: 0.3s; }
+        .mode-indicator { font-size: 10px; font-weight: 900; background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; margin-top: 5px; display: inline-block; }
 
-        .container { padding: 0 15px; max-width: 600px; margin: auto; }
-        .card { background: white; border-radius: 20px; padding: 20px; margin-bottom: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.03); }
+        /* CARDS DE OPERAÇÃO */
+        .container { padding: 15px; max-width: 600px; margin: auto; }
+        .op-card { background: white; border-radius: 15px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); display: none; }
+        .op-card.active { display: block; animation: fadeIn 0.3s; }
         
-        /* SELETOR DE MODO PROFISSIONAL */
-        .mode-selector { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 15px; }
-        .mode-btn { padding: 12px; border: 2px solid #eee; border-radius: 10px; cursor: pointer; text-align: center; font-weight: 800; font-size: 11px; transition: 0.3s; background: white; }
-        .mode-btn.active { border-color: var(--p); background: #e3f2fd; color: var(--p); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        #scanner-box { width: 100%; height: 260px; background: #000; border-radius: 15px; overflow: hidden; position: relative; border: 4px solid var(--s); }
+        /* INPUTS TÉCNICOS */
+        .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        input, select { width: 100%; padding: 12px; border: 2px solid #edf2f7; border-radius: 10px; font-weight: 700; outline: none; }
+        input:focus { border-color: var(--p); }
+
+        /* SCANNER INTEGRADO */
+        #v-box { width: 100%; height: 220px; background: #000; border-radius: 15px; overflow: hidden; position: relative; border: 4px solid var(--s); }
         video { width: 100%; height: 100%; object-fit: cover; }
         .laser { position: absolute; top: 50%; left: 10%; width: 80%; height: 2px; background: var(--d); box-shadow: 0 0 10px var(--d); animation: move 2s infinite; }
         @keyframes move { 0%, 100% { top: 20%; } 50% { top: 80%; } }
 
-        .btn { border: none; padding: 18px; border-radius: 12px; width: 100%; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 10px; }
-        .btn-p { background: var(--p); color: white; }
-        .btn-s { background: var(--s); color: white; }
+        /* BOTÃO DE AÇÃO */
+        .btn-scan { background: var(--s); color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: 900; margin-top: -20px; position: relative; z-index: 10; cursor: pointer; }
 
-        .log-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #f0f0f0; font-size: 12px; }
-        .badge { padding: 4px 8px; border-radius: 5px; font-size: 9px; font-weight: 900; color: white; }
+        /* BARRA DE NAVEGAÇÃO (A MUDANÇA QUE VOCÊ PEDIU) */
+        .nav-bar { position: fixed; bottom: 0; width: 100%; background: white; height: 75px; display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid #ddd; z-index: 1000; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: #888; cursor: pointer; transition: 0.2s; }
+        .nav-item i { font-size: 22px; margin-bottom: 4px; }
+        .nav-item.active { color: var(--p); border-top: 3px solid var(--p); background: #f0f7ff; }
+
+        /* TAGS DE STATUS */
+        .tag { padding: 3px 8px; border-radius: 5px; font-size: 9px; font-weight: 900; color: white; }
     </style>
 </head>
 <body>
 
-<header>
-    <h2 style="letter-spacing:-1px">ELITE LOG V21</h2>
-    <p style="font-size:10px; opacity:0.8">HORTOLÂNDIA HUB | OPERAÇÃO TOTAL</p>
+<header id="main-header">
+    <h3 id="app-title">ELITE CROSSDOCK</h3>
+    <span class="mode-indicator" id="mode-text">MODO VELOCIDADE ATIVO</span>
 </header>
 
-<div class="status-grid">
-    <div class="stat-card"><span id="c-ent" class="stat-val">0</span><span class="stat-lab">Entradas</span></div>
-    <div class="stat-card"><span id="c-sai" class="stat-val">0</span><span class="stat-lab">Saídas</span></div>
-    <div class="stat-card"><span id="c-ok" class="stat-val">0</span><span class="stat-lab" style="color:var(--s)">Entregues</span></div>
-    <div class="stat-card"><span id="c-err" class="stat-val">0</span><span class="stat-lab" style="color:var(--d)">Paradas/Erro</span></div>
-</div>
-
 <div class="container">
-    <div class="card">
-        <label style="font-size:10px; font-weight:800; color:#666">SELECIONE O TIPO DE OPERAÇÃO:</label>
-        <div class="mode-selector">
-            <div class="mode-btn active" onclick="setMode('ENTRADA', this)">📥 ENTRADA</div>
-            <div class="mode-btn" onclick="setMode('SAIDA', this)">🚚 SAÍDA</div>
-            <div class="mode-btn" onclick="setMode('ENTREGA', this)">✅ ENTREGA</div>
-            <div class="mode-btn" onclick="setMode('PARADA', this)">⚠️ PARADA/ERRO</div>
+    <div id="card-cross" class="op-card active">
+        <div class="grid-inputs">
+            <input type="text" id="pla-cross" placeholder="PLACA">
+            <select id="status-cross">
+                <option value="ENTRADA">📥 ENTRADA</option>
+                <option value="SAIDA">🚚 SAÍDA</option>
+                <option value="AVARIA">❌ AVARIA</option>
+            </select>
         </div>
-        <input type="text" id="pla" placeholder="PLACA OU MOTORISTA" style="width:100%; padding:15px; border-radius:10px; border:2px solid #eee; font-weight:700; text-transform:uppercase">
+        <div id="v-box"><video id="video"></video><div class="laser"></div></div>
+        <button onclick="ligar()" class="btn-scan">BIPAR CROSSDOCK</button>
     </div>
 
-    <div class="card" style="text-align:center">
-        <div id="scanner-box">
-            <video id="video"></video>
-            <div class="laser"></div>
+    <div id="card-wms" class="op-card">
+        <div class="grid-inputs">
+            <input type="text" id="rua" placeholder="RUA-NIVEL (Ex: A-01)">
+            <select id="status-wms">
+                <option value="ARMAZENAR">📦 ARMAZENAR</option>
+                <option value="PICKING">🛒 SEPARAÇÃO</option>
+                <option value="INVENTARIO">🔍 AUDITORIA</option>
+            </select>
         </div>
-        <button onclick="ativar()" id="btn-at" class="btn btn-s"><i class="fa-solid fa-barcode"></i> LIGAR SCANNER</button>
-        <p id="res" style="margin-top:15px; font-weight:900; color:var(--p)">AGUARDANDO...</p>
+        <div id="v-box-wms" style="height:150px; background:#000; border-radius:15px"></div>
+        <button onclick="ligar()" class="btn-scan" style="background:var(--p)">BIPAR ARMAZÉM</button>
     </div>
 
-    <div class="card">
-        <h4 style="font-size:11px; margin-bottom:10px">ÚLTIMOS MOVIMENTOS (AUDITORIA)</h4>
-        <div id="logs"></div>
-        <button onclick="exportar()" class="btn btn-p" style="margin-top:20px; font-size:12px; height:45px">GERAR RELATÓRIO PDF</button>
+    <div id="card-auditoria" class="op-card">
+        <h4 style="font-size:12px; margin-bottom:10px">CONTROLE DE ERRO HUMANO (LOG)</h4>
+        <div id="log-list"></div>
     </div>
 </div>
+
+<nav class="nav-bar">
+    <div class="nav-item active" onclick="switchMode('cross', this)">
+        <i class="fa-solid fa-truck-fast"></i>
+        <span>CROSSDOCK</span>
+    </div>
+    <div class="nav-item" onclick="switchMode('wms', this)">
+        <i class="fa-solid fa-boxes-stacked"></i>
+        <span>ARMAZÉM</span>
+    </div>
+    <div class="nav-item" onclick="switchMode('auditoria', this)">
+        <i class="fa-solid fa-clipboard-check"></i>
+        <span>AUDITORIA</span>
+    </div>
+</nav>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('elite_v21_db')) || [];
-    let currentMode = 'ENTRADA';
+    let db = JSON.parse(localStorage.getItem('elite_v24_db')) || [];
+    let currentTab = 'cross';
     const reader = new ZXing.BrowserMultiFormatReader();
 
-    function setMode(mode, btn) {
-        currentMode = mode;
-        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+    function switchMode(mode, el) {
+        currentTab = mode;
+        // Interface
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        el.classList.add('active');
+        document.querySelectorAll('.op-card').forEach(c => c.classList.remove('active'));
+        document.getElementById('card-' + mode).classList.add('active');
+        
+        // Estética do Header
+        const header = document.getElementById('main-header');
+        if(mode === 'wms') {
+            header.style.background = '#0747a6';
+            document.getElementById('app-title').innerText = "ELITE WMS";
+            document.getElementById('mode-text').innerText = "MODO ARMAZENAGEM";
+        } else if(mode === 'cross') {
+            header.style.background = '#0052cc';
+            document.getElementById('app-title').innerText = "ELITE CROSSDOCK";
+            document.getElementById('mode-text').innerText = "MODO VELOCIDADE";
+        }
         vibrar(30);
+        renderLogs();
     }
 
-    function ativar() {
-        const p = document.getElementById('pla').value;
-        if(!p) return alert("Erro: Identifique a Placa/Motorista!");
-        document.getElementById('btn-at').style.display = 'none';
-
+    function ligar() {
         reader.decodeFromVideoDevice(null, 'video', (res) => {
-            if (res) {
-                // Auditoria de Fluxo: Não deixa 'Entregar' algo que não 'Entrou'
-                processar(res.text, p.toUpperCase());
-            }
+            if(res) processarBipe(res.text);
         });
     }
 
-    function processar(id, info) {
-        const item = {
-            id: id,
-            tipo: currentMode,
-            info: info,
-            h: new Date().toLocaleTimeString(),
-            d: new Date().toLocaleDateString()
+    function processarBipe(barcode) {
+        let status = currentTab === 'cross' ? document.getElementById('status-cross').value : document.getElementById('status-wms').value;
+        let info = currentTab === 'cross' ? document.getElementById('pla-cross').value : document.getElementById('rua').value;
+
+        // CRUZAMENTO DE SEGURANÇA (Anti-Erro Humano)
+        if(status === 'ARMAZENAR') {
+            const tempAvaria = db.find(i => i.barcode === barcode && i.status === 'AVARIA');
+            if(tempAvaria) {
+                vibrar([100, 50, 100]);
+                alert("🛑 BLOQUEIO DE SEGURANÇA: Este item foi marcado como AVARIA no Crossdock. Não pode entrar no Armazém!");
+                return;
+            }
+        }
+
+        const bip = {
+            barcode: barcode,
+            status: status,
+            info: info || 'N/A',
+            data: new Date().toLocaleString(),
+            origem: currentTab
         };
 
-        db.unshift(item);
-        localStorage.setItem('elite_v21_db', JSON.stringify(db));
-        vibrar(50);
-        document.getElementById('res').innerHTML = `OK: ${currentMode} - ${id}`;
-        render();
+        db.unshift(bip);
+        localStorage.setItem('elite_v24_db', JSON.stringify(db));
+        vibrar(60);
+        renderLogs();
     }
 
-    function render() {
-        document.getElementById('c-ent').innerText = db.filter(i => i.tipo === 'ENTRADA').length;
-        document.getElementById('c-sai').innerText = db.filter(i => i.tipo === 'SAIDA').length;
-        document.getElementById('c-ok').innerText = db.filter(i => i.tipo === 'ENTREGA').length;
-        document.getElementById('c-err').innerText = db.filter(i => i.tipo === 'PARADA').length;
-
-        const logs = document.getElementById('logs');
-        logs.innerHTML = db.slice(0, 5).map(i => {
-            let color = i.tipo === 'ENTRADA' ? 'var(--p)' : (i.tipo === 'ENTREGA' ? 'var(--s)' : 'var(--d)');
-            return `
-                <div class="log-item">
-                    <span><b>${i.id}</b><br><small>${i.info}</small></span>
-                    <span class="badge" style="background:${color}">${i.tipo}</span>
+    function renderLogs() {
+        const list = document.getElementById('log-list');
+        list.innerHTML = db.slice(0, 10).map(i => `
+            <div style="background:white; padding:12px; border-radius:10px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; border-left:4px solid ${i.status === 'AVARIA' ? 'red' : 'var(--p)'}">
+                <div style="font-size:12px">
+                    <b>${i.barcode}</b><br>
+                    <small>${i.info} • ${i.data}</small>
                 </div>
-            `;
-        }).join('');
+                <span class="tag" style="background:${i.status === 'AVARIA' ? 'red' : (i.origem === 'cross' ? 'var(--p)' : 'var(--s)')}">${i.status}</span>
+            </div>
+        `).join('');
     }
 
     function vibrar(ms) { if(navigator.vibrate) navigator.vibrate(ms); }
-    render();
+    renderLogs();
 </script>
 </body>
 </html>
