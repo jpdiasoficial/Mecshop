@@ -3,82 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TESTE EM TEMPO REAL | JP DIAS V60</title>
+    <title>JP DIAS | ELITE LOGISTICS</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #000; color: #fff; text-align: center; padding: 20px; }
-        .box-teste { border: 2px solid #f39c12; border-radius: 15px; padding: 20px; background: #1a1a1a; max-width: 400px; margin: auto; }
-        .btn-teste { background: #f39c12; color: #000; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; margin-bottom: 10px; cursor: pointer; font-size: 16px; }
-        .btn-avaria { background: #e74c3c; color: white; }
-        .painel-gestor { margin-top: 20px; background: #222; padding: 10px; border-radius: 8px; font-size: 12px; text-align: left; border-left: 5px solid #2ecc71; }
-        .log-linha { border-bottom: 1px solid #333; padding: 5px; color: #2ecc71; font-family: monospace; }
+        :root { --neon-orange: #ff9f0a; --dark-bg: #0b0b0b; --card-bg: #151515; --matrix-green: #00ff41; --alert-red: #ff3b30; }
+        
+        body { background: var(--dark-bg); color: #fff; font-family: 'Orbitron', 'Segoe UI', sans-serif; margin: 0; padding: 15px; text-transform: uppercase; }
+        header { border-bottom: 2px solid var(--neon-orange); padding: 10px; text-align: left; display: flex; justify-content: space-between; align-items: center; }
+        
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .card { background: var(--card-bg); border: 1px solid #333; padding: 20px; position: relative; clip-path: polygon(0 0, 95% 0, 100% 15%, 100% 100%, 5% 100%, 0 85%); border-left: 4px solid var(--neon-orange); }
+        .full { grid-column: span 2; }
+
+        h2 { color: var(--neon-orange); font-size: 14px; margin: 0 0 15px 0; letter-spacing: 2px; }
+        
+        /* BOTÕES ESTILO INDUSTRIAL */
+        .btn { background: var(--neon-orange); color: #000; border: none; padding: 15px; font-weight: 900; width: 100%; cursor: pointer; margin-bottom: 10px; clip-path: polygon(5% 0, 100% 0, 95% 100%, 0% 100%); transition: 0.3s; }
+        .btn:active { transform: scale(0.95); opacity: 0.8; }
+        .btn-red { background: var(--alert-red); color: #fff; }
+
+        /* PAINEL DE MONITORAMENTO */
+        .monitor-list { font-size: 12px; color: var(--matrix-green); list-style: none; padding: 0; }
+        .monitor-list li { margin-bottom: 8px; border-bottom: 1px solid #222; padding-bottom: 5px; }
+        
+        .logs { background: #000; color: var(--matrix-green); font-family: monospace; height: 100px; overflow-y: scroll; padding: 10px; font-size: 11px; border: 1px solid #333; }
+        .status-pulse { height: 10px; width: 10px; background: var(--matrix-green); border-radius: 50%; display: inline-block; animation: pulse 1.5s infinite; }
+        
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <div class="box-teste">
-        <h2 style="color:#f39c12">JP DIAS LOG</h2>
-        <p>Simulação de Operação Real</p>
-        
-        <button class="btn-teste" onclick="testeArmazem()">1. TESTAR ARMAZÉM (VOZ)</button>
-        <button class="btn-teste" onclick="testeCrossDock()">2. TESTAR CROSS DOCK</button>
-        <button class="btn-teste btn-avaria" onclick="testeAvaria()">3. TESTAR AVARIA (TRAVA)</button>
+<header>
+    <div>
+        <span style="font-size: 20px; font-weight: 900; color: var(--neon-orange);">JP DIAS</span>
+        <span style="font-size: 14px; color: #666; margin-left: 10px;">CORE V61_ELITE</span>
+    </div>
+    <div class="status-pulse"></div>
+</header>
 
-        <div class="painel-gestor">
-            <strong>🛰️ TORRE DE CONTROLE (LOGS):</strong>
-            <div id="log-espaco">
-                <div class="log-linha">[18:23] Sistema V60 Pronto...</div>
-            </div>
-        </div>
+<div class="grid">
+    <div class="card">
+        <h2>[01] WMS_ARMAZÉM</h2>
+        <button class="btn" onclick="opArmazem()">INICIAR PICKING_VOZ</button>
+        <button class="btn btn-red" onclick="triggerAvaria('ARMAZÉM')">REGISTRAR_AVARIA</button>
+        <ul class="monitor-list">
+            <li>> RUA A: OCUPAÇÃO 92%</li>
+            <li>> PENDÊNCIA_CONFERÊNCIA: 04</li>
+        </ul>
     </div>
 
-    <script>
-        const falar = (t) => {
-            window.speechSynthesis.cancel();
-            const m = new SpeechSynthesisUtterance(t);
-            m.lang = 'pt-BR';
-            window.speechSynthesis.speak(m);
-        };
+    <div class="card">
+        <h2>[02] CROSSDOCK_FLOW</h2>
+        <button class="btn" onclick="opCross()">TRIAGEM_DOCA</button>
+        <button class="btn" onclick="checkCorte()">HORÁRIO_CORTE</button>
+        <ul class="monitor-list">
+            <li>> ROTA_SP: STATUS_OK</li>
+            <li>> ROTA_HORT: <span style="color:var(--alert-red)">CRÍTICO</span></li>
+        </ul>
+    </div>
 
-        function registrar(msg) {
-            const log = document.getElementById('log-espaco');
-            const hora = new Date().toLocaleTimeString();
-            log.innerHTML = `<div class="log-linha">[${hora}] ${msg}</div>` + log.innerHTML;
-        }
+    <div class="card full">
+        <h2>[03] TORRE_DE_CONTROLE_LOGS</h2>
+        <div class="logs" id="logBox">
+            > INICIALIZANDO JP_DIAS_CORE...<br>
+            > PROTOCOLO V1-V60 CARREGADO...<br>
+            > MONITORAMENTO HORTOLÂNDIA ONLINE...<br>
+        </div>
+        <button class="btn" style="background:#444; color:#fff; margin-top:15px;" onclick="auditoria()">ACESSAR_AUDITORIA_GESTOR</button>
+    </div>
+</div>
 
-        // TESTE 01: ARMAZÉM + TRAVA 3 DÍGITOS
-        function testeArmazem() {
-            falar("Iniciando teste de Armazém. Vá para a Rua B e separe Alcatra. O código final é 789.");
-            setTimeout(() => {
-                let bip = prompt("DIGITE OS 3 ÚLTIMOS DÍGITOS DO PRODUTO (Dica: 789):");
-                if(bip === "789") {
-                    falar("Bipe confirmado. Item enviado para conferência.");
-                    registrar("ARMAZÉM: Separação concluída com sucesso.");
-                } else {
-                    falar("Erro de separação! O código não confere.");
-                    registrar("ERRO: Tentativa de separação incorreta.");
-                }
-            }, 500);
-        }
+<script>
+    const falar = (t) => {
+        window.speechSynthesis.cancel();
+        const m = new SpeechSynthesisUtterance(t);
+        m.lang = 'pt-BR';
+        m.rate = 1.1; // Voz um pouco mais rápida e profissional
+        window.speechSynthesis.speak(m);
+    };
 
-        // TESTE 02: CROSS DOCK + CORTE
-        function testeCrossDock() {
-            falar("Alerta de Cross Dock. Rota Campinas entra em horário de corte em 5 minutos. Priorize o carregamento.");
-            registrar("CROSSDOCK: Alerta de Cut-off disparado para Rota Campinas.");
-            alert("⚠️ ALERTA: Rota fecha em breve!");
-        }
+    function addLog(msg) {
+        const box = document.getElementById('logBox');
+        const agora = new Date().toLocaleTimeString();
+        box.innerHTML += `> [${agora}] ${msg}<br>`;
+        box.scrollTop = box.scrollHeight;
+    }
 
-        // TESTE 03: AVARIA + HIERARQUIA
-        function testeAvaria() {
-            falar("Avaria detectada. Item bloqueado. Somente o Gestor pode autorizar.");
-            let senha = prompt("SENHA DO GESTOR PARA BAIXA:");
-            if(senha === "123") {
-                falar("Acesso autorizado. Baixa de avaria registrada no histórico.");
-                registrar("AUDITORIA: Gestor autorizou descarte de item.");
-            } else {
-                falar("Senha incorreta. O item permanece travado no estoque.");
-                registrar("BLOQUEIO: Tentativa de baixa sem autorização.");
-            }
+    // LÓGICA DE OPERAÇÃO
+    function opArmazem() {
+        falar("Iniciando Picking. Rua B. Nível 2. Separação de lote premium.");
+        let check = prompt("CONFIRME OS 3 DÍGITOS FINAIS:");
+        if(check) {
+            falar("Confirmado. Movendo item para mesa de conferência.");
+            addLog(`PICKING_SUCCESS: ITEM ${check} SEPARADO.`);
         }
-    </script>
+    }
+
+    function checkCorte() {
+        falar("Atenção. Rota Hortolândia atinge limite de corte em dez minutos.");
+        addLog("ALERTA_CUTOFF: ROTA_HORTOLANDIA EM RISCO.");
+    }
+
+    function triggerAvaria(setor) {
+        falar(`Avaria detectada no ${setor}. Bloqueio de inventário iniciado.`);
+        addLog(`AVARIA_LOCK: SETOR ${setor} AGUARDANDO GESTOR.`);
+    }
+
+    function auditoria() {
+        let pass = prompt("IDENTIFICAÇÃO_SHARK:");
+        if(pass === "123") {
+            falar("Acesso concedido. Painel de auditoria liberado.");
+            addLog("GESTOR_AUTH: ACESSO AO NÚCLEO DE DECISÃO.");
+        } else {
+            falar("Acesso negado. Tentativa registrada.");
+            addLog("SECURITY_ALERT: TENTATIVA DE ACESSO NÃO AUTORIZADA.");
+        }
+    }
+
+    window.onload = () => {
+        falar("Sistema JP Dias Elite ativado.");
+    };
+</script>
+
 </body>
 </html>
