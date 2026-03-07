@@ -3,151 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>JP DIAS | GENESIS V190</title>
+    <title>JP DIAS | GENESIS V170</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=JetBrains+Mono:wght@500&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #ff9f0a; --bg: #050505; --surface: #121212; --border: rgba(255,159,10,0.2); --green: #30d158; --blue: #0a84ff; --red: #ff453a; }
+        :root { --primary: #ff9f0a; --bg: #050505; --surface: #121212; --border: rgba(255,159,10,0.3); --green: #30d158; --blue: #0a84ff; --red: #ff375f; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; text-transform: uppercase; overflow: hidden; height: 100vh; }
-        .glass { background: rgba(25, 25, 25, 0.9); backdrop-filter: blur(15px); border: 1px solid var(--border); border-radius: 12px; }
+        .glass { background: rgba(25, 25, 25, 0.9); backdrop-filter: blur(10px); border: 1px solid var(--border); border-radius: 12px; }
         
-        /* --- PORTAL GHOST --- */
+        /* --- PORTAL --- */
         #portal { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        #ghost-trigger { font-family: 'Orbitron'; letter-spacing: 12px; color: #151515; cursor: default; transition: 0.5s; user-select: none; }
-        .login-card { width: 300px; padding: 25px; margin-top: 20px; text-align: center; }
-        input { width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 1px solid #333; color: #fff; border-radius: 5px; box-sizing: border-box; }
-        .btn-access { width: 100%; padding: 15px; margin-top: 10px; cursor: pointer; background: var(--surface); color: #fff; border: 1px solid var(--border); font-weight: bold; border-radius: 8px; }
+        .btn-access { width: 300px; padding: 18px; margin: 10px; background: var(--surface); border: 1px solid var(--border); color: #fff; font-family: 'JetBrains Mono'; font-weight: bold; cursor: pointer; display: flex; justify-content: space-between; border-radius: 4px; }
+        
+        /* --- LOBBY DIRETORIA --- */
+        #lobby { display: none; padding: 20px; animation: fadeIn 0.5s; overflow-y: auto; height: 100vh; }
+        .card-adm { background: var(--surface); border: 1px solid var(--primary); padding: 15px; border-radius: 8px; margin-bottom: 20px; }
 
-        /* --- PAINEL INTERNO (SHARK / MASTER) --- */
-        #painel-master { display: none; padding: 20px; height: 100vh; overflow-y: auto; box-sizing: border-box; }
-        .section { padding: 15px; margin-bottom: 20px; border-left: 4px solid var(--primary); }
-        .grid-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .stat-card { background: #111; padding: 10px; border-radius: 5px; border: 1px solid #222; }
-        .stat-card b { display: block; color: var(--primary); font-family: 'Orbitron'; font-size: 16px; }
-
-        /* --- MODULOS OPERACIONAIS --- */
-        .mod-op { display: none; height: 100vh; flex-direction: column; padding: 20px; box-sizing: border-box; }
-        .display-v { flex: 1; border: 2px solid var(--primary); border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: rgba(255,159,10,0.03); }
+        /* --- MÓDULOS --- */
+        .modulo { display: none; padding: 20px; height: 100vh; animation: fadeIn 0.4s; }
+        .display-v { flex: 1; border: 2px solid var(--primary); border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: rgba(255,159,10,0.05); margin-bottom: 20px; }
+        .terminal { background: #000; color: #666; padding: 15px; height: 150px; overflow-y: auto; font-family: 'JetBrains Mono'; font-size: 11px; border: 1px solid #222; border-radius: 5px; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
 <div id="portal">
-    <h1 id="ghost-trigger">JP DIAS</h1>
-    <div class="login-card glass">
-        <p style="font-size: 9px; color: #555; letter-spacing: 2px;">AUTENTICAÇÃO DE ACESSO</p>
-        <input type="text" id="user-login" placeholder="USUÁRIO">
-        <input type="password" id="user-pass" placeholder="SENHA">
-        <button class="btn-access" onclick="validarAcesso()">ENTRAR NO SISTEMA</button>
-    </div>
+    <h1 style="font-family:'Orbitron'; letter-spacing:8px; margin-bottom:30px;">JP DIAS</h1>
+    <button class="btn-access" onclick="acesso('GOD')">GOD (OWNER) <span>⚡</span></button>
+    <button class="btn-access" onclick="acesso('SHARK')">SHARK (CLIENT) <span>🦈</span></button>
+    <button class="btn-access" onclick="acesso('MOTORISTA')">MOTORISTA <span>🚚</span></button>
 </div>
 
-<div id="painel-master">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-        <h2 style="font-family:'Orbitron'; font-size:12px; color:var(--primary);">MASTER CONTROL | JP DIAS</h2>
-        <button onclick="location.reload()" style="background:none; border:1px solid var(--red); color:var(--red); font-size:10px;">LOGOUT</button>
+<div id="lobby">
+    <div id="adm-controls" class="card-adm">
+        <h3 style="font-family:'Orbitron'; font-size:12px; color:var(--primary); margin:0;">DIRETORIA ESTRATÉGICA</h3>
+        <hr style="border:0; border-top:1px solid #333; margin:10px 0;">
+        <label style="font-size:10px;">LIBERAR MOTORISTA: <input type="checkbox" id="check-mot" checked></label><br><br>
+        <label style="font-size:10px;">DEFINIR SETOR OPERAÇÃO: 
+            <select id="select-setor">
+                <option value="ARMAZEM">ARMAZÉM (VOZ ATIVA)</option>
+                <option value="CROSSDOCK">CROSSDOCK (LISTA TÉCNICA)</option>
+            </select>
+        </label>
     </div>
-
-    <div class="grid-stats" style="margin-top:20px;">
-        <div class="stat-card"><b>R$ 1.420</b><small>ECONOMIA ROI</small></div>
-        <div class="stat-card"><b>14ms</b><small>REDE SUL</small></div>
-    </div>
-
-    <div class="section glass">
-        <h4 style="font-family:'Orbitron'; font-size:10px; margin:0 0 10px 0;">GERENCIAR EQUIPE (GHOSTS)</h4>
-        <input type="text" id="new-user" placeholder="NOME DO FUNCIONÁRIO">
-        <input type="password" id="new-pass" placeholder="DEFINIR SENHA">
-        <select id="set-funcao" style="width:100%; padding:10px; background:#000; color:#fff; border:1px solid #333; margin-bottom:10px;">
-            <option value="ARMAZEM">MODO ARMAZÉM (VOZ)</option>
-            <option value="CROSSDOCK">MODO CROSSDOCK (LISTA)</option>
-        </select>
-        <button class="btn-access" style="background:var(--green); color:#000; border:none;" onclick="alert('Usuário Criado e Liberado!')">LIBERAR ACESSO</button>
-    </div>
-
-    <div class="section glass" style="border-left-color:var(--blue);">
-        <h4 style="font-family:'Orbitron'; font-size:10px; margin:0 0 10px 0;">LATÊNCIA DE SEPARAÇÃO (SILENT)</h4>
-        <div id="log-latencia" style="font-family:'JetBrains Mono'; font-size:10px; color:#666;">
-            > GHOST-01: 22s (ELITE)<br>
-            > GHOST-05: 89s (ATENÇÃO)
-        </div>
-    </div>
+    <div id="botoes-dinamicos"></div>
 </div>
 
-<div id="mod-armazem" class="mod-op">
+<div id="mod-operacao" class="modulo">
+    <h2 id="titulo-mod" style="font-family:'Orbitron'; color:var(--primary); font-size:14px;">ARMAZÉM</h2>
     <div class="display-v">
-        <div id="voz-status" style="font-family:'Orbitron'; font-size:20px; color:var(--primary);">DIGA "ATIVAR" 3X</div>
-        <div style="font-size:10px; color:#444; margin-top:15px;">MÃOS LIVRES ATIVADO</div>
+        <div id="display-principal" style="font-family:'Orbitron'; font-size:24px; color:var(--primary);">DIGA "ATIVAR" 3X</div>
     </div>
-</div>
-
-<div id="mod-crossdock" class="mod-op">
-    <h3 style="font-family:'Orbitron'; font-size:12px; color:var(--blue);">LISTA CROSSDOCK</h3>
-    <div style="background:#111; flex:1; border-radius:10px; padding:15px; border:1px solid #222;">
-        <div style="display:flex; justify-content:space-between; border-bottom:1px solid #222; padding:10px 0;">
-            <span>CARGA #998</span> <span style="color:var(--blue);">BIPAR CAIXA</span>
-        </div>
-    </div>
-    <button class="btn-access" style="border-color:var(--blue); color:var(--blue);">ABRIR SCANNER</button>
+    <div class="terminal" id="term-log">> AGUARDANDO COMANDO...</div>
+    <button onclick="voltar()" style="width:100%; padding:15px; margin-top:20px; background:transparent; border:1px solid var(--red); color:var(--red); font-weight:bold;">SAIR</button>
 </div>
 
 <script>
-    let clicks = 0;
-    const ghostTrigger = document.getElementById('ghost-trigger');
+    let roleAtiva = "";
+    let counts = { ativar: 0 };
+    let etapa = "ESPERA";
 
-    // 1. GATILHO OCULTO (MODO DONO)
-    ghostTrigger.onclick = () => {
-        clicks++;
-        if(clicks === 5) {
-            const secret = prompt("KEY:");
-            if(secret === "9910") {
-                document.getElementById('portal').style.display = 'none';
-                document.getElementById('painel-master').style.display = 'block';
-                falar("Acesso mestre concedido, J P.");
-            }
-            clicks = 0;
+    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const voice = Recognition ? new Recognition() : null;
+
+    if(voice) {
+        voice.continuous = true;
+        voice.lang = 'pt-BR';
+        voice.onresult = (e) => {
+            const fala = e.results[e.results.length - 1][0].transcript.toLowerCase();
+            processarVoz(fala);
+        };
+    }
+
+    function acesso(r) {
+        if(r !== 'MOTORISTA') {
+            if(prompt("PASSWORD:") !== "123") return;
         }
-    };
-
-    // 2. VALIDAÇÃO DE ACESSO (SHARK/FUNCIONÁRIO)
-    function validarAcesso() {
-        const u = document.getElementById('user-login').value.toLowerCase();
-        const p = document.getElementById('user-pass').value;
-
+        roleAtiva = r;
         document.getElementById('portal').style.display = 'none';
-        
-        if(u === "shark") {
-            document.getElementById('painel-master').style.display = 'block';
-        } else if (u === "op") {
-            // Se for operador, decide o modo (simulado aqui)
-            document.getElementById('mod-armazem').style.display = 'flex';
-            iniciarVoz();
+        document.getElementById('lobby').style.display = 'block';
+        montarLobby();
+    }
+
+    function montarLobby() {
+        const bot = document.getElementById('botoes-dinamicos');
+        bot.innerHTML = "";
+        if(roleAtiva === 'MOTORISTA') {
+            if(!document.getElementById('check-mot').checked) return alert("ACESSO BLOQUEADO PELA DIRETORIA");
+            bot.innerHTML = `<button class="btn-access" style="width:100%; border-color:var(--blue)" onclick="abrirOp('MOTORISTA')">INICIAR ROTA 🚚</button>`;
         } else {
-            document.getElementById('mod-crossdock').style.display = 'flex';
+            const setor = document.getElementById('select-setor').value;
+            bot.innerHTML = `<button class="btn-access" style="width:100%" onclick="abrirOp('${setor}')">ENTRAR EM ${setor} 📦</button>`;
         }
     }
 
-    // 3. MOTOR DE VOZ (ARMAZÉM)
-    const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const voiceEngine = Speech ? new Speech() : null;
-    let ativarCount = 0;
-
-    function iniciarVoz() {
-        if(voiceEngine) {
-            voiceEngine.continuous = true;
-            voiceEngine.lang = 'pt-BR';
-            voiceEngine.onresult = (e) => {
-                const txt = e.results[e.results.length-1][0].transcript.toLowerCase();
-                if(txt.includes("ativar")) {
-                    ativarCount++;
-                    falar(ativarCount);
-                    if(ativarCount === 3) {
-                        document.getElementById('voz-status').innerHTML = "CASA A-12<br>FINAL: 482";
-                        falar("Ativado. Casa A-12. Código final 482.");
-                        ativarCount = 0;
-                    }
-                }
-            };
-            voiceEngine.start();
+    function abrirOp(modo) {
+        document.getElementById('lobby').style.display = 'none';
+        document.getElementById('mod-operacao').style.display = 'flex';
+        document.getElementById('titulo-mod').innerText = modo;
+        
+        if(modo === 'ARMAZEM') {
+            if(voice) voice.start();
+            falar("Modo Armazém Ativo. Diga ativar três vezes.");
+        } else if(modo === 'CROSSDOCK') {
+            document.getElementById('display-principal').innerText = "LISTA DE BIPAGEM";
         }
+    }
+
+    function processarVoz(txt) {
+        if(txt.includes("ativar")) {
+            counts.ativar++;
+            falar(counts.ativar);
+            if(counts.ativar === 3) {
+                document.getElementById('display-principal').innerHTML = "CASA A-12<br>4-8-2";
+                falar("Ativado. Casa A-12. Código 482.");
+                counts.ativar = 0;
+            }
+        }
+    }
+
+    function voltar() {
+        if(voice) voice.stop();
+        document.getElementById('mod-operacao').style.display = 'none';
+        document.getElementById('lobby').style.display = 'block';
     }
 
     function falar(t) {
