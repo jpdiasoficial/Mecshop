@@ -3,70 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ELITE SYSTEM | LOGIN UNIFICADO</title>
+    <title>ELITE LOGISTICS | SISTEMA INTEGRADO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --primary: #0052cc; --dark: #091e42; --bg: #f4f5f7; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        :root { --p: #0052cc; --s: #36b37e; --d: #ff4b4b; --w: #ffab00; --bg: #f4f5f7; --dark: #091e42; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg); display: flex; height: 100vh; overflow: hidden; }
+
+        /* NAVEGAÇÃO DINÂMICA */
+        aside { width: 260px; background: var(--dark); color: white; display: flex; flex-direction: column; padding: 20px; }
+        .nav-item { padding: 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px; color: #b3bac5; transition: 0.3s; margin-bottom: 5px; }
+        .nav-item.active { background: var(--p); color: white; }
         
-        .login-card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
-        .logo { font-size: 24px; font-weight: 900; color: var(--dark); margin-bottom: 30px; }
-        .logo span { color: var(--primary); }
+        main { flex: 1; display: flex; flex-direction: column; overflow-y: auto; }
+        header { background: white; height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; border-bottom: 1px solid #dfe1e6; }
+
+        .screen { display: none; padding: 25px; }
+        .screen.active { display: block; }
+
+        /* CARDS E TABELAS */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .card { background: white; padding: 20px; border-radius: 10px; border: 1px solid #dfe1e6; }
+        .card b { font-size: 24px; display: block; margin-top: 5px; }
         
-        select, input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #dfe1e6; border-radius: 6px; outline: none; font-size: 14px; }
-        .btn-login { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.3s; }
-        .btn-login:hover { background: #0747a6; }
-        
-        .role-info { font-size: 12px; color: #6b778c; margin-top: 20px; text-align: left; background: #f4f5f7; padding: 10px; border-radius: 6px; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; }
+        th { text-align: left; padding: 12px; background: #f8f9fa; font-size: 12px; color: #6b778c; }
+        td { padding: 12px; border-bottom: 1px solid #eee; font-size: 14px; }
+
+        /* STATUS */
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; }
+        .bg-s { background: #e3fcef; color: #006644; }
+        .bg-d { background: #ffebe6; color: #bf2600; }
+
+        /* TERMINAL DE BIPAGEM */
+        .scanner { background: #172b4d; color: #36b37e; padding: 20px; border-radius: 10px; font-family: monospace; height: 200px; overflow-y: auto; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-    <div class="login-card">
-        <div class="logo">ELITE<span>ENTERPRISE</span></div>
-        <p style="color: #6b778c; margin-bottom: 25px;">Acesse sua estação de trabalho</p>
-        
-        <form id="loginForm">
-            <select id="userRole" required>
-                <option value="" disabled selected>Selecione seu Cargo</option>
-                <option value="admin">Gestor Master (Torre de Controle)</option>
-                <option value="operador">Operador de Doca (Bipagem)</option>
-                <option value="motorista">Motorista (Rotas/Last Mile)</option>
-                <option value="rh">Recursos Humanos (Performance)</option>
-            </select>
-            
-            <input type="text" placeholder="Matrícula ou Usuário" required>
-            <input type="password" placeholder="Senha de Acesso" required>
-            
-            <button type="submit" class="btn-login">ACESSAR SISTEMA</button>
-        </form>
+    <aside>
+        <h2 style="margin-bottom: 30px;"><i class="fa-solid fa-box"></i> ELITE<span>LOG</span></h2>
+        <div class="nav-item active" onclick="nav('dash')"><i class="fa-solid fa-gauge"></i> Dashboard Master</div>
+        <div class="nav-item" onclick="nav('bip')"><i class="fa-solid fa-qrcode"></i> Bipagem/Doca</div>
+        <div class="nav-item" onclick="nav('rota')"><i class="fa-solid fa-truck"></i> Porta a Motorista</div>
+        <div class="nav-item" onclick="nav('rh')"><i class="fa-solid fa-users"></i> Gestão/RH</div>
+        <div style="margin-top:auto; font-size: 10px; color: #6b778c;">SISTEMA V3.0 - 2026</div>
+    </aside>
 
-        <div class="role-info" id="info">
-            <i class="fa-solid fa-circle-info"></i> Selecione um cargo para ver suas permissões.
+    <main>
+        <header>
+            <span id="user-status"><b>GESTOR:</b> Master Online</span>
+            <div style="color: var(--p); font-weight: bold;">Hortolândia-SP <i class="fa-solid fa-location-dot"></i></div>
+        </header>
+
+        <div id="dash" class="screen active">
+            <div class="grid">
+                <div class="card"><span>Saídas Hoje</span><b>1.450</b></div>
+                <div class="card"><span>Cargas Atrasadas</span><b style="color:var(--d)">03</b></div>
+                <div class="card"><span>Eficiência Rota</span><b>94.2%</b></div>
+                <div class="card"><span>Cut-off (14h)</span><b style="color:var(--s)">OK</b></div>
+            </div>
+            <h3>Alertas Críticos</h3>
+            <table>
+                <thead><tr><th>Veículo</th><th>Ocorrência</th><th>Tempo</th><th>Status</th></tr></thead>
+                <tbody>
+                    <tr><td>Fiorino #XP90</td><td>Desvio de Rota Detectado</td><td>2 min</td><td><span class="badge bg-d">CRÍTICO</span></td></tr>
+                    <tr><td>VUC #ML44</td><td>Parada Suspeita</td><td>15 min</td><td><span class="badge bg-d">VERIFICAR</span></td></tr>
+                </tbody>
+            </table>
         </div>
-    </div>
+
+        <div id="bip" class="screen">
+            <div class="card">
+                <h3>Terminal de Bipagem (Cross-Docking)</h3>
+                <input type="text" id="barcode" placeholder="Bipar QR Code do Produto..." style="width:70%; padding:10px; margin-top:10px;">
+                <button onclick="bipar()" style="padding:10px; background:var(--p); color:white; border:none; border-radius:5px; cursor:pointer;">BIPAR</button>
+                <div class="scanner" id="log-bip">[AGUARDANDO CONEXÃO COM COLETOR...]</div>
+            </div>
+        </div>
+
+        <div id="rota" class="screen">
+            <h3>Manifesto de Saída (Porta a Motorista)</h3>
+            <div class="card" style="margin-bottom: 10px; border-left: 5px solid var(--s);">
+                <b>JOÃO SILVA - Rota Centro</b>
+                <p>Status: Carregando... (8/10 Itens)</p>
+                <progress value="80" max="100" style="width:100%"></progress>
+            </div>
+            <div class="card" style="border-left: 5px solid var(--w);">
+                <b>RICARDO SOUZA - Rota Norte</b>
+                <p>Status: Aguardando Liberação de Doca</p>
+            </div>
+        </div>
+
+        <div id="rh" class="screen">
+            <h3>Performance da Equipe</h3>
+            <table>
+                <thead><tr><th>Colaborador</th><th>Cargo</th><th>Eficiência</th><th>Score</th></tr></thead>
+                <tbody>
+                    <tr><td>Carlos Operador</td><td>Doca 02</td><td>98%</td><td><span class="badge bg-s">ELITE</span></td></tr>
+                    <tr><td>Ana Conferente</td><td>Triagem</td><td>82%</td><td><span class="badge" style="background:#eee">MÉDIA</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
 
     <script>
-        const roleSelect = document.getElementById('userRole');
-        const infoBox = document.getElementById('info');
+        function nav(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
 
-        const permissions = {
-            admin: "Acesso total: Financeiro, Frota, RH e Dashboards de Atraso.",
-            operador: "Acesso restrito: Terminal de Bipagem e Conferência de Carga.",
-            motorista: "Acesso mobile: GPS, Ordem de Entrega e Assinatura Digital.",
-            rh: "Acesso administrativo: Folha de Ponto e Score de Produtividade."
-        };
-
-        roleSelect.addEventListener('change', () => {
-            infoBox.innerHTML = `<i class="fa-solid fa-shield-halved"></i> <b>Nível:</b> ${permissions[roleSelect.value]}`;
-        });
-
-        document.getElementById('loginForm').onsubmit = (e) => {
-            e.preventDefault();
-            const role = roleSelect.value;
-            alert(`Redirecionando para o Painel de ${role.toUpperCase()}... \n(Aqui o sistema carrega o módulo específico que criamos nas mensagens anteriores)`);
-            // Lógica Real: window.location.href = `dashboard_${role}.html`;
-        };
+        function bipar() {
+            const input = document.getElementById('barcode');
+            const log = document.getElementById('log-bip');
+            const val = input.value || "ITEM-" + Math.floor(Math.random()*999);
+            const time = new Date().toLocaleTimeString();
+            log.innerHTML = `[${time}] OK! ${val} -> DESTINO: DOCA 05 (SÃO PAULO)<br>` + log.innerHTML;
+            input.value = "";
+        }
     </script>
 </body>
 </html>
