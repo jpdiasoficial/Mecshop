@@ -3,199 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>JP DIAS | GLOBAL LOGISTICS V75</title>
+    <title>JP DIAS | INDUSTRIAL V80</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=JetBrains+Mono&family=Orbitron:wght@900&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #ff9f0a; /* Laranja Meli/Industrial */
-            --bg: #0a0a0c;
-            --surface: rgba(255, 255, 255, 0.05);
-            --border: rgba(255, 159, 10, 0.3);
-            --green: #32d74b;
-        }
+        :root { --primary: #ff9f0a; --bg: #0a0a0c; --surface: rgba(255, 255, 255, 0.05); --green: #32d74b; --red: #ff453a; }
+        body { background: var(--bg); color: #e0e0e0; font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; text-transform: uppercase; }
 
-        body {
-            background-color: var(--bg);
-            background-image: radial-gradient(circle at 50% 50%, #1a1a20 0%, #0a0a0c 100%);
-            color: #e0e0e0;
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            overflow: hidden;
-            text-transform: uppercase;
-        }
+        /* --- INTERFACE DE LOGIN (V75 STYLE) --- */
+        #portal { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .btn-premium { width: 320px; padding: 20px; margin: 10px; background: var(--surface); border: 1px solid rgba(255,159,10,0.3); color: #fff; font-family: 'JetBrains Mono'; font-weight: bold; cursor: pointer; letter-spacing: 2px; transition: 0.3s; }
+        .btn-premium:hover { background: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary); }
 
-        /* --- PORTAL DE ENTRADA ULTRA LUXO --- */
-        #portal {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
+        /* --- LOBBY --- */
+        #lobby { display: none; padding: 20px; animation: fadeIn 0.5s; }
+        .grid-master { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; }
+        .card-hq { background: var(--surface); border: 1px solid rgba(255,255,255,0.1); padding: 25px; border-radius: 4px; cursor: pointer; border-left: 4px solid var(--primary); }
 
-        .logo-container {
-            position: relative;
-            margin-bottom: 50px;
-        }
+        /* --- MÓDULO OPERACIONAL COM CÂMERA --- */
+        .modulo { display: none; padding: 15px; }
+        .camera-container { width: 100%; height: 200px; background: #000; border-radius: 12px; margin-bottom: 15px; overflow: hidden; position: relative; border: 2px solid var(--primary); }
+        video { width: 100%; height: 100%; object-fit: cover; }
+        .scan-line { position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: var(--primary); box-shadow: 0 0 15px var(--primary); animation: scanning 2s infinite linear; }
+        @keyframes scanning { 0% { top: 0; } 100% { top: 100%; } }
 
-        .logo-container h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 45px;
-            letter-spacing: 12px;
-            background: linear-gradient(to bottom, #fff 0%, var(--primary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 0;
-        }
-
-        .btn-premium {
-            width: 320px;
-            padding: 20px;
-            margin: 12px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 4px; /* Visual mais industrial/sério */
-            color: #fff;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 13px;
-            font-weight: bold;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            letter-spacing: 2px;
-        }
-
-        .btn-premium:hover {
-            background: var(--primary);
-            color: #000;
-            box-shadow: 0 0 30px rgba(255, 159, 10, 0.4);
-            transform: scale(1.05);
-        }
-
-        /* --- LOBBY "COMMAND CENTER" --- */
-        #lobby { display: none; padding: 30px; }
-
-        .header-main {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 15px;
-        }
-
-        .grid-master {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 25px;
-            margin-top: 40px;
-        }
-
-        .card-hq {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 0 20px 0 20px; /* Design assimétrico moderno */
-            padding: 30px;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .card-hq::before { /* Efeito de linha de scanner */
-            content: "";
-            position: absolute;
-            top: -100%;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, transparent, rgba(255,159,10,0.1), transparent);
-            animation: scan 4s infinite linear;
-        }
-
-        @keyframes scan { 0% { top: -100%; } 100% { top: 100%; } }
-
-        .card-hq h3 { font-family: 'Orbitron'; color: var(--primary); margin: 0; font-size: 16px; }
-        .card-hq p { font-size: 10px; color: #888; margin-top: 10px; font-family: 'JetBrains Mono'; }
-
-        /* --- LOGS E STATUS --- */
-        .terminal {
-            background: rgba(0,0,0,0.8);
-            border: 1px solid #222;
-            height: 150px;
-            border-radius: 10px;
-            padding: 15px;
-            font-family: 'JetBrains Mono';
-            font-size: 11px;
-            color: var(--green);
-            overflow-y: auto;
-            margin-top: 30px;
-        }
-
-        .badge-ghost {
-            border: 1px solid var(--green);
-            color: var(--green);
-            padding: 4px 12px;
-            font-size: 10px;
-            border-radius: 100px;
-        }
-
+        /* --- BOTÕES E TERMINAL --- */
+        .btn-op { width: 100%; padding: 18px; margin-bottom: 10px; background: transparent; border: 1px solid var(--primary); color: var(--primary); font-weight: bold; cursor: pointer; border-radius: 4px; }
+        .btn-op:active { background: var(--primary); color: #000; }
+        .terminal { background: #000; color: var(--green); font-family: 'JetBrains Mono'; padding: 15px; height: 120px; overflow-y: scroll; font-size: 11px; border: 1px solid #222; margin-top: 15px; }
+        
+        header { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #222; }
     </style>
 </head>
 <body>
 
 <div id="portal">
-    <div class="logo-container">
-        <h1>JP DIAS</h1>
-        <div style="height:2px; background:var(--primary); width:50px; margin: 10px auto;"></div>
-    </div>
-    <button class="btn-premium" onclick="login('MASTER')">ACCESS LEVEL 01 // OWNER</button>
-    <button class="btn-premium" onclick="login('SHARK')">ACCESS LEVEL 02 // SHARK</button>
-    <button class="btn-premium" onclick="login('OP')">ACCESS LEVEL 03 // TECH-OP</button>
+    <h1 style="font-family:'Orbitron'; color:var(--primary); letter-spacing:8px;">JP DIAS</h1>
+    <button class="btn-premium" onclick="login('MASTER')">LEVEL 01: OWNER</button>
+    <button class="btn-premium" onclick="login('OP')">LEVEL 03: TECH-OP</button>
 </div>
 
 <div id="lobby">
-    <div class="header-main">
-        <span class="badge-ghost" id="id-display">ID: GHOST_INIT</span>
-        <button onclick="location.reload()" style="background:none; border:none; color:#555; cursor:pointer; font-weight:bold;">DISCONNECT_</button>
-    </div>
-
+    <header>
+        <span id="id-display" style="color:var(--green); font-family:'JetBrains Mono';">ID: ---</span>
+        <button onclick="location.reload()" style="background:none; border:none; color:#555; cursor:pointer;">DISCONNECT_</button>
+    </header>
     <div class="grid-master">
-        <div class="card-hq" onclick="alert('Iniciando Armazém...')">
-            <h3>📦 ARMAZÉM WMS</h3>
-            <p>// TRAVA 3 ETAPAS ATIVA<br>// VOICE COMMAND READY</p>
-        </div>
-        <div class="card-hq" onclick="alert('Iniciando Crossdock...')">
-            <h3>⚡ CROSS DOCK</h3>
-            <p>// MONITOR MOTORISTA ON<br>// FLOW OPTIMIZATION</p>
-        </div>
-        <div class="card-hq" style="grid-column: span 2;" onclick="alert('Abrindo Auditoria...')">
-            <h3>🛰️ TORRE DE CONTROLE GHOST</h3>
-            <p>// TOTAL VISIBILITY // ENCRYPTED DATA</p>
-        </div>
-    </div>
-
-    <div class="terminal" id="terminal-out">
-        > SYSTEM_READY...<br>
-        > JP_DIAS_CORE_V75_LOADED...<br>
-        > WAITING_FOR_OPERATIONAL_INPUT...
+        <div class="card-hq" onclick="abrirModulo('mod-armazem')"><h3>📦 ARMAZÉM WMS</h3><p>PICKING E ESTOQUE</p></div>
+        <div class="card-hq" onclick="abrirModulo('mod-crossdock')"><h3>⚡ CROSS DOCK</h3><p>TRIAGEM E CARGA</p></div>
     </div>
 </div>
 
+<div id="mod-armazem" class="modulo">
+    <header><button onclick="voltarLobby()" style="background:none; border:none; color:var(--primary); cursor:pointer;">⬅ VOLTAR</button> <span>AREA_BIPA</span></header>
+    
+    <div class="camera-container">
+        <video id="videoWMS" autoplay playsinline></video>
+        <div class="scan-line"></div>
+    </div>
+
+    <div class="card-hq" style="border-left:none; border-top:4px solid var(--primary);">
+        <button class="btn-op" onclick="fluxoBipa()">INICIAR BIPAGEM (VOZ)</button>
+        <button class="btn-op" style="border-color:var(--red); color:var(--red);" onclick="addLog('AVARIA REGISTRADA')">SINALIZAR AVARIA</button>
+    </div>
+    <div class="terminal" id="logWMS">> AGUARDANDO COMANDO...</div>
+</div>
+
+<div id="mod-crossdock" class="modulo">
+    <header><button onclick="voltarLobby()" style="background:none; border:none; color:var(--primary); cursor:pointer;">⬅ VOLTAR</button> <span>CROSS_FLOW</span></header>
+    
+    <div class="camera-container">
+        <video id="videoCross" autoplay playsinline></video>
+        <div class="scan-line" style="background: var(--green); box-shadow: 0 0 15px var(--green);"></div>
+    </div>
+
+    <div class="card-hq" style="border-left:none; border-top:4px solid var(--green);">
+        <button class="btn-op" style="border-color:var(--green); color:var(--green);" onclick="fluxoDoca()">TRIAGEM MOTORISTA</button>
+    </div>
+    <div class="terminal" id="logCross">> MONITORANDO FLUXO DE SAÍDA...</div>
+</div>
+
 <script>
-    function login(nivel) {
-        if(nivel !== 'OP') {
-            let p = prompt("ENTER SECURITY KEY:");
-            if(p !== "123") return;
+    let streamAtual = null;
+
+    async function ligarCamera(videoElementId) {
+        try {
+            if(streamAtual) { streamAtual.getTracks().forEach(track => track.stop()); }
+            streamAtual = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+            document.getElementById(videoElementId).srcObject = streamAtual;
+        } catch (err) {
+            console.error("Erro ao acessar câmera: ", err);
+            alert("Acesso à câmera negado ou não disponível.");
         }
+    }
+
+    function falar(t) {
+        window.speechSynthesis.cancel();
+        const m = new SpeechSynthesisUtterance(t);
+        m.lang = 'pt-BR';
+        window.speechSynthesis.speak(m);
+    }
+
+    function login(tipo) {
+        if(tipo === 'MASTER') { if(prompt("KEY:") !== "123") return; }
         document.getElementById('portal').style.display = 'none';
         document.getElementById('lobby').style.display = 'block';
-        const id = "GHOST-" + Math.floor(Math.random()*9999);
-        document.getElementById('id-display').innerText = `ID: ${id}`;
-        
-        const audio = new SpeechSynthesisUtterance("Bem vindo ao sistema J P Dias. Protocolo de segurança ativado.");
-        audio.lang = 'pt-BR';
-        window.speechSynthesis.speak(audio);
+        document.getElementById('id-display').innerText = "GHOST-" + Math.floor(Math.random()*999);
+        falar("Protocolo JP Dias Ativado.");
+    }
+
+    function abrirModulo(id) {
+        document.getElementById('lobby').style.display = 'none';
+        document.getElementById(id).style.display = 'block';
+        if(id === 'mod-armazem') ligarCamera('videoWMS');
+        if(id === 'mod-crossdock') ligarCamera('videoCross');
+    }
+
+    function voltarLobby() {
+        if(streamAtual) streamAtual.getTracks().forEach(track => track.stop());
+        document.querySelectorAll('.modulo').forEach(m => m.style.display = 'none');
+        document.getElementById('lobby').style.display = 'block';
+    }
+
+    function fluxoBipa() {
+        falar("Vá para a Rua B. Aponte a câmera para o código do produto.");
+        let cod = prompt("DIGITE OS 3 DÍGITOS DO PRODUTO:");
+        if(cod) { addLog(`WMS: PRODUTO ${cod} IDENTIFICADO.`); falar("Confirmado."); }
+    }
+
+    function fluxoDoca() {
+        falar("Triagem de motorista iniciada. Valide o manifesto.");
+        let man = prompt("NÚMERO DO MANIFESTO:");
+        if(man) addLog(`CROSS: MANIFESTO ${man} VALIDADO.`);
+    }
+
+    function addLog(msg) {
+        const t = `> [${new Date().toLocaleTimeString()}] ${msg}<br>`;
+        document.getElementById('logWMS').innerHTML += t;
+        document.getElementById('logCross').innerHTML += t;
     }
 </script>
 
