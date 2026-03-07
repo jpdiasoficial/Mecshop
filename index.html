@@ -3,143 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>JP DIAS | CENTRAL CONTROL V160</title>
+    <title>JP DIAS | GENESIS V170</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono:wght@500&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --primary: #ff9f0a; --bg: #050505; --surface: rgba(25, 25, 25, 0.9);
-            --border: rgba(255, 159, 10, 0.3); --green: #30d158; --red: #ff453a; --blue: #0a84ff;
+            --primary: #ff9f0a; --bg: #050505; --surface: rgba(28, 28, 30, 0.8);
+            --border: rgba(255, 159, 10, 0.2); --green: #30d158; --red: #ff453a; --blue: #0a84ff;
         }
-        body { background: var(--bg); color: #f5f5f7; font-family: 'Inter', sans-serif; margin: 0; text-transform: uppercase; overflow: hidden; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; height: 100vh; text-transform: uppercase; }
         
-        /* --- PAINEL DE CONTROLE DETALHADO (GOD/SHARK) --- */
-        #painel-mestre { height: 100vh; display: none; flex-direction: column; padding: 20px; box-sizing: border-box; overflow-y: auto; }
+        /* --- ESTÉTICA GLASSMORPHISM --- */
+        .glass { background: var(--surface); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 16px; }
         
-        .header-status { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 20px; }
-        .grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 20px; }
-        .stat-card { background: var(--surface); padding: 15px; border-radius: 8px; border-left: 4px solid var(--primary); }
-        .stat-card small { font-size: 9px; color: #666; }
-        .stat-card b { display: block; font-size: 18px; font-family: 'Orbitron'; color: var(--primary); }
+        /* --- PORTAL DE ACESSO --- */
+        #portal { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background: radial-gradient(circle at center, #1c1c1e, #000); }
+        .logo { font-family: 'Orbitron'; font-size: 32px; letter-spacing: 10px; margin-bottom: 40px; background: linear-gradient(to bottom, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .btn-access { width: 300px; padding: 20px; margin: 10px; cursor: pointer; color: #fff; font-family: 'JetBrains Mono'; font-weight: bold; display: flex; justify-content: space-between; transition: 0.3s; }
+        .btn-access:hover { border-color: var(--primary); transform: scale(1.02); }
 
-        /* --- MONITORAMENTO EM TEMPO REAL --- */
-        .monitor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .monitor-box { background: rgba(0,0,0,0.5); border: 1px solid #333; border-radius: 10px; padding: 15px; height: 300px; overflow-y: auto; }
-        .monitor-box h4 { font-family: 'Orbitron'; font-size: 10px; margin-top: 0; color: #aaa; border-bottom: 1px solid #222; padding-bottom: 5px; }
-        
-        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #1a1a1a; font-family: 'JetBrains Mono'; font-size: 10px; }
-        .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 5px; }
-        
-        /* --- COMANDOS DE ACESSO --- */
-        .control-group { margin-top: 20px; background: var(--surface); padding: 20px; border-radius: 12px; border: 1px solid var(--border); }
-        .switch-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 10px; background: #000; border-radius: 5px; }
-        
-        .btn-master { width: 100%; padding: 15px; background: var(--primary); color: #000; border: none; border-radius: 5px; font-weight: 900; font-family: 'Orbitron'; cursor: pointer; margin-top: 10px; }
-        .btn-danger { background: var(--red); color: #fff; }
+        /* --- PAINEL MASTER (GOD/SHARK) --- */
+        #painel-master { display: none; padding: 20px; height: 100vh; overflow-y: auto; box-sizing: border-box; }
+        .grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
+        .stat-card { padding: 15px; border-left: 4px solid var(--primary); }
+        .stat-card b { display: block; font-size: 20px; font-family: 'Orbitron'; color: var(--primary); }
+        .stat-card small { font-size: 9px; color: #888; }
 
-        /* --- MODOS OPERACIONAIS (VOZ/LISTA) --- */
-        #mod-op { display: none; height: 100vh; padding: 20px; }
-        .display-voice { height: 200px; border: 1px solid var(--primary); display: flex; align-items: center; justify-content: center; font-size: 20px; font-family: 'Orbitron'; color: var(--primary); text-align: center; background: #000; border-radius: 10px; margin-bottom: 15px; }
+        /* --- MÓDULO OPERACIONAL (VOZ) --- */
+        #mod-op { display: none; height: 100vh; flex-direction: column; padding: 20px; box-sizing: border-box; }
+        .display-voice { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; border: 1px solid var(--border); border-radius: 20px; background: rgba(0,0,0,0.4); margin-bottom: 20px; }
+        .instruction { font-family: 'Orbitron'; font-size: 22px; color: var(--primary); padding: 20px; }
+        .visual-indicator { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; margin-top: 20px; }
+        .pulse { width: 20px; height: 20px; background: var(--primary); border-radius: 50%; animation: pulse 1.5s infinite; }
+
+        .terminal { height: 120px; background: rgba(0,0,0,0.6); border: 1px solid #333; border-radius: 10px; padding: 15px; font-family: 'JetBrains Mono'; font-size: 10px; color: #666; overflow-y: auto; }
+        
+        @keyframes pulse { 0% { transform: scale(0.8); opacity: 1; } 100% { transform: scale(2); opacity: 0; } }
+        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
     </style>
 </head>
 <body>
 
-<div id="portal" style="height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;">
-    <h1 style="font-family:'Orbitron'; letter-spacing:10px;">JP DIAS</h1>
-    <button onclick="entrar('GOD')" style="width:280px; padding:20px; margin:10px; background:#111; border:1px solid var(--primary); color:#fff; cursor:pointer; font-weight:bold;">ACESSAR CENTRAL CONTROL</button>
+<div id="portal">
+    <div class="logo">JP DIAS</div>
+    <div class="glass" style="padding: 20px; display: flex; flex-direction: column;">
+        <button class="btn-access glass" onclick="acesso('GOD')">01. MASTER GOD <span>⚡</span></button>
+        <button class="btn-access glass" onclick="acesso('SHARK')">02. CLIENT SHARK <span>🦈</span></button>
+        <button class="btn-access glass" onclick="acesso('OPERACIONAL')">03. OPERACIONAL <span>📦</span></button>
+    </div>
 </div>
 
-<div id="painel-mestre">
-    <div class="header-status">
-        <div>
-            <span style="font-family:'Orbitron'; color:var(--primary);">GENESIS MASTER CONTROL</span><br>
-            <small style="font-size:9px; color:#555;">ID: GOD_MODE_JP_DIAS_2026</small>
-        </div>
-        <button onclick="location.reload()" class="btn-exit" style="background:none; border:1px solid var(--red); color:var(--red); padding:5px 15px; font-size:10px; cursor:pointer;">LOGOUT</button>
+<div id="painel-master">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+        <h2 style="font-family:'Orbitron'; font-size:14px; color:var(--primary);">CENTRAL CONTROL V170</h2>
+        <button onclick="location.reload()" class="glass" style="padding:8px 15px; color:var(--red); border-color:var(--red); font-size:10px; font-weight:bold;">LOGOUT</button>
     </div>
 
     <div class="grid-stats">
-        <div class="stat-card"><b>12</b><small>USUÁRIOS ATIVOS</small></div>
-        <div class="stat-card" style="border-left-color:var(--blue);"><b>04</b><small>MOTOS EM ROTA</small></div>
-        <div class="stat-card" style="border-left-color:var(--green);"><b>89%</b><small>ROI OPERACIONAL</small></div>
-        <div class="stat-card" style="border-left-color:var(--red);"><b>02</b><small>ALERTAS AVARIA</small></div>
+        <div class="glass stat-card"><b>R$ 1.850</b><small>ROI ECONOMIA (MÊS)</small></div>
+        <div class="glass stat-card" style="border-left-color:var(--green);"><b>94%</b><small>EFICIÊNCIA GERAL</small></div>
+        <div class="glass stat-card" style="border-left-color:var(--blue);"><b>12ms</b><small>LATÊNCIA REDE</small></div>
     </div>
 
-    <div class="monitor-grid">
-        <div class="monitor-box">
-            <h4>📡 ATIVIDADE DE CAMPO (LIVE)</h4>
-            <div class="user-row"><span><span class="dot" style="background:var(--green)"></span>GHOST-01 [ARMAZÉM]</span> <span>BIPANDO...</span></div>
-            <div class="user-row"><span><span class="dot" style="background:var(--green)"></span>GHOST-05 [ARMAZÉM]</span> <span>VOZ ATIVA</span></div>
-            <div class="user-row"><span><span class="dot" style="background:var(--blue)"></span>TRUCK-88 [ROTA]</span> <span>KM 122</span></div>
-            <div class="user-row"><span><span class="dot" style="background:var(--red)"></span>GHOST-09 [CROSS]</span> <span>AVARIA!</span></div>
-            <div class="user-row" style="opacity:0.4;"><span><span class="dot" style="background:#555"></span>GHOST-12 [OFFLINE]</span> <span>---</span></div>
-        </div>
-        <div class="monitor-box">
-            <h4>📝 LOGS DO SISTEMA</h4>
-            <div id="log-system" style="font-family:'JetBrains Mono'; font-size:9px; color:#666;">
-                > 20:15: [GOD] ACESSO AO PAINEL<br>
-                > 20:12: [MOT-88] ROTA INICIADA<br>
-                > 20:05: [OP-01] ATIVAÇÃO VOZ (OK,OK,OK)<br>
-                > 19:50: [SHARK] RELATÓRIO GERADO
+    <div class="glass" style="padding:20px; margin-bottom:20px;">
+        <h4 style="font-family:'Orbitron'; font-size:10px; margin-top:0;">📡 MONITORAMENTO SILENCIOSO (GHOSTS)</h4>
+        <div id="lista-latencia" style="font-family:'JetBrains Mono'; font-size:11px;">
+            <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #222;">
+                <span>GHOST-01 (ARMAZÉM)</span><span style="color:var(--green);">MÉDIA 22s</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #222;">
+                <span>GHOST-05 (ARMAZÉM)</span><span style="color:var(--red);">MÉDIA 88s (ATRASO)</span>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="control-group">
-        <h4 style="font-family:'Orbitron'; font-size:10px; margin-bottom:15px;">GERENCIAMENTO DE PERMISSÕES</h4>
-        
-        <div class="switch-row">
-            <span>LIBERAR LOGIN MOTORISTAS</span>
-            <input type="checkbox" id="sw-mot" checked onchange="alert('Status de Motoristas Atualizado')">
-        </div>
-
-        <div class="switch-row">
-            <span>ATIVAR MODO VOZ (ARMAZÉM)</span>
-            <input type="checkbox" id="sw-voice" checked>
-        </div>
-
-        <div class="switch-row" style="flex-direction:column; align-items:flex-start;">
-            <span style="margin-bottom:10px;">DEFINIR FUNÇÃO DO PRÓXIMO LOGIN:</span>
-            <select style="width:100%; padding:10px; background:#111; color:var(--primary); border:1px solid var(--border);">
-                <option>ARMAZÉM - SEPARAÇÃO POR VOZ</option>
-                <option>CROSSDOCK - BIPAGEM TÉCNICA</option>
-                <option>AUDITORIA - CONFERÊNCIA FINAL</option>
-            </select>
-        </div>
-
-        <button class="btn-master btn-danger" onclick="alert('PROTOCOLO LOCKDOWN ATIVADO!')">BLOQUEIO TOTAL DO SISTEMA</button>
+<div id="mod-op" class="modulo-full">
+    <div class="display-voice glass">
+        <div id="instrucao" class="instruction">DIGA "ATIVAR" 3X<br><small style="font-size:10px; color:#555;">SINAL DE PRONTIDÃO</small></div>
+        <div class="visual-indicator"><div class="pulse"></div></div>
     </div>
+    <div id="terminal" class="terminal">> INICIALIZANDO CORE DE VOZ V170...<br></div>
+    <button onclick="sair()" class="glass" style="width:100%; padding:20px; margin-top:20px; color:var(--red); border-color:var(--red); font-weight:bold;">ENCERRAR TURNO</button>
 </div>
 
 <script>
-    function entrar(r) {
-        if(prompt("CHAVE GOD:") === "123") {
-            document.getElementById('portal').style.display = 'none';
-            document.getElementById('painel-mestre').style.display = 'flex';
-            falar("Bem vindo, Senhor J P Dias. Central de controle Genesis ativa.");
+    let role = "";
+    let counts = { ativar: 0, desativar: 0 };
+    let etapa = "STANDBY"; // STANDBY, CODIGO, QTD, OK
+    let tempoInicio = 0;
+
+    const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const voice = Speech ? new Speech() : null;
+
+    if(voice) {
+        voice.continuous = true;
+        voice.lang = 'pt-BR';
+        voice.onresult = (e) => {
+            const fala = e.results[e.results.length - 1][0].transcript.toLowerCase();
+            processarVoz(fala);
+        };
+        voice.onend = () => { if(etapa !== "STANDBY") voice.start(); };
+    }
+
+    function acesso(r) {
+        if(r !== 'OPERACIONAL' && prompt("CHAVE DIRETORIA:") !== "123") return;
+        role = r;
+        document.getElementById('portal').style.display = 'none';
+        if(r === 'OPERACIONAL') {
+            document.getElementById('mod-op').style.display = 'flex';
+            etapa = "AGUARDANDO_ATIVACAO";
+            if(voice) voice.start();
+        } else {
+            document.getElementById('painel-master').style.display = 'block';
         }
+        falar("Genesis V1 70 Iniciada.");
+    }
+
+    function processarVoz(txt) {
+        addLog(`OUVIDO: "${txt}"`);
+
+        // 1. ATIVAÇÃO (3X)
+        if(etapa === "AGUARDANDO_ATIVACAO" && txt.includes("ativar")) {
+            counts.ativar++;
+            falar(counts.ativar);
+            if(counts.ativar === 3) {
+                counts.ativar = 0;
+                iniciarFluxo();
+            }
+        }
+        // 2. FLUXO TÉCNICO (CASA -> CÓDIGO -> QTD -> OK)
+        else if(etapa === "CODIGO" && txt.includes("482")) {
+            falar("Código correto. Diga a quantidade.");
+            etapa = "QUANTIDADE";
+            updateDisplay("INFORME A QUANTIDADE");
+        }
+        else if(etapa === "QUANTIDADE" && !isNaN(parseInt(txt))) {
+            falar(txt + " unidades. Diga OK para finalizar.");
+            etapa = "CONCLUIR";
+            updateDisplay("Diga OK para concluir");
+        }
+        else if(etapa === "CONCLUIR" && txt.includes("ok")) {
+            registrarLatencia();
+            falar("Sucesso. Próximo item.");
+            iniciarFluxo();
+        }
+    }
+
+    function iniciarFluxo() {
+        tempoInicio = Date.now();
+        etapa = "CODIGO";
+        falar("Vá para a Casa A-12. Código final 4-8-2.");
+        updateDisplay("CASA A-12<br><small>CÓDIGO: 482</small>");
+    }
+
+    function registrarLatencia() {
+        let seg = Math.floor((Date.now() - tempoInicio) / 1000);
+        addLog(`<b>[LATÊNCIA: ${seg}s]</b> ITEM REGISTRADO NO BANCO.`);
+        // Aqui o dado subiria silenciosamente para o painel do Shark
+    }
+
+    function updateDisplay(h) { document.getElementById('instrucao').innerHTML = h; }
+    function addLog(m) { 
+        const t = document.getElementById('terminal');
+        t.innerHTML += `> ${m}<br>`;
+        t.scrollTop = t.scrollHeight;
+    }
+
+    function sair() {
+        if(voice) voice.stop();
+        location.reload();
     }
 
     function falar(t) {
         window.speechSynthesis.cancel();
         const m = new SpeechSynthesisUtterance(t);
         m.lang = 'pt-BR';
+        m.rate = 1.1;
         window.speechSynthesis.speak(m);
     }
-
-    // Simulação de Logs em Tempo Real
-    setInterval(() => {
-        const log = document.getElementById('log-system');
-        const time = new Date().toLocaleTimeString();
-        const events = [
-            "ITEM CONFIRMADO NA CASA A-12",
-            "MOTORISTA EM MOVIMENTO (ROTA 01)",
-            "SINAL DE PRONTIDÃO RECEBIDO",
-            "SCANNER ATIVO SETOR SUL"
-        ];
-        const randomEvent = events[Math.floor(Math.random() * events.length)];
-        log.innerHTML = `> ${time}: ${randomEvent}<br>` + log.innerHTML;
-    }, 5000);
 </script>
-
 </body>
 </html>
