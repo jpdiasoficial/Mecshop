@@ -3,101 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>JP DIAS | LOG-PRO V24.0</title>
+    <title>JP DIAS | LOG-PRO V24.4</title>
     <script src="https://unpkg.com/html5-qrcode"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #00ff41; --bg: #000; --inbound: #ffcc00; --outbound: #00ff41; --reversa: #ff3b30; }
+        :root { --primary: #00ff41; --bg: #030303; --card-bg: #0a0a0a; --inbound: #00d4ff; --outbound: #00ff41; --reversa: #ff3b30; --user: #a020f0; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; height: 100vh; text-transform: uppercase; }
-        .screen { display: none; position: absolute; width: 100%; height: 100%; flex-direction: column; background: var(--bg); }
+        .screen { display: none; position: absolute; width: 100%; height: 100%; flex-direction: column; background: radial-gradient(circle at center, #0a0a0a 0%, #000 100%); }
         .active { display: flex !important; }
-        header { padding: 15px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; background: #050505; font-family: 'Orbitron'; font-size: 10px; }
-        .scroll { flex: 1; overflow-y: auto; padding: 15px; }
-        .btn { width: 100%; padding: 15px; border: none; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; border-radius: 5px; margin-bottom: 10px; font-size: 11px; transition: 0.3s; }
-        .card { background: #080808; border: 1px solid #222; padding: 12px; border-radius: 5px; margin-bottom: 10px; border-left: 3px solid var(--primary); }
-        input, select { width: 100%; padding: 12px; background: #111; border: 1px solid #333; color: #fff; font-family: 'Orbitron'; border-radius: 5px; margin-bottom: 10px; box-sizing: border-box; }
-        #reader { width: 100%; border-radius: 10px; overflow: hidden; border: 2px solid var(--primary) !important; background: #111; min-height: 200px; }
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; flex-direction: column; justify-content: center; padding: 30px; box-sizing: border-box; z-index: 100; }
-        table { width: 100%; border-collapse: collapse; font-size: 10px; }
-        th { color: #555; text-align: left; padding: 10px; border-bottom: 1px solid #222; }
-        td { padding: 10px; border-bottom: 1px solid #111; color: #888; }
+        header { padding: 20px; border-bottom: 1px solid #1a1a1a; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); font-family: 'Orbitron'; font-size: 10px; letter-spacing: 2px; }
+        .scroll { flex: 1; overflow-y: auto; padding: 20px; }
+        .btn { width: 100%; padding: 16px; border: none; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; border-radius: 8px; margin-bottom: 12px; font-size: 11px; transition: all 0.3s ease; }
+        .btn-glow { box-shadow: 0 0 15px var(--primary); }
+        .card { background: var(--card-bg); border: 1px solid #1a1a1a; padding: 15px; border-radius: 12px; position: relative; overflow: hidden; }
+        .card::after { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--primary); }
+        .card-user::after { background: var(--user); }
+        input, select { width: 100%; padding: 14px; background: #000; border: 1px solid #222; color: #fff; font-family: 'Orbitron'; border-radius: 8px; margin-bottom: 12px; font-size: 12px; }
+        #reader { width: 100%; border-radius: 15px; overflow: hidden; border: 1px solid #333 !important; background: #000; min-height: 220px; margin-bottom: 15px; }
+        #last-read { text-align: center; padding: 15px; background: rgba(0,255,65,0.05); border: 1px solid rgba(0,255,65,0.2); margin-bottom: 15px; border-radius: 8px; font-size: 12px; color: var(--primary); font-weight: bold; }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); display: none; flex-direction: column; justify-content: center; padding: 40px; box-sizing: border-box; z-index: 100; text-align: center; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
+        th { color: #444; text-align: left; padding: 10px; font-size: 8px; }
+        td { padding: 15px 10px; background: #070707; color: #aaa; font-size: 11px; border-top: 1px solid #111; border-bottom: 1px solid #111; }
+        td:first-child { border-radius: 8px 0 0 8px; }
+        td:last-child { border-radius: 0 8px 8px 0; }
     </style>
 </head>
 <body onload="init()">
 
 <div id="scr-login" class="screen active">
-    <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:30px;">
-        <h1 style="font-family:'Orbitron'; color:var(--primary); font-size:28px; margin-bottom:0;">LOG-PRO</h1>
-        <p style="font-size: 9px; color: #444; letter-spacing: 2px; margin-bottom: 30px;">TECNOLOGIA JP DIAS V24</p>
-        <input type="password" id="pass" placeholder="CHAVE DE ACESSO">
-        <button class="btn" style="background:var(--primary);" onclick="auth()">CONECTAR AO SERVIDOR</button>
+    <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:40px;">
+        <h1 style="font-family:'Orbitron'; color:#fff; font-size:32px; margin:0; letter-spacing:5px;">LOG-PRO</h1>
+        <p style="font-size: 8px; color: #666; letter-spacing: 4px; margin-bottom: 40px;">SISTEMA DE GESTÃO | JP DIAS</p>
+        <input type="password" id="pass" placeholder="SENHA DE ACESSO">
+        <button class="btn btn-glow" style="background:var(--primary); color:#000;" onclick="auth()">ENTRAR NO SISTEMA</button>
     </div>
 </div>
 
 <div id="modal-cad" class="modal">
-    <h2 style="font-family:'Orbitron'; color:var(--primary); margin:0;">NOVO SKU!</h2>
-    <p id="txt-cod-novo" style="font-family:monospace; color:#888; font-size: 12px; margin: 10px 0 20px 0;"></p>
-    <label style="font-size: 9px; color: #555;">NOME DO PRODUTO (FANTASIA):</label>
-    <input type="text" id="input-nome-fantasia" placeholder="EX: SUQUINHO OU LEITE">
-    <button class="btn" style="background:var(--primary); color:#000;" onclick="confirmarCadastro()">GRAVAR E BIPAR</button>
-    <button class="btn" style="background:none; color:var(--reversa); border:1px solid var(--reversa);" onclick="fecharModal()">CANCELAR</button>
+    <h2 style="font-family:'Orbitron'; color:var(--primary); font-size: 20px;">CADASTRAR ITEM</h2>
+    <p id="txt-cod-novo" style="font-family:monospace; color:#444; font-size: 10px; margin-bottom: 30px; word-break: break-all;"></p>
+    <input type="text" id="input-nome-fantasia" placeholder="NOME DO PRODUTO">
+    <button class="btn" style="background:var(--primary); color:#000;" onclick="confirmarCadastro()">GRAVAR</button>
+    <button class="btn" style="background:none; color:#444;" onclick="fecharModal()">CANCELAR</button>
 </div>
 
 <div id="scr-shark" class="screen">
-    <header><span>MONITORAMENTO GLOBAL</span> <button onclick="location.reload()" style="background:none; border:none; color:var(--reversa);">SAIR</button></header>
+    <header><span>PAINEL DE CONTROLE</span> <button onclick="location.reload()" style="background:none; border:none; color:var(--reversa); font-family:'Orbitron'; font-size:9px;">SAIR</button></header>
     <div class="scroll">
-        <div id="stats" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px;">
-            <div class="card"><small>ESTOQUE ATUAL</small><br><b id="tot-geral" style="font-size:22px; color:var(--primary)">0</b></div>
-            <div class="card"><small>SKUS ATIVOS</small><br><b id="tot-itens" style="font-size:22px;">0</b></div>
+        <div id="stats" style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px; margin-bottom:25px;">
+            <div class="card"><small style="color:#444; font-size:8px;">ESTOQUE</small><br><b id="tot-geral" style="font-size:18px; color:var(--primary); font-family:'Orbitron';">0</b></div>
+            <div class="card"><small style="color:#444; font-size:8px;">SKUS</small><br><b id="tot-itens" style="font-size:18px; font-family:'Orbitron';">0</b></div>
+            <div class="card card-user"><small style="color:#444; font-size:8px;">ON-LINE</small><br><b id="tot-users" style="font-size:18px; color:var(--user); font-family:'Orbitron';">1</b></div>
         </div>
         <table>
-            <thead><tr><th>ITEM</th><th>SKU ID</th><th>QTD</th><th>OPERAÇÃO</th></tr></thead>
+            <thead><tr><th>PRODUTO</th><th>CÓDIGO</th><th>QTD</th><th>OP</th></tr></thead>
             <tbody id="table-body"></tbody>
         </table>
-        <button class="btn" style="background:var(--reversa); color:#fff; margin-top:30px;" onclick="limparTudo()">REINICIAR TODO O SISTEMA</button>
+        <button class="btn" style="background:#111; color:#444; margin-top:40px; border:1px solid #222;" onclick="limparTudo()">ZERAR BANCO</button>
     </div>
 </div>
 
 <div id="scr-op" class="screen">
-    <header><span>COLETOR DE DADOS</span> <button onclick="ir('scr-login')" style="background:none; border:none; color:#555;">VOLTAR</button></header>
+    <header><span>COLETOR DIGITAL</span> <button onclick="ir('scr-login')" style="background:none; border:none; color:#444; font-family:'Orbitron'; font-size:9px;">VOLTAR</button></header>
     <div class="scroll">
-        <div style="display:grid; grid-template-columns: 2fr 1fr; gap:10px;">
+        <div style="display:grid; grid-template-columns: 2fr 1fr; gap:12px;">
             <select id="sel-mod-op">
-                <option value="IN">RECEBIMENTO (+)</option>
-                <option value="OUT">EXPEDIÇÃO (-)</option>
+                <option value="IN">ENTRADA (+)</option>
+                <option value="OUT">SAÍDA (-)</option>
             </select>
             <input type="number" id="qtd-bipe" value="1" min="1">
         </div>
-        
         <div id="reader"></div>
-        <div id="last-read" style="text-align:center; padding:12px; background:#111; margin:10px 0; border-radius:5px; font-size:11px; color:var(--primary); border: 1px solid #222;">AGUARDANDO LEITURA...</div>
-
-        <button class="btn" style="background:#222; color:#fff;" onclick="startScan()">ACIONAR SCANNER</button>
-        
-        <div id="lote-view" style="background:#0a0a0a; padding:15px; border:1px solid #222; border-radius: 5px;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span style="font-size: 10px;">CARGA EM LOTE:</span> 
-                <b id="lote-count" style="color:var(--primary)">0</b>
+        <div id="last-read">PRONTO PARA LER</div>
+        <button class="btn" style="background:#fff; color:#000;" onclick="startScan()">ABRIR CÂMERA</button>
+        <div id="lote-view" style="background:rgba(255,255,255,0.02); padding:20px; border:1px solid #111; border-radius: 12px; margin-top:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <span style="font-size: 9px; color:#444;">NO LOTE:</span> <b id="lote-count" style="color:var(--primary); font-family:'Orbitron';">0</b>
             </div>
-            <div id="lote-list" style="color:#444; margin:10px 0; height:60px; overflow-y:auto; font-size:10px; font-family:monospace;"></div>
-            <button class="btn" id="btn-env" style="background:var(--primary); color:#000; display:none;" onclick="enviarLote()">SINCRONIZAR COM SHARK</button>
+            <div id="lote-list" style="color:#333; height:50px; overflow-y:auto; font-size:9px;"></div>
+            <button class="btn btn-glow" id="btn-env" style="background:var(--primary); color:#000; display:none; margin-top:10px;" onclick="enviarLote()">SINCRONIZAR</button>
         </div>
     </div>
 </div>
 
 <script>
-    const canal = new BroadcastChannel('logpro_v24_core');
-    let DB_LOGS = JSON.parse(localStorage.getItem('LOG_V24_DATA')) || [];
-    let CADASTRO = JSON.parse(localStorage.getItem('LOG_V24_CAD')) || {};
+    const canal = new BroadcastChannel('logpro_v24_4');
+    let DB_LOGS = JSON.parse(localStorage.getItem('V24_DB')) || [];
+    let CADASTRO = JSON.parse(localStorage.getItem('V24_CAD')) || {};
     let LOTE = [];
     let tempCod = "";
     let scannerObj = null;
+    let onlineUsers = 1; // O painel sempre conta como 1
 
     function auth() {
         const p = document.getElementById('pass').value;
         if(p === "9910") ir('scr-shark');
-        else if(p === "1234") ir('scr-op');
-        else alert("ACESSO NEGADO");
+        else if(p === "1234") {
+            canal.postMessage({ type: 'USER_LOGIN' }); // Avisa o painel que alguém logou
+            ir('scr-op');
+        }
     }
 
     function ir(id) {
@@ -106,116 +111,97 @@
         if(id === 'scr-shark') atualizarPainel();
     }
 
-    function processarScan(cod) {
-        // Lógica de sufixo: Pega os últimos 3 dígitos do código
-        const sufixo = cod.substring(cod.length - 3);
-        tempCod = sufixo;
+    canal.onmessage = (e) => {
+        if(e.data.type === 'SYNC') {
+            DB_LOGS = [...e.data.dados, ...DB_LOGS];
+            localStorage.setItem('V24_DB', JSON.stringify(DB_LOGS));
+            if(document.getElementById('scr-shark').classList.contains('active')) atualizarPainel();
+            beep(1200);
+        }
+        if(e.data.type === 'USER_LOGIN') {
+            onlineUsers++;
+            if(document.getElementById('tot-users')) {
+                document.getElementById('tot-users').innerText = onlineUsers;
+            }
+        }
+    };
 
-        if(!CADASTRO[sufixo]) {
-            document.getElementById('txt-cod-novo').innerText = "CÓDIGO DETECTADO: ..." + sufixo;
+    function processarScan(cod) {
+        tempCod = cod.trim();
+        if(!CADASTRO[tempCod]) {
+            document.getElementById('txt-cod-novo').innerText = tempCod;
             document.getElementById('modal-cad').style.display = 'flex';
-            if(scannerObj) scannerObj.stop();
+            if(scannerObj) scannerObj.pause(true);
         } else {
-            registrarNoLote(sufixo);
+            registrarNoLote(tempCod);
         }
     }
 
     function confirmarCadastro() {
         const nome = document.getElementById('input-nome-fantasia').value.toUpperCase();
         if(!nome) return;
-        
         CADASTRO[tempCod] = nome;
-        localStorage.setItem('LOG_V24_CAD', JSON.stringify(CADASTRO));
+        localStorage.setItem('V24_CAD', JSON.stringify(CADASTRO));
         document.getElementById('modal-cad').style.display = 'none';
         document.getElementById('input-nome-fantasia').value = "";
-        
+        if(scannerObj) scannerObj.resume();
         registrarNoLote(tempCod);
     }
 
-    function fecharModal() { document.getElementById('modal-cad').style.display = 'none'; }
+    function fecharModal() { 
+        document.getElementById('modal-cad').style.display = 'none';
+        if(scannerObj) scannerObj.resume();
+    }
 
-    function registrarNoLote(suf) {
+    function registrarNoLote(cod) {
         const qtd = parseInt(document.getElementById('qtd-bipe').value) || 1;
         const mod = document.getElementById('sel-mod-op').value;
-        
-        LOTE.unshift({ 
-            cod: suf, 
-            nome: CADASTRO[suf], 
-            q: qtd, 
-            m: mod, 
-            h: new Date().toLocaleTimeString() 
-        });
-        
-        document.getElementById('last-read').innerHTML = `LIDO: <b style="color:#fff">${CADASTRO[suf]}</b> (x${qtd})`;
-        document.getElementById('lote-count').innerText = LOTE.length + " ITENS";
-        document.getElementById('lote-list').innerHTML = LOTE.map(i => `[${i.m}] ${i.nome} x${i.q}<br>`).join('');
+        LOTE.unshift({ cod: cod, nome: CADASTRO[cod], q: qtd, m: mod, h: new Date().toLocaleTimeString() });
+        document.getElementById('last-read').innerHTML = `LIDO: <b>${CADASTRO[cod]}</b>`;
+        document.getElementById('lote-count').innerText = LOTE.length;
+        document.getElementById('lote-list').innerHTML = LOTE.map(i => `${i.nome} x${i.q}<br>`).join('');
         document.getElementById('btn-env').style.display = 'block';
-        
         beep(800);
-        if(navigator.vibrate) navigator.vibrate(50);
     }
 
     function enviarLote() {
-        canal.postMessage({ type: 'SYNC_UP', dados: LOTE });
+        canal.postMessage({ type: 'SYNC', dados: LOTE });
         DB_LOGS = [...LOTE, ...DB_LOGS];
-        localStorage.setItem('LOG_V24_DATA', JSON.stringify(DB_LOGS));
+        localStorage.setItem('V24_DB', JSON.stringify(DB_LOGS));
         LOTE = [];
         document.getElementById('lote-count').innerText = "0";
         document.getElementById('lote-list').innerHTML = "";
         document.getElementById('btn-env').style.display = 'none';
-        document.getElementById('last-read').innerText = "LOTE ENVIADO!";
+        alert("SINCRONIZADO!");
     }
-
-    canal.onmessage = (e) => {
-        if(e.data.type === 'SYNC_UP') {
-            DB_LOGS = [...e.data.dados, ...DB_LOGS];
-            localStorage.setItem('LOG_V24_DATA', JSON.stringify(DB_LOGS));
-            atualizarPainel();
-            beep(1200);
-        }
-    };
 
     function atualizarPainel() {
         const body = document.getElementById('table-body');
         if(!body) return;
         let tIn = 0, tOut = 0;
-        
         body.innerHTML = DB_LOGS.map(l => {
             if(l.m === 'IN') tIn += l.q; else tOut += l.q;
-            return `<tr>
-                <td style="color:#fff;"><b>${l.nome}</b></td>
-                <td>...${l.cod}</td>
-                <td style="color:var(--primary)">x${l.q}</td>
-                <td style="font-size:9px; color:${l.m === 'IN' ? 'var(--inbound)' : 'var(--outbound)'}">${l.m === 'IN' ? 'RECEBIDO' : 'EXPEDIDO'}</td>
-            </tr>`;
+            return `<tr><td><b>${l.nome}</b></td><td style="font-size:7px; opacity:0.3;">${l.cod}</td><td style="color:var(--primary)">x${l.q}</td><td>${l.m}</td></tr>`;
         }).join('');
-
         document.getElementById('tot-geral').innerText = tIn - tOut;
         document.getElementById('tot-itens').innerText = Object.keys(CADASTRO).length;
+        document.getElementById('tot-users').innerText = onlineUsers;
     }
 
     function startScan() {
-        scannerObj = new Html5Qrcode("reader");
-        scannerObj.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, (txt) => {
-            processarScan(txt);
-        }).catch(err => alert("ERRO AO ABRIR CÂMERA"));
+        if(!scannerObj) scannerObj = new Html5Qrcode("reader");
+        scannerObj.start({ facingMode: "environment" }, { fps: 20, qrbox: 250 }, (txt) => { processarScan(txt); });
     }
 
-    function limparTudo() { 
-        if(confirm("Deseja apagar todos os cadastros e histórico?")) { 
-            localStorage.clear(); 
-            location.reload(); 
-        } 
-    }
+    function limparTudo() { if(confirm("ZERAR TUDO?")) { localStorage.clear(); location.reload(); } }
 
     function beep(f) {
-        const c = new (window.AudioContext || window.webkitAudioContext)();
-        const o = c.createOscillator(); const g = c.createGain();
-        o.connect(g); g.connect(c.destination); o.frequency.value = f; g.gain.value = 0.1;
+        const c = new AudioContext(); const o = c.createOscillator();
+        o.connect(c.destination); o.frequency.value = f;
         o.start(); o.stop(c.currentTime + 0.1);
     }
 
-    function init() { console.log("JP DIAS LOG-PRO V24 - MASTER LOADED"); }
+    function init() { console.log("JP DIAS V24.4 - MULTIUSER"); }
 </script>
 </body>
 </html>
