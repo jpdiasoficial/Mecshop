@@ -3,140 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LOG-PRO v79.1 | JP TURBO</title>
+    <title>LOG-PRO v85 (BACK TO 73)</title>
     <script src="https://unpkg.com/html5-qrcode"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --p: #00ff41; --bg: #000; --bd: #222; --s: #ffae00; --d: #ff3b30; --sf: #0a0a0a; }
-        * { box-sizing: border-box; font-family: 'Inter', sans-serif; text-transform: uppercase; -webkit-font-smoothing: antialiased; }
-        body { background: var(--bg); color: #fff; margin: 0; font-size: 10px; height: 100vh; overflow: hidden; }
+        :root { --p: #00ff41; --s: #ffae00; --bg: #000; }
+        body { background: var(--bg); color: #fff; font-family: sans-serif; margin: 0; text-transform: uppercase; overflow: hidden; }
         
-        .screen { display: none; position: absolute; width: 100%; height: 100%; flex-direction: column; background: #000; z-index: 10; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .active { display: flex !important; }
+        /* Layout v73: Simples e Funcional */
+        .screen { display: none; height: 100vh; flex-direction: column; }
+        .active { display: flex; }
+        header { padding: 15px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 14px; }
+        .content { flex: 1; overflow-y: auto; padding: 15px; }
 
-        header { padding: 15px; border-bottom: 2px solid var(--bd); display: flex; justify-content: space-between; align-items: center; background: #050505; font-family: 'Orbitron'; }
-        .scroll { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 120px; }
-
-        /* INDICADORES E CARDS */
-        .status-row { display: flex; gap: 10px; padding: 10px; background: #080808; border-bottom: 1px solid #111; font-size: 8px; color: #666; }
-        .on { color: var(--p); text-shadow: 0 0 5px var(--p); }
+        /* Blocos de Dados */
+        .card { background: #0a0a0a; border: 1px solid #222; padding: 12px; border-radius: 5px; margin-bottom: 10px; }
+        .line-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #111; font-size: 12px; }
         
-        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px; }
-        .card { background: var(--sf); padding: 12px; border: 1px solid var(--bd); border-radius: 6px; text-align: center; }
-        .card b { display: block; font-size: 14px; color: var(--p); font-family: 'Orbitron'; }
-
-        /* PICKING DINÂMICO */
-        .pk-box { background: #120e00; border: 1px solid var(--s); border-radius: 8px; padding: 15px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(255,174,0,0.1); }
-        .pk-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #221; align-items: center; }
-        .pk-bar { height: 4px; background: #332; border-radius: 2px; margin-top: 5px; overflow: hidden; }
-        .pk-fill { height: 100%; background: var(--s); transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
-
-        /* TABELAS INDUSTRIAIS */
-        .table-container { border: 1px solid var(--bd); border-radius: 8px; overflow: hidden; background: #050505; margin-top: 10px; }
-        table { width: 100%; border-collapse: collapse; }
-        th { background: #111; color: #555; padding: 12px; text-align: left; font-size: 7px; border-bottom: 1px solid #222; }
-        td { padding: 12px; border-bottom: 1px solid #0a0a0a; font-size: 9px; }
-        
-        /* FORMULÁRIOS */
-        input, select, textarea { width: 100%; padding: 15px; background: #080808; border: 1px solid #333; color: #fff; border-radius: 5px; font-family: 'Orbitron'; margin-bottom: 8px; font-size: 11px; outline: none; transition: 0.3s; }
-        input:focus { border-color: var(--p); box-shadow: 0 0 10px rgba(0,255,65,0.2); }
-        
-        .btn { width: 100%; padding: 18px; border: none; border-radius: 5px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; transition: 0.2s; font-size: 11px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        /* Inputs Estilo Terminal */
+        input, select { width: 100%; padding: 12px; background: #111; border: 1px solid #333; color: var(--p); margin-bottom: 10px; border-radius: 3px; font-weight: bold; }
+        .btn { width: 100%; padding: 15px; border: none; border-radius: 3px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
         .btn-p { background: var(--p); color: #000; }
-        .btn-p:active { transform: scale(0.98); background: #00cc33; }
         .btn-s { background: var(--s); color: #000; }
-        .btn-o { background: transparent; border: 1px solid #444; color: #fff; }
+        
+        /* Auditoria/WMS */
+        table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        th { text-align: left; color: #555; padding: 5px; }
+        td { padding: 8px 5px; border-bottom: 1px solid #111; }
+        .tag { font-size: 9px; padding: 2px 4px; border-radius: 2px; font-weight: bold; }
+        .t-ent { background: #003311; color: var(--p); }
+        .t-sai { background: #331100; color: var(--s); }
 
-        #reader { width: 100%; border-radius: 10px; overflow: hidden; border: 2px solid #222; margin-bottom: 15px; background: #000; min-height: 200px; }
-        .badge { padding: 3px 7px; border-radius: 3px; font-size: 8px; font-weight: bold; }
-        .bg-in { background: #003314; color: var(--p); border: 1px solid var(--p); }
-        .bg-out { background: #331a00; color: var(--s); border: 1px solid var(--s); }
-
-        .f-config { position: fixed; bottom: 25px; right: 25px; width: 60px; height: 60px; border-radius: 50%; background: var(--p); border: none; font-size: 24px; box-shadow: 0 5px 20px rgba(0,255,65,0.4); z-index: 100; cursor: pointer; }
+        #reader { width: 100%; background: #000; border-radius: 5px; }
     </style>
 </head>
 <body onload="init()">
 
 <div id="scr-login" class="screen active" style="justify-content:center; align-items:center;">
-    <div style="text-align:center; width: 85%; max-width: 320px;">
-        <div style="font-family:'Orbitron'; color:var(--p); font-size:45px; letter-spacing:4px; margin-bottom:5px;">LOG-PRO</div>
-        <div style="font-size:8px; color:#444; letter-spacing:4px; margin-bottom:40px;">V79.1 TURBO COMMAND</div>
-        <input type="text" id="user-name" placeholder="IDENTIFICAÇÃO">
-        <input type="password" id="pass" placeholder="CHAVE DE REDE">
-        <button class="btn btn-p" onclick="auth()">ENTRAR AGORA</button>
+    <div style="width:80%; text-align:center;">
+        <h2 style="color:var(--p); letter-spacing:5px;">LOG-PRO</h2>
+        <input type="text" id="user" placeholder="USUÁRIO">
+        <input type="password" id="pass" placeholder="SENHA">
+        <button class="btn btn-p" onclick="auth()">LOG-IN</button>
+    </div>
+</div>
+
+<div id="scr-op" class="screen">
+    <header><span>OP: <span id="n-op"></span></span> <button onclick="logout()">SAIR</button></header>
+    <div class="content">
+        <div class="card">
+            <div style="color:var(--s); font-size:10px; margin-bottom:10px;">ORDENS DE SEPARAÇÃO</div>
+            <div id="list-op"></div>
+        </div>
+        <div id="reader"></div>
+        <button class="btn btn-p" id="b-cam" onclick="toggleCam()" style="margin-top:10px;">LER CÓDIGO</button>
+        <div style="display:flex; gap:5px; margin-top:10px;">
+            <select id="m-op" style="flex:2;"><option value="SAIDA">SAÍDA</option><option value="ENTRADA">ENTRADA</option></select>
+            <input type="number" id="q-op" value="1" style="flex:1; text-align:center;">
+        </div>
     </div>
 </div>
 
 <div id="scr-shark" class="screen">
-    <header><span>GESTOR: SHARK</span> <button onclick="logout()" style="background:none; border:none; color:var(--d); font-size:10px;">SAIR</button></header>
-    <div class="status-row">OPERADORES ATIVOS: <span id="users-on" class="on">...</span></div>
-    
-    <div class="scroll">
-        <div class="stats">
-            <div class="card">SKUs<b id="st-base">0</b></div>
-            <div class="card">PEND<b id="st-pend">0</b></div>
-            <div class="card">FLUXO<b id="st-mov">0</b></div>
+    <header><span>WMS SHARK</span> <button onclick="logout()">SAIR</button></header>
+    <div class="content">
+        <div class="card">
+            <textarea id="inp-list" placeholder="CÓDIGO, QUANTIDADE" style="width:100%; background:#000; color:var(--s); border:1px solid #222; padding:10px;"></textarea>
+            <button class="btn btn-s" onclick="sendOrder()" style="margin-top:5px; padding:10px;">ENVIAR PARA CAMPO</button>
+        </div>
+        
+        <div style="display:flex; gap:5px; margin-bottom:15px;">
+            <button class="btn btn-p" style="padding:10px;" onclick="ir('scr-base')">BASE DE ITENS</button>
+            <button class="btn btn-p" style="padding:10px;" onclick="exportar()">EXPORTAR</button>
         </div>
 
-        <div style="background:#080808; padding:15px; border-radius:8px; border:1px solid #111; margin-bottom:20px;">
-            <h4 style="color:var(--s); font-family:'Orbitron'; margin:0 0 10px 0; font-size:9px;">COMANDO DE SEPARAÇÃO</h4>
-            <textarea id="list-in" placeholder="CODIGO, QUANTIDADE (PULTE LINHA)" style="height:80px;"></textarea>
-            <button class="btn btn-s" onclick="subirLista()">🚀 LANÇAR DEMANDA</button>
-        </div>
-
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:25px;">
-            <button class="btn btn-o" onclick="exportar('print')">📄 ROMANEIO</button>
-            <button class="btn btn-o" onclick="exportar('email')">📧 LOG TURNO</button>
-        </div>
-
-        <input type="text" id="search-inv" placeholder="🔍 FILTRAR ESTOQUE..." onkeyup="filterStock()" style="margin-bottom:10px; border-color:var(--bd);">
-
-        <div class="table-container">
+        <div class="card">
             <table>
-                <thead><tr><th>CÓDIGO</th><th>ITEM</th><th>SALDO</th></tr></thead>
-                <tbody id="stock-body"></tbody>
+                <thead><tr><th>ITEM</th><th>SALDO</th><th>STATUS</th></tr></thead>
+                <tbody id="tb-stock"></tbody>
             </table>
         </div>
 
-        <h4 style="font-family:'Orbitron'; margin-top:30px; font-size:9px; color:#444;">AUDITORIA DE MOVIMENTOS</h4>
-        <div class="table-container">
-            <table>
-                <thead><tr><th>HORA</th><th>OP</th><th>TIPO</th><th>PROD</th><th>QTD</th></tr></thead>
-                <tbody id="audit-body"></tbody>
-            </table>
+        <div style="color:#444; font-size:10px; margin:15px 0 5px 0;">AUDITORIA DE MOVIMENTOS</div>
+        <div class="card">
+            <table id="tb-audit"></table>
         </div>
-    </div>
-    <button class="f-config" onclick="ir('scr-config')">⚙️</button>
-</div>
-
-<div id="scr-op" class="screen">
-    <header><span>OP: <span id="op-name"></span></span> <button onclick="logout()" style="background:none; border:none; color:var(--d);">SAIR</button></header>
-    <div class="scroll">
-        <div class="pk-box">
-            <div style="font-size:9px; color:var(--s); font-family:'Orbitron'; margin-bottom:12px;">📋 PICKING PENDENTE</div>
-            <div id="op-pk-list" style="max-height:150px; overflow-y:auto;">CARREGANDO...</div>
-        </div>
-
-        <div id="reader"></div>
-        <button class="btn btn-p" id="btn-cam" onclick="toggleCam()">📷 SCANNER ON/OFF</button>
-
-        <div style="display:flex; gap:10px; margin-top:15px;">
-            <select id="mod-op" style="flex:2; margin:0;"><option value="SAIDA">SAÍDA (PICKING)</option><option value="ENTRADA">ENTRADA (CARGA)</option></select>
-            <input type="number" id="qtd-q" value="1" style="flex:0.8; margin:0; text-align:center; font-size:16px;">
-        </div>
-
-        <div id="op-log" style="margin-top:20px; font-size:9px; color:#444; border-top:1px solid #111; padding-top:10px; font-style:italic;"></div>
     </div>
 </div>
 
-<div id="scr-config" class="screen">
-    <header><span>CONFIGURAÇÃO</span> <button onclick="ir('scr-shark')">VOLTAR</button></header>
-    <div class="scroll">
-        <h4 style="font-family:'Orbitron'; color:var(--p);">CARGA DE SKUs</h4>
-        <textarea id="imp-area" style="height:300px;" placeholder="001, ITEM EXEMPLO"></textarea>
-        <button class="btn btn-p" onclick="saveBase()">ATUALIZAR BANCO</button>
-        <button class="btn btn-o" onclick="zerarTudo()" style="margin-top:30px; color:var(--d); border-color:var(--d);">ZERAR DADOS LOCAIS</button>
+<div id="scr-base" class="screen">
+    <header><span>CADASTRO MESTRE</span> <button onclick="ir('scr-shark')">VOLTAR</button></header>
+    <div class="content">
+        <textarea id="imp-txt" style="width:100%; height:300px; background:#111; color:var(--p); border:1px solid #333;" placeholder="COD, NOME DO PRODUTO"></textarea>
+        <button class="btn btn-p" onclick="saveBase()" style="margin-top:10px;">SALVAR BASE B18</button>
     </div>
 </div>
 
@@ -144,130 +102,79 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit, setDoc, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    const fbCfg = {
-        apiKey: "AIzaSyDRDhONvvzZmo2csXksqHs6E6vV3MuvLSs",
-        authDomain: "log-pro-jp.firebaseapp.com",
-        projectId: "log-pro-jp",
-        storageBucket: "log-pro-jp.firebasestorage.app",
-        messagingSenderId: "481645607846",
-        appId: "1:481645607846:web:fd55dd943718ad78386d67"
-    };
-
-    const app = initializeApp(fbCfg);
+    const config = { apiKey: "AIzaSyDRDhONvvzZmo2csXksqHs6E6vV3MuvLSs", authDomain: "log-pro-jp.firebaseapp.com", projectId: "log-pro-jp", storageBucket: "log-pro-jp.firebasestorage.app", messagingSenderId: "481645607846", appId: "1:481645607846:web:fd55dd943718ad78386d67" };
+    const app = initializeApp(config);
     const db = getFirestore(app);
-    let BASE = JSON.parse(localStorage.getItem('LP_B')) || {};
-    let MOVS = []; let user = localStorage.getItem('LP_S') || ""; let scan, cam = false;
+    
+    let BASE = JSON.parse(localStorage.getItem('JP_BASE')) || {};
+    let user = localStorage.getItem('JP_USER') || "";
+    let scan, cam = false;
 
-    // --- PULSO DE CONEXÃO ---
-    async function hbeat() { if(user) await setDoc(doc(db, "presenca", user), { u: user, t: serverTimestamp() }); }
-    setInterval(hbeat, 15000);
-    onSnapshot(collection(db, "presenca"), (s) => {
-        let us = []; s.docs.forEach(d => us.push(d.data().u));
-        document.getElementById('users-on').innerHTML = us.join(" • ");
-    });
-
-    // --- MOTOR DE PROCESSAMENTO ---
+    // Monitor de Ordens (Simplificado v73)
     onSnapshot(collection(db, "separacao"), (s) => {
-        let h = ""; let c = 0;
-        s.docs.forEach(d => {
+        let h = ""; s.docs.forEach(d => {
             const p = d.data(); const f = p.qtd_p - p.qtd_f;
-            if(f > 0) {
-                const pc = Math.round((p.qtd_f / p.qtd_p) * 100);
-                h += `<div class="pk-item"><div style="flex:1"><b>${p.nome}</b><div class="pk-bar"><div class="pk-fill" style="width:${pc}%"></div></div></div><span style="color:var(--s); font-weight:bold; margin-left:10px;">FALTAM ${f}</span></div>`;
-                c++;
-            }
+            if(f > 0) h += `<div class="line-item"><span>${p.nome}</span> <b style="color:var(--s)">FALTA ${f}</b></div>`;
         });
-        document.getElementById('op-pk-list').innerHTML = h || "✅ TUDO SEPARADO";
-        document.getElementById('st-pend').innerText = c;
+        document.getElementById('list-op').innerHTML = h || "SEM PENDÊNCIAS";
     });
 
-    onSnapshot(query(collection(db, "logs"), orderBy("data_hora", "desc"), limit(60)), (sn) => {
-        MOVS = sn.docs.map(d => d.data());
-        renderMaster();
+    // Auditoria e Estoque
+    onSnapshot(query(collection(db, "logs"), orderBy("data_hora", "desc"), limit(50)), (sn) => {
+        const logs = sn.docs.map(d => d.data());
+        let sld = {}; Object.keys(BASE).forEach(k => sld[k] = { n: BASE[k], s: 0 });
+        let hA = "";
+        logs.forEach(m => {
+            if(sld[m.c]) m.t === 'ENTRADA' ? sld[m.c].s += m.q : sld[m.c].s -= m.q;
+            hA += `<tr><td>${m.d_s}</td><td>${m.op}</td><td><span class="tag ${m.t==='ENTRADA'?'t-ent':'t-sai'}">${m.t}</span></td><td>${m.n}</td><td>${m.q}</td></tr>`;
+        });
+        document.getElementById('tb-audit').innerHTML = hA;
+        document.getElementById('tb-stock').innerHTML = Object.keys(sld).map(k => `<tr><td>${sld[k].n}</td><td>${sld[k].s}</td><td><span class="tag ${sld[k].s>0?'t-ent':'t-sai'}">${sld[k].s>0?'OK':'OFF'}</span></td></tr>`).join('');
     });
 
-    window.processar = async (cod) => {
-        let c = cod.trim(); const q = parseInt(document.getElementById('qtd-q').value) || 1;
-        const m = document.getElementById('mod-op').value;
-        if(!BASE[c]) { const n = prompt("NOME DO PRODUTO:"); if(n) { BASE[c]=n.toUpperCase(); saveLoc(); } else return; }
+    window.bipe = async (cod) => {
+        let c = cod.trim(); const q = parseInt(document.getElementById('q-op').value) || 1;
+        const m = document.getElementById('m-op').value;
+        if(!BASE[c]) { const n = prompt("NOME:"); if(n) BASE[c]=n.toUpperCase(); else return; }
         
-        const log = { c, n: BASE[c], t: m, q, op: user, data_hora: serverTimestamp(), d_s: new Date().toLocaleTimeString() };
-        await addDoc(collection(db, "logs"), log);
-
+        await addDoc(collection(db, "logs"), { c, n: BASE[c], t: m, q, op: user, data_hora: serverTimestamp(), d_s: new Date().toLocaleTimeString() });
         if(m === "SAIDA") {
             const r = doc(db, "separacao", c); const d = await getDoc(r);
             if(d.exists()) await updateDoc(r, { qtd_f: d.data().qtd_f + q });
         }
-        document.getElementById('op-log').innerHTML = `<div>> ${log.d_s}: ${log.n} (${q})</div>` + document.getElementById('op-log').innerHTML;
+        localStorage.setItem('JP_BASE', JSON.stringify(BASE));
     };
 
-    window.renderMaster = () => {
-        let sld = {}; Object.keys(BASE).forEach(k => sld[k] = { n: BASE[k], s: 0 });
-        let hH = ""; let mH = 0;
-        MOVS.forEach(m => {
-            if(sld[m.c]) m.t === 'ENTRADA' ? sld[m.c].s += m.q : sld[m.c].s -= m.q;
-            hH += `<tr><td>${m.d_s}</td><td>${m.op}</td><td><span class="badge ${m.t==='ENTRADA'?'bg-in':'bg-out'}">${m.t}</span></td><td>${m.n}</td><td>${m.q}</td></tr>`;
-            mH++;
-        });
-        document.getElementById('audit-body').innerHTML = hH;
-        document.getElementById('stock-body').innerHTML = Object.keys(sld).map(k => `<tr><td>${k}</td><td>${sld[k].n}</td><td style="color:var(--p); font-weight:bold;">${sld[k].s}</td></tr>`).join('');
-        document.getElementById('st-base').innerText = Object.keys(BASE).length;
-        document.getElementById('st-mov').innerText = mH;
-    };
-
-    // --- FUNÇÕES DE COMANDO ---
-    window.subirLista = async () => {
-        const lines = document.getElementById('list-in').value.split('\n');
+    window.sendOrder = async () => {
+        const lines = document.getElementById('inp-list').value.split('\n');
         for(let l of lines) {
             const [c, q] = l.split(',');
-            if(c && q) { const cod = c.trim(); await setDoc(doc(db, "separacao", cod), { cod, nome: BASE[cod] || "ITEM "+cod, qtd_p: parseInt(q), qtd_f: 0 }); }
+            if(c && q) await setDoc(doc(db, "separacao", c.trim()), { cod: c.trim(), nome: BASE[c.trim()] || "ITEM "+c, qtd_p: parseInt(q), qtd_f: 0 });
         }
-        document.getElementById('list-in').value = ""; alert("ORDEM ENVIADA!");
-    };
-
-    window.filterStock = () => {
-        let v = document.getElementById('search-inv').value.toUpperCase();
-        let rs = document.getElementById('stock-body').getElementsByTagName('tr');
-        for (let r of rs) { r.style.display = r.innerText.toUpperCase().indexOf(v) > -1 ? "" : "none"; }
-    };
-
-    window.exportar = (t) => {
-        let txt = `LOG-PRO REPORT | ${new Date().toLocaleString()}\n----------------\n`;
-        MOVS.forEach(m => { txt += `${m.d_s} | ${m.op} | ${m.n} | ${m.q}\n`; });
-        if(t==='email') window.location.href = `mailto:?subject=Relatorio&body=${encodeURIComponent(txt)}`;
-        else { let w = window.open(); w.document.write(`<pre>${txt}</pre>`); w.print(); }
+        alert("ENVIADO!"); document.getElementById('inp-list').value = "";
     };
 
     window.auth = () => {
-        const u = document.getElementById('user-name').value.toUpperCase().trim();
+        const u = document.getElementById('user').value.toUpperCase();
         const p = document.getElementById('pass').value;
-        if(((u==="JP"||u==="SHARK") && p==="9910") || (u==="OP" && p==="1234")) { user=u; localStorage.setItem('LP_S', u); location.reload(); }
-        else alert("ACESSO NEGADO");
+        if((u==="JP"||u==="SHARK")&&p==="9910" || (u==="OP"&&p==="1234")) { user=u; localStorage.setItem('JP_USER', u); location.reload(); }
     };
 
     window.toggleCam = async () => {
-        if(!cam) { scan = new Html5Qrcode("reader"); await scan.start({ facingMode: "environment" }, { fps: 24, qrbox: 250 }, (t)=>processar(t)); cam=true; }
+        if(!cam) { scan = new Html5Qrcode("reader"); await scan.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, (t)=>bipe(t)); cam=true; }
         else { await scan.stop(); cam=false; }
     };
 
     window.saveBase = () => {
-        document.getElementById('imp-area').value.split('\n').forEach(l => { const d = l.split(','); if(d[0] && d[1]) BASE[d[0].trim()] = d[1].trim().toUpperCase(); });
-        saveLoc(); alert("BASE SINCRONIZADA!");
+        document.getElementById('imp-txt').value.split('\n').forEach(l => { const d = l.split(','); if(d[0] && d[1]) BASE[d[0].trim()] = d[1].trim().toUpperCase(); });
+        localStorage.setItem('JP_BASE', JSON.stringify(BASE)); alert("BASE ATUALIZADA!");
     };
 
-    const saveLoc = () => localStorage.setItem('LP_B', JSON.stringify(BASE));
     window.ir = (id) => { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); };
     window.logout = () => { localStorage.clear(); location.reload(); };
-    window.zerarTudo = () => { if(confirm("APAGAR TUDO?")) { localStorage.clear(); location.reload(); } };
-    
-    window.init = () => { 
-        if(user) { 
-            ir(user === 'OP' ? 'scr-op' : 'scr-shark'); 
-            document.getElementById('op-name').innerText = user; hbeat(); 
-        } 
-        renderMaster(); 
-    };
+    window.exportar = () => { window.print(); };
+    window.init = () => { if(user) { ir(user === 'OP' ? 'scr-op' : 'scr-shark'); document.getElementById('n-op').innerText = user; } };
 </script>
 </body>
-                </html>
-                
+    </html>
+    
