@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>JP DIAS | LOG-PRO V18.9 LOTE</title>
+    <title>JP DIAS | LOG-PRO V24.0</title>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -13,153 +13,209 @@
         .active { display: flex !important; }
         header { padding: 15px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; background: #050505; font-family: 'Orbitron'; font-size: 10px; }
         .scroll { flex: 1; overflow-y: auto; padding: 15px; }
-        .btn { width: 100%; padding: 15px; border: none; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; border-radius: 5px; margin-bottom: 10px; font-size: 12px; }
-        .kpi-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 15px; }
-        .kpi { background: #080808; border: 1px solid #222; padding: 10px; border-radius: 5px; text-align: center; border-bottom: 2px solid var(--primary); }
-        .kpi b { font-family: 'Orbitron'; color: var(--primary); font-size: 18px; }
-        #reader { width: 100%; border-radius: 10px; overflow: hidden; border: 2px solid var(--primary) !important; margin-bottom: 10px; }
-        .sheet-container { background: #050505; border: 1px solid #222; border-radius: 5px; margin-top: 10px; overflow-x: auto; height: 250px; }
-        table { width: 100%; border-collapse: collapse; font-size: 9px; font-family: monospace; }
-        th { background: #111; color: #555; padding: 10px; text-align: left; position: sticky; top: 0; }
+        .btn { width: 100%; padding: 15px; border: none; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; border-radius: 5px; margin-bottom: 10px; font-size: 11px; transition: 0.3s; }
+        .card { background: #080808; border: 1px solid #222; padding: 12px; border-radius: 5px; margin-bottom: 10px; border-left: 3px solid var(--primary); }
+        input, select { width: 100%; padding: 12px; background: #111; border: 1px solid #333; color: #fff; font-family: 'Orbitron'; border-radius: 5px; margin-bottom: 10px; box-sizing: border-box; }
+        #reader { width: 100%; border-radius: 10px; overflow: hidden; border: 2px solid var(--primary) !important; background: #111; min-height: 200px; }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; flex-direction: column; justify-content: center; padding: 30px; box-sizing: border-box; z-index: 100; }
+        table { width: 100%; border-collapse: collapse; font-size: 10px; }
+        th { color: #555; text-align: left; padding: 10px; border-bottom: 1px solid #222; }
         td { padding: 10px; border-bottom: 1px solid #111; color: #888; }
-        .status-tag { padding: 2px 5px; border-radius: 3px; font-size: 8px; font-weight: bold; color: #000; }
-        /* PREVIA DO LOTE NO CELULAR */
-        #previa-lote { background: #0a0a0a; border: 1px solid #222; padding: 10px; border-radius: 5px; margin-top: 10px; }
     </style>
 </head>
 <body onload="init()">
 
 <div id="scr-login" class="screen active">
     <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:30px;">
-        <h1 style="font-family:'Orbitron'; color:var(--primary); font-size:25px; text-align:center;">JP DIAS PRO</h1>
-        <input type="password" id="pass" placeholder="SENHA" style="width:100%; padding:15px; background:#111; border:1px solid #333; color:#fff; margin-bottom:10px; text-align:center;">
-        <button class="btn" style="background:var(--primary);" onclick="auth()">CONECTAR UNIDADE</button>
+        <h1 style="font-family:'Orbitron'; color:var(--primary); font-size:28px; margin-bottom:0;">LOG-PRO</h1>
+        <p style="font-size: 9px; color: #444; letter-spacing: 2px; margin-bottom: 30px;">TECNOLOGIA JP DIAS V24</p>
+        <input type="password" id="pass" placeholder="CHAVE DE ACESSO">
+        <button class="btn" style="background:var(--primary);" onclick="auth()">CONECTAR AO SERVIDOR</button>
     </div>
 </div>
 
+<div id="modal-cad" class="modal">
+    <h2 style="font-family:'Orbitron'; color:var(--primary); margin:0;">NOVO SKU!</h2>
+    <p id="txt-cod-novo" style="font-family:monospace; color:#888; font-size: 12px; margin: 10px 0 20px 0;"></p>
+    <label style="font-size: 9px; color: #555;">NOME DO PRODUTO (FANTASIA):</label>
+    <input type="text" id="input-nome-fantasia" placeholder="EX: SUQUINHO OU LEITE">
+    <button class="btn" style="background:var(--primary); color:#000;" onclick="confirmarCadastro()">GRAVAR E BIPAR</button>
+    <button class="btn" style="background:none; color:var(--reversa); border:1px solid var(--reversa);" onclick="fecharModal()">CANCELAR</button>
+</div>
+
 <div id="scr-shark" class="screen">
-    <header><span>CENTRAL DE COMANDO (SHARK)</span> <button onclick="location.reload()" style="background:none; border:none; color:var(--reversa);">SAIR</button></header>
+    <header><span>MONITORAMENTO GLOBAL</span> <button onclick="location.reload()" style="background:none; border:none; color:var(--reversa);">SAIR</button></header>
     <div class="scroll">
-        <div class="kpi-grid">
-            <div class="kpi"><small>TOTAL</small><br><b id="tot-geral">0</b></div>
-            <div class="kpi"><small>IN</small><br><b id="tot-in" style="color:var(--inbound)">0</b></div>
-            <div class="kpi"><small>OUT</small><br><b id="tot-out" style="color:var(--outbound)">0</b></div>
+        <div id="stats" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px;">
+            <div class="card"><small>ESTOQUE ATUAL</small><br><b id="tot-geral" style="font-size:22px; color:var(--primary)">0</b></div>
+            <div class="card"><small>SKUS ATIVOS</small><br><b id="tot-itens" style="font-size:22px;">0</b></div>
         </div>
-        <div class="sheet-container">
-            <table id="main-table">
-                <thead><tr><th>HORA</th><th>CÓDIGO</th><th>SETOR</th><th>STATUS</th></tr></thead>
-                <tbody id="table-body"></tbody>
-            </table>
-        </div>
-        <button class="btn" style="background:var(--reversa); color:#fff; margin-top:15px;" onclick="limpar()">LIMPAR TELA</button>
+        <table>
+            <thead><tr><th>ITEM</th><th>SKU ID</th><th>QTD</th><th>OPERAÇÃO</th></tr></thead>
+            <tbody id="table-body"></tbody>
+        </table>
+        <button class="btn" style="background:var(--reversa); color:#fff; margin-top:30px;" onclick="limparTudo()">REINICIAR TODO O SISTEMA</button>
     </div>
 </div>
 
 <div id="scr-op" class="screen">
-    <header><span id="txt-mod">OPERADOR</span> <button onclick="ir('scr-login')" style="background:none; border:none; color:#555;">VOLTAR</button></header>
+    <header><span>COLETOR DE DADOS</span> <button onclick="ir('scr-login')" style="background:none; border:none; color:#555;">VOLTAR</button></header>
     <div class="scroll">
-        <select id="sel-mod-op" style="width:100%; padding:10px; background:#111; color:#fff; border:1px solid #333; margin-bottom:10px;">
-            <option value="INBOUND">SETOR: RECEBIMENTO</option>
-            <option value="OUTBOUND">SETOR: EXPEDIÇÃO</option>
-        </select>
-        <div id="reader"></div>
-        <button class="btn" style="background:#222; color:#fff;" onclick="startScan()">ABRIR CÂMERA</button>
+        <div style="display:grid; grid-template-columns: 2fr 1fr; gap:10px;">
+            <select id="sel-mod-op">
+                <option value="IN">RECEBIMENTO (+)</option>
+                <option value="OUT">EXPEDIÇÃO (-)</option>
+            </select>
+            <input type="number" id="qtd-bipe" value="1" min="1">
+        </div>
         
-        <div id="previa-lote">
-            <div style="display:flex; justify-content:space-between; font-size:10px; margin-bottom:5px;">
-                <span>CARGA ATUAL:</span> <b id="count-lote" style="color:var(--primary)">0 ITENS</b>
+        <div id="reader"></div>
+        <div id="last-read" style="text-align:center; padding:12px; background:#111; margin:10px 0; border-radius:5px; font-size:11px; color:var(--primary); border: 1px solid #222;">AGUARDANDO LEITURA...</div>
+
+        <button class="btn" style="background:#222; color:#fff;" onclick="startScan()">ACIONAR SCANNER</button>
+        
+        <div id="lote-view" style="background:#0a0a0a; padding:15px; border:1px solid #222; border-radius: 5px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size: 10px;">CARGA EM LOTE:</span> 
+                <b id="lote-count" style="color:var(--primary)">0</b>
             </div>
-            <div id="lista-lote" style="height:60px; overflow-y:auto; font-size:9px; color:#444; font-family:monospace; border-bottom:1px solid #222; margin-bottom:10px;"></div>
-            <button class="btn" id="btn-enviar" style="background:var(--primary); color:#000; display:none;" onclick="enviarLoteParaCentral()">ENVIAR LISTA PARA CENTRAL</button>
+            <div id="lote-list" style="color:#444; margin:10px 0; height:60px; overflow-y:auto; font-size:10px; font-family:monospace;"></div>
+            <button class="btn" id="btn-env" style="background:var(--primary); color:#000; display:none;" onclick="enviarLote()">SINCRONIZAR COM SHARK</button>
         </div>
     </div>
 </div>
 
 <script>
-    const canal = new BroadcastChannel('logpro_sync');
-    let DB = { logs: [], in: 0, out: 0 };
-    let LOTE_LOCAL = [];
+    const canal = new BroadcastChannel('logpro_v24_core');
+    let DB_LOGS = JSON.parse(localStorage.getItem('LOG_V24_DATA')) || [];
+    let CADASTRO = JSON.parse(localStorage.getItem('LOG_V24_CAD')) || {};
+    let LOTE = [];
+    let tempCod = "";
+    let scannerObj = null;
 
     function auth() {
         const p = document.getElementById('pass').value;
         if(p === "9910") ir('scr-shark');
         else if(p === "1234") ir('scr-op');
+        else alert("ACESSO NEGADO");
     }
 
     function ir(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
+        if(id === 'scr-shark') atualizarPainel();
     }
-
-    // SINCRONIA: O Shark recebe a lista enviada pelo celular
-    canal.onmessage = (event) => {
-        if(event.data.type === 'LOTE_OK') {
-            const dadosLote = event.data.dados;
-            DB.logs = [...dadosLote, ...DB.logs];
-            DB.in += dadosLote.filter(d => d.m === "INBOUND").length;
-            DB.out += dadosLote.filter(d => d.m === "OUTBOUND").length;
-            atualizarPainel();
-            beep(1200); // Som diferente para chegada de lote
-        }
-    };
 
     function processarScan(cod) {
-        const mod = document.getElementById('sel-mod-op').value;
-        const item = { h: new Date().toLocaleTimeString(), c: cod, m: mod };
-        LOTE_LOCAL.unshift(item);
+        // Lógica de sufixo: Pega os últimos 3 dígitos do código
+        const sufixo = cod.substring(cod.length - 3);
+        tempCod = sufixo;
+
+        if(!CADASTRO[sufixo]) {
+            document.getElementById('txt-cod-novo').innerText = "CÓDIGO DETECTADO: ..." + sufixo;
+            document.getElementById('modal-cad').style.display = 'flex';
+            if(scannerObj) scannerObj.stop();
+        } else {
+            registrarNoLote(sufixo);
+        }
+    }
+
+    function confirmarCadastro() {
+        const nome = document.getElementById('input-nome-fantasia').value.toUpperCase();
+        if(!nome) return;
         
-        // Atualiza a prévia no celular
-        document.getElementById('count-lote').innerText = LOTE_LOCAL.length + " ITENS";
-        document.getElementById('lista-lote').innerHTML = LOTE_LOCAL.map(i => `> ${i.c}<br>`).join('');
-        document.getElementById('btn-enviar').style.display = 'block';
+        CADASTRO[tempCod] = nome;
+        localStorage.setItem('LOG_V24_CAD', JSON.stringify(CADASTRO));
+        document.getElementById('modal-cad').style.display = 'none';
+        document.getElementById('input-nome-fantasia').value = "";
+        
+        registrarNoLote(tempCod);
+    }
+
+    function fecharModal() { document.getElementById('modal-cad').style.display = 'none'; }
+
+    function registrarNoLote(suf) {
+        const qtd = parseInt(document.getElementById('qtd-bipe').value) || 1;
+        const mod = document.getElementById('sel-mod-op').value;
+        
+        LOTE.unshift({ 
+            cod: suf, 
+            nome: CADASTRO[suf], 
+            q: qtd, 
+            m: mod, 
+            h: new Date().toLocaleTimeString() 
+        });
+        
+        document.getElementById('last-read').innerHTML = `LIDO: <b style="color:#fff">${CADASTRO[suf]}</b> (x${qtd})`;
+        document.getElementById('lote-count').innerText = LOTE.length + " ITENS";
+        document.getElementById('lote-list').innerHTML = LOTE.map(i => `[${i.m}] ${i.nome} x${i.q}<br>`).join('');
+        document.getElementById('btn-env').style.display = 'block';
         
         beep(800);
+        if(navigator.vibrate) navigator.vibrate(50);
     }
 
-    function enviarLoteParaCentral() {
-        if(LOTE_LOCAL.length === 0) return;
-        canal.postMessage({ type: 'LOTE_OK', dados: LOTE_LOCAL });
-        alert("LISTA ENVIADA!");
-        LOTE_LOCAL = [];
-        document.getElementById('count-lote').innerText = "0 ITENS";
-        document.getElementById('lista-lote').innerHTML = "";
-        document.getElementById('btn-enviar').style.display = 'none';
+    function enviarLote() {
+        canal.postMessage({ type: 'SYNC_UP', dados: LOTE });
+        DB_LOGS = [...LOTE, ...DB_LOGS];
+        localStorage.setItem('LOG_V24_DATA', JSON.stringify(DB_LOGS));
+        LOTE = [];
+        document.getElementById('lote-count').innerText = "0";
+        document.getElementById('lote-list').innerHTML = "";
+        document.getElementById('btn-env').style.display = 'none';
+        document.getElementById('last-read').innerText = "LOTE ENVIADO!";
     }
 
-    function startScan() {
-        const scanner = new Html5Qrcode("reader");
-        scanner.start({ facingMode: "environment" }, { fps: 10, qrbox: 200 }, (txt) => {
-            processarScan(txt);
-        });
-    }
+    canal.onmessage = (e) => {
+        if(e.data.type === 'SYNC_UP') {
+            DB_LOGS = [...e.data.dados, ...DB_LOGS];
+            localStorage.setItem('LOG_V24_DATA', JSON.stringify(DB_LOGS));
+            atualizarPainel();
+            beep(1200);
+        }
+    };
 
     function atualizarPainel() {
         const body = document.getElementById('table-body');
         if(!body) return;
-        document.getElementById('tot-geral').innerText = DB.logs.length;
-        document.getElementById('tot-in').innerText = DB.in;
-        document.getElementById('tot-out').innerText = DB.out;
-        body.innerHTML = DB.logs.map(l => `
-            <tr>
-                <td>${l.h}</td>
-                <td style="color:#fff;">${l.c}</td>
-                <td><span class="status-tag" style="background:${l.m === 'INBOUND' ? 'var(--inbound)' : 'var(--outbound)'}">${l.m}</span></td>
-                <td style="color:var(--primary)">✓ RECEBIDO</td>
-            </tr>
-        `).join('');
+        let tIn = 0, tOut = 0;
+        
+        body.innerHTML = DB_LOGS.map(l => {
+            if(l.m === 'IN') tIn += l.q; else tOut += l.q;
+            return `<tr>
+                <td style="color:#fff;"><b>${l.nome}</b></td>
+                <td>...${l.cod}</td>
+                <td style="color:var(--primary)">x${l.q}</td>
+                <td style="font-size:9px; color:${l.m === 'IN' ? 'var(--inbound)' : 'var(--outbound)'}">${l.m === 'IN' ? 'RECEBIDO' : 'EXPEDIDO'}</td>
+            </tr>`;
+        }).join('');
+
+        document.getElementById('tot-geral').innerText = tIn - tOut;
+        document.getElementById('tot-itens').innerText = Object.keys(CADASTRO).length;
     }
 
-    function beep(freq) {
-        const ctx = new AudioContext();
-        const osc = ctx.createOscillator();
-        const g = ctx.createGain();
-        osc.connect(g); g.connect(ctx.destination);
-        osc.frequency.value = freq; g.gain.value = 0.1;
-        osc.start(); osc.stop(ctx.currentTime + 0.1);
+    function startScan() {
+        scannerObj = new Html5Qrcode("reader");
+        scannerObj.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, (txt) => {
+            processarScan(txt);
+        }).catch(err => alert("ERRO AO ABRIR CÂMERA"));
     }
 
-    function limpar() { DB = { logs: [], in: 0, out: 0 }; atualizarPainel(); }
-    function init() { console.log("SINCRONIA LOTE ATIVA"); }
+    function limparTudo() { 
+        if(confirm("Deseja apagar todos os cadastros e histórico?")) { 
+            localStorage.clear(); 
+            location.reload(); 
+        } 
+    }
+
+    function beep(f) {
+        const c = new (window.AudioContext || window.webkitAudioContext)();
+        const o = c.createOscillator(); const g = c.createGain();
+        o.connect(g); g.connect(c.destination); o.frequency.value = f; g.gain.value = 0.1;
+        o.start(); o.stop(c.currentTime + 0.1);
+    }
+
+    function init() { console.log("JP DIAS LOG-PRO V24 - MASTER LOADED"); }
 </script>
 </body>
 </html>
