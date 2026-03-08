@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DEMO | LOG-PRO JP DIAS</title>
+    <title>TESTE MOBILE | JP DIAS</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #00ff41; --bg: #000; --inbound: #ffcc00; --outbound: #00ff41; --reversa: #ff3b30; --shark: #0a84ff; }
@@ -11,15 +11,14 @@
         .screen { display: none; position: absolute; width: 100%; height: 100%; flex-direction: column; background: var(--bg); }
         .active { display: flex !important; }
         header { padding: 15px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; background: #050505; font-family: 'Orbitron'; font-size: 10px; }
-        .scroll { flex: 1; overflow-y: auto; padding: 15px; }
-        .btn { width: 100%; padding: 18px; border: none; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; border-radius: 5px; margin-bottom: 10px; }
+        .scroll { flex: 1; overflow-y: auto; padding: 20px; }
+        .btn { width: 100%; padding: 20px; border: none; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; border-radius: 8px; margin-bottom: 15px; font-size: 14px; }
         .btn-main { background: var(--primary); color: #000; }
-        .display { flex: 1; margin: 15px; border: 2px solid var(--primary); border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; background: #050505; }
-        #flash { position: absolute; width: 100%; height: 100%; background: var(--primary); color: #000; display: none; justify-content: center; align-items: center; font-family: 'Orbitron'; font-size: 25px; z-index: 10; border-radius: 18px; }
-        input, select { width: 100%; padding: 14px; background: #111; border: 1px solid #333; color: #fff; font-family: 'Orbitron'; font-size: 10px; border-radius: 5px; margin-bottom: 10px; box-sizing: border-box; }
-        .kpi { background: #080808; border-left: 4px solid var(--primary); padding: 10px; border-radius: 5px; margin-bottom: 10px; border: 1px solid #222; }
-        .kpi b { font-family: 'Orbitron'; color: var(--primary); font-size: 18px; }
-        .status-nuvem { font-size: 9px; margin-top: 10px; color: #555; }
+        .display { flex: 1; margin: 15px; border: 3px solid var(--primary); border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; background: #080808; text-align: center; }
+        #flash { position: absolute; width: 100%; height: 100%; background: var(--primary); color: #000; display: none; justify-content: center; align-items: center; font-family: 'Orbitron'; font-size: 30px; z-index: 100; border-radius: 17px; pointer-events: none; }
+        input, select { width: 100%; padding: 18px; background: #151515; border: 2px solid #333; color: #fff; font-family: 'Orbitron'; font-size: 14px; border-radius: 8px; margin-bottom: 15px; box-sizing: border-box; }
+        .kpi { background: #080808; border-left: 5px solid var(--primary); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #222; }
+        .kpi b { font-family: 'Orbitron'; color: var(--primary); font-size: 22px; }
     </style>
 </head>
 <body onload="boot()">
@@ -28,55 +27,51 @@
 
 <div id="scr-login" class="screen active">
     <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:30px;">
-        <h1 style="font-family:'Orbitron'; color:#151515; font-size:35px; letter-spacing:5px; text-align:center;">JP DIAS<br>LOG-PRO</h1>
-        <p style="font-size:8px; color:#444; margin-bottom:20px;">DEMO V18 - MODO APRESENTAÇÃO</p>
-        <input type="password" id="pass" placeholder="CHAVE (9910 OU 1234)">
-        <button class="btn btn-main" onclick="entrar()">ACESSAR SISTEMA</button>
+        <h1 style="font-family:'Orbitron'; color:var(--primary); font-size:30px; letter-spacing:5px; text-align:center;">JP DIAS<br>LOG-PRO</h1>
+        <p style="font-size:10px; color:#555; margin-bottom:30px;">V18.2 - VERSÃO TESTE MOBILE</p>
+        <input type="number" id="pass" placeholder="SENHA (9910 OU 1234)" pattern="\d*">
+        <button class="btn btn-main" onclick="entrar()">ACESSAR AGORA</button>
     </div>
 </div>
 
 <div id="scr-shark" class="screen">
-    <header><span>SHARK COMMAND</span> <button onclick="location.reload()" style="color:var(--reversa); background:none; border:none;">SAIR</button></header>
+    <header><span>PAINEL DO DONO</span> <button onclick="location.reload()" style="color:var(--reversa); background:none; border:none; font-weight:bold;">SAIR</button></header>
     <div class="scroll">
-        <div class="kpi"><small>PRODUTIVIDADE TOTAL</small><br><b id="shark-total">0</b></div>
-        <div class="kpi" style="border-left-color:var(--shark)"><small>FILA DE SINCRONIA</small><br><b id="shark-queue">0</b></div>
-        <div id="log-feed" style="font-size:9px; color:var(--primary); font-family:monospace; background:#050505; padding:10px; border:1px solid #222; height:150px; overflow-y:auto;">
-            > SISTEMA INICIALIZADO...<br>
-            > AGUARDANDO OPERAÇÃO...
+        <div class="kpi"><small>BIPES TOTAIS</small><br><b id="shark-total">0</b></div>
+        <div class="kpi" style="border-left-color:var(--shark)"><small>FILA DE ENVIO</small><br><b id="shark-queue">0</b></div>
+        <div id="log-feed" style="font-size:11px; color:var(--primary); font-family:monospace; background:#050505; padding:15px; border:1px solid #333; height:200px; overflow-y:auto; border-radius:8px;">
+            > AGUARDANDO BIPE...
         </div>
-        <button class="btn" style="background:var(--shark); color:#fff; margin-top:15px;" onclick="alert('Relatório Gerado com Sucesso!')">BAIXAR RELATÓRIO PDF</button>
     </div>
 </div>
 
 <div id="scr-setup" class="screen">
-    <header><span>OPERADOR: <span id="op-nome">---</span></span></header>
+    <header><span>CONFIGURAR POSTO</span></header>
     <div class="scroll">
-        <label style="font-size:10px; color:var(--primary)">SELECIONE SEU NOME:</label>
-        <select id="sel-operador" onchange="CORE.op = this.value; document.getElementById('op-nome').innerText = this.value;">
-            <option value="JP DIAS">JP DIAS (DEMO)</option>
-            <option value="OPERADOR 01">OPERADOR 01</option>
-            <option value="OPERADOR 02">OPERADOR 02</option>
+        <label style="font-size:11px; color:var(--primary)">OPERADOR:</label>
+        <select id="sel-operador">
+            <option value="JP DIAS">JP DIAS (TESTE)</option>
+            <option value="AUXILIAR 01">AUXILIAR 01</option>
         </select>
-        <label style="font-size:10px; color:var(--primary)">ESTAÇÃO DE TRABALHO:</label>
-        <button class="btn" style="background:var(--inbound)" onclick="abrirModulo('INBOUND', 'var(--inbound)')">RECEBIMENTO (AMARELO)</button>
-        <button class="btn" style="background:var(--outbound)" onclick="abrirModulo('OUTBOUND', 'var(--outbound)')">EXPEDIÇÃO (VERDE)</button>
-        <button class="btn" style="background:var(--reversa); color:#fff" onclick="abrirModulo('REVERSA', 'var(--reversa)')">AVARIA (VERMELHO)</button>
+        <label style="font-size:11px; color:var(--primary); margin-top:10px; display:block;">ESTAÇÃO:</label>
+        <button class="btn" style="background:var(--inbound)" onclick="abrirModulo('INBOUND', 'var(--inbound)')">RECEBIMENTO</button>
+        <button class="btn" style="background:var(--outbound)" onclick="abrirModulo('OUTBOUND', 'var(--outbound)')">EXPEDIÇÃO</button>
+        <button class="btn" style="background:var(--reversa); color:#fff" onclick="abrirModulo('REVERSA', 'var(--reversa)')">AVARIA</button>
     </div>
 </div>
 
 <div id="scr-operacao" class="screen">
-    <header><span id="txt-modulo">OPERANDO</span> <button onclick="ir('scr-setup')" style="color:#555; border:none; background:none;">VOLTAR</button></header>
+    <header><span id="txt-modulo">OPERANDO</span> <button onclick="ir('scr-setup')" style="color:#777; border:none; background:none;">VOLTAR</button></header>
     <div id="area-display" class="display">
-        <h2 id="val-lido" style="font-family:'Orbitron';">PRONTO</h2>
-        <input type="text" id="scan-hidden" style="position:absolute; opacity:0;">
-        <div class="status-nuvem" id="nuvem-status">☁️ NUVEM CONECTADA</div>
+        <h2 id="val-lido" style="font-family:'Orbitron'; font-size:28px;">PRONTO</h2>
+        <p id="txt-status" style="font-size:10px; color:#444;">AGUARDANDO CÓDIGO</p>
     </div>
-    <div style="padding:20px; background:#080808; border-top:1px solid #222;">
+    <div style="padding:20px; background:#0a0a0a; border-top:1px solid #222;">
         <div id="meta-extra" style="display:none;">
-            <input type="text" id="inp-meta" placeholder="PLACA OU ROTA">
+            <input type="text" id="inp-meta" placeholder="PLACA DO CARRO">
         </div>
-        <input type="text" id="manual" placeholder="DIGITE O CÓDIGO">
-        <button id="btn-acao" class="btn btn-main" onclick="registrar(true)">BIPAR AGORA</button>
+        <input type="text" id="manual" placeholder="DIGITE O CÓDIGO AQUI">
+        <button id="btn-acao" class="btn btn-main" onclick="registrar()">BIPAR AGORA</button>
     </div>
 </div>
 
@@ -89,6 +84,7 @@
         const p = document.getElementById('pass').value;
         if(p === "9910") ir('scr-shark');
         else if(p === "1234") ir('scr-setup');
+        else alert("SENHA INCORRETA");
     }
 
     function ir(id) {
@@ -98,36 +94,41 @@
 
     function abrirModulo(m, c) {
         CORE.mod = m; CORE.cor = c;
+        CORE.op = document.getElementById('sel-operador').value;
         document.getElementById('txt-modulo').innerText = m;
         document.getElementById('area-display').style.borderColor = c;
         document.getElementById('val-lido').style.color = c;
         document.getElementById('btn-acao').style.background = c;
         document.getElementById('meta-extra').style.display = (m === 'OUTBOUND') ? 'block' : 'none';
         ir('scr-operacao');
-        focar();
     }
 
-    function registrar(manual) {
-        const inp = manual ? document.getElementById('manual') : document.getElementById('scan-hidden');
-        const val = inp.value.trim().toUpperCase();
+    function registrar() {
+        const input = document.getElementById('manual');
+        let val = input.value.trim().toUpperCase();
         const extra = document.getElementById('inp-meta').value || "N/A";
 
-        if(val && val !== CORE.last) {
-            const entry = { h: new Date().toLocaleTimeString(), c: val, op: CORE.op, m: CORE.mod, ex: extra };
-            CORE.logs.push(entry);
-            CORE.queue.push(entry);
-            CORE.last = val;
-            
-            feedback(() => {
-                document.getElementById('val-lido').innerText = val;
-                inp.value = "";
-                updateUI();
-                addLogFeed(entry);
-                focar();
-                // Simulação de envio
-                setTimeout(() => { if(CORE.queue.length > 0) CORE.queue.shift(); updateUI(); }, 2000);
-            });
-        }
+        if(!val) return;
+        if(val === CORE.last) { alert("ERRO: CÓDIGO DUPLICADO!"); input.value = ""; return; }
+
+        const entry = { h: new Date().toLocaleTimeString(), c: val, op: CORE.op, m: CORE.mod, ex: extra };
+        CORE.logs.push(entry);
+        CORE.queue.push(entry);
+        CORE.last = val;
+        
+        // Feedback visual
+        const f = document.getElementById('flash');
+        f.style.background = CORE.cor; f.style.display = 'flex';
+        
+        setTimeout(() => { 
+            f.style.display = 'none';
+            document.getElementById('val-lido').innerText = val;
+            input.value = "";
+            updateUI();
+            addLogFeed(entry);
+            // Simulação de envio para a nuvem
+            setTimeout(() => { if(CORE.queue.length > 0) CORE.queue.shift(); updateUI(); }, 1500);
+        }, 300);
     }
 
     function updateUI() {
@@ -137,18 +138,8 @@
 
     function addLogFeed(e) {
         const feed = document.getElementById('log-feed');
-        feed.innerHTML += `<br>> [${e.h}] ${e.op} BIPOU ${e.c} EM ${e.m}`;
-        feed.scrollTop = feed.scrollHeight;
+        feed.innerHTML = `> [${e.h}] ${e.op} BIPOU ${e.c}<br>` + feed.innerHTML;
     }
-
-    function feedback(cb) {
-        const f = document.getElementById('flash');
-        f.style.background = CORE.cor; f.style.display = 'flex';
-        setTimeout(() => { f.style.display = 'none'; cb(); }, 300);
-    }
-
-    function focar() { setTimeout(() => document.getElementById('scan-hidden').focus(), 400); }
-    document.addEventListener('click', () => { if(document.getElementById('scr-operacao').classList.contains('active')) focar(); });
 </script>
 </body>
 </html>
