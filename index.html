@@ -13,11 +13,22 @@
         .active { display: flex !important; }
         header { padding: 12px; border-bottom: 1px solid #111; display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron'; background: #050505; }
         .scroll { flex: 1; overflow-y: auto; padding: 10px; padding-bottom: 150px; }
+        
+        /* DASHBOARD CARDS */
+        .stats { display: flex; gap: 10px; padding: 10px; background: #080808; border-bottom: 1px solid #111; }
+        .card { flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 4px; text-align: center; }
+        .card span { display: block; font-size: 14px; color: var(--primary); font-family: 'Orbitron'; }
+        
+        .search-bar { padding: 10px; background: #050505; border-bottom: 1px solid #111; }
+        .search-bar input { margin: 0; padding: 10px; background: #111; border: 1px solid #222; }
+
         h3 { font-family: 'Orbitron'; color: var(--primary); font-size: 10px; margin: 15px 0 8px 0; border-left: 3px solid var(--primary); padding-left: 8px; }
         .table-wrapper { border: 1px solid var(--border); border-radius: 6px; overflow-x: auto; background: #080808; margin-bottom: 20px; }
-        table { width: 100%; border-collapse: collapse; min-width: 500px; }
-        th { background: #111; color: #555; padding: 10px; text-align: left; font-size: 8px; border-bottom: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        th { background: #111; color: #555; padding: 10px; text-align: left; font-size: 8px; border-bottom: 1px solid var(--border); position: sticky; top: 0; }
         td { padding: 8px 10px; border-bottom: 1px solid #151515; white-space: nowrap; }
+        
+        .btn-edit { background: none; border: 1px solid #333; color: var(--primary); padding: 2px 6px; border-radius: 3px; cursor: pointer; font-size: 8px; }
         .btn-green { width: 100%; padding: 18px; background: var(--primary); color: #000; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 4px; cursor: pointer; }
         input, select, textarea { width: 100%; padding: 14px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; font-family: 'Orbitron'; margin-bottom: 10px; box-sizing: border-box; }
         #reader { width: 100%; border-radius: 8px; overflow: hidden; border: 2px solid #222; }
@@ -25,10 +36,9 @@
         @media print {
             body * { visibility: hidden; background: white !important; color: black !important; }
             #print-area, #print-area * { visibility: visible; }
-            #print-area { position: absolute; left: 0; top: 0; width: 100%; padding: 10px; font-family: sans-serif; }
-            table { border: 1px solid #000; width: 100%; border-collapse: collapse; margin-top: 10px; }
-            th, td { border: 1px solid #000; padding: 6px; font-size: 10px; text-align: left; color: black !important; }
-            .print-header { border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 10px; text-align: center; }
+            #print-area { position: absolute; left: 0; top: 0; width: 100%; padding: 10px; }
+            table { border: 1px solid #000; width: 100%; border-collapse: collapse; }
+            th, td { border: 1px solid #000; padding: 6px; font-size: 10px; color: black !important; }
         }
     </style>
 </head>
@@ -38,25 +48,48 @@
 
 <div id="scr-login" class="screen active" style="align-items:center; justify-content:center; text-align:center;">
     <div style="font-family:'Orbitron'; color:var(--primary); font-size:35px;">LOG-PRO</div>
-    <div style="font-size:7px; color:#444; margin-bottom:40px;">SISTEMA JP TECNOLOGIA</div>
+    <div style="font-size:7px; color:#444; margin-bottom:40px;">JP TECNOLOGIA</div>
     <div style="width: 85%; max-width: 320px;">
         <input type="text" id="user-name" placeholder="USUÁRIO">
         <input type="password" id="pass" placeholder="CHAVE">
-        <button class="btn-green" onclick="auth()">ENTRAR</button>
+        <button class="btn-green" onclick="auth()">ACESSAR</button>
     </div>
 </div>
 
 <div id="scr-shark" class="screen">
     <header><span style="color:var(--primary)">MASTER: JP</span> <button onclick="logout()" style="color:var(--out); background:none; border:none; font-size:8px;">SAIR</button></header>
-    <div class="scroll">
-        <h3>AUDITORIA GLOBAL</h3>
-        <div class="table-wrapper"><table><thead><tr><th>HORA</th><th>OP</th><th>ACAO</th><th>ITEM</th><th>QTD</th></tr></thead><tbody id="audit-body"></tbody></table></div>
-        <h3>INVENTARIO GLOBAL</h3>
-        <div class="table-wrapper"><table><thead><tr><th>CODIGO</th><th>PRODUTO</th><th style="background:#002200; color:var(--primary);">SALDO</th><th>ENTRADA</th><th>SEP</th><th>SAIDA</th></tr></thead><tbody id="stock-body"></tbody></table></div>
+    
+    <div class="stats">
+        <div class="card">ITENS <span id="stat-itens">0</span></div>
+        <div class="card">MOVS HOJE <span id="stat-movs">0</span></div>
+        <div class="card">SALDO TOTAL <span id="stat-saldo">0</span></div>
     </div>
+
+    <div class="search-bar">
+        <input type="text" id="main-filter" placeholder="FILTRAR POR NOME OU CODIGO..." oninput="atualizarTabelas()">
+    </div>
+
+    <div class="scroll">
+        <h3>CONTROLE DE INVENTARIO</h3>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>CODIGO</th><th>PRODUTO</th><th>SALDO</th><th>AÇÕES</th></tr></thead>
+                <tbody id="stock-body"></tbody>
+            </table>
+        </div>
+
+        <h3>LOG DE OPERAÇÕES</h3>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>HORA</th><th>OP</th><th>ACAO</th><th>ITEM</th><th>QTD</th></tr></thead>
+                <tbody id="audit-body"></tbody>
+            </table>
+        </div>
+    </div>
+
     <div style="position:fixed; bottom:20px; right:20px; display:flex; flex-direction:column; gap:10px;">
-        <button onclick="prepararImpressao('GLOBAL')" style="width:50px; height:50px; border-radius:50%; background:#fff; border:none; font-size:18px; font-weight:bold;">PRINT</button>
-        <button onclick="ir('scr-config')" style="width:50px; height:50px; border-radius:50%; background:var(--primary); border:none; font-weight:bold;">CONFIG</button>
+        <button onclick="prepararImpressao('GLOBAL')" style="width:50px; height:50px; border-radius:50%; background:#fff; border:none; font-weight:bold;">🖨️</button>
+        <button onclick="ir('scr-config')" style="width:50px; height:50px; border-radius:50%; background:var(--primary); border:none; font-weight:bold;">⚙️</button>
     </div>
 </div>
 
@@ -64,20 +97,12 @@
     <header><span id="display-user">OP: ---</span> <button onclick="logout()" style="color:var(--out); background:none; border:none; font-size:8px;">SAIR</button></header>
     <div class="scroll">
         <div style="display:flex; gap:5px; margin-bottom:10px;">
-            <select id="mod-op" style="flex:2;">
-                <option value="ENTRADA">ENTRADA</option>
-                <option value="SEPARACAO">SEPARACAO</option>
-                <option value="SAIDA">SAIDA</option>
-            </select>
+            <select id="mod-op" style="flex:2;"><option value="ENTRADA">ENTRADA</option><option value="SEPARACAO">SEPARACAO</option><option value="SAIDA">SAIDA</option></select>
             <input type="number" id="qtd-bipe" value="1" style="flex:0.6; text-align:center;">
         </div>
         <div id="reader"></div>
-        <button class="btn-green" id="btn-cam" onclick="toggleCamera()" style="margin:10px 0;">ATIVAR SCANNER V30</button>
-
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <h3>MEUS ÚLTIMOS BIPES</h3>
-            <button onclick="prepararImpressao('OP')" style="background:none; border:1px solid #444; color:#fff; padding:5px 10px; border-radius:4px; font-size:8px; font-weight:bold;">IMPRIMIR LISTA</button>
-        </div>
+        <button class="btn-green" id="btn-cam" onclick="toggleCamera()" style="margin:10px 0;">ATIVAR SCANNER</button>
+        <h3>MEUS ÚLTIMOS BIPES</h3>
         <div class="table-wrapper"><table><thead><tr><th>HORA</th><th>ACAO</th><th>ITEM</th><th>QTD</th></tr></thead><tbody id="op-audit-body"></tbody></table></div>
     </div>
 </div>
@@ -85,14 +110,17 @@
 <div id="scr-config" class="screen">
     <header><span>CONFIGURAÇÕES</span> <button onclick="ir('scr-shark')">VOLTAR</button></header>
     <div class="scroll">
-        <textarea id="op-area" style="height:80px;" placeholder="OPERADORES (NOME, CHAVE)"></textarea>
-        <textarea id="import-area" style="height:250px;" placeholder="PRODUTOS (CODIGO, NOME)"></textarea>
-        <button class="btn-green" onclick="salvarConfig()">SALVAR TUDO</button>
+        <h3>CADASTRO DE OPERADORES</h3>
+        <textarea id="op-area" style="height:80px;" placeholder="NOME, CHAVE"></textarea>
+        <h3>IMPORTAÇÃO EM MASSA (EXCEL)</h3>
+        <textarea id="import-area" style="height:200px;" placeholder="CODIGO, NOME"></textarea>
+        <button class="btn-green" onclick="salvarConfig()">ATUALIZAR SISTEMA</button>
+        <button onclick="resetTotal()" style="margin-top:20px; color:var(--out); background:none; border:none; width:100%; font-size:8px;">LIMPAR TODO O BANCO DE DADOS</button>
     </div>
 </div>
 
 <script>
-    const canal = new BroadcastChannel('logpro_jp_v66');
+    const canal = new BroadcastChannel('logpro_jp_v67');
     let BASE = JSON.parse(localStorage.getItem('LP_BASE')) || {};
     let MOVS = JSON.parse(localStorage.getItem('LP_MOVS')) || [];
     let OPERADORES = JSON.parse(localStorage.getItem('LP_USERS')) || {"JP":"9910", "OP":"1234"};
@@ -114,6 +142,11 @@
         document.getElementById(id).classList.add('active');
         if(id === 'scr-shark') atualizarTabelas();
         if(id === 'scr-config') document.getElementById('op-area').value = Object.entries(OPERADORES).map(([k,v]) => `${k}, ${v}`).join('\n');
+    }
+
+    function renomearItem(cod) {
+        const novoNome = prompt("DIGITE O NOME PARA O CODIGO " + cod, BASE[cod]);
+        if(novoNome) { BASE[cod] = novoNome.toUpperCase(); localStorage.setItem('LP_BASE', JSON.stringify(BASE)); atualizarTabelas(); canal.postMessage('sync'); }
     }
 
     function salvarConfig() {
@@ -140,24 +173,39 @@
     }
 
     function atualizarTabelas() {
-        document.getElementById('audit-body').innerHTML = MOVS.slice(0, 15).map(m => `<tr><td>${m.d.split(' ')[1]}</td><td>${m.u}</td><td>${m.m}</td><td>${m.n}</td><td>${m.q}</td></tr>`).join('');
-        let r = {}; Object.keys(BASE).forEach(k => r[k] = { n: BASE[k], ent:0, sep:0, sai:0, sal:0 });
-        MOVS.forEach(m => { if(r[m.cod]) { if(m.m === 'ENTRADA') { r[m.cod].ent += m.q; r[m.cod].sal += m.q; } else if(m.m === 'SEPARACAO') { r[m.cod].sep += m.q; r[m.cod].sal -= m.q; } else { r[m.cod].sai += m.q; r[m.cod].sal -= m.q; } } });
-        document.getElementById('stock-body').innerHTML = Object.keys(r).map(k => `<tr><td>${k}</td><td><b>${r[k].n}</b></td><td style="color:var(--primary); font-weight:900;">${r[k].sal}</td><td>${r[k].ent}</td><td>${r[k].sep}</td><td>${r[k].sai}</td></tr>`).join('');
+        const filtro = document.getElementById('main-filter').value.toUpperCase();
+        
+        // Audit log
+        const movsFiltradas = MOVS.filter(m => m.n.includes(filtro) || m.cod.includes(filtro) || m.u.includes(filtro));
+        document.getElementById('audit-body').innerHTML = movsFiltradas.slice(0, 20).map(m => `<tr><td>${m.d.split(' ')[1]}</td><td>${m.u}</td><td>${m.m}</td><td>${m.n}</td><td>${m.q}</td></tr>`).join('');
+
+        // Stock and Stats
+        let r = {}; let totalS = 0;
+        Object.keys(BASE).forEach(k => r[k] = { n: BASE[k], sal: 0 });
+        MOVS.forEach(m => { 
+            if(r[m.cod]) { 
+                if(m.m === 'ENTRADA') r[m.cod].sal += m.q; else r[m.cod].sal -= m.q;
+            }
+        });
+
+        const chavesFiltradas = Object.keys(r).filter(k => r[k].n.includes(filtro) || k.includes(filtro));
+        document.getElementById('stock-body').innerHTML = chavesFiltradas.map(k => {
+            totalS += r[k].sal;
+            return `<tr><td>${k}</td><td><b>${r[k].n}</b></td><td style="color:var(--primary);">${r[k].sal}</td><td><button class="btn-edit" onclick="renomearItem('${k}')">EDITAR</button></td></tr>`;
+        }).join('');
+
+        document.getElementById('stat-itens').innerText = Object.keys(BASE).length;
+        document.getElementById('stat-movs').innerText = MOVS.filter(m => m.d.includes(new Date().toLocaleDateString())).length;
+        document.getElementById('stat-saldo').innerText = totalS;
     }
 
     function prepararImpressao(tipo) {
         let lista = tipo === 'OP' ? MOVS.filter(m => m.u === currentUser).slice(0, 15) : MOVS.slice(0, 30);
-        let html = `<div class="print-header">
-                        <h2 style="margin:0;">JP TECNOLOGIA - LOGPRO</h2>
-                        <p style="margin:5px 0; font-size:12px;">RELATORIO DE CONFERENCIA E ENTREGA</p>
-                        <p style="margin:0; font-size:10px;">DATA: ${new Date().toLocaleString()}</p>
-                    </div>`;
-        html += `<table><thead><tr><th>HORA</th><th>OPERADOR</th><th>ACAO</th><th>PRODUTO</th><th>QTD</th></tr></thead><tbody>`;
+        let html = `<div style="text-align:center;"><h2>JP TECNOLOGIA - LOGPRO</h2><p>RELATORIO DE CONFERENCIA - ${new Date().toLocaleString()}</p></div>`;
+        html += `<table><thead><tr><th>HORA</th><th>OP</th><th>ACAO</th><th>ITEM</th><th>QTD</th></tr></thead><tbody>`;
         html += lista.map(m => `<tr><td>${m.d.split(' ')[1]}</td><td>${m.u}</td><td>${m.m}</td><td>${m.n}</td><td>${m.q}</td></tr>`).join('');
-        html += `</tbody></table><br><br><p style="font-size:10px;">ASS. RESPONSÁVEL: __________________________________________________</p>`;
-        document.getElementById('print-area').innerHTML = html;
-        window.print();
+        html += `</tbody></table><br><p>ASSINATURA: __________________________________</p>`;
+        document.getElementById('print-area').innerHTML = html; window.print();
     }
 
     function exportarCSV() {
@@ -165,13 +213,15 @@
         const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([c], {type:'text/csv'})); a.download = 'RELATORIO_JP.csv'; a.click();
     }
 
+    function resetTotal() { if(confirm("CUIDADO: APAGAR TUDO?")) { localStorage.clear(); location.reload(); } }
+
     async function toggleCamera() {
-        if(!camOn) { if(!scanner) scanner = new Html5Qrcode("reader"); await scanner.start({ facingMode: "environment" }, { fps: 26, qrbox: 250 }, (t) => processar(t)); camOn = true; document.getElementById('btn-cam').innerText = "PARAR SCANNER"; }
-        else { await scanner.stop(); camOn = false; document.getElementById('btn-cam').innerText = "ATIVAR SCANNER V30"; }
+        if(!camOn) { if(!scanner) scanner = new Html5Qrcode("reader"); await scanner.start({ facingMode: "environment" }, { fps: 26, qrbox: 250 }, (t) => processar(t)); camOn = true; document.getElementById('btn-cam').innerText = "PARAR"; }
+        else { await scanner.stop(); camOn = false; document.getElementById('btn-cam').innerText = "ATIVAR SCANNER"; }
     }
 
-    canal.onmessage = () => { MOVS = JSON.parse(localStorage.getItem('LP_MOVS')) || []; BASE = JSON.parse(localStorage.getItem('LP_BASE')) || []; if(document.querySelector('#scr-shark.active')) atualizarTabelas(); if(document.querySelector('#scr-op.active')) atualizarOpAudit(); };
-    function init() {}
+    canal.onmessage = () => { MOVS = JSON.parse(localStorage.getItem('LP_MOVS')) || []; BASE = JSON.parse(localStorage.getItem('LP_BASE')) || []; atualizarTabelas(); };
+    function init() { atualizarTabelas(); }
 </script>
 </body>
 </html>
