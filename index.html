@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>JP DIAS | CENTRAL LOG-PRO V18.6</title>
+    <title>JP DIAS | LOG-PRO V18.8 SCAN</title>
+    <script src="https://unpkg.com/html5-qrcode"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #00ff41; --bg: #000; --inbound: #ffcc00; --outbound: #00ff41; --reversa: #ff3b30; }
@@ -17,71 +18,61 @@
         .kpi { background: #080808; border: 1px solid #222; padding: 10px; border-radius: 5px; text-align: center; border-bottom: 2px solid var(--primary); }
         .kpi b { font-family: 'Orbitron'; color: var(--primary); font-size: 18px; }
         
-        /* TABELA INTEGRADA (A PLANILHA DO PAINEL) */
-        .sheet-container { background: #050505; border: 1px solid #222; border-radius: 5px; margin-top: 10px; overflow-x: auto; }
+        /* SCANNER STYLE */
+        #reader { width: 100%; border-radius: 10px; overflow: hidden; border: 2px solid var(--primary) !important; margin-bottom: 10px; }
+        .sheet-container { background: #050505; border: 1px solid #222; border-radius: 5px; margin-top: 10px; overflow-x: auto; height: 250px; }
         table { width: 100%; border-collapse: collapse; font-size: 9px; font-family: monospace; }
-        th { background: #111; color: #555; padding: 10px; text-align: left; border-bottom: 1px solid #222; }
+        th { background: #111; color: #555; padding: 10px; text-align: left; position: sticky; top: 0; }
         td { padding: 10px; border-bottom: 1px solid #111; color: #888; }
-        tr:nth-child(even) { background: #080808; }
         .status-tag { padding: 2px 5px; border-radius: 3px; font-size: 8px; font-weight: bold; color: #000; }
-
-        input, select { width: 100%; padding: 15px; background: #111; border: 1px solid #333; color: #fff; font-family: 'Orbitron'; border-radius: 5px; margin-bottom: 10px; box-sizing: border-box; }
-        #flash { position: absolute; width: 100%; height: 100%; display: none; z-index: 100; pointer-events: none; opacity: 0.8; }
     </style>
 </head>
 <body onload="init()">
 
-<div id="flash"></div>
-
 <div id="scr-login" class="screen active">
     <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:30px;">
-        <h1 style="font-family:'Orbitron'; color:var(--primary); font-size:25px; letter-spacing:4px;">JP DIAS PRO</h1>
-        <input type="password" id="pass" placeholder="CHAVE DE ACESSO">
-        <button class="btn" style="background:var(--primary);" onclick="auth()">ACESSAR UNIDADE</button>
+        <h1 style="font-family:'Orbitron'; color:var(--primary); font-size:25px; text-align:center;">JP DIAS PRO<br><small style="font-size:10px; letter-spacing:3px;">SISTEMA DE LOGÍSTICA</small></h1>
+        <input type="password" id="pass" placeholder="SENHA" style="width:100%; padding:15px; background:#111; border:1px solid #333; color:#fff; margin-bottom:10px; text-align:center;">
+        <button class="btn" style="background:var(--primary);" onclick="auth()">CONECTAR UNIDADE</button>
     </div>
 </div>
 
 <div id="scr-shark" class="screen">
-    <header><span>CENTRAL DE DADOS</span> <button onclick="location.reload()" style="background:none; border:none; color:var(--reversa);">SAIR</button></header>
+    <header><span>CENTRAL DE COMANDO (SHARK)</span> <button onclick="location.reload()" style="background:none; border:none; color:var(--reversa);">SAIR</button></header>
     <div class="scroll">
         <div class="kpi-grid">
             <div class="kpi"><small>TOTAL</small><br><b id="tot-geral">0</b></div>
             <div class="kpi"><small>IN</small><br><b id="tot-in" style="color:var(--inbound)">0</b></div>
             <div class="kpi"><small>OUT</small><br><b id="tot-out" style="color:var(--outbound)">0</b></div>
         </div>
-
-        <button class="btn" style="background:#111; color:var(--primary); border:1px solid var(--primary);" onclick="simularEquipe()">SIMULAR OPERAÇÃO (5 BOTS)</button>
-
         <div class="sheet-container">
-            <header style="border:none; background:#111; padding:8px;"><span>PLANILHA EM TEMPO REAL</span></header>
             <table id="main-table">
-                <thead>
-                    <tr><th>HORA</th><th>CÓDIGO</th><th>SETOR</th><th>OPERADOR</th><th>STATUS</th></tr>
-                </thead>
-                <tbody id="table-body">
-                    </tbody>
+                <thead><tr><th>HORA</th><th>CÓDIGO</th><th>SETOR</th><th>STATUS</th></tr></thead>
+                <tbody id="table-body"></tbody>
             </table>
         </div>
-        <button class="btn" style="background:var(--reversa); color:#fff; margin-top:15px;" onclick="exportar()">FECHAR CARGA E LIMPAR</button>
+        <button class="btn" style="background:var(--reversa); color:#fff; margin-top:15px;" onclick="limpar()">LIMPAR CARGA ATUAL</button>
     </div>
 </div>
 
 <div id="scr-op" class="screen">
-    <header><span id="txt-mod">OPERANDO</span> <button onclick="ir('scr-login')" style="background:none; border:none; color:#555;">SAIR</button></header>
-    <div class="scroll" style="display:flex; flex-direction:column; justify-content:center;">
-        <div id="display-bipe" style="height:150px; border:2px dashed #222; border-radius:15px; display:flex; flex-direction:column; justify-content:center; align-items:center; margin-bottom:20px;">
-            <h2 id="lido-txt" style="font-family:'Orbitron'; font-size:25px; color:#333;">PRONTO</h2>
-        </div>
-        <select id="sel-mod-op">
-            <option value="INBOUND">RECEBIMENTO</option>
-            <option value="OUTBOUND">EXPEDIÇÃO</option>
+    <header><span id="txt-mod">OPERADOR ATIVO</span> <button onclick="ir('scr-login')" style="background:none; border:none; color:#555;">VOLTAR</button></header>
+    <div class="scroll">
+        <select id="sel-mod-op" style="width:100%; padding:10px; background:#111; color:#fff; border:1px solid #333; margin-bottom:10px;">
+            <option value="INBOUND">SETOR: RECEBIMENTO</option>
+            <option value="OUTBOUND">SETOR: EXPEDIÇÃO</option>
         </select>
-        <input type="text" id="inp-bipe" placeholder="DIGITE O CÓDIGO">
-        <button class="btn" id="btn-bipe" style="background:var(--primary); height:80px; font-size:18px;" onclick="bipeManual()">BIPAR AGORA</button>
+        
+        <div id="reader"></div>
+        
+        <div id="status-scan" style="text-align:center; padding:10px; background:#111; border-radius:5px; margin-bottom:10px; color:var(--primary); font-family:'Orbitron'; font-size:12px;">AGUARDANDO CÓDIGO...</div>
+        
+        <button class="btn" style="background:#222; color:#fff;" onclick="startScan()">LIGAR CÂMERA SCANNER</button>
     </div>
 </div>
 
 <script>
+    const canal = new BroadcastChannel('logpro_sync'); // CANAL DE SINCRONIA REAL-TIME
     let DB = { logs: [], in: 0, out: 0 };
 
     function auth() {
@@ -95,63 +86,60 @@
         document.getElementById(id).classList.add('active');
     }
 
-    function bipeManual() {
-        const input = document.getElementById('inp-bipe');
-        const mod = document.getElementById('sel-mod-op').value;
-        if(!input.value) return;
+    // SINCRONIA: Ouve o que o outro dispositivo enviou
+    canal.onmessage = (event) => {
+        processarBipe(event.data.c, event.data.m, "SINCRONIZADO", false);
+    };
 
-        processarBipe(input.value.toUpperCase(), mod, "JP DIAS (VOCÊ)");
-        
-        // Feedback Celular
-        document.getElementById('lido-txt').innerText = input.value.toUpperCase();
-        document.getElementById('lido-txt').style.color = (mod === "INBOUND") ? "var(--inbound)" : "var(--outbound)";
-        input.value = "";
-    }
-
-    function processarBipe(cod, mod, op) {
-        const entry = { h: new Date().toLocaleTimeString(), c: cod, m: mod, o: op };
-        DB.logs.unshift(entry); // Novo no topo
+    function processarBipe(cod, mod, op, enviar = true) {
+        const entry = { h: new Date().toLocaleTimeString(), c: cod, m: mod };
+        DB.logs.unshift(entry);
         if(mod === "INBOUND") DB.in++; else DB.out++;
         
+        if(enviar) canal.postMessage(entry); // ENVIA PARA O OUTRO LADO NA HORA
+        
         atualizarPainel();
+        document.getElementById('status-scan').innerText = "LIDO: " + cod;
+        beep();
+    }
+
+    function startScan() {
+        const html5QrCode = new Html5Qrcode("reader");
+        const config = { fps: 10, qrbox: { width: 250, height: 150 } };
+        
+        html5QrCode.start({ facingMode: "environment" }, config, (decodedText) => {
+            const mod = document.getElementById('sel-mod-op').value;
+            processarBipe(decodedText, mod, "OPERADOR");
+        });
     }
 
     function atualizarPainel() {
+        const body = document.getElementById('table-body');
+        if(!body) return;
         document.getElementById('tot-geral').innerText = DB.logs.length;
         document.getElementById('tot-in').innerText = DB.in;
         document.getElementById('tot-out').innerText = DB.out;
-
-        const body = document.getElementById('table-body');
         body.innerHTML = DB.logs.map(l => `
             <tr>
                 <td>${l.h}</td>
-                <td style="color:#fff; font-weight:bold;">${l.c}</td>
+                <td style="color:#fff;">${l.c}</td>
                 <td><span class="status-tag" style="background:${l.m === 'INBOUND' ? 'var(--inbound)' : 'var(--outbound)'}">${l.m}</span></td>
-                <td>${l.o}</td>
-                <td style="color:var(--primary)">✓ OK</td>
+                <td style="color:var(--primary)">OK</td>
             </tr>
         `).join('');
     }
 
-    function simularEquipe() {
-        let i = 0;
-        const interval = setInterval(() => {
-            const mods = ["INBOUND", "OUTBOUND"];
-            const names = ["OP-01", "OP-05", "GESTOR", "AUX-02"];
-            processarBipe("SIM-"+Math.floor(1000+Math.random()*9000), mods[Math.floor(Math.random()*2)], names[Math.floor(Math.random()*4)]);
-            i++;
-            if(i > 15) clearInterval(interval);
-        }, 800);
+    function beep() {
+        const ctx = new AudioContext();
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.connect(g); g.connect(ctx.destination);
+        osc.frequency.value = 800; g.gain.value = 0.1;
+        osc.start(); osc.stop(ctx.currentTime + 0.1);
     }
 
-    function exportar() {
-        alert("CARGA FECHADA!\nOs dados foram consolidados no relatório interno.");
-        DB = { logs: [], in: 0, out: 0 };
-        atualizarPainel();
-    }
-
-    function init() { console.log("LOG-PRO INTEGRADO V18.6"); }
+    function limpar() { DB = { logs: [], in: 0, out: 0 }; atualizarPainel(); }
+    function init() { console.log("JP DIAS V18.8 - SINCRONIA ATIVA"); }
 </script>
 </body>
-            </html>
-            
+</html>
