@@ -3,41 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>JP DIAS LOGÍSTICA | V4000</title>
+    <title>SISTEMA JP DIAS | V5000</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #00ff41; --bg: #000; --red: #ff3b30; --blue: #0a84ff; --gold: #ff9f0a; --gray: #0d0d0d; }
+        :root { --primary: #00ff41; --bg: #000; --red: #ff3b30; --blue: #0a84ff; --gray: #0d0d0d; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; height: 100vh; text-transform: uppercase; }
         .screen { display: none; position: absolute; width: 100%; height: 100%; flex-direction: column; box-sizing: border-box; }
         .active { display: flex !important; }
 
-        /* HEADER & TABS GESTOR */
-        header { padding: 15px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; background: #050505; }
-        .admin-tabs { display: flex; background: #080808; border-bottom: 1px solid #222; overflow-x: auto; }
-        .tab { flex: 1; padding: 12px; text-align: center; font-size: 8px; font-family: 'Orbitron'; color: #444; cursor: pointer; white-space: nowrap; }
-        .tab.active-tab { color: var(--primary); border-bottom: 2px solid var(--primary); background: #0d0d0d; }
+        /* HEADER */
+        header { padding: 15px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; background: #050505; font-family: 'Orbitron'; font-size: 10px; }
+        
+        /* FORMULÁRIO DE CADASTRO COMPLETO */
+        .form-container { padding: 20px; overflow-y: auto; flex: 1; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 8px; color: #555; margin-bottom: 5px; letter-spacing: 1px; }
+        input, select { width: 100%; padding: 15px; background: #080808; border: 1px solid #222; color: #fff; border-radius: 5px; font-family: 'Orbitron'; font-size: 10px; outline: none; box-sizing: border-box; }
+        input:focus { border-color: var(--primary); }
+        .btn-save { width: 100%; padding: 20px; background: var(--primary); color: #000; border: none; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; border-radius: 5px; margin-top: 10px; }
 
-        /* CARDS E GRID */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; flex: 1; }
-        .card { background: #0d0d0d; border: 1px solid #222; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; cursor: pointer; transition: 0.2s; }
-        .card:active { background: #151515; border-color: var(--primary); }
-        .card b { font-size: 10px; color: var(--primary); margin-bottom: 5px; }
+        /* BOTÕES DE MÓDULO SEPARADOS */
+        .btn-modulo { width: 100%; padding: 30px; margin-bottom: 10px; border: 1px solid #222; background: #0d0d0d; color: #fff; font-family: 'Orbitron'; font-size: 12px; cursor: pointer; border-radius: 10px; text-align: left; position: relative; }
+        .btn-modulo span { color: var(--primary); display: block; font-size: 8px; margin-bottom: 5px; }
+        .btn-modulo:active { border-color: var(--primary); background: #151515; }
 
-        /* DASHBOARD INTELIGENTE */
-        .dash-content { flex: 1; padding: 15px; overflow-y: auto; display: none; }
-        .active-area { display: block; }
-        .kpi-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-        .kpi-card { background: #080808; border-left: 3px solid var(--primary); padding: 12px; border-radius: 4px; }
-        .kpi-card small { font-size: 7px; color: #555; display: block; }
-        .kpi-card span { font-family: 'Orbitron'; font-size: 14px; color: #fff; }
-
-        /* TELA DE OPERAÇÃO */
-        .op-display { flex: 1; border: 2px solid var(--primary); border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 20px; text-align: center; position: relative; overflow: hidden; }
-        #flash { position: absolute; top:0; left:0; width:100%; height:100%; background: var(--primary); color:#000; display:none; justify-content:center; align-items:center; font-family:'Orbitron'; font-size:25px; z-index:10; }
-        input { width: 100%; max-width: 320px; padding: 18px; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; font-family: 'Orbitron'; text-align: center; margin-bottom: 12px; outline: none; }
-
-        /* ROTA INTELIGENTE */
-        .rota-item { background: #080808; border: 1px solid #1a1a1a; padding: 10px; margin-bottom: 5px; border-radius: 5px; font-size: 10px; display: flex; justify-content: space-between; }
+        /* ÁREA DE OPERAÇÃO */
+        .op-box { flex: 1; margin: 20px; border: 2px solid var(--primary); border-radius: 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        #flash { position: fixed; top:0; left:0; width:100%; height:100%; background: var(--primary); color:#000; display:none; justify-content:center; align-items:center; z-index:100; font-family:'Orbitron'; font-size:30px; }
     </style>
 </head>
 <body>
@@ -46,79 +38,98 @@
 
 <div id="scr-login" class="screen active">
     <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:20px;">
-        <h1 style="font-family:'Orbitron'; color:#111; font-size:35px; letter-spacing:10px;">JP DIAS</h1>
-        <input type="password" id="pass" placeholder="SENHA ACESSO">
-        <button onclick="autenticar()" style="width:100%; max-width:320px; padding:20px; background:var(--primary); color:#000; border:none; border-radius:10px; font-family:'Orbitron'; font-weight:900; cursor:pointer;">ACESSAR SISTEMA</button>
+        <h1 style="font-family:'Orbitron'; color:#151515; font-size:35px; letter-spacing:10px;">JP DIAS</h1>
+        <input type="password" id="pass" placeholder="SENHA MASTER">
+        <button class="btn-save" onclick="autenticar()">ENTRAR NO PAINEL</button>
     </div>
-</div>
-
-<div id="scr-hub" class="screen">
-    <header><span style="font-family:'Orbitron'; color:var(--primary);">SELECIONE O MÓDULO</span></header>
-    <div class="grid">
-        <div class="card" onclick="abrirModulo('ARMAZÉM')"><b>📦</b><span>ARMAZÉM</span></div>
-        <div class="card" onclick="abrirModulo('CROSSDOCK')"><b>⚡</b><span>CROSSDOCK</span></div>
-        <div class="card" onclick="abrirModulo('MOTORISTA')" style="grid-column: span 2; border-color: var(--blue);"><b>🚚</b><span>ROTA INTELIGENTE</span></div>
-    </div>
-    <button onclick="location.reload()" style="background:#111; color:var(--red); padding:15px; border:none; font-family:'Orbitron'; font-size:9px;">ENCERRAR TURNO</button>
 </div>
 
 <div id="scr-gestor" class="screen">
-    <header>
-        <span style="font-family:'Orbitron'; color:var(--primary); font-size:10px;">MASTER DASHBOARD</span>
-        <button onclick="location.reload()" style="background:none; border:1px solid var(--red); color:var(--red); font-size:7px; padding:4px;">LOGOUT</button>
-    </header>
-    <div class="admin-tabs">
-        <div class="tab active-tab" onclick="switchTab('analytics', this)">DADOS</div>
-        <div class="tab" onclick="switchTab('equipe', this)">EQUIPE</div>
-        <div class="tab" onclick="switchTab('frota', this)">FROTA</div>
+    <header><span>GESTOR MASTER</span> <button onclick="location.reload()" style="background:none; border:none; color:var(--red);">SAIR</button></header>
+    
+    <div style="display: flex; background: #080808; border-bottom: 1px solid #222;">
+        <div style="flex:1; padding:15px; text-align:center; color:var(--primary); border-bottom: 2px solid var(--primary); font-size:9px; font-family:'Orbitron';">CADASTRO DE FUNCIONÁRIO</div>
     </div>
 
-    <div id="area-analytics" class="dash-content active-area">
-        <div class="kpi-row">
-            <div class="kpi-card"><small>GIRO CROSSDOCK</small><span>42 min</span></div>
-            <div class="kpi-card" style="border-color:var(--blue)"><small>PRODUTIVIDADE</small><span>142 b/h</span></div>
+    <div class="form-container">
+        <div class="form-group">
+            <label>NOME COMPLETO DO COLABORADOR</label>
+            <input type="text" id="reg-nome" placeholder="NOME DO FUNCIONÁRIO">
         </div>
-        <div class="card" style="text-align:left; align-items:start; padding:15px; background:#080808; border-left:3px solid var(--red);">
-            <b style="color:var(--red)">⚠️ ALERTAS DE GARGALO</b>
-            <span style="font-size:9px; color:#555;">BOX A-12: 15 ITENS PARADOS HÁ +2H</span>
+        <div class="form-group">
+            <label>ID / MATRÍCULA OPERACIONAL</label>
+            <input type="number" id="reg-id" placeholder="EX: 1010">
         </div>
-    </div>
-
-    <div id="area-equipe" class="dash-content">
-        <input type="text" id="new-user" placeholder="NOME DO FUNCIONÁRIO" style="text-align:left; font-size:10px;">
-        <select id="new-access" style="width:100%; padding:15px; background:#000; color:#fff; border:1px solid #333; font-family:'Orbitron'; font-size:10px; margin-bottom:10px;">
-            <option value="Armazém">ACESSO: ARMAZÉM</option>
-            <option value="Crossdock">ACESSO: CROSSDOCK</option>
-            <option value="Motorista">ACESSO: MOTORISTA</option>
-            <option value="Full">ACESSO: TOTAL</option>
-        </select>
-        <button onclick="addFunc()" style="width:100%; padding:15px; background:var(--primary); color:#000; border:none; font-family:'Orbitron'; font-weight:900;">ATIVAR FUNCIONÁRIO</button>
-        <div id="user-list-admin" style="margin-top:20px;"></div>
+        <div class="form-group">
+            <label>FUNÇÃO ESPECÍFICA</label>
+            <select id="reg-funcao">
+                <option value="conferente">CONFERENTE</option>
+                <option value="separador">SEPARADOR</option>
+                <option value="motorista">MOTORISTA</option>
+                <option value="auxiliar">AUXILIAR DE CARGA</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>ATRIBUIÇÃO DE MÓDULO (ACESSO)</label>
+            <select id="reg-modulo">
+                <option value="armazem">EXCLUSIVO: ARMAZÉM</option>
+                <option value="crossdock">EXCLUSIVO: CROSSDOCK</option>
+                <option value="full">ACESSO TOTAL (MASTER)</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>TURNO DE TRABALHO</label>
+            <select id="reg-turno">
+                <option value="manha">MANHÃ (06H - 14H)</option>
+                <option value="tarde">TARDE (14H - 22H)</option>
+                <option value="noite">NOITE (22H - 06H)</option>
+            </select>
+        </div>
+        <button class="btn-save" onclick="salvarCadastro()">CRIAR PAINEL DO FUNCIONÁRIO</button>
+        
+        <div id="status-msg" style="margin-top:15px; font-size:9px; color:var(--primary); text-align:center;"></div>
     </div>
 </div>
 
-<div id="scr-op" class="screen">
-    <header><span id="op-title" style="font-family:'Orbitron';">FUNÇÃO</span></header>
-    <div class="op-display">
-        <h2 id="op-main" style="font-family:'Orbitron';">PRONTO</h2>
-        <p id="op-sub" style="font-size:9px; color:#444;">AGUARDANDO BIPAGEM</p>
+<div id="scr-modulos" class="screen">
+    <header><span>MÓDULOS DE OPERAÇÃO</span></header>
+    <div style="padding:15px;">
+        <button class="btn-modulo" onclick="abrirExec('ARMAZÉM')">
+            <span>FLUXO DE ESTOQUE FIXO</span>
+            MÓDULO ARMAZÉM
+        </button>
+        <button class="btn-modulo" onclick="abrirExec('CROSSDOCK')" style="border-left: 4px solid var(--blue);">
+            <span>FLUXO DE GIRO RÁPIDO</span>
+            MÓDULO CROSSDOCK
+        </button>
+        <button class="btn-modulo" onclick="abrirExec('MOTORISTA')" style="border-left: 4px solid var(--gold);">
+            <span>ROTA INTELIGENTE</span>
+            MÓDULO MOTORISTA
+        </button>
+    </div>
+</div>
+
+<div id="scr-exec" class="screen">
+    <header><span id="exec-title">---</span></header>
+    <div class="op-box">
+        <h2 id="exec-main" style="font-family:'Orbitron';">PRONTO</h2>
+        <p id="exec-sub" style="font-size:10px; color:#444;">AGUARDANDO BIPAGEM</p>
     </div>
     <div style="padding:20px; background:#080808;">
-        <input type="text" id="op-input" placeholder="BIPE OU INSIRA MANUAL">
-        <button class="btn-primary" onclick="processarBipe()" style="width:100%; border-radius:5px;">CONFIRMAR LIBERAÇÃO</button>
+        <input type="text" id="scanner-in" placeholder="BIPE OU DIGITE">
+        <button class="btn-save" onclick="confirmarAcao()">CONFIRMAR ENTRADA</button>
+        <button onclick="show('scr-modulos')" style="width:100%; background:none; border:none; color:#555; font-size:9px; margin-top:15px; font-family:'Orbitron';">VOLTAR AOS MÓDULOS</button>
     </div>
-    <button onclick="show('scr-hub')" style="background:#111; color:#fff; border:none; padding:15px; font-family:'Orbitron'; font-size:9px;">VOLTAR</button>
 </div>
 
 <script>
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    let currentMod = "";
 
     function bip() {
         const osc = audioCtx.createOscillator(); const g = audioCtx.createGain();
         osc.connect(g); g.connect(audioCtx.destination);
-        osc.type = 'square'; osc.frequency.value = 1250;
-        g.gain.value = 0.1; osc.start(); osc.stop(audioCtx.currentTime + 0.12);
+        osc.type = 'square'; osc.frequency.value = 1300;
+        g.gain.value = 0.1; osc.start(); osc.stop(audioCtx.currentTime + 0.1);
     }
 
     function falar(t) {
@@ -128,9 +139,9 @@
 
     function autenticar() {
         const p = document.getElementById('pass').value;
-        if(p === "9910") { show('scr-gestor'); falar("Gestor logado. Inteligência de dados ativa."); }
-        else if(p === "1234") { show('scr-hub'); falar("Operador logado. Selecione o módulo."); }
-        else { alert("ACESSO NEGADO"); }
+        if(p === "9910") show('scr-gestor');
+        else if(p === "1234") show('scr-modulos');
+        else alert("ACESSO NEGADO");
     }
 
     function show(id) {
@@ -138,53 +149,41 @@
         document.getElementById(id).classList.add('active');
     }
 
-    function abrirModulo(nome) {
-        currentMod = nome;
-        show('scr-op');
-        document.getElementById('op-title').innerText = nome;
-        document.getElementById('op-input').focus();
-        falar("Iniciando " + nome);
+    function salvarCadastro() {
+        const nome = document.getElementById('reg-nome').value;
+        const modulo = document.getElementById('reg-modulo').value;
+        if(nome) {
+            document.getElementById('status-msg').innerText = `PAINEL CRIADO: ${nome.toUpperCase()} ATRIBUÍDO AO ${modulo.toUpperCase()}`;
+            falar("Cadastro realizado com sucesso.");
+            setTimeout(() => document.getElementById('status-msg').innerText = "", 3000);
+        }
     }
 
-    function processarBipe() {
-        const val = document.getElementById('op-input').value;
+    function abrirExec(nome) {
+        show('scr-exec');
+        document.getElementById('exec-title').innerText = nome;
+        document.getElementById('scanner-in').focus();
+        falar("Iniciando módulo " + nome);
+    }
+
+    function confirmarAcao() {
+        const val = document.getElementById('scanner-in').value;
         if(val) {
             bip();
             const flash = document.getElementById('flash');
             flash.style.display = 'flex';
             setTimeout(() => {
                 flash.style.display = 'none';
-                document.getElementById('op-main').innerText = "OK: " + val;
+                document.getElementById('exec-main').innerText = "OK: " + val;
                 falar("Confirmado " + val);
-                document.getElementById('op-input').value = "";
-                document.getElementById('op-input').focus();
+                document.getElementById('scanner-in').value = "";
+                document.getElementById('scanner-in').focus();
             }, 600);
         }
     }
 
-    function switchTab(areaId, tabEl) {
-        document.querySelectorAll('.dash-content').forEach(a => a.classList.remove('active-area'));
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active-tab'));
-        document.getElementById('area-' + areaId).classList.add('active-area');
-        tabEl.classList.add('active-tab');
-    }
-
-    function addFunc() {
-        const nome = document.getElementById('new-user').value;
-        const acesso = document.getElementById('new-access').value;
-        if(nome) {
-            const list = document.getElementById('user-list-admin');
-            const row = document.createElement('div');
-            row.className = 'rota-item';
-            row.innerHTML = `<span>${nome.toUpperCase()}</span> <span style="color:var(--primary)">${acesso.toUpperCase()}</span>`;
-            list.prepend(row);
-            document.getElementById('new-user').value = "";
-            falar("Funcionário " + nome + " cadastrado.");
-        }
-    }
-
-    document.getElementById('op-input')?.addEventListener('keypress', (e) => {
-        if(e.key === 'Enter') processarBipe();
+    document.getElementById('scanner-in')?.addEventListener('keypress', (e) => {
+        if(e.key === 'Enter') confirmarAcao();
     });
 </script>
 </body>
