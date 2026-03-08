@@ -3,36 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SISTEMA JP DIAS</title>
+    <title>JP DIAS LOGÍSTICA</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #00ff41; --bg: #000; --blue: #0a84ff; --red: #ff3b30; --gold: #ff9f0a; --gray: #0d0d0d; }
+        :root { --primary: #00ff41; --bg: #000; --red: #ff3b30; --gray: #0d0d0d; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; height: 100vh; text-transform: uppercase; }
         
-        /* ESTILO EXATO DA IMAGEM */
         .screen { display: none; position: absolute; width: 100%; height: 100%; flex-direction: column; box-sizing: border-box; }
         .active { display: flex !important; }
         
+        /* LOGIN ESTILO MECSHOP */
         .login-container { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
-        .login-box { background: #080808; border: 1px solid #1a1a1a; border-radius: 12px; padding: 30px 20px; width: 100%; max-width: 320px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .login-box { background: #080808; border: 1px solid #1a1a1a; border-radius: 12px; padding: 30px 20px; width: 100%; max-width: 320px; }
+        h1.logo { font-family: 'Orbitron'; color: #151515; letter-spacing: 10px; margin-bottom: 30px; font-size: 32px; font-weight: 900; }
         
-        h1.logo { font-family: 'Orbitron'; color: #222; letter-spacing: 8px; margin-bottom: 30px; font-size: 28px; }
-        
-        .input-group { position: relative; margin-bottom: 12px; }
-        input { width: 100%; padding: 18px; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; font-family: 'Orbitron'; text-align: center; box-sizing: border-box; font-size: 13px; outline: none; transition: 0.3s; }
+        input { width: 100%; padding: 18px; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; font-family: 'Orbitron'; text-align: center; box-sizing: border-box; font-size: 13px; margin-bottom: 12px; outline: none; }
         input:focus { border-color: var(--primary); }
-        
-        .btn-entrar { width: 100%; padding: 18px; background: var(--primary); color: #000; border: none; border-radius: 8px; font-family: 'Orbitron'; font-weight: 900; font-size: 14px; cursor: pointer; margin-top: 10px; transition: 0.2s; }
-        .btn-entrar:active { transform: scale(0.98); opacity: 0.8; }
+        .btn-entrar { width: 100%; padding: 18px; background: var(--primary); color: #000; border: none; border-radius: 8px; font-family: 'Orbitron'; font-weight: 900; font-size: 14px; cursor: pointer; }
 
-        /* INTERFACES INTERNAS */
         header { padding: 15px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; background: #050505; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; flex: 1; overflow-y: auto; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; flex: 1; }
         .card { background: #0d0d0d; border: 1px solid #222; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; cursor: pointer; }
-        .card:active { background: var(--primary); color: #000; }
-        
-        .dash-wide { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; padding: 15px; }
-        .panel { background: #080808; border-left: 4px solid var(--primary); padding: 15px; border-radius: 5px; }
+        .card:active { background: #151515; }
+
+        /* TELA EXECUÇÃO */
+        .op-display { flex: 1; border: 2px solid var(--primary); border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 20px; text-align: center; }
+        .history { height: 60px; overflow-y: auto; font-size: 8px; color: #444; padding: 10px; border-top: 1px solid #111; text-align: center; }
     </style>
 </head>
 <body>
@@ -41,49 +37,52 @@
     <div class="login-container">
         <h1 class="logo">JP DIAS</h1>
         <div class="login-box">
-            <div class="input-group">
-                <input type="text" id="user" placeholder="USUÁRIO / MOTORISTA">
-            </div>
-            <div class="input-group">
-                <input type="password" id="pass" placeholder="SENHA">
-            </div>
-            <button class="btn-entrar" onclick="autenticar()">ENTRAR</button>
+            <input type="password" id="pass" placeholder="SENHA">
+            <button class="btn-entrar" onclick="autenticar()">INICIAR</button>
         </div>
     </div>
 </div>
 
-<div id="scr-gestor" class="screen">
+<div id="scr-lobby" class="screen">
     <header>
-        <span style="font-family:'Orbitron'; color:var(--primary); font-size:12px;">PAINEL GERAL GESTÃO</span>
-        <button onclick="location.reload()" style="background:none; border:1px solid var(--red); color:var(--red); font-size:8px; padding:5px; border-radius:4px;">SAIR</button>
+        <span style="font-family:'Orbitron'; color:var(--primary); font-size:12px;">HUB OPERACIONAL</span>
+        <button onclick="location.reload()" style="background:none; border:1px solid var(--red); color:var(--red); font-size:8px; padding:4px;">SAIR</button>
     </header>
-    <div class="dash-wide">
-        <div class="panel"><b>ESTOQUE</b><br><small>14 ITENS PENDENTES</small></div>
-        <div class="panel" style="border-color:var(--blue)"><b>MOTORISTAS</b><br><small>08 EM ROTA</small></div>
-        <div class="panel" style="border-color:var(--red)"><b>AVARIAS</b><br><small>02 REGISTRADAS</small></div>
+    <div class="grid">
+        <div class="card" onclick="abrirOp('RECEBIMENTO')"><span>RECEBER</span></div>
+        <div class="card" onclick="abrirOp('SEPARAÇÃO (VOZ)')"><span>SEPARAR</span></div>
+        <div class="card" onclick="abrirOp('CONFERÊNCIA')"><span>CONFERIR</span></div>
+        <div class="card" onclick="abrirOp('AVARIA')"><span>AVARIA</span></div>
     </div>
 </div>
 
-<div id="scr-operador" class="screen">
-    <header>
-        <span style="font-family:'Orbitron'; color:var(--primary); font-size:12px;">OPERAÇÃO E LIBERAÇÃO</span>
-        <button onclick="location.reload()" style="background:none; border:1px solid var(--red); color:var(--red); font-size:8px; padding:5px; border-radius:4px;">SAIR</button>
-    </header>
-    <div class="grid">
-        <div class="card" onclick="falar('Recebimento ativo')"><i>IN</i><span>RECEBER</span></div>
-        <div class="card" onclick="falar('Iniciando separação por voz')"><i>VOZ</i><span>SEPARAR</span></div>
-        <div class="card" onclick="falar('Conferência de carga')"><i>OK</i><span>CONFERIR</span></div>
-        <div class="card" onclick="falar('Relatar avaria')"><i>AVR</i><span>AVARIA</span></div>
+<div id="scr-exec" class="screen">
+    <header><span id="exec-title" style="font-family:'Orbitron';">FUNÇÃO</span></header>
+    <div class="op-display">
+        <h2 id="exec-main" style="font-family:'Orbitron'; font-size:24px;">PRONTO</h2>
+        <p id="exec-sub" style="font-size:10px; color:#333;">AGUARDANDO VALIDAÇÃO</p>
     </div>
+    <div style="padding: 20px; background: #080808;" id="input-area">
+        <input type="text" id="main-input" placeholder="DIGITE O CÓDIGO">
+        <button class="btn-entrar" onclick="processarAcao()">CONFIRMAR E BIPAR</button>
+    </div>
+    <div class="history" id="log-list">...</div>
+    <button style="background:#111; color:#fff; border:none; padding:15px; font-family:'Orbitron'; font-size:10px;" onclick="show('scr-lobby')">VOLTAR</button>
 </div>
 
 <script>
-    function bip() {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.connect(gain); gain.connect(ctx.destination);
-        gain.gain.value = 0.1; osc.start(); setTimeout(() => osc.stop(), 100);
+    let vCount = 0;
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    // BIPE SÓ TOCA NA CONFIRMAÇÃO (ACERTO)
+    function bipSucesso() {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.15);
     }
 
     function falar(t) {
@@ -93,18 +92,60 @@
 
     function autenticar() {
         const p = document.getElementById('pass').value;
-        bip();
-        if(p === "9910") {
-            document.getElementById('scr-login').classList.remove('active');
-            document.getElementById('scr-gestor').classList.add('active');
-            falar("Acesso Gestor.");
-        } else if(p === "1234") {
-            document.getElementById('scr-login').classList.remove('active');
-            document.getElementById('scr-operador').classList.add('active');
-            falar("Acesso Operador.");
-        } else {
-            alert("SENHA INCORRETA");
+        if(p === "1234" || p === "9910") {
+            // Sem bip aqui ao apertar, apenas entra
+            show('scr-lobby');
+            falar("Acesso liberado.");
         }
+    }
+
+    function show(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    function abrirOp(nome) {
+        show('scr-exec');
+        document.getElementById('exec-title').innerText = nome;
+        const inputArea = document.getElementById('input-area');
+        if(nome.includes('VOZ')) {
+            inputArea.style.display = 'none';
+            document.getElementById('exec-main').innerText = 'DIGA "ATIVAR"';
+            iniciarVoz();
+        } else {
+            inputArea.style.display = 'block';
+            document.getElementById('exec-main').innerText = 'PRONTO';
+        }
+    }
+
+    function processarAcao() {
+        const cod = document.getElementById('main-input').value;
+        if(cod) {
+            bipSucesso(); // O BIPE SÓ TOCA AQUI NA CONFIRMAÇÃO
+            document.getElementById('exec-main').innerText = "LIBERADO";
+            document.getElementById('log-list').innerText = "ÚLTIMO: " + cod;
+            falar("Confirmado " + cod);
+            document.getElementById('main-input').value = "";
+        }
+    }
+
+    function iniciarVoz() {
+        const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if(!Rec) return;
+        const rec = new Rec(); rec.lang='pt-BR'; rec.continuous=true;
+        rec.onresult = (e) => {
+            const f = e.results[e.results.length-1][0].transcript.toLowerCase();
+            if(f.includes("ativar")) {
+                vCount++;
+                if(vCount === 3) {
+                    bipSucesso(); // BIPE DE CONFIRMAÇÃO POR VOZ
+                    document.getElementById('exec-main').innerText = "BOX B-12";
+                    falar("Boxe B doze liberado.");
+                    vCount = 0;
+                }
+            }
+        };
+        rec.start();
     }
 </script>
 </body>
