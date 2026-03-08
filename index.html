@@ -3,24 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>JP DIAS | GENESIS V500</title>
+    <title>JP DIAS | GENESIS FINAL</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #ff9f0a; --bg: #000; --card: #0d0d0d; --red: #ff3b30; --blue: #0a84ff; --green: #30d158; }
+        :root { --primary: #ff9f0a; --bg: #000; --card: #0d0d0d; --red: #ff3b30; --green: #30d158; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; height: 100vh; text-transform: uppercase; }
         
-        /* GERENCIAMENTO DE TELAS */
         .screen { display: none; position: absolute; width: 100%; height: 100%; flex-direction: column; padding: 20px; box-sizing: border-box; background: var(--bg); }
         .active { display: flex !important; }
 
-        .glass { background: #080808; border: 1px solid #1a1a1a; border-radius: 12px; padding: 20px; }
-        input { width: 100%; padding: 15px; margin-top: 10px; background: #000; border: 1px solid #222; color: var(--primary); border-radius: 6px; font-family: 'Orbitron'; text-align: center; box-sizing: border-box; }
+        .glass { background: #080808; border: 1px solid #1a1a1a; border-radius: 12px; padding: 20px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        input { width: 100%; padding: 15px; margin-top: 10px; background: #000; border: 1px solid #222; color: var(--primary); border-radius: 6px; font-family: 'Orbitron'; text-align: center; }
         
-        .btn { width: 100%; padding: 18px; margin-top: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; font-family: 'Orbitron'; border: none; font-size: 12px; }
-        .btn-green { background: var(--green); color: #000; }
-        .btn-red { background: var(--red); color: #fff; }
+        .btn { width: 100%; padding: 18px; margin-top: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; font-family: 'Orbitron'; border: none; transition: 0.2s; }
+        .btn:active { transform: scale(0.95); }
 
-        .voice-box { flex: 1; border: 2px solid var(--primary); border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 20px 0; background: radial-gradient(circle, rgba(255,159,10,0.05) 0%, transparent 70%); }
+        .voice-box { flex: 1; border: 2px solid var(--primary); border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 20px 0; background: radial-gradient(circle, rgba(255,159,10,0.05) 0%, transparent 75%); }
+        .log-box { height: 100px; overflow-y: auto; font-family: monospace; font-size: 10px; color: #444; text-align: left; padding: 10px; background: #050505; border-radius: 5px; border: 1px solid #111; }
     </style>
 </head>
 <body>
@@ -28,47 +27,52 @@
 <div id="scr-portal" class="screen active" style="justify-content: center; align-items: center;">
     <h1 id="ghost-trigger" style="font-family:'Orbitron'; letter-spacing:15px; color:#0a0a0a; cursor:pointer;" onclick="handleGhost()">JP DIAS</h1>
     <div class="glass" style="width: 320px;">
+        <small style="color:#333; letter-spacing:3px;">LOGIN DO SISTEMA</small>
         <input type="text" id="u" placeholder="USUÁRIO">
         <input type="password" id="p" placeholder="SENHA">
-        <button class="btn" style="background:var(--primary); color:#000;" onclick="handleLogin()">ENTRAR NO SISTEMA</button>
+        <button class="btn" style="background:var(--primary); color:#000;" onclick="handleLogin()">INICIAR TURNO</button>
     </div>
 </div>
 
 <div id="scr-master" class="screen">
     <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-family:'Orbitron'; color:var(--primary); font-size:14px;">MASTER JP DIAS</span>
-        <button onclick="falarESair()" class="btn-red" style="padding:5px 10px; width:auto; margin:0; font-size:10px;">SAIR</button>
-    </div>
-    
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:20px 0;">
-        <div class="glass"><b>R$ 4.290</b><br><small style="font-size:8px;">ROI HOJE</small></div>
-        <div class="glass" style="border-color:var(--blue);"><b>03ms</b><br><small style="font-size:8px;">PING</small></div>
+        <span style="font-family:'Orbitron'; color:var(--primary); font-size:14px;">MASTER CONTROL</span>
+        <button onclick="logout()" style="background:none; border:1px solid var(--red); color:var(--red); padding:5px 10px; border-radius:4px; font-size:10px;">ENCERRAR</button>
     </div>
 
-    <div class="glass" style="text-align:left;">
-        <h4 style="font-family:'Orbitron'; font-size:10px; margin-top:0;">CONFIGURAR PRÓXIMA ENTREGA</h4>
-        <input type="text" id="set-box" placeholder="BOX (Ex: A-12)" style="text-align:left;">
-        <input type="text" id="set-cod" placeholder="CÓDIGO (Ex: 990)" style="text-align:left;">
-        <button class="btn btn-green" onclick="configurarSistema()">ATUALIZAR OPERAÇÃO</button>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:20px 0;">
+        <div class="glass"><b>R$ 5.820</b><br><small style="font-size:8px;">ROI ACUMULADO</small></div>
+        <div class="glass" style="border-left: 3px solid var(--primary);"><b>88%</b><br><small style="font-size:8px;">PERFORMANCE</small></div>
+    </div>
+
+    <div class="glass">
+        <h4 style="font-family:'Orbitron'; font-size:10px; margin:0 0 10px 0; color:var(--primary);">ORDEM DE SEPARAÇÃO</h4>
+        <input type="text" id="set-box" placeholder="LOCAL (EX: BOX 05)">
+        <input type="text" id="set-cod" placeholder="CÓDIGO (EX: 772)">
+        <button class="btn" style="background:var(--green); color:#000;" onclick="salvarConfig()">ATUALIZAR OPERAÇÃO</button>
+    </div>
+
+    <div class="log-box" id="master-logs" style="margin-top:15px;">
+        > NÚCLEO JP DIAS INICIALIZADO...<br>> SISTEMA DE VOZ EM STANDBY...
     </div>
 </div>
 
 <div id="scr-voz" class="screen">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-family:'Orbitron'; color:var(--primary); font-size:12px;">OPERAÇÃO VOZ</span>
-        <span id="status-online" style="color:var(--green); font-size:10px;">● LIVE</span>
-    </div>
+    <h2 style="font-family:'Orbitron'; color:var(--primary); font-size:14px; text-align:center;">SISTEMA DE VOZ ATIVO</h2>
     <div class="voice-box">
         <h3 id="inst" style="font-family:'Orbitron'; font-size:24px;">AGUARDANDO</h3>
-        <p id="v-status" style="font-size:9px; color:#444;">FALE "ATIVAR" 3 VEZES</p>
+        <p id="v-status" style="font-size:10px; color:var(--green);">● OUVINDO...</p>
     </div>
-    <button class="btn btn-red" onclick="falarESair()">FINALIZAR TURNO</button>
+    <div class="glass" style="margin-bottom:10px; padding:10px; font-size:10px; color:#555;">
+        Diga "ATIVAR" 3 vezes para receber a localização.
+    </div>
+    <button class="btn" style="background:var(--red); color:#fff;" onclick="logout()">SAIR / FINALIZAR</button>
 </div>
 
 <script>
-    let vCount = 0;
     let clicks = 0;
-    let config = { box: "A-01", cod: "000" };
+    let vCount = 0;
+    let config = JSON.parse(localStorage.getItem('jp_config')) || { box: "A-01", cod: "000" };
     const audio = new (window.AudioContext || window.webkitAudioContext)();
 
     function bip(f = 800, d = 0.1) {
@@ -90,38 +94,40 @@
         bip(1200); clicks++;
         if(clicks === 5) {
             bip(1500, 0.2);
-            if(prompt("CHAVE MESTRE:") === "9910") {
+            if(prompt("CHAVE JP DIAS:") === "9910") {
                 show('scr-master');
-                falar("Acesso mestre. Painel JP Dias ativo.");
+                falar("Acesso mestre concedido. Bem vindo, J P.");
             }
             clicks = 0;
         }
+        setTimeout(() => clicks = 0, 3000);
     }
 
     function handleLogin() {
-        const u = document.getElementById('u').value.toLowerCase();
         bip();
-        if(u === "shark" || u === "jp") {
+        const user = document.getElementById('u').value.toLowerCase();
+        if(user === "shark" || user === "jp") {
             show('scr-master');
-            falar("Bem vindo ao controle mestre.");
-        } else if(u === "op") {
+            falar("Painel de controle iniciado.");
+        } else if(user === "op") {
             show('scr-voz');
-            falar("Sistema pronto. Aguardando entrega.");
+            falar("Turno iniciado. Aguardando comando.");
             startVoice();
         } else {
-            bip(200, 0.3);
-            alert("ACESSO NEGADO");
+            bip(200, 0.3); alert("NEGADO");
         }
     }
 
-    function configurarSistema() {
-        config.box = document.getElementById('set-box').value || "A-01";
+    function salvarConfig() {
+        config.box = document.getElementById('set-box').value || "BOX 01";
         config.cod = document.getElementById('set-cod').value || "000";
+        localStorage.setItem('jp_config', JSON.stringify(config));
         bip(1000, 0.2);
-        falar("Sistema atualizado. Box " + config.box + " definido.");
+        falar("Configuração salva. Local " + config.box);
+        document.getElementById('master-logs').innerHTML += `<br>> BOX DEFINIDO: ${config.box}`;
     }
 
-    function falarESair() {
+    function logout() {
         bip(400, 0.5);
         falar("Encerrando sistema. Até logo.");
         setTimeout(() => location.reload(), 1500);
@@ -134,7 +140,7 @@
 
     function startVoice() {
         const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if(!Rec) return;
+        if(!Rec) return alert("Erro no microfone");
         const rec = new Rec();
         rec.lang = 'pt-BR'; rec.continuous = true;
         
@@ -146,8 +152,8 @@
                 falar(vCount);
                 if(vCount === 3) {
                     bip(1600, 0.3);
-                    document.getElementById('inst').innerHTML = "BOX: " + config.box + "<br>COD: " + config.cod;
-                    falar("Tarefa entregue. Box " + config.box + ". Código " + config.cod);
+                    document.getElementById('inst').innerHTML = `${config.box}<br>CÓD: ${config.cod}`;
+                    falar(`Tarefa confirmada. Vá para o ${config.box}. Código final ${config.cod}`);
                     vCount = 0;
                 }
             }
