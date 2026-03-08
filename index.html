@@ -3,47 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>JP DIAS LOG-PRO | V12</title>
+    <title>JP DIAS LOG-PRO | V15</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #00ff41; --bg: #000; --red: #ff3b30; --blue: #0a84ff; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; height: 100vh; text-transform: uppercase; }
         .screen { display: none; position: absolute; width: 100%; height: 100%; flex-direction: column; }
         .active { display: flex !important; }
-
         header { padding: 15px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; background: #050505; font-family: 'Orbitron'; font-size: 10px; }
         .scroll { flex: 1; overflow-y: auto; padding: 15px; }
-
-        /* KPI & TABELAS */
         .kpi-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-        .kpi { background: #080808; border: 1px solid #222; padding: 12px; border-radius: 8px; border-left: 4px solid var(--primary); }
-        .kpi b { display: block; font-family: 'Orbitron'; font-size: 14px; color: var(--primary); }
-        
-        table { width: 100%; border-collapse: collapse; font-size: 9px; margin-top: 10px; background: #080808; }
-        th { text-align: left; color: #555; padding: 8px; border-bottom: 1px solid #222; }
-        td { padding: 10px 8px; border-bottom: 1px solid #111; }
-
-        /* BOTOES */
-        .btn { width: 100%; padding: 15px; background: var(--primary); color: #000; border: none; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; border-radius: 4px; margin-top: 5px; }
-        .btn-exp { background: var(--blue); color: #fff; margin-top: 20px; }
-        
-        /* OPERACIONAL */
+        .kpi { background: #080808; border-left: 4px solid var(--primary); padding: 12px; border-radius: 8px; border: 1px solid #222; }
+        .kpi b { display: block; font-family: 'Orbitron'; font-size: 16px; color: var(--primary); }
+        table { width: 100%; border-collapse: collapse; font-size: 9px; margin-top: 15px; background: #080808; }
+        th { text-align: left; color: #555; padding: 10px; border-bottom: 1px solid #222; }
+        td { padding: 12px 10px; border-bottom: 1px solid #111; }
+        .btn { width: 100%; padding: 18px; background: var(--primary); color: #000; border: none; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; border-radius: 5px; text-transform: uppercase; }
+        .btn-blue { background: var(--blue); color: #fff; margin-top: 10px; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; }
-        .card { background: #0d0d0d; border: 1px solid #222; padding: 25px; border-radius: 10px; text-align: center; border-bottom: 4px solid var(--primary); cursor: pointer; }
-        .op-box { flex: 1; margin: 20px; border: 2px solid var(--primary); border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; }
+        .card { background: #0d0d0d; border: 1px solid #222; padding: 25px; border-radius: 12px; text-align: center; border-bottom: 4px solid var(--primary); cursor: pointer; }
+        .display { flex: 1; margin: 20px; border: 2px solid var(--primary); border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; }
         #flash { position: absolute; width: 100%; height: 100%; background: var(--primary); color: #000; display: none; justify-content: center; align-items: center; font-family: 'Orbitron'; font-size: 25px; border-radius: 18px; z-index: 10; }
-        input { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: #fff; font-family: 'Orbitron'; font-size: 10px; border-radius: 4px; box-sizing: border-box; }
+        input, select { width: 100%; padding: 14px; background: #000; border: 1px solid #333; color: #fff; font-family: 'Orbitron'; font-size: 10px; margin-bottom: 10px; border-radius: 5px; box-sizing: border-box; outline: none; }
     </style>
 </head>
-<body onload="init()">
+<body onload="carregarBanco()">
 
-<div id="flash">✓ REGISTRADO</div>
+<div id="flash">BIPADO ✓</div>
 
 <div id="scr-login" class="screen active">
     <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:30px;">
         <h1 style="font-family:'Orbitron'; color:#151515; font-size:40px; letter-spacing:10px;">JP DIAS</h1>
-        <input type="password" id="pass" placeholder="SENHA (9910/1234)">
-        <button class="btn" onclick="login()">ENTRAR</button>
+        <input type="password" id="senha" placeholder="SENHA GESTOR (9910) OU OP (1234)">
+        <button class="btn" onclick="entrar()">ENTRAR</button>
     </div>
 </div>
 
@@ -51,116 +43,151 @@
     <header><span>DASHBOARD MASTER</span> <button onclick="location.reload()" style="color:var(--red); background:none; border:none;">SAIR</button></header>
     <div class="scroll">
         <div class="kpi-row">
-            <div class="kpi"><small>TOTAL BIPES</small><b id="k-total">0</b></div>
-            <div class="kpi" style="border-left-color: var(--blue);"><small>EQUIPE</small><b id="k-equipe">0</b></div>
+            <div class="kpi"><small>BIPES TOTAIS</small><b id="k-total">0</b></div>
+            <div class="kpi" style="border-left-color:var(--blue)"><small>EQUIPE ATIVA</small><b id="k-equipe">0</b></div>
         </div>
 
-        <div style="background:#080808; padding:15px; border:1px solid #222; border-radius:8px;">
-            <b style="font-size:10px; color:var(--primary); font-family:'Orbitron';">NOVO CADASTRO</b>
-            <input type="text" id="fnome" placeholder="NOME DO FUNCIONÁRIO" style="margin-top:10px;">
-            <select id="fmod" style="width:100%; padding:12px; background:#000; color:#fff; font-family:'Orbitron'; font-size:10px; margin:10px 0; border:1px solid #333;">
-                <option value="Armazém">MÓDULO: ARMAZÉM</option>
-                <option value="Crossdock">MÓDULO: CROSSDOCK</option>
+        <div style="background:#080808; padding:15px; border:1px solid #222; border-radius:8px; margin-bottom:20px;">
+            <b style="font-size:10px; color:var(--primary); font-family:'Orbitron';">NOVO COLABORADOR</b>
+            <input type="text" id="c-nome" placeholder="NOME COMPLETO" style="margin-top:10px;">
+            <input type="number" id="c-id" placeholder="ID MATRÍCULA">
+            <select id="c-mod">
+                <option value="ARMAZÉM">MÓDULO: ARMAZÉM</option>
+                <option value="CROSSDOCK">MÓDULO: CROSSDOCK</option>
             </select>
-            <button class="btn" onclick="addFunc()">SALVAR FUNCIONÁRIO</button>
+            <button class="btn" onclick="cadastrar()">SALVAR E ATIVAR</button>
         </div>
 
-        <button class="btn btn-exp" onclick="exportarLista()">📦 GERAR LISTA DE BIPAGEM</button>
+        <button class="btn btn-blue" onclick="exportarLista()">📦 EXPORTAR LISTA PARA WHATSAPP</button>
 
-        <table id="tbl-bipes">
-            <thead><tr><th>HORA</th><th>CÓDIGO</th><th>MÓDULO</th></tr></thead>
+        <table id="tbl-equipe">
+            <thead><tr><th>COLABORADOR</th><th>MÓDULO</th><th>STATUS</th></tr></thead>
+            <tbody id="lista-equipe"></tbody>
+        </table>
+
+        <b style="font-size:10px; display:block; margin-top:20px; color:#333;">ÚLTIMOS BIPES REGISTRADOS</b>
+        <table id="tbl-logs">
+            <thead><tr><th>HORA</th><th>CÓDIGO</th><th>OPERADOR</th></tr></thead>
             <tbody id="lista-logs"></tbody>
         </table>
+        
+        <button onclick="limparTudo()" style="margin-top:40px; color:#222; background:none; border:none; width:100%; font-size:8px;">ZERAR SISTEMA</button>
     </div>
 </div>
 
 <div id="scr-hub" class="screen">
-    <header><span>MÓDULOS JP DIAS</span></header>
+    <header><span>OPERACIONAL</span> <button onclick="location.reload()" style="color:var(--red); background:none; border:none;">SAIR</button></header>
     <div class="grid">
-        <div class="card" onclick="op('ARMAZÉM')"><b>ARMAZÉM</b></div>
-        <div class="card" onclick="op('CROSSDOCK')" style="border-color:var(--blue)"><b>CROSSDOCK</b></div>
+        <div class="card" onclick="irAmz()"><b>ARMAZÉM</b></div>
+        <div class="card" onclick="irCros()" style="border-color:var(--blue)"><b>CROSSDOCK</b></div>
+    </div>
+</div>
+
+<div id="scr-amz" class="screen">
+    <header><span>MÓDULO ARMAZÉM</span> <button onclick="show('scr-hub')" style="color:#555; background:none; border:none;">VOLTAR</button></header>
+    <div class="grid">
+        <div class="card" onclick="exec('RECEBER')"><b>RECEBER</b></div>
+        <div class="card" onclick="exec('SEPARAR')"><b>SEPARAR</b></div>
+        <div class="card" onclick="exec('CONFERIR')"><b>CONFERIR</b></div>
+        <div class="card" onclick="exec('AVARIA')" style="border-color:var(--red)"><b>AVARIA</b></div>
+    </div>
+</div>
+
+<div id="scr-cros" class="screen">
+    <header><span>MÓDULO CROSSDOCK</span> <button onclick="show('scr-hub')" style="color:#555; background:none; border:none;">VOLTAR</button></header>
+    <div class="grid">
+        <div class="card" onclick="exec('TRIAGEM')" style="border-color:var(--blue)"><b>TRIAGEM</b></div>
+        <div class="card" onclick="exec('ROTA')" style="border-color:var(--blue)"><b>ROTA</b></div>
+        <div class="card" onclick="exec('EXPEDIÇÃO')" style="border-color:var(--blue)"><b>EXPEDIÇÃO</b></div>
     </div>
 </div>
 
 <div id="scr-exec" class="screen">
-    <header><span id="exec-title">---</span> <button onclick="show('scr-hub')" style="color:#555; background:none; border:none;">VOLTAR</button></header>
-    <div class="op-box">
-        <h2 id="main-val" style="font-family:'Orbitron';">READY</h2>
-        <input type="text" id="scanner" style="position:absolute; opacity:0;">
+    <header><span id="exec-titulo">---</span> <button onclick="voltarModulo()" style="color:#555; background:none; border:none;">VOLTAR</button></header>
+    <div class="display">
+        <h2 id="valor-atual" style="font-family:'Orbitron';">PRONTO</h2>
+        <input type="text" id="scanner" style="position:absolute; opacity:0; pointer-events:none;">
     </div>
     <div style="padding:20px; background:#080808;">
-        <input type="text" id="manual" placeholder="BIPE OU DIGITE">
-        <button class="btn" onclick="registrar(true)">CONFIRMAR</button>
+        <input type="text" id="manual" placeholder="DIGITAR MANUALMENTE">
+        <button class="btn" onclick="bipar(true)">CONFIRMAR</button>
     </div>
 </div>
 
 <script>
-    let db = { logs: [], equipe: [] };
-    const audio = new (window.AudioContext || window.webkitAudioContext)();
+    let BD = { logs: [], equipe: [] };
+    const som = new (window.AudioContext || window.webkitAudioContext)();
+    let modAnterior = "";
 
-    function init() {
-        const salvo = localStorage.getItem('jpdias_v12');
-        if(salvo) db = JSON.parse(salvo);
+    function carregarBanco() {
+        const dados = localStorage.getItem('JPD_V15_FINAL');
+        if(dados) BD = JSON.parse(dados);
         render();
     }
 
     function render() {
-        document.getElementById('k-total').innerText = db.logs.length;
-        document.getElementById('k-equipe').innerText = db.equipe.length;
-        const lista = document.getElementById('lista-logs');
-        if(lista) {
-            lista.innerHTML = db.logs.slice(-10).reverse().map(l => `<tr><td>${l.hora}</td><td>${l.cod}</td><td>${l.mod}</td></tr>`).join('');
-        }
-        localStorage.setItem('jpdias_v12', JSON.stringify(db));
+        document.getElementById('k-total').innerText = BD.logs.length;
+        document.getElementById('k-equipe').innerText = BD.equipe.length;
+        
+        const lEquipe = document.getElementById('lista-equipe');
+        if(lEquipe) lEquipe.innerHTML = BD.equipe.map(f => `<tr><td>${f.nome}</td><td>${f.mod}</td><td style="color:var(--primary)">● ATIVO</td></tr>`).join('');
+
+        const lLogs = document.getElementById('lista-logs');
+        if(lLogs) lLogs.innerHTML = BD.logs.slice(-5).reverse().map(l => `<tr><td>${l.h}</td><td>${l.c}</td><td>${l.op}</td></tr>`).join('');
+        
+        localStorage.setItem('JPD_V15_FINAL', JSON.stringify(BD));
     }
 
-    function login() {
-        const p = document.getElementById('pass').value;
-        if(p === "9910") show('scr-gestor');
-        else if(p === "1234") show('scr-hub');
-        else alert("SENHA INCORRETA");
+    function entrar() {
+        const s = document.getElementById('senha').value;
+        if(s === "9910") show('scr-gestor');
+        else if(s === "1234") show('scr-hub');
+        else alert("ACESSO NEGADO");
     }
 
     function show(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
+        if(id === 'scr-exec') setTimeout(() => document.getElementById('scanner').focus(), 400);
     }
 
-    function addFunc() {
-        const n = document.getElementById('fnome').value.toUpperCase();
+    function cadastrar() {
+        const n = document.getElementById('c-nome').value.toUpperCase();
+        const m = document.getElementById('c-mod').value;
         if(n) {
-            db.equipe.push({ nome: n, mod: document.getElementById('fmod').value });
-            document.getElementById('fnome').value = "";
+            BD.equipe.push({ nome: n, mod: m, id: document.getElementById('c-id').value });
+            document.getElementById('c-nome').value = "";
             render();
-            alert("CADASTRADO!");
+            alert("CADASTRADO COM SUCESSO!");
         }
     }
 
-    function op(t) {
+    function irAmz() { modAnterior = 'scr-amz'; show('scr-amz'); }
+    function irCros() { modAnterior = 'scr-cros'; show('scr-cros'); }
+    function voltarModulo() { show(modAnterior); }
+
+    function exec(t) {
+        document.getElementById('exec-titulo').innerText = t;
         show('scr-exec');
-        document.getElementById('exec-title').innerText = t;
-        document.getElementById('scanner').focus();
     }
 
-    function registrar(manual) {
+    function bipar(manual) {
         const input = manual ? document.getElementById('manual') : document.getElementById('scanner');
-        const cod = input.value;
-        if(cod) {
-            const agora = new Date();
-            const hora = agora.getHours() + ":" + agora.getMinutes().toString().padStart(2, '0');
-            
-            db.logs.push({ hora, cod, mod: document.getElementById('exec-title').innerText });
+        const val = input.value;
+        if(val) {
+            const h = new Date().toLocaleTimeString();
+            BD.logs.push({ h, c: val, op: document.getElementById('exec-titulo').innerText });
             render();
 
-            const osc = audio.createOscillator(); const g = audio.createGain();
-            osc.connect(g); g.connect(audio.destination);
+            const osc = som.createOscillator(); const g = som.createGain();
+            osc.connect(g); g.connect(som.destination);
             osc.type = 'square'; osc.frequency.value = 1300;
-            g.gain.value = 0.1; osc.start(); osc.stop(audio.currentTime + 0.1);
+            g.gain.value = 0.1; osc.start(); osc.stop(som.currentTime + 0.1);
 
             document.getElementById('flash').style.display = 'flex';
             setTimeout(() => {
                 document.getElementById('flash').style.display = 'none';
-                document.getElementById('main-val').innerText = cod;
+                document.getElementById('valor-atual').innerText = val;
                 input.value = "";
                 document.getElementById('scanner').focus();
             }, 400);
@@ -168,22 +195,21 @@
     }
 
     function exportarLista() {
-        if(db.logs.length === 0) return alert("LISTA VAZIA");
-        let texto = "--- LISTA DE BIPAGEM JP DIAS ---\n\n";
-        db.logs.forEach(l => {
-            texto += `[${l.hora}] ${l.cod} (${l.mod})\n`;
-        });
-        
-        const blob = new Blob([texto], { type: 'text/plain' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `bipagem_jpdias_${new Date().toLocaleDateString()}.txt`;
-        a.click();
+        if(BD.logs.length === 0) return alert("SEM DADOS PARA EXPORTAR");
+        let txt = "--- JP DIAS LOGÍSTICA | LISTA DE BIPAGEM ---\n\n";
+        BD.logs.forEach(l => txt += `[${l.h}] ${l.c} | FUNÇÃO: ${l.op}\n`);
+        const blob = new Blob([txt], {type: 'text/plain'});
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `LISTA_BIPAGEM_JP_${new Date().toLocaleDateString().replace(/\//g,'-')}.txt`;
+        link.click();
     }
 
-    document.getElementById('scanner')?.addEventListener('keypress', (e) => { if(e.key === 'Enter') registrar(false); });
-    document.getElementById('manual')?.addEventListener('keypress', (e) => { if(e.key === 'Enter') registrar(true); });
+    function limparTudo() { if(confirm("CUIDADO: APAGAR TUDO?")) { localStorage.clear(); location.reload(); } }
+    
+    document.getElementById('scanner')?.addEventListener('keypress', (e) => { if(e.key === 'Enter') bipar(false); });
+    document.getElementById('manual')?.addEventListener('keypress', (e) => { if(e.key === 'Enter') bipar(true); });
+    document.addEventListener('click', () => { if(document.getElementById('scr-exec').classList.contains('active')) document.getElementById('scanner').focus(); });
 </script>
 </body>
-                       </html>
-    
+</html>
