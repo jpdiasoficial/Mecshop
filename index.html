@@ -130,7 +130,6 @@
             currentUser = u; 
             if(u === "JP" || u === "SHARK") {
                 document.getElementById('shark-user-title').innerText = (u === "JP" ? "MASTER: JP" : "GESTÃO: SHARK");
-                // Shark não vê botão de config nem de editar item
                 document.getElementById('btn-config-float').style.display = (u === "JP" ? "block" : "none");
                 ir('scr-shark'); 
             } else { 
@@ -220,5 +219,4 @@
     function init() { atualizarTabelas(); }
 </script>
 </body>
-    </html>
-    
+</html>
