@@ -3,145 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SISTEMA JP DIAS | V5000</title>
+    <title>JP DIAS LOG-PRO | V8000</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #00ff41; --bg: #000; --red: #ff3b30; --blue: #0a84ff; --gray: #0d0d0d; }
+        :root { --primary: #00ff41; --bg: #000; --red: #ff3b30; --blue: #0a84ff; --gold: #ff9f0a; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; height: 100vh; text-transform: uppercase; }
-        .screen { display: none; position: absolute; width: 100%; height: 100%; flex-direction: column; box-sizing: border-box; }
+        .screen { display: none; position: absolute; width: 100%; height: 100%; flex-direction: column; }
         .active { display: flex !important; }
 
         /* HEADER */
         header { padding: 15px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; background: #050505; font-family: 'Orbitron'; font-size: 10px; }
-        
-        /* FORMULÁRIO DE CADASTRO COMPLETO */
-        .form-container { padding: 20px; overflow-y: auto; flex: 1; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-size: 8px; color: #555; margin-bottom: 5px; letter-spacing: 1px; }
-        input, select { width: 100%; padding: 15px; background: #080808; border: 1px solid #222; color: #fff; border-radius: 5px; font-family: 'Orbitron'; font-size: 10px; outline: none; box-sizing: border-box; }
-        input:focus { border-color: var(--primary); }
-        .btn-save { width: 100%; padding: 20px; background: var(--primary); color: #000; border: none; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; border-radius: 5px; margin-top: 10px; }
 
-        /* BOTÕES DE MÓDULO SEPARADOS */
-        .btn-modulo { width: 100%; padding: 30px; margin-bottom: 10px; border: 1px solid #222; background: #0d0d0d; color: #fff; font-family: 'Orbitron'; font-size: 12px; cursor: pointer; border-radius: 10px; text-align: left; position: relative; }
-        .btn-modulo span { color: var(--primary); display: block; font-size: 8px; margin-bottom: 5px; }
-        .btn-modulo:active { border-color: var(--primary); background: #151515; }
+        /* FORMULÁRIO CADASTRO COMPLETO */
+        .box { flex: 1; padding: 25px; overflow-y: auto; }
+        input, select { width: 100%; padding: 18px; background: #080808; border: 1px solid #222; color: #fff; border-radius: 8px; font-family: 'Orbitron'; font-size: 10px; margin-bottom: 15px; outline: none; box-sizing: border-box; }
+        .btn-save { width: 100%; padding: 20px; background: var(--primary); color: #000; border: none; border-radius: 8px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; }
 
-        /* ÁREA DE OPERAÇÃO */
-        .op-box { flex: 1; margin: 20px; border: 2px solid var(--primary); border-radius: 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-        #flash { position: fixed; top:0; left:0; width:100%; height:100%; background: var(--primary); color:#000; display:none; justify-content:center; align-items:center; z-index:100; font-family:'Orbitron'; font-size:30px; }
+        /* HUB DE MÓDULOS (ESTILO JP DIAS) */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; }
+        .card-mod { background: #0d0d0d; border: 1px solid #222; padding: 20px; border-radius: 12px; text-align: center; cursor: pointer; border-bottom: 4px solid var(--primary); }
+        .card-mod span { display: block; font-size: 8px; color: #555; margin-bottom: 5px; font-family: 'Orbitron'; }
+        .card-mod b { font-size: 11px; }
+
+        /* OPERAÇÃO (SCANNER + FLASH) */
+        .op-display { flex: 1; margin: 20px; border: 2px solid var(--primary); border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; }
+        #flash { position: absolute; top:0; left:0; width:100%; height:100%; background: var(--primary); color:#000; display:none; justify-content:center; align-items:center; border-radius:18px; font-family:'Orbitron'; font-size:25px; z-index:10; }
     </style>
 </head>
 <body>
 
-<div id="flash">✓ CONFIRMADO</div>
+<div id="flash">BIPADO COM SUCESSO</div>
 
 <div id="scr-login" class="screen active">
     <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:20px;">
         <h1 style="font-family:'Orbitron'; color:#151515; font-size:35px; letter-spacing:10px;">JP DIAS</h1>
-        <input type="password" id="pass" placeholder="SENHA MASTER">
-        <button class="btn-save" onclick="autenticar()">ENTRAR NO PAINEL</button>
+        <input type="password" id="pass" placeholder="SENHA">
+        <button class="btn-save" onclick="entrar()">ENTRAR</button>
     </div>
 </div>
 
 <div id="scr-gestor" class="screen">
-    <header><span>GESTOR MASTER</span> <button onclick="location.reload()" style="background:none; border:none; color:var(--red);">SAIR</button></header>
-    
-    <div style="display: flex; background: #080808; border-bottom: 1px solid #222;">
-        <div style="flex:1; padding:15px; text-align:center; color:var(--primary); border-bottom: 2px solid var(--primary); font-size:9px; font-family:'Orbitron';">CADASTRO DE FUNCIONÁRIO</div>
-    </div>
-
-    <div class="form-container">
-        <div class="form-group">
-            <label>NOME COMPLETO DO COLABORADOR</label>
-            <input type="text" id="reg-nome" placeholder="NOME DO FUNCIONÁRIO">
-        </div>
-        <div class="form-group">
-            <label>ID / MATRÍCULA OPERACIONAL</label>
-            <input type="number" id="reg-id" placeholder="EX: 1010">
-        </div>
-        <div class="form-group">
-            <label>FUNÇÃO ESPECÍFICA</label>
-            <select id="reg-funcao">
-                <option value="conferente">CONFERENTE</option>
-                <option value="separador">SEPARADOR</option>
-                <option value="motorista">MOTORISTA</option>
-                <option value="auxiliar">AUXILIAR DE CARGA</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>ATRIBUIÇÃO DE MÓDULO (ACESSO)</label>
-            <select id="reg-modulo">
-                <option value="armazem">EXCLUSIVO: ARMAZÉM</option>
-                <option value="crossdock">EXCLUSIVO: CROSSDOCK</option>
-                <option value="full">ACESSO TOTAL (MASTER)</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>TURNO DE TRABALHO</label>
-            <select id="reg-turno">
-                <option value="manha">MANHÃ (06H - 14H)</option>
-                <option value="tarde">TARDE (14H - 22H)</option>
-                <option value="noite">NOITE (22H - 06H)</option>
-            </select>
-        </div>
-        <button class="btn-save" onclick="salvarCadastro()">CRIAR PAINEL DO FUNCIONÁRIO</button>
-        
-        <div id="status-msg" style="margin-top:15px; font-size:9px; color:var(--primary); text-align:center;"></div>
+    <header><span>GESTOR MASTER</span> <button onclick="location.reload()" style="color:var(--red); background:none; border:none;">SAIR</button></header>
+    <div class="box">
+        <b style="color:var(--primary); font-family:'Orbitron'; display:block; margin-bottom:15px;">NOVO COLABORADOR</b>
+        <input type="text" id="reg-nome" placeholder="NOME COMPLETO">
+        <input type="number" id="reg-id" placeholder="ID MATRÍCULA">
+        <select id="reg-mod">
+            <option value="Armazém">MÓDULO: ARMAZÉM</option>
+            <option value="Crossdock">MÓDULO: CROSSDOCK</option>
+            <option value="Motorista">MÓDULO: MOTORISTA</option>
+        </select>
+        <select id="reg-turno">
+            <option>TURNO: MANHÃ</option>
+            <option>TURNO: TARDE</option>
+            <option>TURNO: NOITE</option>
+        </select>
+        <button class="btn-save" onclick="falar('Cadastro Realizado')">CRIAR PAINEL</button>
     </div>
 </div>
 
-<div id="scr-modulos" class="screen">
-    <header><span>MÓDULOS DE OPERAÇÃO</span></header>
-    <div style="padding:15px;">
-        <button class="btn-modulo" onclick="abrirExec('ARMAZÉM')">
-            <span>FLUXO DE ESTOQUE FIXO</span>
-            MÓDULO ARMAZÉM
-        </button>
-        <button class="btn-modulo" onclick="abrirExec('CROSSDOCK')" style="border-left: 4px solid var(--blue);">
-            <span>FLUXO DE GIRO RÁPIDO</span>
-            MÓDULO CROSSDOCK
-        </button>
-        <button class="btn-modulo" onclick="abrirExec('MOTORISTA')" style="border-left: 4px solid var(--gold);">
-            <span>ROTA INTELIGENTE</span>
-            MÓDULO MOTORISTA
-        </button>
+<div id="scr-amz" class="screen">
+    <header><span>MÓDULO ARMAZÉM</span> <button onclick="show('scr-login')" style="color:#555; background:none; border:none;">VOLTAR</button></header>
+    <div class="grid">
+        <div class="card-mod" onclick="abrirExec('RECEBIMENTO')"><span>ENTRADA</span><b>RECEBER</b></div>
+        <div class="card-mod" onclick="abrirExec('SEPARAÇÃO')"><span>PICKING</span><b>SEPARAR</b></div>
+        <div class="card-mod" onclick="abrirExec('CONFERÊNCIA')"><span>CHECKOUT</span><b>CONFERIR</b></div>
+        <div class="card-mod" onclick="abrirExec('AVARIA')" style="border-color:var(--red)"><span>DANO</span><b>AVARIA</b></div>
+    </div>
+</div>
+
+<div id="scr-cros" class="screen">
+    <header><span>MÓDULO CROSSDOCK</span> <button onclick="show('scr-login')" style="color:#555; background:none; border:none;">VOLTAR</button></header>
+    <div class="grid">
+        <div class="card-mod" onclick="abrirExec('TRIAGEM')" style="border-color:var(--blue)"><span>FLUXO</span><b>TRIAGEM</b></div>
+        <div class="card-mod" onclick="abrirExec('ROTA')" style="border-color:var(--blue)"><span>DESTINO</span><b>IDENT. ROTA</b></div>
+        <div class="card-mod" onclick="abrirExec('EXPEDIÇÃO')" style="border-color:var(--blue)"><span>SAÍDA</span><b>EXPEDIR</b></div>
     </div>
 </div>
 
 <div id="scr-exec" class="screen">
     <header><span id="exec-title">---</span></header>
-    <div class="op-box">
-        <h2 id="exec-main" style="font-family:'Orbitron';">PRONTO</h2>
-        <p id="exec-sub" style="font-size:10px; color:#444;">AGUARDANDO BIPAGEM</p>
+    <div class="op-display">
+        <div id="flash">✓ BIPADO</div>
+        <h2 id="st-main" style="font-family:'Orbitron';">READY</h2>
+        <p id="st-sub" style="font-size:10px; color:#444;">AGUARDANDO BIPAGEM</p>
     </div>
     <div style="padding:20px; background:#080808;">
-        <input type="text" id="scanner-in" placeholder="BIPE OU DIGITE">
-        <button class="btn-save" onclick="confirmarAcao()">CONFIRMAR ENTRADA</button>
-        <button onclick="show('scr-modulos')" style="width:100%; background:none; border:none; color:#555; font-size:9px; margin-top:15px; font-family:'Orbitron';">VOLTAR AOS MÓDULOS</button>
+        <input type="text" id="scan-in" placeholder="BIPE OU INSIRA MANUAL">
+        <button class="btn-save" onclick="bipar()">CONFIRMAR ITEM</button>
+        <button onclick="location.reload()" style="width:100%; background:none; border:none; color:#555; margin-top:15px; font-size:9px; font-family:'Orbitron';">VOLTAR AO MENU</button>
     </div>
 </div>
 
 <script>
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function falar(t) { window.speechSynthesis.cancel(); window.speechSynthesis.speak(new SpeechSynthesisUtterance(t)); }
 
-    function bip() {
-        const osc = audioCtx.createOscillator(); const g = audioCtx.createGain();
-        osc.connect(g); g.connect(audioCtx.destination);
-        osc.type = 'square'; osc.frequency.value = 1300;
-        g.gain.value = 0.1; osc.start(); osc.stop(audioCtx.currentTime + 0.1);
-    }
-
-    function falar(t) {
-        window.speechSynthesis.cancel();
-        window.speechSynthesis.speak(new SpeechSynthesisUtterance(t));
-    }
-
-    function autenticar() {
+    function entrar() {
         const p = document.getElementById('pass').value;
         if(p === "9910") show('scr-gestor');
-        else if(p === "1234") show('scr-modulos');
-        else alert("ACESSO NEGADO");
+        else if(p === "amz") show('scr-amz');
+        else if(p === "cros") show('scr-cros');
+        else alert("ACESSO INVÁLIDO");
     }
 
     function show(id) {
@@ -149,42 +112,33 @@
         document.getElementById(id).classList.add('active');
     }
 
-    function salvarCadastro() {
-        const nome = document.getElementById('reg-nome').value;
-        const modulo = document.getElementById('reg-modulo').value;
-        if(nome) {
-            document.getElementById('status-msg').innerText = `PAINEL CRIADO: ${nome.toUpperCase()} ATRIBUÍDO AO ${modulo.toUpperCase()}`;
-            falar("Cadastro realizado com sucesso.");
-            setTimeout(() => document.getElementById('status-msg').innerText = "", 3000);
-        }
-    }
-
-    function abrirExec(nome) {
+    function abrirExec(n) {
         show('scr-exec');
-        document.getElementById('exec-title').innerText = nome;
-        document.getElementById('scanner-in').focus();
-        falar("Iniciando módulo " + nome);
+        document.getElementById('exec-title').innerText = n;
+        document.getElementById('scan-in').focus();
+        falar("Iniciando " + n);
     }
 
-    function confirmarAcao() {
-        const val = document.getElementById('scanner-in').value;
+    function bipar() {
+        const val = document.getElementById('scan-in').value;
         if(val) {
-            bip();
-            const flash = document.getElementById('flash');
-            flash.style.display = 'flex';
+            const osc = audioCtx.createOscillator(); const g = audioCtx.createGain();
+            osc.connect(g); g.connect(audioCtx.destination);
+            osc.type = 'square'; osc.frequency.value = 1300;
+            g.gain.value = 0.1; osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+
+            document.getElementById('flash').style.display = 'flex';
             setTimeout(() => {
-                flash.style.display = 'none';
-                document.getElementById('exec-main').innerText = "OK: " + val;
+                document.getElementById('flash').style.display = 'none';
+                document.getElementById('st-main').innerText = "OK: " + val;
                 falar("Confirmado " + val);
-                document.getElementById('scanner-in').value = "";
-                document.getElementById('scanner-in').focus();
+                document.getElementById('scan-in').value = "";
+                document.getElementById('scan-in').focus();
             }, 600);
         }
     }
 
-    document.getElementById('scanner-in')?.addEventListener('keypress', (e) => {
-        if(e.key === 'Enter') confirmarAcao();
-    });
+    document.getElementById('scan-in')?.addEventListener('keypress', (e) => { if(e.key === 'Enter') bipar(); });
 </script>
 </body>
 </html>
