@@ -3,100 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SISTEMA OMNI | JP DIAS</title>
+    <title>PAINEL GERAL | JP DIAS</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #00ff41; --bg: #000; --blue: #0a84ff; --red: #ff3b30; --gold: #ff9f0a; --gray: #1a1a1a; }
+        :root { --primary: #00ff41; --bg: #000; --blue: #0a84ff; --red: #ff3b30; --gold: #ff9f0a; --gray: #0d0d0d; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; height: 100vh; text-transform: uppercase; }
         
-        .screen { display: none; position: absolute; width: 100%; height: 100%; flex-direction: column; padding: 20px; box-sizing: border-box; background: var(--bg); }
+        .screen { display: none; position: absolute; width: 100%; height: 100%; flex-direction: column; padding: 15px; box-sizing: border-box; }
         .active { display: flex !important; }
 
-        header { padding-bottom: 10px; border-bottom: 1px solid #222; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .glass { background: #080808; border: 1px solid #1a1a1a; border-radius: 12px; padding: 15px; text-align: center; margin-bottom: 10px; }
+        header { border-bottom: 1px solid #222; padding-bottom: 10px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
         
-        /* MENU GRID */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; flex: 1; overflow-y: auto; }
-        .card { background: var(--gray); border: 1px solid #333; border-radius: 10px; padding: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; text-align: center; }
-        .card:active { background: var(--primary); color: #000; }
-        .card i { font-family: 'Orbitron'; font-size: 14px; margin-bottom: 5px; }
-        .card span { font-size: 8px; font-weight: bold; }
-
-        /* ALERTAS DE ESTOQUE */
-        .alert-box { background: rgba(255, 59, 48, 0.1); border: 1px solid var(--red); color: var(--red); padding: 8px; font-size: 9px; border-radius: 5px; margin-bottom: 10px; font-weight: bold; }
-
-        /* ÁREA OPERACIONAL */
-        .op-display { flex: 1; border: 2px solid var(--primary); border-radius: 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: radial-gradient(circle, rgba(0,255,101,0.05) 0%, transparent 80%); margin: 10px 0; }
-        input { width: 100%; padding: 15px; margin-top: 10px; background: #000; border: 1px solid #333; color: var(--primary); border-radius: 6px; font-family: 'Orbitron'; text-align: center; box-sizing: border-box; }
+        /* LAYOUT LARGO (DASHBOARD) */
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; flex: 1; overflow-y: auto; }
+        .panel-card { background: var(--gray); border: 1px solid #1a1a1a; border-radius: 8px; padding: 15px; display: flex; flex-direction: column; }
+        .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #222; padding-bottom: 5px; }
+        .panel-header span { font-family: 'Orbitron'; font-size: 10px; }
         
-        .btn-footer { background: #111; color: #fff; border: 1px solid #444; padding: 12px; border-radius: 6px; font-family: 'Orbitron'; font-size: 9px; cursor: pointer; }
+        .stat-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 9px; }
+        .stat-val { color: var(--primary); font-weight: bold; }
+        
+        .progress-bar { width: 100%; height: 4px; background: #222; border-radius: 2px; margin-top: 5px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary); }
+
+        /* BOTÃO GHOST & ACESSO */
+        .btn-master { background: var(--primary); color: #000; border: none; padding: 10px; border-radius: 4px; font-family: 'Orbitron'; font-weight: bold; font-size: 9px; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div id="scr-login" class="screen active" style="justify-content: center; align-items: center;">
-    <h1 style="font-family:'Orbitron'; letter-spacing:10px; color:#151515; cursor:pointer;" onclick="handleGhost()">JP DIAS</h1>
-    <div class="glass" style="width: 300px;">
-        <input type="text" id="u" placeholder="USUÁRIO / MOTORISTA">
-        <input type="password" id="p" placeholder="SENHA">
-        <button onclick="login()" style="width:100%; padding:15px; margin-top:15px; background:var(--primary); color:#000; border:none; border-radius:5px; font-family:'Orbitron'; font-weight:bold;">ENTRAR</button>
+    <h1 style="font-family:'Orbitron'; color:#111; letter-spacing:10px; cursor:pointer;" onclick="handleGhost()">JP DIAS</h1>
+    <div style="background:#080808; border:1px solid #222; padding:20px; border-radius:12px; width:280px; text-align:center;">
+        <input type="password" id="p" placeholder="SENHA MESTRE" style="width:100%; padding:15px; background:#000; border:1px solid #333; color:var(--primary); font-family:'Orbitron'; text-align:center; margin-bottom:15px;">
+        <button onclick="loginMaster()" style="width:100%; padding:15px; background:var(--primary); border:none; border-radius:5px; font-family:'Orbitron'; font-weight:bold;">ACESSAR PAINEL GERAL</button>
     </div>
 </div>
 
-<div id="scr-lobby" class="screen">
+<div id="scr-master-panel" class="screen">
     <header>
-        <span style="font-family:'Orbitron'; color:var(--primary); font-size:12px;">HUB LOGÍSTICO</span>
-        <button onclick="location.reload()" style="background:none; border:1px solid var(--red); color:var(--red); font-size:8px; padding:4px 8px; border-radius:4px;">SAIR</button>
+        <span style="font-family:'Orbitron'; color:var(--primary); font-size:14px;">CONTROLE GERAL OPERACIONAL</span>
+        <button onclick="location.reload()" style="background:none; border:1px solid var(--red); color:var(--red); font-size:8px; padding:5px; border-radius:4px; border:1px solid var(--red);">LOGOUT</button>
     </header>
 
-    <div class="alert-box" id="stock-alert">⚠️ ALERTA: ABASTECIMENTO NECESSÁRIO NO SETOR A-05</div>
+    <div class="dashboard-grid">
+        
+        <div class="panel-card" style="border-top: 3px solid var(--primary);">
+            <div class="panel-header"><span>ARMAZÉM</span> <small style="color:var(--primary);">ON</small></div>
+            <div class="stat-row"><span>PICKING ATIVO:</span> <span class="stat-val">14</span></div>
+            <div class="stat-row"><span>PENDENTES:</span> <span class="stat-val" style="color:var(--gold)">08</span></div>
+            <div class="stat-row"><span>ABASTECER:</span> <span class="stat-val" style="color:var(--red)">02</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width: 65%;"></div></div>
+        </div>
 
-    <div class="grid">
-        <div class="card" onclick="go('scr-armazem', 'var(--primary)')"><i>AMZ</i><span>ARMAZÉM</span></div>
-        <div class="card" onclick="go('scr-cross', 'var(--blue)')"><i>CRX</i><span>CROSSDOCK</span></div>
-        <div class="card" onclick="go('scr-motorista', 'var(--gold)')"><i>DVR</i><span>MOTORISTAS</span></div>
-        <div class="card" onclick="go('scr-avaria', 'var(--red)')"><i>AVR</i><span>AVARIAS</span></div>
-    </div>
-</div>
+        <div class="panel-card" style="border-top: 3px solid var(--blue);">
+            <div class="panel-header"><span>CROSSDOCK</span> <small style="color:var(--blue);">FLUXO</small></div>
+            <div class="stat-row"><span>DOCA ENTRADA:</span> <span class="stat-val">03</span></div>
+            <div class="stat-row"><span>TRIAGEM:</span> <span class="stat-val">22 VOL.</span></div>
+            <div class="stat-row"><span>AG. SAÍDA:</span> <span class="stat-val">05 VOL.</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width: 80%; background:var(--blue);"></div></div>
+        </div>
 
-<div id="scr-armazem" class="screen">
-    <header><span style="font-family:'Orbitron'; color:var(--primary);">ARMAZÉM</span></header>
-    <div class="grid" style="grid-template-columns: 1fr 1fr;">
-        <div class="card" onclick="openOp('RECEBIMENTO')">IN<span>RECEBER</span></div>
-        <div class="card" onclick="openOp('SEPARAÇÃO (VOZ)')">VOZ<span>SEPARAR</span></div>
-        <div class="card" onclick="openOp('ABASTECIMENTO')">UP<span>ABASTECER</span></div>
-        <div class="card" onclick="openOp('CONFERÊNCIA')">OK<span>CONFERIR</span></div>
-    </div>
-    <button class="btn-footer" onclick="show('scr-lobby')">VOLTAR</button>
-</div>
+        <div class="panel-card" style="border-top: 3px solid var(--gold);">
+            <div class="panel-header"><span>MOTORISTAS</span> <small style="color:var(--gold);">ROTA</small></div>
+            <div class="stat-row"><span>EM TRÂNSITO:</span> <span class="stat-val">06</span></div>
+            <div class="stat-row"><span>CHECK-IN:</span> <span class="stat-val">02</span></div>
+            <div class="stat-row"><span>LIBERADOS:</span> <span class="stat-val">11</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width: 40%; background:var(--gold);"></div></div>
+        </div>
 
-<div id="scr-motorista" class="screen">
-    <header><span style="font-family:'Orbitron'; color:var(--gold);">PORTAL MOTORISTA</span></header>
-    <div class="glass">
-        <p style="font-size:10px; color:var(--gold);">PLACA: JP-2026 | ROTA: CENTRO-SUL</p>
-    </div>
-    <div class="grid">
-        <div class="card" style="border-color:var(--gold)">LISTA<span>PEDIDOS</span></div>
-        <div class="card" style="border-color:var(--gold)">MAPA<span>ROTEIRO</span></div>
-        <div class="card" style="border-color:var(--primary); grid-column: span 2;">OK<span>CONFIRMAR ENTREGA</span></div>
-    </div>
-    <button class="btn-footer" onclick="show('scr-lobby')">VOLTAR</button>
-</div>
+        <div class="panel-card" style="border-top: 3px solid var(--red);">
+            <div class="panel-header"><span>QUALIDADE</span> <small style="color:var(--red);">ALERTA</small></div>
+            <div class="stat-row"><span>AVARIAS HOJE:</span> <span class="stat-val">03</span></div>
+            <div class="stat-row"><span>DEVOLUÇÕES:</span> <span class="stat-val">01</span></div>
+            <div class="stat-row"><span>PERDAS:</span> <span class="stat-val">0%</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width: 15%; background:var(--red);"></div></div>
+        </div>
 
-<div id="scr-exec" class="screen">
-    <header><span id="exec-title" style="font-family:'Orbitron';">FUNÇÃO</span></header>
-    <div class="op-display" id="exec-border">
-        <h2 id="exec-main" style="font-family:'Orbitron'; font-size:24px;">PRONTO</h2>
-        <p id="exec-sub" style="font-size:9px; color:#555;">AGUARDANDO AÇÃO</p>
     </div>
-    <div id="exec-input-box" class="glass" style="display:none;">
-        <input type="text" id="scanner" placeholder="SCANNER / CÓDIGO">
+
+    <div class="glass" style="margin-top:15px; display:flex; gap:10px; align-items:center;">
+        <span style="font-size:8px; font-family:'Orbitron';">COMANDO RÁPIDO:</span>
+        <button class="btn-master" style="flex:1;" onclick="bip(1500); alert('ALERTA GERAL ENVIADO')">ALERTAR TODOS</button>
+        <button class="btn-master" style="flex:1; background:var(--blue); color:#fff;" onclick="bip(800); alert('NOVA ROTA LIBERADA')">LIBERAR MOTORISTAS</button>
     </div>
-    <button class="btn-footer" onclick="show('scr-lobby')">FINALIZAR</button>
 </div>
 
 <script>
-    let vCount = 0;
     const audio = new (window.AudioContext || window.webkitAudioContext)();
 
     function bip(f=800, d=0.1) {
@@ -106,65 +99,21 @@
         o.start(); setTimeout(()=>o.stop(), d*1000);
     }
 
-    function falar(t) {
-        window.speechSynthesis.cancel();
-        const m=new SpeechSynthesisUtterance(t); m.lang='pt-BR';
-        window.speechSynthesis.speak(m);
-    }
-
-    function login() { bip(); show('scr-lobby'); falar("Sistema operacional JP Dias iniciado."); }
-
-    function show(id) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-    }
-
-    function go(id, cor) { bip(1000, 0.05); show(id); }
-
-    function openOp(nome) {
-        bip(); show('scr-exec');
-        document.getElementById('exec-title').innerText = nome;
-        const main = document.getElementById('exec-main');
-        const sub = document.getElementById('exec-sub');
-        const input = document.getElementById('exec-input-box');
-
-        if(nome.includes('VOZ')) {
-            main.innerText = 'FALE "ATIVAR"';
-            sub.innerText = '3 VEZES PARA SEPARAÇÃO';
-            input.style.display = 'none';
-            falar("Módulo de voz iniciado.");
-            startVoice();
+    function loginMaster() {
+        const p = document.getElementById('p').value;
+        if(p === "9910") {
+            bip(1200, 0.2);
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('scr-master-panel').classList.add('active');
+            window.speechSynthesis.speak(new SpeechSynthesisUtterance("Painel Geral Master ativo. Monitorando operações."));
         } else {
-            main.innerText = 'SCANNER READY';
-            sub.innerText = 'AGUARDANDO BIPE';
-            input.style.display = 'block';
-            falar("Módulo " + nome + " ativo.");
+            bip(200, 0.5); alert("ACESSO NEGADO");
         }
-    }
-
-    function startVoice() {
-        const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if(!Rec) return;
-        const rec = new Rec(); rec.lang='pt-BR'; rec.continuous=true;
-        rec.onresult = (e) => {
-            const f = e.results[e.results.length-1][0].transcript.toLowerCase();
-            if(f.includes("ativar")) {
-                bip(1000, 0.1); vCount++; falar(vCount);
-                if(vCount === 3) {
-                    bip(1600, 0.3);
-                    document.getElementById('exec-main').innerText = "BOX A-05";
-                    falar("Vá para o Box A zero cinco. Abastecimento prioritário.");
-                    vCount = 0;
-                }
-            }
-        };
-        rec.start();
     }
 
     function handleGhost() {
-        if(prompt("MASTER KEY:") === "9910") {
-            falar("Acesso mestre."); show('scr-lobby');
-        }
+        bip(1500, 0.2);
+        document.getElementById('p').focus();
     }
 </script>
 </body>
