@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TESTE MOBILE | JP DIAS</title>
+    <title>JP DIAS | LOG-PRO V18.5</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #00ff41; --bg: #000; --inbound: #ffcc00; --outbound: #00ff41; --reversa: #ff3b30; --shark: #0a84ff; }
@@ -12,79 +12,74 @@
         .active { display: flex !important; }
         header { padding: 15px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; background: #050505; font-family: 'Orbitron'; font-size: 10px; }
         .scroll { flex: 1; overflow-y: auto; padding: 20px; }
-        .btn { width: 100%; padding: 20px; border: none; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; border-radius: 8px; margin-bottom: 15px; font-size: 14px; }
-        .btn-main { background: var(--primary); color: #000; }
-        .display { flex: 1; margin: 15px; border: 3px solid var(--primary); border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; background: #080808; text-align: center; }
-        #flash { position: absolute; width: 100%; height: 100%; background: var(--primary); color: #000; display: none; justify-content: center; align-items: center; font-family: 'Orbitron'; font-size: 30px; z-index: 100; border-radius: 17px; pointer-events: none; }
-        input, select { width: 100%; padding: 18px; background: #151515; border: 2px solid #333; color: #fff; font-family: 'Orbitron'; font-size: 14px; border-radius: 8px; margin-bottom: 15px; box-sizing: border-box; }
-        .kpi { background: #080808; border-left: 5px solid var(--primary); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #222; }
-        .kpi b { font-family: 'Orbitron'; color: var(--primary); font-size: 22px; }
+        .btn { width: 100%; padding: 18px; border: none; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; border-radius: 8px; margin-bottom: 12px; font-size: 13px; transition: 0.2s; }
+        .display { flex: 1; margin: 15px; border: 3px solid var(--primary); border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; background: #080808; }
+        #flash { position: absolute; width: 100%; height: 100%; background: var(--primary); display: none; z-index: 100; border-radius: 17px; pointer-events: none; }
+        input { width: 100%; padding: 15px; background: #111; border: 2px solid #333; color: #fff; font-family: 'Orbitron'; font-size: 14px; border-radius: 8px; margin-bottom: 10px; text-align: center; }
+        .kpi-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .kpi { background: #080808; border-bottom: 3px solid var(--primary); padding: 10px; border-radius: 8px; border: 1px solid #222; text-align: center; }
+        .kpi b { font-family: 'Orbitron'; color: var(--primary); font-size: 20px; }
+        .chart-bar { height: 12px; background: #222; border-radius: 6px; margin-top: 5px; overflow: hidden; border: 1px solid #333; }
+        .chart-fill { height: 100%; width: 0%; transition: 0.8s ease-in-out; }
+        .bot-tag { font-size: 8px; color: var(--primary); border: 1px solid var(--primary); padding: 2px 5px; border-radius: 3px; margin-left: 5px; }
     </style>
 </head>
 <body onload="boot()">
 
-<div id="flash">BIPADO ✓</div>
+<div id="flash"></div>
 
 <div id="scr-login" class="screen active">
     <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:30px;">
-        <h1 style="font-family:'Orbitron'; color:var(--primary); font-size:30px; letter-spacing:5px; text-align:center;">JP DIAS<br>LOG-PRO</h1>
-        <p style="font-size:10px; color:#555; margin-bottom:30px;">V18.2 - VERSÃO TESTE MOBILE</p>
-        <input type="number" id="pass" placeholder="SENHA (9910 OU 1234)" pattern="\d*">
-        <button class="btn btn-main" onclick="entrar()">ACESSAR AGORA</button>
+        <h1 style="font-family:'Orbitron'; color:var(--primary); font-size:28px; letter-spacing:5px; text-align:center;">JP DIAS LOG-PRO</h1>
+        <input type="number" id="pass" placeholder="SENHA (9910 OU 1234)">
+        <button class="btn" style="background:var(--primary);" onclick="entrar()">ENTRAR NO SISTEMA</button>
     </div>
 </div>
 
 <div id="scr-shark" class="screen">
-    <header><span>PAINEL DO DONO</span> <button onclick="location.reload()" style="color:var(--reversa); background:none; border:none; font-weight:bold;">SAIR</button></header>
+    <header><span>CENTRAL DE COMANDO</span> <button onclick="location.reload()" style="color:var(--reversa); background:none; border:none;">SAIR</button></header>
     <div class="scroll">
-        <div class="kpi"><small>BIPES TOTAIS</small><br><b id="shark-total">0</b></div>
-        <div class="kpi" style="border-left-color:var(--shark)"><small>FILA DE ENVIO</small><br><b id="shark-queue">0</b></div>
-        <div id="log-feed" style="font-size:11px; color:var(--primary); font-family:monospace; background:#050505; padding:15px; border:1px solid #333; height:200px; overflow-y:auto; border-radius:8px;">
-            > AGUARDANDO BIPE...
+        <div class="kpi-row">
+            <div class="kpi"><small>BIPES TOTAIS</small><br><b id="sh-total">0</b></div>
+            <div class="kpi" style="border-color:var(--shark)"><small>CAPACIDADE %</small><br><b id="sh-perc">0%</b></div>
         </div>
-    </div>
-</div>
+        
+        <label style="font-size:10px; color:#777;">FLUXO POR SETOR:</label>
+        <div style="margin-top:10px; background:#0a0a0a; padding:15px; border-radius:10px;">
+            <small>INBOUND (ENTRADA)</small> <div class="chart-bar"><div id="bar-in" class="chart-fill" style="background:var(--inbound)"></div></div>
+            <small style="margin-top:10px; display:block;">OUTBOUND (SAÍDA)</small> <div class="chart-bar"><div id="bar-out" class="chart-fill" style="background:var(--outbound)"></div></div>
+        </div>
 
-<div id="scr-setup" class="screen">
-    <header><span>CONFIGURAR POSTO</span></header>
-    <div class="scroll">
-        <label style="font-size:11px; color:var(--primary)">OPERADOR:</label>
-        <select id="sel-operador">
-            <option value="JP DIAS">JP DIAS (TESTE)</option>
-            <option value="AUXILIAR 01">AUXILIAR 01</option>
-        </select>
-        <label style="font-size:11px; color:var(--primary); margin-top:10px; display:block;">ESTAÇÃO:</label>
-        <button class="btn" style="background:var(--inbound)" onclick="abrirModulo('INBOUND', 'var(--inbound)')">RECEBIMENTO</button>
-        <button class="btn" style="background:var(--outbound)" onclick="abrirModulo('OUTBOUND', 'var(--outbound)')">EXPEDIÇÃO</button>
-        <button class="btn" style="background:var(--reversa); color:#fff" onclick="abrirModulo('REVERSA', 'var(--reversa)')">AVARIA</button>
+        <button id="btn-bot" class="btn" style="background:#222; color:var(--primary); margin-top:15px; border: 1px solid var(--primary);" onclick="toggleBots()">LIGAR EQUIPE (5 BOTS)</button>
+        <button class="btn" style="background:var(--reversa); color:#fff;" onclick="finalizarCarga()">FECHAR LISTA E RELATÓRIO</button>
+        
+        <div id="log-feed" style="font-size:10px; color:#444; font-family:monospace; margin-top:15px; border-top:1px solid #222; padding-top:10px; height:120px; overflow-y:auto;"></div>
     </div>
 </div>
 
 <div id="scr-operacao" class="screen">
-    <header><span id="txt-modulo">OPERANDO</span> <button onclick="ir('scr-setup')" style="color:#777; border:none; background:none;">VOLTAR</button></header>
+    <header><span id="txt-modulo">ESTAÇÃO ATIVA</span> <button onclick="ir('scr-login')" style="color:#555; background:none; border:none;">SAIR</button></header>
     <div id="area-display" class="display">
-        <h2 id="val-lido" style="font-family:'Orbitron'; font-size:28px;">PRONTO</h2>
-        <p id="txt-status" style="font-size:10px; color:#444;">AGUARDANDO CÓDIGO</p>
+        <h2 id="val-lido" style="font-family:'Orbitron'; font-size:30px;">PRONTO</h2>
+        <small id="status-envio" style="color:#444;">AGUARDANDO LEITURA</small>
     </div>
-    <div style="padding:20px; background:#0a0a0a; border-top:1px solid #222;">
-        <div id="meta-extra" style="display:none;">
-            <input type="text" id="inp-meta" placeholder="PLACA DO CARRO">
-        </div>
-        <input type="text" id="manual" placeholder="DIGITE O CÓDIGO AQUI">
-        <button id="btn-acao" class="btn btn-main" onclick="registrar()">BIPAR AGORA</button>
+    <div style="padding:20px; background:#050505;">
+        <select id="sel-mod" style="width:100%; padding:12px; background:#111; color:#fff; border:1px solid #333; margin-bottom:10px; font-family:'Orbitron';">
+            <option value="INBOUND">SETOR: RECEBIMENTO</option>
+            <option value="OUTBOUND">SETOR: EXPEDIÇÃO</option>
+        </select>
+        <input type="text" id="manual" placeholder="ESCANEIE O CÓDIGO">
+        <button id="btn-acao" class="btn" style="background:var(--primary); color:#000;" onclick="registrar()">CONFIRMAR BIPE</button>
     </div>
 </div>
 
 <script>
-    let CORE = { logs: [], queue: [], op: "JP DIAS", mod: "", cor: "", last: "" };
-
-    function boot() { updateUI(); }
+    let DATA = { bipes: [], in: 0, out: 0, botsAtivos: false, botInterval: null };
 
     function entrar() {
         const p = document.getElementById('pass').value;
         if(p === "9910") ir('scr-shark');
-        else if(p === "1234") ir('scr-setup');
-        else alert("SENHA INCORRETA");
+        else if(p === "1234") ir('scr-operacao');
     }
 
     function ir(id) {
@@ -92,54 +87,80 @@
         document.getElementById(id).classList.add('active');
     }
 
-    function abrirModulo(m, c) {
-        CORE.mod = m; CORE.cor = c;
-        CORE.op = document.getElementById('sel-operador').value;
-        document.getElementById('txt-modulo').innerText = m;
-        document.getElementById('area-display').style.borderColor = c;
-        document.getElementById('val-lido').style.color = c;
-        document.getElementById('btn-acao').style.background = c;
-        document.getElementById('meta-extra').style.display = (m === 'OUTBOUND') ? 'block' : 'none';
-        ir('scr-operacao');
-    }
-
-    function registrar() {
+    function registrar(isBot = false, botName = "", botMod = "") {
         const input = document.getElementById('manual');
-        let val = input.value.trim().toUpperCase();
-        const extra = document.getElementById('inp-meta').value || "N/A";
+        const mod = isBot ? botMod : document.getElementById('sel-mod').value;
+        let val = isBot ? "SIM-" + Math.floor(1000 + Math.random() * 9000) : input.value.trim().toUpperCase();
 
-        if(!val) return;
-        if(val === CORE.last) { alert("ERRO: CÓDIGO DUPLICADO!"); input.value = ""; return; }
+        if(!val && !isBot) return;
 
-        const entry = { h: new Date().toLocaleTimeString(), c: val, op: CORE.op, m: CORE.mod, ex: extra };
-        CORE.logs.push(entry);
-        CORE.queue.push(entry);
-        CORE.last = val;
-        
-        // Feedback visual
-        const f = document.getElementById('flash');
-        f.style.background = CORE.cor; f.style.display = 'flex';
-        
-        setTimeout(() => { 
-            f.style.display = 'none';
-            document.getElementById('val-lido').innerText = val;
-            input.value = "";
-            updateUI();
-            addLogFeed(entry);
-            // Simulação de envio para a nuvem
-            setTimeout(() => { if(CORE.queue.length > 0) CORE.queue.shift(); updateUI(); }, 1500);
-        }, 300);
+        const entry = { h: new Date().toLocaleTimeString(), c: val, m: mod, op: isBot ? botName : "JP DIAS" };
+        DATA.bipes.push(entry);
+        if(mod === "INBOUND") DATA.in++; else DATA.out++;
+
+        if(!isBot) {
+            const f = document.getElementById('flash');
+            f.style.background = (mod === "INBOUND") ? "var(--inbound)" : "var(--outbound)";
+            f.style.display = 'block';
+            setTimeout(() => {
+                f.style.display = 'none';
+                document.getElementById('val-lido').innerText = val;
+                document.getElementById('val-lido').style.color = f.style.background;
+                input.value = "";
+            }, 200);
+        }
+
+        updateShark();
+        addLog(entry, isBot);
     }
 
-    function updateUI() {
-        document.getElementById('shark-total').innerText = CORE.logs.length;
-        document.getElementById('shark-queue').innerText = CORE.queue.length;
+    function toggleBots() {
+        if(DATA.botsAtivos) {
+            clearInterval(DATA.botInterval);
+            DATA.botsAtivos = false;
+            document.getElementById('btn-bot').innerText = "LIGAR EQUIPE (5 BOTS)";
+            document.getElementById('btn-bot').style.background = "#222";
+        } else {
+            DATA.botsAtivos = true;
+            document.getElementById('btn-bot').innerText = "EQUIPE OPERANDO...";
+            document.getElementById('btn-bot').style.background = "var(--primary)";
+            document.getElementById('btn-bot').style.color = "#000";
+            
+            DATA.botInterval = setInterval(() => {
+                const names = ["OP-PEDRO", "OP-MARCOS", "OP-CARLOS", "OP-ANA", "OP-LUCAS"];
+                const rName = names[Math.floor(Math.random() * names.length)];
+                const rMod = Math.random() > 0.5 ? "INBOUND" : "OUTBOUND";
+                registrar(true, rName, rMod);
+            }, 1500);
+        }
     }
 
-    function addLogFeed(e) {
+    function updateShark() {
+        const total = DATA.bipes.length;
+        document.getElementById('sh-total').innerText = total;
+        document.getElementById('sh-perc').innerText = Math.min(Math.floor(total / 2), 100) + "%";
+        
+        // Ajuste de escala para o gráfico
+        const max = Math.max(DATA.in, DATA.out, 10);
+        document.getElementById('bar-in').style.width = (DATA.in / max * 100) + "%";
+        document.getElementById('bar-out').style.width = (DATA.out / max * 100) + "%";
+    }
+
+    function addLog(e, isBot) {
         const feed = document.getElementById('log-feed');
-        feed.innerHTML = `> [${e.h}] ${e.op} BIPOU ${e.c}<br>` + feed.innerHTML;
+        const botTag = isBot ? `<span class="bot-tag">${e.op}</span>` : `<span class="bot-tag" style="border-color:#fff; color:#fff">VOCÊ</span>`;
+        feed.innerHTML = `<div>> ${e.h} | ${e.c} ${botTag}</div>` + feed.innerHTML;
     }
+
+    function finalizarCarga() {
+        if(DATA.bipes.length === 0) return alert("SEM DADOS PARA FECHAR");
+        alert("LISTA FECHADA!\n\nRELATÓRIO GERADO:\nTotal de Itens: " + DATA.bipes.length + "\nEquipe Ativa: 6 Operadores");
+        DATA.bipes = []; DATA.in = 0; DATA.out = 0;
+        updateShark();
+        document.getElementById('log-feed').innerHTML = "CARGA DESPACHADA ✅";
+    }
+
+    function boot() { console.log("JP DIAS V18.5 - SHARK TURBO READY"); }
 </script>
 </body>
 </html>
