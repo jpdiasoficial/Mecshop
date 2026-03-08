@@ -3,63 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>JP DIAS | V25.5 OMNI</title>
+    <title>LOG-PRO | TECNOLOGIA JP DIAS</title>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #00ff41; --bg: #030303; --card: #0a0a0a; --in: #00d4ff; --out: #ff3b30; --wa: #25d366; }
+        :root { --primary: #00ff41; --bg: #000000; --input-bg: #111111; --out: #ff3b30; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; height: 100vh; text-transform: uppercase; }
-        .screen { display: none; position: absolute; width: 100%; height: 100%; flex-direction: column; background: radial-gradient(circle at center, #0a0a0a 0%, #000 100%); }
+        .screen { display: none; position: absolute; width: 100%; height: 100%; flex-direction: column; align-items: center; justify-content: center; background: #000; }
         .active { display: flex !important; }
-        header { padding: 15px; border-bottom: 1px solid #1a1a1a; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.9); font-family: 'Orbitron'; font-size: 10px; z-index: 10; }
-        .scroll { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 100px; }
-        .btn { width: 100%; padding: 16px; border: none; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; border-radius: 8px; margin-bottom: 12px; font-size: 11px; transition: 0.3s; }
-        .btn-sync { background: var(--primary); color: #000; padding: 6px 12px; border-radius: 5px; font-size: 9px; border: none; font-weight: 900; }
-        .btn-wa { background: var(--wa); color: #000; padding: 6px 12px; border-radius: 5px; font-size: 9px; text-decoration: none; font-weight: 900; }
-        #reader { width: 100%; border-radius: 15px; overflow: hidden; border: 1px solid #333 !important; background: #000; min-height: 200px; position: relative; margin-bottom: 15px; }
-        .scan-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 5; color: var(--primary); font-family: 'Orbitron'; font-size: 10px; text-align:center; padding: 20px; box-sizing: border-box; }
-        .card { background: var(--card); padding: 12px; border-radius: 8px; border-left: 3px solid var(--primary); margin-bottom: 10px; }
-        input, select { width: 100%; padding: 14px; background: #000; border: 1px solid #222; color: #fff; font-family: 'Orbitron'; border-radius: 8px; margin-bottom: 12px; outline: none; }
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); display: none; flex-direction: column; justify-content: center; padding: 40px; box-sizing: border-box; z-index: 100; text-align: center; }
-        .badge-in { color: var(--in); border: 1px solid var(--in); padding: 2px 4px; border-radius: 3px; font-size: 8px; }
-        .badge-out { color: var(--out); border: 1px solid var(--out); padding: 2px 4px; border-radius: 3px; font-size: 8px; }
+        
+        /* ESTILO NEON JP DIAS */
+        .logo-main { font-family: 'Orbitron'; color: var(--primary); font-size: 38px; letter-spacing: 4px; margin: 0; }
+        .sub-logo { font-size: 8px; color: #444; letter-spacing: 3px; margin-bottom: 40px; }
+        
+        .input-group { width: 85%; max-width: 400px; }
+        input, select { width: 100%; padding: 18px; background: var(--input-bg); border: 1px solid #222; color: #fff; font-family: 'Orbitron'; border-radius: 8px; margin-bottom: 15px; box-sizing: border-box; outline: none; }
+        .btn-green { width: 100%; padding: 18px; background: var(--primary); color: #000; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 8px; cursor: pointer; font-size: 11px; }
+        
+        header { width: 100%; padding: 15px; border-bottom: 1px solid #111; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; font-family: 'Orbitron'; font-size: 10px; }
+        .scroll { flex: 1; overflow-y: auto; width: 100%; padding: 20px; box-sizing: border-box; }
+        
+        #reader { width: 100%; border-radius: 12px; border: 1px solid #222 !important; background: #050505; min-height: 200px; margin-bottom: 15px; display: none; }
+        .card { background: #080808; padding: 15px; border-radius: 10px; border-left: 3px solid var(--primary); margin-bottom: 10px; width: 100%; box-sizing: border-box; position: relative; }
+        
+        table { width: 100%; border-collapse: collapse; font-size: 10px; }
+        th { color: #444; text-align: left; padding: 10px; border-bottom: 1px solid #111; }
+        td { padding: 12px 10px; border-bottom: 1px solid #050505; color: #888; }
+        .btn-del { color: var(--out); background: none; border: 1px solid #222; padding: 5px; border-radius: 4px; font-size: 8px; cursor: pointer; }
     </style>
 </head>
 <body onload="init()">
 
 <div id="scr-login" class="screen active">
-    <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:40px;">
-        <h1 style="font-family:'Orbitron'; font-size:32px; letter-spacing:5px;">LOG-PRO</h1>
-        <p style="font-size: 7px; color:#444; letter-spacing:4px; margin-bottom:30px;">JP DIAS | V25.5 OMNI</p>
-        <form onsubmit="auth(); return false;" style="width:100%">
-            <input type="password" id="pass" placeholder="SENHA" inputmode="numeric">
-            <button type="submit" class="btn" style="background:var(--primary); color:#000;">CONECTAR</button>
-        </form>
+    <div class="input-group">
+        <h1 class="logo-main">LOG-PRO</h1>
+        <p class="sub-logo">SISTEMA TECNOLOGIA JP DIAS</p>
+        <input type="password" id="pass" placeholder="SENHA DE ACESSO" inputmode="numeric">
+        <button class="btn-green" onclick="auth()">ENTRAR NO SISTEMA</button>
     </div>
-</div>
-
-<div id="modal-cad" class="modal">
-    <h2 style="font-family:'Orbitron'; color:var(--in);">NOVO ITEM</h2>
-    <p id="txt-cod-novo" style="font-family:monospace; color:#444; font-size: 9px; margin-bottom:20px;"></p>
-    <form onsubmit="confirmarCadastro(); return false;">
-        <input type="text" id="input-nome-fantasia" placeholder="NOME DO PRODUTO" autocomplete="off">
-        <button type="submit" class="btn" style="background:var(--in); color:#000;">CADASTRAR E ENTRAR</button>
-    </form>
 </div>
 
 <div id="scr-shark" class="screen">
     <header>
-        <span>HUB SHARK</span> 
-        <button class="btn-sync" onclick="sincronizarDadosSilencioso()">⚡ ATUALIZAR</button>
-        <button onclick="sair()" style="background:none; border:none; color:var(--out); font-family:'Orbitron'; font-size:9px;">SAIR</button>
+        <span style="color:var(--primary)">PAINEL DE COMANDO</span>
+        <button onclick="limparTudo()" style="background:var(--out); border:none; color:#fff; font-family:'Orbitron'; font-size:8px; padding:5px 10px; border-radius:4px;">ZERAR TUDO</button>
     </header>
     <div class="scroll">
-        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px; margin-bottom:20px;">
-            <div class="card"><small style="color:#444; font-size:7px;">ESTOQUE</small><br><b id="tot-geral">0</b></div>
-            <div class="card"><small style="color:#444; font-size:7px;">SKUS</small><br><b id="tot-itens">0</b></div>
-            <div class="card" style="border-left-color:purple"><small style="color:#444; font-size:7px;">ON</small><br><b id="tot-users">1</b></div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px;">
+            <div class="card"><small style="color:#444; font-size:7px;">ESTOQUE ATUAL</small><br><b id="tot-geral" style="font-size:22px;">0</b></div>
+            <div class="card"><small style="color:#444; font-size:7px;">SKUs ATIVOS</small><br><b id="tot-itens" style="font-size:22px;">0</b></div>
         </div>
-        <table style="width:100%; font-size:10px;">
+        <table>
+            <thead><tr><th>ITEM / REGISTRO</th><th>QTD</th><th>AÇÃO</th></tr></thead>
             <tbody id="table-body"></tbody>
         </table>
     </div>
@@ -67,41 +62,47 @@
 
 <div id="scr-op" class="screen">
     <header>
-        <span>OPERADOR</span> 
-        <div style="display:flex; gap:5px;">
-            <a href="https://wa.me/" target="_blank" class="btn-wa">ZAP</a>
-            <button class="btn-sync" id="sync-op" style="display:none;" onclick="enviarLote()">⚡ ENVIAR</button>
-        </div>
+        <span>COLETOR V26.6</span>
+        <button id="btn-sync" style="display:none; background:var(--primary); border:none; padding:5px 10px; font-family:'Orbitron'; font-size:9px;" onclick="enviarLote()">SUBIR PARA O PAINEL</button>
     </header>
     <div class="scroll">
-        <div style="display:grid; grid-template-columns: 2fr 1fr; gap:10px;">
-            <select id="sel-mod-op"><option value="IN">📥 ENTRADA</option><option value="OUT">📤 SAÍDA</option></select>
-            <input type="number" id="qtd-bipe" value="1">
-        </div>
-        <div id="reader">
-            <div id="scan-overlay" class="scan-overlay">CAMERA EM STANDBY<br><small style="font-size:7px;">ECONOMIZANDO BATERIA</small></div>
-        </div>
-        <button class="btn" id="btn-trigger" style="background:var(--primary); color:#000;" onclick="resumeScan()">⚡ LIGAR SCANNER</button>
-        <div id="lote-view" class="card" style="border:1px solid #222; border-left:none;">
-            <small style="color:#444;">LOTE ATUAL: <b id="lote-count" style="color:var(--primary);">0</b></small>
-            <div id="lote-list" style="font-size:9px; color:#666; margin-top:5px; height:50px; overflow-y:auto;"></div>
+        <select id="sel-mod-op">
+            <option value="IN">📥 ENTRADA (CADASTRAR)</option>
+            <option value="OUT">📤 SAÍDA (BAIXA)</option>
+        </select>
+        
+        <div id="reader"></div>
+        <button class="btn-green" id="btn-cam" onclick="toggleCamera()">ABRIR CÂMERA (SCANNER)</button>
+
+        <div id="lote-view" class="card" style="margin-top:20px; border-left-color:#333;">
+            <small style="color:#444;">LISTA PARA EMISSÃO: <b id="lote-count" style="color:var(--primary);">0</b></small>
+            <div id="lote-list" style="font-size:9px; color:#555; margin-top:10px; max-height:100px; overflow-y:auto;"></div>
         </div>
     </div>
 </div>
 
+<div id="modal-cad" class="screen" style="background:rgba(0,0,0,0.9); z-index:100;">
+    <div class="input-group">
+        <h2 style="font-family:'Orbitron'; color:var(--primary);">CADASTRAR ITEM</h2>
+        <input type="text" id="input-nome" placeholder="NOME DO PRODUTO">
+        <button class="btn-green" onclick="confirmarCadastro()">SALVAR NO ESTOQUE</button>
+    </div>
+</div>
+
 <script>
-    const canal = new BroadcastChannel('logpro_v25_5');
-    let DB_LOGS = JSON.parse(localStorage.getItem('V24_DB')) || [];
-    let CADASTRO = JSON.parse(localStorage.getItem('V24_CAD')) || {};
+    const canal = new BroadcastChannel('logpro_v26');
+    let DB_LOGS = JSON.parse(localStorage.getItem('LOGS_JP')) || [];
+    let CADASTRO = JSON.parse(localStorage.getItem('CAD_JP')) || {};
     let LOTE = [];
+    let scanner = null;
+    let camOn = false;
     let tempCod = "";
-    let scannerObj = null;
-    let onlineUsers = 1;
 
     function auth() {
         const p = document.getElementById('pass').value;
         if(p === "9910") ir('scr-shark');
-        else if(p === "1234") { canal.postMessage({ type: 'LOGIN' }); ir('scr-op'); startScan(); }
+        else if(p === "1234") ir('scr-op');
+        else alert("ACESSO NEGADO");
     }
 
     function ir(id) {
@@ -110,107 +111,87 @@
         if(id === 'scr-shark') atualizarPainel();
     }
 
-    function startScan() {
-        if(!scannerObj) {
-            scannerObj = new Html5Qrcode("reader");
-            scannerObj.start({ facingMode: "environment" }, { fps: 20, qrbox: 220 }, (txt) => { 
-                processarScan(txt); 
-                pauseScan(); 
+    async function toggleCamera() {
+        const rd = document.getElementById('reader');
+        const btn = document.getElementById('btn-cam');
+        if(!camOn) {
+            rd.style.display = 'block';
+            if(!scanner) scanner = new Html5Qrcode("reader");
+            await scanner.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, (txt) => {
+                processar(txt);
+                toggleCamera(); // Desliga após bipar para economizar bateria
             });
+            btn.innerText = "FECHAR CÂMERA";
+            camOn = true;
+        } else {
+            if(scanner) await scanner.stop();
+            rd.style.display = 'none';
+            btn.innerText = "ABRIR CÂMERA (SCANNER)";
+            camOn = false;
         }
     }
 
-    function pauseScan() { 
-        if(scannerObj) scannerObj.pause(true); 
-        document.getElementById('scan-overlay').style.display = 'flex';
-        document.getElementById('btn-trigger').style.display = 'block';
-    }
-
-    function resumeScan() { 
-        if(scannerObj) scannerObj.resume(); 
-        document.getElementById('scan-overlay').style.display = 'none';
-        document.getElementById('btn-trigger').style.display = 'none';
-        beep(400);
-    }
-
-    function processarScan(cod) {
+    function processar(cod) {
         tempCod = cod.trim();
         if(!CADASTRO[tempCod]) {
-            document.getElementById('txt-cod-novo').innerText = tempCod;
-            document.getElementById('modal-cad').style.display = 'flex';
-            document.getElementById('input-nome-fantasia').focus();
-        } else { registrarNoLote(tempCod); }
+            document.getElementById('modal-cad').classList.add('active');
+        } else {
+            adicionarAoLote(tempCod);
+        }
     }
 
     function confirmarCadastro() {
-        const nome = document.getElementById('input-nome-fantasia').value.toUpperCase();
+        const nome = document.getElementById('input-nome').value.toUpperCase();
         if(!nome) return;
         CADASTRO[tempCod] = nome;
-        localStorage.setItem('V24_CAD', JSON.stringify(CADASTRO));
-        document.getElementById('modal-cad').style.display = 'none';
-        document.getElementById('input-nome-fantasia').value = "";
-        registrarNoLote(tempCod);
+        localStorage.setItem('CAD_JP', JSON.stringify(CADASTRO));
+        document.getElementById('modal-cad').classList.remove('active');
+        adicionarAoLote(tempCod);
     }
 
-    function registrarNoLote(cod) {
-        const qtd = parseInt(document.getElementById('qtd-bipe').value) || 1;
+    function adicionarAoLote(cod) {
         const mod = document.getElementById('sel-mod-op').value;
-        
-        if(mod === 'OUT' && calcularEstoque(cod) < qtd) {
-            alert("ESTOQUE INSUFICIENTE!");
-            return;
-        }
-
-        LOTE.unshift({ cod: cod, nome: CADASTRO[cod], q: qtd, m: mod, h: new Date().toLocaleTimeString() });
+        LOTE.unshift({ cod, nome: CADASTRO[cod], m: mod, q: 1, d: new Date().toLocaleString() });
         document.getElementById('lote-count').innerText = LOTE.length;
-        document.getElementById('lote-list').innerHTML = LOTE.map(i => `[${i.m}] ${i.nome} x${i.q}<br>`).join('');
-        document.getElementById('sync-op').style.display = 'block';
-        beep(800);
-    }
-
-    function calcularEstoque(cod) {
-        let total = 0;
-        DB_LOGS.forEach(l => { if(l.cod === cod) total += (l.m === 'IN' ? l.q : -l.q); });
-        return total;
+        document.getElementById('lote-list').innerHTML = LOTE.map(i => `[${i.m}] ${i.nome}<br>`).join('');
+        document.getElementById('btn-sync').style.display = 'block';
     }
 
     function enviarLote() {
         canal.postMessage({ type: 'SYNC', dados: LOTE });
         DB_LOGS = [...LOTE, ...DB_LOGS];
-        localStorage.setItem('V24_DB', JSON.stringify(DB_LOGS));
+        localStorage.setItem('LOGS_JP', JSON.stringify(DB_LOGS));
         LOTE = [];
         document.getElementById('lote-count').innerText = "0";
         document.getElementById('lote-list').innerHTML = "";
-        document.getElementById('sync-op').style.display = 'none';
-        alert("SINCRONIZADO!");
+        document.getElementById('btn-sync').style.display = 'none';
+        alert("PLANILHA ATUALIZADA NO PAINEL!");
     }
 
-    function sincronizarDadosSilencioso() {
-        DB_LOGS = JSON.parse(localStorage.getItem('V24_DB')) || [];
-        atualizarPainel();
+    function removerItem(index) {
+        if(confirm("REMOVER ESTE REGISTRO?")) {
+            DB_LOGS.splice(index, 1);
+            localStorage.setItem('LOGS_JP', JSON.stringify(DB_LOGS));
+            atualizarPainel();
+        }
     }
 
     function atualizarPainel() {
         const body = document.getElementById('table-body');
-        let tIn = 0, tOut = 0;
-        body.innerHTML = DB_LOGS.map(l => {
-            l.m === 'IN' ? tIn += l.q : tOut += l.q;
-            return `<tr><td><b>${l.nome}</b></td><td>x${l.q}</td><td><span class="${l.m=='IN'?'badge-in':'badge-out'}">${l.m}</span></td></tr>`;
+        let saldo = 0;
+        body.innerHTML = DB_LOGS.map((l, idx) => {
+            l.m === 'IN' ? saldo += l.q : saldo -= l.q;
+            return `<tr><td><b>${l.nome}</b><br><small>${l.d}</small></td>
+                    <td style="color:${l.m=='IN'?'var(--primary)':'var(--out)'}">${l.m} x${l.q}</td>
+                    <td><button class="btn-del" onclick="removerItem(${idx})">DEL</button></td></tr>`;
         }).join('');
-        document.getElementById('tot-geral').innerText = tIn - tOut;
+        document.getElementById('tot-geral').innerText = saldo;
         document.getElementById('tot-itens').innerText = Object.keys(CADASTRO).length;
-        document.getElementById('tot-users').innerText = onlineUsers;
     }
 
-    canal.onmessage = (e) => {
-        if(e.data.type === 'SYNC') { DB_LOGS = [...e.data.dados, ...DB_LOGS]; localStorage.setItem('V24_DB', JSON.stringify(DB_LOGS)); atualizarPainel(); beep(1200); }
-        if(e.data.type === 'LOGIN') { onlineUsers++; atualizarPainel(); }
-    };
-
-    document.addEventListener("visibilitychange", () => { if(document.hidden) pauseScan(); });
-    function sair() { if(confirm("SAIR?")) location.reload(); }
-    function beep(f) { try { const c = new AudioContext(); const o = c.createOscillator(); o.connect(c.destination); o.frequency.value = f; o.start(); o.stop(c.currentTime + 0.1); } catch(e){} }
-    function init() { console.log("JP DIAS LOG-PRO V25.5"); }
+    function limparTudo() { if(confirm("DESEJA ZERAR TODO O ESTOQUE E PLANILHA?")) { localStorage.clear(); location.reload(); } }
+    function init() { console.log("MODO TESTE ATIVO"); }
+    canal.onmessage = (e) => { if(e.data.type === 'SYNC') { DB_LOGS = [...e.data.dados, ...DB_LOGS]; localStorage.setItem('LOGS_JP', JSON.stringify(DB_LOGS)); atualizarPainel(); } };
 </script>
 </body>
 </html>
