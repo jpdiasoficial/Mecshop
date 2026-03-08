@@ -25,23 +25,13 @@
         .btn-green { width: 100%; padding: 18px; background: var(--primary); color: #000; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 4px; cursor: pointer; }
         input, select, textarea { width: 100%; padding: 14px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; font-family: 'Orbitron'; margin-bottom: 10px; box-sizing: border-box; }
         #reader { width: 100%; border-radius: 8px; overflow: hidden; border: 2px solid #222; background: #050505; }
-        
-        #print-area { display: none; }
-        @media print {
-            .screen { display: none !important; }
-            #print-area { display: block !important; background: white !important; color: black !important; padding: 10px; }
-            table { border: 1px solid #000; width: 100%; border-collapse: collapse; color: black !important; }
-            th, td { border: 1px solid #000; padding: 5px; font-size: 10px; color: black !important; text-align: left; }
-        }
     </style>
 </head>
 <body onload="init()">
 
-<div id="print-area"></div>
-
 <div id="scr-login" class="screen active" style="align-items:center; justify-content:center; text-align:center;">
     <div style="font-family:'Orbitron'; color:var(--primary); font-size:35px;">LOG-PRO</div>
-    <div style="font-size:7px; color:#444; margin-bottom:40px;">JP TECNOLOGIA</div>
+    <div style="font-size:7px; color:#444; margin-bottom:40px;">JP TECNOLOGIA | REAL-TIME</div>
     <div style="width: 85%; max-width: 320px;">
         <input type="text" id="user-name" placeholder="USUÁRIO">
         <input type="password" id="pass" placeholder="CHAVE">
@@ -52,191 +42,141 @@
 <div id="scr-shark" class="screen">
     <header><span style="color:var(--primary)" id="shark-user-title">...</span> <button onclick="logout()" style="color:var(--out); background:none; border:none; font-size:8px;">SAIR</button></header>
     <div class="stats"><div class="card">ITENS <span id="stat-itens">0</span></div><div class="card">MOVS <span id="stat-movs">0</span></div><div class="card">SALDO <span id="stat-saldo">0</span></div></div>
-    
-    <div class="filters">
-        <input type="text" id="main-filter" placeholder="BUSCAR ITEM OU OPERADOR..." oninput="atualizarTabelas()">
-        <div style="display:flex; gap:5px;">
-            <input type="date" id="date-filter" style="flex:1;" onchange="atualizarTabelas()">
-            <button onclick="document.getElementById('date-filter').value=''; atualizarTabelas();" style="background:#222; border:none; color:#fff; padding:0 10px; border-radius:4px; font-size:8px;">LIMPAR</button>
-        </div>
-    </div>
-
     <div class="scroll">
-        <h3>INVENTÁRIO</h3>
-        <div class="table-wrapper"><table><thead><tr><th>COD</th><th>NOME</th><th>SALDO</th><th>AÇÕES</th></tr></thead><tbody id="stock-body"></tbody></table></div>
-        <h3>HISTÓRICO DE LOGÍSTICA</h3>
-        <div class="table-wrapper"><table><thead><tr><th>DATA/HORA</th><th>OP</th><th>MOV</th><th>ITEM</th><th>QTD</th></tr></thead><tbody id="audit-body"></tbody></table></div>
+        <h3>INVENTÁRIO</h3><div class="table-wrapper"><table><thead><tr><th>COD</th><th>NOME</th><th>SALDO</th></tr></thead><tbody id="stock-body"></tbody></table></div>
+        <h3>LOGÍSTICA EM TEMPO REAL</h3><div class="table-wrapper"><table><thead><tr><th>DATA/HORA</th><th>OP</th><th>MOV</th><th>ITEM</th><th>QTD</th></tr></thead><tbody id="audit-body"></tbody></table></div>
     </div>
-    
-    <div style="position:fixed; bottom:20px; right:20px; display:flex; flex-direction:column; gap:10px;">
-        <button onclick="prepararImpressao('GLOBAL')" style="width:50px; height:50px; border-radius:50%; background:#fff; border:none; font-weight:bold;">🖨️</button>
-        <button onclick="ir('scr-config')" style="width:50px; height:50px; border-radius:50%; background:var(--primary); border:none; font-weight:bold;">⚙️</button>
-    </div>
+    <button onclick="ir('scr-config')" style="position:fixed; bottom:20px; right:20px; width:50px; height:50px; border-radius:50%; background:var(--primary); border:none;">⚙️</button>
 </div>
 
 <div id="scr-op" class="screen">
     <header><span id="display-user">...</span> <button onclick="logout()" style="color:var(--out); background:none; border:none; font-size:8px;">SAIR</button></header>
     <div class="scroll">
         <div style="display:flex; gap:5px; margin-bottom:10px;">
-            <select id="mod-op" style="flex:2;"><option value="ENTRADA">ENTRADA</option><option value="SEPARACAO">SEPARAÇÃO</option><option value="SAIDA">SAÍDA</option></select>
+            <select id="mod-op" style="flex:2;"><option value="ENTRADA">ENTRADA</option><option value="SAIDA">SAÍDA</option></select>
             <input type="number" id="qtd-bipe" value="1" style="flex:0.6; text-align:center;">
         </div>
         <div id="reader"></div>
         <button class="btn-green" id="btn-cam" onclick="toggleCamera()" style="margin:10px 0;">LIGAR SCANNER</button>
-        
-        <h3>BIPES ATUAIS (EM ESPERA)</h3>
-        <div class="table-wrapper"><table><thead><tr><th>HORA</th><th>MOV</th><th>ITEM</th><th>QTD</th></tr></thead><tbody id="op-audit-body"></tbody></table></div>
-        
-        <button class="btn-green" onclick="salvarERomaneio()">GERAR E FINALIZAR LISTA</button>
-
-        <h3>HISTÓRICO DE ROMANEIOS (HOJE)</h3>
-        <div id="romaneios-history"></div>
+        <h3>BIPES DA SESSÃO</h3>
+        <div class="table-wrapper"><table><tbody id="op-audit-body"></tbody></table></div>
+        <button class="btn-green" onclick="finalizarSessao()">FINALIZAR E ENVIAR</button>
     </div>
 </div>
 
 <div id="scr-config" class="screen">
     <header><span>CONFIGURAÇÕES</span> <button onclick="ir('scr-shark')">VOLTAR</button></header>
     <div class="scroll">
-        <div id="area-exclusiva-jp" style="display:none; border: 1px solid var(--primary); padding:10px; border-radius:6px; margin-bottom:20px;">
-            <h3 style="margin-top:0">CONTROLE DE ACESSOS (MASTER JP)</h3>
-            <textarea id="op-area" style="height:100px; border:1px solid var(--primary)"></textarea>
-        </div>
-        <h3>BASE DE ITENS (COD, NOME)</h3>
-        <textarea id="import-area" style="height:200px;"></textarea>
-        <button class="btn-green" onclick="salvarConfig()">SALVAR TUDO</button>
-        <button onclick="resetTotal()" style="margin-top:20px; color:var(--out); background:none; border:none; width:100%; font-size:8px;">RESET TOTAL</button>
+        <textarea id="import-area" style="height:200px;" placeholder="COD, NOME"></textarea>
+        <button class="btn-green" onclick="salvarConfig()">SALVAR ITENS</button>
     </div>
 </div>
 
-<script>
-    const canal = new BroadcastChannel('logpro_jp_v73');
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    // CHAVES EXTRAÍDAS DA SUA FOTO
+    const firebaseConfig = {
+        apiKey: "AIzaSyDRDhONvvzZmo2csXksqHs6E6vV3MuvLSs",
+        authDomain: "log-pro-jp.firebaseapp.com",
+        projectId: "log-pro-jp",
+        storageBucket: "log-pro-jp.firebasestorage.app",
+        messagingSenderId: "481645607846",
+        appId: "1:481645607846:web:fd55dd943718ad78386d67"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
     let BASE = JSON.parse(localStorage.getItem('LP_BASE')) || {};
-    let MOVS = JSON.parse(localStorage.getItem('LP_MOVS')) || [];
-    let OPERADORES = JSON.parse(localStorage.getItem('LP_USERS')) || {"JP":"9910", "SHARK":"9910"};
-    let ROMANEIOS = JSON.parse(localStorage.getItem('LP_ROMS')) || [];
-    let bipesSessao = []; // LISTA VOLÁTIL QUE SOME APÓS ROMANEIO
+    let MOVS = []; // Agora alimentado pelo Firebase em tempo real
+    let OPERADORES = {"JP":"9910", "SHARK":"9910"};
     let currentUser = localStorage.getItem('LP_SESSION') || "";
-    let scanner, camOn = false, isLocked = false;
+    let bipesSessao = [];
+    let scanner, camOn = false;
 
-    function playBeep() { try { const ctx = new AudioContext(); const osc = ctx.createOscillator(); const g = ctx.createGain(); osc.connect(g); g.connect(ctx.destination); osc.frequency.value = 900; g.gain.setValueAtTime(0.4, ctx.currentTime); osc.start(); g.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.02); osc.stop(ctx.currentTime + 0.03); } catch(e){} }
+    // --- ESCUTADOR EM TEMPO REAL (SHARK MONITOR) ---
+    onSnapshot(query(collection(db, "logs"), orderBy("data_hora", "desc"), limit(50)), (snapshot) => {
+        MOVS = snapshot.docs.map(doc => doc.data());
+        atualizarTabelas();
+    });
 
-    function auth() {
+    window.auth = () => {
         const u = document.getElementById('user-name').value.toUpperCase().trim();
         const p = document.getElementById('pass').value.trim();
         if(OPERADORES[u] === p) { currentUser = u; localStorage.setItem('LP_SESSION', u); logarNaTela(); } else alert("ACESSO NEGADO");
-    }
+    };
 
-    function logarNaTela() {
+    window.logarNaTela = () => {
         if(!currentUser) return;
         if(currentUser === "JP" || currentUser === "SHARK") {
-            document.getElementById('shark-user-title').innerText = currentUser === "JP" ? "MASTER: JP" : "GESTÃO: SHARK";
-            document.getElementById('area-exclusiva-jp').style.display = currentUser === "JP" ? "block" : "none";
+            document.getElementById('shark-user-title').innerText = "GESTOR: " + currentUser;
             ir('scr-shark');
         } else {
             document.getElementById('display-user').innerText = "OP: " + currentUser;
-            ir('scr-op'); atualizarOpAudit(); atualizarHistoricoRomaneios();
+            ir('scr-op');
         }
-    }
+    };
 
-    function logout() { currentUser = ""; localStorage.removeItem('LP_SESSION'); ir('scr-login'); }
-
-    function ir(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); if(id === 'scr-shark') atualizarTabelas(); }
-
-    function processar(cod) {
-        if(isLocked) return; isLocked = true; let c = cod.trim();
+    window.processar = async (cod) => {
+        let c = cod.trim();
         if(!BASE[c]) {
-            playBeep(); const n = prompt("NOVO ITEM ("+c+"). NOME:", "");
-            if(n) { BASE[c] = n.toUpperCase(); localStorage.setItem('LP_BASE', JSON.stringify(BASE)); } else { isLocked = false; return; }
-        } else playBeep();
-        
-        const q = parseInt(document.getElementById('qtd-bipe').value) || 1;
-        const novaMov = { cod: c, n: BASE[c], m: document.getElementById('mod-op').value, q, d: new Date().toLocaleString(), u: currentUser };
-        
-        // ADICIONA NA SESSÃO ATUAL (QUE VAI SUMIR)
-        bipesSessao.unshift(novaMov);
-        
-        // SALVA NO HISTÓRICO GERAL (PARA O SHARK VER)
-        MOVS.unshift(novaMov);
-        localStorage.setItem('LP_MOVS', JSON.stringify(MOVS));
-        
-        atualizarOpAudit(); canal.postMessage('sync');
-        setTimeout(() => isLocked = false, 800);
-    }
-
-    function atualizarOpAudit() {
-        document.getElementById('op-audit-body').innerHTML = bipesSessao.map(m => `<tr><td>${m.d.split(',')[1]}</td><td>${m.m}</td><td>${m.n}</td><td>${m.q}</td></tr>`).join('');
-    }
-
-    function salvarERomaneio() {
-        if(bipesSessao.length === 0) return alert("LISTA VAZIA");
-        
-        // SALVA NO HISTÓRICO DE ROMANEIOS
-        const nR = { id: Date.now(), data: new Date().toLocaleString(), itens: [...bipesSessao], user: currentUser };
-        ROMANEIOS.unshift(nR);
-        localStorage.setItem('LP_ROMS', JSON.stringify(ROMANEIOS));
-        
-        // GERA IMPRESSÃO
-        prepararImpressao('OP', bipesSessao);
-        
-        // LIMPA A TELA DO OPERADOR
-        bipesSessao = [];
-        atualizarOpAudit();
-        atualizarHistoricoRomaneios();
-    }
-
-    function atualizarHistoricoRomaneios() {
-        const l = ROMANEIOS.filter(r => r.user === currentUser).slice(0, 5);
-        document.getElementById('romaneios-history').innerHTML = l.map(r => `<div style="background:#111; padding:10px; border:1px solid #222; margin-bottom:5px; display:flex; justify-content:space-between; align-items:center;"><span>ID: ${r.id.toString().slice(-4)} | ${r.data.split(',')[1]}</span><button onclick='prepararImpressao("OP", ROMANEIOS.find(x=>x.id===${r.id}).itens)' style="background:var(--primary); border:none; padding:5px 10px; border-radius:3px; font-weight:bold;">REIMPRIMIR</button></div>`).join('');
-    }
-
-    function atualizarTabelas() {
-        const f = document.getElementById('main-filter').value.toUpperCase();
-        const dF = document.getElementById('date-filter').value;
-        let movsF = MOVS.filter(m => {
-            const dM = m.d.split(',')[0].split('/').reverse().join('-');
-            return (dF ? dM === dF : true) && (m.n.includes(f) || m.u.includes(f) || m.cod.includes(f));
-        });
-        let r = {}; let totalS = 0;
-        Object.keys(BASE).forEach(k => r[k] = { n: BASE[k], sal: 0 });
-        MOVS.forEach(m => { if(r[m.cod]) { if(m.m === 'ENTRADA') r[m.cod].sal += m.q; else r[m.cod].sal -= m.q; } });
-        document.getElementById('stock-body').innerHTML = Object.keys(r).filter(k => r[k].n.includes(f) || k.includes(f)).map(k => {
-            totalS += r[k].sal;
-            const btn = currentUser === "JP" ? `<button style="background:none; border:1px solid #333; color:var(--primary); font-size:8px; padding:2px 5px;" onclick="BASE['${k}']=prompt('NOVO NOME',BASE['${k}']).toUpperCase(); localStorage.setItem('LP_BASE',JSON.stringify(BASE)); atualizarTabelas();">EDITAR</button>` : "-";
-            return `<tr><td>${k}</td><td><b>${r[k].n}</b></td><td style="color:var(--primary)">${r[k].sal}</td><td>${btn}</td></tr>`;
-        }).join('');
-        document.getElementById('audit-body').innerHTML = movsF.slice(0, 50).map(m => `<tr><td>${m.d}</td><td>${m.u}</td><td>${m.m}</td><td>${m.n}</td><td>${m.q}</td></tr>`).join('');
-        document.getElementById('stat-itens').innerText = Object.keys(BASE).length;
-        document.getElementById('stat-movs').innerText = movsF.length; document.getElementById('stat-saldo').innerText = totalS;
-        document.getElementById('op-area').value = Object.entries(OPERADORES).map(([k,v]) => `${k}, ${v}`).join('\n');
-        document.getElementById('import-area').value = Object.entries(BASE).map(([k,v]) => `${k}, ${v}`).join('\n');
-    }
-
-    function prepararImpressao(t, d = null) {
-        let l = d ? d : MOVS.slice(0, 50);
-        let h = `<div style="text-align:center;"><h2>LOG-PRO | ROMANEIO</h2><p>${new Date().toLocaleString()}</p></div><hr><table><thead><tr><th>DATA/HORA</th><th>OP</th><th>MOV</th><th>ITEM</th><th>QTD</th></tr></thead><tbody>`;
-        h += l.map(m => `<tr><td>${m.d}</td><td>${m.u}</td><td>${m.m}</td><td>${m.n}</td><td>${m.q}</td></tr>`).join('');
-        h += `</tbody></table><br><div style="border-top:1px solid #000; padding-top:10px;">ASSINATURA RESPONSÁVEL:</div>`;
-        document.getElementById('print-area').innerHTML = h; window.print();
-    }
-
-    function salvarConfig() {
-        if(currentUser === "JP") {
-            let nO = {}; document.getElementById('op-area').value.split('\n').forEach(l => { const d = l.split(','); if(d[0] && d[1]) nO[d[0].trim().toUpperCase()] = d[1].trim(); });
-            OPERADORES = nO; localStorage.setItem('LP_USERS', JSON.stringify(OPERADORES));
+            const n = prompt("NOVO ITEM ("+c+"). NOME:", "");
+            if(n) { BASE[c] = n.toUpperCase(); localStorage.setItem('LP_BASE', JSON.stringify(BASE)); } else return;
         }
+        const q = parseInt(document.getElementById('qtd-bipe').value) || 1;
+        const mov = { 
+            item: BASE[c], 
+            cod: c, 
+            tipo: document.getElementById('mod-op').value, 
+            qtd: q, 
+            op: currentUser, 
+            data_hora: serverTimestamp(),
+            data_str: new Date().toLocaleString()
+        };
+        
+        await addDoc(collection(db, "logs"), mov); // ENVIA PARA O SHARK NA HORA
+        bipesSessao.unshift(mov);
+        atualizarOpAudit();
+    };
+
+    window.atualizarTabelas = () => {
+        document.getElementById('audit-body').innerHTML = MOVS.map(m => `
+            <tr><td>${m.data_str || 'Sinc...'}</td><td>${m.op}</td><td>${m.tipo}</td><td>${m.item}</td><td>${m.qtd}</td></tr>
+        `).join('');
+        // Cálculo de saldo simplificado para o Shark
+        let saldos = {};
+        MOVS.forEach(m => {
+            if(!saldos[m.item]) saldos[m.item] = 0;
+            m.tipo === "ENTRADA" ? saldos[m.item] += m.qtd : saldos[m.item] -= m.qtd;
+        });
+        document.getElementById('stock-body').innerHTML = Object.entries(saldos).map(([nome, sal]) => `
+            <tr><td>-</td><td>${nome}</td><td style="color:var(--primary)">${sal}</td></tr>
+        `).join('');
+    };
+
+    window.finalizarSessao = () => { bipesSessao = []; atualizarOpAudit(); alert("ENVIADO AO FIREBASE!"); };
+    window.atualizarOpAudit = () => { document.getElementById('op-audit-body').innerHTML = bipesSessao.map(m => `<tr><td>${m.item}</td><td>${m.qtd}</td></tr>`).join(''); };
+    window.ir = (id) => { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); };
+    window.logout = () => { localStorage.removeItem('LP_SESSION'); location.reload(); };
+    
+    window.toggleCamera = async () => {
+        if(!camOn) { 
+            scanner = new Html5Qrcode("reader"); 
+            await scanner.start({ facingMode: "environment" }, { fps: 20, qrbox: 250 }, (t) => processar(t)); 
+            camOn = true; document.getElementById('btn-cam').innerText = "PARAR SCANNER"; 
+        } else { 
+            await scanner.stop(); camOn = false; document.getElementById('btn-cam').innerText = "LIGAR SCANNER"; 
+        }
+    };
+
+    window.salvarConfig = () => {
         document.getElementById('import-area').value.split('\n').forEach(l => { const d = l.split(','); if(d[0] && d[1]) BASE[d[0].trim()] = d[1].trim().toUpperCase(); });
-        localStorage.setItem('LP_BASE', JSON.stringify(BASE)); alert("SALVO!"); atualizarTabelas();
-    }
+        localStorage.setItem('LP_BASE', JSON.stringify(BASE)); alert("ITENS SALVOS!");
+    };
 
-    function resetTotal() { if(confirm("LIMPAR TUDO?")) { localStorage.clear(); location.reload(); } }
-
-    async function toggleCamera() {
-        if(!camOn) { if(!scanner) scanner = new Html5Qrcode("reader"); await scanner.start({ facingMode: "environment" }, { fps: 30, qrbox: 250 }, (t) => processar(t)); camOn = true; document.getElementById('btn-cam').innerText = "PARAR"; }
-        else { await scanner.stop(); camOn = false; document.getElementById('btn-cam').innerText = "LIGAR SCANNER"; }
-    }
-
-    canal.onmessage = () => { MOVS = JSON.parse(localStorage.getItem('LP_MOVS')) || []; BASE = JSON.parse(localStorage.getItem('LP_BASE')) || []; atualizarTabelas(); };
-    function init() { logarNaTela(); atualizarTabelas(); }
+    window.init = () => { logarNaTela(); };
 </script>
 </body>
-    </html>
+</html>
