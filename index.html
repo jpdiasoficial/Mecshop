@@ -3,92 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LOG-PRO | JP TECNOLOGIA</title>
+    <title>LOG-PRO v75.1 | JP TECNOLOGIA</title>
     <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #00ff41; --bg: #000; --border: #222; --sep: #ffae00; }
+        :root { --primary: #00ff41; --bg: #000; --border: #222; --sep: #ffae00; --danger: #ff3b30; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; text-transform: uppercase; font-size: 10px; height: 100vh; overflow: hidden; }
         .screen { display: none; position: absolute; width: 100%; height: 100%; flex-direction: column; background: #000; z-index: 10; }
         .active { display: flex !important; }
         header { padding: 12px; border-bottom: 1px solid #111; display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron'; background: #050505; }
         .scroll { flex: 1; overflow-y: auto; padding: 10px; padding-bottom: 150px; }
-        .stats { display: flex; gap: 10px; padding: 10px; background: #080808; border-bottom: 1px solid #111; }
+        .presence-bar { display: flex; gap: 10px; padding: 8px 12px; background: #0a0a0a; border-bottom: 1px solid #222; font-size: 8px; }
+        .online { color: var(--primary); font-weight: bold; text-shadow: 0 0 5px var(--primary); }
+        .stats { display: flex; gap: 8px; padding: 10px; background: #080808; border-bottom: 1px solid #111; }
         .card { flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 4px; text-align: center; }
         .card span { display: block; font-size: 14px; color: var(--primary); font-family: 'Orbitron'; }
         .table-wrapper { border: 1px solid var(--border); border-radius: 6px; overflow-x: auto; background: #080808; margin-bottom: 15px; }
-        table { width: 100%; border-collapse: collapse; min-width: 350px; }
-        th { background: #111; color: #555; padding: 10px; text-align: left; font-size: 8px; border-bottom: 1px solid var(--border); }
-        td { padding: 8px 10px; border-bottom: 1px solid #151515; white-space: nowrap; }
-        .btn-green { width: 100%; padding: 18px; background: var(--primary); color: #000; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 4px; cursor: pointer; margin-bottom: 5px; }
-        .btn-sep { background: var(--sep) !important; color: #000 !important; }
-        input, select, textarea { width: 100%; padding: 14px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; font-family: 'Orbitron'; margin-bottom: 10px; box-sizing: border-box; }
-        #reader { width: 100%; border-radius: 8px; overflow: hidden; border: 2px solid #222; }
-        .status-bar { display: flex; gap: 10px; padding: 5px 12px; background: #050505; border-bottom: 1px solid #111; font-size: 7px; }
+        table { width: 100%; border-collapse: collapse; min-width: 500px; }
+        th { background: #111; color: #555; padding: 10px; text-align: left; font-size: 7px; border-bottom: 1px solid #222; }
+        td { padding: 10px; border-bottom: 1px solid #151515; white-space: nowrap; font-size: 9px; }
+        .btn-green { width: 100%; padding: 15px; background: var(--primary); color: #000; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 4px; cursor: pointer; }
+        input, select, textarea { width: 100%; padding: 12px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; font-family: 'Orbitron'; margin-bottom: 5px; box-sizing: border-box; }
+        #reader { width: 100%; border-radius: 8px; overflow: hidden; border: 2px solid #222; margin-bottom: 10px; }
     </style>
 </head>
 <body onload="init()">
 
 <div id="scr-login" class="screen active" style="align-items:center; justify-content:center;">
-    <div style="font-family:'Orbitron'; color:var(--primary); font-size:30px;">LOG-PRO v73.3</div>
+    <div style="font-family:'Orbitron'; color:var(--primary); font-size:35px; text-align:center;">LOG-PRO<br><span style="font-size:8px; color:#444;">VERIFIED v75.1</span></div>
     <div style="width: 80%; max-width: 300px; margin-top:20px;">
         <input type="text" id="user-name" placeholder="USUÁRIO">
-        <input type="password" id="pass" placeholder="CHAVE">
-        <button class="btn-green" onclick="auth()">ENTRAR</button>
+        <input type="password" id="pass" placeholder="CHAVE MESTRA">
+        <button class="btn-green" onclick="auth()">ENTRAR NA REDE</button>
     </div>
 </div>
 
 <div id="scr-shark" class="screen">
-    <header><span id="shark-title">GESTOR</span> <button onclick="logout()" style="color:red; background:none; border:none;">SAIR</button></header>
-    <div class="status-bar"><span id="st-jp">JP: ⚪</span> <span id="st-shark">SHARK: ⚪</span> <span id="st-op">OP: ⚪</span></div>
-    <div class="stats"><div class="card">ESTOQUE <span id="stat-total">0</span></div><div class="card">PEDIDOS <span id="stat-pedidos">0</span></div></div>
+    <header><span id="shark-title">GESTOR</span> <button onclick="logout()" style="color:var(--danger); background:none; border:none;">SAIR</button></header>
+    <div class="presence-bar"><span id="st-jp">JP: ⚪</span> <span id="st-shark">SHARK: ⚪</span> <span id="st-op">OP: ⚪</span></div>
     
+    <div style="padding: 10px; background: #080808; border-bottom: 1px solid #222;">
+        <canvas id="prodChart" style="width: 100%; height: 110px;"></canvas>
+    </div>
+
+    <div class="stats">
+        <div class="card">ITENS BASE <span id="stat-total">0</span></div>
+        <div class="card">PENDÊNCIAS <span id="stat-pedidos">0</span></div>
+    </div>
+
     <div class="scroll">
-        <h3>SUBIR LISTA DE SEPARAÇÃO (PICKING)</h3>
-        <textarea id="list-input" placeholder="FORMATO: COD, QTD (Ex: 001, 10)" style="height:80px;"></textarea>
-        <button class="btn-green btn-sep" onclick="enviarListaSeparacao()">ENVIAR PARA OPERADOR</button>
+        <div style="padding: 10px; border: 1px dashed var(--primary); margin-bottom: 10px; background: #050505;">
+            <p style="margin:0 0 5px 0; font-size:7px; color:var(--primary);">ENTRADA MANUAL / AJUSTE RÁPIDO</p>
+            <div style="display:flex; gap:5px;">
+                <input type="text" id="ins-cod" placeholder="COD" style="margin:0;">
+                <input type="number" id="ins-qtd" value="1" style="margin:0; width:60px;">
+                <button onclick="processarManual()" style="background:var(--primary); border:none; padding:10px; border-radius:4px; font-weight:bold;">ADD</button>
+            </div>
+        </div>
+
+        <h3>HISTÓRICO COMPLETO</h3>
+        <div class="table-wrapper"><table><thead><tr><th>HORA</th><th>OP</th><th>TIPO</th><th>ITEM</th><th>QTD</th></tr></thead><tbody id="audit-body"></tbody></table></div>
         
-        <h3>STATUS DA SEPARAÇÃO</h3>
-        <div class="table-wrapper"><table><thead><tr><th>ITEM</th><th>PEDIDO</th><th>FALTA</th><th>STATUS</th></tr></thead><tbody id="sep-status-body"></tbody></table></div>
+        <h3>INVENTÁRIO ATUALIZADO</h3>
+        <div class="table-wrapper"><table><thead><tr><th>CÓDIGO</th><th>NOME DO PRODUTO</th><th>SALDO REAL</th></tr></thead><tbody id="stock-body"></tbody></table></div>
         
-        <h3>HISTÓRICO GERAL</h3>
-        <div class="table-wrapper"><table><thead><tr><th>HORA</th><th>OP</th><th>MOV</th><th>ITEM</th><th>QTD</th></tr></thead><tbody id="audit-body"></tbody></table></div>
+        <div style="display:flex; gap:5px;">
+            <button onclick="exportar('print')" class="btn-green" style="background:#fff; font-size:8px;">🖨️ IMPRIMIR</button>
+            <button onclick="exportar('email')" class="btn-green" style="background:#444; color:#fff; font-size:8px;">📧 E-MAIL</button>
+        </div>
     </div>
     <button onclick="ir('scr-config')" style="position:fixed; bottom:20px; right:20px; width:50px; height:50px; border-radius:50%; background:var(--primary); border:none;">⚙️</button>
 </div>
 
 <div id="scr-op" class="screen">
-    <header><span id="display-user">OP</span> <button onclick="logout()" style="color:red; background:none; border:none;">SAIR</button></header>
+    <header><span id="display-user">OPERADOR</span> <button onclick="logout()" style="color:var(--danger); background:none; border:none;">SAIR</button></header>
     <div class="scroll">
-        <div id="area-separacao" style="border: 1px solid var(--sep); padding:10px; border-radius:5px; margin-bottom:15px; background: #1a1500;">
-            <h4 style="color:var(--sep); margin:0 0 10px 0;">📦 LISTA PARA SEPARAR:</h4>
-            <div id="op-list-picking">Aguardando lista...</div>
-        </div>
-
-        <div style="display:flex; gap:5px;">
-            <select id="mod-op" style="flex:2;"><option value="SAIDA">SAÍDA / SEPARAÇÃO</option><option value="ENTRADA">ENTRADA</option></select>
+        <div id="op-list-picking" style="border: 2px solid var(--sep); padding:10px; color:var(--sep); margin-bottom:10px; background:#120e00;">Carregando demandas...</div>
+        <div id="reader"></div>
+        <button class="btn-green" id="btn-cam" onclick="toggleCamera()">ATIVAR SCANNER</button>
+        <div style="display:flex; gap:5px; margin-top:10px;">
+            <select id="mod-op" style="flex:2;"><option value="SAIDA">SAÍDA / PICKING</option><option value="ENTRADA">ENTRADA</option></select>
             <input type="number" id="qtd-bipe" value="1" style="flex:0.6; text-align:center;">
         </div>
-        <div id="reader"></div>
-        <button class="btn-green" id="btn-cam" onclick="toggleCamera()">LIGAR SCANNER</button>
-        
-        <h3>ÚLTIMOS BIPES</h3>
-        <div id="op-audit-body" style="font-size:9px; color:#aaa;"></div>
+        <div id="op-audit-body" style="font-size:8px; margin-top:15px; color:#555;"></div>
     </div>
 </div>
 
 <div id="scr-config" class="screen">
-    <header><span>CONFIG</span> <button onclick="ir('scr-shark')">VOLTAR</button></header>
+    <header><span>BASE DE DADOS</span> <button onclick="ir('scr-shark')">VOLTAR</button></header>
     <div class="scroll">
-        <h3>CADASTRO DE ITENS (COD, NOME)</h3>
-        <textarea id="import-area" style="height:150px;"></textarea>
+        <textarea id="import-area" style="height:300px;" placeholder="COD, NOME"></textarea>
         <button class="btn-green" onclick="salvarConfig()">SALVAR BASE</button>
+        <button onclick="localStorage.clear(); location.reload();" style="margin-top:20px; color:red; background:none; border:none; width:100%;">LIMPAR TUDO</button>
     </div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit, setDoc, doc, updateDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit, setDoc, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyDRDhONvvzZmo2csXksqHs6E6vV3MuvLSs",
@@ -101,88 +114,80 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-
     let BASE = JSON.parse(localStorage.getItem('LP_BASE')) || {};
-    let currentUser = localStorage.getItem('LP_SESSION') || "";
-    let scanner, camOn = false;
+    let MOVS = []; let myChart; let currentUser = localStorage.getItem('LP_SESSION') || ""; let scanner, camOn = false;
 
-    // PRESENÇA E MONITORAMENTO
-    async function sinal() { if(currentUser) await setDoc(doc(db, "presenca", currentUser), { u: currentUser, t: serverTimestamp() }); }
-    setInterval(sinal, 15000);
-    onSnapshot(collection(db, "presenca"), (s) => { s.docs.forEach(d => { const p = d.data(); const el = document.getElementById("st-"+p.u.toLowerCase()); if(el) el.innerHTML = p.u + ": 🟢"; }); });
+    // PRESENÇA REAL-TIME
+    async function heartbeat() { if(currentUser) await setDoc(doc(db, "presenca", currentUser), { u: currentUser, t: serverTimestamp() }); }
+    setInterval(heartbeat, 15000);
+    onSnapshot(collection(db, "presenca"), (s) => { s.docs.forEach(d => { const p = d.data(); const el = document.getElementById("st-"+p.u.toLowerCase()); if(el) el.innerHTML = `${p.u}: <span class="online">🟢 ON</span>`; }); });
 
-    // ESCUTADOR DE SEPARAÇÃO (PICKING)
+    // ESCUTADOR DE LOGS
+    onSnapshot(query(collection(db, "logs"), orderBy("data_hora", "desc"), limit(50)), (snap) => {
+        MOVS = snap.docs.map(d => d.data());
+        render();
+    });
+
+    // ESCUTADOR DE SEPARAÇÃO
     onSnapshot(collection(db, "separacao"), (s) => {
-        let hGestor = ""; let hOp = ""; let count = 0;
-        s.docs.forEach(d => {
-            const p = d.data();
-            const falta = p.qtd_pedida - p.qtd_feita;
-            const statusCor = falta <= 0 ? "var(--primary)" : "var(--sep)";
-            hGestor += `<tr><td>${p.nome}</td><td>${p.qtd_pedida}</td><td>${falta}</td><td style="color:${statusCor}">${falta<=0?'OK':'PENDENTE'}</td></tr>`;
-            if(falta > 0) {
-                hOp += `<div style="padding:5px; border-bottom:1px solid #333;"><b>${p.nome}</b>: Faltam <span style="color:var(--sep)">${falta}</span></div>`;
-                count++;
-            }
-        });
-        document.getElementById('sep-status-body').innerHTML = hGestor;
-        document.getElementById('op-list-picking').innerHTML = hOp || "NADA PENDENTE 🎉";
+        let hO = ""; let count = 0;
+        s.docs.forEach(d => { const p = d.data(); const f = p.qtd_pedida - p.qtd_feita; if(f > 0) { hO += `<div>📦 ${p.nome}: FALTAM ${f}</div>`; count++; } });
+        document.getElementById('op-list-picking').innerHTML = hO || "TUDO OK! ✅";
         document.getElementById('stat-pedidos').innerText = count;
     });
 
-    // ESCUTADOR DE LOGS
-    onSnapshot(query(collection(db, "logs"), orderBy("data_hora", "desc"), limit(30)), (s) => {
-        document.getElementById('audit-body').innerHTML = s.docs.map(d => {
-            const m = d.data(); return `<tr><td>${m.d_str}</td><td>${m.op}</td><td>${m.t}</td><td>${m.n}</td><td>${m.q}</td></tr>`;
-        }).join('');
-    });
-
-    window.enviarListaSeparacao = async () => {
-        const linhas = document.getElementById('list-input').value.split('\n');
-        for(let l of linhas) {
-            const [cod, qtd] = l.split(',');
-            if(cod && qtd) {
-                await setDoc(doc(db, "separacao", cod.trim()), {
-                    cod: cod.trim(), nome: BASE[cod.trim()] || "ITEM "+cod,
-                    qtd_pedida: parseInt(qtd), qtd_feita: 0
-                });
-            }
+    window.processarManual = () => {
+        const c = document.getElementById('ins-cod').value;
+        const q = parseInt(document.getElementById('ins-qtd').value);
+        if(c && q) { 
+            processar(c, q); 
+            document.getElementById('ins-cod').value = ''; // CORREÇÃO: Limpar campo após inserir
         }
-        document.getElementById('list-input').value = ""; alert("LISTA ENVIADA!");
     };
 
-    window.processar = async (cod) => {
-        let c = cod.trim(); const q = parseInt(document.getElementById('qtd-bipe').value) || 1;
-        if(!BASE[c]) { const n = prompt("NOVO ITEM ("+c+"):"); if(n) BASE[c]=n.toUpperCase(); else return; }
+    window.processar = async (cod, qtd) => {
+        let c = cod.trim(); const q = qtd || parseInt(document.getElementById('qtd-bipe').value) || 1;
+        if(!BASE[c]) { const n = prompt("NOME DO PRODUTO:"); if(n) BASE[c]=n.toUpperCase(); else return; }
         
-        // Registrar Log
-        const mov = { cod:c, n:BASE[c], t:document.getElementById('mod-op').value, q:q, op:currentUser, data_hora:serverTimestamp(), d_str:new Date().toLocaleTimeString() };
+        const mov = { cod:c, n:BASE[c], t:document.getElementById('mod-op')?.value || 'ENTRADA', q:q, op:currentUser, data_hora:serverTimestamp(), d_str:new Date().toLocaleTimeString() };
         await addDoc(collection(db, "logs"), mov);
-
-        // Baixa na Separação (se houver pedido)
+        
         if(mov.t === "SAIDA") {
-            const sepRef = doc(db, "separacao", c);
-            const snap = await getDocs(query(collection(db, "separacao")));
-            snap.forEach(async (d) => {
-                if(d.id === c) {
-                    await updateDoc(sepRef, { qtd_feita: d.data().qtd_feita + q });
-                }
-            });
+            const r = doc(db, "separacao", c); const d = await getDoc(r);
+            if(d.exists()) await updateDoc(r, { qtd_feita: d.data().qtd_feita + q });
         }
-        document.getElementById('op-audit-body').innerHTML = `BIPADO: ${BASE[c]} (${q}) <br>` + document.getElementById('op-audit-body').innerHTML;
+        localStorage.setItem('LP_BASE', JSON.stringify(BASE));
     };
+
+    window.render = () => {
+        let saldos = {}; Object.keys(BASE).forEach(k => saldos[k] = { n: BASE[k], s: 0 });
+        let htmlHist = "";
+        MOVS.forEach(m => {
+            if(saldos[m.cod]) { m.t === 'ENTRADA' ? saldos[m.cod].s += m.q : saldos[m.cod].s -= m.q; }
+            htmlHist += `<tr><td>${m.d_str}</td><td>${m.op}</td><td>${m.t}</td><td>${m.n}</td><td>${m.q}</td></tr>`;
+        });
+        document.getElementById('audit-body').innerHTML = htmlHist;
+        document.getElementById('stock-body').innerHTML = Object.keys(saldos).map(k => `<tr><td>${k}</td><td>${saldos[k].n}</td><td>${saldos[k].s}</td></tr>`).join('');
+        document.getElementById('stat-total').innerText = Object.keys(BASE).length;
+        updateChart();
+    };
+
+    function updateChart() {
+        const ctx = document.getElementById('prodChart').getContext('2d');
+        if (myChart) myChart.destroy();
+        myChart = new Chart(ctx, {
+            type: 'bar',
+            data: { labels: MOVS.slice(0,8).map(m => m.d_str).reverse(), datasets: [{ label: 'VOLUME', data: MOVS.slice(0,8).map(m => m.q), backgroundColor: '#00ff41' }] },
+            options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+        });
+    }
 
     window.auth = () => {
         const u = document.getElementById('user-name').value.toUpperCase().trim();
-        const p = document.getElementById('pass').value.trim();
-        if((u==="JP"||u==="SHARK")&&p==="9910") { currentUser=u; localStorage.setItem('LP_SESSION',u); logarNaTela(); }
-        else if(u==="OP"&&p==="1234") { currentUser=u; localStorage.setItem('LP_SESSION',u); logarNaTela(); }
-        else alert("ERRO");
-    };
-
-    window.logarNaTela = () => {
-        if(!currentUser) return; document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-        if(currentUser!=="OP") { document.getElementById('scr-shark').classList.add('active'); }
-        else { document.getElementById('scr-op').classList.add('active'); document.getElementById('display-user').innerText=currentUser; }
+        const p = document.getElementById('pass').value;
+        if((u==="JP"||u==="SHARK")&&p==="9910") { currentUser=u; localStorage.setItem('LP_SESSION',u); location.reload(); }
+        else if(u==="OP"&&p==="1234") { currentUser=u; localStorage.setItem('LP_SESSION',u); location.reload(); }
+        else alert("CHAVE INVÁLIDA");
     };
 
     window.toggleCamera = async () => {
@@ -192,12 +197,12 @@
 
     window.salvarConfig = () => {
         document.getElementById('import-area').value.split('\n').forEach(l=>{const d=l.split(','); if(d[0]&&d[1]) BASE[d[0].trim()]=d[1].trim().toUpperCase();});
-        localStorage.setItem('LP_BASE', JSON.stringify(BASE)); alert("OK");
+        localStorage.setItem('LP_BASE', JSON.stringify(BASE)); alert("BASE SINCRONIZADA!"); render();
     };
 
     window.logout = () => { localStorage.removeItem('LP_SESSION'); location.reload(); };
     window.ir = (id) => { document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); };
-    window.init = () => { if(currentUser) logarNaTela(); };
+    window.init = () => { if(currentUser) { document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); if(currentUser==='OP') document.getElementById('scr-op').classList.add('active'); else document.getElementById('scr-shark').classList.add('active'); heartbeat(); } };
 </script>
 </body>
 </html>
