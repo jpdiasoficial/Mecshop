@@ -16,37 +16,43 @@
         .stats { display: flex; gap: 10px; padding: 10px; background: #080808; border-bottom: 1px solid #111; }
         .card { flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 4px; text-align: center; }
         .card span { display: block; font-size: 14px; color: var(--primary); font-family: 'Orbitron'; }
-        .filters { padding: 10px; background: #050505; border-bottom: 1px solid #111; display: flex; flex-direction: column; gap: 8px; }
-        .filters input { margin: 0; padding: 12px; background: #111; border: 1px solid #222; color: #fff; border-radius: 4px; font-family: 'Orbitron'; font-size: 9px; }
         .table-wrapper { border: 1px solid var(--border); border-radius: 6px; overflow-x: auto; background: #080808; margin-bottom: 20px; }
         table { width: 100%; border-collapse: collapse; min-width: 400px; }
         th { background: #111; color: #555; padding: 10px; text-align: left; font-size: 8px; border-bottom: 1px solid var(--border); }
         td { padding: 8px 10px; border-bottom: 1px solid #151515; white-space: nowrap; }
         .btn-green { width: 100%; padding: 18px; background: var(--primary); color: #000; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 4px; cursor: pointer; }
-        input, select, textarea { width: 100%; padding: 14px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; font-family: 'Orbitron'; margin-bottom: 10px; box-sizing: border-box; }
+        input, select { width: 100%; padding: 14px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; font-family: 'Orbitron'; margin-bottom: 10px; box-sizing: border-box; }
         #reader { width: 100%; border-radius: 8px; overflow: hidden; border: 2px solid #222; background: #050505; }
+        .status-bar { display: flex; gap: 15px; padding: 8px 12px; background: #111; border-bottom: 1px solid #222; font-size: 7px; color: #666; }
+        .online { color: var(--primary); font-weight: bold; }
     </style>
 </head>
 <body onload="init()">
 
 <div id="scr-login" class="screen active" style="align-items:center; justify-content:center; text-align:center;">
     <div style="font-family:'Orbitron'; color:var(--primary); font-size:35px;">LOG-PRO</div>
-    <div style="font-size:7px; color:#444; margin-bottom:40px;">JP TECNOLOGIA | REAL-TIME</div>
+    <div style="font-size:7px; color:#444; margin-bottom:40px;">SISTEMA DE MONITORAMENTO REAL-TIME</div>
     <div style="width: 85%; max-width: 320px;">
         <input type="text" id="user-name" placeholder="USUÁRIO">
         <input type="password" id="pass" placeholder="CHAVE">
-        <button class="btn-green" onclick="auth()">ACESSAR</button>
+        <button class="btn-green" onclick="auth()">ACESSAR SISTEMA</button>
     </div>
 </div>
 
 <div id="scr-shark" class="screen">
     <header><span style="color:var(--primary)" id="shark-user-title">...</span> <button onclick="logout()" style="color:var(--out); background:none; border:none; font-size:8px;">SAIR</button></header>
-    <div class="stats"><div class="card">ITENS <span id="stat-itens">0</span></div><div class="card">MOVS <span id="stat-movs">0</span></div><div class="card">SALDO <span id="stat-saldo">0</span></div></div>
-    <div class="scroll">
-        <h3>INVENTÁRIO</h3><div class="table-wrapper"><table><thead><tr><th>COD</th><th>NOME</th><th>SALDO</th></tr></thead><tbody id="stock-body"></tbody></table></div>
-        <h3>LOGÍSTICA EM TEMPO REAL</h3><div class="table-wrapper"><table><thead><tr><th>DATA/HORA</th><th>OP</th><th>MOV</th><th>ITEM</th><th>QTD</th></tr></thead><tbody id="audit-body"></tbody></table></div>
+    
+    <div class="status-bar">
+        <span id="st-jp">JP: ⚪</span>
+        <span id="st-shark">SHARK: ⚪</span>
+        <span id="st-op">OP: ⚪</span>
     </div>
-    <button onclick="ir('scr-config')" style="position:fixed; bottom:20px; right:20px; width:50px; height:50px; border-radius:50%; background:var(--primary); border:none;">⚙️</button>
+
+    <div class="stats"><div class="card">LOGS RECENTES <span id="stat-movs">0</span></div><div class="card">LINK <span style="color:var(--primary)">ESTÁVEL</span></div></div>
+    <div class="scroll">
+        <h3>FLUXO DE CARGA</h3>
+        <div class="table-wrapper"><table><thead><tr><th>HORA</th><th>OP</th><th>TIPO</th><th>COD</th><th>QTD</th></tr></thead><tbody id="audit-body"></tbody></table></div>
+    </div>
 </div>
 
 <div id="scr-op" class="screen">
@@ -57,26 +63,17 @@
             <input type="number" id="qtd-bipe" value="1" style="flex:0.6; text-align:center;">
         </div>
         <div id="reader"></div>
-        <button class="btn-green" id="btn-cam" onclick="toggleCamera()" style="margin:10px 0;">LIGAR SCANNER</button>
-        <h3>BIPES DA SESSÃO</h3>
+        <button class="btn-green" id="btn-cam" onclick="toggleCamera()" style="margin:10px 0;">ATIVAR SCANNER</button>
+        <h3>LISTA DE ENVIO</h3>
         <div class="table-wrapper"><table><tbody id="op-audit-body"></tbody></table></div>
-        <button class="btn-green" onclick="finalizarSessao()">FINALIZAR E ENVIAR</button>
-    </div>
-</div>
-
-<div id="scr-config" class="screen">
-    <header><span>CONFIGURAÇÕES</span> <button onclick="ir('scr-shark')">VOLTAR</button></header>
-    <div class="scroll">
-        <textarea id="import-area" style="height:200px;" placeholder="COD, NOME"></textarea>
-        <button class="btn-green" onclick="salvarConfig()">SALVAR ITENS</button>
+        <button class="btn-green" onclick="limparTelaOp()">LIMPAR LISTA</button>
     </div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    // CHAVES EXTRAÍDAS DA SUA FOTO
     const firebaseConfig = {
         apiKey: "AIzaSyDRDhONvvzZmo2csXksqHs6E6vV3MuvLSs",
         authDomain: "log-pro-jp.firebaseapp.com",
@@ -89,76 +86,92 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    let BASE = JSON.parse(localStorage.getItem('LP_BASE')) || {};
-    let MOVS = []; // Agora alimentado pelo Firebase em tempo real
-    let OPERADORES = {"JP":"9910", "SHARK":"9910"};
+    let MOVS = [];
     let currentUser = localStorage.getItem('LP_SESSION') || "";
     let bipesSessao = [];
     let scanner, camOn = false;
 
-    // --- ESCUTADOR EM TEMPO REAL (SHARK MONITOR) ---
-    onSnapshot(query(collection(db, "logs"), orderBy("data_hora", "desc"), limit(50)), (snapshot) => {
-        MOVS = snapshot.docs.map(doc => doc.data());
-        atualizarTabelas();
+    // --- SISTEMA DE PRESENÇA (SINAL DE VIDA) ---
+    async function enviarSinalDeVida() {
+        if(!currentUser) return;
+        try {
+            await setDoc(doc(db, "presenca", currentUser), {
+                usuario: currentUser,
+                last_seen: serverTimestamp()
+            });
+        } catch(e) {}
+    }
+    setInterval(enviarSinalDeVida, 10000); // Envia a cada 10 segundos
+
+    // --- ESCUTADOR DE PRESENÇA (PARA JP E SHARK) ---
+    onSnapshot(collection(db, "presenca"), (snapshot) => {
+        snapshot.docs.forEach(d => {
+            const data = d.data();
+            const id = "st-" + data.usuario.toLowerCase();
+            const el = document.getElementById(id);
+            if(el) {
+                el.innerHTML = `${data.usuario}: <span class="online">🟢 ONLINE</span>`;
+                // Reseta para cinza se ficar 40s sem sinal (opcional)
+            }
+        });
+    });
+
+    // --- ESCUTADOR DE LOGS (REAL-TIME) ---
+    onSnapshot(query(collection(db, "logs"), orderBy("data_hora", "desc"), limit(25)), (snapshot) => {
+        MOVS = snapshot.docs.map(d => d.data());
+        if(currentUser === "JP" || currentUser === "SHARK") atualizarTabelas();
     });
 
     window.auth = () => {
         const u = document.getElementById('user-name').value.toUpperCase().trim();
         const p = document.getElementById('pass').value.trim();
-        if(OPERADORES[u] === p) { currentUser = u; localStorage.setItem('LP_SESSION', u); logarNaTela(); } else alert("ACESSO NEGADO");
+        
+        if((u === "JP" || u === "SHARK") && p === "9910") {
+            currentUser = u; localStorage.setItem('LP_SESSION', u); logarNaTela();
+        } else if(u === "OP" && p === "1234") {
+            currentUser = u; localStorage.setItem('LP_SESSION', u); logarNaTela();
+        } else {
+            alert("CHAVE INCORRETA!");
+        }
     };
 
     window.logarNaTela = () => {
         if(!currentUser) return;
+        enviarSinalDeVida();
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         if(currentUser === "JP" || currentUser === "SHARK") {
             document.getElementById('shark-user-title').innerText = "GESTOR: " + currentUser;
-            ir('scr-shark');
+            document.getElementById('scr-shark').classList.add('active');
         } else {
-            document.getElementById('display-user').innerText = "OP: " + currentUser;
-            ir('scr-op');
+            document.getElementById('display-user').innerText = "OPERADOR: " + currentUser;
+            document.getElementById('scr-op').classList.add('active');
         }
     };
 
     window.processar = async (cod) => {
-        let c = cod.trim();
-        if(!BASE[c]) {
-            const n = prompt("NOVO ITEM ("+c+"). NOME:", "");
-            if(n) { BASE[c] = n.toUpperCase(); localStorage.setItem('LP_BASE', JSON.stringify(BASE)); } else return;
-        }
         const q = parseInt(document.getElementById('qtd-bipe').value) || 1;
         const mov = { 
-            item: BASE[c], 
-            cod: c, 
+            cod: cod, 
             tipo: document.getElementById('mod-op').value, 
             qtd: q, 
             op: currentUser, 
             data_hora: serverTimestamp(),
-            data_str: new Date().toLocaleString()
+            data_str: new Date().toLocaleTimeString()
         };
-        
-        await addDoc(collection(db, "logs"), mov); // ENVIA PARA O SHARK NA HORA
+        await addDoc(collection(db, "logs"), mov);
         bipesSessao.unshift(mov);
         atualizarOpAudit();
     };
 
     window.atualizarTabelas = () => {
         document.getElementById('audit-body').innerHTML = MOVS.map(m => `
-            <tr><td>${m.data_str || 'Sinc...'}</td><td>${m.op}</td><td>${m.tipo}</td><td>${m.item}</td><td>${m.qtd}</td></tr>
+            <tr><td>${m.data_str || '...'}</td><td>${m.op}</td><td>${m.tipo}</td><td>${m.cod}</td><td>${m.qtd}</td></tr>
         `).join('');
-        // Cálculo de saldo simplificado para o Shark
-        let saldos = {};
-        MOVS.forEach(m => {
-            if(!saldos[m.item]) saldos[m.item] = 0;
-            m.tipo === "ENTRADA" ? saldos[m.item] += m.qtd : saldos[m.item] -= m.qtd;
-        });
-        document.getElementById('stock-body').innerHTML = Object.entries(saldos).map(([nome, sal]) => `
-            <tr><td>-</td><td>${nome}</td><td style="color:var(--primary)">${sal}</td></tr>
-        `).join('');
+        document.getElementById('stat-movs').innerText = MOVS.length;
     };
 
-    window.finalizarSessao = () => { bipesSessao = []; atualizarOpAudit(); alert("ENVIADO AO FIREBASE!"); };
-    window.atualizarOpAudit = () => { document.getElementById('op-audit-body').innerHTML = bipesSessao.map(m => `<tr><td>${m.item}</td><td>${m.qtd}</td></tr>`).join(''); };
-    window.ir = (id) => { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); };
+    window.limparTelaOp = () => { bipesSessao = []; atualizarOpAudit(); };
+    window.atualizarOpAudit = () => { document.getElementById('op-audit-body').innerHTML = bipesSessao.map(m => `<tr><td>${m.cod}</td><td>${m.qtd}</td></tr>`).join(''); };
     window.logout = () => { localStorage.removeItem('LP_SESSION'); location.reload(); };
     
     window.toggleCamera = async () => {
@@ -166,17 +179,10 @@
             scanner = new Html5Qrcode("reader"); 
             await scanner.start({ facingMode: "environment" }, { fps: 20, qrbox: 250 }, (t) => processar(t)); 
             camOn = true; document.getElementById('btn-cam').innerText = "PARAR SCANNER"; 
-        } else { 
-            await scanner.stop(); camOn = false; document.getElementById('btn-cam').innerText = "LIGAR SCANNER"; 
-        }
+        } else { await scanner.stop(); camOn = false; document.getElementById('btn-cam').innerText = "ATIVAR SCANNER"; }
     };
 
-    window.salvarConfig = () => {
-        document.getElementById('import-area').value.split('\n').forEach(l => { const d = l.split(','); if(d[0] && d[1]) BASE[d[0].trim()] = d[1].trim().toUpperCase(); });
-        localStorage.setItem('LP_BASE', JSON.stringify(BASE)); alert("ITENS SALVOS!");
-    };
-
-    window.init = () => { logarNaTela(); };
+    window.init = () => { if(currentUser) logarNaTela(); };
 </script>
 </body>
 </html>
