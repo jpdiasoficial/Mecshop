@@ -25,7 +25,7 @@
         
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 
-        input, select { width: 100%; padding: 18px; background: #111; border: 1px solid #222; color: #fff; font-family: 'Orbitron'; border-radius: 8px; margin-bottom: 15px; outline: none; box-sizing: border-box; }
+        input, select { width: 100%; padding: 18px; background: #111; border: 1px solid #222; color: #fff; font-family: 'Orbitron'; border-radius: 8px; margin-bottom: 15px; outline: none; box-sizing: border-box; font-size: 12px; }
         .btn-green { width: 100%; padding: 18px; background: var(--primary); color: #000; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 8px; cursor: pointer; font-size: 11px; }
         
         #reader { width: 100%; border-radius: 12px; border: 1px solid #222 !important; background: #050505; min-height: 200px; display: none; margin-bottom: 15px; }
@@ -60,27 +60,26 @@
             <div class="card"><small style="color:#444; font-size:7px;">ESTOQUE ATUAL</small><br><b id="tot-geral" style="font-size:24px;">0</b></div>
             <div class="card"><small style="color:#444; font-size:7px;">ITENS ATIVOS</small><br><b id="tot-itens" style="font-size:24px;">0</b></div>
         </div>
-        
-        <div style="padding: 10px; background: #050505; border-radius: 8px; border: 1px solid #111;">
-            <p style="font-family:'Orbitron'; font-size:9px; color:#444; margin-bottom:15px;">PLANILHA DE MOVIMENTAÇÃO</p>
-            <table>
-                <thead><tr><th>ITEM / DATA</th><th>QTD</th><th>AÇÃO</th></tr></thead>
-                <tbody id="table-body"></tbody>
-            </table>
-        </div>
+        <table>
+            <thead><tr><th>ITEM / DATA</th><th>QTD</th><th>AÇÃO</th></tr></thead>
+            <tbody id="table-body"></tbody>
+        </table>
     </div>
 </div>
 
 <div id="scr-op" class="screen">
     <header>
-        <span>OPERADOR LOGADO</span>
+        <span>MODO COLETOR</span>
         <button id="btn-sync" style="display:none; background:var(--primary); border:none; padding:8px 12px; font-family:'Orbitron'; font-size:9px; border-radius:4px;" onclick="enviarLote()">SUBIR PARA O PAINEL</button>
     </header>
     <div class="scroll">
-        <select id="sel-mod-op">
-            <option value="IN">📥 ENTRADA (CADASTRAR)</option>
-            <option value="OUT">📤 SAÍDA (BAIXA)</option>
-        </select>
+        <div style="display: flex; gap: 10px;">
+            <select id="sel-mod-op" style="flex: 2;">
+                <option value="IN">📥 ENTRADA</option>
+                <option value="OUT">📤 SAÍDA</option>
+            </select>
+            <input type="number" id="qtd-bipe" value="1" min="1" style="flex: 1; text-align: center;" placeholder="QTD">
+        </div>
         
         <div id="reader"></div>
         <button class="btn-green" id="btn-cam" onclick="toggleCamera()">LIGAR SCANNER (BATERIA ON)</button>
@@ -90,14 +89,14 @@
                 <small style="color:#444;">LOTE PENDENTE:</small>
                 <b id="lote-count" style="color:var(--primary); font-family:'Orbitron';">0</b>
             </div>
-            <div id="lote-list" style="font-size:9px; color:#555; margin-top:10px; max-height:120px; overflow-y:auto; line-height: 1.6;"></div>
+            <div id="lote-list" style="font-size:9px; color:#555; margin-top:10px; max-height:120px; overflow-y:auto;"></div>
         </div>
     </div>
 </div>
 
 <div id="modal-cad" class="screen" style="background:rgba(0,0,0,0.95); z-index:100; align-items: center; justify-content: center;">
     <div style="width: 85%;">
-        <h2 style="font-family:'Orbitron'; color:var(--primary); text-align:center;">NOVO ITEM DETECTADO</h2>
+        <h2 style="font-family:'Orbitron'; color:var(--primary); text-align:center;">NOVO ITEM</h2>
         <input type="text" id="input-nome" placeholder="NOME DO PRODUTO">
         <button class="btn-green" onclick="confirmarCadastro()">GRAVAR NO BANCO</button>
     </div>
@@ -138,13 +137,11 @@
                 toggleCamera(); 
             });
             btn.innerText = "DESLIGAR CÂMERA";
-            btn.style.background = "#222"; btn.style.color = "#fff";
             camOn = true;
         } else {
             if(scanner) await scanner.stop();
             rd.style.display = 'none';
             btn.innerText = "LIGAR SCANNER (BATERIA ON)";
-            btn.style.background = "var(--primary)"; btn.style.color = "#000";
             camOn = false;
         }
     }
@@ -169,9 +166,11 @@
 
     function adicionarAoLote(cod) {
         const mod = document.getElementById('sel-mod-op').value;
-        LOTE.unshift({ cod, nome: CADASTRO[cod], m: mod, q: 1, d: new Date().toLocaleString() });
+        const qtd = parseInt(document.getElementById('qtd-bipe').value) || 1; // PEGA A QUANTIDADE DO INPUT
+        
+        LOTE.unshift({ cod, nome: CADASTRO[cod], m: mod, q: qtd, d: new Date().toLocaleString() });
         document.getElementById('lote-count').innerText = LOTE.length;
-        document.getElementById('lote-list').innerHTML = LOTE.map(i => `[${i.m}] ${i.nome}<br>`).join('');
+        document.getElementById('lote-list').innerHTML = LOTE.map(i => `[${i.m}] ${i.nome} x${i.q}<br>`).join('');
         document.getElementById('btn-sync').style.display = 'block';
         beep();
     }
@@ -184,11 +183,11 @@
         document.getElementById('lote-count').innerText = "0";
         document.getElementById('lote-list').innerHTML = "";
         document.getElementById('btn-sync').style.display = 'none';
-        alert("DADOS ENVIADOS!");
+        alert("LOTE ENVIADO!");
     }
 
     function removerItem(idx) {
-        if(confirm("REMOVER LINHA DA PLANILHA?")) {
+        if(confirm("APAGAR LINHA?")) {
             DB_LOGS.splice(idx, 1);
             localStorage.setItem('DB_LOGS', JSON.stringify(DB_LOGS));
             atualizarPainel();
@@ -203,24 +202,18 @@
             return `<tr><td><b>${l.nome}</b><br><small style="color:#333;">${l.d}</small></td>
                     <td style="color:${l.m=='IN'?'var(--primary)':'var(--out)'}">${l.m} x${l.q}</td>
                     <td><button class="btn-del" onclick="removerItem(${idx})">DEL</button></td></tr>`;
-        }).reverse().join(''); // Mais recentes no topo
+        }).reverse().join('');
         document.getElementById('tot-geral').innerText = saldo;
         document.getElementById('tot-itens').innerText = Object.keys(CADASTRO).length;
     }
 
-    function limparTudo() { if(confirm("LIMPAR TODO O BANCO DE DADOS?")) { localStorage.clear(); location.reload(); } }
+    function limparTudo() { if(confirm("RESET TOTAL?")) { localStorage.clear(); location.reload(); } }
     function beep() { try { const c=new AudioContext(); const o=c.createOscillator(); o.connect(c.destination); o.start(); o.stop(c.currentTime+0.1); } catch(e){} }
-    function init() { console.log("LOG-PRO V27 JP DIAS ATIVA"); }
+    function init() { console.log("V27.1 READY"); }
 
     canal.onmessage = (e) => { 
-        if(e.data.type === 'SYNC') { 
-            DB_LOGS = JSON.parse(localStorage.getItem('DB_LOGS')); 
-            atualizarPainel(); 
-            beep();
-        }
-        if(e.data.type === 'USER_ON') {
-            document.getElementById('user-status').style.display = 'flex';
-        }
+        if(e.data.type === 'SYNC') { DB_LOGS = JSON.parse(localStorage.getItem('DB_LOGS')); atualizarPainel(); }
+        if(e.data.type === 'USER_ON') { document.getElementById('user-status').style.display = 'flex'; }
     };
 </script>
 </body>
