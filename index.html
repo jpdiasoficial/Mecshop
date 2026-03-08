@@ -3,99 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LOG-PRO v75.1 | JP TECNOLOGIA</title>
+    <title>LOG-PRO v77.0 | JP MASTER</title>
     <script src="https://unpkg.com/html5-qrcode"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #00ff41; --bg: #000; --border: #222; --sep: #ffae00; --danger: #ff3b30; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; text-transform: uppercase; font-size: 10px; height: 100vh; overflow: hidden; }
-        .screen { display: none; position: absolute; width: 100%; height: 100%; flex-direction: column; background: #000; z-index: 10; }
+        .screen { display: none; position: absolute; width: 100%; height: 100%; flex-direction: column; background: #000; }
         .active { display: flex !important; }
-        header { padding: 12px; border-bottom: 1px solid #111; display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron'; background: #050505; }
-        .scroll { flex: 1; overflow-y: auto; padding: 10px; padding-bottom: 150px; }
-        .presence-bar { display: flex; gap: 10px; padding: 8px 12px; background: #0a0a0a; border-bottom: 1px solid #222; font-size: 8px; }
-        .online { color: var(--primary); font-weight: bold; text-shadow: 0 0 5px var(--primary); }
-        .stats { display: flex; gap: 8px; padding: 10px; background: #080808; border-bottom: 1px solid #111; }
-        .card { flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 4px; text-align: center; }
-        .card span { display: block; font-size: 14px; color: var(--primary); font-family: 'Orbitron'; }
-        .table-wrapper { border: 1px solid var(--border); border-radius: 6px; overflow-x: auto; background: #080808; margin-bottom: 15px; }
-        table { width: 100%; border-collapse: collapse; min-width: 500px; }
-        th { background: #111; color: #555; padding: 10px; text-align: left; font-size: 7px; border-bottom: 1px solid #222; }
-        td { padding: 10px; border-bottom: 1px solid #151515; white-space: nowrap; font-size: 9px; }
-        .btn-green { width: 100%; padding: 15px; background: var(--primary); color: #000; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 4px; cursor: pointer; }
-        input, select, textarea { width: 100%; padding: 12px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; font-family: 'Orbitron'; margin-bottom: 5px; box-sizing: border-box; }
+        header { padding: 15px; border-bottom: 2px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: #050505; font-family: 'Orbitron'; }
+        .scroll { flex: 1; overflow-y: auto; padding: 12px; padding-bottom: 120px; }
+        
+        /* CARDS DE STATUS */
+        .picking-box { background: #120e00; border: 1px solid var(--sep); border-radius: 6px; padding: 10px; margin-bottom: 15px; }
+        .picking-item { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #222; font-size: 11px; }
+        .falta-qtd { color: var(--sep); font-weight: bold; }
+
+        /* BOTÕES E INPUTS */
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+        input, select, textarea { width: 100%; padding: 14px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; font-family: 'Orbitron'; margin-bottom: 8px; box-sizing: border-box; }
+        .btn-green { width: 100%; padding: 18px; background: var(--primary); color: #000; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 4px; }
+        
+        /* TABELA */
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #111; color: #666; padding: 8px; text-align: left; font-size: 7px; }
+        td { padding: 10px 8px; border-bottom: 1px solid #111; font-size: 9px; }
+        
         #reader { width: 100%; border-radius: 8px; overflow: hidden; border: 2px solid #222; margin-bottom: 10px; }
     </style>
 </head>
 <body onload="init()">
 
-<div id="scr-login" class="screen active" style="align-items:center; justify-content:center;">
-    <div style="font-family:'Orbitron'; color:var(--primary); font-size:35px; text-align:center;">LOG-PRO<br><span style="font-size:8px; color:#444;">VERIFIED v75.1</span></div>
+<div id="scr-login" class="screen active" style="justify-content:center; align-items:center;">
+    <div style="font-family:'Orbitron'; color:var(--primary); font-size:35px; text-align:center;">LOG-PRO<br><span style="font-size:8px; color:#444;">VERIFIED v77.0</span></div>
     <div style="width: 80%; max-width: 300px; margin-top:20px;">
         <input type="text" id="user-name" placeholder="USUÁRIO">
-        <input type="password" id="pass" placeholder="CHAVE MESTRA">
-        <button class="btn-green" onclick="auth()">ENTRAR NA REDE</button>
+        <input type="password" id="pass" placeholder="CHAVE">
+        <button class="btn-green" onclick="auth()">ACESSAR SISTEMA</button>
     </div>
 </div>
 
 <div id="scr-shark" class="screen">
-    <header><span id="shark-title">GESTOR</span> <button onclick="logout()" style="color:var(--danger); background:none; border:none;">SAIR</button></header>
-    <div class="presence-bar"><span id="st-jp">JP: ⚪</span> <span id="st-shark">SHARK: ⚪</span> <span id="st-op">OP: ⚪</span></div>
-    
-    <div style="padding: 10px; background: #080808; border-bottom: 1px solid #222;">
-        <canvas id="prodChart" style="width: 100%; height: 110px;"></canvas>
-    </div>
-
-    <div class="stats">
-        <div class="card">ITENS BASE <span id="stat-total">0</span></div>
-        <div class="card">PENDÊNCIAS <span id="stat-pedidos">0</span></div>
-    </div>
-
+    <header><span>SHARK / GESTÃO</span> <button onclick="logout()" style="color:var(--danger); background:none; border:none; font-size:8px;">LOGOUT</button></header>
     <div class="scroll">
-        <div style="padding: 10px; border: 1px dashed var(--primary); margin-bottom: 10px; background: #050505;">
-            <p style="margin:0 0 5px 0; font-size:7px; color:var(--primary);">ENTRADA MANUAL / AJUSTE RÁPIDO</p>
-            <div style="display:flex; gap:5px;">
-                <input type="text" id="ins-cod" placeholder="COD" style="margin:0;">
-                <input type="number" id="ins-qtd" value="1" style="margin:0; width:60px;">
-                <button onclick="processarManual()" style="background:var(--primary); border:none; padding:10px; border-radius:4px; font-weight:bold;">ADD</button>
-            </div>
+        <div class="action-grid">
+            <button class="btn-green" style="background:#fff;" onclick="exportar('print')">🖨️ IMPRIMIR</button>
+            <button class="btn-green" style="background:#444; color:#fff;" onclick="exportar('email')">📧 E-MAIL</button>
         </div>
 
-        <h3>HISTÓRICO COMPLETO</h3>
-        <div class="table-wrapper"><table><thead><tr><th>HORA</th><th>OP</th><th>TIPO</th><th>ITEM</th><th>QTD</th></tr></thead><tbody id="audit-body"></tbody></table></div>
-        
-        <h3>INVENTÁRIO ATUALIZADO</h3>
-        <div class="table-wrapper"><table><thead><tr><th>CÓDIGO</th><th>NOME DO PRODUTO</th><th>SALDO REAL</th></tr></thead><tbody id="stock-body"></tbody></table></div>
-        
-        <div style="display:flex; gap:5px;">
-            <button onclick="exportar('print')" class="btn-green" style="background:#fff; font-size:8px;">🖨️ IMPRIMIR</button>
-            <button onclick="exportar('email')" class="btn-green" style="background:#444; color:#fff; font-size:8px;">📧 E-MAIL</button>
+        <h3 style="font-family:'Orbitron'; font-size:9px; color:var(--sep);">ENVIAR LISTA DE SEPARAÇÃO</h3>
+        <textarea id="list-input" placeholder="CÓDIGO, QUANTIDADE" style="height:60px;"></textarea>
+        <button class="btn-green" style="background:var(--sep); margin-bottom:20px;" onclick="subirLista()">ENVIAR PARA OPERAÇÃO</button>
+
+        <h3 style="font-family:'Orbitron'; font-size:9px;">INVENTÁRIO / SALDO</h3>
+        <div style="background:#050505; border:1px solid #111; margin-bottom:20px;">
+            <table><thead><tr><th>CÓDIGO</th><th>NOME</th><th>SALDO</th></tr></thead><tbody id="stock-body"></tbody></table>
+        </div>
+
+        <h3 style="font-family:'Orbitron'; font-size:9px;">HISTÓRICO DE MOVIMENTAÇÃO</h3>
+        <div style="background:#050505; border:1px solid #111;">
+            <table><thead><tr><th>HORA</th><th>OP</th><th>TIPO</th><th>PRODUTO</th><th>QTD</th></tr></thead><tbody id="audit-body"></tbody></table>
         </div>
     </div>
     <button onclick="ir('scr-config')" style="position:fixed; bottom:20px; right:20px; width:50px; height:50px; border-radius:50%; background:var(--primary); border:none;">⚙️</button>
 </div>
 
 <div id="scr-op" class="screen">
-    <header><span id="display-user">OPERADOR</span> <button onclick="logout()" style="color:var(--danger); background:none; border:none;">SAIR</button></header>
+    <header><span>OPERADOR: <span id="display-user"></span></span> <button onclick="logout()" style="color:var(--danger); background:none; border:none; font-size:8px;">SAIR</button></header>
     <div class="scroll">
-        <div id="op-list-picking" style="border: 2px solid var(--sep); padding:10px; color:var(--sep); margin-bottom:10px; background:#120e00;">Carregando demandas...</div>
-        <div id="reader"></div>
-        <button class="btn-green" id="btn-cam" onclick="toggleCamera()">ATIVAR SCANNER</button>
-        <div style="display:flex; gap:5px; margin-top:10px;">
-            <select id="mod-op" style="flex:2;"><option value="SAIDA">SAÍDA / PICKING</option><option value="ENTRADA">ENTRADA</option></select>
-            <input type="number" id="qtd-bipe" value="1" style="flex:0.6; text-align:center;">
+        <div class="picking-box">
+            <div style="font-size:8px; color:var(--sep); margin-bottom:8px; font-family:'Orbitron';">📋 PENDENTE PARA SEPARAR:</div>
+            <div id="op-list-picking">Nenhuma demanda...</div>
         </div>
-        <div id="op-audit-body" style="font-size:8px; margin-top:15px; color:#555;"></div>
-    </div>
-</div>
 
-<div id="scr-config" class="screen">
-    <header><span>BASE DE DADOS</span> <button onclick="ir('scr-shark')">VOLTAR</button></header>
-    <div class="scroll">
-        <textarea id="import-area" style="height:300px;" placeholder="COD, NOME"></textarea>
-        <button class="btn-green" onclick="salvarConfig()">SALVAR BASE</button>
-        <button onclick="localStorage.clear(); location.reload();" style="margin-top:20px; color:red; background:none; border:none; width:100%;">LIMPAR TUDO</button>
+        <div id="reader"></div>
+        <button class="btn-green" id="btn-cam" onclick="toggleCamera()" style="margin-bottom:10px;">ATIVAR SCANNER</button>
+
+        <div class="action-grid">
+            <select id="mod-op" style="margin:0;"><option value="SAIDA">SAÍDA / PICKING</option><option value="ENTRADA">ENTRADA</option></select>
+            <input type="number" id="qtd-bipe" value="1" style="margin:0; text-align:center;">
+        </div>
+        
+        <div id="op-audit-body" style="margin-top:15px; border-top:1px solid #111; padding-top:10px; font-size:9px; color:#555;"></div>
     </div>
 </div>
 
@@ -115,79 +104,77 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     let BASE = JSON.parse(localStorage.getItem('LP_BASE')) || {};
-    let MOVS = []; let myChart; let currentUser = localStorage.getItem('LP_SESSION') || ""; let scanner, camOn = false;
+    let MOVS = []; let currentUser = localStorage.getItem('LP_SESSION') || ""; let scanner, camOn = false;
 
-    // PRESENÇA REAL-TIME
-    async function heartbeat() { if(currentUser) await setDoc(doc(db, "presenca", currentUser), { u: currentUser, t: serverTimestamp() }); }
-    setInterval(heartbeat, 15000);
-    onSnapshot(collection(db, "presenca"), (s) => { s.docs.forEach(d => { const p = d.data(); const el = document.getElementById("st-"+p.u.toLowerCase()); if(el) el.innerHTML = `${p.u}: <span class="online">🟢 ON</span>`; }); });
+    // MONITORAMENTO DE LISTA DE SEPARAÇÃO (PICKING)
+    onSnapshot(collection(db, "separacao"), (s) => {
+        let h = ""; s.docs.forEach(d => {
+            const p = d.data(); const f = p.qtd_pedida - p.qtd_feita;
+            if(f > 0) h += `<div class="picking-item"><span>${p.nome}</span> <span class="falta-qtd">FALTAM ${f}</span></div>`;
+        });
+        document.getElementById('op-list-picking').innerHTML = h || "TUDO CONCLUÍDO! ✅";
+    });
 
-    // ESCUTADOR DE LOGS
+    // MONITORAMENTO DE LOGS E SALDO
     onSnapshot(query(collection(db, "logs"), orderBy("data_hora", "desc"), limit(50)), (snap) => {
         MOVS = snap.docs.map(d => d.data());
         render();
     });
 
-    // ESCUTADOR DE SEPARAÇÃO
-    onSnapshot(collection(db, "separacao"), (s) => {
-        let hO = ""; let count = 0;
-        s.docs.forEach(d => { const p = d.data(); const f = p.qtd_pedida - p.qtd_feita; if(f > 0) { hO += `<div>📦 ${p.nome}: FALTAM ${f}</div>`; count++; } });
-        document.getElementById('op-list-picking').innerHTML = hO || "TUDO OK! ✅";
-        document.getElementById('stat-pedidos').innerText = count;
-    });
-
-    window.processarManual = () => {
-        const c = document.getElementById('ins-cod').value;
-        const q = parseInt(document.getElementById('ins-qtd').value);
-        if(c && q) { 
-            processar(c, q); 
-            document.getElementById('ins-cod').value = ''; // CORREÇÃO: Limpar campo após inserir
-        }
-    };
-
-    window.processar = async (cod, qtd) => {
-        let c = cod.trim(); const q = qtd || parseInt(document.getElementById('qtd-bipe').value) || 1;
-        if(!BASE[c]) { const n = prompt("NOME DO PRODUTO:"); if(n) BASE[c]=n.toUpperCase(); else return; }
+    window.processar = async (cod) => {
+        let c = cod.trim(); const q = parseInt(document.getElementById('qtd-bipe').value) || 1;
+        const tipo = document.getElementById('mod-op').value;
+        if(!BASE[c]) { const n = prompt("PRODUTO NOVO. NOME:"); if(n) BASE[c]=n.toUpperCase(); else return; }
         
-        const mov = { cod:c, n:BASE[c], t:document.getElementById('mod-op')?.value || 'ENTRADA', q:q, op:currentUser, data_hora:serverTimestamp(), d_str:new Date().toLocaleTimeString() };
+        const mov = { cod:c, n:BASE[c], t:tipo, q:q, op:currentUser, data_hora:serverTimestamp(), d_str:new Date().toLocaleTimeString() };
         await addDoc(collection(db, "logs"), mov);
-        
-        if(mov.t === "SAIDA") {
+
+        // BAIXA AUTOMÁTICA SE FOR SAÍDA
+        if(tipo === "SAIDA") {
             const r = doc(db, "separacao", c); const d = await getDoc(r);
             if(d.exists()) await updateDoc(r, { qtd_feita: d.data().qtd_feita + q });
         }
+        
+        document.getElementById('op-audit-body').innerHTML = `<div>${mov.d_str} - ${mov.n} (${q})</div>` + document.getElementById('op-audit-body').innerHTML;
         localStorage.setItem('LP_BASE', JSON.stringify(BASE));
     };
 
     window.render = () => {
         let saldos = {}; Object.keys(BASE).forEach(k => saldos[k] = { n: BASE[k], s: 0 });
-        let htmlHist = "";
+        let hH = "";
         MOVS.forEach(m => {
-            if(saldos[m.cod]) { m.t === 'ENTRADA' ? saldos[m.cod].s += m.q : saldos[m.cod].s -= m.q; }
-            htmlHist += `<tr><td>${m.d_str}</td><td>${m.op}</td><td>${m.t}</td><td>${m.n}</td><td>${m.q}</td></tr>`;
+            if(saldos[m.cod]) m.t === 'ENTRADA' ? saldos[m.cod].s += m.q : saldos[m.cod].s -= m.q;
+            hH += `<tr><td>${m.d_str}</td><td>${m.op}</td><td>${m.t}</td><td>${m.n}</td><td>${m.q}</td></tr>`;
         });
-        document.getElementById('audit-body').innerHTML = htmlHist;
+        document.getElementById('audit-body').innerHTML = hH;
         document.getElementById('stock-body').innerHTML = Object.keys(saldos).map(k => `<tr><td>${k}</td><td>${saldos[k].n}</td><td>${saldos[k].s}</td></tr>`).join('');
-        document.getElementById('stat-total').innerText = Object.keys(BASE).length;
-        updateChart();
     };
 
-    function updateChart() {
-        const ctx = document.getElementById('prodChart').getContext('2d');
-        if (myChart) myChart.destroy();
-        myChart = new Chart(ctx, {
-            type: 'bar',
-            data: { labels: MOVS.slice(0,8).map(m => m.d_str).reverse(), datasets: [{ label: 'VOLUME', data: MOVS.slice(0,8).map(m => m.q), backgroundColor: '#00ff41' }] },
-            options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
-        });
-    }
+    window.subirLista = async () => {
+        const linhas = document.getElementById('list-input').value.split('\n');
+        for(let l of linhas) {
+            const [cod, qtd] = l.split(',');
+            if(cod && qtd) {
+                const c = cod.trim();
+                await setDoc(doc(db, "separacao", c), { cod:c, nome:BASE[c]||"ITEM "+c, qtd_pedida:parseInt(qtd), qtd_feita:0 });
+            }
+        }
+        document.getElementById('list-input').value = ""; alert("LISTA ENVIADA!");
+    };
+
+    window.exportar = (tipo) => {
+        let txt = `ROMANEIO LOG-PRO - ${new Date().toLocaleDateString()}\n--------------------------------\n`;
+        MOVS.forEach(m => { txt += `${m.d_str} | ${m.op} | ${m.n} | QTD: ${m.q}\n`; });
+        if(tipo === 'email') window.location.href = `mailto:?subject=Romaneio&body=${encodeURIComponent(txt)}`;
+        else { let w = window.open(); w.document.write(`<pre>${txt}</pre>`); w.print(); }
+    };
 
     window.auth = () => {
         const u = document.getElementById('user-name').value.toUpperCase().trim();
         const p = document.getElementById('pass').value;
-        if((u==="JP"||u==="SHARK")&&p==="9910") { currentUser=u; localStorage.setItem('LP_SESSION',u); location.reload(); }
-        else if(u==="OP"&&p==="1234") { currentUser=u; localStorage.setItem('LP_SESSION',u); location.reload(); }
-        else alert("CHAVE INVÁLIDA");
+        if((u==="JP"||u==="SHARK")&&p==="9910" || (u==="OP"&&p==="1234")) { 
+            currentUser=u; localStorage.setItem('LP_SESSION',u); location.reload();
+        } else alert("ERRO DE ACESSO");
     };
 
     window.toggleCamera = async () => {
@@ -195,14 +182,9 @@
         else { await scanner.stop(); camOn=false; }
     };
 
-    window.salvarConfig = () => {
-        document.getElementById('import-area').value.split('\n').forEach(l=>{const d=l.split(','); if(d[0]&&d[1]) BASE[d[0].trim()]=d[1].trim().toUpperCase();});
-        localStorage.setItem('LP_BASE', JSON.stringify(BASE)); alert("BASE SINCRONIZADA!"); render();
-    };
-
-    window.logout = () => { localStorage.removeItem('LP_SESSION'); location.reload(); };
+    window.logout = () => { localStorage.clear(); location.reload(); };
     window.ir = (id) => { document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); };
-    window.init = () => { if(currentUser) { document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); if(currentUser==='OP') document.getElementById('scr-op').classList.add('active'); else document.getElementById('scr-shark').classList.add('active'); heartbeat(); } };
+    window.init = () => { if(currentUser) { document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); if(currentUser==='OP') document.getElementById('scr-op').classList.add('active'); else document.getElementById('scr-shark').classList.add('active'); document.getElementById('display-user').innerText = currentUser; } };
 </script>
 </body>
 </html>
