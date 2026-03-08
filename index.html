@@ -7,33 +7,33 @@
     <script src="https://unpkg.com/html5-qrcode"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #00ff41; --bg: #000; --card: #0a0a0a; --out: #ff3b30; --in: #00d4ff; --line: #1a1a1a; }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; text-transform: uppercase; overflow: hidden; height: 100vh; font-size: 11px; }
+        :root { --primary: #00ff41; --bg: #000; --excel-border: #222; --out: #ff3b30; --in: #00d4ff; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; text-transform: uppercase; font-size: 11px; height: 100vh; overflow: hidden; }
         .screen { display: none; position: absolute; width: 100%; height: 100%; flex-direction: column; background: #000; }
         .active { display: flex !important; }
         
-        /* ESTILO DA LOGO CONFORME IMAGEM */
-        .logo-main { font-family: 'Orbitron'; color: var(--primary); font-size: 38px; letter-spacing: 5px; text-shadow: 0 0 15px rgba(0,255,65,0.6); margin-bottom: 5px; }
-        .logo-sub { font-size: 8px; letter-spacing: 2px; color: #555; font-family: 'Orbitron'; }
+        /* LOGO IDENTIDADE JP DIAS */
+        .logo-main { font-family: 'Orbitron'; color: var(--primary); font-size: 38px; letter-spacing: 5px; text-shadow: 0 0 15px var(--primary); margin-top: 20px; }
+        .logo-sub { font-size: 8px; color: #555; font-family: 'Orbitron'; letter-spacing: 2px; }
 
-        header { padding: 15px; border-bottom: 1px solid #111; display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron'; background: rgba(0,0,0,0.95); z-index: 10; }
-        .scroll { flex: 1; overflow-y: auto; padding: 20px; box-sizing: border-box; padding-bottom: 120px; }
+        header { padding: 15px; border-bottom: 1px solid #111; display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron'; background: #050505; }
+        .scroll { flex: 1; overflow-y: auto; padding: 15px; box-sizing: border-box; padding-bottom: 100px; }
         
-        .card { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid #151515; margin-bottom: 12px; }
-        .btn-green { width: 100%; padding: 18px; background: var(--primary); color: #000; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 8px; cursor: pointer; text-transform: uppercase; }
-        input, select { width: 100%; padding: 15px; background: #0d0d0d; border: 1px solid #222; color: #fff; border-radius: 8px; margin-bottom: 10px; box-sizing: border-box; font-family: 'Orbitron'; }
-        
-        /* TABELA PLANILHA */
-        .sheet-container { width: 100%; border-collapse: collapse; }
-        .sheet-header th { padding: 12px 10px; text-align: left; color: var(--primary); border-bottom: 2px solid var(--primary); font-size: 9px; }
-        .sheet-row td { padding: 12px 10px; border-bottom: 1px solid var(--line); }
+        /* TABELA ESTILO PLANILHA MESTRE */
+        .excel-table { width: 100%; border-collapse: collapse; min-width: 800px; }
+        .excel-table th { background: #111; color: var(--primary); padding: 12px; border: 1px solid var(--excel-border); text-align: left; font-size: 9px; position: sticky; top: 0; z-index: 10; }
+        .excel-table td { padding: 10px; border: 1px solid var(--excel-border); font-size: 10px; white-space: nowrap; }
+        .row-alt { background: #080808; }
 
-        /* PAINEL DE FEEDBACK PÓS-BIPE */
-        .info-panel { background: #000; border: 2px solid var(--primary); border-radius: 12px; padding: 15px; margin-top: 15px; display: none; }
-        .val-destaque { color: var(--primary); font-size: 18px; font-family: 'Orbitron'; display: block; }
+        .btn-green { width: 100%; padding: 18px; background: var(--primary); color: #000; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 4px; cursor: pointer; }
+        input, select { width: 100%; padding: 14px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; font-family: 'Orbitron'; margin-bottom: 10px; box-sizing: border-box; }
+
+        /* V30 SCANNER ENGINE (ULTRA FAST) */
+        #reader { width: 100%; border-radius: 8px; overflow: hidden; border: 2px solid #222; background: #000; }
+        #cooldown-bar { width: 0%; height: 5px; background: var(--primary); transition: width 0.5s linear; }
         
-        #reader-container { width: 100%; border-radius: 12px; overflow: hidden; border: 2px solid #222; position: relative; }
-        #cooldown-bar { width: 0%; height: 5px; background: var(--primary); position: absolute; bottom: 0; transition: width 0.5s linear; }
+        .feedback-card { background: #0a0a0a; border: 1px solid var(--primary); border-radius: 8px; padding: 15px; margin-top: 15px; display: none; animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
 <body onload="init()">
@@ -41,72 +41,78 @@
 <div id="scr-login" class="screen active" style="align-items:center; justify-content:center; text-align:center;">
     <div class="logo-main">LOG-PRO</div>
     <div class="logo-sub">SISTEMA TECNOLOGIA JP DIAS</div>
-    
-    <div style="width: 85%; max-width: 320px; margin-top: 40px;">
-        <input type="password" id="pass" placeholder="CHAVE DE ACESSO" inputmode="numeric">
-        <button class="btn-green" onclick="auth()">CONECTAR TERMINAL</button>
+    <div style="width: 80%; max-width: 320px; margin-top: 40px;">
+        <input type="password" id="pass" placeholder="CHAVE MESTRE" style="text-align:center;">
+        <button class="btn-green" onclick="auth()">CONECTAR</button>
     </div>
 </div>
 
 <div id="scr-shark" class="screen">
-    <header><span>SHARK HUB</span> <span id="sync-blink" style="color:var(--primary); display:none;">● LIVE</span></header>
+    <header><span>ADMIN MESTRE</span> <button onclick="exportarCSV()" style="background:var(--primary); color:#000; border:none; padding:5px 10px; font-size:9px; font-weight:bold; border-radius:3px;">EXPORTAR CSV</button></header>
     <div class="scroll">
-        <div id="stats" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px;"></div>
-        <div class="card" style="padding:0; overflow-x: auto;">
-            <table class="sheet-container">
-                <thead><tr class="sheet-header"><th>PRODUTO</th><th>EST</th><th>SEP</th><th>SAI</th></tr></thead>
-                <tbody id="sheet-body"></tbody>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px;">
+            <button onclick="ir('scr-config')" style="background:#111; color:var(--primary); border:1px solid var(--primary); padding:12px; font-family:'Orbitron'; font-size:9px;">+ CADASTRAR ITEM</button>
+            <button onclick="limparRegistros()" style="background:#111; color:red; border:1px solid red; padding:12px; font-family:'Orbitron'; font-size:9px;">ZERAR DIÁRIO</button>
+        </div>
+        <div style="overflow-x: auto; border: 1px solid #222; border-radius: 8px;">
+            <table class="excel-table">
+                <thead>
+                    <tr>
+                        <th>CÓDIGO</th>
+                        <th>DESCRIÇÃO DO PRODUTO</th>
+                        <th style="color:#fff; background:#003300; text-align:center;">SALDO REAL</th>
+                        <th>ENTRADAS</th>
+                        <th>SEPARAÇÃO</th>
+                        <th>SAÍDA FINAL</th>
+                        <th>CONF.</th>
+                    </tr>
+                </thead>
+                <tbody id="excel-body"></tbody>
             </table>
         </div>
-        <button class="btn-green" onclick="exportarCSV()" style="margin-top:10px;">RELATÓRIO CSV</button>
-        <button class="btn-green" style="margin-top:10px; background:#222; color:#fff;" onclick="ir('scr-config')">CONFIGURAR BASE</button>
     </div>
 </div>
 
 <div id="scr-op" class="screen">
-    <header><span>OPERADOR</span> <button onclick="ir('scr-login')" style="background:none; border:none; color:red;">SAIR</button></header>
+    <header><span>OPERADOR V30</span> <button onclick="ir('scr-login')" style="background:none; border:none; color:red; font-size:10px;">LOGOUT</button></header>
     <div class="scroll">
         <div style="display:flex; gap:8px;">
             <select id="mod-op" style="flex:2;">
                 <option value="IN">📥 ENTRADA</option>
                 <option value="SEP">📦 SEPARAÇÃO</option>
-                <option value="CON">✅ CONFERÊNCIA</option>
                 <option value="OUT">📤 SAÍDA FINAL</option>
+                <option value="CON">✅ CONFERÊNCIA</option>
             </select>
-            <input type="number" id="qtd-bipe" value="1" style="flex:1; text-align:center;">
+            <input type="number" id="qtd-bipe" value="1" style="flex:0.8; text-align:center;">
         </div>
 
-        <div id="reader-container">
-            <div id="reader"></div>
-            <div id="cooldown-bar"></div>
-        </div>
+        <div id="reader"></div>
+        <div id="cooldown-bar"></div>
 
-        <div id="info-panel" class="info-panel">
-            <small style="color:#555">PRODUTO:</small>
-            <span id="view-nome" class="val-destaque">---</span>
-            <div style="display:flex; justify-content:space-between; margin-top:10px;">
-                <div><small style="color:#555">CÓDIGO:</small><br><b id="view-cod">---</b></div>
-                <div><small style="color:#555">SALDO ATUAL:</small><br><b id="view-saldo" style="color:var(--in)">0</b></div>
+        <div id="feedback-op" class="feedback-card">
+            <small style="color:var(--primary)">DETALHES DO PRODUTO:</small><br>
+            <b id="res-nome" style="font-size:16px;">---</b><br>
+            <div style="display:flex; justify-content:space-between; margin-top:10px; border-top:1px solid #222; padding-top:10px;">
+                <span>COD: <b id="res-cod">---</b></span>
+                <span>EM ESTOQUE: <b id="res-est" style="color:var(--in)">0</b></span>
             </div>
         </div>
 
-        <button class="btn-green" id="btn-cam" onclick="toggleCamera()" style="margin-top:15px;">ABRIR SCANNER</button>
+        <button class="btn-green" id="btn-cam" onclick="toggleCamera()" style="margin-top:15px;">ABRIR SCANNER V30</button>
     </div>
 </div>
 
 <div id="scr-config" class="screen">
-    <header><span>AJUSTES</span> <button onclick="ir('scr-shark')">VOLTAR</button></header>
+    <header><span>AJUSTAR BASE</span> <button onclick="ir('scr-shark')" style="font-size:9px;">VOLTAR</button></header>
     <div class="scroll">
-        <div class="card">
-            <small style="color:var(--primary)">CADASTRAR (CÓDIGO, NOME)</small>
-            <textarea id="import-area" style="width:100%; height:100px; background:#111; color:#fff; border:1px solid #333; margin-top:10px;"></textarea>
-            <button class="btn-green" onclick="importar()">SALVAR BASE</button>
-        </div>
+        <p style="font-size:9px; color:#555">FORMATO EXCEL: CODIGO, NOME DO PRODUTO</p>
+        <textarea id="import-area" style="width:100%; height:250px; background:#050505; border:1px solid #333; color:var(--primary); font-family:monospace; padding:10px;"></textarea>
+        <button class="btn-green" style="margin-top:10px;" onclick="importar()">SALVAR NA PLANILHA</button>
     </div>
 </div>
 
 <script>
-    const canal = new BroadcastChannel('logpro_v51');
+    const canal = new BroadcastChannel('logpro_jp_sync');
     let BASE = JSON.parse(localStorage.getItem('LP_BASE')) || {};
     let MOVS = JSON.parse(localStorage.getItem('LP_MOVS')) || [];
     let scanner, camOn = false, isLocked = false;
@@ -115,13 +121,12 @@
         const p = document.getElementById('pass').value;
         if(p === "9910") ir('scr-shark');
         else if(p === "1234") ir('scr-op');
-        else alert("ACESSO NEGADO");
     }
 
     function ir(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-        if(id === 'scr-shark') atualizarShark();
+        if(id === 'scr-shark') atualizarExcel();
     }
 
     function importar() {
@@ -134,59 +139,71 @@
     function processar(cod) {
         if(isLocked || !BASE[cod.trim()]) return;
         isLocked = true;
-        const item = BASE[cod.trim()];
+        const nome = BASE[cod.trim()];
         const modo = document.getElementById('mod-op').value;
-        const qtd = parseInt(document.getElementById('qtd-bipe').value) || 1;
+        const q = parseInt(document.getElementById('qtd-bipe').value) || 1;
 
-        // CÁLCULO DE SALDO PARA FEEDBACK
-        let s = 0; MOVS.filter(m => m.cod === cod).forEach(m => {
-            if(m.modo === 'IN') s += m.q; else if(m.modo === 'SEP' || m.modo === 'OUT') s -= m.q;
-        });
-
-        MOVS.unshift({ cod, nome: item, modo, q: qtd, d: new Date().toLocaleString() });
+        MOVS.unshift({ cod, n: nome, m: modo, q, d: new Date().toLocaleString() });
         localStorage.setItem('LP_MOVS', JSON.stringify(MOVS));
 
-        document.getElementById('info-panel').style.display = 'block';
-        document.getElementById('view-nome').innerText = item;
-        document.getElementById('view-cod').innerText = cod;
-        document.getElementById('view-saldo').innerText = (modo === 'IN' ? s + qtd : s - qtd);
+        // FEEDBACK OPERACIONAL
+        document.getElementById('feedback-op').style.display = 'block';
+        document.getElementById('res-nome').innerText = nome;
+        document.getElementById('res-cod').innerText = cod;
+        
+        // CALCULO DE SALDO EXPRESSO
+        let saldo = 0; MOVS.filter(m => m.cod === cod).forEach(m => {
+            if(m.m === 'IN') saldo += m.q; else if(m.m === 'SEP' || m.m === 'OUT') saldo -= m.q;
+        });
+        document.getElementById('res-est').innerText = saldo;
 
-        canal.postMessage({ type: 'BIPE' });
+        // V30 PERFORMANCE ANIMATION
         document.getElementById('cooldown-bar').style.width = "100%";
-        setTimeout(() => { isLocked = false; document.getElementById('cooldown-bar').style.width = "0%"; }, 600);
+        canal.postMessage('sync');
+        setTimeout(() => { isLocked = false; document.getElementById('cooldown-bar').style.width = "0%"; }, 500);
     }
 
-    function atualizarShark() {
-        let r = {}; Object.keys(BASE).forEach(k => r[k] = { n: BASE[k], ent: 0, sep: 0, sai: 0, sal: 0 });
+    function atualizarExcel() {
+        let r = {};
+        Object.keys(BASE).forEach(k => r[k] = { n: BASE[k], ent:0, sep:0, sai:0, conf:0, sal:0 });
         MOVS.forEach(m => {
             if(r[m.cod]) {
-                if(m.modo === 'IN') { r[m.cod].ent += m.q; r[m.cod].sal += m.q; }
-                if(m.modo === 'SEP') { r[m.cod].sep += m.q; r[m.cod].sal -= m.q; }
-                if(m.modo === 'OUT') { r[m.cod].sai += m.q; r[m.cod].sal -= m.q; }
+                if(m.m === 'IN') { r[m.cod].ent += m.q; r[m.cod].sal += m.q; }
+                if(m.m === 'SEP') { r[m.cod].sep += m.q; r[m.cod].sal -= m.q; }
+                if(m.m === 'OUT') { r[m.cod].sai += m.q; r[m.cod].sal -= m.q; }
+                if(m.m === 'CON') { r[m.cod].conf += m.q; }
             }
         });
-        document.getElementById('sheet-body').innerHTML = Object.keys(r).map(k => `
-            <tr class="sheet-row"><td><b>${r[k].n}</b></td><td>${r[k].sal}</td><td style="color:orange">${r[k].sep}</td><td style="color:var(--out)">${r[k].sai}</td></tr>
+        document.getElementById('excel-body').innerHTML = Object.keys(r).map((k, i) => `
+            <tr class="${i%2===0?'':'row-alt'}">
+                <td style="color:#444">${k}</td>
+                <td><b>${r[k].n}</b></td>
+                <td style="color:var(--primary); font-weight:900; text-align:center; background:rgba(0,255,65,0.05)">${r[k].sal}</td>
+                <td style="color:var(--in)">${r[k].ent}</td>
+                <td style="color:orange">${r[k].sep}</td>
+                <td style="color:var(--out)">${r[k].sai}</td>
+                <td>${r[k].conf > 0 ? '✅ '+r[k].conf : '--'}</td>
+            </tr>
         `).join('');
-        document.getElementById('stats').innerHTML = `<div class="card"><small>ESTOQUE TOTAL</small><br><b>${Object.values(r).reduce((a,b)=>a+b.sal,0)}</b></div><div class="card"><small>SKUS</small><br><b>${Object.keys(BASE).length}</b></div>`;
     }
 
     async function toggleCamera() {
         if(!camOn) {
             if(!scanner) scanner = new Html5Qrcode("reader");
-            await scanner.start({ facingMode: "environment" }, { fps: 15, qrbox: 220 }, (t) => processar(t));
-            camOn = true; document.getElementById('btn-cam').innerText = "FECHAR";
-        } else { await scanner.stop(); camOn = false; document.getElementById('btn-cam').innerText = "ABRIR SCANNER"; }
+            await scanner.start({ facingMode: "environment" }, { fps: 25, qrbox: 250 }, (t) => processar(t));
+            camOn = true; document.getElementById('btn-cam').innerText = "FECHAR CÂMERA";
+        } else { await scanner.stop(); camOn = false; document.getElementById('btn-cam').innerText = "ABRIR SCANNER V30"; }
     }
 
     function exportarCSV() {
-        let c = "DATA,ITEM,MODO,QTD\n" + MOVS.map(m=>`${m.d},${m.nome},${m.modo},${m.q}`).join('\n');
+        let c = "DATA,PRODUTO,MODO,QTD\n" + MOVS.map(m=>`${m.d},${m.n},${m.m},${m.q}`).join('\n');
         const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([c], {type:'text/csv'}));
-        a.download = 'LOGPRO_FINAL.csv'; a.click();
+        a.download = 'RELATORIO_LOGPRO_FINAL.csv'; a.click();
     }
 
-    canal.onmessage = () => { MOVS = JSON.parse(localStorage.getItem('LP_MOVS')); if(document.getElementById('scr-shark').classList.contains('active')) atualizarShark(); };
-    function init() { console.log("LOG-PRO V51 READY"); }
+    function limparRegistros() { if(confirm("DESEJA LIMPAR TODO O HISTÓRICO?")) { MOVS=[]; localStorage.setItem('LP_MOVS','[]'); atualizarExcel(); } }
+    canal.onmessage = () => { MOVS = JSON.parse(localStorage.getItem('LP_MOVS')); if(document.getElementById('scr-shark').classList.contains('active')) atualizarExcel(); };
+    function init() { console.log("LOG-PRO V55.0 OMNI READY"); }
 </script>
 </body>
 </html>
