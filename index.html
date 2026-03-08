@@ -7,227 +7,253 @@
     <script src="https://unpkg.com/html5-qrcode"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #00ff41; --bg: #000; --card: #0a0a0a; --out: #ff3b30; --in: #00d4ff; }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; height: 100vh; text-transform: uppercase; }
+        :root { --primary: #00ff41; --bg: #000; --card: #0a0a0a; --out: #ff3b30; --in: #00d4ff; --line: #1a1a1a; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; height: 100vh; text-transform: uppercase; font-size: 11px; }
         .screen { display: none; position: absolute; width: 100%; height: 100%; flex-direction: column; background: #000; }
         .active { display: flex !important; }
         
-        header { width: 100%; padding: 15px; border-bottom: 1px solid #111; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; font-family: 'Orbitron'; font-size: 10px; background: rgba(0,0,0,0.95); z-index: 10; }
+        header { width: 100%; padding: 15px; border-bottom: 1px solid #111; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; font-family: 'Orbitron'; background: rgba(0,0,0,0.95); z-index: 10; }
         .scroll { flex: 1; overflow-y: auto; width: 100%; padding: 20px; box-sizing: border-box; padding-bottom: 120px; }
         
+        /* PLANILHA STYLE */
+        .sheet-container { width: 100%; border-collapse: collapse; font-size: 10px; }
+        .sheet-header th { padding: 12px 8px; text-align: left; color: var(--primary); border-bottom: 2px solid var(--primary); }
+        .sheet-row { border-bottom: 1px solid var(--line); }
+        .sheet-row td { padding: 12px 8px; }
+
+        /* CARDS & UI */
         .card { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid #151515; margin-bottom: 12px; }
-        input, select, textarea { width: 100%; padding: 16px; background: #0d0d0d; border: 1px solid #222; color: #fff; font-family: 'Orbitron'; border-radius: 8px; margin-bottom: 15px; outline: none; box-sizing: border-box; font-size: 11px; }
-        .btn-green { width: 100%; padding: 18px; background: var(--primary); color: #000; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 8px; cursor: pointer; font-size: 11px; }
+        .btn-green { width: 100%; padding: 18px; background: var(--primary); color: #000; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 8px; cursor: pointer; }
+        input, select, textarea { width: 100%; padding: 15px; background: #0d0d0d; border: 1px solid #222; color: #fff; font-family: 'Orbitron'; border-radius: 8px; margin-bottom: 10px; box-sizing: border-box; }
         
-        /* TRAVA ANTI-BIPE (0.5s) */
-        #reader-container { position: relative; width: 100%; border-radius: 12px; overflow: hidden; border: 2px solid #222; margin-bottom: 15px; }
+        /* SAÚDE DO SISTEMA */
+        .health-bar { width: 100%; height: 4px; background: #111; border-radius: 2px; margin-top: 5px; overflow: hidden; }
+        #health-fill { width: 0%; height: 100%; background: var(--primary); transition: 0.5s; }
+        
+        /* SCANNER & TRAVA */
+        #reader-container { position: relative; width: 100%; border-radius: 12px; overflow: hidden; border: 2px solid #222; }
         #cooldown-bar { width: 0%; height: 6px; background: var(--primary); position: absolute; bottom: 0; left: 0; z-index: 5; }
-        .locked { filter: grayscale(1) opacity(0.5); }
-        
-        .badge-cod { background: #111; color: var(--primary); padding: 2px 5px; border-radius: 4px; font-family: monospace; font-size: 9px; }
+        .locked { filter: grayscale(1) opacity(0.3); pointer-events: none; }
+
+        .fab { position: fixed; bottom: 30px; right: 30px; width: 56px; height: 56px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 24px; border: none; box-shadow: 0 4px 15px rgba(0,255,65,0.4); z-index: 100; }
     </style>
 </head>
 <body onload="init()">
 
-<div id="scr-login" class="screen active" style="align-items: center; justify-content: center; text-align: center;">
-    <h1 style="font-family:'Orbitron'; color:var(--primary); font-size:32px; letter-spacing:5px;">LOG-PRO</h1>
-    <p style="font-size:7px; color:#444;">V36.5 | ARMOR & HIGH-SPEED</p>
-    <div style="width: 85%; max-width: 350px;">
+<div id="scr-login" class="screen active" style="align-items: center; justify-content: center;">
+    <h1 style="font-family:'Orbitron'; color:var(--primary); font-size:35px; letter-spacing:5px;">LOG-PRO</h1>
+    <p style="font-size:8px; color:#444;">V45.0 | OMNI-MASTER SYSTEM</p>
+    <div style="width: 85%; max-width: 320px;">
         <input type="password" id="pass" placeholder="CHAVE DE ACESSO" inputmode="numeric">
-        <button class="btn-green" onclick="auth()">CONECTAR</button>
+        <button class="btn-green" onclick="auth()">ENTRAR</button>
     </div>
 </div>
 
 <div id="scr-shark" class="screen">
     <header>
         <span style="color:var(--primary)">SHARK HUB</span>
-        <div style="display:flex; gap:8px;">
-            <button onclick="ir('scr-config')" style="background:#111; border:1px solid #333; color:#fff; font-size:8px; padding:8px; border-radius:4px;">GERAR BASE</button>
-            <button onclick="exportarCSV()" style="background:#111; border:1px solid #222; color:var(--primary); font-size:8px; padding:8px; border-radius:4px;">EXCEL</button>
-            <button onclick="ir('scr-login')" style="background:none; border:none; color:#444; font-size:8px;">SAIR</button>
-        </div>
+        <div id="mem-badge" style="font-size:8px; border:1px solid #333; padding:2px 5px; border-radius:10px;">MEM: 0%</div>
     </header>
     <div class="scroll">
-        <div id="dashboard" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px;"></div>
-        <div id="main-list"></div>
+        <div class="card" style="padding:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <small style="font-size:8px;">SAÚDE DA MEMÓRIA LOCAL</small>
+                <button onclick="limpezaSegura()" style="color:var(--out); background:none; border:none; font-size:8px;">LIMPAR BANCO</button>
+            </div>
+            <div class="health-bar"><div id="health-fill"></div></div>
+        </div>
+
+        <div id="dashboard" style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:15px;"></div>
+
+        <div class="card" style="padding: 0; overflow-x: auto;">
+            <table class="sheet-container">
+                <thead><tr class="sheet-header"><th>DESCRIÇÃO</th><th>ESTOQUE</th><th>SEP</th><th>CONF</th></tr></thead>
+                <tbody id="sheet-body"></tbody>
+            </table>
+        </div>
     </div>
+    <button class="fab" onclick="ir('scr-config')">+</button>
 </div>
 
 <div id="scr-config" class="screen">
-    <header><span>GESTÃO DE PRODUTOS</span> <button onclick="ir('scr-shark')">X</button></header>
+    <header><span>BASE / LISTAS</span> <button onclick="ir('scr-shark')">VOLTAR</button></header>
     <div class="scroll">
-        <div class="card" style="border-top: 2px solid var(--primary);">
-            <small style="color:var(--primary); font-size:8px;">INSERIR INDIVIDUAL</small>
-            <input type="text" id="conf-cod" placeholder="CÓDIGO DE BARRAS">
-            <input type="text" id="conf-nome" placeholder="NOME DO PRODUTO">
-            <button class="btn-green" onclick="salvarNaBase()">CADASTRAR</button>
+        <div class="card">
+            <small style="color:var(--in)">UPLOAD DE LISTA (IMAGEM OTIMIZADA)</small>
+            <input type="file" accept="image/*" onchange="uploadLista(this)" style="margin-top:10px;">
         </div>
-
-        <div style="text-align:center; margin: 10px 0; color:#333; font-size:9px;">——— OU ———</div>
-
-        <div class="card" style="border-top: 2px solid var(--in);">
-            <small style="color:var(--in); font-size:8px;">IMPORTAR LISTA (CODIGO,NOME)</small>
-            <textarea id="import-area" placeholder="12345,PRODUTO A&#10;67890,PRODUTO B" rows="4" style="margin-top:10px; font-family:monospace; font-size:10px;"></textarea>
-            <button class="btn-green" style="background:var(--in);" onclick="importarLista()">SUBIR PLANILHA</button>
+        <div class="card">
+            <small style="color:var(--primary)">IMPORTAR BASE (COD,NOME)</small>
+            <textarea id="import-area" placeholder="789...,PRODUTO A" rows="3"></textarea>
+            <button class="btn-green" onclick="importarLista()">ATUALIZAR PLANILHA</button>
         </div>
-        
-        <div id="base-list-preview" style="margin-top:20px;"></div>
+        <div id="base-list-preview"></div>
     </div>
 </div>
 
 <div id="scr-op" class="screen">
     <header>
         <span>COLLECTOR</span>
-        <button id="btn-sync" style="display:none; background:var(--primary); border:none; padding:8px 12px; font-family:'Orbitron'; font-size:8px; border-radius:4px;" onclick="enviarLote()">SUBIR LOTE</button>
+        <button onclick="toggleDoc()" id="btn-doc" style="background:var(--in); border:none; padding:5px 10px; border-radius:4px; font-size:9px;">VER MAPA</button>
     </header>
     <div class="scroll">
-        <div style="display:flex; gap:10px;">
-            <select id="sel-mod-op" style="flex:2;">
-                <option value="IN">📥 ENTRADA</option>
-                <option value="OUT">📤 SAÍDA</option>
-            </select>
-            <input type="number" id="qtd-bipe" value="1" style="flex:1; text-align:center; color:var(--primary);">
+        <div id="doc-viewer" class="card" style="display:none; text-align:center;">
+            <img id="lista-img" style="width:100%; border-radius:8px;">
+            <button class="btn-green" onclick="toggleDoc()" style="background:#222; color:#fff; padding:10px; margin-top:10px;">FECHAR</button>
         </div>
+
+        <select id="sel-mod-op" onchange="checkMode()">
+            <option value="IN">📥 ENTRADA</option>
+            <option value="OUT">📤 SAÍDA</option>
+            <option value="SEP">📦 SEPARAÇÃO (PICKING)</option>
+            <option value="CON">✅ CONFERÊNCIA (CHECK)</option>
+        </select>
+        <input type="number" id="qtd-bipe" value="1" style="font-size:25px; text-align:center; color:var(--primary);">
 
         <div id="reader-container">
             <div id="reader"></div>
             <div id="cooldown-bar"></div>
         </div>
 
-        <div style="display:flex; gap:10px;">
-            <button class="btn-green" id="btn-cam" onclick="toggleCamera()" style="flex:4;">SCANNER</button>
-            <button class="btn-green" onclick="toggleFlash()" style="flex:1; background:#222; color:#fff;">⚡</button>
-        </div>
-
-        <div id="feedback-op" class="card" style="display:none; margin-top:20px; border-color:var(--primary); text-align: center;">
-            <b id="op-nome-view" style="font-size:16px;"></b><br>
-            <span id="op-cod-view" class="badge-cod"></span>
-        </div>
+        <button class="btn-green" id="btn-cam" onclick="toggleCamera()" style="margin-top:15px;">LIGAR SCANNER</button>
+        <button id="btn-sync" class="btn-green" style="display:none; background:var(--in); margin-top:10px;" onclick="enviarLote()">SINCRONIZAR AGORA</button>
     </div>
 </div>
 
 <script>
-    const canal = new BroadcastChannel('logpro_v36');
-    let BASE = JSON.parse(localStorage.getItem('LP_BASE')) || {}; 
-    let MOVS = JSON.parse(localStorage.getItem('LP_MOVS')) || []; 
+    const canal = new BroadcastChannel('logpro_omni');
+    let BASE = JSON.parse(localStorage.getItem('LP_BASE')) || {};
+    let MOVS = JSON.parse(localStorage.getItem('LP_MOVS')) || [];
     let LOTE = [];
-    let scanner = null, camOn = false, isLocked = false, flashOn = false;
+    let scanner, camOn = false, isLocked = false;
+    const falar = (t) => { const m = new SpeechSynthesisUtterance(t); m.lang='pt-BR'; speechSynthesis.speak(m); };
 
     function auth() {
         const p = document.getElementById('pass').value;
         if(p === "9910") ir('scr-shark');
         else if(p === "1234") ir('scr-op');
-        else alert("ACESSO NEGADO");
+        else alert("CHAVE INVÁLIDA");
     }
 
     function ir(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         if(id === 'scr-shark') atualizarPainel();
-        if(id === 'scr-config') renderBase();
+        checkMemory();
     }
 
-    // GESTÃO DA BASE
-    function salvarNaBase() {
-        const c = document.getElementById('conf-cod').value.trim();
-        const n = document.getElementById('conf-nome').value.toUpperCase();
-        if(c && n) { BASE[c] = n; salvarEAtualizar(); document.getElementById('conf-cod').value=""; document.getElementById('conf-nome').value=""; }
+    // MONITOR DE MEMÓRIA & SAÚDE
+    function checkMemory() {
+        let total = 0; for (let x in localStorage) { if (localStorage.hasOwnProperty(x)) total += (localStorage[x].length * 2); }
+        const percent = ((total / (1024 * 1024 * 5)) * 100).toFixed(1);
+        const fill = document.getElementById('health-fill');
+        if(fill) {
+            fill.style.width = percent + "%";
+            document.getElementById('mem-badge').innerText = "MEM: " + percent + "%";
+            if(percent > 85) { fill.style.background = "red"; falar("Memória cheia. Limpe os dados."); }
+        }
     }
 
-    function importarLista() {
-        const texto = document.getElementById('import-area').value;
-        const linhas = texto.split('\n');
-        let cont = 0;
-        linhas.forEach(l => {
-            const d = l.split(',');
-            if(d.length >= 2) { const c = d[0].trim(); const n = d[1].trim().toUpperCase(); if(c && n) { BASE[c] = n; cont++; } }
-        });
-        if(cont > 0) { salvarEAtualizar(); document.getElementById('import-area').value=""; alert(cont + " ITENS CARREGADOS!"); }
+    function limpezaSegura() {
+        if(confirm("Deseja limpar as movimentações? O sistema fará backup automático.")){
+            exportarCSV();
+            MOVS = []; localStorage.setItem('LP_MOVS', JSON.stringify(MOVS));
+            ir('scr-shark');
+        }
     }
 
-    function salvarEAtualizar() { localStorage.setItem('LP_BASE', JSON.stringify(BASE)); renderBase(); }
-
-    function renderBase() {
-        const keys = Object.keys(BASE);
-        document.getElementById('base-list-preview').innerHTML = `<small style="color:#444;">ITENS NA BASE: ${keys.length}</small>` + 
-        keys.map(k => `<div class="card" style="padding:10px; font-size:9px; display:flex; justify-content:space-between;"><div><b>${BASE[k]}</b><br>${k}</div><button onclick="removerBase('${k}')" style="color:red; background:none; border:none;">×</button></div>`).join('');
+    // OTIMIZAÇÃO DE IMAGEM
+    function uploadLista(input) {
+        if (input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image(); img.src = e.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const scale = 800 / img.width; canvas.width = 800; canvas.height = img.height * scale;
+                    canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                    const compressed = canvas.toDataURL('image/jpeg', 0.6);
+                    localStorage.setItem('LP_LISTA_IMG', compressed);
+                    alert("MAPA SINCRONIZADO!");
+                }
+            }; reader.readAsDataURL(input.files[0]);
+        }
     }
 
-    function removerBase(k) { if(confirm("EXCLUIR?")) { delete BASE[k]; salvarEAtualizar(); } }
-
-    // PROCESSO DE BIPE (0.5s DELAY)
     function processar(cod) {
         if(isLocked) return;
-        const itemNome = BASE[cod.trim()];
-        if(!itemNome) { vibrate([100,50,100]); alert("NÃO CADASTRADO!"); return; }
-        
+        const nome = BASE[cod.trim()];
+        if(!nome) { falar("Item fora da planilha"); return; }
+
         isLocked = true;
         const bar = document.getElementById('cooldown-bar');
+        bar.style.transition = "width 0.5s linear"; bar.style.width = "100%";
         document.getElementById('reader-container').classList.add('locked');
-        bar.style.transition = "width 0.5s linear";
-        bar.style.width = '100%';
 
-        document.getElementById('feedback-op').style.display = 'block';
-        document.getElementById('op-nome-view').innerText = itemNome;
-        document.getElementById('op-cod-view').innerText = cod;
-        
         const m = document.getElementById('sel-mod-op').value;
         const q = parseInt(document.getElementById('qtd-bipe').value) || 1;
-        LOTE.unshift({ cod, nome: itemNome, m, q, d: new Date().toLocaleString() });
-        document.getElementById('btn-sync').style.display = 'block';
         
-        beep(850, 0.08); vibrate(40);
+        // VOZ INTELIGENTE
+        falar(q + " de " + nome);
+
+        LOTE.unshift({ cod, nome, m, q, d: new Date().toLocaleString() });
+        document.getElementById('btn-sync').style.display = 'block';
 
         setTimeout(() => {
-            isLocked = false;
+            isLocked = false; bar.style.transition = "none"; bar.style.width = "0%";
             document.getElementById('reader-container').classList.remove('locked');
-            bar.style.transition = "none";
-            bar.style.width = '0%';
-        }, 500); 
-    }
-
-    function enviarLote() {
-        MOVS = [...LOTE, ...MOVS];
-        localStorage.setItem('LP_MOVS', JSON.stringify(MOVS));
-        canal.postMessage('SYNC');
-        LOTE = []; document.getElementById('btn-sync').style.display = 'none';
-        alert("SINCRONIZADO!");
+        }, 500);
     }
 
     function atualizarPainel() {
-        const dash = document.getElementById('dashboard');
-        let totais = {};
-        MOVS.forEach(mov => {
-            if(!totais[mov.cod]) totais[mov.cod] = { nome: mov.nome, saldo: 0 };
-            mov.m === 'IN' ? totais[mov.cod].saldo += mov.q : totais[mov.cod].saldo -= mov.q;
+        let t = {}; Object.keys(BASE).forEach(k => t[k] = { n: BASE[k], s: 0, p: 0, c: 0 });
+        MOVS.forEach(m => {
+            if(t[m.cod]) {
+                if(m.m === 'IN') t[m.cod].s += m.q; if(m.m === 'OUT') t[m.cod].s -= m.q;
+                if(m.m === 'SEP') t[m.cod].p += m.q; if(m.m === 'CON') t[m.cod].c += m.q;
+            }
         });
-        let totalGeral = Object.values(totais).reduce((a, b) => a + b.saldo, 0);
-        dash.innerHTML = `<div class="card"><small>ESTOQUE TOTAL</small><br><b style="font-size:24px;">${totalGeral}</b></div><div class="card"><small>ITENS BASE</small><br><b style="font-size:24px;">${Object.keys(BASE).length}</b></div>`;
-        document.getElementById('main-list').innerHTML = Object.keys(totais).map(k => `<div class="card"><div style="display:flex; justify-content:space-between;"><div><b>${totais[k].nome}</b><br><small>${k}</small></div><b style="font-size:20px; color:var(--primary)">${totais[k].saldo}</b></div></div>`).join('');
+        document.getElementById('sheet-body').innerHTML = Object.keys(t).map(k => `
+            <tr class="sheet-row"><td><b>${t[k].n}</b></td><td>${t[k].s}</td><td style="color:orange">${t[k].p}</td><td style="color:purple">${t[k].c}</td></tr>
+        `).join('');
+        document.getElementById('dashboard').innerHTML = `<div class="card"><small>ESTOQUE</small><br><b>${Object.values(t).reduce((a,b)=>a+b.s,0)}</b></div><div class="card"><small>SKUS</small><br><b>${Object.keys(BASE).length}</b></div>`;
+    }
+
+    function importarLista() {
+        const txt = document.getElementById('import-area').value.split('\n');
+        txt.forEach(l => { const d = l.split(','); if(d[2]||d[1]) BASE[d[0].trim()] = (d[1]||d[0]).toUpperCase(); });
+        localStorage.setItem('LP_BASE', JSON.stringify(BASE)); ir('scr-shark');
     }
 
     async function toggleCamera() {
-        const rd = document.getElementById('reader'), btn = document.getElementById('btn-cam');
+        const btn = document.getElementById('btn-cam');
         if(!camOn) {
-            rd.style.display = 'block';
             if(!scanner) scanner = new Html5Qrcode("reader");
-            await scanner.start({ facingMode: "environment" }, { fps: 30, qrbox: 250 }, (txt) => { processar(txt); });
+            await scanner.start({ facingMode: "environment" }, { fps: 20, qrbox: 250 }, (txt) => processar(txt));
             btn.innerText = "PARAR"; camOn = true;
-        } else { if(scanner) await scanner.stop(); rd.style.display = 'none'; btn.innerText = "SCANNER"; camOn = false; }
+        } else { await scanner.stop(); btn.innerText = "LIGAR SCANNER"; camOn = false; }
     }
 
-    function toggleFlash() { if(camOn) { flashOn = !flashOn; scanner.applyVideoConstraints({ advanced: [{ torch: flashOn }] }); } }
+    function toggleDoc() {
+        const v = document.getElementById('doc-viewer');
+        v.style.display = v.style.display === 'none' ? 'block' : 'none';
+        document.getElementById('lista-img').src = localStorage.getItem('LP_LISTA_IMG') || '';
+    }
+
+    function enviarLote() {
+        MOVS = [...LOTE, ...MOVS]; localStorage.setItem('LP_MOVS', JSON.stringify(MOVS));
+        LOTE = []; document.getElementById('btn-sync').style.display = 'none';
+        falar("Dados enviados"); atualizarPainel();
+    }
 
     function exportarCSV() {
-        let csv = "DATA,ITEM,BARCODE,TIPO,QTD\n";
+        let csv = "DATA,ITEM,COD,MODO,QTD\n";
         MOVS.forEach(m => csv += `${m.d},${m.nome},${m.cod},${m.m},${m.q}\n`);
-        const b = new Blob([csv], {type: 'text/csv'});
-        const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'ESTOQUE_FINAL.csv'; a.click();
+        const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'}));
+        a.download = 'LOGPRO_MASTER.csv'; a.click();
     }
 
-    function beep(f, d) { try { const c=new AudioContext(); const o=c.createOscillator(); o.connect(c.destination); o.frequency.value=f; o.start(); o.stop(c.currentTime+d); } catch(e){} }
-    function vibrate(ms) { if(navigator.vibrate) navigator.vibrate(ms); }
-    function init() { console.log("LOG-PRO V36.5 READY"); }
+    function init() { checkMemory(); }
     canal.onmessage = () => { MOVS = JSON.parse(localStorage.getItem('LP_MOVS')); atualizarPainel(); };
 </script>
 </body>
