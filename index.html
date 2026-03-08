@@ -3,98 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>JP DIAS LOGÍSTICA</title>
+    <title>JP DIAS LOGÍSTICA | V2300</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #00ff41; --bg: #000; --red: #ff3b30; --blue: #0a84ff; --gray: #0d0d0d; }
+        :root { --primary: #00ff41; --bg: #000; --red: #ff3b30; --blue: #0a84ff; --gold: #ff9f0a; --gray: #0d0d0d; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; height: 100vh; text-transform: uppercase; }
         .screen { display: none; position: absolute; width: 100%; height: 100%; flex-direction: column; box-sizing: border-box; }
         .active { display: flex !important; }
 
-        /* LOGIN */
+        /* ESTILO LOGIN JP DIAS */
         .login-box { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
-        h1.logo { font-family: 'Orbitron'; color: #111; letter-spacing: 10px; margin-bottom: 25px; font-size: 32px; }
-        input { width: 100%; max-width: 300px; padding: 18px; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; font-family: 'Orbitron'; text-align: center; margin-bottom: 12px; outline: none; }
-        .btn-entrar { width: 100%; max-width: 300px; padding: 18px; background: var(--primary); color: #000; border: none; border-radius: 8px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; }
+        h1.logo { font-family: 'Orbitron'; color: #151515; letter-spacing: 12px; margin-bottom: 25px; font-size: 35px; font-weight: 900; }
+        input { width: 100%; max-width: 320px; padding: 20px; background: #000; border: 1px solid #333; color: #fff; border-radius: 10px; font-family: 'Orbitron'; text-align: center; margin-bottom: 15px; outline: none; }
+        .btn-primary { width: 100%; max-width: 320px; padding: 20px; background: var(--primary); color: #000; border: none; border-radius: 10px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; }
 
-        /* PAINEL GESTOR (MENU LARGO) */
-        .dash-wide { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; padding: 15px; flex: 1; overflow-y: auto; }
-        .panel { background: #080808; border-left: 4px solid var(--primary); padding: 20px; border-radius: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
-        .panel b { font-size: 11px; display: block; margin-bottom: 10px; color: var(--primary); }
-        .stat { display: flex; justify-content: space-between; font-size: 10px; color: #888; margin-bottom: 5px; }
-
-        /* OPERAÇÃO */
+        /* PAINEL GESTOR LARGO (MASTER) */
         header { padding: 15px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; background: #050505; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; flex: 1; }
-        .card { background: #0d0d0d; border: 1px solid #222; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
+        .dash-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; padding: 15px; overflow-y: auto; flex: 1; }
+        .card-gestor { background: #080808; border: 1px solid #1a1a1a; padding: 15px; border-radius: 8px; border-top: 4px solid var(--primary); }
+        
+        .timer-corte { background: #111; color: var(--red); padding: 10px; border-radius: 5px; text-align: center; font-family: 'Orbitron'; font-size: 18px; border: 1px solid var(--red); margin-bottom: 10px; }
+        
+        .user-status { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #111; font-size: 10px; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 5px; }
+        .online { background: var(--primary); box-shadow: 0 0 10px var(--primary); }
+        .offline { background: #333; }
 
-        /* CONFIRMAÇÃO DE SCANNER */
-        .op-display { flex: 1; border: 2px solid var(--primary); border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 20px; text-align: center; transition: 0.3s; }
-        .success-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,255,65,0.9); color:#000; display:none; justify-content:center; align-items:center; flex-direction:column; z-index:100; font-family:'Orbitron'; }
+        /* TABELA PRODUTIVIDADE */
+        table { width: 100%; font-size: 10px; margin-top: 10px; border-collapse: collapse; }
+        th { text-align: left; color: #555; padding-bottom: 5px; }
+        td { padding: 8px 0; border-bottom: 1px solid #111; }
 
-        .btn-cam { background: #111; color: var(--blue); border: 1px solid var(--blue); padding: 10px; width: 100%; border-radius: 6px; font-family: 'Orbitron'; font-size: 9px; margin-top: 10px; }
+        /* OVERLAY SUCESSO */
+        #success-bip { position: fixed; top:0; left:0; width:100%; height:100%; background: var(--primary); color:#000; display:none; justify-content:center; align-items:center; z-index:999; font-family:'Orbitron'; font-size:40px; }
     </style>
 </head>
 <body>
 
+<div id="success-bip">✓ CONFIRMADO</div>
+
 <div id="scr-login" class="screen active">
     <div class="login-box">
         <h1 class="logo">JP DIAS</h1>
-        <input type="password" id="pass" placeholder="DIGITE A SENHA">
-        <button class="btn-entrar" onclick="autenticar()">ACESSAR</button>
+        <input type="password" id="pass" placeholder="SENHA MESTRE OU OP">
+        <button class="btn-primary" onclick="autenticar()">ACESSAR SISTEMA</button>
     </div>
 </div>
 
 <div id="scr-gestor" class="screen">
     <header>
-        <span style="font-family:'Orbitron'; color:var(--primary); font-size:12px;">PAINEL GERAL (ACOMPANHAMENTO)</span>
-        <button onclick="location.reload()" style="background:none; border:1px solid var(--red); color:var(--red); font-size:8px;">SAIR</button>
+        <span style="font-family:'Orbitron'; color:var(--primary);">MONITORAMENTO GERAL</span>
+        <button onclick="location.reload()" style="background:none; border:1px solid var(--red); color:var(--red); font-size:8px;">LOGOUT</button>
     </header>
-    <div class="dash-wide">
-        <div class="panel"><b>ESTOQUE ARMAZÉM</b>
-            <div class="stat">PENDENTES: <span>14</span></div>
-            <div class="stat">CONCLUÍDOS: <span>89</span></div>
+    
+    <div class="dash-container">
+        <div class="card-gestor" style="border-top-color: var(--red);">
+            <b>⏱️ HORÁRIO DE CORTE (EXPEDIÇÃO)</b>
+            <div class="timer-corte" id="countdown">02:44:12</div>
+            <p style="font-size:8px; color:#555;">PRÓXIMA SAÍDA: 18:00H - ROTA SUL</p>
         </div>
-        <div class="panel" style="border-color:var(--blue)"><b>LOGÍSTICA / MOTORISTAS</b>
-            <div class="stat">EM ROTA: <span>08</span></div>
-            <div class="stat">AG. CARGA: <span>03</span></div>
+
+        <div class="card-gestor" style="border-top-color: var(--blue);">
+            <b>👥 STATUS DA EQUIPE</b>
+            <div class="user-status"><span><span class="dot online"></span>OP-01 (PEDRO)</span> <span>LOGADO</span></div>
+            <div class="user-status"><span><span class="dot online"></span>OP-02 (MARCOS)</span> <span>LOGADO</span></div>
+            <div class="user-status"><span><span class="dot offline"></span>OP-03 (ANA)</span> <span>OFFLINE</span></div>
+            <div class="user-status"><span><span class="dot online"></span>MOT-05 (CARLOS)</span> <span>EM ROTA</span></div>
         </div>
-        <div class="panel" style="border-color:var(--red)"><b>QUALIDADE</b>
-            <div class="stat">AVARIAS HOJE: <span>02</span></div>
-            <div class="stat">DEVOLUÇÕES: <span>01</span></div>
+
+        <div class="card-gestor">
+            <b>📊 RANKING PRODUTIVIDADE</b>
+            <table>
+                <tr><th>COLABORADOR</th><th>BIPES</th><th>ROI</th></tr>
+                <tr><td>OP-01 PEDRO</td><td>142</td><td style="color:var(--primary)">+12%</td></tr>
+                <tr><td>OP-02 MARCOS</td><td>98</td><td>-2%</td></tr>
+            </table>
+        </div>
+
+        <div class="card-gestor" style="border-top-color: var(--gold);">
+            <b>🚚 RASTREIO MOTORISTAS</b>
+            <div class="user-status"><span>VAN-01 (SÃO PAULO)</span> <span style="color:var(--primary)">ENTREGANDO</span></div>
+            <div class="user-status"><span>VAN-02 (INTERIOR)</span> <span style="color:var(--gold)">EM DESLOCAMENTO</span></div>
         </div>
     </div>
 </div>
 
 <div id="scr-operador" class="screen">
     <header>
-        <span style="font-family:'Orbitron'; color:var(--primary); font-size:12px;">OPERAÇÃO E LIBERAÇÃO</span>
+        <span style="font-family:'Orbitron'; color:var(--primary);">OPERAÇÃO ATIVA</span>
         <button onclick="location.reload()" style="background:none; border:1px solid var(--red); color:var(--red); font-size:8px;">SAIR</button>
     </header>
-    <div class="grid">
-        <div class="card" onclick="abrirOp('RECEBIMENTO')"><span>RECEBER</span></div>
-        <div class="card" onclick="abrirOp('SEPARAÇÃO')"><span>SEPARAR</span></div>
-        <div class="card" onclick="abrirOp('CONFERIR')"><span>CONFERIR</span></div>
-        <div class="card" onclick="abrirOp('AVARIA')"><span>AVARIA</span></div>
+    <div style="padding:20px; flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+        <div style="border:2px solid var(--primary); width:100%; height:150px; border-radius:15px; display:flex; flex-direction:column; justify-content:center; align-items:center; margin-bottom:20px;">
+            <h2 id="op-status" style="font-family:'Orbitron';">READY</h2>
+            <p id="op-last" style="font-size:10px; color:#444;">AGUARDANDO BIP</p>
+        </div>
+        <input type="text" id="scanner" placeholder="BIPE O CÓDIGO">
+        <button class="btn-primary" onclick="biparItem()">CONFIRMAR ITEM</button>
     </div>
-</div>
-
-<div id="scr-exec" class="screen">
-    <div id="success-anim" class="success-overlay">
-        <h1 style="font-size:50px;">✓</h1>
-        <h2>BIPADO!</h2>
-    </div>
-    <header><span id="exec-title" style="font-family:'Orbitron';">FUNÇÃO</span></header>
-    <div class="op-display" id="display-box">
-        <h2 id="exec-main" style="font-family:'Orbitron';">AGUARDANDO</h2>
-        <p id="exec-sub" style="font-size:10px; color:#333;">SCANNER ATIVO</p>
-    </div>
-    <div style="padding: 20px; background: #080808;">
-        <input type="text" id="main-input" placeholder="BIPE O CÓDIGO">
-        <button class="btn-entrar" onclick="processarAcao()">CONFIRMAR MANUAL</button>
-        <button class="btn-cam" onclick="alert('CÂMERA ATIVADA')">SCANNER CÂMERA (OFFLINE)</button>
-    </div>
-    <button style="background:#111; color:#fff; border:none; padding:15px; font-family:'Orbitron'; font-size:10px;" onclick="show('scr-operador')">VOLTAR</button>
 </div>
 
 <script>
@@ -103,15 +109,15 @@
     function bip() {
         const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
         osc.connect(gain); gain.connect(audioCtx.destination);
-        osc.type = 'square'; osc.frequency.value = 1200;
+        osc.type = 'square'; osc.frequency.value = 1300;
         gain.gain.value = 0.1; osc.start(); osc.stop(audioCtx.currentTime + 0.1);
     }
 
     function autenticar() {
         const p = document.getElementById('pass').value;
-        if(p === "9910") { show('scr-gestor'); }
+        if(p === "9910") { show('scr-gestor'); iniciarCorte(); }
         else if(p === "1234") { show('scr-operador'); }
-        else { alert("SENHA INVÁLIDA"); }
+        else { alert("ACESSO NEGADO"); }
     }
 
     function show(id) {
@@ -119,32 +125,37 @@
         document.getElementById(id).classList.add('active');
     }
 
-    function abrirOp(nome) {
-        show('scr-exec');
-        document.getElementById('exec-title').innerText = nome;
-        document.getElementById('main-input').focus();
-    }
-
-    function processarAcao() {
-        const val = document.getElementById('main-input').value;
+    function biparItem() {
+        const val = document.getElementById('scanner').value;
         if(val) {
             bip();
-            // ANIMAÇÃO DE SUCESSO PÓS BIP
-            const anim = document.getElementById('success-anim');
-            anim.style.display = 'flex';
-            
+            const overlay = document.getElementById('success-bip');
+            overlay.style.display = 'flex';
             setTimeout(() => {
-                anim.style.display = 'none';
-                document.getElementById('main-input').value = "";
-                document.getElementById('main-input').focus();
-                document.getElementById('exec-main').innerText = "ÚLTIMO: " + val;
-            }, 800); // 800ms de confirmação visual
+                overlay.style.display = 'none';
+                document.getElementById('op-status').innerText = "CONCLUÍDO";
+                document.getElementById('op-last').innerText = "ÚLTIMO: " + val;
+                document.getElementById('scanner').value = "";
+                document.getElementById('scanner').focus();
+            }, 600);
         }
     }
 
-    // LISTENER PARA SCANNER (ENTER)
-    document.getElementById('main-input').addEventListener('keypress', (e) => {
-        if(e.key === 'Enter') processarAcao();
+    function iniciarCorte() {
+        let tempo = 9852; // segundos fake para o exemplo
+        setInterval(() => {
+            tempo--;
+            let h = Math.floor(tempo / 3600);
+            let m = Math.floor((tempo % 3600) / 60);
+            let s = tempo % 60;
+            document.getElementById('countdown').innerText = 
+                `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+        }, 1000);
+    }
+
+    // Suporte ao Enter do Scanner
+    document.getElementById('scanner')?.addEventListener('keypress', (e) => {
+        if(e.key === 'Enter') biparItem();
     });
 </script>
 </body>
