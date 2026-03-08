@@ -3,163 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>JP DIAS | GENESIS FINAL</title>
+    <title>SISTEMA OMNI | JP DIAS</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #ff9f0a; --bg: #000; --card: #0d0d0d; --red: #ff3b30; --green: #30d158; }
+        :root { --primary: #00ff41; --bg: #000; --blue: #0a84ff; --red: #ff3b30; --gold: #ff9f0a; --gray: #1a1a1a; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; height: 100vh; text-transform: uppercase; }
         
         .screen { display: none; position: absolute; width: 100%; height: 100%; flex-direction: column; padding: 20px; box-sizing: border-box; background: var(--bg); }
         .active { display: flex !important; }
 
-        .glass { background: #080808; border: 1px solid #1a1a1a; border-radius: 12px; padding: 20px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
-        input { width: 100%; padding: 15px; margin-top: 10px; background: #000; border: 1px solid #222; color: var(--primary); border-radius: 6px; font-family: 'Orbitron'; text-align: center; }
+        header { padding-bottom: 10px; border-bottom: 1px solid #222; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .glass { background: #080808; border: 1px solid #1a1a1a; border-radius: 12px; padding: 15px; text-align: center; margin-bottom: 10px; }
         
-        .btn { width: 100%; padding: 18px; margin-top: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; font-family: 'Orbitron'; border: none; transition: 0.2s; }
-        .btn:active { transform: scale(0.95); }
+        /* MENU GRID */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; flex: 1; overflow-y: auto; }
+        .card { background: var(--gray); border: 1px solid #333; border-radius: 10px; padding: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; text-align: center; }
+        .card:active { background: var(--primary); color: #000; }
+        .card i { font-family: 'Orbitron'; font-size: 14px; margin-bottom: 5px; }
+        .card span { font-size: 8px; font-weight: bold; }
 
-        .voice-box { flex: 1; border: 2px solid var(--primary); border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 20px 0; background: radial-gradient(circle, rgba(255,159,10,0.05) 0%, transparent 75%); }
-        .log-box { height: 100px; overflow-y: auto; font-family: monospace; font-size: 10px; color: #444; text-align: left; padding: 10px; background: #050505; border-radius: 5px; border: 1px solid #111; }
+        /* ALERTAS DE ESTOQUE */
+        .alert-box { background: rgba(255, 59, 48, 0.1); border: 1px solid var(--red); color: var(--red); padding: 8px; font-size: 9px; border-radius: 5px; margin-bottom: 10px; font-weight: bold; }
+
+        /* ÁREA OPERACIONAL */
+        .op-display { flex: 1; border: 2px solid var(--primary); border-radius: 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: radial-gradient(circle, rgba(0,255,101,0.05) 0%, transparent 80%); margin: 10px 0; }
+        input { width: 100%; padding: 15px; margin-top: 10px; background: #000; border: 1px solid #333; color: var(--primary); border-radius: 6px; font-family: 'Orbitron'; text-align: center; box-sizing: border-box; }
+        
+        .btn-footer { background: #111; color: #fff; border: 1px solid #444; padding: 12px; border-radius: 6px; font-family: 'Orbitron'; font-size: 9px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<div id="scr-portal" class="screen active" style="justify-content: center; align-items: center;">
-    <h1 id="ghost-trigger" style="font-family:'Orbitron'; letter-spacing:15px; color:#0a0a0a; cursor:pointer;" onclick="handleGhost()">JP DIAS</h1>
-    <div class="glass" style="width: 320px;">
-        <small style="color:#333; letter-spacing:3px;">LOGIN DO SISTEMA</small>
-        <input type="text" id="u" placeholder="USUÁRIO">
+<div id="scr-login" class="screen active" style="justify-content: center; align-items: center;">
+    <h1 style="font-family:'Orbitron'; letter-spacing:10px; color:#151515; cursor:pointer;" onclick="handleGhost()">JP DIAS</h1>
+    <div class="glass" style="width: 300px;">
+        <input type="text" id="u" placeholder="USUÁRIO / MOTORISTA">
         <input type="password" id="p" placeholder="SENHA">
-        <button class="btn" style="background:var(--primary); color:#000;" onclick="handleLogin()">INICIAR TURNO</button>
+        <button onclick="login()" style="width:100%; padding:15px; margin-top:15px; background:var(--primary); color:#000; border:none; border-radius:5px; font-family:'Orbitron'; font-weight:bold;">ENTRAR</button>
     </div>
 </div>
 
-<div id="scr-master" class="screen">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-family:'Orbitron'; color:var(--primary); font-size:14px;">MASTER CONTROL</span>
-        <button onclick="logout()" style="background:none; border:1px solid var(--red); color:var(--red); padding:5px 10px; border-radius:4px; font-size:10px;">ENCERRAR</button>
-    </div>
+<div id="scr-lobby" class="screen">
+    <header>
+        <span style="font-family:'Orbitron'; color:var(--primary); font-size:12px;">HUB LOGÍSTICO</span>
+        <button onclick="location.reload()" style="background:none; border:1px solid var(--red); color:var(--red); font-size:8px; padding:4px 8px; border-radius:4px;">SAIR</button>
+    </header>
 
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:20px 0;">
-        <div class="glass"><b>R$ 5.820</b><br><small style="font-size:8px;">ROI ACUMULADO</small></div>
-        <div class="glass" style="border-left: 3px solid var(--primary);"><b>88%</b><br><small style="font-size:8px;">PERFORMANCE</small></div>
-    </div>
+    <div class="alert-box" id="stock-alert">⚠️ ALERTA: ABASTECIMENTO NECESSÁRIO NO SETOR A-05</div>
 
+    <div class="grid">
+        <div class="card" onclick="go('scr-armazem', 'var(--primary)')"><i>AMZ</i><span>ARMAZÉM</span></div>
+        <div class="card" onclick="go('scr-cross', 'var(--blue)')"><i>CRX</i><span>CROSSDOCK</span></div>
+        <div class="card" onclick="go('scr-motorista', 'var(--gold)')"><i>DVR</i><span>MOTORISTAS</span></div>
+        <div class="card" onclick="go('scr-avaria', 'var(--red)')"><i>AVR</i><span>AVARIAS</span></div>
+    </div>
+</div>
+
+<div id="scr-armazem" class="screen">
+    <header><span style="font-family:'Orbitron'; color:var(--primary);">ARMAZÉM</span></header>
+    <div class="grid" style="grid-template-columns: 1fr 1fr;">
+        <div class="card" onclick="openOp('RECEBIMENTO')">IN<span>RECEBER</span></div>
+        <div class="card" onclick="openOp('SEPARAÇÃO (VOZ)')">VOZ<span>SEPARAR</span></div>
+        <div class="card" onclick="openOp('ABASTECIMENTO')">UP<span>ABASTECER</span></div>
+        <div class="card" onclick="openOp('CONFERÊNCIA')">OK<span>CONFERIR</span></div>
+    </div>
+    <button class="btn-footer" onclick="show('scr-lobby')">VOLTAR</button>
+</div>
+
+<div id="scr-motorista" class="screen">
+    <header><span style="font-family:'Orbitron'; color:var(--gold);">PORTAL MOTORISTA</span></header>
     <div class="glass">
-        <h4 style="font-family:'Orbitron'; font-size:10px; margin:0 0 10px 0; color:var(--primary);">ORDEM DE SEPARAÇÃO</h4>
-        <input type="text" id="set-box" placeholder="LOCAL (EX: BOX 05)">
-        <input type="text" id="set-cod" placeholder="CÓDIGO (EX: 772)">
-        <button class="btn" style="background:var(--green); color:#000;" onclick="salvarConfig()">ATUALIZAR OPERAÇÃO</button>
+        <p style="font-size:10px; color:var(--gold);">PLACA: JP-2026 | ROTA: CENTRO-SUL</p>
     </div>
-
-    <div class="log-box" id="master-logs" style="margin-top:15px;">
-        > NÚCLEO JP DIAS INICIALIZADO...<br>> SISTEMA DE VOZ EM STANDBY...
+    <div class="grid">
+        <div class="card" style="border-color:var(--gold)">LISTA<span>PEDIDOS</span></div>
+        <div class="card" style="border-color:var(--gold)">MAPA<span>ROTEIRO</span></div>
+        <div class="card" style="border-color:var(--primary); grid-column: span 2;">OK<span>CONFIRMAR ENTREGA</span></div>
     </div>
+    <button class="btn-footer" onclick="show('scr-lobby')">VOLTAR</button>
 </div>
 
-<div id="scr-voz" class="screen">
-    <h2 style="font-family:'Orbitron'; color:var(--primary); font-size:14px; text-align:center;">SISTEMA DE VOZ ATIVO</h2>
-    <div class="voice-box">
-        <h3 id="inst" style="font-family:'Orbitron'; font-size:24px;">AGUARDANDO</h3>
-        <p id="v-status" style="font-size:10px; color:var(--green);">● OUVINDO...</p>
+<div id="scr-exec" class="screen">
+    <header><span id="exec-title" style="font-family:'Orbitron';">FUNÇÃO</span></header>
+    <div class="op-display" id="exec-border">
+        <h2 id="exec-main" style="font-family:'Orbitron'; font-size:24px;">PRONTO</h2>
+        <p id="exec-sub" style="font-size:9px; color:#555;">AGUARDANDO AÇÃO</p>
     </div>
-    <div class="glass" style="margin-bottom:10px; padding:10px; font-size:10px; color:#555;">
-        Diga "ATIVAR" 3 vezes para receber a localização.
+    <div id="exec-input-box" class="glass" style="display:none;">
+        <input type="text" id="scanner" placeholder="SCANNER / CÓDIGO">
     </div>
-    <button class="btn" style="background:var(--red); color:#fff;" onclick="logout()">SAIR / FINALIZAR</button>
+    <button class="btn-footer" onclick="show('scr-lobby')">FINALIZAR</button>
 </div>
 
 <script>
-    let clicks = 0;
     let vCount = 0;
-    let config = JSON.parse(localStorage.getItem('jp_config')) || { box: "A-01", cod: "000" };
     const audio = new (window.AudioContext || window.webkitAudioContext)();
 
-    function bip(f = 800, d = 0.1) {
-        const o = audio.createOscillator();
-        const g = audio.createGain();
+    function bip(f=800, d=0.1) {
+        const o=audio.createOscillator(); const g=audio.createGain();
         o.connect(g); g.connect(audio.destination);
-        o.frequency.value = f; g.gain.value = 0.1;
-        o.start(); setTimeout(() => o.stop(), d * 1000);
+        o.frequency.value=f; g.gain.value=0.1;
+        o.start(); setTimeout(()=>o.stop(), d*1000);
     }
 
     function falar(t) {
         window.speechSynthesis.cancel();
-        const m = new SpeechSynthesisUtterance(t);
-        m.lang = 'pt-BR'; m.rate = 1.1;
+        const m=new SpeechSynthesisUtterance(t); m.lang='pt-BR';
         window.speechSynthesis.speak(m);
     }
 
-    function handleGhost() {
-        bip(1200); clicks++;
-        if(clicks === 5) {
-            bip(1500, 0.2);
-            if(prompt("CHAVE JP DIAS:") === "9910") {
-                show('scr-master');
-                falar("Acesso mestre concedido. Bem vindo, J P.");
-            }
-            clicks = 0;
-        }
-        setTimeout(() => clicks = 0, 3000);
-    }
-
-    function handleLogin() {
-        bip();
-        const user = document.getElementById('u').value.toLowerCase();
-        if(user === "shark" || user === "jp") {
-            show('scr-master');
-            falar("Painel de controle iniciado.");
-        } else if(user === "op") {
-            show('scr-voz');
-            falar("Turno iniciado. Aguardando comando.");
-            startVoice();
-        } else {
-            bip(200, 0.3); alert("NEGADO");
-        }
-    }
-
-    function salvarConfig() {
-        config.box = document.getElementById('set-box').value || "BOX 01";
-        config.cod = document.getElementById('set-cod').value || "000";
-        localStorage.setItem('jp_config', JSON.stringify(config));
-        bip(1000, 0.2);
-        falar("Configuração salva. Local " + config.box);
-        document.getElementById('master-logs').innerHTML += `<br>> BOX DEFINIDO: ${config.box}`;
-    }
-
-    function logout() {
-        bip(400, 0.5);
-        falar("Encerrando sistema. Até logo.");
-        setTimeout(() => location.reload(), 1500);
-    }
+    function login() { bip(); show('scr-lobby'); falar("Sistema operacional JP Dias iniciado."); }
 
     function show(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
     }
 
+    function go(id, cor) { bip(1000, 0.05); show(id); }
+
+    function openOp(nome) {
+        bip(); show('scr-exec');
+        document.getElementById('exec-title').innerText = nome;
+        const main = document.getElementById('exec-main');
+        const sub = document.getElementById('exec-sub');
+        const input = document.getElementById('exec-input-box');
+
+        if(nome.includes('VOZ')) {
+            main.innerText = 'FALE "ATIVAR"';
+            sub.innerText = '3 VEZES PARA SEPARAÇÃO';
+            input.style.display = 'none';
+            falar("Módulo de voz iniciado.");
+            startVoice();
+        } else {
+            main.innerText = 'SCANNER READY';
+            sub.innerText = 'AGUARDANDO BIPE';
+            input.style.display = 'block';
+            falar("Módulo " + nome + " ativo.");
+        }
+    }
+
     function startVoice() {
         const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if(!Rec) return alert("Erro no microfone");
-        const rec = new Rec();
-        rec.lang = 'pt-BR'; rec.continuous = true;
-        
+        if(!Rec) return;
+        const rec = new Rec(); rec.lang='pt-BR'; rec.continuous=true;
         rec.onresult = (e) => {
-            const fala = e.results[e.results.length - 1][0].transcript.toLowerCase();
-            if(fala.includes("ativar")) {
-                bip(1000, 0.1);
-                vCount++;
-                falar(vCount);
+            const f = e.results[e.results.length-1][0].transcript.toLowerCase();
+            if(f.includes("ativar")) {
+                bip(1000, 0.1); vCount++; falar(vCount);
                 if(vCount === 3) {
                     bip(1600, 0.3);
-                    document.getElementById('inst').innerHTML = `${config.box}<br>CÓD: ${config.cod}`;
-                    falar(`Tarefa confirmada. Vá para o ${config.box}. Código final ${config.cod}`);
+                    document.getElementById('exec-main').innerText = "BOX A-05";
+                    falar("Vá para o Box A zero cinco. Abastecimento prioritário.");
                     vCount = 0;
                 }
             }
         };
-        rec.onerror = () => rec.start();
         rec.start();
+    }
+
+    function handleGhost() {
+        if(prompt("MASTER KEY:") === "9910") {
+            falar("Acesso mestre."); show('scr-lobby');
+        }
     }
 </script>
 </body>
