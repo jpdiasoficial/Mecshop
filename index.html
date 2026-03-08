@@ -3,82 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>JP DIAS LOG-PRO | V9000</title>
+    <title>JP DIAS LOG-PRO | V12</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #00ff41; --bg: #000; --red: #ff3b30; --blue: #0a84ff; --gray: #111; }
+        :root { --primary: #00ff41; --bg: #000; --red: #ff3b30; --blue: #0a84ff; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; height: 100vh; text-transform: uppercase; }
         .screen { display: none; position: absolute; width: 100%; height: 100%; flex-direction: column; }
         .active { display: flex !important; }
 
         header { padding: 15px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; background: #050505; font-family: 'Orbitron'; font-size: 10px; }
+        .scroll { flex: 1; overflow-y: auto; padding: 15px; }
+
+        /* KPI & TABELAS */
+        .kpi-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .kpi { background: #080808; border: 1px solid #222; padding: 12px; border-radius: 8px; border-left: 4px solid var(--primary); }
+        .kpi b { display: block; font-family: 'Orbitron'; font-size: 14px; color: var(--primary); }
         
-        /* PAINEL GESTOR - DIVIDIDO EM CADASTRO E DADOS */
-        .dash-scroll { flex: 1; overflow-y: auto; padding: 15px; }
-        .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .kpi-card { background: #080808; border: 1px solid #222; padding: 15px; border-radius: 8px; border-left: 4px solid var(--primary); }
-        .kpi-card small { font-size: 7px; color: #555; }
-        .kpi-card b { display: block; font-size: 14px; font-family: 'Orbitron'; }
+        table { width: 100%; border-collapse: collapse; font-size: 9px; margin-top: 10px; background: #080808; }
+        th { text-align: left; color: #555; padding: 8px; border-bottom: 1px solid #222; }
+        td { padding: 10px 8px; border-bottom: 1px solid #111; }
 
-        /* TABELA DE FUNCIONÁRIOS COM DADOS */
-        .data-table { width: 100%; border-collapse: collapse; font-size: 9px; margin-top: 15px; }
-        .data-table th { text-align: left; color: #555; padding: 8px; border-bottom: 1px solid #222; }
-        .data-table td { padding: 10px 8px; border-bottom: 1px solid #111; }
-        .status-on { color: var(--primary); }
-
-        /* FORMULÁRIO */
-        .form-box { background: #080808; padding: 15px; border-radius: 8px; border: 1px solid #222; margin-bottom: 20px; }
-        input, select { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: #fff; font-family: 'Orbitron'; font-size: 9px; margin-bottom: 10px; border-radius: 4px; box-sizing: border-box; }
-        .btn-add { width: 100%; padding: 15px; background: var(--primary); color: #000; border: none; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; border-radius: 4px; }
-
+        /* BOTOES */
+        .btn { width: 100%; padding: 15px; background: var(--primary); color: #000; border: none; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; border-radius: 4px; margin-top: 5px; }
+        .btn-exp { background: var(--blue); color: #fff; margin-top: 20px; }
+        
         /* OPERACIONAL */
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; }
-        .card-mod { background: #0d0d0d; border: 1px solid #222; padding: 20px; border-radius: 12px; text-align: center; border-bottom: 4px solid var(--primary); cursor: pointer; }
-        .op-display { flex: 1; margin: 20px; border: 2px solid var(--primary); border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; }
+        .card { background: #0d0d0d; border: 1px solid #222; padding: 25px; border-radius: 10px; text-align: center; border-bottom: 4px solid var(--primary); cursor: pointer; }
+        .op-box { flex: 1; margin: 20px; border: 2px solid var(--primary); border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; }
         #flash { position: absolute; width: 100%; height: 100%; background: var(--primary); color: #000; display: none; justify-content: center; align-items: center; font-family: 'Orbitron'; font-size: 25px; border-radius: 18px; z-index: 10; }
+        input { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: #fff; font-family: 'Orbitron'; font-size: 10px; border-radius: 4px; box-sizing: border-box; }
     </style>
 </head>
-<body>
+<body onload="init()">
 
-<div id="flash">✓ BIPADO</div>
+<div id="flash">✓ REGISTRADO</div>
 
 <div id="scr-login" class="screen active">
-    <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:20px;">
-        <h1 style="font-family:'Orbitron'; color:#151515; font-size:35px; letter-spacing:10px;">JP DIAS</h1>
-        <input type="password" id="pass" placeholder="SENHA (9910 ou 1234)">
-        <button class="btn-add" onclick="entrar()">ACESSAR</button>
+    <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:30px;">
+        <h1 style="font-family:'Orbitron'; color:#151515; font-size:40px; letter-spacing:10px;">JP DIAS</h1>
+        <input type="password" id="pass" placeholder="SENHA (9910/1234)">
+        <button class="btn" onclick="login()">ENTRAR</button>
     </div>
 </div>
 
 <div id="scr-gestor" class="screen">
     <header><span>DASHBOARD MASTER</span> <button onclick="location.reload()" style="color:var(--red); background:none; border:none;">SAIR</button></header>
-    <div class="dash-scroll">
-        
-        <div class="kpi-grid">
-            <div class="kpi-card"><small>BIPES TOTAIS</small><b id="total-bipes">1.240</b></div>
-            <div class="kpi-card" style="border-left-color: var(--blue);"><small>EFICIÊNCIA GIRO</small><b>94%</b></div>
+    <div class="scroll">
+        <div class="kpi-row">
+            <div class="kpi"><small>TOTAL BIPES</small><b id="k-total">0</b></div>
+            <div class="kpi" style="border-left-color: var(--blue);"><small>EQUIPE</small><b id="k-equipe">0</b></div>
         </div>
 
-        <div class="form-box">
-            <b style="font-family:'Orbitron'; font-size:10px; display:block; margin-bottom:10px; color:var(--primary);">NOVO ACESSO</b>
-            <input type="text" id="reg-nome" placeholder="NOME DO COLABORADOR">
-            <select id="reg-mod">
-                <option value="Armazém">ARMAZÉM</option>
-                <option value="Crossdock">CROSSDOCK</option>
-                <option value="Motorista">MOTORISTA</option>
+        <div style="background:#080808; padding:15px; border:1px solid #222; border-radius:8px;">
+            <b style="font-size:10px; color:var(--primary); font-family:'Orbitron';">NOVO CADASTRO</b>
+            <input type="text" id="fnome" placeholder="NOME DO FUNCIONÁRIO" style="margin-top:10px;">
+            <select id="fmod" style="width:100%; padding:12px; background:#000; color:#fff; font-family:'Orbitron'; font-size:10px; margin:10px 0; border:1px solid #333;">
+                <option value="Armazém">MÓDULO: ARMAZÉM</option>
+                <option value="Crossdock">MÓDULO: CROSSDOCK</option>
             </select>
-            <button class="btn-add" onclick="salvarFunc()">CRIAR E ATIVAR</button>
+            <button class="btn" onclick="addFunc()">SALVAR FUNCIONÁRIO</button>
         </div>
 
-        <b style="font-family:'Orbitron'; font-size:10px;">EQUIPE & PERFORMANCE</b>
-        <table class="data-table">
-            <thead>
-                <tr><th>NOME</th><th>MÓDULO</th><th>BIPES</th><th>STATUS</th></tr>
-            </thead>
-            <tbody id="lista-func">
-                <tr><td>PEDRO SILVA</td><td>ARMAZÉM</td><td>450</td><td class="status-on">● ON</td></tr>
-                <tr><td>MARCOS REIS</td><td>CROSSDOCK</td><td>890</td><td class="status-on">● ON</td></tr>
-            </tbody>
+        <button class="btn btn-exp" onclick="exportarLista()">📦 GERAR LISTA DE BIPAGEM</button>
+
+        <table id="tbl-bipes">
+            <thead><tr><th>HORA</th><th>CÓDIGO</th><th>MÓDULO</th></tr></thead>
+            <tbody id="lista-logs"></tbody>
         </table>
     </div>
 </div>
@@ -86,33 +77,48 @@
 <div id="scr-hub" class="screen">
     <header><span>MÓDULOS JP DIAS</span></header>
     <div class="grid">
-        <div class="card-mod" onclick="showOp('AMZ')"><span>ESTOQUE</span><b>ARMAZÉM</b></div>
-        <div class="card-mod" onclick="showOp('CROS')" style="border-color:var(--blue)"><span>GIRO</span><b>CROSSDOCK</b></div>
-        <div class="card-mod" onclick="showOp('ROTA')" style="border-color:var(--gold); grid-column: span 2;"><span>LOGÍSTICA</span><b>ROTA MOTORISTA</b></div>
+        <div class="card" onclick="op('ARMAZÉM')"><b>ARMAZÉM</b></div>
+        <div class="card" onclick="op('CROSSDOCK')" style="border-color:var(--blue)"><b>CROSSDOCK</b></div>
     </div>
 </div>
 
 <div id="scr-exec" class="screen">
     <header><span id="exec-title">---</span> <button onclick="show('scr-hub')" style="color:#555; background:none; border:none;">VOLTAR</button></header>
-    <div class="op-display">
-        <h2 id="main-st" style="font-family:'Orbitron';">READY</h2>
-        <p id="sub-st" style="font-size:10px; color:#444;">AGUARDANDO LEITURA</p>
+    <div class="op-box">
+        <h2 id="main-val" style="font-family:'Orbitron';">READY</h2>
+        <input type="text" id="scanner" style="position:absolute; opacity:0;">
     </div>
     <div style="padding:20px; background:#080808;">
-        <input type="text" id="scan-in" placeholder="ESCANEIE OU DIGITE">
-        <button class="btn-add" onclick="bipar()">CONFIRMAR MANUAL</button>
+        <input type="text" id="manual" placeholder="BIPE OU DIGITE">
+        <button class="btn" onclick="registrar(true)">CONFIRMAR</button>
     </div>
 </div>
 
 <script>
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    function falar(t) { window.speechSynthesis.cancel(); window.speechSynthesis.speak(new SpeechSynthesisUtterance(t)); }
+    let db = { logs: [], equipe: [] };
+    const audio = new (window.AudioContext || window.webkitAudioContext)();
 
-    function entrar() {
+    function init() {
+        const salvo = localStorage.getItem('jpdias_v12');
+        if(salvo) db = JSON.parse(salvo);
+        render();
+    }
+
+    function render() {
+        document.getElementById('k-total').innerText = db.logs.length;
+        document.getElementById('k-equipe').innerText = db.equipe.length;
+        const lista = document.getElementById('lista-logs');
+        if(lista) {
+            lista.innerHTML = db.logs.slice(-10).reverse().map(l => `<tr><td>${l.hora}</td><td>${l.cod}</td><td>${l.mod}</td></tr>`).join('');
+        }
+        localStorage.setItem('jpdias_v12', JSON.stringify(db));
+    }
+
+    function login() {
         const p = document.getElementById('pass').value;
         if(p === "9910") show('scr-gestor');
         else if(p === "1234") show('scr-hub');
-        else alert("ERRO");
+        else alert("SENHA INCORRETA");
     }
 
     function show(id) {
@@ -120,43 +126,64 @@
         document.getElementById(id).classList.add('active');
     }
 
-    function showOp(tipo) {
-        show('scr-exec');
-        document.getElementById('exec-title').innerText = tipo;
-        document.getElementById('scan-in').focus();
-        falar("Iniciando Módulo " + tipo);
-    }
-
-    function salvarFunc() {
-        const nome = document.getElementById('reg-nome').value;
-        const mod = document.getElementById('reg-mod').value;
-        if(nome) {
-            const row = `<tr><td>${nome.toUpperCase()}</td><td>${mod.toUpperCase()}</td><td>0</td><td class="status-on">● ON</td></tr>`;
-            document.getElementById('lista-func').innerHTML += row;
-            document.getElementById('reg-nome').value = "";
-            falar("Funcionário Cadastrado");
+    function addFunc() {
+        const n = document.getElementById('fnome').value.toUpperCase();
+        if(n) {
+            db.equipe.push({ nome: n, mod: document.getElementById('fmod').value });
+            document.getElementById('fnome').value = "";
+            render();
+            alert("CADASTRADO!");
         }
     }
 
-    function bipar() {
-        const val = document.getElementById('scan-in').value;
-        if(val) {
-            const osc = audioCtx.createOscillator(); const g = audioCtx.createGain();
-            osc.connect(g); g.connect(audioCtx.destination);
+    function op(t) {
+        show('scr-exec');
+        document.getElementById('exec-title').innerText = t;
+        document.getElementById('scanner').focus();
+    }
+
+    function registrar(manual) {
+        const input = manual ? document.getElementById('manual') : document.getElementById('scanner');
+        const cod = input.value;
+        if(cod) {
+            const agora = new Date();
+            const hora = agora.getHours() + ":" + agora.getMinutes().toString().padStart(2, '0');
+            
+            db.logs.push({ hora, cod, mod: document.getElementById('exec-title').innerText });
+            render();
+
+            const osc = audio.createOscillator(); const g = audio.createGain();
+            osc.connect(g); g.connect(audio.destination);
             osc.type = 'square'; osc.frequency.value = 1300;
-            g.gain.value = 0.1; osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+            g.gain.value = 0.1; osc.start(); osc.stop(audio.currentTime + 0.1);
 
             document.getElementById('flash').style.display = 'flex';
             setTimeout(() => {
                 document.getElementById('flash').style.display = 'none';
-                document.getElementById('main-st').innerText = "BIP: " + val;
-                document.getElementById('scan-in').value = "";
-                document.getElementById('scan-in').focus();
-            }, 600);
+                document.getElementById('main-val').innerText = cod;
+                input.value = "";
+                document.getElementById('scanner').focus();
+            }, 400);
         }
     }
 
-    document.getElementById('scan-in')?.addEventListener('keypress', (e) => { if(e.key === 'Enter') bipar(); });
+    function exportarLista() {
+        if(db.logs.length === 0) return alert("LISTA VAZIA");
+        let texto = "--- LISTA DE BIPAGEM JP DIAS ---\n\n";
+        db.logs.forEach(l => {
+            texto += `[${l.hora}] ${l.cod} (${l.mod})\n`;
+        });
+        
+        const blob = new Blob([texto], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `bipagem_jpdias_${new Date().toLocaleDateString()}.txt`;
+        a.click();
+    }
+
+    document.getElementById('scanner')?.addEventListener('keypress', (e) => { if(e.key === 'Enter') registrar(false); });
+    document.getElementById('manual')?.addEventListener('keypress', (e) => { if(e.key === 'Enter') registrar(true); });
 </script>
 </body>
-</html>
+                       </html>
+    
