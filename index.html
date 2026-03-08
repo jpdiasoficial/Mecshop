@@ -20,20 +20,21 @@
         .search-bar input { margin: 0; padding: 10px; background: #111; border: 1px solid #222; width: 100%; box-sizing: border-box; color: #fff; border-radius: 4px; }
         h3 { font-family: 'Orbitron'; color: var(--primary); font-size: 10px; margin: 15px 0 8px 0; border-left: 3px solid var(--primary); padding-left: 8px; }
         .table-wrapper { border: 1px solid var(--border); border-radius: 6px; overflow-x: auto; background: #080808; margin-bottom: 20px; }
-        table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        table { width: 100%; border-collapse: collapse; min-width: 500px; }
         th { background: #111; color: #555; padding: 10px; text-align: left; font-size: 8px; border-bottom: 1px solid var(--border); position: sticky; top: 0; }
         td { padding: 8px 10px; border-bottom: 1px solid #151515; white-space: nowrap; }
         .btn-edit { background: none; border: 1px solid #333; color: var(--primary); padding: 2px 6px; border-radius: 3px; cursor: pointer; font-size: 8px; }
         .btn-green { width: 100%; padding: 18px; background: var(--primary); color: #000; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 4px; cursor: pointer; }
         input, select, textarea { width: 100%; padding: 14px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; font-family: 'Orbitron'; margin-bottom: 10px; box-sizing: border-box; }
-        #reader { width: 100%; border-radius: 8px; overflow: hidden; border: 2px solid #222; }
+        #reader { width: 100%; border-radius: 8px; overflow: hidden; border: 2px solid #222; background: #050505; }
 
         @media print {
             body * { visibility: hidden; background: white !important; color: black !important; }
             #print-area, #print-area * { visibility: visible; }
-            #print-area { position: absolute; left: 0; top: 0; width: 100%; padding: 10px; }
-            table { border: 1px solid #000; width: 100%; border-collapse: collapse; }
-            th, td { border: 1px solid #000; padding: 6px; font-size: 10px; color: black !important; }
+            #print-area { position: absolute; left: 0; top: 0; width: 100%; padding: 5px; }
+            table { border: 1px solid #000; width: 100%; border-collapse: collapse; min-width: 100%; }
+            th, td { border: 1px solid #000; padding: 4px; font-size: 9px; color: black !important; text-align: left; }
+            .no-print { display: none; }
         }
     </style>
 </head>
@@ -56,34 +57,24 @@
     
     <div class="stats">
         <div class="card">ITENS <span id="stat-itens">0</span></div>
-        <div class="card">MOVS HOJE <span id="stat-movs">0</span></div>
-        <div class="card">SALDO TOTAL <span id="stat-saldo">0</span></div>
+        <div class="card">MOVS <span id="stat-movs">0</span></div>
+        <div class="card">SALDO <span id="stat-saldo">0</span></div>
     </div>
 
     <div class="search-bar">
-        <input type="text" id="main-filter" placeholder="FILTRAR POR NOME OU CODIGO..." oninput="atualizarTabelas()">
+        <input type="text" id="main-filter" placeholder="BUSCAR ITEM OU OPERADOR..." oninput="atualizarTabelas()">
     </div>
 
     <div class="scroll">
-        <h3>CONTROLE DE INVENTARIO</h3>
-        <div class="table-wrapper">
-            <table>
-                <thead><tr><th>CODIGO</th><th>PRODUTO</th><th>SALDO</th><th id="th-edit">AÇÕES</th></tr></thead>
-                <tbody id="stock-body"></tbody>
-            </table>
-        </div>
+        <h3>INVENTÁRIO ATUAL</h3>
+        <div class="table-wrapper"><table id="tbl-stock"><thead><tr><th>COD</th><th>NOME</th><th>SALDO</th><th>AÇÕES</th></tr></thead><tbody id="stock-body"></tbody></table></div>
 
-        <h3>LOG DE OPERAÇÕES</h3>
-        <div class="table-wrapper">
-            <table>
-                <thead><tr><th>HORA</th><th>OP</th><th>ACAO</th><th>ITEM</th><th>QTD</th></tr></thead>
-                <tbody id="audit-body"></tbody>
-            </table>
-        </div>
+        <h3>HISTÓRICO DE LOGÍSTICA</h3>
+        <div class="table-wrapper"><table><thead><tr><th>HORA</th><th>OP</th><th>MODO</th><th>ITEM</th><th>QTD</th></tr></thead><tbody id="audit-body"></tbody></table></div>
     </div>
 
     <div style="position:fixed; bottom:20px; right:20px; display:flex; flex-direction:column; gap:10px;">
-        <button onclick="prepararImpressao('GLOBAL')" style="width:50px; height:50px; border-radius:50%; background:#fff; border:none; font-weight:bold;">🖨️</button>
+        <button onclick="prepararImpressao('GLOBAL')" style="width:50px; height:50px; border-radius:50%; background:#fff; border:none; font-weight:bold; box-shadow: 0 4px 15px rgba(255,255,255,0.2);">🖨️</button>
         <button id="btn-config-float" onclick="ir('scr-config')" style="width:50px; height:50px; border-radius:50%; background:var(--primary); border:none; font-weight:bold;">⚙️</button>
     </div>
 </div>
@@ -92,36 +83,52 @@
     <header><span id="display-user">OP: ---</span> <button onclick="logout()" style="color:var(--out); background:none; border:none; font-size:8px;">SAIR</button></header>
     <div class="scroll">
         <div style="display:flex; gap:5px; margin-bottom:10px;">
-            <select id="mod-op" style="flex:2;"><option value="ENTRADA">ENTRADA</option><option value="SEPARACAO">SEPARACAO</option><option value="SAIDA">SAIDA</option></select>
+            <select id="mod-op" style="flex:2;"><option value="ENTRADA">ENTRADA</option><option value="SEPARACAO">SEPARAÇÃO</option><option value="SAIDA">SAÍDA</option></select>
             <input type="number" id="qtd-bipe" value="1" style="flex:0.6; text-align:center;">
         </div>
         <div id="reader"></div>
-        <button class="btn-green" id="btn-cam" onclick="toggleCamera()" style="margin:10px 0;">ATIVAR SCANNER</button>
-        <h3>MEUS ÚLTIMOS BIPES</h3>
-        <div class="table-wrapper"><table><thead><tr><th>HORA</th><th>ACAO</th><th>ITEM</th><th>QTD</th></tr></thead><tbody id="op-audit-body"></tbody></table></div>
+        <button class="btn-green" id="btn-cam" onclick="toggleCamera()" style="margin:10px 0;">LIGAR SCANNER</button>
+        
+        <h3>MEU ROMANEIO ATUAL</h3>
+        <div class="table-wrapper"><table><thead><tr><th>HORA</th><th>AÇÃO</th><th>ITEM</th><th>QTD</th></tr></thead><tbody id="op-audit-body"></tbody></table></div>
+        <button onclick="prepararImpressao('OP')" style="background:#222; color:#fff; border:1px solid #444; padding:10px; width:100%; border-radius:4px; font-family:'Orbitron';">GERAR MEU ROMANEIO</button>
     </div>
 </div>
 
 <div id="scr-config" class="screen">
-    <header><span>CONFIGURAÇÕES</span> <button onclick="ir('scr-shark')">VOLTAR</button></header>
+    <header><span>SISTEMA</span> <button onclick="ir('scr-shark')">VOLTAR</button></header>
     <div class="scroll">
-        <h3>CADASTRO DE OPERADORES</h3>
-        <textarea id="op-area" style="height:80px;" placeholder="NOME, CHAVE"></textarea>
-        <h3>IMPORTAÇÃO EM MASSA</h3>
-        <textarea id="import-area" style="height:200px;" placeholder="CODIGO, NOME"></textarea>
-        <button class="btn-green" onclick="salvarConfig()">ATUALIZAR SISTEMA</button>
-        <button onclick="resetTotal()" style="margin-top:20px; color:var(--out); background:none; border:none; width:100%; font-size:8px;">ZERAR BANCO DE DADOS</button>
+        <h3>OPERADORES (NOME, CHAVE)</h3>
+        <textarea id="op-area" style="height:80px;"></textarea>
+        <h3>BASE DE ITENS (COD, NOME)</h3>
+        <textarea id="import-area" style="height:200px;"></textarea>
+        <button class="btn-green" onclick="salvarConfig()">SALVAR TUDO</button>
+        <button onclick="resetTotal()" style="margin-top:20px; color:var(--out); background:none; border:none; width:100%; font-size:8px;">LIMPAR BANCO DE DADOS</button>
     </div>
 </div>
 
 <script>
-    const canal = new BroadcastChannel('logpro_jp_v67');
+    const canal = new BroadcastChannel('logpro_jp_v68');
     let BASE = JSON.parse(localStorage.getItem('LP_BASE')) || {};
     let MOVS = JSON.parse(localStorage.getItem('LP_MOVS')) || [];
     let OPERADORES = JSON.parse(localStorage.getItem('LP_USERS')) || {"JP":"9910", "SHARK":"9910", "OP":"1234"};
     let currentUser = "", scanner, camOn = false, isLocked = false;
 
-    function playBeep() { try { const ctx = new AudioContext(); const osc = ctx.createOscillator(); const g = ctx.createGain(); osc.connect(g); g.connect(ctx.destination); osc.frequency.value = 880; g.gain.setValueAtTime(0.3, ctx.currentTime); osc.start(); g.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1); osc.stop(ctx.currentTime + 0.12); } catch(e){} }
+    // BIP ULTRA-RÁPIDO (0.02s)
+    function playBeep() { 
+        try { 
+            const ctx = new AudioContext(); 
+            const osc = ctx.createOscillator(); 
+            const g = ctx.createGain(); 
+            osc.connect(g); 
+            g.connect(ctx.destination); 
+            osc.frequency.value = 900; 
+            g.gain.setValueAtTime(0.4, ctx.currentTime); 
+            osc.start(); 
+            g.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.02); // 0.02 milésimos
+            osc.stop(ctx.currentTime + 0.03); 
+        } catch(e){} 
+    }
 
     function auth() {
         const u = document.getElementById('user-name').value.toUpperCase().trim();
@@ -137,7 +144,7 @@
                 ir('scr-op'); 
                 atualizarOpAudit(); 
             } 
-        } else alert("ACESSO NEGADO");
+        } else alert("CHAVE INCORRETA");
     }
 
     function logout() { currentUser = ""; ir('scr-login'); }
@@ -146,12 +153,10 @@
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         if(id === 'scr-shark') atualizarTabelas();
-        if(id === 'scr-config') document.getElementById('op-area').value = Object.entries(OPERADORES).map(([k,v]) => `${k}, ${v}`).join('\n');
     }
 
     function renomearItem(cod) {
-        if(currentUser !== "JP") return;
-        const novoNome = prompt("DIGITE O NOVO NOME PARA " + cod, BASE[cod]);
+        const novoNome = prompt("ALTERAR NOME PARA " + cod, BASE[cod]);
         if(novoNome) { BASE[cod] = novoNome.toUpperCase(); localStorage.setItem('LP_BASE', JSON.stringify(BASE)); atualizarTabelas(); canal.postMessage('sync'); }
     }
 
@@ -159,12 +164,29 @@
         let novosOps = {}; document.getElementById('op-area').value.split('\n').forEach(l => { const d = l.split(','); if(d[0] && d[1]) novosOps[d[0].trim().toUpperCase()] = d[1].trim(); });
         OPERADORES = novosOps; localStorage.setItem('LP_USERS', JSON.stringify(OPERADORES));
         document.getElementById('import-area').value.split('\n').forEach(l => { const d = l.split(','); if(d[0] && d[1]) BASE[d[0].trim()] = d[1].trim().toUpperCase(); });
-        localStorage.setItem('LP_BASE', JSON.stringify(BASE)); alert("SISTEMA ATUALIZADO!"); ir('scr-shark');
+        localStorage.setItem('LP_BASE', JSON.stringify(BASE)); alert("BASE SINCRONIZADA!"); ir('scr-shark');
     }
 
+    // FUNÇÃO DE AUTO-CADASTRO NO BIP
     function processar(cod) {
-        if(isLocked) return; isLocked = true; playBeep();
-        let c = cod.trim(); if(!BASE[c]) { BASE[c] = "ITEM NOVO: " + c; localStorage.setItem('LP_BASE', JSON.stringify(BASE)); }
+        if(isLocked) return; isLocked = true; 
+        let c = cod.trim(); 
+        
+        // Se o item não existe, o OP cadastra na hora
+        if(!BASE[c]) {
+            playBeep();
+            const nomeRapido = prompt("ITEM NÃO CADASTRADO ("+c+"). DIGITE O NOME:", "");
+            if(nomeRapido) {
+                BASE[c] = nomeRapido.toUpperCase();
+                localStorage.setItem('LP_BASE', JSON.stringify(BASE));
+            } else {
+                isLocked = false;
+                return; // Cancela se não der nome
+            }
+        } else {
+            playBeep();
+        }
+
         const modo = document.getElementById('mod-op').value;
         const q = parseInt(document.getElementById('qtd-bipe').value) || 1;
         MOVS.unshift({ cod: c, n: BASE[c], m: modo, q, d: new Date().toLocaleString(), u: currentUser });
@@ -174,15 +196,12 @@
     }
 
     function atualizarOpAudit() {
-        const meusBipes = MOVS.filter(m => m.u === currentUser).slice(0, 10);
+        const meusBipes = MOVS.filter(m => m.u === currentUser).slice(0, 15);
         document.getElementById('op-audit-body').innerHTML = meusBipes.map(m => `<tr><td>${m.d.split(' ')[1]}</td><td>${m.m}</td><td>${m.n}</td><td>${m.q}</td></tr>`).join('');
     }
 
     function atualizarTabelas() {
         const filtro = document.getElementById('main-filter').value.toUpperCase();
-        const movsFiltradas = MOVS.filter(m => m.n.includes(filtro) || m.cod.includes(filtro) || m.u.includes(filtro));
-        document.getElementById('audit-body').innerHTML = movsFiltradas.slice(0, 20).map(m => `<tr><td>${m.d.split(' ')[1]}</td><td>${m.u}</td><td>${m.m}</td><td>${m.n}</td><td>${m.q}</td></tr>`).join('');
-
         let r = {}; let totalS = 0;
         Object.keys(BASE).forEach(k => r[k] = { n: BASE[k], sal: 0 });
         MOVS.forEach(m => { if(r[m.cod]) { if(m.m === 'ENTRADA') r[m.cod].sal += m.q; else r[m.cod].sal -= m.q; } });
@@ -191,28 +210,34 @@
         document.getElementById('stock-body').innerHTML = chavesFiltradas.map(k => {
             totalS += r[k].sal;
             const btnEdit = currentUser === "JP" ? `<button class="btn-edit" onclick="renomearItem('${k}')">EDITAR</button>` : "-";
-            return `<tr><td>${k}</td><td><b>${r[k].n}</b></td><td style="color:var(--primary); font-weight:bold;">${r[k].sal}</td><td>${btnEdit}</td></tr>`;
+            return `<tr><td>${k}</td><td><b>${r[k].n}</b></td><td style="color:var(--primary)">${r[k].sal}</td><td>${btnEdit}</td></tr>`;
         }).join('');
 
+        const movsF = MOVS.filter(m => m.n.includes(filtro) || m.u.includes(filtro)).slice(0, 30);
+        document.getElementById('audit-body').innerHTML = movsF.map(m => `<tr><td>${m.d.split(' ')[1]}</td><td>${m.u}</td><td>${m.m}</td><td>${m.n}</td><td>${m.q}</td></tr>`).join('');
+
         document.getElementById('stat-itens').innerText = Object.keys(BASE).length;
-        document.getElementById('stat-movs').innerText = MOVS.filter(m => m.d.includes(new Date().toLocaleDateString())).length;
+        document.getElementById('stat-movs').innerText = MOVS.length;
         document.getElementById('stat-saldo').innerText = totalS;
+        document.getElementById('op-area').value = Object.entries(OPERADORES).map(([k,v]) => `${k}, ${v}`).join('\n');
+        document.getElementById('import-area').value = Object.entries(BASE).map(([k,v]) => `${k}, ${v}`).join('\n');
     }
 
     function prepararImpressao(tipo) {
-        let lista = tipo === 'OP' ? MOVS.filter(m => m.u === currentUser).slice(0, 15) : MOVS.slice(0, 30);
-        let html = `<div style="text-align:center;"><h2>JP TECNOLOGIA - LOGPRO</h2><p>CONFERENCIA - ${new Date().toLocaleString()}</p></div>`;
-        html += `<table><thead><tr><th>HORA</th><th>OP</th><th>ACAO</th><th>ITEM</th><th>QTD</th></tr></thead><tbody>`;
+        let lista = tipo === 'OP' ? MOVS.filter(m => m.u === currentUser).slice(0, 50) : MOVS.slice(0, 50);
+        let html = `<div style="text-align:center; font-family:'Orbitron';"><h2>LOG-PRO | ROMANEIO</h2><p>${new Date().toLocaleString()}</p></div><hr>`;
+        if(tipo === 'OP') html += `<p><b>OPERADOR:</b> ${currentUser}</p>`;
+        html += `<table><thead><tr><th>HORA</th><th>OP</th><th>MOV</th><th>ITEM</th><th>QTD</th></tr></thead><tbody>`;
         html += lista.map(m => `<tr><td>${m.d.split(' ')[1]}</td><td>${m.u}</td><td>${m.m}</td><td>${m.n}</td><td>${m.q}</td></tr>`).join('');
-        html += `</tbody></table><br><p>ASSINATURA: __________________________________</p>`;
+        html += `</tbody></table><br><div style="margin-top:20px; border-top:1px solid #000; padding-top:10px;">ASSINATURA RESPONSÁVEL:</div>`;
         document.getElementById('print-area').innerHTML = html; window.print();
     }
 
-    function resetTotal() { if(confirm("APAGAR TUDO?")) { localStorage.clear(); location.reload(); } }
+    function resetTotal() { if(confirm("DESEJA LIMPAR TUDO?")) { localStorage.clear(); location.reload(); } }
 
     async function toggleCamera() {
-        if(!camOn) { if(!scanner) scanner = new Html5Qrcode("reader"); await scanner.start({ facingMode: "environment" }, { fps: 26, qrbox: 250 }, (t) => processar(t)); camOn = true; document.getElementById('btn-cam').innerText = "PARAR"; }
-        else { await scanner.stop(); camOn = false; document.getElementById('btn-cam').innerText = "ATIVAR SCANNER"; }
+        if(!camOn) { if(!scanner) scanner = new Html5Qrcode("reader"); await scanner.start({ facingMode: "environment" }, { fps: 30, qrbox: 250 }, (t) => processar(t)); camOn = true; document.getElementById('btn-cam').innerText = "PARAR"; }
+        else { await scanner.stop(); camOn = false; document.getElementById('btn-cam').innerText = "LIGAR SCANNER"; }
     }
 
     canal.onmessage = () => { MOVS = JSON.parse(localStorage.getItem('LP_MOVS')) || []; BASE = JSON.parse(localStorage.getItem('LP_BASE')) || []; atualizarTabelas(); };
