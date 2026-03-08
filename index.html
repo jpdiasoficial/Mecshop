@@ -3,171 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>JP DIAS | GENESIS V200</title>
+    <title>JP DIAS | GENESIS V300</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #ff9f0a; --bg: #000000; --card: #151515; --red: #ff3b30; --blue: #0a84ff; --green: #30d158; }
+        :root { --primary: #ff9f0a; --bg: #000; --card: #111; --red: #ff3b30; --blue: #0a84ff; --green: #30d158; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; text-transform: uppercase; overflow: hidden; height: 100vh; }
         
-        /* --- ESTILOS DO PRINT (DESIGN FIEL) --- */
-        .card { background: var(--card); border-radius: 12px; padding: 15px; margin-bottom: 10px; border: 1px solid #222; }
-        .stat-card { border-left: 4px solid var(--primary); }
-        .stat-val { font-family: 'Orbitron'; font-size: 24px; color: var(--primary); display: block; }
-        .stat-label { font-size: 9px; color: #666; letter-spacing: 1px; }
+        /* --- ESTILOS GLOBAIS --- */
+        .glass { background: #0a0a0a; border: 1px solid #222; border-radius: 12px; padding: 20px; box-sizing: border-box; }
+        input, select { width: 100%; padding: 12px; margin-top: 10px; background: #000; border: 1px solid #333; color: #fff; border-radius: 6px; font-size: 11px; }
+        .btn { width: 100%; padding: 15px; margin-top: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; font-family: 'Orbitron'; border: none; transition: 0.3s; }
         
-        /* --- PORTAL INICIAL --- */
-        #portal { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        #ghost-trigger { font-family: 'Orbitron'; letter-spacing: 10px; color: #111; cursor: pointer; transition: 0.3s; margin-bottom: 30px; }
-        .btn-login { width: 280px; padding: 18px; margin: 8px; background: #111; border: 1px solid #333; color: #fff; border-radius: 8px; font-weight: bold; cursor: pointer; }
-
-        /* --- PAINEL MASTER --- */
-        #painel-master { display: none; padding: 15px; height: 100vh; overflow-y: auto; box-sizing: border-box; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .log-box { background: #000; border: 1px solid #222; border-radius: 8px; height: 180px; overflow-y: auto; font-family: monospace; font-size: 10px; padding: 10px; color: #888; }
+        /* --- TELAS --- */
+        .page { display: none; height: 100vh; width: 100vw; flex-direction: column; padding: 20px; box-sizing: border-box; }
+        #page-portal { display: flex; justify-content: center; align-items: center; }
         
-        /* --- BOTÃO DE BLOQUEIO (IGUAL AO PRINT) --- */
-        .btn-lockdown { width: 100%; padding: 20px; background: var(--red); color: #fff; border: none; border-radius: 8px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; margin-top: 15px; }
+        /* --- PORTAL GHOST --- */
+        #ghost-trigger { font-family: 'Orbitron'; letter-spacing: 12px; color: #080808; cursor: pointer; user-select: none; margin-bottom: 25px; }
+        
+        /* --- PAINEL MASTER (GOD) --- */
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .stat-item { background: var(--card); padding: 15px; border-left: 3px solid var(--primary); border-radius: 6px; }
+        .stat-item b { display: block; font-family: 'Orbitron'; font-size: 20px; color: var(--primary); }
+        .stat-item span { font-size: 8px; color: #555; letter-spacing: 1px; }
 
-        /* --- TELAS OPERACIONAIS --- */
-        .mod-op { display: none; height: 100vh; padding: 20px; flex-direction: column; text-align: center; }
-        .voice-circle { width: 150px; height: 150px; border: 2px solid var(--primary); border-radius: 50%; margin: 50px auto; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(255,159,10,0.2); }
+        /* --- OPERAÇÃO --- */
+        .voice-box { flex: 1; border: 2px solid var(--primary); border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: rgba(255,159,10,0.03); margin: 20px 0; }
+        .pulse { width: 15px; height: 15px; background: var(--primary); border-radius: 50%; animation: pulse 1s infinite; margin-top: 20px; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(3); opacity: 0; } }
     </style>
 </head>
 <body>
 
-<div id="portal">
-    <h1 id="ghost-trigger" onclick="ghostCheck()">JP DIAS</h1>
-    <div class="card" style="width: 300px; text-align: center;">
-        <button class="btn-login" onclick="abrirModo('OPERACIONAL')">ACESSAR OPERAÇÃO 📦</button>
-        <button class="btn-login" style="border-color: #222; color: #444;" onclick="alert('Acesso Restrito')">GUEST ACCESS</button>
+<div id="page-portal" class="page">
+    <h1 id="ghost-trigger" onclick="ghostClick()">JP DIAS</h1>
+    <div class="glass" style="width: 300px;">
+        <small style="color:#444; letter-spacing:2px;">SISTEMA OPERACIONAL</small>
+        <input type="text" id="user" placeholder="USUÁRIO">
+        <input type="password" id="pass" placeholder="SENHA">
+        <button class="btn" style="background:var(--primary); color:#000;" onclick="handleLogin()">ENTRAR</button>
     </div>
 </div>
 
-<div id="painel-master">
-    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px;">
+<div id="page-master" class="page">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
         <div>
-            <span style="font-family:'Orbitron'; color:var(--primary); font-size:14px;">GENESIS MASTER CONTROL</span><br>
-            <small style="font-size:8px; color:#444;">ID: GOD_MODE_JP_DIAS_2026</small>
+            <span style="font-family:'Orbitron'; color:var(--primary); font-size:14px;">MASTER CONTROL</span><br>
+            <small style="color:#333; font-size:8px;">GENESIS V300 | ONLINE</small>
         </div>
-        <button onclick="location.reload()" style="background:none; border:1px solid var(--red); color:var(--red); font-size:9px; padding:4px 10px; border-radius:4px;">LOGOUT</button>
+        <button onclick="location.reload()" style="background:none; border:1px solid var(--red); color:var(--red); padding:5px 10px; font-size:10px; border-radius:4px;">LOGOUT</button>
     </div>
 
-    <div class="grid-2">
-        <div class="card stat-card"><b class="stat-val">12</b><span class="stat-label">USUÁRIOS ATIVOS</span></div>
-        <div class="card stat-card" style="border-left-color:var(--blue);"><b class="stat-val">04</b><span class="stat-label">MOTOS EM ROTA</span></div>
-        <div class="card stat-card" style="border-left-color:var(--green);"><b class="stat-val">89%</b><span class="stat-label">ROI OPERACIONAL</span></div>
-        <div class="card stat-card" style="border-left-color:var(--red);"><b class="stat-val">02</b><span class="stat-label">ALERTAS AVARIA</span></div>
+    <div class="stat-grid">
+        <div class="stat-item"><b>R$ 2.150</b><span>ROI ESTIMADO</span></div>
+        <div class="stat-item" style="border-left-color:var(--blue);"><b>09ms</b><span>LATÊNCIA REDE</span></div>
     </div>
 
-    <div class="grid-2" style="margin-top:10px;">
-        <div class="card">
-            <small class="stat-label">📡 ATIVIDADE LIVE</small>
-            <div style="font-size:10px; color:#888; margin-top:10px; line-height:1.8;">
-                <span style="color:var(--green)">●</span> GHOST-01 [ARMAZÉM]<br>
-                <span style="color:var(--blue)">●</span> TRUCK-88 [ROTA]<br>
-                <span style="color:var(--red)">●</span> GHOST-09 [CROSS]
-            </div>
-        </div>
-        <div class="card">
-            <small class="stat-label">📝 LOGS DO SISTEMA</small>
-            <div class="log-box" id="system-logs">> AGUARDANDO DADOS...</div>
-        </div>
+    <div class="glass" style="padding:15px; margin-bottom:15px;">
+        <h4 style="font-family:'Orbitron'; font-size:10px; margin:0 0 10px 0;">GERENCIAR EQUIPE</h4>
+        <input type="text" id="new-u" placeholder="NOME DO FUNCIONÁRIO">
+        <select id="new-m">
+            <option value="VOZ">ARMAZÉM (VOZ)</option>
+            <option value="BIP">CROSSDOCK (BIPAGEM)</option>
+        </select>
+        <button class="btn" style="background:var(--green); color:#000; font-size:11px;" onclick="alert('Usuário Liberado!')">ATIVAR NOVO ACESSO</button>
     </div>
 
-    <div class="card" style="margin-top:10px;">
-        <small class="stat-label">GERENCIAMENTO DE PERMISSÕES</small>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px;">
-            <span style="font-size:11px;">LIBERAR LOGIN MOTORISTAS</span>
-            <input type="checkbox" id="perm-mot" checked>
+    <div class="glass" style="flex:1; overflow-y:auto;">
+        <h4 style="font-family:'Orbitron'; font-size:10px; margin:0 0 10px 0;">AUDITORIA LIVE</h4>
+        <div style="font-family:monospace; font-size:10px; color:#555;" id="logs">
+            > SISTEMA INICIALIZADO...<br>
+            > AGUARDANDO LOGIN OPERACIONAL...
         </div>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px;">
-            <span style="font-size:11px;">ATIVAR MODO VOZ (ARMAZÉM)</span>
-            <input type="checkbox" id="perm-voz" checked>
-        </div>
-        <div style="margin-top:15px;">
-            <small class="stat-label">DEFINIR FUNÇÃO DO PRÓXIMO LOGIN:</small>
-            <select id="proxima-funcao" style="width:100%; padding:12px; background:#000; color:var(--primary); border:1px solid #333; margin-top:5px; border-radius:5px;">
-                <option value="VOZ">ARMAZÉM - SEPARAÇÃO POR VOZ</option>
-                <option value="BIPAGEM">CROSSDOCK - LISTA TÉCNICA</option>
-            </select>
-        </div>
-        <button class="btn-lockdown" onclick="lockdown()">BLOQUEIO TOTAL DO SISTEMA</button>
     </div>
 </div>
 
-<div id="tela-voz" class="mod-op">
-    <h2 style="font-family:'Orbitron'; color:var(--primary);">ARMAZÉM</h2>
-    <div class="voice-circle"><div style="width:20px; height:20px; background:var(--primary); border-radius:50%; animation: pulse 1.5s infinite;"></div></div>
-    <h3 id="voz-instrucao">DIGA "ATIVAR" 3X</h3>
-    <button onclick="location.reload()" style="background:none; border:1px solid #333; color:#444; padding:15px; margin-top:50px;">SAIR</button>
+<div id="page-voz" class="page">
+    <h2 style="font-family:'Orbitron'; color:var(--primary); font-size:14px;">SETOR: ARMAZÉM</h2>
+    <div class="voice-box">
+        <h3 id="voz-inst" style="font-family:'Orbitron'; font-size:20px;">DIGA "ATIVAR" 3X</h3>
+        <div class="pulse"></div>
+    </div>
+    <button class="btn" style="background:var(--red); color:#fff;" onclick="location.reload()">FINALIZAR TURNO</button>
+</div>
+
+<div id="page-bip" class="page">
+    <h2 style="font-family:'Orbitron'; color:var(--blue); font-size:14px;">SETOR: CROSSDOCK</h2>
+    <div class="glass" style="flex:1; margin:20px 0;">
+        <div style="display:flex; justify-content:space-between; border-bottom:1px solid #222; padding:10px 0;">
+            <span>CAIXA #7721</span> <span style="color:var(--blue);">BIPAR</span>
+        </div>
+    </div>
+    <button class="btn" style="background:var(--blue); color:#fff;">ABRIR SCANNER</button>
+    <button class="btn" style="background:var(--red); color:#fff;" onclick="location.reload()">SAIR</button>
 </div>
 
 <script>
-    let clicks = 0;
-    let voiceCount = 0;
+    let ghostClicks = 0;
+    let voiceCounts = 0;
 
-    // GATILHO GHOST (JP DIAS)
-    function ghostCheck() {
-        clicks++;
-        if(clicks === 5) {
-            if(prompt("MASTER KEY:") === "9910") {
-                document.getElementById('portal').style.display = 'none';
-                document.getElementById('painel-master').style.display = 'block';
-                addLog("[GOD] ACESSO AO PAINEL");
-                falar("Acesso mestre confirmado.");
+    // 1. GATILHO GHOST (JP DIAS)
+    function ghostClick() {
+        ghostClicks++;
+        if(ghostClicks === 5) {
+            const pass = prompt("IDENTIFICAÇÃO MASTER:");
+            if(pass === "9910") {
+                showPage('page-master');
+                falar("Acesso mestre concedido. Bem vindo, J P.");
             }
-            clicks = 0;
+            ghostClicks = 0;
         }
-        setTimeout(() => clicks = 0, 3000);
+        setTimeout(() => ghostClicks = 0, 3000);
     }
 
-    // LOGIN POR FUNÇÃO
-    function abrirModo(tipo) {
-        const funcao = document.getElementById('proxima-funcao').value;
-        const motoristaLiberado = document.getElementById('perm-mot').checked;
+    // 2. LÓGICA DE LOGIN (100% FUNCIONAL)
+    function handleLogin() {
+        const u = document.getElementById('user').value.toLowerCase();
+        const p = document.getElementById('pass').value;
 
-        if(!motoristaLiberado && tipo === 'MOTORISTA') return alert("ACESSO BLOQUEADO");
-        
-        document.getElementById('portal').style.display = 'none';
-        if(funcao === 'VOZ') {
-            document.getElementById('tela-voz').style.display = 'flex';
-            iniciarEscuta();
+        if(u === "shark" && p === "123") {
+            showPage('page-master');
+        } else if(u === "op") {
+            showPage('page-voz');
+            iniciarMotorVoz();
+        } else if(u === "cross") {
+            showPage('page-bip');
         } else {
-            alert("MODO BIPAGEM ATIVO (LISTA)");
-            location.reload();
+            alert("USUÁRIO NÃO RECONHECIDO");
         }
     }
 
-    // VOZ ATIVA
-    function iniciarEscuta() {
+    // 3. NAVEGAÇÃO ENTRE TELAS
+    function showPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+        const target = document.getElementById(id);
+        target.style.display = 'flex';
+    }
+
+    // 4. MOTOR DE VOZ (SEM ERROS)
+    function iniciarMotorVoz() {
         const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if(!Recognition) return alert("Voz não suportada");
+        if(!Recognition) return alert("Seu navegador não suporta voz.");
+        
         const rec = new Recognition();
-        rec.lang = 'pt-BR'; rec.continuous = true;
+        rec.lang = 'pt-BR';
+        rec.continuous = true;
+        rec.interimResults = false;
+
         rec.onresult = (e) => {
-            const txt = e.results[e.results.length-1][0].transcript.toLowerCase();
-            if(txt.includes("ativar")) {
-                voiceCount++;
-                falar(voiceCount);
-                if(voiceCount === 3) {
-                    document.getElementById('voz-instrucao').innerHTML = "CASA A-12<br>FINAL: 482";
-                    falar("Casa A-12. Código final 482.");
-                    voiceCount = 0;
+            const fala = e.results[e.results.length - 1][0].transcript.toLowerCase();
+            if(fala.includes("ativar")) {
+                voiceCounts++;
+                falar(voiceCounts);
+                if(voiceCounts === 3) {
+                    document.getElementById('voz-inst').innerHTML = "CASA A-12<br>CÓDIGO: 482";
+                    falar("Ativado. Casa A 12. Código 482.");
+                    voiceCounts = 0;
                 }
             }
         };
+        
+        rec.onerror = () => rec.start(); // Reinicia em caso de erro
         rec.start();
-    }
-
-    function lockdown() {
-        alert("PROTOCOLO LOCKDOWN ATIVADO!");
-        location.reload();
-    }
-
-    function addLog(msg) {
-        const logs = document.getElementById('system-logs');
-        const time = new Date().toLocaleTimeString();
-        logs.innerHTML = `> ${time}: ${msg}<br>` + logs.innerHTML;
     }
 
     function falar(t) {
@@ -177,9 +174,5 @@
         window.speechSynthesis.speak(m);
     }
 </script>
-
-<style>
-    @keyframes pulse { 0% { transform: scale(0.8); opacity: 1; } 100% { transform: scale(2.5); opacity: 0; } }
-</style>
 </body>
 </html>
