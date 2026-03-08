@@ -3,112 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>JP DIAS LOGÍSTICA | V2500</title>
+    <title>JP DIAS LOGÍSTICA | V3000</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #00ff41; --bg: #000; --red: #ff3b30; --blue: #0a84ff; --gray: #111; }
+        :root { --primary: #00ff41; --bg: #000; --red: #ff3b30; --blue: #0a84ff; --gray: #0d0d0d; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; height: 100vh; text-transform: uppercase; }
         .screen { display: none; position: absolute; width: 100%; height: 100%; flex-direction: column; box-sizing: border-box; }
         .active { display: flex !important; }
 
-        /* HEADER & TABS */
+        /* HEADER */
         header { padding: 15px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; background: #050505; }
-        .admin-tabs { display: flex; background: #080808; border-bottom: 1px solid #222; }
-        .tab { flex: 1; padding: 12px; text-align: center; font-size: 9px; font-family: 'Orbitron'; color: #444; cursor: pointer; border-bottom: 2px solid transparent; }
-        .tab.active-tab { color: var(--primary); border-bottom-color: var(--primary); background: #0d0d0d; }
-
-        /* PAINEL CONTEÚDO */
-        .dash-content { flex: 1; padding: 15px; overflow-y: auto; display: none; }
-        .dash-content.active-area { display: block; }
-
-        .card-gestor { background: #080808; border: 1px solid #1a1a1a; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--primary); }
         
-        /* FORMULÁRIO CONFIG */
-        .config-group { margin-bottom: 15px; }
-        label { font-size: 8px; color: #666; display: block; margin-bottom: 5px; }
-        select, .input-admin { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: #fff; font-family: 'Orbitron'; font-size: 10px; border-radius: 5px; outline: none; }
-        .btn-add { background: var(--primary); color: #000; border: none; padding: 12px; width: 100%; border-radius: 5px; font-family: 'Orbitron'; font-weight: 900; margin-top: 10px; cursor: pointer; }
-
-        /* LISTA DE FUNCIONÁRIOS */
-        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #0d0d0d; border-radius: 5px; margin-top: 8px; font-size: 10px; }
-        .badge { padding: 3px 8px; border-radius: 10px; font-size: 8px; background: #222; }
-        .toggle { color: var(--primary); font-size: 14px; cursor: pointer; }
-
-        /* LOGIN */
+        /* LOGIN ESTILO MECSHOP */
         .login-box { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
+        h1.logo { font-family: 'Orbitron'; color: #111; letter-spacing: 12px; margin-bottom: 25px; font-size: 35px; }
+        input { width: 100%; max-width: 320px; padding: 18px; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; font-family: 'Orbitron'; text-align: center; margin-bottom: 12px; outline: none; }
         .btn-primary { width: 100%; max-width: 320px; padding: 18px; background: var(--primary); color: #000; border: none; border-radius: 8px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; }
+
+        /* HUB OPERAÇÃO (ARMAZÉM / CROSSDOCK) */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; flex: 1; }
+        .card { background: #0d0d0d; border: 1px solid #222; border-radius: 10px; padding: 25px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; cursor: pointer; }
+        .card:active { background: #151515; }
+
+        /* TELA DE EXECUÇÃO (SCANNER / MANUAL) */
+        .op-display { flex: 1; border: 2px solid var(--primary); border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 20px; text-align: center; position: relative; }
+        #flash { position: absolute; top:0; left:0; width:100%; height:100%; background: var(--primary); color:#000; display:none; justify-content:center; align-items:center; border-radius:18px; font-family:'Orbitron'; font-size:25px; z-index:10; }
+
+        /* PAINEL GESTOR (TABS) */
+        .admin-tabs { display: flex; background: #080808; border-bottom: 1px solid #222; }
+        .tab { flex: 1; padding: 12px; text-align: center; font-size: 9px; font-family: 'Orbitron'; color: #444; cursor: pointer; }
+        .tab.active-tab { color: var(--primary); border-bottom: 2px solid var(--primary); }
+        .dash-content { flex: 1; padding: 15px; overflow-y: auto; display: none; }
+        .active-area { display: block; }
+        .user-row { background: #0d0d0d; padding: 10px; border-radius: 5px; margin-bottom: 5px; display: flex; justify-content: space-between; font-size: 10px; }
     </style>
 </head>
 <body>
 
 <div id="scr-login" class="screen active">
     <div class="login-box">
-        <h1 style="font-family:'Orbitron'; color:#151515; font-size:32px; letter-spacing:8px;">JP DIAS</h1>
-        <input type="password" id="pass" style="width:100%; max-width:320px; padding:18px; background:#000; border:1px solid #333; color:#fff; text-align:center; margin-bottom:15px;" placeholder="SENHA MASTER">
-        <button class="btn-primary" onclick="autenticar()">INICIAR GESTÃO</button>
+        <h1 class="logo">JP DIAS</h1>
+        <input type="password" id="pass" placeholder="SENHA">
+        <button class="btn-primary" onclick="autenticar()">ENTRAR</button>
     </div>
+</div>
+
+<div id="scr-operador" class="screen">
+    <header>
+        <span style="font-family:'Orbitron'; color:var(--primary); font-size:11px;">ARMAZÉM & CROSSDOCK</span>
+        <button onclick="location.reload()" style="background:none; border:1px solid var(--red); color:var(--red); font-size:8px;">SAIR</button>
+    </header>
+    <div class="grid">
+        <div class="card" onclick="abrirOp('RECEBIMENTO')"><span>RECEBER</span></div>
+        <div class="card" onclick="abrirOp('SEPARAÇÃO')"><span>SEPARAR</span></div>
+        <div class="card" onclick="abrirOp('CONFERÊNCIA')"><span>CONFERIR</span></div>
+        <div class="card" onclick="abrirOp('AVARIA')"><span>AVARIA</span></div>
+    </div>
+</div>
+
+<div id="scr-exec" class="screen">
+    <header><span id="exec-title" style="font-family:'Orbitron';">FUNÇÃO</span></header>
+    <div class="op-display">
+        <div id="flash">✓ BIPADO</div>
+        <h2 id="exec-main" style="font-family:'Orbitron';">READY</h2>
+        <p id="exec-sub" style="font-size:10px; color:#333;">SCANNER ATIVO</p>
+    </div>
+    <div style="padding: 20px; background: #080808;">
+        <input type="text" id="scanner-input" placeholder="BIPE OU DIGITE">
+        <button class="btn-primary" onclick="confirmarBipe()">LIBERAR ITEM</button>
+    </div>
+    <button style="background:#111; color:#fff; border:none; padding:15px; font-family:'Orbitron'; font-size:10px;" onclick="show('scr-operador')">VOLTAR AO HUB</button>
 </div>
 
 <div id="scr-gestor" class="screen">
     <header>
-        <span style="font-family:'Orbitron'; color:var(--primary); font-size:11px;">SISTEMA DE CONTROLE MASTER</span>
-        <button onclick="location.reload()" style="background:none; border:1px solid var(--red); color:var(--red); font-size:8px; padding:5px;">SAIR</button>
+        <span style="font-family:'Orbitron'; color:var(--primary); font-size:11px;">GESTOR MASTER</span>
+        <button onclick="location.reload()" style="background:none; border:1px solid var(--red); color:var(--red); font-size:8px;">SAIR</button>
     </header>
-
     <div class="admin-tabs">
         <div class="tab active-tab" onclick="switchTab('monitor', this)">MONITORAR</div>
-        <div class="tab" onclick="switchTab('config', this)">CONFIGURAÇÕES</div>
+        <div class="tab" onclick="switchTab('config', this)">ADD FUNCIONÁRIO</div>
     </div>
-
     <div id="area-monitor" class="dash-content active-area">
-        <div class="card-gestor">
-            <b>📊 PERFORMANCE OPERACIONAL</b>
-            <div style="font-size:10px; color:#555; margin-top:10px;">BIPES TOTAIS: <span style="color:var(--primary)">1.240</span></div>
-            <div style="font-size:10px; color:#555;">EFICIÊNCIA: <span style="color:var(--primary)">94%</span></div>
+        <div style="border-left: 4px solid var(--primary); padding:10px; background:#080808; margin-bottom:10px;">
+            <b>BIPES TOTAIS: 1.240</b>
         </div>
-        <div class="card-gestor" style="border-left-color: var(--blue);">
-            <b>🚚 ROTA MOTORISTAS</b>
-            <div class="user-row"><span>VAN-01 CARLOS</span> <span class="badge" style="color:var(--primary)">ENTREGANDO</span></div>
-            <div class="user-row"><span>VAN-02 JOSÉ</span> <span class="badge" style="color:var(--blue)">CARREGANDO</span></div>
+        <div style="border-left: 4px solid var(--blue); padding:10px; background:#080808;">
+            <b>EQUIPE ATIVA: 05 ON</b>
         </div>
     </div>
-
     <div id="area-config" class="dash-content">
-        <div class="card-gestor" style="border-left-color: var(--gold);">
-            <b>➕ NOVO ACESSO</b>
-            <div class="config-group">
-                <label>NOME DO FUNCIONÁRIO</label>
-                <input type="text" id="new-name" class="input-admin" placeholder="EX: PEDRO SILVA">
-            </div>
-            <div class="config-group">
-                <label>FUNÇÃO / CARGO</label>
-                <select id="new-role">
-                    <option value="Separador">SEPARADOR</option>
-                    <option value="Conferente">CONFERENTE</option>
-                    <option value="Recebimento">RECEBIMENTO</option>
-                    <option value="Motorista">MOTORISTA</option>
-                </select>
-            </div>
-            <button class="btn-add" onclick="addFunc()">LIBERAR ACESSO</button>
-        </div>
-
-        <div class="card-gestor">
-            <b>👥 GERENCIAR EQUIPE</b>
-            <div id="user-list">
-                <div class="user-row"><span>PEDRO (SEPARADOR)</span> <span class="toggle" onclick="this.innerText=this.innerText=='● ON'?'○ OFF':'● ON'">● ON</span></div>
-                <div class="user-row"><span>MARCOS (MOTORISTA)</span> <span class="toggle" onclick="this.innerText=this.innerText=='● ON'?'○ OFF':'● ON'">● ON</span></div>
-            </div>
+        <input type="text" id="new-name" placeholder="NOME DO FUNCIONÁRIO" style="font-size:10px; text-align:left; padding:12px;">
+        <button class="btn-primary" onclick="addFunc()" style="padding:12px;">ATIVAR ACESSO</button>
+        <div id="user-list" style="margin-top:20px;">
+            <div class="user-row"><span>PEDRO (OP)</span> <span style="color:var(--primary)">● ON</span></div>
         </div>
     </div>
 </div>
 
 <script>
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function bip() {
+        const osc = audioCtx.createOscillator(); const g = audioCtx.createGain();
+        osc.connect(g); g.connect(audioCtx.destination);
+        osc.type = 'square'; osc.frequency.value = 1200;
+        g.gain.value = 0.1; osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+    }
+
+    function falar(t) {
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(new SpeechSynthesisUtterance(t));
+    }
+
     function autenticar() {
         const p = document.getElementById('pass').value;
-        if(p === "9910") {
-            document.getElementById('scr-login').classList.remove('active');
-            document.getElementById('scr-gestor').classList.add('active');
-        } else { alert("ACESSO RESTRITO"); }
+        if(p === "9910") { show('scr-gestor'); falar("Gestor Logado"); }
+        else if(p === "1234") { show('scr-operador'); falar("Operação Ativa"); }
+        else { alert("ERRO"); }
+    }
+
+    function show(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    function abrirOp(nome) {
+        show('scr-exec');
+        document.getElementById('exec-title').innerText = nome;
+        document.getElementById('scanner-input').focus();
+    }
+
+    function confirmarBipe() {
+        const val = document.getElementById('scanner-input').value;
+        if(val) {
+            bip();
+            const flash = document.getElementById('flash');
+            flash.style.display = 'flex';
+            setTimeout(() => {
+                flash.style.display = 'none';
+                document.getElementById('exec-main').innerText = "OK: " + val;
+                falar("Confirmado " + val);
+                document.getElementById('scanner-input').value = "";
+                document.getElementById('scanner-input').focus();
+            }, 600);
+        }
     }
 
     function switchTab(areaId, tabEl) {
@@ -120,17 +159,18 @@
 
     function addFunc() {
         const nome = document.getElementById('new-name').value;
-        const cargo = document.getElementById('new-role').value;
         if(nome) {
-            const list = document.getElementById('user-list');
             const row = document.createElement('div');
             row.className = 'user-row';
-            row.innerHTML = `<span>${nome.toUpperCase()} (${cargo.toUpperCase()})</span> <span class="toggle">● ON</span>`;
-            list.prepend(row);
+            row.innerHTML = `<span>${nome.toUpperCase()}</span> <span style="color:var(--primary)">● ON</span>`;
+            document.getElementById('user-list').prepend(row);
             document.getElementById('new-name').value = "";
-            alert("FUNCIONÁRIO ADICIONADO COM SUCESSO!");
         }
     }
+
+    document.getElementById('scanner-input')?.addEventListener('keypress', (e) => {
+        if(e.key === 'Enter') confirmarBipe();
+    });
 </script>
 </body>
 </html>
