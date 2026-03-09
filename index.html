@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LOG-PRO v76 | JP MASTER</title>
+    <title>LOG-PRO v77 | JP MASTER</title>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #00ff41; --bg: #000; --border: #222; --sep: #888; --danger: #ff3b30; }
+        :root { --primary: #00ff41; --bg: #000; --border: #222; --sep: #888; --danger: #ff3b30; --info: #007aff; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; text-transform: uppercase; font-size: 10px; height: 100vh; overflow: hidden; }
         .screen { display: none; position: absolute; width: 100%; height: 100%; flex-direction: column; background: #000; z-index: 10; }
         .active { display: flex !important; }
@@ -16,16 +16,17 @@
         .btn-green { width: 100%; padding: 15px; background: var(--primary); color: #000; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 4px; cursor: pointer; margin-bottom: 5px; }
         input, select, textarea { width: 100%; padding: 12px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; font-family: 'Orbitron'; margin-bottom: 8px; box-sizing: border-box; }
         .table-wrapper { border: 1px solid var(--border); border-radius: 6px; overflow-x: auto; background: #080808; margin-bottom: 15px; }
-        table { width: 100%; border-collapse: collapse; min-width: 500px; }
+        table { width: 100%; border-collapse: collapse; min-width: 550px; }
         th { background: #111; color: #555; padding: 8px; text-align: left; font-size: 7px; }
         td { padding: 8px; border-bottom: 1px solid #151515; font-size: 9px; }
         #reader { width: 100%; border-radius: 8px; overflow: hidden; border: 2px solid #222; }
+        .alert-box { padding: 10px; border-radius: 4px; margin-bottom: 10px; font-weight: bold; font-size: 11px; }
     </style>
 </head>
 <body onload="init()">
 
 <div id="scr-login" class="screen active" style="align-items:center; justify-content:center;">
-    <div style="font-family:'Orbitron'; color:var(--primary); font-size:35px;">LOG-PRO v76</div>
+    <div style="font-family:'Orbitron'; color:var(--primary); font-size:35px;">LOG-PRO v77</div>
     <div style="width: 80%; max-width: 300px; margin-top:30px;">
         <input type="text" id="user-name" placeholder="USUARIO">
         <input type="password" id="pass" placeholder="CHAVE">
@@ -34,24 +35,25 @@
 </div>
 
 <div id="scr-shark" class="screen">
-    <header><span style="color:var(--primary)">GESTOR SHARK</span> <button onclick="logout()">SAIR</button></header>
+    <header><span style="color:var(--primary)">SHARK PAINEL</span> <button onclick="logout()">SAIR</button></header>
     <div class="scroll">
-        <h3>LANÇAR CARGA / MOTORISTA</h3>
-        <input type="text" id="mot-info" placeholder="PLACA / MOTORISTA">
-        <input type="text" id="regiao-info" placeholder="ENDERECO / REGIAO (EX: SUL 01)">
-        <textarea id="list-input" placeholder="COPIAR E COLAR: COD, QTD" style="height:60px;"></textarea>
-        <input type="file" id="file-csv" accept=".csv" style="display:none" onchange="importarCSV(this)">
-        <div style="display:flex; gap:5px;">
-            <button class="btn-green" style="background:#222; color:#fff; flex:1;" onclick="document.getElementById('file-csv').click()">IMPORTAR</button>
-            <button class="btn-green" style="flex:2;" onclick="enviarCarga()">ENVIAR CARGA</button>
-        </div>
+        <h3>CADASTRO MASTER (PRODUTO/ENDERECO)</h3>
+        <input type="text" id="m-cod" placeholder="CODIGO BARRAS">
+        <input type="text" id="m-nome" placeholder="NOME PRODUTO">
+        <input type="text" id="m-end" placeholder="ENDERECO (EX: RUA A-01)">
+        <button class="btn-green" style="background:#222; color:var(--primary);" onclick="salvarMaster()">SALVAR NA BASE M</button>
         
-        <h3>AUDITORIA E RELATORIO</h3>
-        <button class="btn-green" style="background:var(--primary); color:#000;" onclick="exportarRelatorio()">EXTRAIR PLANILHA COMPLETA</button>
+        <hr border="1" color="#111">
+        <h3>LANÇAR CARGA SAIDA</h3>
+        <input type="text" id="mot-info" placeholder="PLACA / MOTORISTA">
+        <textarea id="list-input" placeholder="COD, QTD" style="height:50px;"></textarea>
+        <button class="btn-green" onclick="enviarCarga()">ENVIAR SEPARACAO</button>
+        
+        <button class="btn-green" style="background:var(--primary); color:#000; margin-top:20px;" onclick="exportarRelatorio()">EXTRAIR PLANILHA DIA</button>
         <button class="btn-green" style="background:var(--danger); color:#fff;" onclick="finalizarLista()">LIMPAR TUDO</button>
         
         <div class="table-wrapper">
-            <table><thead><tr><th>HORA</th><th>OP</th><th>TIPO</th><th>MOTORISTA</th><th>ITEM</th><th>QTD</th><th>REGIAO</th></tr></thead>
+            <table><thead><tr><th>HORA</th><th>OP</th><th>TIPO</th><th>ITEM</th><th>QTD</th><th>ENDERECO</th><th>MOT</th></tr></thead>
             <tbody id="audit-body"></tbody></table>
         </div>
     </div>
@@ -60,15 +62,17 @@
 <div id="scr-op" class="screen">
     <header><span id="display-user">OPERADOR</span> <button onclick="logout()">SAIR</button></header>
     <div class="scroll">
+        <div id="guia-op" class="alert-box" style="display:none; background:#111; border:1px solid var(--info); color:var(--info);"></div>
+        
         <div id="box-picking" style="border: 1px solid var(--primary); padding:10px; background:#050505; margin-bottom:10px;">
-            <h4 style="color:var(--primary); margin:0;">CARGA ATIVA:</h4>
-            <div id="mot-display" style="font-size:12px; color:var(--primary); margin-bottom:5px;"></div>
+            <h4 style="color:var(--primary); margin:0;">PENDENTE SEPARACAO:</h4>
             <div id="op-list-picking"></div>
         </div>
+
         <select id="mod-op">
-            <option value="ENTRADA">ENTRADA</option>
-            <option value="SEPARACAO">SEPARACAO (PRE-SAIDA)</option>
-            <option value="SAIDA">SAIDA (CONFERENCIA MOTORISTA)</option>
+            <option value="ENTRADA">📥 ENTRADA / ABASTECIMENTO</option>
+            <option value="SEPARACAO">📦 SEPARACAO (CARGA)</option>
+            <option value="SAIDA">🚚 SAIDA (CONFERENCIA)</option>
         </select>
         <input type="number" id="qtd-bipe" value="1" style="text-align:center;">
         <div id="reader"></div>
@@ -92,88 +96,114 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    let BASE = JSON.parse(localStorage.getItem('LP_BASE')) || {};
+    let BASE_M = {}; 
     let MOVS = [];
     let currentUser = localStorage.getItem('LP_SESSION') || "";
     let scanner, camOn = false;
 
-    // Escuta Logs
-    onSnapshot(query(collection(db, "logs"), orderBy("data_hora", "desc"), limit(100)), (snap) => {
-        MOVS = snap.docs.map(d => d.data());
-        render();
+    // Sincroniza Base Master (Nomes e Endereços)
+    onSnapshot(collection(db, "base_master"), (snap) => {
+        snap.forEach(d => { BASE_M[d.id] = d.data(); });
     });
 
-    // Escuta Lista de Separação
+    onSnapshot(query(collection(db, "logs"), orderBy("data_hora", "desc"), limit(100)), (snap) => {
+        MOVS = snap.docs.map(d => d.data());
+        renderShark();
+    });
+
     onSnapshot(collection(db, "separacao"), (s) => {
         let h = "";
         s.docs.forEach(d => {
             const p = d.data(); const falta = p.qtd_pedida - p.qtd_feita;
-            if(falta > 0) h += `<div style='border-bottom:1px solid #222; padding:5px;'>[${p.regiao || 'GERAL'}] ${p.nome} - FALTAM: ${falta}</div>`;
-            if(p.motorista) document.getElementById('mot-display').innerText = "MOTORISTA: " + p.motorista;
+            if(falta > 0) h += `<div style='border-bottom:1px solid #222; padding:5px;'>${p.nome} - FALTAM: ${falta}</div>`;
         });
-        document.getElementById('op-list-picking').innerHTML = h || "SEM PENDENCIAS";
+        document.getElementById('op-list-picking').innerHTML = h || "CARGA COMPLETA";
     });
+
+    window.salvarMaster = async () => {
+        const c = document.getElementById('m-cod').value.trim();
+        const n = document.getElementById('m-nome').value.toUpperCase();
+        const e = document.getElementById('m-end').value.toUpperCase();
+        if(c && n) {
+            await setDoc(doc(db, "base_master", c), { nome:n, endereco:e });
+            alert("PRODUTO SALVO NA BASE M");
+            document.getElementById('m-cod').value=""; document.getElementById('m-nome').value=""; document.getElementById('m-end').value="";
+        }
+    };
+
+    window.processar = async (cod) => {
+        let c = cod.trim(); const q = parseInt(document.getElementById('qtd-bipe').value) || 1;
+        const tipo = document.getElementById('mod-op').value;
+        const guia = document.getElementById('guia-op');
+
+        if(!BASE_M[c]) {
+            const n = prompt("NOVO ITEM! NOME:");
+            const e = prompt("ENDERECO:");
+            if(n) { await setDoc(doc(db, "base_master", c), { nome:n.toUpperCase(), endereco:e.toUpperCase() }); } else return;
+        }
+
+        const info = BASE_M[c];
+        const sepRef = doc(db, "separacao", c);
+        const ds = await getDoc(sepRef);
+        
+        // Lógica de Abastecimento na Entrada
+        if(tipo === "ENTRADA") {
+            if(ds.exists()) {
+                const falta = ds.data().qtd_pedida - ds.data().qtd_feita;
+                if(falta > 0) {
+                    guia.style.display = "block";
+                    guia.innerHTML = `⚠️ ABASTECER ${falta} UNID. EM SEPARACAO<br>RESTO VAI PARA: ${info.endereco}`;
+                } else {
+                    guia.innerHTML = `✅ SEPARACAO CHEIA. TUDO PARA: ${info.endereco}`;
+                }
+            } else {
+                guia.style.display = "block";
+                guia.innerHTML = `PRODUTO: ${info.nome}<br>ENDERECO: ${info.endereco}`;
+            }
+        }
+
+        const mov = { 
+            cod:c, n:info.nome, t:tipo, q:q, op:currentUser, 
+            end:info.endereco, mot: ds.exists() ? ds.data().motorista : "",
+            data_hora:serverTimestamp(), d_str:new Date().toLocaleTimeString() 
+        };
+        
+        await addDoc(collection(db, "logs"), mov);
+        if(tipo === "SEPARACAO" && ds.exists()) await updateDoc(sepRef, { qtd_feita: ds.data().qtd_feita + q });
+        document.getElementById('op-audit-body').innerHTML = `BIPADO: ${info.nome} (${q})<br>` + document.getElementById('op-audit-body').innerHTML;
+    };
+
+    window.renderShark = () => {
+        let h = "";
+        MOVS.forEach(m => {
+            h += `<tr><td>${m.d_str}</td><td>${m.op}</td><td>${m.t}</td><td>${m.n}</td><td>${m.q}</td><td>${m.end}</td><td>${m.mot}</td></tr>`;
+        });
+        document.getElementById('audit-body').innerHTML = h;
+    };
 
     window.enviarCarga = async () => {
         const mot = document.getElementById('mot-info').value.toUpperCase();
-        const reg = document.getElementById('regiao-info').value.toUpperCase();
         const linhas = document.getElementById('list-input').value.split('\n');
-        
         for(let l of linhas) {
             const [cod, qtd] = l.split(',');
             if(cod && qtd) {
                 const c = cod.trim();
                 await setDoc(doc(db, "separacao", c), { 
-                    cod:c, nome:BASE[c]||"ITEM "+c, qtd_pedida:parseInt(qtd), 
-                    qtd_feita:0, motorista:mot, regiao:reg 
+                    cod:c, nome:BASE_M[c] ? BASE_M[c].nome : "ITEM "+c, 
+                    qtd_pedida:parseInt(qtd), qtd_feita:0, motorista:mot 
                 });
             }
         }
-        alert("CARGA ENVIADA!");
-    };
-
-    window.importarCSV = (input) => {
-        const reader = new FileReader();
-        reader.onload = () => { document.getElementById('list-input').value = reader.result; };
-        reader.readAsText(input.files[0]);
-    };
-
-    window.processar = async (cod) => {
-        let c = cod.trim(); const q = parseInt(document.getElementById('qtd-bipe').value) || 1;
-        if(!BASE[c]) { const n = prompt("NOME DO ITEM:"); if(n) { BASE[c]=n.toUpperCase(); localStorage.setItem('LP_BASE', JSON.stringify(BASE)); } else return; }
-        
-        // Busca motorista e regiao ativos da lista
-        const sepRef = doc(db, "separacao", c);
-        const ds = await getDoc(sepRef);
-        const motAtivo = ds.exists() ? ds.data().motorista : "AVULSO";
-        const regAtiva = ds.exists() ? ds.data().regiao : "GERAL";
-
-        const mov = { 
-            cod:c, n:BASE[c], t:document.getElementById('mod-op').value, 
-            q:q, op:currentUser, motorista:motAtivo, regiao:regAtiva,
-            data_hora:serverTimestamp(), d_str:new Date().toLocaleTimeString() 
-        };
-        
-        await addDoc(collection(db, "logs"), mov);
-        if(mov.t === "SEPARACAO" && ds.exists()) await updateDoc(sepRef, { qtd_feita: ds.data().qtd_feita + q });
-        document.getElementById('op-audit-body').innerHTML = `BIPADO: ${mov.n}<br>` + document.getElementById('op-audit-body').innerHTML;
-    };
-
-    window.render = () => {
-        let h = "";
-        MOVS.forEach(m => {
-            h += `<tr><td>${m.d_str}</td><td>${m.op}</td><td>${m.t}</td><td>${m.motorista || ''}</td><td>${m.n}</td><td>${m.q}</td><td>${m.regiao || ''}</td></tr>`;
-        });
-        document.getElementById('audit-body').innerHTML = h;
+        alert("LISTA ENVIADA!");
     };
 
     window.exportarRelatorio = () => {
-        let csv = "HORA,OPERADOR,TIPO,MOTORISTA,ITEM,QTD,REGIAO\n";
-        MOVS.forEach(m => { csv += `${m.d_str},${m.op},${m.t},${m.motorista},${m.n},${m.q},${m.regiao}\n`; });
+        let csv = "HORA,OP,TIPO,ITEM,QTD,ENDERECO,MOTORISTA\n";
+        MOVS.forEach(m => { csv += `${m.d_str},${m.op},${m.t},${m.n},${m.q},${m.end},${m.mot}\n`; });
         const blob = new Blob([csv], {type: 'text/csv'});
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = `LOGPRO_${new Date().toLocaleDateString()}.csv`;
+        a.download = `LOGPRO_WMS_${new Date().toLocaleDateString()}.csv`;
         a.click();
     };
 
