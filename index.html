@@ -3,95 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MECSHOP | Shark Defense V10</title>
+    <title>MECSHOP | Enterprise Ecosystem</title>
     <script src="https://unpkg.com/html5-qrcode"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
     <style>
-        :root { --red: #ea1d2c; --gold: #c5a059; --green: #00ff00; --dark: #000; }
-        body { background: var(--dark); color: #fff; font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; user-select: none; }
-        .screen { display: none; min-height: 100vh; flex-direction: column; }
+        :root { --red: #ea1d2c; --gold: #c5a059; --green: #00ff00; --dark: #050505; --card: #0d0d0d; --border: #1a1a1a; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--dark); color: #fff; font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; }
+        
+        .screen { display: none; min-height: 100vh; flex-direction: column; animation: fadeIn 0.3s ease; }
         .active { display: flex !important; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        header { padding: 20px; background: #000; border-bottom: 2px solid var(--red); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,0.8); }
+        .logo { font-family: 'Orbitron'; color: var(--red); font-size: 20px; letter-spacing: 3px; font-weight: 900; }
+
+        /* NOTIFICAÇÃO PUSH NIVEL IOS */
+        #push-note { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: rgba(15,15,15,0.95); backdrop-filter: blur(10px); border: 1px solid var(--border); border-left: 5px solid var(--red); padding: 15px; border-radius: 15px; z-index: 10000; transition: 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28); display: flex; align-items: center; gap: 12px; }
+
+        /* GRID SYSTEM (BLINDADO) */
+        .portal-grid { padding: 25px; display: grid; gap: 15px; }
+        .portal-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 30px 20px; cursor: pointer; transition: 0.2s; position: relative; overflow: hidden; }
+        .portal-card:active { transform: scale(0.97); background: #111; }
+        .portal-card::after { content: '→'; position: absolute; right: 20px; bottom: 20px; color: var(--red); font-weight: 900; }
+        .portal-card h2 { margin: 5px 0; font-family: 'Orbitron'; font-size: 14px; color: var(--red); }
+        .portal-card small { color: #555; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+
+        .sub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 20px; overflow-y: auto; padding-bottom: 100px; }
+        .mod-btn { background: #080808; border: 1px solid var(--border); padding: 22px 10px; border-radius: 16px; text-align: center; font-size: 10px; font-weight: 900; color: #444; cursor: pointer; transition: 0.2s; }
+        .main-mod { border-color: var(--red) !important; color: #fff !important; box-shadow: 0 0 15px rgba(234, 29, 44, 0.1); }
+        .gold-mod { border-color: var(--gold) !important; color: var(--gold) !important; }
+
+        /* INTERFACES DE EXECUÇÃO */
+        .ui-panel { background: #000; border: 1px solid var(--border); border-radius: 30px; width: 100%; max-width: 360px; padding: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .btn-elite { width: 100%; padding: 18px; background: var(--red); color: #fff; border: none; border-radius: 15px; font-weight: 900; cursor: pointer; margin-top: 15px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+        #reader { width: 100%; border-radius: 20px; border: 2px solid var(--red); display: none; margin-bottom: 20px; overflow: hidden; }
         
-        /* NOTIFICAÇÃO PUSH (ANTI-ERRO) */
-        #push-note { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); width: 85%; background: rgba(20,20,20,0.95); border: 1px solid var(--red); padding: 12px; border-radius: 15px; z-index: 9999; transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .push-icon { background: var(--red); border-radius: 50%; width: 10px; height: 10px; margin-right: 10px; }
-
-        header { padding: 18px; background: #000; border-bottom: 2px solid var(--red); display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-family: 'Orbitron'; color: var(--red); font-size: 20px; letter-spacing: 2px; text-shadow: 0 0 10px rgba(234, 29, 44, 0.5); }
-
-        /* GRADES OTIMIZADAS */
-        .portal-grid { padding: 20px; display: grid; gap: 15px; }
-        .portal-card { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 20px; padding: 35px 20px; text-align: center; cursor: pointer; border-left: 6px solid var(--red); transition: 0.2s; }
-        .portal-card:active { transform: scale(0.95); background: #151515; }
-        .portal-card h2 { margin: 10px 0; font-family: 'Orbitron'; font-size: 14px; color: var(--red); }
-
-        .sub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 15px; overflow-y: auto; padding-bottom: 40px; }
-        .mod-btn { background: #050505; border: 1px solid #111; padding: 22px 10px; border-radius: 15px; text-align: center; font-size: 10px; font-weight: 900; color: #444; cursor: pointer; display: flex; flex-direction: column; justify-content: center; }
-        .main-mod { border-color: var(--red) !important; color: #fff !important; background: #0f0a0a; }
-        .gold-mod { border-color: var(--gold) !important; color: var(--gold) !important; background: #0f0f0a; }
-
-        /* INTERFACES */
-        .test-box { padding: 20px; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .ui-panel { background: #050505; border: 1px solid #1a1a1a; border-radius: 30px; width: 100%; max-width: 340px; padding: 25px; position: relative; }
-        .btn-elite { width: 100%; padding: 18px; background: var(--red); color: #fff; border: none; border-radius: 15px; font-weight: 900; cursor: pointer; margin-top: 20px; text-transform: uppercase; letter-spacing: 1px; }
-        #reader { width: 100%; border-radius: 20px; border: 2px solid var(--red); display: none; margin-bottom: 15px; overflow: hidden; }
-        
-        .extrato-scroll { max-height: 120px; overflow-y: auto; margin-top: 15px; padding-right: 5px; }
-        .extrato-item { display: flex; justify-content: space-between; font-size: 11px; padding: 10px 0; border-bottom: 1px solid #111; }
+        /* MEC-BANK UI */
+        .bank-card { background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%); border: 1px solid var(--gold); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
+        .extrato-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #111; font-size: 11px; }
     </style>
 </head>
 <body onload="init()">
 
 <div id="push-note">
-    <div class="push-icon"></div>
-    <div style="flex:1">
-        <b style="color:var(--red); font-size:10px; display:block">SISTEMA MECSHOP</b>
-        <span id="push-txt" style="font-size:11px">Aguardando operação...</span>
-    </div>
+    <div style="width:12px; height:12px; background:var(--red); border-radius:50%; animate: pulse 2s infinite;"></div>
+    <div style="flex:1"><b id="push-title" style="color:var(--red); font-size:10px; display:block">SISTEMA</b><span id="push-txt"></span></div>
 </div>
 
-<div id="scr-login" class="screen active" style="align-items:center; justify-content:center;">
-    <div class="logo" style="font-size:40px; margin-bottom:50px;">MECSHOP</div>
-    <div class="ui-panel" style="max-width:280px;">
-        <input type="password" id="pass" placeholder="CHAVE MESTRE" style="width:100%; box-sizing:border-box; padding:18px; background:#000; border:1px solid #222; color:var(--red); border-radius:12px; text-align:center; font-family:'Orbitron'; font-size:18px; margin-bottom:20px;">
-        <button onclick="auth()" class="btn-elite">ACESSAR ARSENAL</button>
+<div id="scr-login" class="screen active" style="align-items:center; justify-content:center; padding:20px;">
+    <div class="logo" style="font-size:45px; margin-bottom:50px;">MECSHOP</div>
+    <div class="ui-panel" style="text-align:center;">
+        <small style="color:#444; font-weight:900;">SECURITY ACCESS</small>
+        <input type="password" id="pass" placeholder="MASTER KEY" style="width:100%; padding:20px; background:#080808; border:1px solid #1a1a1a; color:var(--red); border-radius:12px; text-align:center; font-family:'Orbitron'; font-size:20px; margin:20px 0;">
+        <button onclick="auth()" class="btn-elite">DECRYPT & ENTER</button>
+        <div style="display:flex; justify-content:space-between; margin-top:25px; font-size:10px; color:#333; font-weight:bold;">
+            <span onclick="alert('Recovery system active.')">FORGOT KEY</span>
+            <span onclick="alert('Enrollment via Admin Portal only.')">NEW PARTNER</span>
+        </div>
     </div>
 </div>
 
 <div id="scr-portais" class="screen">
-    <header><span class="logo">MECSHOP</span></header>
+    <header><span class="logo">MECSHOP</span><div style="width:10px; height:10px; background:var(--green); border-radius:50%;"></div></header>
     <div class="portal-grid">
-        <div class="portal-card" onclick="abrirPortal('fisico')"><p>OPERAÇÃO</p><h2>PORTAL FÍSICO</h2><small>Log-Pro • WMS • Produção</small></div>
-        <div class="portal-card" onclick="abrirPortal('online')"><p>ESCALABILIDADE</p><h2>PORTAL ONLINE</h2><small>Afiliados • Bet • Vendas</small></div>
-        <div class="portal-card" onclick="abrirPortal('business')"><p>HOLDING</p><h2>PORTAL EMPRESARIAL</h2><small>Mec-Bank • O Cérebro</small></div>
+        <div class="portal-card" onclick="abrirPortal('fisico')"><small>Supply Chain</small><h2>LOG-PRO OPERATIONAL</h2></div>
+        <div class="portal-card" onclick="abrirPortal('online')"><small>Marketplace</small><h2>MAG SHOPPING V10</h2></div>
+        <div class="portal-card" onclick="abrirPortal('business')"><small>Financial</small><h2>MEC-BANK HOLDING</h2></div>
     </div>
 </div>
 
 <div id="scr-sub" class="screen">
-    <header>
-        <div id="txt-p" style="color:var(--red); font-family:'Orbitron'; font-size:12px;"></div>
-        <button onclick="ir('scr-portais')" style="background:#111; color:#fff; border:none; padding:10px 15px; border-radius:8px;">VOLTAR</button>
-    </header>
+    <header><div id="txt-p" style="color:var(--red); font-family:'Orbitron'; font-size:12px;"></div><button onclick="ir('scr-portais')" style="background:#111; color:#fff; border:none; padding:10px 15px; border-radius:10px; font-size:10px;">BACK</button></header>
     <div class="sub-grid" id="cont-mods"></div>
 </div>
 
 <div id="scr-exec" class="screen">
-    <header><b id="txt-m"></b><button onclick="vSub()" style="background:#111; color:#fff; border:none; padding:10px 15px; border-radius:8px;">FECHAR</button></header>
-    <div class="test-box" id="render"></div>
+    <header><b id="txt-m" style="font-size:11px;"></b><button onclick="vSub()" style="background:#111; color:#fff; border:none; padding:10px 15px; border-radius:10px; font-size:10px;">EXIT</button></header>
+    <div id="render" style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px;"></div>
 </div>
 
 <script>
-    let qr;
-    let saldo = 45200.00;
-    let historico = [{ desc: "Saldo Holding", valor: 45200, tipo: "in" }];
+    let qr; 
+    let saldo = parseFloat(localStorage.getItem('MEC_SALDO')) || 45200.50;
+    let historico = JSON.parse(localStorage.getItem('MEC_HIST')) || [{ desc: "Initial Liquidity", valor: 45200.50, tipo: "in", date: "09/03" }];
 
-    const bancos = {
-        fisico: ["Log-Pro WMS", "Bipe Conferência", "Estoque Real", "Triagem Carga", "Sensor de Frio", "Scanner Master", "Frente de Loja", "Produção Sinc", "Auditoria Local", "Recebimento"],
-        online: ["Mag Shopping", "Afiliados (Hotmart)", "Mec-Bet (Aposta)", "Uber Logística", "99 Fast Delivery", "Mec-Prêmios VIP", "Checkout Pay", "Venda Externa", "Rastreio Global", "Fidelidade Shark"],
-        business: ["Mec-Bank (Banco)", "Holding Shark", "Inteligência AI", "RH Digital", "Contabilidade", "Marketing Ads", "Mec-Invest", "Jurídico Pro", "Shark Score", "API Holding"]
+    const modulos = {
+        fisico: ["Log-Pro WMS", "Bipe Smart", "Real-Time Stock", "Load Master", "Thermal Sensor", "Scanner V2", "Point of Sale", "Sinc Engine", "Audit Shield", "Inbound Hub"],
+        online: ["Mag Shopping", "Affiliate Hot", "Mec-Bet Pro", "Logi-Uber API", "99 Fast Sinc", "Mec-Awards", "Checkout Pay", "External Sales", "Global Track", "Shark Club"],
+        business: ["Mec-Bank", "Holding View", "Core AI", "Digital HR", "Tax Control", "Ads Manager", "Mec-Invest", "Legal Shield", "Shark Score", "API Gateway"]
     };
 
-    function notify(msg) {
+    function sync() {
+        localStorage.setItem('MEC_SALDO', saldo);
+        localStorage.setItem('MEC_HIST', JSON.stringify(historico));
+    }
+
+    function notify(title, msg) {
+        document.getElementById('push-title').innerText = title.toUpperCase();
         document.getElementById('push-txt').innerText = msg;
         document.getElementById('push-note').style.top = "20px";
         setTimeout(() => { document.getElementById('push-note').style.top = "-100px"; }, 4000);
@@ -99,80 +108,70 @@
 
     function abrirPortal(p) {
         document.getElementById('txt-p').innerText = p.toUpperCase();
-        let h = "";
-        bancos[p].forEach((nome, i) => {
-            let cl = (i < 2) ? "main-mod" : "";
-            if(nome.includes("Bank") || nome.includes("Bet") || nome.includes("Prêmios")) cl += " gold-mod";
-            h += `<div class="mod-btn ${cl}" onclick="rodarTeste('${nome}')">MÓDULO ${i+1}<br>${nome}</div>`;
+        let html = "";
+        modulos[p].forEach((nome, i) => {
+            let cl = (i < 1) ? "main-mod" : "";
+            if(nome.match(/Bank|Bet|Shopping/)) cl += " gold-mod";
+            html += `<div class="mod-btn ${cl}" onclick="executar('${nome}')">MÓDULO ${String(i+1).padStart(2,'0')}<br>${nome}</div>`;
         });
-        document.getElementById('cont-mods').innerHTML = h;
+        document.getElementById('cont-mods').innerHTML = html;
         ir('scr-sub');
     }
 
-    function rodarTeste(nome) {
-        document.getElementById('txt-m').innerText = nome.toUpperCase();
+    function executar(nome) {
+        document.getElementById('txt-m').innerText = nome;
         let ui = document.getElementById('render');
         ir('scr-exec');
 
-        if(nome.includes("Log-Pro") || nome.includes("Bipe")) {
-            ui.innerHTML = `<div class="ui-panel"><div id="reader"></div><button class="btn-elite" id="bS" onclick="sQR()">ATIVAR SCANNER LOG-PRO</button><p style="font-size:9px; color:#333; margin-top:10px;">(Requer HTTPS para Câmera)</p></div>`;
+        if(nome === "Log-Pro WMS") {
+            ui.innerHTML = `<div class="ui-panel"><div id="reader"></div><button class="btn-elite" id="btnS" onclick="startScan()">ACTIVATE LOG-PRO SCAN</button><p style="font-size:9px; color:#333; margin-top:15px;">ENCRYPTED SCANNER V2.4</p></div>`;
         } 
-        else if(nome.includes("Mag Shopping")) {
-            ui.innerHTML = `<div class="ui-panel"><b>MAG SHOPPING (LOJA)</b><div style="background:#111; padding:20px; border-radius:20px; margin:20px 0;"><small>Produto:</small><br><b>SORVETE MEC V10</b><br><br><b style="color:var(--red); font-size:20px;">R$ 15,00</b></div><button class="btn-elite" onclick="venda()">EFETUAR VENDA</button></div>`;
+        else if(nome === "Mag Shopping") {
+            ui.innerHTML = `<div class="ui-panel"><b style="color:var(--red)">SERGEL SORVETES V10</b><div style="background:#080808; padding:20px; border-radius:20px; margin:20px 0; border:1px solid #111;"><small>SKU: #8829</small><br><b style="font-size:22px;">SORVETE PREMIUM</b><br><br><span style="color:var(--green); font-weight:900; font-size:24px;">R$ 15,00</span></div><button class="btn-elite" onclick="processarVenda(15, 'Venda Sorvete Mag')">CONFIRM SALE</button></div>`;
         }
-        else if(nome.includes("Bank")) { renderBanco(); }
-        else if(nome.includes("Bet")) {
-            ui.innerHTML = `<div class="ui-panel" style="border-color:var(--green);"><b style="color:var(--green)">MEC-BET ALGORITMO</b><div style="background:#111; padding:20px; border-radius:20px; margin:15px 0;"><small>MULTIPLICADOR</small><h1 style="color:var(--green); margin:5px 0;">2.50x</h1></div><button class="btn-elite" style="background:var(--green); color:#000;" onclick="ganharBet()">APOSTAR R$ 100</button></div>`;
+        else if(nome === "Mec-Bank") {
+            renderBank();
         }
-        else if(nome.includes("Afiliado")) {
-            ui.innerHTML = `<div class="ui-panel"><b>PAINEL AFILIADOS</b><div style="background:#111; padding:15px; border-radius:15px; text-align:left; font-size:11px;"><p>Cliques: 4.502</p><p>Vendas: 112</p><p>Conversão: 2.4%</p></div><button class="btn-elite" style="background:#05a;" onclick="alert('LINK COPIADO!')">GERAR NOVO LINK</button></div>`;
+        else if(nome === "Mec-Bet Pro") {
+            ui.innerHTML = `<div class="ui-panel" style="border-color:var(--green);"><b style="color:var(--green)">ALGORITMO MEC-BET</b><h1 style="font-size:45px; margin:10px 0;">2.50x</h1><button class="btn-elite" style="background:var(--green); color:#000;" onclick="processarVenda(250, 'Win Mec-Bet')">BET R$ 100</button></div>`;
         }
         else {
-            ui.innerHTML = `<div class="ui-panel"><h2>${nome}</h2><p style="color:#444;">Módulo operacional sincronizado via API.</p><button class="btn-elite" onclick="alert('MÓDULO OK!')">TESTAR FUNÇÃO</button></div>`;
+            ui.innerHTML = `<div class="ui-panel"><h2>${nome}</h2><p style="color:#444; font-size:12px;">Módulo operacional e sincronizado via protocolo Mec-Sinc.</p><button class="btn-elite" onclick="alert('Executed.')">RUN DIAGNOSTIC</button></div>`;
         }
     }
 
-    function venda() { 
-        saldo += 15; historico.unshift({ desc: "Venda Sorvete Mag", valor: 15, tipo: "in" });
-        notify("Log-Pro: Novo pedido para separação em Hortolândia!");
-        alert("Sucesso! O lucro já consta no Mec-Bank."); 
+    function processarVenda(valor, desc) {
+        saldo += valor;
+        historico.unshift({ desc: desc, valor: valor, tipo: "in", date: "09/03" });
+        sync();
+        notify("Transactional", `${desc} processada com sucesso!`);
+        alert("Transaction Encrypted & Confirmed.");
     }
 
-    function ganharBet() { 
-        saldo += 250; historico.unshift({ desc: "Lucro Mec-Bet", valor: 250, tipo: "in" });
-        notify("Mec-Bank: Depósito de prêmio via PIX!");
-        alert("GREEN! Saldo atualizado."); 
-    }
-
-    function renderBanco() {
-        let h = historico.map(i => `<div class="extrato-item"><span>${i.desc}</span><b style="color:${i.tipo=='in'?'#0f0':'#f00'}">${i.tipo=='in'?'+':'-'} R$ ${i.valor.toFixed(2)}</b></div>`).join('');
+    function renderBank() {
+        let h = historico.map(i => `<div class="extrato-item"><span>${i.desc}</span><b style="color:${i.tipo=='in'?'var(--green)':'var(--red)'}">${i.tipo=='in'?'+':'-'} R$ ${i.valor.toFixed(2)}</b></div>`).join('');
         document.getElementById('render').innerHTML = `
             <div class="ui-panel" style="border-color:var(--gold); text-align:left;">
-                <div style="display:flex; justify-content:space-between;"><small style="color:var(--gold)">MEC-BANK PLATFORM</small><b>SHARK</b></div>
-                <h1 style="margin:20px 0;">R$ ${saldo.toFixed(2)}</h1>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:15px;">
-                    <div style="background:#111; padding:10px; border-radius:10px; text-align:center; font-size:10px;">PIX</div>
-                    <div style="background:#111; padding:10px; border-radius:10px; text-align:center; font-size:10px;">SACAR</div>
-                </div>
-                <small style="color:#444">EXTRATO DINÂMICO</small>
-                <div class="extrato-scroll">${h}</div>
+                <div class="bank-card"><small style="color:var(--gold)">TOTAL BALANCE</small><h1 style="margin:5px 0; font-size:32px;">R$ ${saldo.toFixed(2)}</h1><small>MEC-BANK HOLDING</small></div>
+                <small style="color:#444; font-weight:900;">LIVE FEED</small>
+                <div style="max-height:150px; overflow-y:auto; margin-top:10px;">${h}</div>
             </div>`;
     }
 
-    function sQR() { 
-        document.getElementById('reader').style.display='block'; 
-        document.getElementById('bS').style.display='none'; 
-        qr = new Html5Qrcode("reader"); 
-        qr.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, (t) => { 
-            notify("Log-Pro: Item "+t+" identificado no estoque."); 
-            alert("BIPE CONFIRMADO!"); 
-        }).catch(err => { alert("ERRO: O navegador bloqueou a câmera. Use HTTPS."); vSub(); });
+    function startScan() {
+        document.getElementById('reader').style.display = 'block';
+        document.getElementById('btnS').style.display = 'none';
+        qr = new Html5Qrcode("reader");
+        qr.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, (txt) => {
+            notify("Log-Pro", `Item ${txt} bipado e conferido!`);
+            alert("BIPE CONFIRMADO: " + txt);
+        }).catch(() => alert("SSL Required for Camera. Use HTTPS."));
     }
 
+    function auth() { if(document.getElementById('pass').value === "9910") { localStorage.setItem('AUTH', '1'); ir('scr-portais'); } }
     function ir(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-    function vSub() { if(qr){ qr.stop().catch(()=>{}); qr=null; document.getElementById('reader').style.display='none'; } ir('scr-sub'); }
-    function auth() { if(document.getElementById('pass').value === "9910") { localStorage.setItem('M', '1'); ir('scr-portais'); } }
-    function init() { if(localStorage.getItem('M')) ir('scr-portais'); }
+    function vSub() { if(qr) { qr.stop().catch(()=>{}); qr=null; } ir('scr-sub'); }
+    function init() { if(localStorage.getItem('AUTH')) ir('scr-portais'); }
 </script>
 </body>
 </html>
