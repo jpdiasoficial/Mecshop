@@ -3,161 +3,252 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LOG-PRO | SISTEMA JP</title>
+    <title>LOG-PRO v74.4 | JP & SHARK</title>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --neon: #00ff41; --bg: #000; --gold: #ffae00; --blue: #007aff; --red: #ff3b30; }
-        body { background: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; text-transform: uppercase; overflow-x: hidden; }
+        :root { --primary: #00ff41; --bg: #000; --border: #222; --sep: #ffae00; --danger: #ff3b30; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; text-transform: uppercase; font-size: 10px; height: 100vh; overflow: hidden; }
+        .screen { display: none; position: absolute; width: 100%; height: 100%; flex-direction: column; background: #000; z-index: 10; }
+        .active { display: flex !important; }
+        header { padding: 12px; border-bottom: 1px solid #111; display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron'; background: #050505; }
+        .scroll { flex: 1; overflow-y: auto; padding: 10px; padding-bottom: 150px; }
         
-        /* TELAS E LOGIN */
-        .tela { display: none; padding: 20px; min-height: 100vh; }
-        #tela-login { display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle, #111, #000); }
+        /* STATUS DE LOGIN REAL-TIME */
+        .presence-bar { display: flex; gap: 10px; padding: 8px 12px; background: #0a0a0a; border-bottom: 1px solid #222; font-size: 8px; color: #666; }
+        .online { color: var(--primary); font-weight: bold; text-shadow: 0 0 5px var(--primary); }
+
+        .stats { display: flex; gap: 8px; padding: 10px; background: #080808; border-bottom: 1px solid #111; }
+        .card { flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 4px; text-align: center; }
+        .card span { display: block; font-size: 14px; color: var(--primary); font-family: 'Orbitron'; }
         
-        /* CABEÇALHO COM BOTÃO SAIR */
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #222; padding-bottom: 10px; margin-bottom: 20px; }
-        .btn-sair { background: var(--red); color: #fff; border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px; }
-
-        /* BOTÕES DE COMANDO */
-        .btn-menu { width: 90%; padding: 20px; margin: 10px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer; font-size: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-        .btn-acao { width: 100%; padding: 25px; margin: 10px 0; border-radius: 10px; font-weight: bold; font-size: 12px; border: 1px solid #333; cursor: pointer; transition: 0.3s; }
-        .btn-acao:active { transform: scale(0.98); background: #222; }
-
-        /* QUADROS DE INFORMAÇÃO */
-        .quadro { background: #080808; border: 1px solid #1a1a1a; padding: 12px; border-radius: 6px; margin-bottom: 15px; }
-        .titulo-quadro { font-size: 10px; color: #555; margin-bottom: 8px; display: block; border-bottom: 1px solid #111; }
-        .item-lista { display: flex; justify-content: space-between; font-size: 11px; padding: 8px 0; border-bottom: 1px solid #0d0d0d; }
-
-        /* LANTERNA FLUTUANTE (SÓ NO BIPE) */
-        #btn-flash { position: fixed; bottom: 30px; right: 30px; width: 75px; height: 75px; background: var(--gold); border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 35px; z-index: 1000; border: none; box-shadow: 0 0 25px var(--gold); color: #000; }
+        .export-bar { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; padding: 10px; }
+        .btn-exp { padding: 12px; border: none; font-family: 'Orbitron'; font-size: 7px; font-weight: 900; border-radius: 4px; cursor: pointer; }
+        
+        .table-wrapper { border: 1px solid var(--border); border-radius: 6px; overflow-x: auto; background: #080808; margin-bottom: 15px; }
+        table { width: 100%; border-collapse: collapse; min-width: 500px; }
+        th { background: #111; color: #555; padding: 10px; text-align: left; font-size: 7px; border-bottom: 1px solid #222; }
+        td { padding: 10px; border-bottom: 1px solid #151515; white-space: nowrap; font-size: 9px; }
+        
+        .btn-green { width: 100%; padding: 18px; background: var(--primary); color: #000; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 4px; cursor: pointer; }
+        input, select, textarea { width: 100%; padding: 14px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; font-family: 'Orbitron'; margin-bottom: 8px; box-sizing: border-box; }
+        #reader { width: 100%; border-radius: 8px; overflow: hidden; border: 2px solid #222; }
     </style>
 </head>
-<body onload="atualizarTudo()">
+<body onload="init()">
 
-<div id="tela-login" class="tela" style="display: flex;">
-    <h1 style="color: var(--neon); letter-spacing: 8px; margin-bottom: 40px;">LOG-PRO</h1>
-    <button class="btn-menu" style="background: var(--neon); color: #000;" onclick="irPara('dono')">👑 DONO (JP)</button>
-    <button class="btn-menu" style="background: var(--blue); color: #fff;" onclick="irPara('shark')">🦈 SHARK (DIRETOR)</button>
-    <button class="btn-menu" style="background: #222; color: #fff;" onclick="irPara('op')">📦 OPERACIONAL</button>
-</div>
-
-<div id="painel-dono" class="tela">
-    <div class="header">
-        <b style="color: var(--neon)">COMANDO JP</b>
-        <button class="btn-sair" onclick="logout()">SAIR</button>
-    </div>
-    <button class="btn-acao" onclick="window.print()">🖨️ IMPRIMIR ROMANEIO / RELATÓRIO</button>
-    <div class="quadro">
-        <span class="titulo-quadro">AUDITORIA DE MOVIMENTOS (MÉTRICA)</span>
-        <div id="logs-jp"></div>
+<div id="scr-login" class="screen active" style="align-items:center; justify-content:center; text-align:center;">
+    <div style="font-family:'Orbitron'; color:var(--primary); font-size:38px;">LOG-PRO</div>
+    <div style="font-size:8px; color:#444; letter-spacing:2px; margin-bottom:30px;">SISTEMA DE FLUXO E INVENTÁRIO</div>
+    <div style="width: 85%; max-width: 320px;">
+        <input type="text" id="user-name" placeholder="USUÁRIO">
+        <input type="password" id="pass" placeholder="CHAVE MESTRA">
+        <button class="btn-green" onclick="auth()">ENTRAR NO PAINEL</button>
     </div>
 </div>
 
-<div id="painel-shark" class="tela">
-    <div class="header">
-        <b style="color: var(--blue)">DIRETORIA SHARK</b>
-        <button class="btn-sair" onclick="logout()">SAIR</button>
+<div id="scr-shark" class="screen">
+    <header><span id="shark-title" style="color:var(--primary)">ADMIN: ...</span> <button onclick="logout()" style="color:var(--danger); background:none; border:none; font-size:8px;">DESCONECTAR</button></header>
+    
+    <div class="presence-bar">
+        <span id="st-jp">JP: ⚪</span> | <span id="st-shark">SHARK: ⚪</span> | <span id="st-op">OP: ⚪</span>
     </div>
-    <button class="btn-acao" style="border-color: var(--blue);" onclick="criarDemanda()">📋 LANÇAR NOVA DEMANDA / ROTA</button>
-    <div class="quadro">
-        <span class="titulo-quadro">PENDÊNCIAS DO DIA</span>
-        <div id="demandas-shark"></div>
+
+    <div class="export-bar">
+        <button onclick="exportar('print')" class="btn-exp" style="background:#fff; color:#000;">🖨️ IMPRIMIR</button>
+        <button onclick="exportar('email')" class="btn-exp" style="background:#333; color:#fff;">📧 E-MAIL</button>
+        <button onclick="exportar('pdf')" class="btn-exp" style="background:var(--primary); color:#000;">📄 ROMANEIO</button>
     </div>
-</div>
 
-<div id="painel-op" class="tela">
-    <div class="header">
-        <b>OPERAÇÃO GALPÃO</b>
-        <button class="btn-sair" onclick="logout()">SAIR</button>
+    <div class="stats">
+        <div class="card">ESTOQUE TOTAL <span id="stat-total">0</span></div>
+        <div class="card">FILA PICKING <span id="stat-pedidos">0</span></div>
     </div>
-    <button class="btn-acao" style="background: #001a00; color: var(--neon); border-color: var(--neon);" onclick="processoBipe('ENTRADA')">📥 RECEBIMENTO (BIPAR)</button>
-    <button class="btn-acao" style="background: #1a0000; color: var(--red); border-color: var(--red);" onclick="processoBipe('SAIDA')">🚀 EXPEDIÇÃO (BIPAR)</button>
-    <div class="quadro">
-        <span class="titulo-quadro">MINHA LISTA DE TAREFAS</span>
-        <div id="demandas-op"></div>
-    </div>
-</div>
 
-<button id="btn-flash" onclick="toggleFlash()">🔦</button>
-
-<script>
-    // Banco de Dados Local (Simulado para teste, integra com Firebase depois)
-    let PRODUTOS = JSON.parse(localStorage.getItem('DB_PROD')) || {};
-    let MOVS = JSON.parse(localStorage.getItem('DB_MOVS')) || [];
-    let DEMANDAS = JSON.parse(localStorage.getItem('DB_DEM')) || [];
-
-    function irPara(nivel) {
-        document.querySelectorAll('.tela').forEach(t => t.style.display = 'none');
-        document.getElementById('painel-' + nivel).style.display = 'block';
-    }
-
-    function logout() { location.reload(); }
-
-    // FUNÇÃO DO OPERADOR (SCANNER + LANTERNA + CADASTRO)
-    async function processoBipe(tipo) {
-        document.getElementById('btn-flash').style.display = 'flex';
-        let sku = prompt("AGUARDANDO LEITURA DO SCANNER (SKU/LOTE):");
+    <div class="scroll">
+        <h3>CONTROLE DE SEPARAÇÃO (PICKING)</h3>
+        <textarea id="list-input" placeholder="COLE AQUI: COD, QTD (Ex: 001, 10)" style="height:60px;"></textarea>
+        <button class="btn-green" style="background:var(--sep); margin-bottom:15px; font-size:10px;" onclick="enviarListaSeparacao()">SUBIR DEMANDA PARA OPERADOR</button>
         
-        if(!sku) { finalizarBipe(); return; }
+        <h3>HISTÓRICO DE MOVIMENTAÇÕES (AO VIVO)</h3>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>DATA/HORA</th><th>USUÁRIO</th><th>AÇÃO</th><th>PRODUTO/ITEM</th><th>QTD</th></tr></thead>
+                <tbody id="audit-body"></tbody>
+            </table>
+        </div>
+        
+        <h3>INVENTÁRIO / SALDO POR CÓDIGO</h3>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>CÓDIGO</th><th>NOME DO PRODUTO</th><th>SALDO ATUAL</th></tr></thead>
+                <tbody id="stock-body"></tbody>
+            </table>
+        </div>
+    </div>
+    <button onclick="ir('scr-config')" style="position:fixed; bottom:20px; right:20px; width:55px; height:55px; border-radius:50%; background:var(--primary); border:none; font-weight:bold; box-shadow: 0 0 15px var(--primary);">⚙️</button>
+</div>
 
-        // AUTO-CADASTRO (Se não existir no sistema)
-        if(!PRODUTOS[sku]) {
-            let nome = prompt("⚠️ PRODUTO NÃO CADASTRADO! DIGITE O NOME PARA REGISTRAR:");
-            if(nome) {
-                PRODUTOS[sku] = nome.toUpperCase();
-                localStorage.setItem('DB_PROD', JSON.stringify(PRODUTOS));
-            } else { finalizarBipe(); return; }
-        }
+<div id="scr-op" class="screen">
+    <header><span id="display-user">OPERADOR</span> <button onclick="logout()" style="color:var(--danger); background:none; border:none; font-size:8px;">SAIR</button></header>
+    <div class="scroll">
+        <div id="box-picking" style="border: 2px solid var(--sep); padding:12px; border-radius:6px; margin-bottom:15px; background: #0f0b00;">
+            <h4 style="color:var(--sep); margin:0 0 8px 0; font-family:'Orbitron';">📋 LISTA DE SEPARAÇÃO:</h4>
+            <div id="op-list-picking" style="font-size:12px; line-height:1.5;">Aguardando lista do Shark...</div>
+        </div>
 
-        let qtd = prompt(`QUANTIDADE PARA ${PRODUTOS[sku]}:`);
-        if(qtd) {
-            MOVS.push({sku, nome: PRODUTOS[sku], qtd, tipo, hora: new Date().toLocaleTimeString()});
-            localStorage.setItem('DB_MOVS', JSON.stringify(MOVS));
-            alert("BIPE CONFIRMADO NO ARMAZÉM!");
-            atualizarTudo();
-        }
-        finalizarBipe();
-    }
+        <div style="display:flex; gap:5px;">
+            <select id="mod-op" style="flex:2;"><option value="SAIDA">SAÍDA / SEPARAÇÃO</option><option value="ENTRADA">ENTRADA ESTOQUE</option></select>
+            <input type="number" id="qtd-bipe" value="1" style="flex:0.6; text-align:center;">
+        </div>
+        <div id="reader"></div>
+        <button class="btn-green" id="btn-cam" onclick="toggleCamera()" style="margin:12px 0;">ATIVAR SCANNER</button>
+        <div id="op-audit-body" style="font-size:9px; color:#555;">Sessão iniciada...</div>
+    </div>
+</div>
 
-    function finalizarBipe() { document.getElementById('btn-flash').style.display = 'none'; }
+<div id="scr-config" class="screen">
+    <header><span>AJUSTES DE SISTEMA</span> <button onclick="ir('scr-shark')">VOLTAR</button></header>
+    <div class="scroll">
+        <h3>BASE DE DADOS (CÓDIGO, NOME)</h3>
+        <textarea id="import-area" style="height:250px;" placeholder="Ex: 001, IPHONE 15 PRO"></textarea>
+        <button class="btn-green" onclick="salvarConfig()">SALVAR BASE DE ITENS</button>
+    </div>
+</div>
 
-    // FUNÇÃO DO SHARK (LANÇAR)
-    function criarDemanda() {
-        let rota = prompt("QUAL A ROTA OU ROMANEIO?");
-        let sku = prompt("QUAL O SKU?");
-        let qtd = prompt("QUAL A QUANTIDADE?");
-        if(rota && sku && qtd) {
-            DEMANDAS.push({rota, sku, qtd, status: 'PENDENTE'});
-            localStorage.setItem('DB_DEM', JSON.stringify(DEMANDAS));
-            atualizarTudo();
-        }
-    }
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit, setDoc, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    function atualizarTudo() {
-        // Atualiza a visão do Shark e Op
-        let h = "";
-        DEMANDAS.forEach(d => {
-            h += `<div class="item-lista"><span>${d.rota} | ${d.sku}</span><b>${d.qtd} UN</b></div>`;
+    const firebaseConfig = {
+        apiKey: "AIzaSyDRDhONvvzZmo2csXksqHs6E6vV3MuvLSs",
+        authDomain: "log-pro-jp.firebaseapp.com",
+        projectId: "log-pro-jp",
+        storageBucket: "log-pro-jp.firebasestorage.app",
+        messagingSenderId: "481645607846",
+        appId: "1:481645607846:web:fd55dd943718ad78386d67"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let BASE = JSON.parse(localStorage.getItem('LP_BASE')) || {};
+    let MOVS = [];
+    let currentUser = localStorage.getItem('LP_SESSION') || "";
+    let scanner, camOn = false;
+
+    // --- MONITOR DE PRESENÇA ---
+    async function heartbeat() { if(currentUser) await setDoc(doc(db, "presenca", currentUser), { u: currentUser, t: serverTimestamp() }); }
+    setInterval(heartbeat, 15000);
+    onSnapshot(collection(db, "presenca"), (s) => { 
+        s.docs.forEach(d => { 
+            const p = d.data(); const el = document.getElementById("st-"+p.u.toLowerCase()); 
+            if(el) el.innerHTML = `${p.u}: <span class="online">🟢 ON</span>`; 
+        }); 
+    });
+
+    // --- ESCUTADOR DE MOVIMENTOS (HISTÓRICO) ---
+    onSnapshot(query(collection(db, "logs"), orderBy("data_hora", "desc"), limit(50)), (snap) => {
+        MOVS = snap.docs.map(d => d.data());
+        render();
+    });
+
+    // --- ESCUTADOR DE SEPARAÇÃO (PICKING) ---
+    onSnapshot(collection(db, "separacao"), (s) => {
+        let hO = ""; let count = 0;
+        s.docs.forEach(d => {
+            const p = d.data(); const falta = p.qtd_pedida - p.qtd_feita;
+            if(falta > 0) {
+                hO += `<div style="padding:8px; border-bottom:1px solid #222;">📦 <b>${p.nome}</b>: FALTAM <span style="color:var(--sep)">${falta}</span></div>`;
+                count++;
+            }
         });
-        document.getElementById('demandas-shark').innerHTML = h || "NENHUMA ROTA ATIVA";
-        document.getElementById('demandas-op').innerHTML = h || "LISTA VAZIA";
+        document.getElementById('op-list-picking').innerHTML = hO || "NENHUMA DEMANDA PENDENTE! 🎉";
+        document.getElementById('stat-pedidos').innerText = count;
+    });
 
-        // Atualiza Logs do JP
-        let m = "";
-        MOVS.slice(-10).reverse().forEach(log => {
-            m += `<div class="item-lista" style="color:#666">${log.hora} - ${log.tipo}: ${log.nome} (${log.qtd})</div>`;
+    // --- RENDERIZAÇÃO DE DADOS ---
+    window.render = () => {
+        let saldos = {};
+        Object.keys(BASE).forEach(k => saldos[k] = { n: BASE[k], s: 0 });
+        
+        let htmlHist = "";
+        MOVS.forEach(m => {
+            if(saldos[m.cod]) { m.t === 'ENTRADA' ? saldos[m.cod].s += m.q : saldos[m.cod].s -= m.q; }
+            htmlHist += `<tr><td>${m.d_str || ''}</td><td>${m.op}</td><td>${m.t}</td><td>${m.n}</td><td>${m.q}</td></tr>`;
         });
-        document.getElementById('logs-jp').innerHTML = m || "SEM MOVIMENTAÇÃO";
-    }
 
-    // LANTERNA (API Flash)
-    let flashAtivo = false;
-    async function toggleFlash() {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({video: {facingMode: 'environment'}});
-            const track = stream.getVideoTracks()[0];
-            flashAtivo = !flashAtivo;
-            await track.applyConstraints({advanced: [{torch: flashAtivo}]});
-        } catch(e) { alert("LANTERNA INDISPONÍVEL"); }
-    }
+        document.getElementById('audit-body').innerHTML = htmlHist;
+        document.getElementById('stock-body').innerHTML = Object.keys(saldos).map(k => `
+            <tr><td>${k}</td><td><b>${saldos[k].n}</b></td><td style="color:var(--primary)">${saldos[k].s}</td></tr>
+        `).join('');
+        document.getElementById('stat-total').innerText = Object.keys(BASE).length;
+    };
+
+    // --- PROCESSAMENTO DE BIPE ---
+    window.processar = async (cod) => {
+        let c = cod.trim(); const q = parseInt(document.getElementById('qtd-bipe').value) || 1;
+        if(!BASE[c]) { const n = prompt("PRODUTO NÃO CADASTRADO. NOME DO ITEM:"); if(n) { BASE[c]=n.toUpperCase(); localStorage.setItem('LP_BASE', JSON.stringify(BASE)); } else return; }
+        
+        const mov = { cod:c, n:BASE[c], t:document.getElementById('mod-op').value, q:q, op:currentUser, data_hora:serverTimestamp(), d_str:new Date().toLocaleTimeString() };
+        await addDoc(collection(db, "logs"), mov);
+
+        if(mov.t === "SAIDA") {
+            const sepRef = doc(db, "separacao", c);
+            const ds = await getDoc(sepRef);
+            if(ds.exists()) await updateDoc(sepRef, { qtd_feita: ds.data().qtd_feita + q });
+        }
+        document.getElementById('op-audit-body').innerHTML = `BIPADO: ${mov.n} (${q})<br>` + document.getElementById('op-audit-body').innerHTML;
+    };
+
+    // --- FUNÇÕES DE INTERFACE ---
+    window.auth = () => {
+        const u = document.getElementById('user-name').value.toUpperCase().trim();
+        const p = document.getElementById('pass').value.trim();
+        if((u==="JP"||u==="SHARK")&&p==="9910") { currentUser=u; localStorage.setItem('LP_SESSION',u); logarNaTela(); }
+        else if(u==="OP"&&p==="1234") { currentUser=u; localStorage.setItem('LP_SESSION',u); logarNaTela(); }
+        else alert("CHAVE DE ACESSO INCORRETA!");
+    };
+
+    window.logarNaTela = () => {
+        if(!currentUser) return; document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+        if(currentUser!=="OP") { document.getElementById('scr-shark').classList.add('active'); document.getElementById('shark-title').innerText = "ADMIN: "+currentUser; }
+        else document.getElementById('scr-op').classList.add('active');
+        heartbeat();
+    };
+
+    window.enviarListaSeparacao = async () => {
+        const linhas = document.getElementById('list-input').value.split('\n');
+        for(let l of linhas) {
+            const [cod, qtd] = l.split(',');
+            if(cod && qtd) {
+                const c = cod.trim();
+                await setDoc(doc(db, "separacao", c), { cod:c, nome:BASE[c]||"ITEM "+c, qtd_pedida:parseInt(qtd), qtd_feita:0 });
+            }
+        }
+        document.getElementById('list-input').value = ""; alert("DEMANDA ENVIADA AO OPERADOR!");
+    };
+
+    window.exportar = (tipo) => {
+        let txt = `LOG-PRO - RELATÓRIO DE EXPEDIÇÃO\nGERADO EM: ${new Date().toLocaleString()}\n----------------------------------\n`;
+        MOVS.forEach(m => { txt += `${m.d_str} | ${m.op} | ${m.t} | ${m.n} | ${m.q}\n`; });
+        if(tipo === 'email') window.location.href = `mailto:?subject=Romaneio LOG-PRO&body=${encodeURIComponent(txt)}`;
+        else { let w = window.open(); w.document.write(`<pre style="font-family:monospace; color:black;">${txt}</pre>`); w.print(); }
+    };
+
+    window.toggleCamera = async () => {
+        if(!camOn) { scanner = new Html5Qrcode("reader"); await scanner.start({ facingMode: "environment" }, { fps: 25, qrbox: 250 }, (t)=>processar(t)); camOn=true; document.getElementById('btn-cam').innerText = "DESATIVAR SCANNER"; }
+        else { await scanner.stop(); camOn=false; document.getElementById('btn-cam').innerText = "ATIVAR SCANNER"; }
+    };
+
+    window.salvarConfig = () => {
+        document.getElementById('import-area').value.split('\n').forEach(l=>{const d=l.split(','); if(d[0]&&d[1]) BASE[d[0].trim()]=d[1].trim().toUpperCase();});
+        localStorage.setItem('LP_BASE', JSON.stringify(BASE)); alert("BASE DE DADOS ATUALIZADA!"); render();
+    };
+
+    window.logout = () => { localStorage.removeItem('LP_SESSION'); location.reload(); };
+    window.ir = (id) => { document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); };
+    window.init = () => { if(currentUser) logarNaTela(); render(); };
 </script>
 </body>
 </html>
