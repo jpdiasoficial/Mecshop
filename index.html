@@ -2,123 +2,148 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MECSHOP | Sistema de Elite</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MECSHOP | Pitch de Elite</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --red: #ea1d2c; --dark: #0a0a0a; --card: #141414; --border: #222; --text: #fff; }
-        body { font-family: 'Poppins', sans-serif; background: var(--dark); color: var(--text); margin: 0; overflow-x: hidden; }
+        :root { --red: #ea1d2c; --dark: #0a0a0a; --card: #111; --text: #fff; }
+        body { font-family: 'Poppins', sans-serif; background: var(--dark); color: var(--text); margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
         
-        /* TELA PÚBLICA (COBERTURA) */
-        #site-publico { padding: 100px 20px; text-align: center; transition: 0.5s; }
-        .logo { font-size: 50px; font-weight: 800; color: var(--red); margin: 0; }
-        .slogan { font-size: 10px; letter-spacing: 5px; color: #555; text-transform: uppercase; }
+        /* LOGIN */
+        #tela-login { width: 320px; text-align: center; animation: fadeIn 0.5s; }
+        .logo { font-size: 35px; font-weight: 800; color: var(--red); margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; margin-bottom: 10px; background: #1a1a1a; border: 1px solid #222; border-radius: 8px; color: #fff; box-sizing: border-box; outline: none; }
+        button { width: 100%; padding: 12px; background: var(--red); border: none; border-radius: 8px; color: #fff; font-weight: 800; cursor: pointer; }
 
-        /* PAINEL RESTRITO (O ARSENAL) */
-        #painel-restrito { display: none; padding: 20px; animation: fadeIn 0.5s; }
-        .header-adm { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--red); padding-bottom: 15px; margin-bottom: 20px; }
+        /* PAINEL PRINCIPAL */
+        #painel { display: none; width: 100%; max-width: 900px; padding: 20px; animation: fadeIn 0.5s; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         
-        /* FILTROS */
-        .filtros-nav { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 15px; margin-bottom: 20px; scrollbar-width: none; }
-        .btn-filter { background: var(--card); border: 1px solid var(--border); color: #888; padding: 10px 18px; border-radius: 25px; cursor: pointer; white-space: nowrap; font-size: 11px; font-weight: 600; transition: 0.3s; }
-        .btn-filter.active { background: var(--red); color: #fff; border-color: var(--red); }
+        /* SIMULAÇÃO IPHONE */
+        .iphone { background: #fff; border-radius: 35px; border: 8px solid #333; color: #333; height: 580px; overflow: hidden; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        .ip-header { background: var(--red); color: #fff; padding: 15px; text-align: center; font-weight: 800; font-size: 13px; }
+        
+        /* STATUS SYNC */
+        .status-area { margin: 15px; padding: 20px; background: #f4f4f4; border-radius: 15px; text-align: center; border: 2px dashed #ccc; }
+        .status-val { font-size: 20px; font-weight: 800; color: var(--red); display: block; margin-top: 5px; }
 
-        /* GRID DE MODELOS */
-        .grid-arsenal { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 15px; }
-        .model-card { background: var(--card); border: 1px solid var(--border); padding: 20px; border-radius: 15px; cursor: pointer; transition: 0.3s; position: relative; }
-        .model-card:hover { border-color: var(--red); transform: translateY(-5px); }
-        .model-card b { font-size: 16px; color: var(--red); display: block; margin-bottom: 5px; }
-        .model-card p { font-size: 11px; color: #777; margin: 0; }
-        .badge-nivel { position: absolute; top: 15px; right: 15px; font-size: 8px; color: #555; font-weight: 800; }
+        /* PAINEL DE COMANDO */
+        .controles { padding: 20px; background: var(--card); border: 1px solid #222; border-radius: 20px; color: #fff; }
+        .btn-c { width: 100%; padding: 12px; margin-top: 8px; border-radius: 8px; border: none; font-weight: 800; cursor: pointer; color: #fff; transition: 0.2s; }
+        .btn-c:active { transform: scale(0.95); }
 
-        /* SIMULADOR (CELULAR) */
-        #modal-teste { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 99999; align-items: center; justify-content: center; }
-        .simulador { width: 90%; max-width: 360px; height: 85vh; background: #fff; border-radius: 30px; border: 8px solid #333; overflow: hidden; color: #333; position: relative; }
-        .sim-header { background: var(--red); color: #fff; padding: 15px; font-weight: 800; display: flex; justify-content: space-between; font-size: 14px; }
+        /* SIMULADOR DE ROI (LUCRO) */
+        #simulador-lucro { margin-top: 25px; padding: 20px; background: #000; border: 1px solid #0f0; border-radius: 15px; display: none; }
+        .calc-input { background: #111; border: 1px solid #333; color: #0f0; font-family: monospace; padding: 5px; width: 70px; text-align: center; border-radius: 4px; }
+        .res-lucro { color: #0f0; font-weight: 800; font-size: 20px; display: block; margin-top: 10px; }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @media (max-width: 750px) { .grid { grid-template-columns: 1fr; } .iphone { height: 500px; } }
     </style>
 </head>
 <body>
 
-    <div id="site-publico">
+    <div id="tela-login">
         <h1 class="logo">MECSHOP</h1>
-        <div class="slogan">Sistemas de Alta Performance</div>
-        <p style="margin-top: 50px; color: #333; font-size: 12px;">Pressione as teclas para autenticar...</p>
-        <p style="color: #222; font-size: 10px;">(Dica: digite a senha secreta agora)</p>
+        <p style="color:#555; font-size:10px; letter-spacing:2px; margin-bottom:20px;">TECNOLOGIA DE ESCALA</p>
+        <input type="text" id="user" placeholder="usuário (jp ou shark)">
+        <input type="password" id="pass" placeholder="senha">
+        <button onclick="logar()">ENTRAR NO ARSENAL</button>
     </div>
 
-    <div id="painel-restrito">
-        <div class="header-adm">
-            <div><b style="color: var(--red);">MECSHOP ARSENAL</b><br><small>Do Micro ao Shark</small></div>
-            <button onclick="window.location.reload()" style="background:#222; color:#fff; border:none; padding:8px 15px; border-radius:5px; font-size: 10px;">SAIR</button>
+    <div id="painel">
+        <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 id="boas-vindas" style="margin:0; font-size: 18px;"></h2>
+            <button onclick="window.location.reload()" style="width:auto; padding: 5px 15px; background:#333; font-size:10px;">SAIR</button>
         </div>
 
-        <div class="filtros-nav">
-            <button class="btn-filter active" onclick="filtrar('TODOS', this)">TODOS</button>
-            <button class="btn-filter" onclick="filtrar('MICRO', this)">MICRO</button>
-            <button class="btn-filter" onclick="filtrar('SERVICO', this)">SERVIÇOS</button>
-            <button class="btn-filter" onclick="filtrar('LOGISTICA', this)">LOGÍSTICA</button>
-            <button class="btn-filter" onclick="filtrar('SHARK', this)">SHARK</button>
-        </div>
+        <div class="grid">
+            <div class="iphone">
+                <div class="ip-header">VISÃO DO OPERADOR / CLIENTE</div>
+                <div class="status-area">
+                    <small style="color:#999; font-weight:800;">STATUS DA OPERAÇÃO</small>
+                    <span id="sync-val" class="status-val">AGUARDANDO...</span>
+                </div>
+                <div style="padding: 15px;">
+                    <small style="font-weight:800;">RELATÓRIO DE CAMPO:</small>
+                    <textarea id="nota-op" oninput="sync('NOTA', this.value)" style="width:100%; height:100px; margin-top:10px; border-radius:10px; border:1px solid #ddd; padding:10px; font-family:inherit;" placeholder="O operador reporta aqui..."></textarea>
+                    <p style="font-size: 9px; color: #999; margin-top: 10px;">Sincronização ativa via LocalStorage.</p>
+                </div>
+            </div>
 
-        <div class="grid-arsenal" id="grid"></div>
-    </div>
+            <div class="controles">
+                <p style="margin-top:0; color:var(--red); font-weight:800;">CENTRAL DE COMANDO</p>
+                <button class="btn-c" style="background:#ffa500" onclick="sync('STATUS', '📦 EM SEPARAÇÃO')">ORDEM: SEPARAÇÃO</button>
+                <button class="btn-c" style="background:#007bff" onclick="sync('STATUS', '🚚 SAIU P/ ENTREGA')">ORDEM: SAÍDA</button>
+                <button class="btn-c" style="background:#28a745" onclick="sync('STATUS', '✅ ENTREGUE')">ORDEM: FINALIZAR</button>
 
-    <div id="modal-teste" onclick="fecharTeste()">
-        <div class="simulador" onclick="event.stopPropagation()">
-            <div class="sim-header"><span id="tit-teste">MECSHOP PRO</span> <span>✕</span></div>
-            <div id="cont-teste" style="padding: 20px; overflow-y: auto; height: 100%;"></div>
+                <div id="simulador-lucro">
+                    <p style="color:#0f0; font-weight:800; margin-top:0; font-size: 12px;">💸 CALCULADORA DE ECONOMIA (ROI)</p>
+                    <div style="font-size: 11px; line-height: 25px;">
+                        Vendas/Mês: <input type="number" id="v-mes" class="calc-input" value="200" oninput="calc()"> <br>
+                        Custo do erro (R$): <input type="number" id="v-perda" class="calc-input" value="45" oninput="calc()">
+                    </div>
+                    <hr style="border:0; border-top:1px solid #111; margin: 10px 0;">
+                    <small style="color:#888;">Economia com a Automação:</small>
+                    <span class="res-lucro" id="total-lucro">R$ 9.000,00</span>
+                </div>
+            </div>
         </div>
     </div>
 
 <script>
-    const SENHA_MESTRA = "9910shark"; 
-    let buffer = "";
-
-    // Escuta a senha para abrir o Arsenal
-    document.addEventListener('keydown', (e) => {
-        buffer += e.key.toLowerCase();
-        if(buffer.includes(SENHA_MESTRA)) {
-            document.getElementById('site-publico').style.display = 'none';
-            document.getElementById('painel-restrito').style.display = 'block';
-            buffer = "";
-        }
-    });
-
-    const modelos = [
-        { id:1, cat:'MICRO', nome:'Hortifruti Pro', desc:'Organização de pedidos por setor.', demo:'<h3>🍎 Pedido #102</h3><p>• 1kg Tomate<br>• 2x Alface Fresca</p><button style="background:green; color:white; width:100%; border:none; padding:10px;">ENVIAR AO MOTOBOY</button>' },
-        { id:8, cat:'SERVICO', nome:'Painel Barbearia', desc:'Agendamento e Status de Cadeira.', demo:'<h3>💈 Status Agenda</h3><p>Cliente: João<br>Serviço: Corte + Barba</p><div style="background:#eee; padding:10px; border-radius:5px;"><b>Status: EM ATENDIMENTO</b></div>' },
-        { id:15, cat:'LOGISTICA', nome:'Tênis (Sneakers)', desc:'Grade 34-44 e Etiqueta DHL.', demo:'<h3>👟 Loja de Tênis</h3><p>Modelo: Jordan Retro<br>Tam: 42 | Cor: Black</p><button style="background:black; color:white; width:100%; border:none; padding:10px;">GERAR ETIQUETA DHL</button>' },
-        { id:22, cat:'SHARK', nome:'BET-SHARK (Apostas)', desc:'Sinais API e Saque Automático.', demo:'<h3>🎰 Dashboard Shark</h3><p>Saldo Afiliados: R$ 15.400,00</p><div style="background:#00ff00; padding:10px; border-radius:5px; color:#000"><b>SINAL ENVIADO: ENTRAR NO VERMELHO</b></div>' },
-        { id:24, cat:'SHARK', nome:'MEC-BANK (Fintech)', desc:'Gestão de Lucro e Vencimentos.', demo:'<h3>🏦 MEC-BANK</h3><p>Lucro Líquido: R$ 8.900,00</p><p>Vencimentos Hoje: 3 boletos</p><button style="background:blue; color:white; width:100%; border:none; padding:10px;">VER FLUXO DE CAIXA</button>' }
-    ];
-
-    function filtrar(cat, btn) {
-        const grid = document.getElementById('grid');
-        document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+    let uLogado = "";
+    
+    function logar() {
+        const u = document.getElementById('user').value.toLowerCase();
+        const p = document.getElementById('pass').value;
         
-        const lista = (cat === 'TODOS') ? modelos : modelos.filter(m => m.cat === cat);
-        grid.innerHTML = lista.map(m => `
-            <div class="model-card" onclick="abrirTeste(${m.id})">
-                <div class="badge-nivel">${m.cat}</div>
-                <b>${m.nome}</b>
-                <p>${m.desc}</p>
-            </div>
-        `).join('');
+        // Senha Mestra: 9910shark
+        if(p === "9910shark" && (u === 'shark' || u === 'jp')) {
+            uLogado = u;
+            document.getElementById('tela-login').style.display = 'none';
+            document.getElementById('painel').style.display = 'block';
+            document.getElementById('boas-vindas').innerText = "PAINEL: " + u.toUpperCase();
+            
+            // Se for SHARK, mostra a calculadora de lucro
+            if(u === 'shark') {
+                document.getElementById('simulador-lucro').style.display = 'block';
+            }
+            
+            // Carrega estados anteriores
+            document.getElementById('sync-val').innerText = localStorage.getItem('p_status') || "OFFLINE";
+            document.getElementById('nota-op').value = localStorage.getItem('p_nota') || "";
+        } else {
+            alert("Acesso negado. Verifique usuário e senha.");
+        }
     }
 
-    function abrirTeste(id) {
-        const m = modelos.find(x => x.id === id);
-        document.getElementById('tit-teste').innerText = m.nome;
-        document.getElementById('cont-teste').innerHTML = m.demo;
-        document.getElementById('modal-teste').style.display = 'flex';
+    function sync(tipo, val) {
+        if(tipo === 'STATUS') {
+            localStorage.setItem('p_status', val);
+            document.getElementById('sync-val').innerText = val;
+            
+            // Efeito visual de brilho no simulador
+            const display = document.getElementById('sync-val');
+            display.style.transform = "scale(1.1)";
+            setTimeout(() => { display.style.transform = "scale(1)"; }, 200);
+        } else {
+            localStorage.setItem('p_nota', val);
+        }
     }
 
-    function fecharTeste() { document.getElementById('modal-teste').style.display = 'none'; }
+    function calc() {
+        const v = document.getElementById('v-mes').value;
+        const p = document.getElementById('v-perda').value;
+        const total = v * p;
+        document.getElementById('total-lucro').innerText = "R$ " + total.toLocaleString('pt-BR') + ",00";
+    }
 
-    filtrar('TODOS', document.querySelector('.btn-filter'));
+    // Ouvinte para atualizar caso você abra em duas abas reais no mesmo navegador
+    window.addEventListener('storage', (e) => {
+        if(e.key === 'p_status') document.getElementById('sync-val').innerText = e.newValue;
+        if(e.key === 'p_nota') document.getElementById('nota-op').value = e.newValue;
+    });
 </script>
 </body>
 </html>
