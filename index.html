@@ -3,173 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MECSHOP | Intelligence System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>MECSHOP | Shark Defense V10</title>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --red: #ea1d2c; --gold: #d4af37; --dark: #050505; 
-            --card: #0d0d0d; --border: #1a1a1a; --text: #f0f0f0;
-        }
-        body { font-family: 'Inter', sans-serif; background: var(--dark); color: var(--text); margin: 0; overflow-x: hidden; }
+        :root { --red: #ea1d2c; --gold: #c5a059; --green: #00ff00; --dark: #000; }
+        body { background: var(--dark); color: #fff; font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; user-select: none; }
+        .screen { display: none; min-height: 100vh; flex-direction: column; }
+        .active { display: flex !important; }
         
-        /* LOGIN ELITE */
-        #login-screen { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle at center, #111 0%, #000 100%); }
-        .logo-main { font-size: 50px; font-weight: 900; letter-spacing: -2px; color: var(--red); margin: 0; text-transform: uppercase; }
-        .sub-logo { font-size: 10px; letter-spacing: 5px; color: #444; margin-bottom: 30px; }
-        .input-group { width: 300px; }
-        input { width: 100%; padding: 18px; margin-bottom: 12px; background: #0a0a0a; border: 1px solid #222; border-radius: 12px; color: #fff; font-size: 14px; box-sizing: border-box; transition: 0.3s; }
-        input:focus { border-color: var(--red); outline: none; box-shadow: 0 0 15px rgba(234, 29, 44, 0.2); }
-        button#btn-login { width: 100%; padding: 18px; background: var(--red); border: none; border-radius: 12px; color: #fff; font-weight: 800; cursor: pointer; text-transform: uppercase; }
+        /* NOTIFICAÇÃO PUSH (ANTI-ERRO) */
+        #push-note { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); width: 85%; background: rgba(20,20,20,0.95); border: 1px solid var(--red); padding: 12px; border-radius: 15px; z-index: 9999; transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .push-icon { background: var(--red); border-radius: 50%; width: 10px; height: 10px; margin-right: 10px; }
 
-        /* PAINEL DE COMANDO */
-        #main-panel { display: none; padding: 40px 20px; animation: fadeIn 0.8s ease; }
-        .nav-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #111; padding-bottom: 20px; margin-bottom: 40px; }
+        header { padding: 18px; background: #000; border-bottom: 2px solid var(--red); display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: 'Orbitron'; color: var(--red); font-size: 20px; letter-spacing: 2px; text-shadow: 0 0 10px rgba(234, 29, 44, 0.5); }
+
+        /* GRADES OTIMIZADAS */
+        .portal-grid { padding: 20px; display: grid; gap: 15px; }
+        .portal-card { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 20px; padding: 35px 20px; text-align: center; cursor: pointer; border-left: 6px solid var(--red); transition: 0.2s; }
+        .portal-card:active { transform: scale(0.95); background: #151515; }
+        .portal-card h2 { margin: 10px 0; font-family: 'Orbitron'; font-size: 14px; color: var(--red); }
+
+        .sub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 15px; overflow-y: auto; padding-bottom: 40px; }
+        .mod-btn { background: #050505; border: 1px solid #111; padding: 22px 10px; border-radius: 15px; text-align: center; font-size: 10px; font-weight: 900; color: #444; cursor: pointer; display: flex; flex-direction: column; justify-content: center; }
+        .main-mod { border-color: var(--red) !important; color: #fff !important; background: #0f0a0a; }
+        .gold-mod { border-color: var(--gold) !important; color: var(--gold) !important; background: #0f0f0a; }
+
+        /* INTERFACES */
+        .test-box { padding: 20px; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .ui-panel { background: #050505; border: 1px solid #1a1a1a; border-radius: 30px; width: 100%; max-width: 340px; padding: 25px; position: relative; }
+        .btn-elite { width: 100%; padding: 18px; background: var(--red); color: #fff; border: none; border-radius: 15px; font-weight: 900; cursor: pointer; margin-top: 20px; text-transform: uppercase; letter-spacing: 1px; }
+        #reader { width: 100%; border-radius: 20px; border: 2px solid var(--red); display: none; margin-bottom: 15px; overflow: hidden; }
         
-        /* GRADE 1-30 */
-        .grid-arsenal { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
-        .card { 
-            background: var(--card); border: 1px solid var(--border); padding: 25px; border-radius: 20px; 
-            cursor: pointer; position: relative; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .card:hover { transform: translateY(-10px); background: #121212; }
-        .card b { font-size: 16px; display: block; margin-bottom: 5px; }
-        .card span { font-size: 10px; color: #555; font-weight: 700; text-transform: uppercase; }
-        .card .id-num { position: absolute; top: 15px; right: 20px; font-size: 11px; font-weight: 900; opacity: 0.2; }
-
-        /* CATEGORIAS POR BORDAS */
-        .card.micro { border-left: 4px solid #333; }
-        .card.logpro { border-left: 4px solid var(--red); }
-        .card.shark { border-left: 4px solid var(--gold); }
-
-        /* MODAL DE SINCRONIZAÇÃO (PITCH) */
-        #modal-sync { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; align-items: center; justify-content: center; }
-        .device { width: 340px; height: 85vh; background: #fff; border-radius: 40px; border: 10px solid #1a1a1a; overflow: hidden; position: relative; color: #111; box-shadow: 0 0 50px rgba(234,29,44,0.1); }
-        .device-header { background: #000; color: #fff; padding: 20px; text-align: center; font-weight: 800; font-size: 14px; letter-spacing: 1px; }
-        
-        .status-monitor { margin: 20px; padding: 30px 15px; background: #f8f8f8; border-radius: 25px; text-align: center; border: 1px solid #eee; transition: 0.3s; }
-        .status-monitor.pulse { border-color: var(--red); box-shadow: 0 0 20px rgba(234,29,44,0.15); transform: scale(1.02); }
-        .status-txt { font-size: 22px; font-weight: 900; color: var(--red); text-transform: uppercase; }
-
-        /* COMANDOS ADM */
-        .admin-controls { padding: 0 25px; display: none; }
-        .btn-act { width: 100%; padding: 14px; margin-bottom: 10px; border: none; border-radius: 12px; color: #fff; font-weight: 700; cursor: pointer; transition: 0.2s; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .extrato-scroll { max-height: 120px; overflow-y: auto; margin-top: 15px; padding-right: 5px; }
+        .extrato-item { display: flex; justify-content: space-between; font-size: 11px; padding: 10px 0; border-bottom: 1px solid #111; }
     </style>
 </head>
-<body>
+<body onload="init()">
 
-    <div id="login-screen">
-        <h1 class="logo-main">MECSHOP</h1>
-        <div class="sub-logo">SYSTEM INTELLIGENCE</div>
-        <div class="input-group">
-            <input type="text" id="user-in" placeholder="IDENTIFICAÇÃO (SHARK / JP)">
-            <input type="password" id="pass-in" placeholder="CHAVE DE ACESSO">
-            <button id="btn-login" onclick="execLogin()">AUTENTICAR</button>
-        </div>
+<div id="push-note">
+    <div class="push-icon"></div>
+    <div style="flex:1">
+        <b style="color:var(--red); font-size:10px; display:block">SISTEMA MECSHOP</b>
+        <span id="push-txt" style="font-size:11px">Aguardando operação...</span>
     </div>
+</div>
 
-    <div id="main-panel">
-        <div class="nav-header">
-            <div><small style="color:#555">SISTEMA ATIVO</small><br><b id="display-user"></b></div>
-            <button onclick="window.location.reload()" style="background:none; border:1px solid #222; color:#fff; padding:10px 20px; border-radius:8px; cursor:pointer;">LOGOUT</button>
-        </div>
-        <div class="grid-arsenal" id="grid-30"></div>
+<div id="scr-login" class="screen active" style="align-items:center; justify-content:center;">
+    <div class="logo" style="font-size:40px; margin-bottom:50px;">MECSHOP</div>
+    <div class="ui-panel" style="max-width:280px;">
+        <input type="password" id="pass" placeholder="CHAVE MESTRE" style="width:100%; box-sizing:border-box; padding:18px; background:#000; border:1px solid #222; color:var(--red); border-radius:12px; text-align:center; font-family:'Orbitron'; font-size:18px; margin-bottom:20px;">
+        <button onclick="auth()" class="btn-elite">ACESSAR ARSENAL</button>
     </div>
+</div>
 
-    <div id="modal-sync">
-        <div class="device">
-            <div class="device-header" id="m-title">MECSHOP PRO</div>
-            
-            <div class="status-monitor" id="status-card">
-                <small style="color:#999; font-weight:700">MONITORAMENTO EM TEMPO REAL</small>
-                <div id="live-status" class="status-txt">STAND BY</div>
-            </div>
-
-            <div id="shark-btns" class="admin-controls">
-                <button class="btn-act" style="background:#ffa500" onclick="trigger('📦 SEPARAÇÃO INICIADA')">ORDEM SEPARAÇÃO</button>
-                <button class="btn-act" style="background:#007bff" onclick="trigger('🚚 EM ROTA DE ENTREGA')">ORDEM DE SAÍDA</button>
-                <button class="btn-act" style="background:#28a745" onclick="trigger('✅ ENTREGA CONCLUÍDA')">ORDEM FINALIZAR</button>
-            </div>
-
-            <div style="padding: 20px;">
-                <small style="font-weight:800; font-size:10px; color:#999">RELATÓRIO DE CAMPO (OPERADOR):</small>
-                <textarea id="op-note" oninput="sendNote(this.value)" style="width:100%; height:80px; margin-top:10px; border-radius:12px; border:1px solid #ddd; padding:15px; font-family:inherit; font-size:13px;" placeholder="Relate o andamento..."></textarea>
-            </div>
-            
-            <center><button onclick="closeModal()" style="background:none; border:none; color:#bbb; cursor:pointer; margin-top:10px; font-size:12px;">FECHAR AMBIENTE</button></center>
-        </div>
+<div id="scr-portais" class="screen">
+    <header><span class="logo">MECSHOP</span></header>
+    <div class="portal-grid">
+        <div class="portal-card" onclick="abrirPortal('fisico')"><p>OPERAÇÃO</p><h2>PORTAL FÍSICO</h2><small>Log-Pro • WMS • Produção</small></div>
+        <div class="portal-card" onclick="abrirPortal('online')"><p>ESCALABILIDADE</p><h2>PORTAL ONLINE</h2><small>Afiliados • Bet • Vendas</small></div>
+        <div class="portal-card" onclick="abrirPortal('business')"><p>HOLDING</p><h2>PORTAL EMPRESARIAL</h2><small>Mec-Bank • O Cérebro</small></div>
     </div>
+</div>
+
+<div id="scr-sub" class="screen">
+    <header>
+        <div id="txt-p" style="color:var(--red); font-family:'Orbitron'; font-size:12px;"></div>
+        <button onclick="ir('scr-portais')" style="background:#111; color:#fff; border:none; padding:10px 15px; border-radius:8px;">VOLTAR</button>
+    </header>
+    <div class="sub-grid" id="cont-mods"></div>
+</div>
+
+<div id="scr-exec" class="screen">
+    <header><b id="txt-m"></b><button onclick="vSub()" style="background:#111; color:#fff; border:none; padding:10px 15px; border-radius:8px;">FECHAR</button></header>
+    <div class="test-box" id="render"></div>
+</div>
 
 <script>
-    let activeRole = "";
-    const modConfig = {
-        1: {n:'Hortifruti Sync', t:'micro'}, 5: {n:'Barbearia VIP', t:'micro'},
-        15: {n:'Sneaker Log Pro', t:'logpro'}, 16: {n:'Moda Logística', t:'logpro'},
-        24: {n:'MEC-BANK', t:'shark'}, 30: {n:'HOLDING MASTER', t:'shark'}
+    let qr;
+    let saldo = 45200.00;
+    let historico = [{ desc: "Saldo Holding", valor: 45200, tipo: "in" }];
+
+    const bancos = {
+        fisico: ["Log-Pro WMS", "Bipe Conferência", "Estoque Real", "Triagem Carga", "Sensor de Frio", "Scanner Master", "Frente de Loja", "Produção Sinc", "Auditoria Local", "Recebimento"],
+        online: ["Mag Shopping", "Afiliados (Hotmart)", "Mec-Bet (Aposta)", "Uber Logística", "99 Fast Delivery", "Mec-Prêmios VIP", "Checkout Pay", "Venda Externa", "Rastreio Global", "Fidelidade Shark"],
+        business: ["Mec-Bank (Banco)", "Holding Shark", "Inteligência AI", "RH Digital", "Contabilidade", "Marketing Ads", "Mec-Invest", "Jurídico Pro", "Shark Score", "API Holding"]
     };
 
-    function execLogin() {
-        const u = document.getElementById('user-in').value.toLowerCase();
-        const p = document.getElementById('pass-in').value;
-        if(p === "9910shark" && (u === 'shark' || u === 'jp')) {
-            activeRole = u;
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('main-panel').style.display = 'block';
-            document.getElementById('display-user').innerText = u.toUpperCase() + " / ARSENAL ATIVO";
-            buildGrid();
+    function notify(msg) {
+        document.getElementById('push-txt').innerText = msg;
+        document.getElementById('push-note').style.top = "20px";
+        setTimeout(() => { document.getElementById('push-note').style.top = "-100px"; }, 4000);
+    }
+
+    function abrirPortal(p) {
+        document.getElementById('txt-p').innerText = p.toUpperCase();
+        let h = "";
+        bancos[p].forEach((nome, i) => {
+            let cl = (i < 2) ? "main-mod" : "";
+            if(nome.includes("Bank") || nome.includes("Bet") || nome.includes("Prêmios")) cl += " gold-mod";
+            h += `<div class="mod-btn ${cl}" onclick="rodarTeste('${nome}')">MÓDULO ${i+1}<br>${nome}</div>`;
+        });
+        document.getElementById('cont-mods').innerHTML = h;
+        ir('scr-sub');
+    }
+
+    function rodarTeste(nome) {
+        document.getElementById('txt-m').innerText = nome.toUpperCase();
+        let ui = document.getElementById('render');
+        ir('scr-exec');
+
+        if(nome.includes("Log-Pro") || nome.includes("Bipe")) {
+            ui.innerHTML = `<div class="ui-panel"><div id="reader"></div><button class="btn-elite" id="bS" onclick="sQR()">ATIVAR SCANNER LOG-PRO</button><p style="font-size:9px; color:#333; margin-top:10px;">(Requer HTTPS para Câmera)</p></div>`;
+        } 
+        else if(nome.includes("Mag Shopping")) {
+            ui.innerHTML = `<div class="ui-panel"><b>MAG SHOPPING (LOJA)</b><div style="background:#111; padding:20px; border-radius:20px; margin:20px 0;"><small>Produto:</small><br><b>SORVETE MEC V10</b><br><br><b style="color:var(--red); font-size:20px;">R$ 15,00</b></div><button class="btn-elite" onclick="venda()">EFETUAR VENDA</button></div>`;
+        }
+        else if(nome.includes("Bank")) { renderBanco(); }
+        else if(nome.includes("Bet")) {
+            ui.innerHTML = `<div class="ui-panel" style="border-color:var(--green);"><b style="color:var(--green)">MEC-BET ALGORITMO</b><div style="background:#111; padding:20px; border-radius:20px; margin:15px 0;"><small>MULTIPLICADOR</small><h1 style="color:var(--green); margin:5px 0;">2.50x</h1></div><button class="btn-elite" style="background:var(--green); color:#000;" onclick="ganharBet()">APOSTAR R$ 100</button></div>`;
+        }
+        else if(nome.includes("Afiliado")) {
+            ui.innerHTML = `<div class="ui-panel"><b>PAINEL AFILIADOS</b><div style="background:#111; padding:15px; border-radius:15px; text-align:left; font-size:11px;"><p>Cliques: 4.502</p><p>Vendas: 112</p><p>Conversão: 2.4%</p></div><button class="btn-elite" style="background:#05a;" onclick="alert('LINK COPIADO!')">GERAR NOVO LINK</button></div>`;
+        }
+        else {
+            ui.innerHTML = `<div class="ui-panel"><h2>${nome}</h2><p style="color:#444;">Módulo operacional sincronizado via API.</p><button class="btn-elite" onclick="alert('MÓDULO OK!')">TESTAR FUNÇÃO</button></div>`;
         }
     }
 
-    function buildGrid() {
-        let html = "";
-        for(let i=1; i<=30; i++) {
-            const m = modConfig[i] || {n: 'Módulo de Escala', t: i > 20 ? 'shark' : i > 10 ? 'logpro' : 'micro'};
-            html += `
-                <div class="card ${m.t}" onclick="openMod('${m.n}')">
-                    <div class="id-num">#${i < 10 ? '0'+i : i}</div>
-                    <span>Categoria: ${m.t}</span>
-                    <b>${m.n}</b>
+    function venda() { 
+        saldo += 15; historico.unshift({ desc: "Venda Sorvete Mag", valor: 15, tipo: "in" });
+        notify("Log-Pro: Novo pedido para separação em Hortolândia!");
+        alert("Sucesso! O lucro já consta no Mec-Bank."); 
+    }
+
+    function ganharBet() { 
+        saldo += 250; historico.unshift({ desc: "Lucro Mec-Bet", valor: 250, tipo: "in" });
+        notify("Mec-Bank: Depósito de prêmio via PIX!");
+        alert("GREEN! Saldo atualizado."); 
+    }
+
+    function renderBanco() {
+        let h = historico.map(i => `<div class="extrato-item"><span>${i.desc}</span><b style="color:${i.tipo=='in'?'#0f0':'#f00'}">${i.tipo=='in'?'+':'-'} R$ ${i.valor.toFixed(2)}</b></div>`).join('');
+        document.getElementById('render').innerHTML = `
+            <div class="ui-panel" style="border-color:var(--gold); text-align:left;">
+                <div style="display:flex; justify-content:space-between;"><small style="color:var(--gold)">MEC-BANK PLATFORM</small><b>SHARK</b></div>
+                <h1 style="margin:20px 0;">R$ ${saldo.toFixed(2)}</h1>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:15px;">
+                    <div style="background:#111; padding:10px; border-radius:10px; text-align:center; font-size:10px;">PIX</div>
+                    <div style="background:#111; padding:10px; border-radius:10px; text-align:center; font-size:10px;">SACAR</div>
                 </div>
-            `;
-        }
-        document.getElementById('grid-30').innerHTML = html;
+                <small style="color:#444">EXTRATO DINÂMICO</small>
+                <div class="extrato-scroll">${h}</div>
+            </div>`;
     }
 
-    function openMod(nome) {
-        // Reset Real-time
-        localStorage.removeItem('sync_v9');
-        localStorage.removeItem('note_v9');
-
-        document.getElementById('modal-sync').style.display = 'flex';
-        document.getElementById('m-title').innerText = nome;
-        document.getElementById('shark-btns').style.display = (activeRole === 'shark') ? 'block' : 'none';
-        document.getElementById('live-status').innerText = "STAND BY";
-        document.getElementById('op-note').value = "";
+    function sQR() { 
+        document.getElementById('reader').style.display='block'; 
+        document.getElementById('bS').style.display='none'; 
+        qr = new Html5Qrcode("reader"); 
+        qr.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, (t) => { 
+            notify("Log-Pro: Item "+t+" identificado no estoque."); 
+            alert("BIPE CONFIRMADO!"); 
+        }).catch(err => { alert("ERRO: O navegador bloqueou a câmera. Use HTTPS."); vSub(); });
     }
 
-    function trigger(v) {
-        localStorage.setItem('sync_v9', v);
-        uiUpdate(v);
-    }
-
-    function sendNote(v) {
-        localStorage.setItem('note_v9', v);
-    }
-
-    function uiUpdate(v) {
-        const card = document.getElementById('status-card');
-        document.getElementById('live-status').innerText = v;
-        card.classList.add('pulse');
-        setTimeout(() => card.classList.remove('pulse'), 400);
-    }
-
-    function closeModal() { document.getElementById('modal-sync').style.display = 'none'; }
-
-    window.addEventListener('storage', (e) => {
-        if(e.key === 'sync_v9') uiUpdate(e.newValue);
-        if(e.key === 'note_v9') document.getElementById('op-note').value = e.newValue;
-    });
+    function ir(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+    function vSub() { if(qr){ qr.stop().catch(()=>{}); qr=null; document.getElementById('reader').style.display='none'; } ir('scr-sub'); }
+    function auth() { if(document.getElementById('pass').value === "9910") { localStorage.setItem('M', '1'); ir('scr-portais'); } }
+    function init() { if(localStorage.getItem('M')) ir('scr-portais'); }
 </script>
 </body>
 </html>
