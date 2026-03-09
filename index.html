@@ -3,178 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LOG-PRO v85 (BACK TO 73)</title>
-    <script src="https://unpkg.com/html5-qrcode"></script>
+    <title>LOG-PRO MASTER | v70-v73</title>
     <style>
-        :root { --p: #00ff41; --s: #ffae00; --bg: #000; }
-        body { background: var(--bg); color: #fff; font-family: sans-serif; margin: 0; text-transform: uppercase; overflow: hidden; }
+        :root { --neon: #00ff41; --bg: #000; --warn: #ffae00; --danger: #ff3b30; }
+        body { background: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; text-transform: uppercase; overflow: hidden; }
         
-        /* Layout v73: Simples e Funcional */
-        .screen { display: none; height: 100vh; flex-direction: column; }
-        .active { display: flex; }
-        header { padding: 15px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 14px; }
-        .content { flex: 1; overflow-y: auto; padding: 15px; }
+        /* HEADER v50/v70 */
+        .header { padding: 10px; border-bottom: 2px solid #222; background: #000; position: sticky; top: 0; z-index: 100; }
+        .logo { color: var(--neon); font-size: 20px; font-weight: bold; text-align: center; text-shadow: 0 0 10px var(--neon); }
+        
+        .dash-v70 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin: 10px 0; }
+        .card { background: #0a0a0a; border: 1px solid #333; padding: 10px 2px; text-align: center; }
+        .card b { display: block; font-size: 22px; color: var(--neon); }
+        .card span { font-size: 8px; color: #666; }
 
-        /* Blocos de Dados */
-        .card { background: #0a0a0a; border: 1px solid #222; padding: 12px; border-radius: 5px; margin-bottom: 10px; }
-        .line-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #111; font-size: 12px; }
-        
-        /* Inputs Estilo Terminal */
-        input, select { width: 100%; padding: 12px; background: #111; border: 1px solid #333; color: var(--p); margin-bottom: 10px; border-radius: 3px; font-weight: bold; }
-        .btn { width: 100%; padding: 15px; border: none; border-radius: 3px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
-        .btn-p { background: var(--p); color: #000; }
-        .btn-s { background: var(--s); color: #000; }
-        
-        /* Auditoria/WMS */
-        table { width: 100%; border-collapse: collapse; font-size: 11px; }
-        th { text-align: left; color: #555; padding: 5px; }
-        td { padding: 8px 5px; border-bottom: 1px solid #111; }
-        .tag { font-size: 9px; padding: 2px 4px; border-radius: 2px; font-weight: bold; }
-        .t-ent { background: #003311; color: var(--p); }
-        .t-sai { background: #331100; color: var(--s); }
+        /* SEPARAÇÃO v40/v71 (O QUE ESTAVA FALTANDO) */
+        .area-separacao { background: #080808; border: 1px solid var(--warn); margin: 10px; padding: 10px; border-radius: 4px; max-height: 150px; overflow-y: auto; }
+        .item-sep { display: flex; justify-content: space-between; border-bottom: 1px solid #222; padding: 8px 0; font-size: 12px; }
+        .item-sep b { color: var(--warn); font-size: 14px; }
 
-        #reader { width: 100%; background: #000; border-radius: 5px; }
+        /* BOTÕES v30/v73 */
+        .grid-btns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; padding: 0 10px; }
+        .btn { padding: 15px 5px; border: 1px solid #444; font-weight: bold; cursor: pointer; font-size: 10px; border-radius: 4px; }
+        .btn-ent { background: #002200; color: var(--neon); border-color: var(--neon); }
+        .btn-sep { background: #221100; color: var(--warn); border-color: var(--warn); }
+        .btn-sai { background: #220000; color: var(--danger); border-color: var(--danger); }
+
+        /* TABELA v72/v73 (500 LINHAS) */
+        .container-v70 { height: calc(100vh - 420px); overflow-y: auto; background: #020202; margin-top: 10px; }
+        table { width: 100%; border-collapse: collapse; font-size: 10px; }
+        th { background: #111; color: #444; padding: 10px; text-align: left; position: sticky; top: 0; }
+        td { padding: 10px; border-bottom: 1px solid #111; color: #aaa; }
+        tr:nth-child(even) { background: #050505; }
+
+        .input-v72 { width: 95%; padding: 12px; background: #0a0a0a; border: 1px solid #333; color: var(--neon); margin: 10px 2.5%; box-sizing: border-box; outline: none; }
     </style>
 </head>
 <body onload="init()">
 
-<div id="scr-login" class="screen active" style="justify-content:center; align-items:center;">
-    <div style="width:80%; text-align:center;">
-        <h2 style="color:var(--p); letter-spacing:5px;">LOG-PRO</h2>
-        <input type="text" id="user" placeholder="USUÁRIO">
-        <input type="password" id="pass" placeholder="SENHA">
-        <button class="btn btn-p" onclick="auth()">LOG-IN</button>
+<div class="header">
+    <div class="logo">LOG-PRO SHARK v73</div>
+    <div class="dash-v70">
+        <div class="card"><b id="d-sku">0</b><span>SKUS B18</span></div>
+        <div class="card"><b id="d-mov">0</b><span>BIPES</span></div>
+        <div class="card"><b id="d-pen" style="color:var(--warn)">0</b><span>ORDENS</span></div>
+    </div>
+    <div class="grid-btns">
+        <button class="btn btn-ent" onclick="lancar('ENTRADA')">ENTRADA</button>
+        <button class="btn btn-sep" onclick="lancarDemanda()">NOVA ORDEM</button>
+        <button class="btn btn-sai" onclick="lancar('SAIDA')">SAÍDA</button>
     </div>
 </div>
 
-<div id="scr-op" class="screen">
-    <header><span>OP: <span id="n-op"></span></span> <button onclick="logout()">SAIR</button></header>
-    <div class="content">
-        <div class="card">
-            <div style="color:var(--s); font-size:10px; margin-bottom:10px;">ORDENS DE SEPARAÇÃO</div>
-            <div id="list-op"></div>
+<div class="area-separacao" id="lista-separacao">
+    <div style="color:var(--warn); font-size:10px; text-align:center; margin-bottom:5px;">⚠️ LISTA DE SEPARAÇÃO ATIVA (ABATER NO BIPE)</div>
+    <div id="itens-pendentes">
         </div>
-        <div id="reader"></div>
-        <button class="btn btn-p" id="b-cam" onclick="toggleCam()" style="margin-top:10px;">LER CÓDIGO</button>
-        <div style="display:flex; gap:5px; margin-top:10px;">
-            <select id="m-op" style="flex:2;"><option value="SAIDA">SAÍDA</option><option value="ENTRADA">ENTRADA</option></select>
-            <input type="number" id="q-op" value="1" style="flex:1; text-align:center;">
-        </div>
-    </div>
 </div>
 
-<div id="scr-shark" class="screen">
-    <header><span>WMS SHARK</span> <button onclick="logout()">SAIR</button></header>
-    <div class="content">
-        <div class="card">
-            <textarea id="inp-list" placeholder="CÓDIGO, QUANTIDADE" style="width:100%; background:#000; color:var(--s); border:1px solid #222; padding:10px;"></textarea>
-            <button class="btn btn-s" onclick="sendOrder()" style="margin-top:5px; padding:10px;">ENVIAR PARA CAMPO</button>
-        </div>
-        
-        <div style="display:flex; gap:5px; margin-bottom:15px;">
-            <button class="btn btn-p" style="padding:10px;" onclick="ir('scr-base')">BASE DE ITENS</button>
-            <button class="btn btn-p" style="padding:10px;" onclick="exportar()">EXPORTAR</button>
-        </div>
+<input type="text" id="filtro" class="input-v72" placeholder="🔍 FILTRAR NAS 500 LINHAS..." onkeyup="filtrar()">
 
-        <div class="card">
-            <table>
-                <thead><tr><th>ITEM</th><th>SALDO</th><th>STATUS</th></tr></thead>
-                <tbody id="tb-stock"></tbody>
-            </table>
-        </div>
-
-        <div style="color:#444; font-size:10px; margin:15px 0 5px 0;">AUDITORIA DE MOVIMENTOS</div>
-        <div class="card">
-            <table id="tb-audit"></table>
-        </div>
-    </div>
-</div>
-
-<div id="scr-base" class="screen">
-    <header><span>CADASTRO MESTRE</span> <button onclick="ir('scr-shark')">VOLTAR</button></header>
-    <div class="content">
-        <textarea id="imp-txt" style="width:100%; height:300px; background:#111; color:var(--p); border:1px solid #333;" placeholder="COD, NOME DO PRODUTO"></textarea>
-        <button class="btn btn-p" onclick="saveBase()" style="margin-top:10px;">SALVAR BASE B18</button>
-    </div>
+<div class="container-v70">
+    <table>
+        <thead>
+            <tr><th>HORA</th><th>OP</th><th>TIPO</th><th>PRODUTO</th><th>QTD</th><th>SALDO</th></tr>
+        </thead>
+        <tbody id="corpo-v70"></tbody>
+    </table>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit, setDoc, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit, doc, updateDoc, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    const config = { apiKey: "AIzaSyDRDhONvvzZmo2csXksqHs6E6vV3MuvLSs", authDomain: "log-pro-jp.firebaseapp.com", projectId: "log-pro-jp", storageBucket: "log-pro-jp.firebasestorage.app", messagingSenderId: "481645607846", appId: "1:481645607846:web:fd55dd943718ad78386d67" };
-    const app = initializeApp(config);
+    const cfg = { apiKey: "AIzaSyDRDhONvvzZmo2csXksqHs6E6vV3MuvLSs", authDomain: "log-pro-jp.firebaseapp.com", projectId: "log-pro-jp", storageBucket: "log-pro-jp.firebasestorage.app", messagingSenderId: "481645607846", appId: "1:481645607846:web:fd55dd943718ad78386d67" };
+    const app = initializeApp(cfg);
     const db = getFirestore(app);
-    
-    let BASE = JSON.parse(localStorage.getItem('JP_BASE')) || {};
-    let user = localStorage.getItem('JP_USER') || "";
-    let scan, cam = false;
 
-    // Monitor de Ordens (Simplificado v73)
-    onSnapshot(collection(db, "separacao"), (s) => {
-        let h = ""; s.docs.forEach(d => {
-            const p = d.data(); const f = p.qtd_p - p.qtd_f;
-            if(f > 0) h += `<div class="line-item"><span>${p.nome}</span> <b style="color:var(--s)">FALTA ${f}</b></div>`;
+    let BASE = JSON.parse(localStorage.getItem('LP_v73_B')) || {};
+
+    // v73: MONITOR DE 500 LINHAS + SALDO B18
+    onSnapshot(query(collection(db, "logs"), orderBy("data_hora", "desc"), limit(500)), (sn) => {
+        const movs = sn.docs.map(d => d.data());
+        let sld = {}; Object.keys(BASE).forEach(k => sld[k] = 0);
+        [...movs].reverse().forEach(m => { if(sld[m.c] !== undefined) m.t === 'ENTRADA' ? sld[m.c]+=m.q : sld[m.c]-=m.q; });
+
+        let h = "";
+        movs.forEach(m => {
+            const s = sld[m.c] || 0;
+            h += `<tr class="item-row">
+                <td style="color:#444">${m.d_s}</td>
+                <td style="color:var(--neon)">${m.op || 'PAI'}</td>
+                <td style="color:${m.t==='ENTRADA'?'#00ff41':'#ff3b30'}">${m.t}</td>
+                <td>${BASE[m.c] || m.c}</td>
+                <td><b>${m.q}</b></td>
+                <td style="color:#fff">${s}</td>
+            </tr>`;
         });
-        document.getElementById('list-op').innerHTML = h || "SEM PENDÊNCIAS";
+        document.getElementById('corpo-v70').innerHTML = h;
+        document.getElementById('d-sku').innerText = Object.keys(BASE).length;
+        document.getElementById('d-mov').innerText = movs.length;
     });
 
-    // Auditoria e Estoque
-    onSnapshot(query(collection(db, "logs"), orderBy("data_hora", "desc"), limit(50)), (sn) => {
-        const logs = sn.docs.map(d => d.data());
-        let sld = {}; Object.keys(BASE).forEach(k => sld[k] = { n: BASE[k], s: 0 });
-        let hA = "";
-        logs.forEach(m => {
-            if(sld[m.c]) m.t === 'ENTRADA' ? sld[m.c].s += m.q : sld[m.c].s -= m.q;
-            hA += `<tr><td>${m.d_s}</td><td>${m.op}</td><td><span class="tag ${m.t==='ENTRADA'?'t-ent':'t-sai'}">${m.t}</span></td><td>${m.n}</td><td>${m.q}</td></tr>`;
+    // v40/v71: MONITOR DE SEPARAÇÃO (ALERTA)
+    onSnapshot(collection(db, "separacao"), (sn) => {
+        let h = ""; let p = 0;
+        sn.docs.forEach(d => {
+            const m = d.data();
+            const falta = m.qtd_p - m.qtd_f;
+            if(falta > 0) {
+                h += `<div class="item-sep"><span>${m.nome}</span><b>${falta} UN</b></div>`;
+                p++;
+            }
         });
-        document.getElementById('tb-audit').innerHTML = hA;
-        document.getElementById('tb-stock').innerHTML = Object.keys(sld).map(k => `<tr><td>${sld[k].n}</td><td>${sld[k].s}</td><td><span class="tag ${sld[k].s>0?'t-ent':'t-sai'}">${sld[k].s>0?'OK':'OFF'}</span></td></tr>`).join('');
+        document.getElementById('itens-pendentes').innerHTML = h || "<center style='color:#333'>NENHUMA ORDEM ATIVA</center>";
+        document.getElementById('d-pen').innerText = p;
     });
 
-    window.bipe = async (cod) => {
-        let c = cod.trim(); const q = parseInt(document.getElementById('q-op').value) || 1;
-        const m = document.getElementById('m-op').value;
-        if(!BASE[c]) { const n = prompt("NOME:"); if(n) BASE[c]=n.toUpperCase(); else return; }
-        
-        await addDoc(collection(db, "logs"), { c, n: BASE[c], t: m, q, op: user, data_hora: serverTimestamp(), d_s: new Date().toLocaleTimeString() });
-        if(m === "SAIDA") {
-            const r = doc(db, "separacao", c); const d = await getDoc(r);
-            if(d.exists()) await updateDoc(r, { qtd_f: d.data().qtd_f + q });
+    window.lancarDemanda = async () => {
+        const c = prompt("SKU PARA SEPARAR:");
+        const q = prompt("QUANTIDADE TOTAL:");
+        if(c && q) {
+            await setDoc(doc(db, "separacao", c), { nome: BASE[c]||c, qtd_p: parseInt(q), qtd_f: 0 });
+            alert("ORDEM LANÇADA!");
         }
-        localStorage.setItem('JP_BASE', JSON.stringify(BASE));
     };
 
-    window.sendOrder = async () => {
-        const lines = document.getElementById('inp-list').value.split('\n');
-        for(let l of lines) {
-            const [c, q] = l.split(',');
-            if(c && q) await setDoc(doc(db, "separacao", c.trim()), { cod: c.trim(), nome: BASE[c.trim()] || "ITEM "+c, qtd_p: parseInt(q), qtd_f: 0 });
+    window.lancar = async (t) => {
+        const c = prompt("SKU:"); const q = prompt("QTD:");
+        if(c && q) {
+            if(navigator.vibrate) navigator.vibrate(50); // v30
+            await addDoc(collection(db, "logs"), { c, t, q: parseInt(q), op: "PAI", data_hora: serverTimestamp(), d_s: new Date().toLocaleTimeString() });
+            
+            // LÓGICA DE ABATE v71: Se for SAÍDA, abate da separação automaticamente
+            if(t === 'SAIDA') {
+                const ref = doc(db, "separacao", c);
+                const d = await getDoc(ref);
+                if(d.exists()) await updateDoc(ref, { qtd_f: d.data().qtd_f + parseInt(q) });
+            }
         }
-        alert("ENVIADO!"); document.getElementById('inp-list').value = "";
     };
 
-    window.auth = () => {
-        const u = document.getElementById('user').value.toUpperCase();
-        const p = document.getElementById('pass').value;
-        if((u==="JP"||u==="SHARK")&&p==="9910" || (u==="OP"&&p==="1234")) { user=u; localStorage.setItem('JP_USER', u); location.reload(); }
+    window.filtrar = () => {
+        const f = document.getElementById('filtro').value.toUpperCase();
+        document.querySelectorAll('.item-row').forEach(r => r.style.display = r.innerText.toUpperCase().includes(f) ? "" : "none");
     };
-
-    window.toggleCam = async () => {
-        if(!cam) { scan = new Html5Qrcode("reader"); await scan.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, (t)=>bipe(t)); cam=true; }
-        else { await scan.stop(); cam=false; }
-    };
-
-    window.saveBase = () => {
-        document.getElementById('imp-txt').value.split('\n').forEach(l => { const d = l.split(','); if(d[0] && d[1]) BASE[d[0].trim()] = d[1].trim().toUpperCase(); });
-        localStorage.setItem('JP_BASE', JSON.stringify(BASE)); alert("BASE ATUALIZADA!");
-    };
-
-    window.ir = (id) => { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); };
-    window.logout = () => { localStorage.clear(); location.reload(); };
-    window.exportar = () => { window.print(); };
-    window.init = () => { if(user) { ir(user === 'OP' ? 'scr-op' : 'scr-shark'); document.getElementById('n-op').innerText = user; } };
 </script>
 </body>
-    </html>
-    
+        </html>
+        
