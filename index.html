@@ -3,83 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LOG-PRO v74.3 | JP MASTER</title>
+    <title>LOG-PRO v76 | JP MASTER</title>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #00ff41; --bg: #000; --border: #222; --sep: #ffae00; --danger: #ff3b30; }
+        :root { --primary: #00ff41; --bg: #000; --border: #222; --sep: #888; --danger: #ff3b30; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; text-transform: uppercase; font-size: 10px; height: 100vh; overflow: hidden; }
         .screen { display: none; position: absolute; width: 100%; height: 100%; flex-direction: column; background: #000; z-index: 10; }
         .active { display: flex !important; }
         header { padding: 12px; border-bottom: 1px solid #111; display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron'; background: #050505; }
         .scroll { flex: 1; overflow-y: auto; padding: 10px; padding-bottom: 150px; }
-        .stats { display: flex; gap: 8px; padding: 10px; background: #080808; border-bottom: 1px solid #111; }
-        .card { flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 4px; text-align: center; }
-        .card span { display: block; font-size: 14px; color: var(--primary); font-family: 'Orbitron'; }
-        .export-bar { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; padding: 10px; background: #050505; border-bottom: 1px solid #222; }
-        .btn-exp { padding: 12px; border: none; font-family: 'Orbitron'; font-size: 7px; font-weight: 900; border-radius: 4px; cursor: pointer; }
-        .table-wrapper { border: 1px solid var(--border); border-radius: 6px; overflow-x: auto; background: #080808; margin-bottom: 15px; }
-        table { width: 100%; border-collapse: collapse; min-width: 450px; }
-        th { background: #111; color: #555; padding: 8px; text-align: left; font-size: 7px; border-bottom: 1px solid #222; }
-        td { padding: 8px; border-bottom: 1px solid #151515; white-space: nowrap; font-size: 9px; }
-        .btn-green { width: 100%; padding: 15px; background: var(--primary); color: #000; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 4px; cursor: pointer; }
+        .btn-green { width: 100%; padding: 15px; background: var(--primary); color: #000; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 4px; cursor: pointer; margin-bottom: 5px; }
         input, select, textarea { width: 100%; padding: 12px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; font-family: 'Orbitron'; margin-bottom: 8px; box-sizing: border-box; }
+        .table-wrapper { border: 1px solid var(--border); border-radius: 6px; overflow-x: auto; background: #080808; margin-bottom: 15px; }
+        table { width: 100%; border-collapse: collapse; min-width: 500px; }
+        th { background: #111; color: #555; padding: 8px; text-align: left; font-size: 7px; }
+        td { padding: 8px; border-bottom: 1px solid #151515; font-size: 9px; }
         #reader { width: 100%; border-radius: 8px; overflow: hidden; border: 2px solid #222; }
-        #btn-torch { position: fixed; bottom: 85px; right: 20px; width: 50px; height: 50px; border-radius: 50%; background: var(--sep); border: none; display: none; z-index: 100; font-size: 20px; box-shadow: 0 0 15px var(--sep); }
     </style>
 </head>
 <body onload="init()">
 
 <div id="scr-login" class="screen active" style="align-items:center; justify-content:center;">
-    <div style="font-family:'Orbitron'; color:var(--primary); font-size:35px; text-align:center;">LOG-PRO<br><span style="font-size:10px; color:#444;">PENTE-FINO OK</span></div>
+    <div style="font-family:'Orbitron'; color:var(--primary); font-size:35px;">LOG-PRO v76</div>
     <div style="width: 80%; max-width: 300px; margin-top:30px;">
-        <input type="text" id="user-name" placeholder="USUÁRIO">
+        <input type="text" id="user-name" placeholder="USUARIO">
         <input type="password" id="pass" placeholder="CHAVE">
-        <button class="btn-green" onclick="auth()">ACESSAR SISTEMA</button>
+        <button class="btn-green" onclick="auth()">ENTRAR</button>
     </div>
 </div>
 
 <div id="scr-shark" class="screen">
-    <header><span id="shark-title" style="color:var(--primary)">GESTOR</span> <button onclick="logout()" style="color:var(--danger); background:none; border:none; font-size:8px;">LOGOUT</button></header>
-    <div class="export-bar">
-        <button onclick="exportar('print')" class="btn-exp" style="background:#fff; color:#000;">🖨️ IMPRIMIR</button>
-        <button onclick="finalizarLista()" class="btn-exp" style="background:var(--danger); color:#fff;">✅ ZERAR LISTA</button>
-        <button onclick="exportar('pdf')" class="btn-exp" style="background:#222; color:var(--primary);">📄 ROMANEIO</button>
-    </div>
-    <div class="stats"><div class="card">SKUS <span id="stat-total">0</span></div><div class="card">PENDENTE <span id="stat-pedidos">0</span></div></div>
+    <header><span style="color:var(--primary)">GESTOR SHARK</span> <button onclick="logout()">SAIR</button></header>
     <div class="scroll">
-        <h3>SUBIR LISTA DE SEPARAÇÃO</h3>
-        <textarea id="list-input" placeholder="COD, QTD (Ex: 001, 10)" style="height:60px;"></textarea>
-        <button class="btn-green" style="background:var(--sep); margin-bottom:15px;" onclick="enviarListaSeparacao()">ENVIAR PARA OPERADOR</button>
-        <h3>HISTÓRICO REAL-TIME</h3>
-        <div class="table-wrapper"><table><thead><tr><th>HORA</th><th>OP</th><th>ETAPA</th><th>ITEM</th><th>QTD</th></tr></thead><tbody id="audit-body"></tbody></table></div>
-        <h3>SALDO ATUAL</h3>
-        <div class="table-wrapper"><table><thead><tr><th>COD</th><th>NOME</th><th>SALDO</th></tr></thead><tbody id="stock-body"></tbody></table></div>
+        <h3>LANÇAR CARGA / MOTORISTA</h3>
+        <input type="text" id="mot-info" placeholder="PLACA / MOTORISTA">
+        <input type="text" id="regiao-info" placeholder="ENDERECO / REGIAO (EX: SUL 01)">
+        <textarea id="list-input" placeholder="COPIAR E COLAR: COD, QTD" style="height:60px;"></textarea>
+        <input type="file" id="file-csv" accept=".csv" style="display:none" onchange="importarCSV(this)">
+        <div style="display:flex; gap:5px;">
+            <button class="btn-green" style="background:#222; color:#fff; flex:1;" onclick="document.getElementById('file-csv').click()">IMPORTAR</button>
+            <button class="btn-green" style="flex:2;" onclick="enviarCarga()">ENVIAR CARGA</button>
+        </div>
+        
+        <h3>AUDITORIA E RELATORIO</h3>
+        <button class="btn-green" style="background:var(--primary); color:#000;" onclick="exportarRelatorio()">EXTRAIR PLANILHA COMPLETA</button>
+        <button class="btn-green" style="background:var(--danger); color:#fff;" onclick="finalizarLista()">LIMPAR TUDO</button>
+        
+        <div class="table-wrapper">
+            <table><thead><tr><th>HORA</th><th>OP</th><th>TIPO</th><th>MOTORISTA</th><th>ITEM</th><th>QTD</th><th>REGIAO</th></tr></thead>
+            <tbody id="audit-body"></tbody></table>
+        </div>
     </div>
 </div>
 
 <div id="scr-op" class="screen">
-    <header><span id="display-user">OPERADOR</span> <button onclick="logout()" style="color:var(--danger); background:none; border:none; font-size:8px;">SAIR</button></header>
+    <header><span id="display-user">OPERADOR</span> <button onclick="logout()">SAIR</button></header>
     <div class="scroll">
-        <div id="box-picking" style="border: 2px solid var(--sep); padding:10px; border-radius:5px; margin-bottom:15px; background: #120e00;">
-            <h4 style="color:var(--sep); margin:0 0 8px 0;">📦 LISTA PARA SEPARAR:</h4>
-            <div id="op-list-picking" style="font-size:11px;">Aguardando...</div>
+        <div id="box-picking" style="border: 1px solid var(--primary); padding:10px; background:#050505; margin-bottom:10px;">
+            <h4 style="color:var(--primary); margin:0;">CARGA ATIVA:</h4>
+            <div id="mot-display" style="font-size:12px; color:var(--primary); margin-bottom:5px;"></div>
+            <div id="op-list-picking"></div>
         </div>
-        <div style="display:flex; gap:5px;">
-            <select id="mod-op" style="flex:2;">
-                <option value="ENTRADA">📥 ENTRADA</option>
-                <option value="SEPARACAO">📦 SEPARAÇÃO</option>
-                <option value="SAIDA">🚚 SAÍDA</option>
-            </select>
-            <input type="number" id="qtd-bipe" value="1" style="flex:0.6; text-align:center;">
-        </div>
+        <select id="mod-op">
+            <option value="ENTRADA">ENTRADA</option>
+            <option value="SEPARACAO">SEPARACAO (PRE-SAIDA)</option>
+            <option value="SAIDA">SAIDA (CONFERENCIA MOTORISTA)</option>
+        </select>
+        <input type="number" id="qtd-bipe" value="1" style="text-align:center;">
         <div id="reader"></div>
-        <button class="btn-green" id="btn-cam" onclick="toggleCamera()" style="margin:10px 0;">ATIVAR CÂMERA</button>
-        <div id="op-audit-body" style="font-size:9px; color:#555; height:80px; overflow:auto;"></div>
+        <button class="btn-green" onclick="toggleCamera()">ABRIR SCANNER</button>
+        <div id="op-audit-body" style="color:#555; font-size:9px;"></div>
     </div>
 </div>
-
-<button id="btn-torch" onclick="toggleTorch()">🔦</button>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -96,98 +92,111 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-
     let BASE = JSON.parse(localStorage.getItem('LP_BASE')) || {};
     let MOVS = [];
     let currentUser = localStorage.getItem('LP_SESSION') || "";
-    let scanner, camOn = false, torchOn = false, track;
+    let scanner, camOn = false;
 
-    onSnapshot(query(collection(db, "logs"), orderBy("data_hora", "desc"), limit(50)), (snap) => {
+    // Escuta Logs
+    onSnapshot(query(collection(db, "logs"), orderBy("data_hora", "desc"), limit(100)), (snap) => {
         MOVS = snap.docs.map(d => d.data());
         render();
     });
 
+    // Escuta Lista de Separação
     onSnapshot(collection(db, "separacao"), (s) => {
-        let hO = ""; let count = 0;
+        let h = "";
         s.docs.forEach(d => {
             const p = d.data(); const falta = p.qtd_pedida - p.qtd_feita;
-            if(falta > 0) { hO += `<div style="padding:6px; border-bottom:1px solid #222;">🚀 <b>${p.nome}</b>: FALTAM <span style="color:var(--sep)">${falta}</span></div>`; count++; }
+            if(falta > 0) h += `<div style='border-bottom:1px solid #222; padding:5px;'>[${p.regiao || 'GERAL'}] ${p.nome} - FALTAM: ${falta}</div>`;
+            if(p.motorista) document.getElementById('mot-display').innerText = "MOTORISTA: " + p.motorista;
         });
-        document.getElementById('op-list-picking').innerHTML = hO || "TUDO OK! ✅";
-        document.getElementById('stat-pedidos').innerText = count;
+        document.getElementById('op-list-picking').innerHTML = h || "SEM PENDENCIAS";
     });
 
-    window.render = () => {
-        let saldos = {};
-        Object.keys(BASE).forEach(k => saldos[k] = { n: BASE[k], s: 0 });
-        let htmlHist = "";
-        MOVS.forEach(m => {
-            if(saldos[m.cod]) { m.t === 'ENTRADA' ? saldos[m.cod].s += m.q : saldos[m.cod].s -= m.q; }
-            htmlHist += `<tr><td>${m.d_str || ''}</td><td>${m.op}</td><td>${m.t}</td><td>${m.n}</td><td>${m.q}</td></tr>`;
-        });
-        document.getElementById('audit-body').innerHTML = htmlHist;
-        document.getElementById('stock-body').innerHTML = Object.keys(saldos).map(k => `<tr><td>${k}</td><td><b>${saldos[k].n}</b></td><td style="color:var(--primary)">${saldos[k].s}</td></tr>`).join('');
-        document.getElementById('stat-total').innerText = Object.keys(BASE).length;
+    window.enviarCarga = async () => {
+        const mot = document.getElementById('mot-info').value.toUpperCase();
+        const reg = document.getElementById('regiao-info').value.toUpperCase();
+        const linhas = document.getElementById('list-input').value.split('\n');
+        
+        for(let l of linhas) {
+            const [cod, qtd] = l.split(',');
+            if(cod && qtd) {
+                const c = cod.trim();
+                await setDoc(doc(db, "separacao", c), { 
+                    cod:c, nome:BASE[c]||"ITEM "+c, qtd_pedida:parseInt(qtd), 
+                    qtd_feita:0, motorista:mot, regiao:reg 
+                });
+            }
+        }
+        alert("CARGA ENVIADA!");
+    };
+
+    window.importarCSV = (input) => {
+        const reader = new FileReader();
+        reader.onload = () => { document.getElementById('list-input').value = reader.result; };
+        reader.readAsText(input.files[0]);
     };
 
     window.processar = async (cod) => {
         let c = cod.trim(); const q = parseInt(document.getElementById('qtd-bipe').value) || 1;
-        if(!BASE[c]) { const n = prompt("PRODUTO NOVO! NOME:"); if(n) { BASE[c]=n.toUpperCase(); localStorage.setItem('LP_BASE', JSON.stringify(BASE)); } else return; }
-        const mov = { cod:c, n:BASE[c], t:document.getElementById('mod-op').value, q:q, op:currentUser, data_hora:serverTimestamp(), d_str:new Date().toLocaleTimeString() };
+        if(!BASE[c]) { const n = prompt("NOME DO ITEM:"); if(n) { BASE[c]=n.toUpperCase(); localStorage.setItem('LP_BASE', JSON.stringify(BASE)); } else return; }
+        
+        // Busca motorista e regiao ativos da lista
+        const sepRef = doc(db, "separacao", c);
+        const ds = await getDoc(sepRef);
+        const motAtivo = ds.exists() ? ds.data().motorista : "AVULSO";
+        const regAtiva = ds.exists() ? ds.data().regiao : "GERAL";
+
+        const mov = { 
+            cod:c, n:BASE[c], t:document.getElementById('mod-op').value, 
+            q:q, op:currentUser, motorista:motAtivo, regiao:regAtiva,
+            data_hora:serverTimestamp(), d_str:new Date().toLocaleTimeString() 
+        };
+        
         await addDoc(collection(db, "logs"), mov);
-        if(mov.t === "SEPARACAO") {
-            const sepRef = doc(db, "separacao", c); const ds = await getDoc(sepRef);
-            if(ds.exists()) await updateDoc(sepRef, { qtd_feita: ds.data().qtd_feita + q });
-        }
-        document.getElementById('op-audit-body').innerHTML = `BIPADO: ${mov.n} (${q})<br>` + document.getElementById('op-audit-body').innerHTML;
+        if(mov.t === "SEPARACAO" && ds.exists()) await updateDoc(sepRef, { qtd_feita: ds.data().qtd_feita + q });
+        document.getElementById('op-audit-body').innerHTML = `BIPADO: ${mov.n}<br>` + document.getElementById('op-audit-body').innerHTML;
     };
 
-    window.enviarListaSeparacao = async () => {
-        const linhas = document.getElementById('list-input').value.split('\n');
-        for(let l of linhas) {
-            const [cod, qtd] = l.split(',');
-            if(cod && qtd) { const c = cod.trim(); await setDoc(doc(db, "separacao", c), { cod:c, nome:BASE[c]||"ITEM "+c, qtd_pedida:parseInt(qtd), qtd_feita:0 }); }
-        }
-        document.getElementById('list-input').value = ""; alert("LISTA ENVIADA!");
+    window.render = () => {
+        let h = "";
+        MOVS.forEach(m => {
+            h += `<tr><td>${m.d_str}</td><td>${m.op}</td><td>${m.t}</td><td>${m.motorista || ''}</td><td>${m.n}</td><td>${m.q}</td><td>${m.regiao || ''}</td></tr>`;
+        });
+        document.getElementById('audit-body').innerHTML = h;
     };
 
-    window.finalizarLista = async () => {
-        if(confirm("ZERAR LISTA DE SEPARAÇÃO?")) {
-            const s = await getDocs(collection(db, "separacao"));
-            s.forEach(async (d) => await deleteDoc(doc(db, "separacao", d.id)));
-        }
-    };
-
-    window.toggleTorch = async () => { if(track) { torchOn = !torchOn; await track.applyConstraints({advanced:[{torch:torchOn}]}); } };
-
-    window.toggleCamera = async () => {
-        if(!camOn) { 
-            scanner = new Html5Qrcode("reader"); 
-            await scanner.start({ facingMode: "environment" }, { fps: 20, qrbox: 250 }, (t)=>processar(t)); 
-            camOn=true; document.getElementById('btn-torch').style.display = 'block'; track = scanner.getRunningTrack();
-        } else { await scanner.stop(); camOn=false; document.getElementById('btn-torch').style.display = 'none'; }
+    window.exportarRelatorio = () => {
+        let csv = "HORA,OPERADOR,TIPO,MOTORISTA,ITEM,QTD,REGIAO\n";
+        MOVS.forEach(m => { csv += `${m.d_str},${m.op},${m.t},${m.motorista},${m.n},${m.q},${m.regiao}\n`; });
+        const blob = new Blob([csv], {type: 'text/csv'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `LOGPRO_${new Date().toLocaleDateString()}.csv`;
+        a.click();
     };
 
     window.auth = () => {
         const u = document.getElementById('user-name').value.toUpperCase().trim();
-        const p = document.getElementById('pass').value.trim();
-        if((u==="JP"||u==="SHARK")&&p==="9910" || u==="OP"&&p==="1234") { currentUser=u; localStorage.setItem('LP_SESSION',u); logarNaTela(); }
-        else alert("CHAVE INCORRETA");
+        const p = document.getElementById('pass').value;
+        if((u==="JP"||u==="SHARK")&&p==="9910" || u==="OP"&&p==="1234") { 
+            currentUser=u; localStorage.setItem('LP_SESSION',u); location.reload(); 
+        } else alert("ERRO");
     };
 
-    window.logarNaTela = () => {
-        document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-        if(currentUser!=="OP") document.getElementById('scr-shark').classList.add('active');
-        else document.getElementById('scr-op').classList.add('active');
-        document.getElementById('display-user').innerText = currentUser;
+    window.toggleCamera = async () => {
+        if(!camOn) { scanner = new Html5Qrcode("reader"); await scanner.start({ facingMode: "environment" }, { fps: 20, qrbox: 250 }, (t)=>processar(t)); camOn=true; }
+        else { await scanner.stop(); camOn=false; }
     };
 
     window.logout = () => { localStorage.removeItem('LP_SESSION'); location.reload(); };
-    window.init = () => { if(currentUser) logarNaTela(); render(); };
-    window.exportar = (tipo) => {
-        let txt = `ROMANEIO LOG-PRO - ${new Date().toLocaleString()}\n`;
-        MOVS.forEach(m => { txt += `${m.d_str} | ${m.op} | ${m.t} | ${m.n} | ${m.q}\n`; });
-        let w = window.open(); w.document.write(`<pre>${txt}</pre>`); w.print();
+    window.init = () => { 
+        if(currentUser) {
+            document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+            document.getElementById(currentUser === "OP" ? 'scr-op' : 'scr-shark').classList.add('active');
+            if(currentUser === "OP") document.getElementById('display-user').innerText = currentUser;
+        }
     };
 </script>
 </body>
