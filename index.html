@@ -3,175 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MECSHOP | Enterprise Ecosystem</title>
+    <title>MecShop Corporate v10</title>
     <script src="https://unpkg.com/html5-qrcode"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --red: #ea1d2c; --gold: #c5a059; --green: #00ff00; --dark: #050505; --card: #0d0d0d; --border: #1a1a1a; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--dark); color: #fff; font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; }
+        :root { --red: #ea1d2c; --gold: #c5a059; --dark: #0d0d0d; --card: #1a1a1a; --nu: #820ad1; --green: #25d366; }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--dark); color: #fff; font-family: 'Inter', sans-serif; height: 100vh; overflow: hidden; }
         
-        .screen { display: none; min-height: 100vh; flex-direction: column; animation: fadeIn 0.3s ease; }
+        .screen { display: none; height: 100vh; flex-direction: column; animation: fadeIn 0.3s ease; }
         .active { display: flex !important; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        header { padding: 20px; background: #000; border-bottom: 2px solid var(--red); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,0.8); }
-        .logo { font-family: 'Orbitron'; color: var(--red); font-size: 20px; letter-spacing: 3px; font-weight: 900; }
+        /* HEADER ESTILO CORPORATE */
+        header { padding: 18px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; background: #000; }
+        .logo-text { font-family: 'Orbitron'; color: #fff; font-size: 13px; letter-spacing: 1px; }
 
-        /* NOTIFICAÇÃO PUSH NIVEL IOS */
-        #push-note { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: rgba(15,15,15,0.95); backdrop-filter: blur(10px); border: 1px solid var(--border); border-left: 5px solid var(--red); padding: 15px; border-radius: 15px; z-index: 10000; transition: 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28); display: flex; align-items: center; gap: 12px; }
+        /* HUB - GRID IGUAL À IMAGEM */
+        .hub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; overflow-y: auto; }
+        .hub-card { background: var(--card); border-radius: 20px; padding: 25px; border: 1px solid #333; text-align: center; cursor: pointer; transition: 0.2s; }
+        .hub-card:active { transform: scale(0.95); border-color: var(--red); }
+        .hub-card i { font-size: 30px; display: block; margin-bottom: 10px; }
+        .hub-card span { font-family: 'Orbitron'; font-size: 9px; color: #fff; }
 
-        /* GRID SYSTEM (BLINDADO) */
-        .portal-grid { padding: 25px; display: grid; gap: 15px; }
-        .portal-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 30px 20px; cursor: pointer; transition: 0.2s; position: relative; overflow: hidden; }
-        .portal-card:active { transform: scale(0.97); background: #111; }
-        .portal-card::after { content: '→'; position: absolute; right: 20px; bottom: 20px; color: var(--red); font-weight: 900; }
-        .portal-card h2 { margin: 5px 0; font-family: 'Orbitron'; font-size: 14px; color: var(--red); }
-        .portal-card small { color: #555; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        /* SELETOR DE MODO (SHARK VS CLIENTE) */
+        .mode-selector { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 20px; padding: 25px; }
+        .mode-btn { width: 100%; padding: 25px; border-radius: 18px; border: 1px solid #444; background: #111; cursor: pointer; text-align: left; }
+        .mode-btn h2 { font-family: 'Orbitron'; font-size: 16px; margin-bottom: 5px; }
+        .mode-btn.shark { border-color: var(--gold); color: var(--gold); }
+        .mode-btn.user { border-color: var(--red); color: var(--red); }
 
-        .sub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 20px; overflow-y: auto; padding-bottom: 100px; }
-        .mod-btn { background: #080808; border: 1px solid var(--border); padding: 22px 10px; border-radius: 16px; text-align: center; font-size: 10px; font-weight: 900; color: #444; cursor: pointer; transition: 0.2s; }
-        .main-mod { border-color: var(--red) !important; color: #fff !important; box-shadow: 0 0 15px rgba(234, 29, 44, 0.1); }
-        .gold-mod { border-color: var(--gold) !important; color: var(--gold) !important; }
-
-        /* INTERFACES DE EXECUÇÃO */
-        .ui-panel { background: #000; border: 1px solid var(--border); border-radius: 30px; width: 100%; max-width: 360px; padding: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-        .btn-elite { width: 100%; padding: 18px; background: var(--red); color: #fff; border: none; border-radius: 15px; font-weight: 900; cursor: pointer; margin-top: 15px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
-        #reader { width: 100%; border-radius: 20px; border: 2px solid var(--red); display: none; margin-bottom: 20px; overflow: hidden; }
+        /* INTERFACES ESPECÍFICAS (MEC-BANK, ROTA, ETC) */
+        .content-area { flex: 1; padding: 20px; overflow-y: auto; }
         
-        /* MEC-BANK UI */
-        .bank-card { background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%); border: 1px solid var(--gold); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
-        .extrato-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #111; font-size: 11px; }
+        /* MEC-BANK STYLE */
+        .nu-card { background: var(--nu); padding: 25px; border-radius: 20px; margin-bottom: 15px; position: relative; }
+        .nu-card h2 { font-size: 22px; margin-top: 10px; }
+        
+        /* SERGEL/HOT-MEC STYLE (GRID DE PRODUTOS) */
+        .prod-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .prod-card { background: #1a1a1a; border-radius: 15px; padding: 10px; text-align: center; border: 1px solid #333; }
+        .prod-card img { width: 100%; border-radius: 10px; margin-bottom: 8px; }
+
+        /* SHARK DASHBOARD (GRÁFICOS) */
+        .chart-box { background: #111; border: 1px solid var(--gold); border-radius: 15px; padding: 15px; margin-bottom: 10px; }
+        .chart-line { height: 60px; border-bottom: 2px solid #333; position: relative; display: flex; align-items: flex-end; gap: 5px; padding-bottom: 5px; }
+        .bar { flex: 1; background: var(--gold); border-radius: 2px; }
+
+        .btn-action { width: 100%; padding: 18px; border-radius: 15px; border: none; font-weight: 800; font-family: 'Orbitron'; cursor: pointer; margin-top: 10px; text-transform: uppercase; font-size: 11px; }
+        #reader { width: 100%; border-radius: 20px; display: none; margin-bottom: 15px; border: 2px solid var(--red); }
     </style>
 </head>
-<body onload="init()">
+<body onload="checkSession()">
 
-<div id="push-note">
-    <div style="width:12px; height:12px; background:var(--red); border-radius:50%; animate: pulse 2s infinite;"></div>
-    <div style="flex:1"><b id="push-title" style="color:var(--red); font-size:10px; display:block">SISTEMA</b><span id="push-txt"></span></div>
+<div id="scr-login" class="screen active" style="justify-content:center; align-items:center; padding:30px;">
+    <div style="font-family:'Orbitron'; font-size:30px; margin-bottom:40px;">MecShop</div>
+    <input type="password" id="access-key" placeholder="ACCESS KEY 9910" style="width:100%; max-width:280px; padding:18px; background:#111; border:1px solid #333; color:#fff; border-radius:15px; text-align:center; font-family:'Orbitron';">
+    <button onclick="doLogin()" class="btn-action" style="background:var(--red); color:#fff; max-width:280px;">LOGIN</button>
 </div>
 
-<div id="scr-login" class="screen active" style="align-items:center; justify-content:center; padding:20px;">
-    <div class="logo" style="font-size:45px; margin-bottom:50px;">MECSHOP</div>
-    <div class="ui-panel" style="text-align:center;">
-        <small style="color:#444; font-weight:900;">SECURITY ACCESS</small>
-        <input type="password" id="pass" placeholder="MASTER KEY" style="width:100%; padding:20px; background:#080808; border:1px solid #1a1a1a; color:var(--red); border-radius:12px; text-align:center; font-family:'Orbitron'; font-size:20px; margin:20px 0;">
-        <button onclick="auth()" class="btn-elite">DECRYPT & ENTER</button>
-        <div style="display:flex; justify-content:space-between; margin-top:25px; font-size:10px; color:#333; font-weight:bold;">
-            <span onclick="alert('Recovery system active.')">FORGOT KEY</span>
-            <span onclick="alert('Enrollment via Admin Portal only.')">NEW PARTNER</span>
-        </div>
+<div id="scr-hub" class="screen">
+    <header><span class="logo-text">Corporate v10</span><button onclick="logout()" style="background:none; border:none; color:#fff; font-size:11px;">SAIR</button></header>
+    <div class="hub-grid">
+        <div class="hub-card" onclick="selectMod('bank', 'MEC-BANK')"><i style="color:var(--nu)">💳</i><span>MEC-BANK</span></div>
+        <div class="hub-card" onclick="selectMod('log', 'LOG-PRO WMS')"><i style="color:var(--gold)">📦</i><span>LOG-PRO WMS</span></div>
+        <div class="hub-card" onclick="selectMod('sergel', 'SERGEL DELIVERY')"><i style="color:#fff">🍦</i><span>SERGEL DELIVERY</span></div>
+        <div class="hub-card" onclick="selectMod('rota', 'ESTRATÉGIA ROTA')"><i style="color:var(--red)">📍</i><span>ESTRATÉGIA ROTA</span></div>
+        <div class="hub-card" onclick="selectMod('hot', 'HOT-MEC')"><i style="color:#007bff">📚</i><span>HOT-MEC</span></div>
+        <div class="hub-card" onclick="selectMod('bet', 'BET GAME')"><i style="color:var(--green)">🎰</i><span>GAMES & BET</span></div>
     </div>
 </div>
 
-<div id="scr-portais" class="screen">
-    <header><span class="logo">MECSHOP</span><div style="width:10px; height:10px; background:var(--green); border-radius:50%;"></div></header>
-    <div class="portal-grid">
-        <div class="portal-card" onclick="abrirPortal('fisico')"><small>Supply Chain</small><h2>LOG-PRO OPERATIONAL</h2></div>
-        <div class="portal-card" onclick="abrirPortal('online')"><small>Marketplace</small><h2>MAG SHOPPING V10</h2></div>
-        <div class="portal-card" onclick="abrirPortal('business')"><small>Financial</small><h2>MEC-BANK HOLDING</h2></div>
+<div id="scr-mode" class="screen">
+    <header><b id="mod-title" style="font-family:'Orbitron';"></b><button onclick="go('scr-hub')">VOLTAR</button></header>
+    <div class="mode-selector">
+        <div class="mode-btn shark" onclick="start('shark')"><h2>SHARK</h2><p>Performance Dashboard & Audit.</p></div>
+        <div class="mode-btn user" onclick="start('user')"><h2>OPERADOR / CLIENTE</h2><p>Direct Action & Terminal.</p></div>
     </div>
-</div>
-
-<div id="scr-sub" class="screen">
-    <header><div id="txt-p" style="color:var(--red); font-family:'Orbitron'; font-size:12px;"></div><button onclick="ir('scr-portais')" style="background:#111; color:#fff; border:none; padding:10px 15px; border-radius:10px; font-size:10px;">BACK</button></header>
-    <div class="sub-grid" id="cont-mods"></div>
 </div>
 
 <div id="scr-exec" class="screen">
-    <header><b id="txt-m" style="font-size:11px;"></b><button onclick="vSub()" style="background:#111; color:#fff; border:none; padding:10px 15px; border-radius:10px; font-size:10px;">EXIT</button></header>
-    <div id="render" style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px;"></div>
+    <header><b id="exec-title" style="font-size:11px; font-family:'Orbitron';"></b><button onclick="closeApp()">VOLTAR</button></header>
+    <div id="ui-body" class="content-area"></div>
 </div>
 
 <script>
-    let qr; 
-    let saldo = parseFloat(localStorage.getItem('MEC_SALDO')) || 45200.50;
-    let historico = JSON.parse(localStorage.getItem('MEC_HIST')) || [{ desc: "Initial Liquidity", valor: 45200.50, tipo: "in", date: "09/03" }];
+    let currentRole = "user";
+    let currentMod = "";
+    let qrcode = null;
 
-    const modulos = {
-        fisico: ["Log-Pro WMS", "Bipe Smart", "Real-Time Stock", "Load Master", "Thermal Sensor", "Scanner V2", "Point of Sale", "Sinc Engine", "Audit Shield", "Inbound Hub"],
-        online: ["Mag Shopping", "Affiliate Hot", "Mec-Bet Pro", "Logi-Uber API", "99 Fast Sinc", "Mec-Awards", "Checkout Pay", "External Sales", "Global Track", "Shark Club"],
-        business: ["Mec-Bank", "Holding View", "Core AI", "Digital HR", "Tax Control", "Ads Manager", "Mec-Invest", "Legal Shield", "Shark Score", "API Gateway"]
-    };
+    function doLogin() { if(document.getElementById('access-key').value === "9910") { localStorage.setItem('m_auth', '1'); go('scr-hub'); } }
+    function selectMod(id, name) { currentMod = id; document.getElementById('mod-title').innerText = name; go('scr-mode'); }
 
-    function sync() {
-        localStorage.setItem('MEC_SALDO', saldo);
-        localStorage.setItem('MEC_HIST', JSON.stringify(historico));
-    }
+    function start(role) {
+        currentRole = role;
+        document.getElementById('exec-title').innerText = `${currentMod.toUpperCase()} | ${role.toUpperCase()}`;
+        const body = document.getElementById('ui-body');
+        go('scr-exec');
 
-    function notify(title, msg) {
-        document.getElementById('push-title').innerText = title.toUpperCase();
-        document.getElementById('push-txt').innerText = msg;
-        document.getElementById('push-note').style.top = "20px";
-        setTimeout(() => { document.getElementById('push-note').style.top = "-100px"; }, 4000);
-    }
-
-    function abrirPortal(p) {
-        document.getElementById('txt-p').innerText = p.toUpperCase();
-        let html = "";
-        modulos[p].forEach((nome, i) => {
-            let cl = (i < 1) ? "main-mod" : "";
-            if(nome.match(/Bank|Bet|Shopping/)) cl += " gold-mod";
-            html += `<div class="mod-btn ${cl}" onclick="executar('${nome}')">MÓDULO ${String(i+1).padStart(2,'0')}<br>${nome}</div>`;
-        });
-        document.getElementById('cont-mods').innerHTML = html;
-        ir('scr-sub');
-    }
-
-    function executar(nome) {
-        document.getElementById('txt-m').innerText = nome;
-        let ui = document.getElementById('render');
-        ir('scr-exec');
-
-        if(nome === "Log-Pro WMS") {
-            ui.innerHTML = `<div class="ui-panel"><div id="reader"></div><button class="btn-elite" id="btnS" onclick="startScan()">ACTIVATE LOG-PRO SCAN</button><p style="font-size:9px; color:#333; margin-top:15px;">ENCRYPTED SCANNER V2.4</p></div>`;
-        } 
-        else if(nome === "Mag Shopping") {
-            ui.innerHTML = `<div class="ui-panel"><b style="color:var(--red)">SERGEL SORVETES V10</b><div style="background:#080808; padding:20px; border-radius:20px; margin:20px 0; border:1px solid #111;"><small>SKU: #8829</small><br><b style="font-size:22px;">SORVETE PREMIUM</b><br><br><span style="color:var(--green); font-weight:900; font-size:24px;">R$ 15,00</span></div><button class="btn-elite" onclick="processarVenda(15, 'Venda Sorvete Mag')">CONFIRM SALE</button></div>`;
-        }
-        else if(nome === "Mec-Bank") {
-            renderBank();
-        }
-        else if(nome === "Mec-Bet Pro") {
-            ui.innerHTML = `<div class="ui-panel" style="border-color:var(--green);"><b style="color:var(--green)">ALGORITMO MEC-BET</b><h1 style="font-size:45px; margin:10px 0;">2.50x</h1><button class="btn-elite" style="background:var(--green); color:#000;" onclick="processarVenda(250, 'Win Mec-Bet')">BET R$ 100</button></div>`;
-        }
-        else {
-            ui.innerHTML = `<div class="ui-panel"><h2>${nome}</h2><p style="color:#444; font-size:12px;">Módulo operacional e sincronizado via protocolo Mec-Sinc.</p><button class="btn-elite" onclick="alert('Executed.')">RUN DIAGNOSTIC</button></div>`;
+        if(role === 'shark') {
+            renderShark(body);
+        } else {
+            renderUser(body);
         }
     }
 
-    function processarVenda(valor, desc) {
-        saldo += valor;
-        historico.unshift({ desc: desc, valor: valor, tipo: "in", date: "09/03" });
-        sync();
-        notify("Transactional", `${desc} processada com sucesso!`);
-        alert("Transaction Encrypted & Confirmed.");
-    }
-
-    function renderBank() {
-        let h = historico.map(i => `<div class="extrato-item"><span>${i.desc}</span><b style="color:${i.tipo=='in'?'var(--green)':'var(--red)'}">${i.tipo=='in'?'+':'-'} R$ ${i.valor.toFixed(2)}</b></div>`).join('');
-        document.getElementById('render').innerHTML = `
-            <div class="ui-panel" style="border-color:var(--gold); text-align:left;">
-                <div class="bank-card"><small style="color:var(--gold)">TOTAL BALANCE</small><h1 style="margin:5px 0; font-size:32px;">R$ ${saldo.toFixed(2)}</h1><small>MEC-BANK HOLDING</small></div>
-                <small style="color:#444; font-weight:900;">LIVE FEED</small>
-                <div style="max-height:150px; overflow-y:auto; margin-top:10px;">${h}</div>
+    function renderShark(body) {
+        body.innerHTML = `
+            <div class="chart-box">
+                <small style="color:var(--gold)">BALANCE</small>
+                <h2 style="font-family:'Orbitron'">R$ 350.400,00</h2>
+            </div>
+            <div class="chart-box">
+                <small>PERFORMANCE DASHBOARD</small>
+                <div class="chart-line">
+                    <div class="bar" style="height:30%"></div><div class="bar" style="height:60%"></div><div class="bar" style="height:45%"></div>
+                    <div class="bar" style="height:90%"></div><div class="bar" style="height:70%"></div>
+                </div>
+            </div>
+            <div class="chart-box">
+                <p style="font-size:10px">AUDIT SHIELD: <span style="color:var(--green)">ACTIVE</span></p>
+                <p style="font-size:10px">ESTRATEGIA: <span style="color:var(--red)">HORTOLÂNDIA v10</span></p>
             </div>`;
     }
 
-    function startScan() {
-        document.getElementById('reader').style.display = 'block';
-        document.getElementById('btnS').style.display = 'none';
-        qr = new Html5Qrcode("reader");
-        qr.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, (txt) => {
-            notify("Log-Pro", `Item ${txt} bipado e conferido!`);
-            alert("BIPE CONFIRMADO: " + txt);
-        }).catch(() => alert("SSL Required for Camera. Use HTTPS."));
+    function renderUser(body) {
+        if(currentMod === 'bank') {
+            body.innerHTML = `
+                <div class="nu-card"><h4>nu</h4><h2>R$ 4.520,00</h2></div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <button class="btn-action" style="background:#222">PIX</button><button class="btn-action" style="background:#222">PAY</button>
+                </div>`;
+        } else if(currentMod === 'log') {
+            body.innerHTML = `<div id="reader"></div><button class="btn-action" style="background:var(--red)" onclick="startScan()">C79 SCANNER</button><div id="log-list" style="font-size:10px; margin-top:10px; color:var(--green)"></div>`;
+        } else if(currentMod === 'rota') {
+            body.innerHTML = `<div style="background:#111; height:200px; border-radius:20px; border:1px solid #333; display:flex; align-items:center; justify-content:center; color:#555">ESTRATÉGIA ROTA MAP</div><button class="btn-action" style="background:var(--red)">OTIMIZAR ROTA</button>`;
+        } else if(currentMod === 'sergel') {
+            body.innerHTML = `<div class="prod-grid">
+                <div class="prod-card"><div style="background:#333; height:80px; border-radius:10px; margin-bottom:5px"></div><b>SORVETE V10</b><button class="btn-action" style="background:var(--green)" onclick="zap()">WHATSAPP</button></div>
+                <div class="prod-card"><div style="background:#333; height:80px; border-radius:10px; margin-bottom:5px"></div><b>AÇAÍ V10</b><button class="btn-action" style="background:var(--green)" onclick="zap()">WHATSAPP</button></div>
+            </div>`;
+        } else if(currentMod === 'hot') {
+            body.innerHTML = `<h3>COURSES/E-BOOKS</h3><div class="stat" style="background:#111; padding:15px; border-radius:15px; margin-top:10px"><b>ESTRATÉGIA SHARK</b><br><small>Comissão: 60%</small><button class="btn-action" style="background:var(--red)">COPIAR LINK</button></div>`;
+        } else {
+            body.innerHTML = `<div style="background:#111; border:1px solid var(--green); padding:20px; border-radius:20px"><b>GAME LIVE</b><br><span style="color:var(--green)">ODD: 2.50</span></div><button class="btn-action" style="background:var(--green)">APOSTAR</button>`;
+        }
     }
 
-    function auth() { if(document.getElementById('pass').value === "9910") { localStorage.setItem('AUTH', '1'); ir('scr-portais'); } }
-    function ir(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-    function vSub() { if(qr) { qr.stop().catch(()=>{}); qr=null; } ir('scr-sub'); }
-    function init() { if(localStorage.getItem('AUTH')) ir('scr-portais'); }
+    function startScan() {
+        document.getElementById('reader').style.display='block';
+        qrcode = new Html5Qrcode("reader");
+        qrcode.start({ facingMode: "environment" }, { fps: 30, qrbox: 250 }, (t) => {
+            document.getElementById('log-list').innerHTML += `> BIPE: ${t}<br>`;
+        });
+    }
+
+    function zap() { window.open("https://wa.me/5519991234567?text=Pedido-MecShop"); }
+    function go(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+    function closeApp() { if(qrcode) { qrcode.stop(); qrcode = null; } go('scr-mode'); }
+    function checkSession() { if(localStorage.getItem('m_auth')) go('scr-hub'); }
+    function logout() { localStorage.clear(); location.reload(); }
 </script>
 </body>
 </html>
