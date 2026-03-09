@@ -3,152 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LOG-PRO MASTER | v70-v73</title>
+    <title>LOG-PRO | SISTEMA JP</title>
     <style>
-        :root { --neon: #00ff41; --bg: #000; --warn: #ffae00; --danger: #ff3b30; }
-        body { background: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; text-transform: uppercase; overflow: hidden; }
+        :root { --neon: #00ff41; --bg: #000; --gold: #ffae00; --blue: #007aff; --red: #ff3b30; }
+        body { background: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; text-transform: uppercase; overflow-x: hidden; }
         
-        /* HEADER v50/v70 */
-        .header { padding: 10px; border-bottom: 2px solid #222; background: #000; position: sticky; top: 0; z-index: 100; }
-        .logo { color: var(--neon); font-size: 20px; font-weight: bold; text-align: center; text-shadow: 0 0 10px var(--neon); }
+        /* TELAS E LOGIN */
+        .tela { display: none; padding: 20px; min-height: 100vh; }
+        #tela-login { display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle, #111, #000); }
         
-        .dash-v70 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin: 10px 0; }
-        .card { background: #0a0a0a; border: 1px solid #333; padding: 10px 2px; text-align: center; }
-        .card b { display: block; font-size: 22px; color: var(--neon); }
-        .card span { font-size: 8px; color: #666; }
+        /* CABEÇALHO COM BOTÃO SAIR */
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #222; padding-bottom: 10px; margin-bottom: 20px; }
+        .btn-sair { background: var(--red); color: #fff; border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px; }
 
-        /* SEPARAÇÃO v40/v71 (O QUE ESTAVA FALTANDO) */
-        .area-separacao { background: #080808; border: 1px solid var(--warn); margin: 10px; padding: 10px; border-radius: 4px; max-height: 150px; overflow-y: auto; }
-        .item-sep { display: flex; justify-content: space-between; border-bottom: 1px solid #222; padding: 8px 0; font-size: 12px; }
-        .item-sep b { color: var(--warn); font-size: 14px; }
+        /* BOTÕES DE COMANDO */
+        .btn-menu { width: 90%; padding: 20px; margin: 10px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer; font-size: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .btn-acao { width: 100%; padding: 25px; margin: 10px 0; border-radius: 10px; font-weight: bold; font-size: 12px; border: 1px solid #333; cursor: pointer; transition: 0.3s; }
+        .btn-acao:active { transform: scale(0.98); background: #222; }
 
-        /* BOTÕES v30/v73 */
-        .grid-btns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; padding: 0 10px; }
-        .btn { padding: 15px 5px; border: 1px solid #444; font-weight: bold; cursor: pointer; font-size: 10px; border-radius: 4px; }
-        .btn-ent { background: #002200; color: var(--neon); border-color: var(--neon); }
-        .btn-sep { background: #221100; color: var(--warn); border-color: var(--warn); }
-        .btn-sai { background: #220000; color: var(--danger); border-color: var(--danger); }
+        /* QUADROS DE INFORMAÇÃO */
+        .quadro { background: #080808; border: 1px solid #1a1a1a; padding: 12px; border-radius: 6px; margin-bottom: 15px; }
+        .titulo-quadro { font-size: 10px; color: #555; margin-bottom: 8px; display: block; border-bottom: 1px solid #111; }
+        .item-lista { display: flex; justify-content: space-between; font-size: 11px; padding: 8px 0; border-bottom: 1px solid #0d0d0d; }
 
-        /* TABELA v72/v73 (500 LINHAS) */
-        .container-v70 { height: calc(100vh - 420px); overflow-y: auto; background: #020202; margin-top: 10px; }
-        table { width: 100%; border-collapse: collapse; font-size: 10px; }
-        th { background: #111; color: #444; padding: 10px; text-align: left; position: sticky; top: 0; }
-        td { padding: 10px; border-bottom: 1px solid #111; color: #aaa; }
-        tr:nth-child(even) { background: #050505; }
-
-        .input-v72 { width: 95%; padding: 12px; background: #0a0a0a; border: 1px solid #333; color: var(--neon); margin: 10px 2.5%; box-sizing: border-box; outline: none; }
+        /* LANTERNA FLUTUANTE (SÓ NO BIPE) */
+        #btn-flash { position: fixed; bottom: 30px; right: 30px; width: 75px; height: 75px; background: var(--gold); border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 35px; z-index: 1000; border: none; box-shadow: 0 0 25px var(--gold); color: #000; }
     </style>
 </head>
-<body onload="init()">
+<body onload="atualizarTudo()">
 
-<div class="header">
-    <div class="logo">LOG-PRO SHARK v73</div>
-    <div class="dash-v70">
-        <div class="card"><b id="d-sku">0</b><span>SKUS B18</span></div>
-        <div class="card"><b id="d-mov">0</b><span>BIPES</span></div>
-        <div class="card"><b id="d-pen" style="color:var(--warn)">0</b><span>ORDENS</span></div>
+<div id="tela-login" class="tela" style="display: flex;">
+    <h1 style="color: var(--neon); letter-spacing: 8px; margin-bottom: 40px;">LOG-PRO</h1>
+    <button class="btn-menu" style="background: var(--neon); color: #000;" onclick="irPara('dono')">👑 DONO (JP)</button>
+    <button class="btn-menu" style="background: var(--blue); color: #fff;" onclick="irPara('shark')">🦈 SHARK (DIRETOR)</button>
+    <button class="btn-menu" style="background: #222; color: #fff;" onclick="irPara('op')">📦 OPERACIONAL</button>
+</div>
+
+<div id="painel-dono" class="tela">
+    <div class="header">
+        <b style="color: var(--neon)">COMANDO JP</b>
+        <button class="btn-sair" onclick="logout()">SAIR</button>
     </div>
-    <div class="grid-btns">
-        <button class="btn btn-ent" onclick="lancar('ENTRADA')">ENTRADA</button>
-        <button class="btn btn-sep" onclick="lancarDemanda()">NOVA ORDEM</button>
-        <button class="btn btn-sai" onclick="lancar('SAIDA')">SAÍDA</button>
+    <button class="btn-acao" onclick="window.print()">🖨️ IMPRIMIR ROMANEIO / RELATÓRIO</button>
+    <div class="quadro">
+        <span class="titulo-quadro">AUDITORIA DE MOVIMENTOS (MÉTRICA)</span>
+        <div id="logs-jp"></div>
     </div>
 </div>
 
-<div class="area-separacao" id="lista-separacao">
-    <div style="color:var(--warn); font-size:10px; text-align:center; margin-bottom:5px;">⚠️ LISTA DE SEPARAÇÃO ATIVA (ABATER NO BIPE)</div>
-    <div id="itens-pendentes">
-        </div>
+<div id="painel-shark" class="tela">
+    <div class="header">
+        <b style="color: var(--blue)">DIRETORIA SHARK</b>
+        <button class="btn-sair" onclick="logout()">SAIR</button>
+    </div>
+    <button class="btn-acao" style="border-color: var(--blue);" onclick="criarDemanda()">📋 LANÇAR NOVA DEMANDA / ROTA</button>
+    <div class="quadro">
+        <span class="titulo-quadro">PENDÊNCIAS DO DIA</span>
+        <div id="demandas-shark"></div>
+    </div>
 </div>
 
-<input type="text" id="filtro" class="input-v72" placeholder="🔍 FILTRAR NAS 500 LINHAS..." onkeyup="filtrar()">
-
-<div class="container-v70">
-    <table>
-        <thead>
-            <tr><th>HORA</th><th>OP</th><th>TIPO</th><th>PRODUTO</th><th>QTD</th><th>SALDO</th></tr>
-        </thead>
-        <tbody id="corpo-v70"></tbody>
-    </table>
+<div id="painel-op" class="tela">
+    <div class="header">
+        <b>OPERAÇÃO GALPÃO</b>
+        <button class="btn-sair" onclick="logout()">SAIR</button>
+    </div>
+    <button class="btn-acao" style="background: #001a00; color: var(--neon); border-color: var(--neon);" onclick="processoBipe('ENTRADA')">📥 RECEBIMENTO (BIPAR)</button>
+    <button class="btn-acao" style="background: #1a0000; color: var(--red); border-color: var(--red);" onclick="processoBipe('SAIDA')">🚀 EXPEDIÇÃO (BIPAR)</button>
+    <div class="quadro">
+        <span class="titulo-quadro">MINHA LISTA DE TAREFAS</span>
+        <div id="demandas-op"></div>
+    </div>
 </div>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit, doc, updateDoc, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+<button id="btn-flash" onclick="toggleFlash()">🔦</button>
 
-    const cfg = { apiKey: "AIzaSyDRDhONvvzZmo2csXksqHs6E6vV3MuvLSs", authDomain: "log-pro-jp.firebaseapp.com", projectId: "log-pro-jp", storageBucket: "log-pro-jp.firebasestorage.app", messagingSenderId: "481645607846", appId: "1:481645607846:web:fd55dd943718ad78386d67" };
-    const app = initializeApp(cfg);
-    const db = getFirestore(app);
+<script>
+    // Banco de Dados Local (Simulado para teste, integra com Firebase depois)
+    let PRODUTOS = JSON.parse(localStorage.getItem('DB_PROD')) || {};
+    let MOVS = JSON.parse(localStorage.getItem('DB_MOVS')) || [];
+    let DEMANDAS = JSON.parse(localStorage.getItem('DB_DEM')) || [];
 
-    let BASE = JSON.parse(localStorage.getItem('LP_v73_B')) || {};
+    function irPara(nivel) {
+        document.querySelectorAll('.tela').forEach(t => t.style.display = 'none');
+        document.getElementById('painel-' + nivel).style.display = 'block';
+    }
 
-    // v73: MONITOR DE 500 LINHAS + SALDO B18
-    onSnapshot(query(collection(db, "logs"), orderBy("data_hora", "desc"), limit(500)), (sn) => {
-        const movs = sn.docs.map(d => d.data());
-        let sld = {}; Object.keys(BASE).forEach(k => sld[k] = 0);
-        [...movs].reverse().forEach(m => { if(sld[m.c] !== undefined) m.t === 'ENTRADA' ? sld[m.c]+=m.q : sld[m.c]-=m.q; });
+    function logout() { location.reload(); }
 
+    // FUNÇÃO DO OPERADOR (SCANNER + LANTERNA + CADASTRO)
+    async function processoBipe(tipo) {
+        document.getElementById('btn-flash').style.display = 'flex';
+        let sku = prompt("AGUARDANDO LEITURA DO SCANNER (SKU/LOTE):");
+        
+        if(!sku) { finalizarBipe(); return; }
+
+        // AUTO-CADASTRO (Se não existir no sistema)
+        if(!PRODUTOS[sku]) {
+            let nome = prompt("⚠️ PRODUTO NÃO CADASTRADO! DIGITE O NOME PARA REGISTRAR:");
+            if(nome) {
+                PRODUTOS[sku] = nome.toUpperCase();
+                localStorage.setItem('DB_PROD', JSON.stringify(PRODUTOS));
+            } else { finalizarBipe(); return; }
+        }
+
+        let qtd = prompt(`QUANTIDADE PARA ${PRODUTOS[sku]}:`);
+        if(qtd) {
+            MOVS.push({sku, nome: PRODUTOS[sku], qtd, tipo, hora: new Date().toLocaleTimeString()});
+            localStorage.setItem('DB_MOVS', JSON.stringify(MOVS));
+            alert("BIPE CONFIRMADO NO ARMAZÉM!");
+            atualizarTudo();
+        }
+        finalizarBipe();
+    }
+
+    function finalizarBipe() { document.getElementById('btn-flash').style.display = 'none'; }
+
+    // FUNÇÃO DO SHARK (LANÇAR)
+    function criarDemanda() {
+        let rota = prompt("QUAL A ROTA OU ROMANEIO?");
+        let sku = prompt("QUAL O SKU?");
+        let qtd = prompt("QUAL A QUANTIDADE?");
+        if(rota && sku && qtd) {
+            DEMANDAS.push({rota, sku, qtd, status: 'PENDENTE'});
+            localStorage.setItem('DB_DEM', JSON.stringify(DEMANDAS));
+            atualizarTudo();
+        }
+    }
+
+    function atualizarTudo() {
+        // Atualiza a visão do Shark e Op
         let h = "";
-        movs.forEach(m => {
-            const s = sld[m.c] || 0;
-            h += `<tr class="item-row">
-                <td style="color:#444">${m.d_s}</td>
-                <td style="color:var(--neon)">${m.op || 'PAI'}</td>
-                <td style="color:${m.t==='ENTRADA'?'#00ff41':'#ff3b30'}">${m.t}</td>
-                <td>${BASE[m.c] || m.c}</td>
-                <td><b>${m.q}</b></td>
-                <td style="color:#fff">${s}</td>
-            </tr>`;
+        DEMANDAS.forEach(d => {
+            h += `<div class="item-lista"><span>${d.rota} | ${d.sku}</span><b>${d.qtd} UN</b></div>`;
         });
-        document.getElementById('corpo-v70').innerHTML = h;
-        document.getElementById('d-sku').innerText = Object.keys(BASE).length;
-        document.getElementById('d-mov').innerText = movs.length;
-    });
+        document.getElementById('demandas-shark').innerHTML = h || "NENHUMA ROTA ATIVA";
+        document.getElementById('demandas-op').innerHTML = h || "LISTA VAZIA";
 
-    // v40/v71: MONITOR DE SEPARAÇÃO (ALERTA)
-    onSnapshot(collection(db, "separacao"), (sn) => {
-        let h = ""; let p = 0;
-        sn.docs.forEach(d => {
-            const m = d.data();
-            const falta = m.qtd_p - m.qtd_f;
-            if(falta > 0) {
-                h += `<div class="item-sep"><span>${m.nome}</span><b>${falta} UN</b></div>`;
-                p++;
-            }
+        // Atualiza Logs do JP
+        let m = "";
+        MOVS.slice(-10).reverse().forEach(log => {
+            m += `<div class="item-lista" style="color:#666">${log.hora} - ${log.tipo}: ${log.nome} (${log.qtd})</div>`;
         });
-        document.getElementById('itens-pendentes').innerHTML = h || "<center style='color:#333'>NENHUMA ORDEM ATIVA</center>";
-        document.getElementById('d-pen').innerText = p;
-    });
+        document.getElementById('logs-jp').innerHTML = m || "SEM MOVIMENTAÇÃO";
+    }
 
-    window.lancarDemanda = async () => {
-        const c = prompt("SKU PARA SEPARAR:");
-        const q = prompt("QUANTIDADE TOTAL:");
-        if(c && q) {
-            await setDoc(doc(db, "separacao", c), { nome: BASE[c]||c, qtd_p: parseInt(q), qtd_f: 0 });
-            alert("ORDEM LANÇADA!");
-        }
-    };
-
-    window.lancar = async (t) => {
-        const c = prompt("SKU:"); const q = prompt("QTD:");
-        if(c && q) {
-            if(navigator.vibrate) navigator.vibrate(50); // v30
-            await addDoc(collection(db, "logs"), { c, t, q: parseInt(q), op: "PAI", data_hora: serverTimestamp(), d_s: new Date().toLocaleTimeString() });
-            
-            // LÓGICA DE ABATE v71: Se for SAÍDA, abate da separação automaticamente
-            if(t === 'SAIDA') {
-                const ref = doc(db, "separacao", c);
-                const d = await getDoc(ref);
-                if(d.exists()) await updateDoc(ref, { qtd_f: d.data().qtd_f + parseInt(q) });
-            }
-        }
-    };
-
-    window.filtrar = () => {
-        const f = document.getElementById('filtro').value.toUpperCase();
-        document.querySelectorAll('.item-row').forEach(r => r.style.display = r.innerText.toUpperCase().includes(f) ? "" : "none");
-    };
+    // LANTERNA (API Flash)
+    let flashAtivo = false;
+    async function toggleFlash() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({video: {facingMode: 'environment'}});
+            const track = stream.getVideoTracks()[0];
+            flashAtivo = !flashAtivo;
+            await track.applyConstraints({advanced: [{torch: flashAtivo}]});
+        } catch(e) { alert("LANTERNA INDISPONÍVEL"); }
+    }
 </script>
 </body>
-        </html>
-        
+</html>
