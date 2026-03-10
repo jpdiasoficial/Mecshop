@@ -3,187 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MEC-BANK V45 | Shark Edition</title>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <title>MEC-BANK | Visão Shark V45</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --primary: #00ff88; --secondary: #00d4ff; --bg: #050505;
-            --card: #121212; --text: #ffffff; --glass: rgba(255, 255, 255, 0.05);
-        }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, sans-serif; margin: 0; overflow-x: hidden; }
+        :root { --accent: #00ff88; --bg: #030303; --card: rgba(255, 255, 255, 0.05); --glass: blur(12px); }
+        * { box-sizing: border-box; font-family: 'Inter', sans-serif; transition: 0.3s; }
+        body { background: var(--bg); color: #fff; margin: 0; overflow-x: hidden; }
 
-        /* --- TELAS --- */
+        /* --- SISTEMA DE TELAS --- */
         .screen { display: none; min-height: 100vh; padding: 20px; flex-direction: column; }
-        .active { display: flex; animation: fadeIn 0.4s ease; }
+        .active { display: flex; animation: slideUp 0.5s ease; }
 
-        /* --- TELA DE LOGIN/CADASTRO (ESTILO NUBANK/INTER) --- */
-        .auth-container { justify-content: center; align-items: center; text-align: center; }
-        .logo-v45 { font-size: 40px; font-weight: 900; background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
-        .input-group { width: 100%; max-width: 320px; margin-top: 30px; }
-        input { width: 100%; background: var(--card); border: 1px solid #333; padding: 18px; border-radius: 15px; color: white; font-size: 16px; margin-bottom: 15px; outline: none; }
-        input:focus { border-color: var(--primary); }
-        .btn-main { width: 100%; max-width: 320px; background: var(--primary); color: black; border: none; padding: 18px; border-radius: 50px; font-weight: bold; font-size: 16px; cursor: pointer; box-shadow: 0 10px 20px rgba(0, 255, 136, 0.2); }
+        /* --- LOGIN SHARK --- */
+        .login-box { justify-content: center; align-items: center; text-align: center; }
+        .logo-bank { font-size: 35px; font-weight: 900; color: var(--accent); letter-spacing: -1px; margin-bottom: 30px; }
+        input[type="text"], input[type="password"] { width: 100%; max-width: 320px; background: #111; border: 1px solid #333; padding: 18px; border-radius: 15px; color: #fff; margin-bottom: 12px; }
+        .btn-main { width: 100%; max-width: 320px; padding: 18px; border-radius: 15px; border: none; font-weight: 800; cursor: pointer; background: var(--accent); color: #000; }
 
-        /* --- DASHBOARD V45 (ESTILO BTG/ULTRA) --- */
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; }
-        .user-chip { display: flex; align-items: center; gap: 10px; background: var(--glass); padding: 8px 15px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.1); }
-        .avatar { width: 35px; height: 35px; background: var(--primary); border-radius: 50%; color: black; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-
-        .balance-section { margin: 25px 0; }
-        .balance-label { font-size: 14px; color: #888; display: flex; align-items: center; gap: 10px; }
-        .main-balance { font-size: 38px; font-weight: 700; margin: 10px 0; transition: 0.3s; }
-
-        /* MENU GRID (AS 45 MELHORIAS DE INTERFACE) */
-        .action-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px; }
-        .action-item { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 12px; cursor: pointer; }
-        .icon-circle { width: 65px; height: 65px; background: var(--card); border-radius: 20px; display: flex; justify-content: center; align-items: center; font-size: 24px; border: 1px solid rgba(255,255,255,0.05); transition: 0.2s; }
-        .icon-circle:active { transform: scale(0.9); background: var(--primary); color: black; }
-
-        /* CARTÃO BLACK HOLOGRAMA */
-        .card-preview { background: linear-gradient(135deg, #1a1a1a 0%, #000 100%); padding: 25px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); position: relative; overflow: hidden; margin-bottom: 30px; }
-        .card-preview::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent); transform: rotate(45deg); animation: shine 4s infinite; }
+        /* --- 01. PAINEL SHARK (DONO/ADMIN) --- */
+        .nav-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; }
+        .shark-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .card-stat { background: var(--card); backdrop-filter: var(--glass); padding: 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); }
+        .import-box { background: rgba(0, 255, 136, 0.1); border: 2px dashed var(--accent); padding: 25px; border-radius: 20px; text-align: center; cursor: pointer; }
         
-        /* EXTRATO VIVO */
-        .feed { background: var(--card); border-radius: 30px 30px 0 0; padding: 25px; margin: 0 -20px; flex-grow: 1; }
-        .trans-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .trans-info { display: flex; gap: 15px; align-items: center; }
-        .trans-icon { width: 45px; height: 45px; background: #1a1a1a; border-radius: 12px; display: flex; justify-content: center; align-items: center; }
-        .val-pos { color: var(--primary); font-weight: bold; }
+        /* --- 02. VISÃO CLIENTE (MEC-BANK) --- */
+        .black-card { background: linear-gradient(135deg, #111, #222); border: 1px solid #444; border-radius: 25px; padding: 25px; margin-bottom: 25px; position: relative; overflow: hidden; }
+        .balance-box { font-size: 28px; font-weight: 700; margin: 15px 0; cursor: pointer; }
+        .balance-hidden { filter: blur(8px); }
+        .actions-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; text-align: center; font-size: 12px; }
+        .action-btn { background: var(--card); padding: 15px 10px; border-radius: 15px; cursor: pointer; }
+        .action-btn i { font-size: 20px; color: var(--accent); margin-bottom: 8px; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes shine { 0% { left: -100%; } 100% { left: 100%; } }
+        /* --- CÂMERA DE ELITE (PIX/BOLETO) --- */
+        #cam-layer { display: none; position: fixed; inset: 0; background: #000; z-index: 1000; flex-direction: column; align-items: center; justify-content: center; }
+        video { width: 90%; border-radius: 30px; border: 3px solid var(--accent); }
+        .cam-frame { position: absolute; width: 250px; height: 250px; border: 2px solid var(--accent); box-shadow: 0 0 50px rgba(0,255,136,0.3); border-radius: 20px; }
 
-        /* CAMERA OVERLAY */
-        #scanner { display: none; position: fixed; inset: 0; background: #000; z-index: 1000; flex-direction: column; align-items: center; justify-content: center; }
-        video { width: 80%; border-radius: 20px; border: 2px solid var(--primary); }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-    <div id="auth-screen" class="screen active auth-container">
-        <div class="logo-v45">MEC-BANK</div>
-        <p style="color: #666">A evolução da sua gestão financeira.</p>
-        <div class="input-group">
-            <input type="text" id="reg-name" placeholder="Como quer ser chamado?">
-            <input type="password" id="reg-pin" placeholder="Senha de 6 dígitos" maxlength="6">
-            <button class="btn-main" onclick="initApp()">CRIAR MINHA CONTA</button>
+    <div id="login" class="screen active login-box">
+        <div class="logo-bank">MEC-BANK</div>
+        <input type="text" id="access-id" placeholder="ID de Acesso (Shark, Operador ou Cliente)">
+        <button class="btn-main" onclick="auth()">ACESSAR CONTA BLACK</button>
+    </div>
+
+    <div id="shark-panel" class="screen">
+        <div class="nav-header">
+            <h3>Visão Shark Master</h3>
+            <button onclick="location.reload()" style="background:none; border:none; color:#ff4444;"><i class="fa-solid fa-power-off"></i></button>
+        </div>
+        <div class="shark-grid">
+            <div class="card-stat"><small>LUCRO TOTAL</small><h2 id="total-profit">R$ 128.500</h2></div>
+            <div class="card-stat"><small>CONTAS ATIVAS</small><h2>482</h2></div>
+        </div>
+        
+        <div class="import-box" onclick="document.getElementById('fileInput').click()">
+            <i class="fa-solid fa-file-excel" style="font-size: 30px; margin-bottom: 10px;"></i>
+            <p>SUBIR PLANILHA DE SALDOS</p>
+            <input type="file" id="fileInput" hidden accept=".xlsx, .csv" onchange="importData(event)">
+        </div>
+        
+        <h4 style="margin-top: 30px;">Fluxo de Transações</h4>
+        <div id="transaction-log" style="font-size: 13px; color: #aaa;">
+            <div class="card-stat" style="margin-bottom: 8px;">Pix Recebido: R$ 1.200,00 - 19:05</div>
         </div>
     </div>
 
-    <div id="dash-screen" class="screen">
-        <header class="header">
-            <div class="user-chip">
-                <div class="avatar" id="avatar-init">J</div>
-                <span id="user-display">Shark</span>
-            </div>
-            <div style="font-size: 20px; gap: 20px; display: flex;">
-                <i class="fas fa-search"></i>
-                <i class="fas fa-sign-out-alt" onclick="location.reload()"></i>
-            </div>
-        </header>
-
-        <section class="balance-section">
-            <div class="balance-label">Saldo em conta <i class="fas fa-eye"></i></div>
-            <div class="main-balance" id="display-balance">R$ 0,00</div>
-        </section>
-
-        <nav class="action-grid">
-            <div class="action-item" onclick="openPix()"><div class="icon-circle">📲</div><span>Pix</span></div>
-            <div class="action-item"><div class="icon-circle">💳</div><span>Cartão</span></div>
-            <div class="action-item" onclick="addBetProfit()"><div class="icon-circle">🎰</div><span>MEC-BET</span></div>
-            <div class="action-item"><div class="icon-circle">📉</div><span>Investir</span></div>
-            <div class="action-item"><div class="icon-circle">🧾</div><span>Boletos</span></div>
-            <div class="action-item"><div class="icon-circle">🔄</div><span>Trocar</span></div>
-            <div class="action-item"><div class="icon-circle">💰</div><span>Empréstimo</span></div>
-            <div class="action-item"><div class="icon-circle">⚙️</div><span>Ajustes</span></div>
-        </nav>
-
-        <div class="card-preview">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <span style="font-weight: bold; color: var(--primary);">MEC-BANK PLATINUM</span>
-                <i class="fas fa-wifi"></i>
-            </div>
-            <div style="margin-top: 40px; font-family: monospace; font-size: 18px; letter-spacing: 2px;">**** **** **** 8835</div>
+    <div id="client-app" class="screen">
+        <div class="nav-header">
+            <span>Olá, **Shark Client**</span>
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: #000; display: flex; align-items: center; justify-content: center; font-weight: bold;">JP</div>
         </div>
 
-        <section class="feed">
-            <h3 style="margin-top: 0;">Atividade recente</h3>
-            <div id="transactions-list">
-                </div>
-        </section>
+        <div class="black-card">
+            <small style="opacity: 0.7;">Saldo disponível <i class="fa-solid fa-eye" onclick="toggleBalance()"></i></small>
+            <div id="balance" class="balance-box balance-hidden">R$ 25.450,88</div>
+            <div style="font-size: 14px; opacity: 0.6;">MEC-CARD Platinum Final 8845</div>
+        </div>
+
+        <div class="actions-row">
+            <div class="action-btn" onclick="openCam('ESCANEAR PIX')"><i class="fa-solid fa-qrcode"></i><br>Pix</div>
+            <div class="action-btn" onclick="openCam('PAGAR BOLETO')"><i class="fa-solid fa-barcode"></i><br>Boleto</div>
+            <div class="action-btn"><i class="fa-solid fa-arrow-trend-up"></i><br>Investir</div>
+            <div class="action-btn"><i class="fa-solid fa-ellipsis"></i><br>Mais</div>
+        </div>
     </div>
 
-    <div id="scanner">
-        <h2 style="color: var(--primary)">Scanner QR Code</h2>
-        <video id="video" playsinline></video>
-        <button class="btn-main" style="margin-top: 30px; background: white;" onclick="closePix()">FECHAR</button>
+    <div id="cam-layer">
+        <h3 id="cam-title">ESCANEANDO...</h3>
+        <div class="cam-frame"></div>
+        <video id="webcam" playsinline></video>
+        <button class="btn-main" style="background: #fff; margin-top: 30px;" onclick="closeCam()">CANCELAR</button>
     </div>
 
     <script>
-        let account = {
-            name: "",
-            balance: 145850.90,
-            history: [
-                { title: "Ganhos MEC-BET", val: 1200.00, pos: true },
-                { title: "Sorveteria Sergel", val: 45.90, pos: false }
-            ]
-        };
-
-        function initApp() {
-            const name = document.getElementById('reg-name').value;
-            if(!name) return alert("Digite seu nome!");
-            
-            account.name = name;
-            document.getElementById('user-display').innerText = name;
-            document.getElementById('avatar-init').innerText = name[0].toUpperCase();
-            
-            updateUI();
-            document.getElementById('auth-screen').classList.remove('active');
-            document.getElementById('dash-screen').classList.add('active');
+        // Lógica de Autenticação
+        function auth() {
+            const user = document.getElementById('access-id').value.toLowerCase();
+            document.getElementById('login').classList.remove('active');
+            if(user === 'shark') document.getElementById('shark-panel').classList.add('active');
+            else if(user === 'cliente') document.getElementById('client-app').classList.add('active');
+            else alert('Acesso não identificado');
         }
 
-        function updateUI() {
-            document.getElementById('display-balance').innerText = `R$ ${account.balance.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-            const list = document.getElementById('transactions-list');
-            list.innerHTML = account.history.map(item => `
-                <div class="trans-item">
-                    <div class="trans-info">
-                        <div class="trans-icon">${item.pos ? '💹' : '🛍️'}</div>
-                        <div>
-                            <strong>${item.title}</strong><br>
-                            <small style="color: #666">Concluído</small>
-                        </div>
-                    </div>
-                    <span class="${item.pos ? 'val-pos' : ''}">${item.pos ? '+' : '-'} R$ ${item.val.toFixed(2)}</span>
-                </div>
-            `).join('');
+        // Upgrade: Visibilidade de Saldo
+        function toggleBalance() {
+            document.getElementById('balance').classList.toggle('balance-hidden');
         }
 
-        function addBetProfit() {
-            const profit = 500.00;
-            account.balance += profit;
-            account.history.unshift({ title: "Lucro Rodada MEC-BET", val: profit, pos: true });
-            updateUI();
-            // Efeito visual de brilho no saldo
-            document.getElementById('display-balance').style.color = 'var(--primary)';
-            setTimeout(() => document.getElementById('display-balance').style.color = 'white', 1000);
+        // Upgrade: Motor de Câmera Real (Pix e Boleto)
+        async function openCam(type) {
+            document.getElementById('cam-title').innerText = type;
+            document.getElementById('cam-layer').style.display = 'flex';
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+                document.getElementById('webcam').srcObject = stream;
+                document.getElementById('webcam').play();
+            } catch(e) { alert('Erro ao acessar câmera: ' + e); closeCam(); }
         }
 
-        async function openPix() {
-            document.getElementById('scanner').style.display = 'flex';
-            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-            document.getElementById('video').srcObject = stream;
-            document.getElementById('video').play();
+        function closeCam() {
+            const v = document.getElementById('webcam');
+            if(v.srcObject) v.srcObject.getTracks().forEach(t => t.stop());
+            document.getElementById('cam-layer').style.display = 'none';
         }
 
-        function closePix() {
-            const video = document.getElementById('video');
-            if (video.srcObject) {
-                video.srcObject.getTracks().forEach(track => track.stop());
-            }
-            document.getElementById('scanner').style.display = 'none';
+        // Upgrade 45: Inteligência de Planilha
+        function importData(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, {type: 'array'});
+                const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+                
+                // Simulação de Processamento
+                alert(`Sucesso, Shark! ${jsonData.length} contas atualizadas via planilha.`);
+                document.getElementById('total-profit').innerText = "R$ 185.200"; // Exemplo de update real
+            };
+            reader.readAsArrayBuffer(file);
         }
     </script>
 </body>
-</html>
+    </html>
+    
