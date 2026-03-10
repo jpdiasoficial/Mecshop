@@ -2,74 +2,144 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MecShop Independent Units</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Inter:wght@400;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MECSHOP OS | MIRROR TEST</title>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --red: #ff0000; --gold: #d4af37; --nu: #820ad1; --dark: #000; }
-        body { background: var(--dark); color: #fff; font-family: 'Inter', sans-serif; margin: 0; padding: 20px; text-align: center; }
+        :root { --red: #ea1d2c; --gold: #c5a059; --bg: #000; --nu: #820ad1; --green: #00ff7f; --card: #0d0d0d; }
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; overflow: hidden; height: 100vh; }
         
-        /* O "DESIGN MEC" INDEPENDENTE */
-        .app-window { width: 100%; max-width: 400px; height: 650px; background: #050505; border: 1px solid #111; border-radius: 40px; margin: 20px auto; overflow: hidden; position: relative; box-shadow: 0 30px 60px rgba(0,0,0,0.5); }
-        .notch { width: 120px; height: 25px; background: #000; position: absolute; top: 0; left: 50%; transform: translateX(-50%); border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; z-index: 10; }
+        /* Camadas Animadas */
+        .layer { display: none; height: 100vh; flex-direction: column; animation: fadeIn 0.3s ease; }
+        .active { display: flex !important; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Header Estilo Corporate */
+        header { padding: 20px; border-bottom: 1px solid #1a1a1a; display: flex; justify-content: space-between; align-items: center; background: #000; }
+        .logo { font-family: 'Orbitron'; font-weight: 900; color: var(--red); font-size: 16px; }
+
+        /* Hub de Apps */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 20px; flex: 1; overflow-y: auto; }
+        .app-card { background: var(--card); border: 1px solid #1a1a1a; border-radius: 25px; padding: 20px; text-align: center; position: relative; transition: 0.2s; }
+        .app-card:active { transform: scale(0.95); border-color: var(--red); }
+        .app-card i { font-size: 24px; display: block; margin-bottom: 8px; }
+        .app-card span { font-family: 'Orbitron'; font-size: 9px; letter-spacing: 1px; }
+        .badge { position: absolute; top: 10px; right: 10px; background: var(--red); font-size: 8px; padding: 2px 6px; border-radius: 10px; font-weight: 800; }
+
+        /* Dashboard Shark */
+        .shark-panel { background: linear-gradient(145deg, #111, #000); margin: 15px; border-radius: 25px; padding: 20px; border: 1px solid var(--gold); }
+        .val { font-family: 'Orbitron'; font-size: 28px; font-weight: 900; margin: 5px 0; }
         
-        /* HEADER ESTILO NATIVO */
-        .status-bar { padding: 15px 25px; display: flex; justify-content: space-between; font-size: 10px; font-weight: 800; }
+        /* Interface de Ação */
+        .content { flex: 1; padding: 20px; overflow-y: auto; }
+        .btn-m { width: 100%; padding: 18px; border-radius: 15px; border: none; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 11px; margin-top: 10px; }
+        .bg-red { background: var(--red); color: #fff; }
+        .bg-nu { background: var(--nu); color: #fff; }
         
-        /* CONTEÚDO DINÂMICO */
-        .content { padding: 20px; }
-        .card-main { background: #111; border-radius: 25px; padding: 25px; margin-top: 10px; border-left: 5px solid var(--red); text-align: left; }
-        .shark-btn { background: var(--gold); color: #000; border: none; padding: 15px; border-radius: 15px; font-family: 'Orbitron'; font-size: 10px; width: 100%; margin-top: 20px; }
-        
-        /* BOTÃO DE TRANSIÇÃO ENTRE APPS */
-        .dock { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,0.05); padding: 10px 20px; border-radius: 20px; display: flex; gap: 15px; backdrop-filter: blur(10px); }
-        .dock-item { width: 35px; height: 35px; background: #111; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+        #reader { width: 100%; border-radius: 20px; overflow: hidden; border: 2px solid var(--red); display: none; margin-bottom: 15px; }
+        .log-box { font-size: 10px; background: #050505; padding: 10px; border-radius: 10px; color: var(--green); margin-top: 10px; height: 100px; overflow-y: auto; border: 1px solid #111; }
     </style>
 </head>
 <body>
 
-<div class="app-window" id="app-frame">
-    <div class="notch"></div>
-    <div class="status-bar"><span>9:41</span><span>MEC-BANK 💳</span></div>
-    
-    <div class="content" id="app-body">
-        <div style="background:var(--nu); padding:30px; border-radius:30px; text-align:left; margin-top:20px;">
-            <p style="font-size:12px; opacity:0.7;">Saldo Total</p>
-            <h2 style="font-family:'Orbitron'; font-size:28px;">R$ 45.200,90</h2>
-        </div>
-        
-        <div class="card-main">
-            <b>Última Venda Sergel</b>
-            <p style="font-size:12px; opacity:0.5;">+ R$ 15,00 (Pote V10)</p>
-        </div>
+<div id="scr-login" class="layer active" style="justify-content:center; align-items:center; padding:40px;">
+    <div class="logo" style="font-size:35px; margin-bottom:40px;">MECSHOP</div>
+    <input type="password" id="sys-key" placeholder="KEY 9910" style="width:250px; padding:18px; background:#111; border:1px solid #333; color:#fff; border-radius:15px; text-align:center; font-family:'Orbitron';">
+    <button onclick="auth()" class="btn-m bg-red" style="width:250px;">UNFOLD SYSTEM</button>
+</div>
 
-        <button class="shark-btn" onclick="alert('AUDITORIA SHARK: Sistema Saudável')">ABRIR MODO SHARK</button>
+<div id="scr-hub" class="layer">
+    <header><span class="logo">MEC OS v10</span><div id="sync-status" style="font-size:8px; color:var(--green)">SYNC ACTIVE</div></header>
+    <div class="shark-panel">
+        <small style="color:var(--gold); font-family:'Orbitron'; font-size:8px;">TOTAL REVENUE (SYNC)</small>
+        <div class="val" id="total-revenue">R$ 0,00</div>
+        <small id="last-op" style="font-size:9px; opacity:0.5;">Aguardando operação...</small>
     </div>
-
-    <div class="dock">
-        <div class="dock-item" onclick="changeApp('bank')">💳</div>
-        <div class="dock-item" onclick="changeApp('log')">📦</div>
-        <div class="dock-item" onclick="changeApp('sergel')">🍦</div>
-        <div class="dock-item" onclick="changeApp('rota')">📍</div>
+    <div class="grid">
+        <div class="app-card" onclick="openMod('bank')"><i>💳</i><span>MEC-BANK</span></div>
+        <div class="app-card" onclick="openMod('log')"><i>📦</i><span>LOG-PRO</span><div class="badge" id="badge-estoque">0</div></div>
+        <div class="app-card" onclick="openMod('sergel')"><i>🍦</i><span>SERGEL</span></div>
+        <div class="app-card" onclick="openMod('rota')"><i>📍</i><span>ROTAS</span></div>
+        <div class="app-card" onclick="openMod('hot')"><i>📚</i><span>HOT-MEC</span></div>
+        <div class="app-card" onclick="openMod('bet')"><i>🎰</i><span>GAMES</span></div>
     </div>
 </div>
 
+<div id="scr-mod" class="layer">
+    <header><button onclick="back()" style="background:none; border:none; color:#fff; font-size:20px;">←</button><b id="title-mod" style="font-family:'Orbitron'; font-size:10px;"></b><div></div></header>
+    <div id="content-mod" class="content"></div>
+</div>
+
 <script>
-    function changeApp(type) {
-        const body = document.getElementById('app-body');
-        const header = document.querySelector('.status-bar span:last-child');
-        
-        if(type === 'log') {
-            header.innerText = "LOG-PRO 📦";
-            body.innerHTML = `<div style="height:250px; background:#111; border:2px dashed var(--red); border-radius:30px; display:flex; align-items:center; justify-content:center;">SCANNER ATIVO</div><button class="shark-btn">RELATÓRIO DE CARGA</button>`;
-        } else if(type === 'sergel') {
-            header.innerText = "SERGEL 🍦";
-            body.innerHTML = `<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"><div style="background:#111; height:120px; border-radius:20px;"></div><div style="background:#111; height:120px; border-radius:20px;"></div></div><button class="shark-btn">LUCRO DO DIA</button>`;
-        } else if(type === 'bank') {
-            location.reload();
+    let state = { revenue: 4500.00, estoque: 150 };
+    let scanner = null;
+
+    // INTELIGÊNCIA DE ESPELHAMENTO (Broadcast Channel)
+    const channel = new BroadcastChannel('mec_sync');
+    channel.onmessage = (e) => {
+        state = e.data;
+        updateUI();
+    };
+
+    function auth() { if(document.getElementById('sys-key').value === "9910") switchLayer('scr-hub'); }
+
+    function updateUI() {
+        document.getElementById('total-revenue').innerText = `R$ ${state.revenue.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+        document.getElementById('badge-estoque').innerText = state.estoque;
+        // Salva localmente para manter entre recarregamentos
+        localStorage.setItem('mec_state', JSON.stringify(state));
+    }
+
+    function sync(newData) {
+        state = {...state, ...newData};
+        channel.postMessage(state);
+        updateUI();
+    }
+
+    function openMod(id) {
+        const c = document.getElementById('content-mod');
+        document.getElementById('title-mod').innerText = id.toUpperCase();
+        switchLayer('scr-mod');
+
+        if(id === 'log') {
+            c.innerHTML = `<div id="reader"></div><button class="btn-m bg-red" onclick="simularBipe()">BIPAR CARGA (SIMULAÇÃO)</button>
+                           <div class="log-box" id="scan-log">> C79 Scanner pronto...</div>`;
+        } else if(id === 'bank') {
+            c.innerHTML = `<div style="background:var(--nu); padding:25px; border-radius:25px; margin-bottom:15px;"><h4>SALDO ATUAL</h4><h2 id="bank-val">R$ ${state.revenue}</h2></div>
+                           <button class="btn-m" style="background:#111; color:#fff;">EXTRATO DE VENDAS</button>`;
+        } else if(id === 'sergel') {
+            c.innerHTML = `<h3>Catálogo Sergel</h3><div style="background:#111; padding:20px; border-radius:20px; margin-top:15px; display:flex; justify-content:space-between; align-items:center;">
+                           <span>Pote V10 (Estoque: <b id="stk">${state.estoque}</b>)</span><button onclick="vender()" class="btn-m bg-red" style="width:80px; margin:0;">VENDER</button></div>`;
+        } else if(id === 'rota') {
+            c.innerHTML = `<div style="height:200px; background:#111; border-radius:25px; display:flex; align-items:center; justify-content:center; color:var(--red); border:1px solid #222;">MAPA HORTOLÂNDIA ATIVO</div><button class="btn-m bg-red">INICIAR ROTA DE ENTREGA</button>`;
         }
     }
-</script>
 
+    function vender() {
+        if(state.estoque > 0) {
+            sync({ revenue: state.revenue + 15, estoque: state.estoque - 1 });
+            document.getElementById('stk').innerText = state.estoque;
+        } else { alert("ESTOQUE ZERADO! BIPE MAIS CARGA."); }
+    }
+
+    function simularBipe() {
+        sync({ estoque: state.estoque + 10 });
+        document.getElementById('scan-log').innerHTML += `<br>> CARGA RECEBIDA: +10 UNID.`;
+    }
+
+    function switchLayer(id) {
+        document.querySelectorAll('.layer').forEach(l => l.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    function back() { switchLayer('scr-hub'); }
+
+    // Inicialização
+    const saved = localStorage.getItem('mec_state');
+    if(saved) state = JSON.parse(saved);
+    updateUI();
+</script>
 </body>
 </html>
