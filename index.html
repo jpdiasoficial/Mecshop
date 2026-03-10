@@ -2,161 +2,181 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JP PLATFORM | SHARK EDITION</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MEC-BET INFINITY | FIXED</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --green: #22c55e; --red: #ef4444; --gold: #d4af37; --bg: #020617; --card: #1e293b; --purple: #7c3aed; }
-        * { box-sizing: border-box; font-family: 'Segoe UI', Arial; }
-        body { margin: 0; background: var(--bg); color: white; text-align: center; }
-        
-        header { background: #000; padding: 20px; font-size: 24px; font-weight: 900; border-bottom: 2px solid var(--gold); }
-        .container { max-width: 500px; margin: auto; padding: 20px; }
-        .card { background: var(--card); padding: 20px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #334155; }
-        
-        input { width: 100%; padding: 12px; margin-top: 10px; border-radius: 8px; border: none; background: #0f172a; color: white; }
-        button { width: 100%; padding: 15px; margin-top: 10px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-green { background: var(--green); color: white; }
-        .btn-purple { background: var(--purple); color: white; }
-        
-        .hidden { display: none; }
-        
-        /* ROLETA MELHORADA */
-        #wheel { width: 220px; height: 220px; border-radius: 50%; border: 8px solid #334155; margin: 20px auto; 
-                 background: conic-gradient(var(--green) 0deg 90deg, #111 90deg 180deg, var(--green) 180deg 270deg, #111 270deg 360deg);
-                 transition: transform 4s cubic-bezier(0.1, 0, 0, 1); position: relative; }
-        #wheel::after { content: '▼'; position: absolute; top: -25px; left: 50%; transform: translateX(-50%); color: var(--gold); font-size: 30px; }
+        :root { --green: #00ff41; --gold: #d4af37; --bg: #000; --primary: #ff5e00; --gray: #1a1a1a; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; text-transform: uppercase; }
+        body { background: var(--bg); color: #fff; height: 100vh; overflow: hidden; }
 
-        /* LISTA DE USUÁRIOS NO ADMIN */
-        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #334155; font-size: 13px; }
+        /* NAVEGAÇÃO DE TELAS */
+        .view { position: absolute; inset: 0; display: none; flex-direction: column; background: var(--bg); }
+        .view.active { display: flex; animation: fade 0.3s ease; }
+        @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+        /* UI ELEMENTS */
+        .header-elite { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--gray); height: 70px; }
+        .logo { font-weight: 900; font-size: 22px; color: var(--gold); }
+        
+        .wallet-card { background: #080808; margin: 20px; padding: 25px; border-radius: 20px; border: 1px solid var(--gray); border-bottom: 4px solid var(--green); }
+        .wallet-value { font-size: 40px; font-weight: 900; margin: 10px 0; letter-spacing: -2px; }
+
+        .btn { width: 100%; padding: 18px; border-radius: 12px; border: none; font-weight: 900; cursor: pointer; transition: 0.2s; }
+        .btn-main { background: var(--primary); color: #fff; }
+        .btn-deposit { background: var(--green); color: #000; margin-top: 10px; }
+
+        /* ROLETA */
+        .wheel-container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .wheel { width: 280px; height: 280px; border: 10px solid #111; border-radius: 50%; background: conic-gradient(var(--primary) 0 12.5%, #000 12.5% 25%, var(--primary) 25% 37.5%, #000 37.5% 50%, var(--primary) 50% 62.5%, #000 62.5% 75%, var(--primary) 75% 87.5%, #000 87.5% 100%); transition: 4s cubic-bezier(0.1, 0, 0, 1); position: relative; }
+        .wheel::before { content: ''; position: absolute; top: -20px; left: 50%; transform: translateX(-50%); border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 25px solid var(--gold); z-index: 10; }
+
+        /* AUTH */
+        .auth-box { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; }
+        .input-auth { width: 100%; background: #0a0a0a; border: 1px solid #222; padding: 18px; border-radius: 12px; color: #fff; margin-bottom: 12px; }
+
+        nav { position: fixed; bottom: 0; width: 100%; height: 75px; background: #000; border-top: 1px solid var(--gray); display: none; justify-content: space-around; align-items: center; }
+        .nav-item { color: #444; font-size: 10px; font-weight: 900; text-align: center; }
+        .nav-item.active { color: var(--gold); }
     </style>
 </head>
-<body>
+<body onload="Mec.init()">
 
-<header>JP PLATFORM <small style="font-size: 10px; color: var(--gold);">V4.0</small></header>
-
-<div class="container">
-    <div id="authBox" class="card">
-        <h3 id="authTitle">LOGIN</h3>
-        <input id="userIn" placeholder="Usuário">
-        <input id="passIn" type="password" placeholder="Senha">
-        <button class="btn-green" onclick="App.handleAuth()">ENTRAR / CADASTRAR</button>
-        <p style="font-size: 12px; margin-top: 15px; color: #94a3b8;">SISTEMA MULTI-USUÁRIO ATIVO</p>
+    <div id="scr-auth" class="view active">
+        <div class="auth-box">
+            <h1 class="logo" style="font-size: 40px; margin-bottom: 30px;">MEC-BET</h1>
+            <div id="login-fields" style="width: 100%;">
+                <input id="user" class="input-auth" placeholder="USUÁRIO">
+                <input id="pass" type="password" class="input-auth" placeholder="SENHA">
+                <button class="btn btn-main" onclick="Mec.Auth.login()">ENTRAR</button>
+                <p onclick="Mec.Auth.toggle(true)" style="text-align:center; margin-top:20px; font-size:11px; color:var(--primary)">CRIAR CONTA</p>
+            </div>
+            <div id="reg-fields" style="width: 100%; display:none;">
+                <input id="new-user" class="input-auth" placeholder="NOVO USUÁRIO">
+                <input id="new-pass" type="password" class="input-auth" placeholder="NOVA SENHA">
+                <button class="btn btn-main" style="background:var(--green); color:#000" onclick="Mec.Auth.register()">CADASTRAR</button>
+                <p onclick="Mec.Auth.toggle(false)" style="text-align:center; margin-top:20px; font-size:11px;">VOLTAR</p>
+            </div>
+        </div>
     </div>
 
-    <div id="dash" class="hidden">
-        <div class="card" style="border-bottom: 4px solid var(--green);">
-            <h3>OLÁ, <span id="uName" style="color: var(--gold);"></span></h3>
-            <p style="font-size: 25px; font-weight: bold;">R$ <span id="uSaldo">0.00</span></p>
-            <canvas id="grafico" width="300" height="100" style="margin-top: 10px;"></canvas>
+    <div id="scr-lobby" class="view">
+        <header class="header-elite">
+            <div class="logo">MEC-BET</div>
+            <i class="fa-solid fa-right-from-bracket" onclick="Mec.Auth.logout()"></i>
+        </header>
+        <div class="wallet-card">
+            <p style="font-size:10px; color:#555">BANCA DISPONÍVEL</p>
+            <h2 id="balance" class="wallet-value">R$ 0,00</h2>
+            <button class="btn btn-deposit" onclick="Mec.Game.add()">DEPOSITAR (DEMO)</button>
         </div>
-
-        <div class="card">
-            <div id="wheel"></div>
-            <button class="btn-green" id="btnGirar" onclick="App.Game.girar()">APOSTAR R$ 10.00</button>
-            <p id="res" style="margin-top: 10px; font-weight: bold;"></p>
+        <div style="padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div onclick="Mec.Router.go('scr-game')" style="background:#0a0a0a; padding:20px; border-radius:15px; border:1px solid #222">
+                <i class="fa-solid fa-dharmachakra" style="font-size:30px; color:var(--gold)"></i>
+                <p style="margin-top:10px; font-size:12px; font-weight:900;">ROLETA VIP</p>
+            </div>
         </div>
-
-        <div id="adminBox" class="card hidden" style="background: #2e1065; border: 1px solid var(--gold);">
-            <h3 style="color: var(--gold);"><i class="fa-solid fa-crown"></i> PAINEL SHARK</h3>
-            <div id="userList" style="text-align: left; margin-top: 15px;"></div>
-            <button class="btn-purple" style="margin-top: 20px;" onclick="App.System.reset()">RESETA SISTEMA</button>
-        </div>
-
-        <button onclick="location.reload()" style="background: transparent; color: #64748b; border: 1px solid #334155;">SAIR DA CONTA</button>
     </div>
-</div>
 
-<script>
-const App = {
-    users: JSON.parse(localStorage.getItem("JP_USERS")) || [],
-    current: null,
+    <div id="scr-game" class="view">
+        <header class="header-elite">
+            <i class="fa-solid fa-chevron-left" onclick="Mec.Router.go('scr-lobby')"></i>
+            <div class="logo">SORTEIO</div>
+            <div></div>
+        </header>
+        <div class="wheel-container">
+            <div id="main-wheel" class="wheel"></div>
+            <button id="btn-spin" class="btn btn-main" style="width:80%; margin-top:40px;" onclick="Mec.Game.spin()">GIRAR R$ 10</button>
+            <p id="game-res" style="margin-top:20px; font-weight:900;"></p>
+        </div>
+    </div>
 
-    handleAuth() {
-        let u = userIn.value, p = passIn.value;
-        if(!u || !p) return alert("Preencha tudo!");
+    <nav id="nav-bar">
+        <div class="nav-item active" onclick="Mec.Router.go('scr-lobby')"><i class="fa-solid fa-house"></i><br>HOME</div>
+        <div class="nav-item" onclick="Mec.Router.go('scr-game')"><i class="fa-solid fa-gamepad"></i><br>JOGOS</div>
+    </nav>
 
-        let found = this.users.find(x => x.user == u);
-        
-        if(found) { // Login
-            if(found.pass == p) this.start(found);
-            else alert("Senha errada!");
-        } else { // Cadastro automático
-            let newUser = { user: u, pass: p, saldo: 0, hist: [0], role: u == 'admin' ? 'admin' : 'player' };
-            this.users.push(newUser);
-            this.save();
-            this.start(newUser);
-        }
-    },
+    <script>
+        const Mec = {
+            users: JSON.parse(localStorage.getItem('JP_DB')) || [],
+            current: null,
 
-    start(user) {
-        this.current = user;
-        authBox.classList.add("hidden");
-        dash.classList.remove("hidden");
-        uName.innerText = user.user;
-        if(user.role == 'admin') this.System.loadAdmin();
-        this.System.updateUI();
-    },
+            init() {
+                const session = localStorage.getItem('JP_SESSION');
+                if(session) {
+                    this.current = this.users.find(u => u.user === session);
+                    if(this.current) this.System.unlock();
+                }
+            },
 
-    Game: {
-        girar() {
-            if(App.current.saldo < 10 && App.current.role != 'admin') return alert("Saldo insuficiente!");
-            App.current.saldo -= 10;
-            btnGirar.disabled = true;
-            let deg = Math.floor(Math.random() * 3600) + 1080;
-            wheel.style.transform = `rotate(${deg}deg)`;
+            Auth: {
+                toggle(reg) {
+                    document.getElementById('login-fields').style.display = reg ? 'none' : 'block';
+                    document.getElementById('reg-fields').style.display = reg ? 'block' : 'none';
+                },
+                register() {
+                    let u = document.getElementById('new-user').value;
+                    let p = document.getElementById('new-pass').value;
+                    if(!u || !p) return alert("PREENCHA");
+                    Mec.users.push({user: u, pass: p, saldo: 0});
+                    localStorage.setItem('JP_DB', JSON.stringify(Mec.users));
+                    alert("CONTA CRIADA");
+                    location.reload();
+                },
+                login() {
+                    let u = document.getElementById('user').value;
+                    let p = document.getElementById('pass').value;
+                    let found = Mec.users.find(x => x.user == u && x.pass == p);
+                    if(found) {
+                        localStorage.setItem('JP_SESSION', u);
+                        location.reload();
+                    } else { alert("ERRO"); }
+                },
+                logout() { localStorage.removeItem('JP_SESSION'); location.reload(); }
+            },
 
-            setTimeout(() => {
-                let win = (deg % 2 == 0); // Lógica simples: se par, ganha
-                let premio = win ? 25 : 0;
-                App.current.saldo += premio;
-                App.current.hist.push(App.current.saldo);
-                res.innerText = win ? "GANHOU R$ 25!" : "PERDEU!";
-                res.style.color = win ? "lime" : "red";
-                btnGirar.disabled = false;
-                App.save();
-                App.System.updateUI();
-            }, 4000);
-        }
-    },
+            Game: {
+                add() { 
+                    Mec.current.saldo += 50; 
+                    Mec.System.sync(); 
+                },
+                spin() {
+                    if(Mec.current.saldo < 10) return alert("SEM SALDO");
+                    Mec.current.saldo -= 10;
+                    document.getElementById('btn-spin').disabled = true;
+                    let deg = Math.floor(Math.random() * 3600) + 7200;
+                    document.getElementById('main-wheel').style.transform = `rotate(${deg}deg)`;
+                    
+                    setTimeout(() => {
+                        let win = Math.random() > 0.5 ? 20 : 0;
+                        Mec.current.saldo += win;
+                        document.getElementById('game-res').innerText = win > 0 ? "GANHOU R$ 20" : "PERDEU";
+                        document.getElementById('btn-spin').disabled = false;
+                        Mec.System.sync();
+                    }, 4000);
+                }
+            },
 
-    System: {
-        updateUI() {
-            uSaldo.innerText = App.current.saldo.toFixed(2);
-            this.drawChart();
-        },
-        drawChart() {
-            let ctx = grafico.getContext("2d");
-            ctx.clearRect(0,0,300,100);
-            ctx.beginPath(); ctx.strokeStyle = "#22c55e";
-            App.current.hist.slice(-10).forEach((v, i) => {
-                let x = i * 30, y = 100 - (v / 2);
-                i == 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-            });
-            ctx.stroke();
-        },
-        loadAdmin() {
-            adminBox.classList.remove("hidden");
-            userList.innerHTML = App.users.map(u => `
-                <div class="user-row">
-                    <span>${u.user}</span>
-                    <button onclick="App.System.addSaldo('${u.user}')" style="width: auto; padding: 5px; font-size: 10px; background: var(--green);">+ R$50</button>
-                    <span>R$ ${u.saldo.toFixed(2)}</span>
-                </div>
-            `).join('');
-        },
-        addSaldo(username) {
-            let user = App.users.find(u => u.user == username);
-            user.saldo += 50;
-            App.save();
-            this.loadAdmin();
-            if(App.current.user == username) this.updateUI();
-        },
-        reset() { localStorage.clear(); location.reload(); }
-    },
+            System: {
+                unlock() {
+                    document.getElementById('scr-auth').classList.remove('active');
+                    document.getElementById('scr-lobby').classList.add('active');
+                    document.getElementById('nav-bar').style.display = 'flex';
+                    this.sync();
+                },
+                sync() {
+                    document.getElementById('balance').innerText = "R$ " + Mec.current.saldo.toFixed(2);
+                    localStorage.setItem('JP_DB', JSON.stringify(Mec.users));
+                }
+            },
 
-    save() { localStorage.setItem("JP_USERS", JSON.stringify(this.users)); }
-};
-</script>
+            Router: {
+                go(id) {
+                    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+                    document.getElementById(id).classList.add('active');
+                }
+            }
+        };
+    </script>
 </body>
 </html>
