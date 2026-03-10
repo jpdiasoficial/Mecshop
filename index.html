@@ -3,177 +3,236 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MEC-BANK V45 | Visão Shark</title>
+    <title>MEC-BANK V45 | Ultimate Shark</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
             --primary: #00ff88; --bg: #050505; --card: #121212; --text: #ffffff;
-            --accent-blue: #00d4ff; --danger: #ff4444; --glass: rgba(255,255,255,0.05);
+            --danger: #ff4444; --accent-blue: #00d4ff;
         }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: var(--text); margin: 0; overflow-x: hidden; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Inter', sans-serif; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        body { background: var(--bg); color: var(--text); margin: 0; overflow: hidden; height: 100vh; }
 
-        .screen { display: none; min-height: 100vh; padding: 20px; flex-direction: column; }
-        .active { display: flex; animation: fadeIn 0.4s ease; }
+        /* --- SISTEMA DE TELAS --- */
+        .screen { display: none; height: 100vh; padding: 20px; flex-direction: column; overflow-y: auto; padding-bottom: 100px; }
+        .active { display: flex; animation: slideIn 0.3s ease-out; }
+
+        /* --- NOTIFICAÇÕES (DETALHE 45) --- */
+        #toast { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #000; padding: 15px 30px; border-radius: 50px; font-weight: bold; z-index: 9999; box-shadow: 0 10px 30px rgba(0,255,136,0.3); }
 
         /* --- AUTH --- */
-        .auth-container { justify-content: center; align-items: center; text-align: center; }
-        .logo-text { font-size: 32px; font-weight: 800; letter-spacing: 2px; color: var(--primary); margin-bottom: 40px; }
-        input { width: 100%; max-width: 320px; background: var(--card); border: 1px solid #333; padding: 18px; border-radius: 12px; color: white; margin-bottom: 15px; outline: none; transition: 0.3s; }
-        .btn-main { width: 100%; max-width: 320px; background: var(--primary); color: black; border: none; padding: 18px; border-radius: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        .auth-container { justify-content: center; align-items: center; text-align: center; background: radial-gradient(circle at top, #111, #050505); }
+        .logo-text { font-size: 35px; font-weight: 900; color: var(--primary); letter-spacing: 2px; margin-bottom: 40px; text-shadow: 0 0 20px rgba(0,255,136,0.2); }
+        input { width: 100%; max-width: 320px; background: #1a1a1a; border: 1px solid #333; padding: 18px; border-radius: 15px; color: white; margin-bottom: 15px; outline: none; border-bottom: 2px solid transparent; }
+        input:focus { border-bottom-color: var(--primary); background: #222; }
+        .btn-main { width: 100%; max-width: 320px; background: var(--primary); color: black; border: none; padding: 18px; border-radius: 15px; font-weight: 800; cursor: pointer; transform: scale(1); }
+        .btn-main:active { transform: scale(0.95); }
 
-        /* --- DASHBOARD CLIENTE --- */
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; }
-        .avatar-circle { width: 40px; height: 40px; border: 1px solid var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary); font-weight: bold; }
-        .balance-box { margin: 30px 0; }
-        .main-balance { font-size: 32px; font-weight: 700; margin-top: 10px; transition: 0.3s; }
+        /* --- HEADER --- */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .avatar { width: 45px; height: 45px; border: 2px solid var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; color: var(--primary); }
+
+        /* --- CARDS & BALANCES --- */
+        .balance-card { background: var(--card); padding: 25px; border-radius: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); }
         .blur { filter: blur(10px); }
+        .black-card { background: linear-gradient(135deg, #1a1a1a, #000); padding: 25px; border-radius: 20px; border: 1px solid #333; position: relative; height: 180px; margin-bottom: 20px; }
 
-        /* --- PAINEL SHARK (ADM MASTER) --- */
-        .shark-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
-        .stat-card { background: var(--card); padding: 20px; border-radius: 15px; border-left: 4px solid var(--primary); }
-        .import-btn { background: rgba(0, 255, 136, 0.1); border: 2px dashed var(--primary); padding: 20px; border-radius: 15px; text-align: center; cursor: pointer; margin: 10px 0; }
+        /* --- MENU INFERIOR (O CORAÇÃO DO APP) --- */
+        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(15px); display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #222; z-index: 900; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 5px; color: #666; font-size: 10px; cursor: pointer; }
+        .nav-item.active-nav { color: var(--primary); }
+        .nav-item i { font-size: 20px; }
 
-        /* --- MENU & GRID --- */
-        .menu-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 25px; }
-        .menu-item { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 11px; color: #aaa; }
-        .icon-box { width: 55px; height: 55px; background: var(--card); border-radius: 15px; display: flex; justify-content: center; align-items: center; font-size: 20px; color: var(--primary); border: 1px solid rgba(255,255,255,0.03); }
+        /* --- GRID DE FUNÇÕES --- */
+        .action-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px; }
+        .action-item { text-align: center; font-size: 11px; color: #aaa; }
+        .icon-circle { width: 60px; height: 60px; background: #1a1a1a; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 8px; font-size: 22px; color: var(--primary); }
 
-        /* --- CARTÃO BLACK --- */
-        .card-pro { background: linear-gradient(135deg, #1a1a1a 0%, #000 100%); padding: 25px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); margin-bottom: 25px; position: relative; }
-        .card-number { margin-top: 30px; font-family: monospace; font-size: 18px; letter-spacing: 2px; }
+        /* --- COMPROVANTE (DETALHE V45) --- */
+        #receipt { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 2000; padding: 40px 20px; text-align: center; }
+        .receipt-box { background: white; color: black; padding: 30px; border-radius: 20px; margin-top: 20px; }
 
-        /* --- CÂMERA GLOBAL --- */
-        #cam-layer { display: none; position: fixed; inset: 0; background: #000; z-index: 1000; flex-direction: column; align-items: center; justify-content: center; }
-        .scanner-frame { width: 260px; height: 260px; border: 2px solid var(--primary); border-radius: 20px; overflow: hidden; position: relative; }
+        /* --- SCANNER --- */
+        #scanner { display: none; position: fixed; inset: 0; background: #000; z-index: 1500; }
         video { width: 100%; height: 100%; object-fit: cover; }
-        .scan-line { position: absolute; width: 100%; height: 2px; background: var(--primary); top: 0; animation: scan 2s linear infinite; box-shadow: 0 0 15px var(--primary); }
 
-        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes scanAnim { 0% { top: 0; } 100% { top: 100%; } }
     </style>
 </head>
 <body>
 
-    <div id="auth-screen" class="screen active auth-container">
+    <div id="toast">Operação Realizada!</div>
+
+    <div id="scr-auth" class="screen active auth-container">
         <div class="logo-text">MEC-BANK</div>
-        <input type="text" id="login-user" placeholder="Digite seu Nome">
-        <input type="password" id="login-pass" placeholder="Sua Senha">
-        <button class="btn-main" onclick="handleAuth()">Acessar Conta Black</button>
+        <input type="text" id="user-name" placeholder="Como quer ser chamado?">
+        <input type="password" placeholder="Qualquer senha libera">
+        <button class="btn-main" onclick="initApp()">ENTRAR NA CONTA</button>
     </div>
 
-    <div id="dash-client" class="screen">
-        <header class="header">
-            <div style="display: flex; align-items: center; gap: 12px;">
-                <div class="avatar-circle" id="av-client">S</div>
-                <span id="name-client" style="font-weight: 600;">Shark</span>
+    <div id="scr-home" class="screen">
+        <div class="header">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div class="avatar" id="avatar-init">S</div>
+                <span id="display-name" style="font-weight: bold;">Shark</span>
             </div>
-            <i class="fa-solid fa-bell" style="color: #444;"></i>
-        </header>
-
-        <section class="balance-box">
-            <div class="balance-label" style="color: #666; font-size: 13px;">Saldo disponível <i class="fa-regular fa-eye" onclick="toggleBlur()"></i></div>
-            <div class="main-balance blur" id="bal-client">R$ 145.850,90</div>
-        </section>
-
-        <nav class="menu-grid">
-            <div class="menu-item" onclick="openScanner('PIX')"><div class="icon-box"><i class="fa-solid fa-qrcode"></i></div><span>Pix</span></div>
-            <div class="menu-item" onclick="openScanner('BOLETO')"><div class="icon-box"><i class="fa-solid fa-barcode"></i></div><span>Pagar</span></div>
-            <div class="menu-item"><div class="icon-box"><i class="fa-solid fa-credit-card"></i></div><span>Cartões</span></div>
-            <div class="menu-item"><div class="icon-box"><i class="fa-solid fa-chart-line"></i></div><span>Investir</span></div>
-        </nav>
-
-        <div class="card-pro">
-            <div style="font-size: 12px; color: var(--primary); font-weight: bold;">MEC-BANK PLATINUM</div>
-            <div class="card-number">•••• •••• •••• 8835</div>
-            <i class="fa-solid fa-microchip" style="position: absolute; right: 25px; bottom: 25px; font-size: 24px; color: #333;"></i>
+            <i class="fa-solid fa-gear" style="color: #444;" onclick="changeTab('scr-settings')"></i>
         </div>
 
-        <div style="background: var(--card); border-radius: 20px; padding: 20px; flex-grow: 1;">
-            <p style="font-size: 14px; color: #666;">Atividade</p>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="display: flex; gap: 15px; align-items: center;">
-                    <div style="width: 40px; height: 40px; background: #1a1a1a; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--primary);"><i class="fa-solid fa-arrow-down"></i></div>
-                    <div><strong style="display: block; font-size: 14px;">Transferência</strong><small style="color: #444;">Hoje às 14:20</small></div>
-                </div>
-                <span style="color: var(--primary); font-weight: bold;">+ R$ 250,00</span>
+        <div class="balance-card">
+            <small style="color: #666;">Saldo em conta <i class="fa-solid fa-eye" onclick="document.getElementById('main-bal').classList.toggle('blur')"></i></small>
+            <div class="main-balance blur" id="main-bal">R$ 145.850,90</div>
+            <div style="margin-top: 15px; font-size: 13px; color: var(--primary); font-weight: bold;">Rendendo 105% do CDI</div>
+        </div>
+
+        <div class="action-grid">
+            <div class="action-item" onclick="openCam('PIX')"><div class="icon-circle"><i class="fa-solid fa-qrcode"></i></div>Pix</div>
+            <div class="action-item" onclick="openCam('BOLETO')"><div class="icon-circle"><i class="fa-solid fa-barcode"></i></div>Pagar</div>
+            <div class="action-item"><div class="icon-circle"><i class="fa-solid fa-money-bill-transfer"></i></div>Transf.</div>
+            <div class="action-item"><div class="icon-circle"><i class="fa-solid fa-mobile-screen"></i></div>Recarga</div>
+        </div>
+
+        <div class="black-card">
+            <div style="color: var(--primary); font-weight: bold; font-size: 12px;">SHARK PLATINUM</div>
+            <div style="margin-top: 40px; font-size: 20px; letter-spacing: 3px;">•••• •••• •••• 8835</div>
+            <div style="position: absolute; bottom: 25px; left: 25px;">
+                <small style="color: #666; display: block;">Limite disponível</small>
+                <strong>R$ 50.000,00</strong>
             </div>
+            <i class="fa-solid fa-microchip" style="position: absolute; right: 25px; bottom: 25px; font-size: 30px; color: #222;"></i>
         </div>
     </div>
 
-    <div id="dash-master" class="screen">
-        <header class="header">
-            <h2 style="color: var(--primary); font-size: 18px;">SHARK MASTER PANEL</h2>
-            <i class="fa-solid fa-power-off" style="color: var(--danger);" onclick="location.reload()"></i>
-        </header>
-
-        <div class="shark-grid">
-            <div class="stat-card"><small style="color: #666;">Faturamento Total</small><h3 id="master-total">R$ 1.450.850</h3></div>
-            <div class="stat-card"><small style="color: #666;">Contas Ativas</small><h3>842</h3></div>
+    <div id="scr-extrato" class="screen">
+        <h3>Atividade Recente</h3>
+        <div class="balance-card" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <strong>Transferência Recebida</strong>
+                <small style="display: block; color: #666;">Logística Sumaré S/A</small>
+            </div>
+            <span style="color: var(--primary); font-weight: bold;">+ R$ 4.500,00</span>
         </div>
-
-        <div class="import-btn" onclick="document.getElementById('fileIn').click()">
-            <i class="fa-solid fa-file-csv" style="font-size: 24px; margin-bottom: 10px;"></i>
-            <p>IMPORTAR PLANILHA (XLSX/CSV)</p>
-            <input type="file" id="fileIn" hidden onchange="importMaster(event)">
+        <div class="balance-card" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <strong>Compra Sergel</strong>
+                <small style="display: block; color: #666;">Débito aprovado</small>
+            </div>
+            <span>- R$ 28,50</span>
         </div>
-
-        <button class="btn-main" style="background: var(--danger); color: white; margin-top: 20px;" onclick="alert('Sistema Bloqueado!')">BLOQUEIO GERAL</button>
     </div>
 
-    <div id="cam-layer">
-        <h3 id="cam-title">ESCANEANDO</h3>
-        <div class="scanner-frame">
-            <div class="scan-line"></div>
-            <video id="v-preview" playsinline></video>
+    <div id="scr-support" class="screen">
+        <h3>Suporte Shark</h3>
+        <div class="balance-card">
+            <p>Olá! Como podemos ajudar na sua operação hoje?</p>
+            <button class="btn-main" onclick="notify('Chamado aberto! Aguarde 1 min.')">Falar com Especialista</button>
         </div>
-        <button class="btn-main" style="margin-top: 40px; background: #fff; color: #000;" onclick="closeScanner()">Cancelar</button>
+        <div class="balance-card">
+            <strong>Dúvidas Frequentes</strong>
+            <p style="font-size: 12px; color: #888; margin-top: 10px;">• Como aumentar limite?<br>• Prazos de compensação<br>• Segurança da conta</p>
+        </div>
+    </div>
+
+    <div id="scr-master" class="screen">
+        <h2 style="color: var(--primary);">Shark Admin Master</h2>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="balance-card"><h3>R$ 1.2M</h3><small>Volume Total</small></div>
+            <div class="balance-card"><h3>1.4k</h3><small>Usuários</small></div>
+        </div>
+        <div class="balance-card" style="border: 2px dashed var(--primary); text-align: center;" onclick="document.getElementById('fileIn').click()">
+            <i class="fa-solid fa-cloud-arrow-up" style="font-size: 30px;"></i>
+            <p>SUBIR PLANILHA DE SALDOS</p>
+            <input type="file" id="fileIn" hidden onchange="notify('Planilha Processada!')">
+        </div>
+    </div>
+
+    <div class="nav-bar" id="bottom-nav" style="display: none;">
+        <div class="nav-item active-nav" onclick="changeTab('scr-home')"><i class="fa-solid fa-house"></i><span>Início</span></div>
+        <div class="nav-item" onclick="changeTab('scr-extrato')"><i class="fa-solid fa-list-ul"></i><span>Extrato</span></div>
+        <div class="nav-item" onclick="changeTab('scr-support')"><i class="fa-solid fa-headset"></i><span>Suporte</span></div>
+        <div class="nav-item" onclick="location.reload()"><i class="fa-solid fa-door-open"></i><span>Sair</span></div>
+    </div>
+
+    <div id="receipt">
+        <div class="receipt-box">
+            <i class="fa-solid fa-circle-check" style="font-size: 50px; color: #00ff88; margin-bottom: 20px;"></i>
+            <h3>Comprovante de Pagamento</h3>
+            <p id="rec-type">Operação Pix</p>
+            <hr>
+            <h2 id="rec-val">R$ 0,00</h2>
+            <p>Autenticação: MEC-SHARK-8835-X</p>
+        </div>
+        <button class="btn-main" style="margin-top: 30px;" onclick="closeReceipt()">VOLTAR AO APP</button>
+    </div>
+
+    <div id="scanner">
+        <video id="v-play" playsinline></video>
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 250px; height: 250px; border: 2px solid var(--primary); border-radius: 20px;"></div>
+        <button class="btn-main" style="position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%); background: #fff;" onclick="closeCam()">CANCELAR</button>
     </div>
 
     <script>
-        function handleAuth() {
-            const user = document.getElementById('login-user').value.toLowerCase();
-            document.getElementById('auth-screen').classList.remove('active');
+        function initApp() {
+            const name = document.getElementById('user-name').value;
+            if(!name) return alert("Diga seu nome, Shark!");
             
-            if(user === 'shark') {
-                document.getElementById('dash-master').classList.add('active');
+            document.getElementById('scr-auth').classList.remove('active');
+            
+            if(name.toLowerCase() === 'shark') {
+                document.getElementById('scr-master').classList.add('active');
             } else {
-                document.getElementById('name-client').innerText = user;
-                document.getElementById('av-client').innerText = user[0].toUpperCase();
-                document.getElementById('dash-client').classList.add('active');
+                document.getElementById('display-name').innerText = name;
+                document.getElementById('avatar-init').innerText = name[0].toUpperCase();
+                document.getElementById('scr-home').classList.add('active');
+                document.getElementById('bottom-nav').style.display = 'flex';
             }
         }
 
-        function toggleBlur() {
-            document.getElementById('bal-client').classList.toggle('blur');
+        function changeTab(tabId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active-nav'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active-nav');
         }
 
-        async function openScanner(title) {
-            document.getElementById('cam-title').innerText = title;
-            document.getElementById('cam-layer').style.display = 'flex';
+        function notify(msg) {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.style.top = '20px';
+            setTimeout(() => t.style.top = '-100px', 3000);
+        }
+
+        async function openCam(type) {
+            document.getElementById('scanner').style.display = 'block';
             const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-            document.getElementById('v-preview').srcObject = stream;
-            document.getElementById('v-preview').play();
+            document.getElementById('v-play').srcObject = stream;
+            document.getElementById('v-play').play();
+            
+            // Simulação de Leitura (Após 3 segundos ele "bipa")
+            setTimeout(() => {
+                closeCam();
+                showReceipt(type);
+            }, 4000);
         }
 
-        function closeScanner() {
-            const video = document.getElementById('v-preview');
-            if(video.srcObject) video.srcObject.getTracks().forEach(t => t.stop());
-            document.getElementById('qr-layer').style.display = 'none'; // Fallback
-            document.getElementById('cam-layer').style.display = 'none';
+        function closeCam() {
+            const v = document.getElementById('v-play');
+            if(v.srcObject) v.srcObject.getTracks().forEach(t => t.stop());
+            document.getElementById('scanner').style.display = 'none';
         }
 
-        function importMaster(event) {
-            const file = event.target.files[0];
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, {type: 'array'});
-                alert("Planilha Master Processada com Sucesso! Dados atualizados.");
-                document.getElementById('master-total').innerText = "R$ 1.890.420"; // Exemplo de refresh
-            };
-            reader.readAsArrayBuffer(file);
+        function showReceipt(type) {
+            document.getElementById('rec-type').innerText = "Pagamento: " + type;
+            document.getElementById('rec-val').innerText = type === 'PIX' ? "R$ 1.250,00" : "R$ 425,90";
+            document.getElementById('receipt').style.display = 'block';
+        }
+
+        function closeReceipt() {
+            document.getElementById('receipt').style.display = 'none';
+            notify("Operação salva no Extrato!");
         }
     </script>
 </body>
