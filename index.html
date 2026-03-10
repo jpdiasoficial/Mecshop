@@ -3,243 +3,217 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ELITEBET | ENTERPRISE V3.1</title>
+    <title>MEC-BET | OFFICIAL SYSTEM</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #ff5e00; --secondary: #00ff41; --bg: #0b0e11; --card: #161a1e; --border: #2b3139; --text: #ffffff; --muted: #929aa5; --danger: #ff3b30; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: var(--text); overflow: hidden; height: 100vh; }
+        :root { --green: #00ff41; --gold: #d4af37; --bg: #000000; --card-bg: #0d0d0d; --text: #ffffff; --danger: #ff3b30; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; text-transform: uppercase; }
+        body { background: var(--bg); color: var(--text); overflow-x: hidden; height: 100vh; }
 
-        /* HEADER */
-        header { position: fixed; top: 0; width: 100%; height: 65px; background: #1e2329; display: flex; align-items: center; padding: 0 20px; border-bottom: 2px solid var(--primary); z-index: 1000; justify-content: space-between; display: none; }
-        .logo { font-weight: 900; font-style: italic; font-size: 18px; }
-        .logo span { color: var(--primary); }
-        
-        /* APP CONTENT */
-        .app-content { padding: 85px 15px 100px; max-width: 500px; margin: 0 auto; height: 100vh; overflow-y: auto; }
-        .screen { display: none; }
-        .active { display: block; animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* HEADER MEC-BET (IGUAL IMAGEM 4509) */
+        .header-player { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1a1a1a; }
+        .logo-mec { font-weight: 900; color: var(--gold); font-size: 18px; letter-spacing: 2px; }
+        .lvl-tag { font-size: 10px; color: var(--gold); }
 
-        /* CARDS E BOTÕES */
-        .card { background: var(--card); border-radius: 12px; padding: 20px; border: 1px solid var(--border); margin-bottom: 15px; }
-        .btn { width: 100%; padding: 16px; border-radius: 8px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 12px; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-main { background: var(--primary); color: #fff; box-shadow: 0 4px 0px #b84300; }
-        .btn-main:active { transform: translateY(2px); box-shadow: 0 2px 0px #b84300; }
-        .btn-danger { background: var(--danger); color: #fff; }
-        
-        input { width: 100%; background: #0b0e11; border: 1px solid var(--border); padding: 14px; border-radius: 8px; color: #fff; margin-bottom: 12px; }
+        /* CONTAINER DE SALDO (IGUAL IMAGEM 4509) */
+        .balance-container { background: var(--card-bg); border: 1px solid #1a1a1a; border-radius: 15px; padding: 25px; margin: 15px; }
+        .label-pix { color: #555; font-size: 9px; margin-bottom: 8px; font-weight: 700; }
+        .main-balance { font-size: 32px; font-weight: 900; margin-bottom: 20px; font-family: sans-serif; }
+        .btns-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn-deposit { background: var(--green); color: #000; border: none; padding: 15px; border-radius: 8px; font-weight: 900; cursor: pointer; }
+        .btn-withdraw { background: #1a1a1a; color: #fff; border: 1px solid #333; padding: 15px; border-radius: 8px; font-weight: 900; cursor: pointer; }
 
-        /* ROLETA */
-        .wheel-box { position: relative; width: 240px; height: 240px; margin: 20px auto; border: 8px solid #1e2329; border-radius: 50%; box-shadow: 0 0 20px rgba(255, 94, 0, 0.2); }
-        .wheel-img { width: 100%; height: 100%; border-radius: 50%; background: conic-gradient(#111 0% 12.5%, #ff5e00 12.5% 25%, #111 25% 37.5%, #ff5e00 37.5% 50%, #111 50% 62.5%, #ff5e00 62.5% 75%, #111 75% 87.5%, #ff5e00 87.5% 100%); transition: 4s cubic-bezier(0.1, 0, 0.1, 1); }
+        /* GRID JOGOS (IGUAL IMAGEM 4509) */
+        .games-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 15px; }
+        .game-card { background: var(--card-bg); border: 1px solid #1a1a1a; border-radius: 12px; height: 140px; position: relative; padding: 15px; display: flex; align-items: flex-end; overflow: hidden; }
+        .game-card.green-border { border-bottom: 3px solid var(--green); }
+        .game-card.blue-border { border-bottom: 3px solid #007aff; }
+        .game-card.gold-border { border-bottom: 3px solid var(--gold); }
+        .game-card span { font-size: 10px; font-weight: 900; z-index: 2; }
 
-        /* TABELA ADMIN */
-        table { width: 100%; border-collapse: collapse; font-size: 11px; }
-        th { color: var(--muted); text-align: left; padding: 10px; border-bottom: 1px solid var(--border); }
-        td { padding: 12px 10px; border-bottom: 1px solid #1e2329; }
+        /* PAINEL ADMIN SHARK-BET (IGUAL IMAGEM 4507) */
+        .admin-header { background: #000; padding: 20px; border-bottom: 2px solid var(--gold); display: flex; justify-content: space-between; align-items: center; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; }
+        .stat-card { background: #0a0a0a; border: 1px solid #1a1a1a; border-left: 3px solid var(--gold); padding: 15px; border-radius: 5px; }
+        .stat-label { font-size: 8px; color: #555; margin-bottom: 5px; }
+        .stat-val { font-size: 16px; font-weight: 900; }
 
-        /* NAV INFERIOR */
-        nav { position: fixed; bottom: 0; width: 100%; height: 70px; background: #1e2329; border-top: 1px solid var(--border); display: none; justify-content: space-around; align-items: center; z-index: 1000; }
-        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; color: var(--muted); font-size: 9px; font-weight: 700; cursor: pointer; }
-        .nav-item.active { color: var(--primary); }
-        .nav-item i { font-size: 20px; margin-bottom: 4px; }
+        /* TELAS */
+        .screen { display: none; height: 100vh; overflow-y: auto; padding-bottom: 100px; }
+        .active { display: block !important; }
+
+        /* NAV FIXA */
+        nav { position: fixed; bottom: 0; width: 100%; background: #000; border-top: 1px solid #111; display: flex; justify-content: space-around; padding: 15px; z-index: 9999; }
+        .nav-link { color: #444; font-size: 9px; font-weight: 900; text-decoration: none; text-align: center; cursor: pointer; }
+        .nav-link i { display: block; font-size: 18px; margin-bottom: 5px; }
+        .nav-link.active { color: var(--gold); }
+
+        /* ACESSO/LOGIN (IGUAL IMAGEM 4511) */
+        .login-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; padding: 30px; }
+        .login-box { width: 100%; max-width: 400px; background: #0d0d0d; border-radius: 15px; padding: 30px; border: 1px solid #1a1a1a; }
+        .login-box input { width: 100%; background: #000; border: 1px solid #222; padding: 15px; border-radius: 8px; color: #fff; margin-bottom: 15px; }
+        .btn-entrar { width: 100%; background: #ff5e00; color: #fff; border: none; padding: 18px; border-radius: 8px; font-weight: 900; cursor: pointer; }
+
+        /* ROLETA (IGUAL IMAGEM 4518) */
+        .wheel-container { text-align: center; padding: 20px; }
+        .wheel { width: 220px; height: 220px; border-radius: 50%; border: 8px solid #1a1a1a; margin: 20px auto; background: conic-gradient(#ff5e00 0% 12.5%, #000 12.5% 25%, #ff5e00 25% 37.5%, #000 37.5% 50%, #ff5e00 50% 62.5%, #000 62.5% 75%, #ff5e00 75% 87.5%, #000 87.5% 100%); transition: 4s cubic-bezier(0.1, 0, 0.1, 1); }
     </style>
 </head>
-<body>
+<body onload="checkSessao()">
 
-    <header id="h-master">
-        <div class="logo">ELITE<span>BET</span></div>
-        <div style="display:flex; align-items:center; gap:12px;">
-            <div id="h-saldo" style="font-weight:900; color:var(--secondary); background:#2b3139; padding:6px 12px; border-radius:6px; font-size:14px;">R$ 0,00</div>
-            <i class="fa-solid fa-circle-user" style="font-size:24px; color:var(--primary);" onclick="location.reload()"></i>
-        </div>
-    </header>
-
-    <div class="app-content">
-
-        <div id="scr-login" class="screen active">
-            <div style="text-align:center; margin-bottom:40px; margin-top: 40px;">
-                <h1 style="font-size:32px; font-weight:900;">ELITE ACCESS</h1>
-                <p style="color:var(--muted);">ENTRE COM SUA CHAVE DE OPERAÇÃO</p>
-            </div>
-            <div class="card">
-                <input type="text" id="l-user" placeholder="USUÁRIO">
-                <input type="password" id="l-pass" placeholder="SENHA">
-                <button class="btn btn-main" onclick="entrar()">AUTENTICAR SISTEMA</button>
-            </div>
-        </div>
-
-        <div id="scr-lobby" class="screen">
-            <div class="card" style="text-align:center; border-bottom: 4px solid var(--primary);">
-                <span style="font-size:10px; color:var(--muted); font-weight:800;">BANCA DISPONÍVEL</span>
-                <h1 id="m-saldo" style="font-size:42px; color:var(--text); margin:10px 0;">R$ 0,00</h1>
-                <button class="btn btn-main">DEPOSITAR VIA PIX</button>
-            </div>
-
-            <div class="card" onclick="irPara('scr-roleta')" style="cursor:pointer; border-left:4px solid var(--primary);">
-                <div style="display:flex; align-items:center; gap:15px;">
-                    <i class="fa-solid fa-dharmachakra" style="font-size:30px; color:var(--primary);"></i>
-                    <div>
-                        <h3 style="font-size:14px;">ROLETA DE GIROS</h3>
-                        <p style="font-size:10px; color:var(--muted);">GERE LUCRO DIÁRIO AGORA</p>
-                    </div>
+    <div id="scr-login" class="screen active">
+        <div class="login-screen">
+            <h1 style="font-size: 32px; margin-bottom: 10px;">ACESSO</h1>
+            <p style="color: #555; margin-bottom: 30px; font-size: 12px;">Entre na elite das apostas.</p>
+            <div class="login-box">
+                <input type="text" id="user-input" placeholder="USUÁRIO OU CPF">
+                <input type="password" id="pass-input" placeholder="PALAVRA-PASSE">
+                <button class="btn-entrar" onclick="login()">ENTRAR NO SISTEMA</button>
+                <div style="display:flex; justify-content: space-between; margin-top: 20px; font-size: 10px;">
+                    <span style="color: #ff5e00;">CRIAR CONTA</span>
+                    <span style="color: #555;">ESQUECI A SENHA</span>
                 </div>
             </div>
         </div>
-
-        <div id="scr-roleta" class="screen">
-            <div class="card" style="text-align:center;">
-                <h2 style="font-size:16px; letter-spacing: 1px;">SORTEIO EM TEMPO REAL</h2>
-                <div class="wheel-box">
-                    <div id="wheel" class="wheel-img"></div>
-                </div>
-                <button id="btn-girar" class="btn btn-main" onclick="girarRoleta()">INICIAR GIRO</button>
-                
-                <div style="margin-top:25px; border-top: 1px solid var(--border); padding-top:15px;">
-                    <h4 style="font-size:10px; color:var(--primary); margin-bottom:10px;">HISTÓRICO DE GANHOS</h4>
-                    <table id="ganhos-recentes">
-                        <tr><td>USUÁRIO_45</td><td style="color:var(--secondary);">R$ 45,00</td><td>AGORA</td></tr>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div id="scr-suporte" class="screen">
-            <div class="card" style="height:400px; display:flex; flex-direction:column;">
-                <h3 style="font-size:12px; margin-bottom:15px;">CHAT OPERACIONAL</h3>
-                <div id="chat-box" style="flex:1; overflow-y:auto; background:#0b0e11; border-radius:8px; padding:15px; font-size:11px;">
-                    <p style="color:var(--primary); margin-bottom:10px;"><b>[SISTEMA]:</b> AGUARDANDO OPERADOR...</p>
-                </div>
-                <div style="margin-top:15px; display:flex; gap:5px;">
-                    <input type="text" id="chat-msg" placeholder="DIGITE..." style="margin:0;">
-                    <button class="btn btn-main" style="width:50px;" onclick="enviarMsg()"><i class="fa-solid fa-paper-plane"></i></button>
-                </div>
-            </div>
-        </div>
-
-        <div id="scr-admin" class="screen">
-            <div class="card">
-                <h3 style="margin-bottom:15px; color:var(--primary);">PAINEL DO SHARK</h3>
-                <table>
-                    <thead>
-                        <tr><th>USER</th><th>SALDO</th><th>AÇÃO</th></tr>
-                    </thead>
-                    <tbody id="admin-users"></tbody>
-                </table>
-                <button class="btn btn-danger" style="margin-top:20px;" onclick="location.reload()">DESLOGAR TODOS</button>
-            </div>
-        </div>
-
     </div>
 
-    <nav id="navbar">
-        <div class="nav-item active" onclick="irPara('scr-lobby')"><i class="fa-solid fa-house"></i>INÍCIO</div>
-        <div class="nav-item" onclick="irPara('scr-roleta')"><i class="fa-solid fa-dharmachakra"></i>ROLETA</div>
-        <div class="nav-item" onclick="irPara('scr-suporte')"><i class="fa-solid fa-headset"></i>SUPORTE</div>
-        <div id="n-adm" class="nav-item" onclick="irPara('scr-admin')" style="display:none; color:var(--primary);"><i class="fa-solid fa-shield"></i>ADMIN</div>
-    </nav>
+    <div id="scr-player" class="screen">
+        <div class="header-player">
+            <div class="logo-mec">MEC-BET</div>
+            <div class="lvl-tag">LVL: 45 <span style="background:var(--gold); color:#000; padding:2px 5px; border-radius:3px; margin-left:5px;">JP</span></div>
+        </div>
+
+        <div class="balance-container">
+            <div class="label-pix">SEU SALDO TOTAL (PIX)</div>
+            <div class="main-balance" id="player-balance">R$ 450,20</div>
+            <div style="color: var(--green); font-size: 8px; margin-bottom: 20px;">● DEPÓSITO PROCESSADO EM 2S</div>
+            <div class="btns-row">
+                <button class="btn-deposit">DEPOSITAR</button>
+                <button class="btn-withdraw">SACAR</button>
+            </div>
+        </div>
+
+        <div style="background: linear-gradient(90deg, #00334d, #001a26); padding: 15px; margin: 15px; border-radius: 10px; border: 1px solid #005580;">
+            <div style="color: #00ccff; font-weight: 900; font-size: 12px;">SEU BÔNUS ESTÁ ATIVO!</div>
+            <p style="color: #006699; font-size: 8px; margin-top: 5px;">JOGUE R$ 1.200 PARA LIBERAR O SAQUE.</p>
+        </div>
+
+        <div class="games-grid">
+            <div class="game-card green-border" onclick="irPara('scr-roleta')"><span>FORTUNE TIGER</span></div>
+            <div class="game-card gold-border"><span>AVIATOR (LIVE)</span></div>
+            <div class="game-card blue-border"><span>ROULETTE VIP</span></div>
+            <div class="game-card gold-border"><span>FOOTBALL SLOTS</span></div>
+        </div>
+
+        <nav>
+            <div class="nav-link active" onclick="irPara('scr-player')"><i class="fa-solid fa-house"></i>INÍCIO</div>
+            <div class="nav-link"><i class="fa-solid fa-gamepad"></i>JOGOS</div>
+            <div class="nav-link"><i class="fa-solid fa-file-invoice-dollar"></i>EXTRATO</div>
+            <div id="nav-adm-btn" class="nav-link" style="display:none;" onclick="irPara('scr-admin')"><i class="fa-solid fa-shield-halved"></i>SHARK</div>
+        </nav>
+    </div>
+
+    <div id="scr-roleta" class="screen">
+        <div class="header-player">
+            <div class="logo-mec" style="color: #ff5e00;">SORTEIO ELITE</div>
+            <i class="fa-solid fa-xmark" onclick="irPara('scr-player')"></i>
+        </div>
+        <div class="wheel-container">
+            <div id="main-wheel" class="wheel"></div>
+            <button class="btn-entrar" style="margin-top: 20px;" onclick="girar()">GIRAR AGORA</button>
+            <div style="margin-top: 40px; border-top: 1px solid #111; padding-top: 20px;">
+                <p style="color: #ff5e00; font-size: 10px; margin-bottom: 15px;">HISTÓRICO DE PRÊMIOS</p>
+                <div id="hist" style="font-size: 10px; opacity: 0.6;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom: 10px;"><span>GABRIEL_***</span><span style="color:var(--green)">R$ 45,00</span><span>AGORA</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="scr-admin" class="screen">
+        <div class="admin-header">
+            <div class="logo-mec" style="color: var(--gold);">SHARK-BET ADMIN</div>
+            <div style="color: var(--green); font-size: 8px;">● SISTEMA OPERACIONAL (ATIVO)</div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card"><div class="stat-label">GGR (ENTRADA TOTAL)</div><div class="stat-val">R$ 154.200,00</div></div>
+            <div class="stat-card" style="border-left-color: var(--danger);"><div class="stat-label">PAYOUT (SAÍDA)</div><div class="stat-val" style="color:var(--danger)">R$ 82.150,00</div></div>
+            <div class="stat-card" style="border-left-color: var(--green);"><div class="stat-label">NGR (LUCRO LÍQUIDO)</div><div class="stat-val" style="color:var(--green)">R$ 72.050,00</div></div>
+            <div class="stat-card"><div class="stat-label">USUÁRIOS ATIVOS</div><div class="stat-val" style="color: #00ccff;">1.422</div></div>
+        </div>
+
+        <div style="background: rgba(255, 59, 48, 0.1); border: 1px solid var(--danger); color: var(--danger); margin: 15px; padding: 10px; border-radius: 5px; font-size: 8px;">
+            ALERTA DE SEGURANÇA: IDENTIFICAMOS 3 CONTAS COM O MESMO IP TENTANDO REALIZAR SAQUES MÚLTIPLOS.
+        </div>
+
+        <div style="padding: 15px;">
+            <p style="font-size: 10px; color: #555; margin-bottom: 10px;">GESTÃO DE SAQUES PENDENTES</p>
+            <div style="background: #0a0a0a; border-radius: 5px; padding: 10px; font-size: 9px; border: 1px solid #111;">
+                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid #222; padding: 10px 0;">
+                    <div>BET_MASTER_99<br><span style="color:var(--green)">R$ 1.500,00 (PIX)</span></div>
+                    <button style="background:var(--green); border:none; padding: 5px 10px; font-weight:900; border-radius:3px;">LIBERAR</button>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-withdraw" style="width: calc(100% - 30px); margin: 15px; border-color: var(--danger); color: var(--danger);" onclick="location.reload()">DESLIGAR SISTEMA (CUT-OFF)</button>
+    </div>
 
     <script>
-        // --- ESTADO DO SISTEMA (DANDO VIDA) ---
-        let state = JSON.parse(localStorage.getItem('elite_state')) || {
-            saldo: 0.00,
-            user: "VISITANTE",
-            role: "USER",
-            logado: false
-        };
+        let banca = 450.20;
+        let logado = false;
 
-        function init() {
-            if(state.logado) {
-                renderApp();
+        function checkSessao() {
+            const save = localStorage.getItem('mec_session');
+            if(save) {
+                logado = true;
+                banca = parseFloat(localStorage.getItem('mec_banca')) || 450.20;
+                irPara('scr-player');
+                if(localStorage.getItem('mec_role') === 'admin') document.getElementById('nav-adm-btn').style.display = 'block';
+                updateBanca();
             }
         }
 
         function irPara(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            const idx = { 'scr-lobby': 0, 'scr-roleta': 1, 'scr-suporte': 2, 'scr-admin': 3 };
-            if(idx[id] !== undefined) document.querySelectorAll('.nav-item')[idx[id]].classList.add('active');
         }
 
-        function entrar() {
-            const u = document.getElementById('l-user').value;
-            const p = document.getElementById('l-pass').value;
-
+        function login() {
+            const u = document.getElementById('user-input').value;
+            const p = document.getElementById('pass-input').value;
             if(!u) return alert("INSIRA O USUÁRIO");
 
-            state.user = u.toUpperCase();
-            state.logado = true;
+            localStorage.setItem('mec_session', 'true');
+            localStorage.setItem('mec_banca', banca);
             
             if(u.toLowerCase() === 'admin' && p === '9910') {
-                state.role = "ADMIN";
+                localStorage.setItem('mec_role', 'admin');
+                document.getElementById('nav-adm-btn').style.display = 'block';
             }
-
-            localStorage.setItem('elite_state', JSON.stringify(state));
-            renderApp();
-            irPara('scr-lobby');
+            
+            irPara('scr-player');
         }
 
-        function renderApp() {
-            document.getElementById('h-master').style.display = 'flex';
-            document.getElementById('navbar').style.display = 'flex';
-            if(state.role === "ADMIN") {
-                document.getElementById('n-adm').style.display = 'flex';
-                renderAdmin();
-            }
-            updateUI();
-        }
-
-        function girarRoleta() {
-            const btn = document.getElementById('btn-girar');
-            const wheel = document.getElementById('wheel');
-            btn.disabled = true;
-            btn.innerText = "PROCESSANDO...";
-
-            const win = parseFloat((Math.random() * 100).toFixed(2));
-            const deg = Math.floor(Math.random() * 3600) + 7200;
-            wheel.style.transform = `rotate(${deg}deg)`;
+        function girar() {
+            const w = document.getElementById('main-wheel');
+            const sorteio = (Math.random() * 50).toFixed(2);
+            const r = Math.floor(Math.random() * 3600) + 7200;
+            w.style.transform = `rotate(${r}deg)`;
 
             setTimeout(() => {
-                state.saldo += win;
-                localStorage.setItem('elite_state', JSON.stringify(state));
-                updateUI();
-                alert(`LUCRO CONFIRMADO: R$ ${win.toFixed(2)}`);
-                btn.disabled = false;
-                btn.innerText = "INICIAR GIRO";
+                banca += parseFloat(sorteio);
+                localStorage.setItem('mec_banca', banca);
+                updateBanca();
+                alert("GANHOU R$ " + sorteio);
             }, 4000);
         }
 
-        function updateUI() {
-            const val = "R$ " + state.saldo.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-            document.getElementById('h-saldo').innerText = val;
-            document.getElementById('m-saldo').innerText = val;
+        function updateBanca() {
+            const formatado = "R$ " + banca.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+            document.getElementById('player-balance').innerText = formatado;
         }
-
-        function renderAdmin() {
-            const list = document.getElementById('admin-users');
-            list.innerHTML = `
-                <tr><td>${state.user}</td><td>${state.saldo}</td><td><i class="fa-solid fa-pen"></i></td></tr>
-                <tr><td>MEC_USER_02</td><td>250.00</td><td><i class="fa-solid fa-pen"></i></td></tr>
-            `;
-        }
-
-        function enviarMsg() {
-            const m = document.getElementById('chat-msg');
-            if(!m.value) return;
-            const box = document.getElementById('chat-box');
-            box.innerHTML += `<p style="text-align:right; margin-bottom:8px;">${m.value}</p>`;
-            m.value = "";
-            setTimeout(() => {
-                box.innerHTML += `<p style="color:var(--primary); margin-bottom:8px;"><b>[SUPORTE]:</b> SOLICITAÇÃO RECEBIDA.</p>`;
-                box.scrollTop = box.scrollHeight;
-            }, 1000);
-        }
-
-        window.onload = init;
     </script>
 </body>
-    </html>
+</html>
