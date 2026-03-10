@@ -292,4 +292,17 @@
                             <div><b>${u.user}</b><br><small>R$ ${u.bal.toFixed(2)}</small></div>
                             <button onclick="App.Sys.toggleLoss('${u.user}')" style="background:${u.mode==='lose'?'red':'#333'}; color:#fff; border:none; padding:8px; border-radius:10px;">${u.mode==='lose'?'TIRAR LOSS':'FORÇAR LOSS'}</button>
                         </div>
-                    
+                    `).join('');
+                },
+                toggleLoss(n) { const u = App.db.find(x=>x.user===n); u.mode = u.mode==='lose'?'auto':'lose'; this.sync(); },
+                wallet(type) {
+                    const v = parseFloat(document.getElementById('w-dep').value) || 0;
+                    if(type === 'in' && v > 0) App.u.bal += v;
+                    this.sync();
+                },
+                save() { localStorage.setItem('MEC_CORE_DB', JSON.stringify(App.db)); localStorage.setItem('MEC_CORE_ST', JSON.stringify(App.st)); }
+            }
+        };
+    </script>
+</body>
+</html>
