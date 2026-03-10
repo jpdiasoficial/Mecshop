@@ -1,172 +1,121 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MEC-BET | PRO OPERATIONAL</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-        :root { --gold: #d4af37; --main: #00ff41; --danger: #ff3b30; --card: #0d0d0d; --bg: #000; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: #fff; text-transform: uppercase; overflow: hidden; height: 100vh; }
-
-        .screen { display: none; height: 100vh; flex-direction: column; }
-        .active { display: flex !important; }
-
-        header { padding: 20px; border-bottom: 1px solid #111; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-weight: 900; color: var(--gold); font-size: 14px; letter-spacing: 1px; }
-        .status-sys { font-size: 8px; color: var(--main); letter-spacing: 1px; }
-
-        .content { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 100px; }
-
-        .card-saldo { background: var(--card); border: 1px solid #1a1a1a; border-radius: 12px; padding: 20px; margin-bottom: 15px; }
-        .label-small { font-size: 8px; color: #555; margin-bottom: 8px; letter-spacing: 1px; }
-        .value-large { font-size: 28px; font-weight: 900; margin-bottom: 15px; }
-        
-        .grid-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .btn { padding: 14px; border-radius: 8px; border: none; font-weight: 900; font-size: 10px; cursor: pointer; text-transform: uppercase; }
-        .btn-main { background: var(--main); color: #000; }
-        .btn-dark { background: #1a1a1a; color: #fff; border: 1px solid #333; }
-        .btn-danger { background: var(--danger); color: #fff; }
-
-        .banner-bonus { background: linear-gradient(90deg, #007aff, #003366); border-radius: 12px; padding: 15px; margin-bottom: 15px; border: 1px solid #0055aa; }
-
-        .game-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .game-card { background: var(--card); border: 1px solid #1a1a1a; border-radius: 12px; height: 140px; position: relative; display: flex; align-items: flex-end; padding: 10px; overflow: hidden; }
-        .game-card span { position: relative; font-size: 9px; font-weight: 900; color: var(--main); }
-
-        .admin-table { width: 100%; border-collapse: collapse; font-size: 9px; background: var(--card); border-radius: 8px; margin-top: 15px; }
-        .admin-table th { text-align: left; padding: 12px; color: #555; border-bottom: 1px solid #222; }
-        .admin-table td { padding: 12px; border-bottom: 1px solid #111; }
-
-        nav { position: fixed; bottom: 0; width: 100%; background: #000; border-top: 1px solid #111; display: flex; justify-content: space-around; padding: 15px; }
-        .nav-link { color: #444; font-size: 8px; font-weight: 900; text-decoration: none; }
-        .nav-link.active { color: var(--gold); }
-    </style>
-</head>
-<body onload="init()">
-
-<div id="scr-player" class="screen active">
-    <header>
-        <div class="logo">MEC-BET SYSTEM</div>
-        <div style="font-size: 9px; color: #888;">ID: 4509 / <span style="color:var(--gold);">JP-VIP</span></div>
-    </header>
+// --- CONFIGURAÇÕES DE ESTADO DO SISTEMA ---
+const MEC_SYSTEM = {
+    user: JSON.parse(localStorage.getItem('mec_user')) || { nome: "Visitante", saldo: 0.00, role: "USER", logado: false },
     
-    <div class="content">
-        <div class="card-saldo">
-            <div class="label-small">TOTAL BALANCE (BRL)</div>
-            <div class="value-large" id="saldo-user">R$ 450,20</div>
-            <div style="color: var(--main); font-size: 7px; margin-bottom: 15px; font-weight: 700;">STATUS: DEPÓSITO VIA PIX CONFIRMADO</div>
-            <div class="grid-btns">
-                <button class="btn btn-main">DEPOSITAR</button>
-                <button class="btn btn-dark">SACAR</button>
-            </div>
-        </div>
+    // Simulação de Banco de Dados local para o Admin
+    db: [
+        {id: 1, nome: "Marcos_Bet", saldo: 250.00, cargo: "Usuário"},
+        {id: 2, nome: "Ana_Luck", saldo: 1200.50, cargo: "VIP"},
+        {id: 3, nome: "Admin_Elite", saldo: 9999.00, cargo: "Admin"}
+    ],
 
-        <div class="banner-bonus">
-            <div style="font-weight: 900; font-size: 11px;">BÔNUS DE GIRO ATIVO</div>
-            <div style="font-size: 8px; opacity: 0.7;">REQUISITO DE ROLLOVER: R$ 1.200,00</div>
-            <button class="btn btn-main" style="margin-top:10px; padding:8px;" onclick="usarGiro()">EXECUTAR GIRO (<span id="giros">10</span>)</button>
-        </div>
-
-        <div class="label-small" style="margin-bottom:10px;">SELEÇÃO DE MERCADO</div>
-        <div class="game-grid">
-            <div class="game-card"><span>FORTUNE TIGER</span></div>
-            <div class="game-card"><span>AVIATOR LIVE</span></div>
-            <div class="game-card"><span>ROULETTE VIP</span></div>
-            <div class="game-card"><span>FOOTBALL SLOTS</span></div>
-        </div>
-        
-        <button class="btn btn-dark" style="margin-top:20px; width:100%; letter-spacing:1px;" onclick="abrirSuporte()">SUPORTE OPERACIONAL</button>
-    </div>
-
-    <nav>
-        <div class="nav-link active">DASHBOARD</div>
-        <div class="nav-link">MARKET</div>
-        <div class="nav-link">EXTRATO</div>
-        <div class="nav-link" onclick="irParaAdmin()">SYSTEM</div>
-    </nav>
-</div>
-
-<div id="scr-admin" class="screen">
-    <header>
-        <div class="logo">CONTROL PANEL</div>
-        <div class="status-sys">LIVE SYNC ACTIVE</div>
-    </header>
-
-    <div class="content">
-        <div class="grid-btns" style="margin-bottom: 15px;">
-            <div class="card-saldo" style="padding:15px; margin-bottom:0;">
-                <div class="label-small">GGR TOTAL</div>
-                <div style="font-size: 16px; font-weight: 900;">R$ 154.200</div>
-            </div>
-            <div class="card-saldo" style="padding:15px; margin-bottom:0; border-left: 3px solid var(--danger);">
-                <div class="label-small">PAYOUT TOTAL</div>
-                <div style="font-size: 16px; font-weight: 900; color: var(--danger);">R$ 82.150</div>
-            </div>
-        </div>
-
-        <div style="background: rgba(255,59,48,0.1); border: 1px solid var(--danger); padding: 10px; border-radius: 8px; font-size: 7px; color: var(--danger); margin-bottom: 15px; font-weight: 700;">
-            SECURITY ALERT: MULTIPLE IP ACCESS DETECTED ON WITHDRAWAL REQUEST.
-        </div>
-
-        <div class="label-small">PENDING TRANSACTIONS</div>
-        <table class="admin-table">
-            <tr><th>USER_ID</th><th>VALUE</th><th>RISK_LVL</th></tr>
-            <tr><td>B_MASTER_99</td><td>R$ 1.500</td><td style="color:var(--main)">LOW</td></tr>
-            <tr><td>L_SHARK_22</td><td>R$ 12.000</td><td style="color:var(--danger)">CRITICAL</td></tr>
-        </table>
-
-        <button class="btn btn-danger" style="margin-top: 30px; width:100%;" onclick="desligarTudo()">EMERGENCY SYSTEM SHUTDOWN</button>
-        <button class="btn btn-dark" style="margin-top: 10px; width:100%;" onclick="irParaPlayer()">BACK TO DASHBOARD</button>
-    </div>
-</div>
-
-<script>
-    let saldo = 450.20;
-    let giros = 10;
-
-    function init() {
-        console.log("MEC-BET CORE INITIALIZED");
-    }
-
-    function usarGiro() {
-        if(giros > 0) {
-            giros--;
-            document.getElementById('giros').innerText = giros;
-            let ganhou = Math.random() > 0.8 ? 50 : 0;
-            if(ganhou > 0) {
-                saldo += ganhou;
-                document.getElementById('saldo-user').innerText = `R$ ${saldo.toFixed(2)}`;
-                alert("SYSTEM: WIN REGISTERED - BRL 50.00");
-            }
+    // --- MOTOR DE INICIALIZAÇÃO ---
+    init() {
+        if(this.user.logado) {
+            this.renderizarSessao();
         } else {
-            alert("SYSTEM: NO FREE SPINS REMAINING");
+            irPara('scr-login');
         }
-    }
+        this.updateUI();
+    },
 
-    function irParaAdmin() {
-        let p = prompt("MASTER KEY:");
-        if(p === "9910") {
-            document.getElementById('scr-player').classList.remove('active');
-            document.getElementById('scr-admin').classList.add('active');
+    // --- LÓGICA DE ENTRADA (UNIFICADA) ---
+    autenticar() {
+        const userField = document.getElementById('l-user').value;
+        const passField = document.getElementById('l-pass').value;
+
+        if(!userField || !passField) return alert("Preencha todos os campos.");
+
+        // Lógica de Perfil
+        this.user.nome = userField;
+        this.user.logado = true;
+        
+        // Gatilho do Shark Admin
+        if(userField.toLowerCase() === 'admin' && passField === '9910') {
+            this.user.role = "ADMIN";
+            document.getElementById('n-adm').style.display = 'flex';
+        } else {
+            this.user.role = "USER";
         }
-    }
 
-    function irParaPlayer() {
-        document.getElementById('scr-admin').classList.remove('active');
-        document.getElementById('scr-player').classList.add('active');
-    }
+        this.salvar();
+        this.renderizarSessao();
+        irPara('scr-lobby');
+    },
 
-    function abrirSuporte() {
-        alert("OPENING OPERATIONAL SUPPORT TICKET...");
-    }
-
-    function desligarTudo() {
-        if(confirm("ACTIVATE TOTAL SYSTEM SHUTDOWN?")) {
-            document.body.innerHTML = "<div style='height:100vh; display:flex; align-items:center; justify-content:center; flex-direction:column; background:#000; color:#fff;'><h1 style='color:red; font-size:15px; font-weight:900;'>SYSTEM OFFLINE</h1><p style='font-size:10px; margin-top:10px;'>EMERGENCY CUT PROTOCOL EXECUTED BY SHARK.</p></div>";
+    renderizarSessao() {
+        document.getElementById('u-name').innerText = this.user.nome;
+        document.getElementById('h-master').style.display = 'flex';
+        document.getElementById('navbar').style.display = 'flex';
+        
+        if(this.user.role === "ADMIN") {
+            document.getElementById('n-adm').style.display = 'flex';
+            const badge = document.getElementById('u-badge');
+            badge.innerText = "ADMINISTRADOR MASTER";
+            badge.className = "badge badge-admin";
+            this.renderAdmin();
         }
+    },
+
+    // --- MOTOR DA ROLETA (GANHO REAL) ---
+    executarSorteio() {
+        const wheel = document.getElementById('wheel');
+        const btn = event.target;
+        
+        btn.disabled = true; // Evita cliques múltiplos
+        btn.innerText = "PROCESSANDO...";
+
+        const sorteio = parseFloat((Math.random() * 50).toFixed(2));
+        const giroExtra = Math.floor(Math.random() * 3600) + 7200;
+        
+        wheel.style.transform = `rotate(${giroExtra}deg)`;
+
+        setTimeout(() => {
+            this.user.saldo += sorteio;
+            this.salvar();
+            this.updateUI();
+            
+            alert(`SISTEMA: R$ ${sorteio} CREDITADOS COM SUCESSO!`);
+            
+            // Log de Ganhos
+            const table = document.getElementById('ganhos-recentes');
+            table.innerHTML = `<tr><td>${this.user.nome}***</td><td style="color:var(--secondary);">R$ ${sorteio}</td><td>Agora</td></tr>` + table.innerHTML;
+            
+            btn.disabled = false;
+            btn.innerText = "GIRAR AGORA";
+        }, 4000);
+    },
+
+    // --- INTERFACE E PERSISTÊNCIA ---
+    updateUI() {
+        const fmt = "R$ " + this.user.saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+        document.getElementById('h-saldo').innerText = fmt;
+        document.getElementById('m-saldo').innerText = fmt;
+    },
+
+    salvar() {
+        localStorage.setItem('mec_user', JSON.stringify(this.user));
+    },
+
+    renderAdmin() {
+        const list = document.getElementById('admin-user-list');
+        list.innerHTML = this.db.map(u => `
+            <tr>
+                <td><b>${u.nome}</b></td>
+                <td><input type="number" value="${u.saldo}" class="admin-input-small"></td>
+                <td><span class="badge ${u.cargo==='Admin'?'badge-admin':'badge-user'}">${u.cargo}</span></td>
+                <td><i class="fa-solid fa-check" onclick="alert('Saldo de ${u.nome} Atualizado!')"></i></td>
+            </tr>
+        `).join('');
+    },
+
+    logout() {
+        localStorage.clear();
+        location.reload();
     }
-</script>
-</body>
-</html>
+};
+
+// --- AJUSTES DE FUNÇÕES GLOBAIS ---
+window.entrar = () => MEC_SYSTEM.autenticar();
+window.girarRoleta = () => MEC_SYSTEM.executarSorteio();
+window.onload = () => MEC_SYSTEM.init();
