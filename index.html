@@ -2,72 +2,106 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>DEMO PLATFORM</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEC BET DEMO</title>
 
 <style>
 
 body{
-background:#0b0b0b;
-color:white;
+background:#050505;
+color:#fff;
 font-family:Arial;
-text-align:center;
+margin:0;
 }
 
-.card{
-background:#151515;
-padding:20px;
-border-radius:10px;
-margin:20px auto;
-width:300px;
+header{
+background:#000;
+padding:15px;
+display:flex;
+justify-content:space-between;
+border-bottom:1px solid #222;
 }
 
-button{
-padding:10px 20px;
-margin:5px;
-border:none;
-border-radius:8px;
-cursor:pointer;
+.logo{
+color:#d4af37;
 font-weight:bold;
 }
 
-.green{background:#00ff6a}
-.red{background:#ff3b3b}
-.gold{background:#d4af37}
+.balance{
+color:#00ff41;
+font-weight:bold;
+}
+
+.container{
+padding:20px;
+}
+
+.card{
+background:#111;
+padding:20px;
+border-radius:10px;
+margin-bottom:15px;
+border:1px solid #222;
+}
+
+button{
+padding:10px 15px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+margin:5px;
+font-weight:bold;
+}
+
+.green{background:#00ff41;color:#000}
+.red{background:#ff3b3b;color:#fff}
+.orange{background:#ff5e00;color:#fff}
 
 input{
 padding:10px;
-margin:10px;
 border-radius:6px;
 border:none;
-width:200px;
+margin:5px;
 }
+
+.view{display:none}
+.active{display:block}
 
 </style>
 </head>
 
 <body>
 
-<div id="login">
+<div id="loginView" class="active container">
 
-<h1>PLATFORM DEMO</h1>
+<h1>MEC BET DEMO</h1>
 
-<input id="user" placeholder="usuario">
+<input id="userInput" placeholder="usuário">
 
 <br>
 
-<button onclick="login()">ENTRAR</button>
+<button class="orange" onclick="login()">ENTRAR</button>
 
 </div>
 
-<div id="userPanel" style="display:none">
 
-<h2>PAINEL USUÁRIO</h2>
+<div id="userView" class="view">
+
+<header>
+
+<div class="logo">MEC BET</div>
+
+<div class="balance">R$ <span id="balanceTop">0</span></div>
+
+</header>
+
+<div class="container">
 
 <div class="card">
 
-Saldo
+<h3>Saldo</h3>
 
-<h1 id="balance">0</h1>
+<h1 id="balanceMain">0</h1>
 
 <button class="green" onclick="deposit()">Depositar +100</button>
 
@@ -77,35 +111,53 @@ Saldo
 
 </div>
 
-<div id="adminPanel" style="display:none">
+</div>
 
-<h2>PAINEL ADMIN</h2>
+
+<div id="adminView" class="view">
+
+<header>
+
+<div class="logo">PAINEL ADMIN</div>
+
+</header>
+
+<div class="container">
+
+<h2>Usuários cadastrados</h2>
 
 <div id="userList"></div>
 
 </div>
 
+</div>
+
+
 <script>
 
-const channel = new BroadcastChannel("demo-platform")
+const channel = new BroadcastChannel("mecbet-demo")
 
-let db = JSON.parse(localStorage.getItem("db")) || []
+let db = JSON.parse(localStorage.getItem("mecbetDB")) || []
 
 let currentUser=null
 
+
 function save(){
 
-localStorage.setItem("db",JSON.stringify(db))
+localStorage.setItem("mecbetDB",JSON.stringify(db))
 
-channel.postMessage("update")
+channel.postMessage("sync")
 
 }
 
+
 function login(){
 
-let name=document.getElementById("user").value.toUpperCase()
+let name=document.getElementById("userInput").value.toUpperCase()
 
-let user=db.find(u=>u.name==name)
+if(!name)return
+
+let user=db.find(u=>u.name===name)
 
 if(!user){
 
@@ -124,19 +176,17 @@ save()
 
 currentUser=user
 
-document.getElementById("login").style.display="none"
+document.getElementById("loginView").style.display="none"
 
-if(name=="ADMIN"){
+if(name==="ADMIN"){
 
-document.getElementById("adminPanel").style.display="block"
+document.getElementById("adminView").style.display="block"
 
 loadUsers()
 
-}
+}else{
 
-else{
-
-document.getElementById("userPanel").style.display="block"
+document.getElementById("userView").style.display="block"
 
 updateUI()
 
@@ -144,11 +194,15 @@ updateUI()
 
 }
 
+
 function updateUI(){
 
-document.getElementById("balance").innerText=currentUser.balance
+document.getElementById("balanceTop").innerText=currentUser.balance
+
+document.getElementById("balanceMain").innerText=currentUser.balance
 
 }
+
 
 function deposit(){
 
@@ -160,6 +214,7 @@ updateUI()
 
 }
 
+
 function bet(){
 
 currentUser.balance-=50
@@ -169,6 +224,7 @@ save()
 updateUI()
 
 }
+
 
 function loadUsers(){
 
@@ -180,9 +236,9 @@ html+=`
 
 <div class="card">
 
-${u.name}
+<b>${u.name}</b>
 
-<h3>${u.balance}</h3>
+<h3>R$ ${u.balance}</h3>
 
 <button onclick="add('${u.name}')">+500</button>
 
@@ -198,9 +254,10 @@ document.getElementById("userList").innerHTML=html
 
 }
 
+
 function add(name){
 
-let u=db.find(x=>x.name==name)
+let u=db.find(x=>x.name===name)
 
 u.balance+=500
 
@@ -210,9 +267,10 @@ loadUsers()
 
 }
 
+
 function remove(name){
 
-let u=db.find(x=>x.name==name)
+let u=db.find(x=>x.name===name)
 
 u.balance-=500
 
@@ -222,19 +280,24 @@ loadUsers()
 
 }
 
+
 channel.onmessage=()=>{
 
-db=JSON.parse(localStorage.getItem("db"))
+db=JSON.parse(localStorage.getItem("mecbetDB"))
 
 if(currentUser){
 
-currentUser=db.find(x=>x.name==currentUser.name)
+currentUser=db.find(x=>x.name===currentUser.name)
+
+if(document.getElementById("userView").style.display==="block"){
 
 updateUI()
 
 }
 
-if(document.getElementById("adminPanel").style.display=="block"){
+}
+
+if(document.getElementById("adminView").style.display==="block"){
 
 loadUsers()
 
