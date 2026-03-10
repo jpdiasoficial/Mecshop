@@ -3,164 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MEC-BET | FULL ACCESS</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>MEC-BET | PRO OPERATIONAL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --main: #00ff41; --gold: #d4af37; --bg: #000; --card: #0d0d0d; --danger: #ff4d4d; }
+        :root { --gold: #d4af37; --main: #00ff41; --danger: #ff3b30; --card: #0d0d0d; --bg: #000; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: #fff; text-transform: uppercase; font-size: 10px; height: 100vh; overflow: hidden; }
+        body { background: var(--bg); color: #fff; text-transform: uppercase; overflow: hidden; height: 100vh; }
 
-        /* NAVEGAÇÃO ENTRE TELAS */
-        .screen { display: none; height: 100vh; flex-direction: column; animation: fadeIn 0.3s ease; }
+        .screen { display: none; height: 100vh; flex-direction: column; }
         .active { display: flex !important; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* HEADER FIXO */
-        header { padding: 15px; border-bottom: 1px solid #111; display: flex; justify-content: space-between; align-items: center; background: #050505; z-index: 100; }
-        .logo { font-family: 'Orbitron'; font-weight: 900; color: var(--gold); font-size: 16px; }
+        header { padding: 20px; border-bottom: 1px solid #111; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: 900; color: var(--gold); font-size: 14px; letter-spacing: 1px; }
+        .status-sys { font-size: 8px; color: var(--main); letter-spacing: 1px; }
 
-        /* COMPONENTES */
-        .scroll { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; }
-        .card { background: var(--card); border: 1px solid #1a1a1a; border-radius: 12px; padding: 15px; margin-bottom: 12px; position: relative; }
-        .btn { padding: 15px; border-radius: 8px; border: none; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 10px; width: 100%; transition: 0.2s; margin-top: 5px; }
-        .btn-gold { background: var(--gold); color: #000; }
+        .content { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 100px; }
+
+        .card-saldo { background: var(--card); border: 1px solid #1a1a1a; border-radius: 12px; padding: 20px; margin-bottom: 15px; }
+        .label-small { font-size: 8px; color: #555; margin-bottom: 8px; letter-spacing: 1px; }
+        .value-large { font-size: 28px; font-weight: 900; margin-bottom: 15px; }
+        
+        .grid-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn { padding: 14px; border-radius: 8px; border: none; font-weight: 900; font-size: 10px; cursor: pointer; text-transform: uppercase; }
         .btn-main { background: var(--main); color: #000; }
-        .btn-danger { background: var(--danger); color: #fff; }
         .btn-dark { background: #1a1a1a; color: #fff; border: 1px solid #333; }
+        .btn-danger { background: var(--danger); color: #fff; }
 
-        /* MODAL SUPORTE */
-        #chat-box { position: fixed; bottom: 80px; right: 20px; width: 250px; background: #111; border: 1px solid var(--gold); border-radius: 10px; display: none; flex-direction: column; z-index: 200; }
-        .chat-header { padding: 10px; background: var(--gold); color: #000; font-weight: 900; font-size: 9px; }
-        .chat-body { height: 150px; padding: 10px; overflow-y: auto; font-size: 9px; color: #ccc; }
+        .banner-bonus { background: linear-gradient(90deg, #007aff, #003366); border-radius: 12px; padding: 15px; margin-bottom: 15px; border: 1px solid #0055aa; }
 
-        /* GRID JOGOS */
-        .game-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .game-item { height: 120px; background: #111; border-radius: 10px; display: flex; align-items: center; justify-content: center; border: 1px solid #222; position: relative; overflow: hidden; }
-        .badge-free { position: absolute; top: 5px; left: 5px; background: var(--main); color: #000; padding: 2px 5px; border-radius: 3px; font-weight: 900; font-size: 8px; }
+        .game-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .game-card { background: var(--card); border: 1px solid #1a1a1a; border-radius: 12px; height: 140px; position: relative; display: flex; align-items: flex-end; padding: 10px; overflow: hidden; }
+        .game-card span { position: relative; font-size: 9px; font-weight: 900; color: var(--main); }
 
-        /* BARRA INFERIOR */
-        nav { position: fixed; bottom: 0; width: 100%; height: 60px; background: #000; border-top: 1px solid #111; display: flex; justify-content: space-around; align-items: center; }
-        .nav-link { color: #555; font-size: 8px; font-weight: 900; text-align: center; cursor: pointer; }
+        .admin-table { width: 100%; border-collapse: collapse; font-size: 9px; background: var(--card); border-radius: 8px; margin-top: 15px; }
+        .admin-table th { text-align: left; padding: 12px; color: #555; border-bottom: 1px solid #222; }
+        .admin-table td { padding: 12px; border-bottom: 1px solid #111; }
+
+        nav { position: fixed; bottom: 0; width: 100%; background: #000; border-top: 1px solid #111; display: flex; justify-content: space-around; padding: 15px; }
+        .nav-link { color: #444; font-size: 8px; font-weight: 900; text-decoration: none; }
         .nav-link.active { color: var(--gold); }
     </style>
 </head>
 <body onload="init()">
 
-<div id="scr-login" class="screen active" style="justify-content:center; align-items:center;">
-    <div class="logo" style="font-size:30px; margin-bottom:40px;">MEC-BET</div>
-    <div style="width:250px;">
-        <input type="text" id="user" placeholder="USUÁRIO" style="width:100%; padding:15px; background:#111; border:1px solid #333; color:#fff; border-radius:8px; margin-bottom:10px;">
-        <input type="password" id="pass" placeholder="CHAVE" style="width:100%; padding:15px; background:#111; border:1px solid #333; color:#fff; border-radius:8px; margin-bottom:20px;">
-        <button class="btn btn-gold" onclick="auth()">ENTRAR NO CASSINO</button>
-        <button class="btn btn-dark" onclick="authAdmin()">PAINEL SHARK</button>
-    </div>
-</div>
-
-<div id="scr-home" class="screen">
+<div id="scr-player" class="screen active">
     <header>
-        <div class="logo">MEC-BET</div>
-        <div style="color:var(--main); font-family:'Orbitron'; font-size:12px;" id="disp-saldo">R$ 0,00</div>
+        <div class="logo">MEC-BET SYSTEM</div>
+        <div style="font-size: 9px; color: #888;">ID: 4509 / <span style="color:var(--gold);">JP-VIP</span></div>
     </header>
-    <div class="scroll">
-        <div class="card" style="border-left: 4px solid var(--gold);">
-            <div style="font-size:8px; color:#888;">BÔNUS DE GIRO GRÁTIS ATIVO</div>
-            <h2 id="giros-count">10 GIROS DISPONÍVEIS</h2>
-            <button class="btn btn-main" onclick="jogarGiro()">USAR GIRO GRÁTIS AGORA</button>
+    
+    <div class="content">
+        <div class="card-saldo">
+            <div class="label-small">TOTAL BALANCE (BRL)</div>
+            <div class="value-large" id="saldo-user">R$ 450,20</div>
+            <div style="color: var(--main); font-size: 7px; margin-bottom: 15px; font-weight: 700;">STATUS: DEPÓSITO VIA PIX CONFIRMADO</div>
+            <div class="grid-btns">
+                <button class="btn btn-main">DEPOSITAR</button>
+                <button class="btn btn-dark">SACAR</button>
+            </div>
         </div>
 
+        <div class="banner-bonus">
+            <div style="font-weight: 900; font-size: 11px;">BÔNUS DE GIRO ATIVO</div>
+            <div style="font-size: 8px; opacity: 0.7;">REQUISITO DE ROLLOVER: R$ 1.200,00</div>
+            <button class="btn btn-main" style="margin-top:10px; padding:8px;" onclick="usarGiro()">EXECUTAR GIRO (<span id="giros">10</span>)</button>
+        </div>
+
+        <div class="label-small" style="margin-bottom:10px;">SELEÇÃO DE MERCADO</div>
         <div class="game-grid">
-            <div class="game-item"><div class="badge-free">QUENTE</div>FORTUNE TIGER</div>
-            <div class="game-item">AVIATOR</div>
-            <div class="game-item">MINES</div>
-            <div class="game-item">ROULETTE VIP</div>
+            <div class="game-card"><span>FORTUNE TIGER</span></div>
+            <div class="game-card"><span>AVIATOR LIVE</span></div>
+            <div class="game-card"><span>ROULETTE VIP</span></div>
+            <div class="game-card"><span>FOOTBALL SLOTS</span></div>
         </div>
-
-        <button class="btn btn-dark" style="margin-top:20px;" onclick="toggleSuporte()">💬 FALAR COM SUPORTE</button>
+        
+        <button class="btn btn-dark" style="margin-top:20px; width:100%; letter-spacing:1px;" onclick="abrirSuporte()">SUPORTE OPERACIONAL</button>
     </div>
+
     <nav>
-        <div class="nav-link active">HOME</div>
-        <div class="nav-link">DEPÓSITO</div>
-        <div class="nav-link">SAQUE</div>
-        <div class="nav-link" onclick="logout()">SAIR</div>
+        <div class="nav-link active">DASHBOARD</div>
+        <div class="nav-link">MARKET</div>
+        <div class="nav-link">EXTRATO</div>
+        <div class="nav-link" onclick="irParaAdmin()">SYSTEM</div>
     </nav>
 </div>
 
 <div id="scr-admin" class="screen">
     <header>
-        <span style="color:var(--gold); font-family:'Orbitron';">SHARK CONTROL</span>
-        <button class="btn-danger" style="padding:5px 10px; border:none; border-radius:4px; font-size:8px;" onclick="emergencyStop()">🔴 DESLIGAR SISTEMA</button>
+        <div class="logo">CONTROL PANEL</div>
+        <div class="status-sys">LIVE SYNC ACTIVE</div>
     </header>
-    <div class="scroll">
-        <div class="card">
-            <div style="font-size:8px;">GGR (LUCRO BRUTO)</div>
-            <div style="font-size:20px; font-family:'Orbitron'; color:var(--main);">R$ 42.900,00</div>
+
+    <div class="content">
+        <div class="grid-btns" style="margin-bottom: 15px;">
+            <div class="card-saldo" style="padding:15px; margin-bottom:0;">
+                <div class="label-small">GGR TOTAL</div>
+                <div style="font-size: 16px; font-weight: 900;">R$ 154.200</div>
+            </div>
+            <div class="card-saldo" style="padding:15px; margin-bottom:0; border-left: 3px solid var(--danger);">
+                <div class="label-small">PAYOUT TOTAL</div>
+                <div style="font-size: 16px; font-weight: 900; color: var(--danger);">R$ 82.150</div>
+            </div>
         </div>
-        <h3>CONTROLE DE ODDS</h3>
-        <select id="rtp-config" style="width:100%; padding:10px; background:#111; color:#fff; border:1px solid var(--gold); font-family:'Orbitron';">
-            <option value="95">PAGAMENTO 95% (NORMAL)</option>
-            <option value="80">PAGAMENTO 80% (LUCRATIVO)</option>
-            <option value="50">PAGAMENTO 50% (RECUPERAÇÃO)</option>
-        </select>
-        <button class="btn btn-gold" onclick="alert('ODDS ATUALIZADAS')">SALVAR CONFIGURAÇÃO</button>
-        
-        <button class="btn btn-dark" style="margin-top:20px;" onclick="logout()">VOLTAR AO LOGIN</button>
+
+        <div style="background: rgba(255,59,48,0.1); border: 1px solid var(--danger); padding: 10px; border-radius: 8px; font-size: 7px; color: var(--danger); margin-bottom: 15px; font-weight: 700;">
+            SECURITY ALERT: MULTIPLE IP ACCESS DETECTED ON WITHDRAWAL REQUEST.
+        </div>
+
+        <div class="label-small">PENDING TRANSACTIONS</div>
+        <table class="admin-table">
+            <tr><th>USER_ID</th><th>VALUE</th><th>RISK_LVL</th></tr>
+            <tr><td>B_MASTER_99</td><td>R$ 1.500</td><td style="color:var(--main)">LOW</td></tr>
+            <tr><td>L_SHARK_22</td><td>R$ 12.000</td><td style="color:var(--danger)">CRITICAL</td></tr>
+        </table>
+
+        <button class="btn btn-danger" style="margin-top: 30px; width:100%;" onclick="desligarTudo()">EMERGENCY SYSTEM SHUTDOWN</button>
+        <button class="btn btn-dark" style="margin-top: 10px; width:100%;" onclick="irParaPlayer()">BACK TO DASHBOARD</button>
     </div>
 </div>
 
-<div id="chat-box">
-    <div class="chat-header">SUPORTE MEC-BET</div>
-    <div class="chat-body" id="chat-content">> Olá! Como podemos ajudar o seu lucro hoje?</div>
-    <input type="text" placeholder="MENSAGEM..." style="width:100%; padding:8px; background:#000; border:none; color:#fff; border-top:1px solid #333;">
-</div>
-
 <script>
-    let state = { saldo: 150.00, giros: 10, sys_active: true };
+    let saldo = 450.20;
+    let giros = 10;
 
-    function init() { updateUI(); }
-
-    function updateUI() {
-        document.getElementById('disp-saldo').innerText = `R$ ${state.saldo.toFixed(2)}`;
-        document.getElementById('giros-count').innerText = `${state.giros} GIROS DISPONÍVEIS`;
+    function init() {
+        console.log("MEC-BET CORE INITIALIZED");
     }
 
-    function auth() { switchScreen('home'); }
-    function authAdmin() {
-        let pass = prompt("CHAVE MASTER:");
-        if(pass === "9910") switchScreen('admin');
-        else alert("ACESSO NEGADO");
-    }
-
-    function jogarGiro() {
-        if(state.giros > 0) {
-            state.giros--;
-            let win = Math.random() > 0.7 ? 20 : 0;
-            state.saldo += win;
-            alert(win > 0 ? `GANHOU R$ ${win}!` : "NÃO FOI DESSA VEZ");
-            updateUI();
+    function usarGiro() {
+        if(giros > 0) {
+            giros--;
+            document.getElementById('giros').innerText = giros;
+            let ganhou = Math.random() > 0.8 ? 50 : 0;
+            if(ganhou > 0) {
+                saldo += ganhou;
+                document.getElementById('saldo-user').innerText = `R$ ${saldo.toFixed(2)}`;
+                alert("SYSTEM: WIN REGISTERED - BRL 50.00");
+            }
         } else {
-            alert("SEUS GIROS ACABARAM! DEPOSITE PARA MAIS.");
+            alert("SYSTEM: NO FREE SPINS REMAINING");
         }
     }
 
-    function emergencyStop() {
-        if(confirm("DESEJA CORTAR O ACESSO DE TODOS OS JOGADORES AGORA?")) {
-            state.sys_active = false;
-            alert("SISTEMA DESLIGADO. TODOS OS SAQUES CONGELADOS.");
-            logout();
+    function irParaAdmin() {
+        let p = prompt("MASTER KEY:");
+        if(p === "9910") {
+            document.getElementById('scr-player').classList.remove('active');
+            document.getElementById('scr-admin').classList.add('active');
         }
     }
 
-    function toggleSuporte() {
-        let c = document.getElementById('chat-box');
-        c.style.display = (c.style.display === 'flex') ? 'none' : 'flex';
+    function irParaPlayer() {
+        document.getElementById('scr-admin').classList.remove('active');
+        document.getElementById('scr-player').classList.add('active');
     }
 
-    function switchScreen(id) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById('scr-' + id).classList.add('active');
+    function abrirSuporte() {
+        alert("OPENING OPERATIONAL SUPPORT TICKET...");
     }
 
-    function logout() { switchScreen('login'); }
+    function desligarTudo() {
+        if(confirm("ACTIVATE TOTAL SYSTEM SHUTDOWN?")) {
+            document.body.innerHTML = "<div style='height:100vh; display:flex; align-items:center; justify-content:center; flex-direction:column; background:#000; color:#fff;'><h1 style='color:red; font-size:15px; font-weight:900;'>SYSTEM OFFLINE</h1><p style='font-size:10px; margin-top:10px;'>EMERGENCY CUT PROTOCOL EXECUTED BY SHARK.</p></div>";
+        }
+    }
 </script>
 </body>
 </html>
