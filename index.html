@@ -1,298 +1,248 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MEC-BET V29 | OMNI-ENGINE</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root { --p: #ff5e00; --g: #00ff41; --gold: #d4af37; --bg: #050505; --card: #0d0d0d; --border: #1a1a1a; --text: #eee; }
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Roboto Mono', monospace; outline: none; }
-        body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; -webkit-tap-highlight-color: transparent; }
+<meta charset="UTF-8">
+<title>DEMO PLATFORM</title>
 
-        /* NAVEGAÇÃO ENTRE TELAS */
-        .view { position: absolute; inset: 0; display: none; flex-direction: column; background: var(--bg); z-index: 10; overflow-y: auto; padding-bottom: 90px; }
-        .view.active { display: flex; animation: fadeIn 0.2s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+<style>
 
-        /* HEADER DAV-768 */
-        header { height: 65px; background: #000; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; padding: 0 15px; position: sticky; top: 0; z-index: 100; }
-        .logo { font-weight: 900; font-size: 22px; color: var(--gold); text-shadow: 0 0 10px rgba(212,175,55,0.3); }
-        .bal-pill { background: #111; padding: 8px 15px; border-radius: 30px; border: 1px solid #222; color: var(--g); font-weight: 900; font-size: 13px; box-shadow: inset 0 0 5px rgba(0,255,65,0.1); }
+body{
+background:#0b0b0b;
+color:white;
+font-family:Arial;
+text-align:center;
+}
 
-        /* DASHBOARD & CARDS ARREDONDADOS */
-        .container { padding: 15px; }
-        .card-main { background: linear-gradient(145deg, #0d0d0d, #151515); border: 1px solid var(--border); border-left: 5px solid var(--p); border-radius: 20px; padding: 25px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
-        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
-        .stat-box { background: #0d0d0d; padding: 12px; border-radius: 12px; border: 1px solid #1a1a1a; text-align: center; }
-        .stat-box small { font-size: 8px; color: #555; display: block; text-transform: uppercase; }
+.card{
+background:#151515;
+padding:20px;
+border-radius:10px;
+margin:20px auto;
+width:300px;
+}
 
-        /* CRASH V22 (MOTOR DE CURVA) */
-        .crash-engine { height: 230px; background: #000; border: 1px solid #222; border-radius: 18px; margin-bottom: 15px; position: relative; overflow: hidden; }
-        #crash-canvas { width: 100%; height: 100%; }
-        #mult-display { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 55px; font-weight: 900; z-index: 10; color: #fff; text-shadow: 0 0 20px rgba(0,0,0,0.8); }
-        #wait-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.7); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 20; color: var(--gold); }
-        
-        .history-row { display: flex; gap: 8px; overflow-x: auto; padding: 10px 0; margin-bottom: 5px; scrollbar-width: none; }
-        .vela { min-width: 55px; height: 30px; border-radius: 8px; font-size: 11px; display: flex; align-items: center; justify-content: center; font-weight: 900; border-bottom: 3px solid rgba(0,0,0,0.4); }
+button{
+padding:10px 20px;
+margin:5px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
+}
 
-        /* CONTROLES DE APOSTA */
-        .bet-ctrl { background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 18px; padding: 15px; margin-bottom: 15px; }
-        .adj-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .btn-math { width: 50px; height: 50px; background: #222; border: none; border-radius: 12px; color: #fff; font-size: 22px; font-weight: 900; }
-        .fast-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-        .btn-fast { background: #111; border: 1px solid #222; padding: 12px 0; border-radius: 10px; color: #777; font-size: 11px; font-weight: 900; }
+.green{background:#00ff6a}
+.red{background:#ff3b3b}
+.gold{background:#d4af37}
 
-        /* BOTÕES GERAIS */
-        .btn { border: none; border-radius: 15px; font-weight: 900; cursor: pointer; text-transform: uppercase; width: 100%; transition: 0.1s; display: flex; align-items: center; justify-content: center; }
-        .btn-p { background: var(--p); color: #fff; height: 65px; box-shadow: 0 6px 0 #943700; font-size: 16px; }
-        .btn-g { background: var(--g); color: #000; height: 65px; box-shadow: 0 6px 0 #008f24; font-size: 16px; }
-        .btn:active { transform: translateY(3px); box-shadow: none; }
+input{
+padding:10px;
+margin:10px;
+border-radius:6px;
+border:none;
+width:200px;
+}
 
-        /* SHARK ADMIN V7 */
-        .shark-card { background: #000; border: 1px solid #1a1a1a; padding: 15px; border-radius: 15px; margin-bottom: 10px; border-left: 3px solid var(--p); }
-        .status-led { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; }
-
-        /* NAVBAR */
-        nav { position: fixed; bottom: 0; left: 0; right: 0; height: 80px; background: #000; border-top: 1px solid var(--border); display: none; justify-content: space-around; align-items: center; z-index: 1000; padding-bottom: 10px; }
-        .nav-item { color: #555; font-size: 10px; text-align: center; text-decoration: none; }
-        .nav-item.active { color: var(--gold); }
-        .nav-item i { font-size: 24px; display: block; margin-bottom: 5px; }
-
-        input { width: 100%; padding: 18px; background: #0d0d0d; border: 1px solid #222; border-radius: 15px; color: #fff; margin-bottom: 15px; font-size: 14px; }
-    </style>
+</style>
 </head>
-<body onload="App.init()">
 
-    <div id="view-auth" class="view active" style="justify-content:center; padding:30px;">
-        <div style="text-align:center; margin-bottom:50px;">
-            <h1 class="logo" style="font-size:50px;">MEC-BET</h1>
-            <p style="color:var(--p); font-size:10px; font-weight:900;">SISTEMA V29 OMNI-ACCESS</p>
-        </div>
-        <input type="text" id="user-in" placeholder="USUÁRIO (USE ADMIN PARA PAINEL)">
-        <input type="password" id="pass-in" placeholder="SENHA (QUALQUER UMA)">
-        <button class="btn btn-p" onclick="App.Auth.entry()">ENTRAR AGORA</button>
-    </div>
+<body>
 
-    <div id="view-lobby" class="view">
-        <header><div class="logo">MEC-BET</div><div class="bal-pill" id="bal-h">R$ 0,00</div></header>
-        <div class="container">
-            <div class="card-main">
-                <small style="color:#666">SALDO EM CARTEIRA</small>
-                <h1 id="bal-m" style="font-size:42px; margin:10px 0;">R$ 0,00</h1>
-                <div style="display:flex; gap:12px;">
-                    <button class="btn btn-g" style="height:50px; font-size:12px;" onclick="App.Sys.addFunds()">DEPÓSITO RÁPIDO</button>
-                    <button class="btn" style="height:50px; font-size:12px; background:#222; color:#fff" onclick="alert('Saque pendente de aprovação admin')">SAQUES</button>
-                </div>
-            </div>
-            <div class="stat-grid">
-                <div class="stat-box"><small>STATUS</small><b style="color:var(--g)">ONLINE</b></div>
-                <div class="stat-box"><small>NÍVEL</small><b>VIP GOLD</b></div>
-                <div class="stat-box"><small>CASHBACK</small><b>10%</b></div>
-            </div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
-                <div class="btn" style="background:#0d0d0d; border:1px solid #1a1a1a; padding:30px; flex-direction:column;" onclick="App.Router.go('view-crash')">
-                    <i class="fa-solid fa-rocket" style="color:var(--p); font-size:40px; margin-bottom:12px;"></i><b>CRASH</b>
-                </div>
-                <div class="btn" style="background:#0d0d0d; border:1px solid #1a1a1a; padding:30px; flex-direction:column;" onclick="alert('Mines em manutenção técnica')">
-                    <i class="fa-solid fa-gem" style="color:var(--gold); font-size:40px; margin-bottom:12px;"></i><b>MINES</b>
-                </div>
-            </div>
-        </div>
-    </div>
+<div id="login">
 
-    <div id="view-crash" class="view">
-        <header><i class="fa-solid fa-chevron-left" onclick="App.Router.go('view-lobby')"></i><div id="bal-c">R$ 0,00</div><div></div></header>
-        <div class="container">
-            <div class="history-row" id="crash-hist"></div>
-            
-            <div class="crash-engine">
-                <div id="wait-overlay">
-                    <i class="fa-solid fa-clock" style="font-size:30px; margin-bottom:10px;"></i>
-                    <b>PRÓXIMA RODADA EM <span id="wait-sec">10</span>S</b>
-                </div>
-                <h1 id="mult-display">1.00x</h1>
-                <canvas id="crash-canvas"></canvas>
-            </div>
+<h1>PLATFORM DEMO</h1>
 
-            <div class="bet-ctrl">
-                <div class="adj-flex">
-                    <button class="btn-math" onclick="App.Game.adj(-10)">-</button>
-                    <div style="text-align:center;"><small style="color:#555">VALOR DA APOSTA</small><br><b style="font-size:26px; color:var(--g)">R$ <span id="cur-bet">10</span></b></div>
-                    <button class="btn-math" onclick="App.Game.adj(10)">+</button>
-                </div>
-                <div class="fast-grid">
-                    <button class="btn-fast" onclick="App.Game.set(10)">10</button>
-                    <button class="btn-fast" onclick="App.Game.set(50)">50</button>
-                    <button class="btn-fast" onclick="App.Game.set(100)">100</button>
-                    <button class="btn-fast" onclick="App.Game.set(500)">500</button>
-                </div>
-            </div>
+<input id="user" placeholder="usuario">
 
-            <button id="btn-play" class="btn btn-p" onclick="App.Game.play()">APOSTAR AGORA</button>
-            <button id="btn-cashout" class="btn btn-g" style="display:none;" onclick="App.Game.cashout()">SACAR LUCRO</button>
-        </div>
-    </div>
+<br>
 
-    <div id="view-admin" class="view">
-        <div class="container">
-            <h2 style="color:var(--p); border-bottom:1px solid #222; padding-bottom:15px; margin-bottom:20px;">
-                <i class="fa-solid fa-skull-crossbones"></i> SHARK COMMANDER V29
-            </h2>
-            <div id="shark-user-list"></div>
-        </div>
-    </div>
+<button onclick="login()">ENTRAR</button>
 
-    <nav id="navbar-main">
-        <div class="nav-item active" onclick="App.Router.go('view-lobby', this)"><i class="fa-solid fa-house"></i>HOME</div>
-        <div class="nav-item" onclick="App.Router.go('view-crash', this)"><i class="fa-solid fa-rocket"></i>JOGAR</div>
-        <div id="nav-adm" class="nav-item" style="display:none; color:var(--p)" onclick="App.Router.go('view-admin', this)"><i class="fa-solid fa-terminal"></i>SHARK</div>
-    </nav>
+</div>
 
-    <script>
-        const App = {
-            db: JSON.parse(localStorage.getItem('MEC_V29_DATA')) || [],
-            u: null,
-            init() {
-                const session = sessionStorage.getItem('MEC_SESSION');
-                if(session) {
-                    this.u = this.db.find(x => x.name === session);
-                    if(this.u) { this.u.active = true; this.Sys.unlock(); }
-                }
-            },
-            Auth: {
-                entry() {
-                    const n = document.getElementById('user-in').value.toUpperCase();
-                    if(!n) return alert("Digite um nome!");
-                    let user = App.db.find(x => x.name === n);
-                    if(!user) {
-                        user = { name: n, balance: 0, role: (n === 'ADMIN') ? 'admin' : 'user', mode: 'auto', bet: 10, active: true };
-                        App.db.push(user);
-                    }
-                    sessionStorage.setItem('MEC_SESSION', n);
-                    location.reload();
-                }
-            },
-            Game: {
-                cvs: null, ctx: null, timer: null, mult: 1.00, wait: 10, running: false, pts: [],
-                adj(v) { App.u.bet = Math.max(10, App.u.bet + v); this.syncUI(); },
-                set(v) { App.u.bet = v; this.syncUI(); },
-                syncUI() { document.getElementById('cur-bet').innerText = App.u.bet; App.Sys.save(); },
-                drawInit() {
-                    this.cvs = document.getElementById('crash-canvas');
-                    if(!this.cvs) return;
-                    this.ctx = this.cvs.getContext('2d');
-                    this.cvs.width = this.cvs.offsetWidth;
-                    this.cvs.height = this.cvs.offsetHeight;
-                },
-                play() {
-                    if(App.u.balance < App.u.bet) return alert("SALDO INSUFICIENTE!");
-                    App.u.balance -= App.u.bet; App.Sys.saveSync();
-                    document.getElementById('btn-play').disabled = true;
-                    document.getElementById('wait-overlay').style.display = 'flex';
-                    let cd = setInterval(() => {
-                        this.wait--; document.getElementById('wait-sec').innerText = this.wait;
-                        if(this.wait <= 0) { clearInterval(cd); this.launch(); document.getElementById('wait-overlay').style.display = 'none'; this.wait = 10; }
-                    }, 1000);
-                },
-                launch() {
-                    this.running = true; this.mult = 1.00; this.pts = [{x:0, y:this.cvs.height}];
-                    document.getElementById('btn-play').style.display = 'none'; document.getElementById('btn-cashout').style.display = 'flex';
-                    let target = (Math.random() * 6 + 1.1); if(App.u.mode === 'lose') target = 1.05;
-                    this.timer = setInterval(() => {
-                        this.mult += (this.mult * 0.04);
-                        document.getElementById('mult-display').innerText = this.mult.toFixed(2)+'x';
-                        this.renderFrame();
-                        if(this.mult >= target) this.crash();
-                    }, 120);
-                },
-                renderFrame() {
-                    this.ctx.clearRect(0,0,this.cvs.width, this.cvs.height);
-                    let x = (this.mult - 1) * (this.cvs.width / 5);
-                    let y = this.cvs.height - ((this.mult - 1) * (this.cvs.height / 5));
-                    this.pts.push({x, y});
-                    this.ctx.strokeStyle = this.mult > 2 ? 'var(--g)' : 'var(--p)';
-                    this.ctx.lineWidth = 5; this.ctx.beginPath();
-                    this.pts.forEach((p, i) => { if(i===0) this.ctx.moveTo(p.x, p.y); else this.ctx.lineTo(p.x, p.y); });
-                    this.ctx.stroke();
-                    // FOGUETE QUADRADO V22
-                    this.ctx.fillStyle = '#fff'; this.ctx.shadowBlur = 20; this.ctx.shadowColor = this.ctx.strokeStyle;
-                    this.ctx.fillRect(x - 7, y - 7, 14, 14);
-                    this.ctx.shadowBlur = 0;
-                },
-                crash() {
-                    clearInterval(this.timer); this.running = false; this.addVela(this.mult);
-                    document.getElementById('mult-display').style.color = 'red';
-                    setTimeout(() => {
-                        document.getElementById('mult-display').style.color = '#fff';
-                        document.getElementById('mult-display').innerText = '1.00x';
-                        document.getElementById('btn-play').style.display = 'flex';
-                        document.getElementById('btn-cashout').style.display = 'none';
-                        document.getElementById('btn-play').disabled = false;
-                        this.ctx.clearRect(0,0,this.cvs.width, this.cvs.height);
-                    }, 2000);
-                },
-                cashout() {
-                    if(!this.running) return;
-                    App.u.balance += (App.u.bet * this.mult);
-                    this.running = false; App.Sys.saveSync();
-                    document.getElementById('btn-cashout').style.display = 'none';
-                },
-                addVela(v) {
-                    const row = document.getElementById('crash-hist');
-                    const vBox = document.createElement('div');
-                    vBox.className = 'vela';
-                    vBox.style.background = v > 2 ? 'var(--g)' : 'var(--p)';
-                    vBox.style.color = v > 2 ? '#000' : '#fff';
-                    vBox.innerText = v.toFixed(2)+'x';
-                    row.prepend(vBox);
-                }
-            },
-            Sys: {
-                unlock() {
-                    document.getElementById('view-auth').classList.remove('active');
-                    document.getElementById('navbar-main').style.display = 'flex';
-                    if(App.u.role === 'admin') { document.getElementById('view-admin').classList.add('active'); document.getElementById('nav-adm').style.display = 'block'; }
-                    else document.getElementById('view-lobby').classList.add('active');
-                    this.syncUI();
-                },
-                syncUI() {
-                    const txt = `R$ ${App.u.balance.toFixed(2)}`;
-                    ['bal-h','bal-m','bal-c'].forEach(id => { if(document.getElementById(id)) document.getElementById(id).innerText = txt; });
-                    document.getElementById('cur-bet').innerText = App.u.bet;
-                    if(App.u.role === 'admin') this.loadShark();
-                },
-                loadShark() {
-                    const list = document.getElementById('shark-user-list');
-                    list.innerHTML = App.db.filter(x => x.role !== 'admin').map(x => `
-                        <div class="shark-card">
-                            <div style="display:flex; justify-content:space-between; align-items:center;">
-                                <span><span class="status-led" style="background:${x.active ? 'var(--g)' : '#333'}"></span><b>${x.name}</b></span>
-                                <b style="color:var(--g)">R$ ${x.balance.toFixed(2)}</b>
-                            </div>
-                            <div style="margin-top:15px; display:flex; gap:8px;">
-                                <button onclick="App.Sys.modU('${x.name}', 1000)" style="flex:1; background:var(--g); border:none; padding:8px; border-radius:5px; font-weight:900;">+1K</button>
-                                <button onclick="App.Sys.modeU('${x.name}', 'win')" style="flex:1; background:blue; color:#fff; border:none; padding:8px; border-radius:5px; font-weight:900;">WIN</button>
-                                <button onclick="App.Sys.modeU('${x.name}', 'lose')" style="flex:1; background:red; color:#fff; border:none; padding:8px; border-radius:5px; font-weight:900;">LOSE</button>
-                            </div>
-                        </div>
-                    `).join('');
-                },
-                modU(n, v) { let u = App.db.find(x => x.name === n); u.balance += v; this.saveSync(); },
-                modeU(n, m) { let u = App.db.find(x => x.name === n); u.mode = m; this.saveSync(); },
-                addFunds() { App.u.balance += 500; this.saveSync(); alert("R$ 500 injetados para teste!"); },
-                save() { localStorage.setItem('MEC_V29_DATA', JSON.stringify(App.db)); },
-                saveSync() { this.save(); this.syncUI(); }
-            },
-            Router: {
-                go(id, el) {
-                    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-                    document.getElementById(id).classList.add('active');
-                    if(el) { document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); el.classList.add('active'); }
-                    if(id === 'view-crash') setTimeout(() => App.Game.drawInit(), 100);
-                }
-            }
-        };
-    </script>
+<div id="userPanel" style="display:none">
+
+<h2>PAINEL USUÁRIO</h2>
+
+<div class="card">
+
+Saldo
+
+<h1 id="balance">0</h1>
+
+<button class="green" onclick="deposit()">Depositar +100</button>
+
+<button class="red" onclick="bet()">Apostar 50</button>
+
+</div>
+
+</div>
+
+<div id="adminPanel" style="display:none">
+
+<h2>PAINEL ADMIN</h2>
+
+<div id="userList"></div>
+
+</div>
+
+<script>
+
+const channel = new BroadcastChannel("demo-platform")
+
+let db = JSON.parse(localStorage.getItem("db")) || []
+
+let currentUser=null
+
+function save(){
+
+localStorage.setItem("db",JSON.stringify(db))
+
+channel.postMessage("update")
+
+}
+
+function login(){
+
+let name=document.getElementById("user").value.toUpperCase()
+
+let user=db.find(u=>u.name==name)
+
+if(!user){
+
+user={
+
+name:name,
+balance:0
+
+}
+
+db.push(user)
+
+save()
+
+}
+
+currentUser=user
+
+document.getElementById("login").style.display="none"
+
+if(name=="ADMIN"){
+
+document.getElementById("adminPanel").style.display="block"
+
+loadUsers()
+
+}
+
+else{
+
+document.getElementById("userPanel").style.display="block"
+
+updateUI()
+
+}
+
+}
+
+function updateUI(){
+
+document.getElementById("balance").innerText=currentUser.balance
+
+}
+
+function deposit(){
+
+currentUser.balance+=100
+
+save()
+
+updateUI()
+
+}
+
+function bet(){
+
+currentUser.balance-=50
+
+save()
+
+updateUI()
+
+}
+
+function loadUsers(){
+
+let html=""
+
+db.forEach(u=>{
+
+html+=`
+
+<div class="card">
+
+${u.name}
+
+<h3>${u.balance}</h3>
+
+<button onclick="add('${u.name}')">+500</button>
+
+<button onclick="remove('${u.name}')">-500</button>
+
+</div>
+
+`
+
+})
+
+document.getElementById("userList").innerHTML=html
+
+}
+
+function add(name){
+
+let u=db.find(x=>x.name==name)
+
+u.balance+=500
+
+save()
+
+loadUsers()
+
+}
+
+function remove(name){
+
+let u=db.find(x=>x.name==name)
+
+u.balance-=500
+
+save()
+
+loadUsers()
+
+}
+
+channel.onmessage=()=>{
+
+db=JSON.parse(localStorage.getItem("db"))
+
+if(currentUser){
+
+currentUser=db.find(x=>x.name==currentUser.name)
+
+updateUI()
+
+}
+
+if(document.getElementById("adminPanel").style.display=="block"){
+
+loadUsers()
+
+}
+
+}
+
+</script>
+
 </body>
 </html>
