@@ -1,7 +1,272 @@
-index.html
- ├ login
- ├ dashboard
- ├ jogo
- ├ saldo
- ├ painel admin
- └ sistema SPA
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mecshop Platform</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#0f172a;
+color:white;
+}
+
+header{
+background:#020617;
+padding:15px;
+text-align:center;
+font-size:20px;
+font-weight:bold;
+}
+
+.container{
+padding:20px;
+}
+
+.card{
+background:#1e293b;
+padding:20px;
+border-radius:10px;
+margin-bottom:20px;
+}
+
+input{
+width:100%;
+padding:10px;
+margin-top:10px;
+border:none;
+border-radius:6px;
+}
+
+button{
+padding:10px;
+margin-top:10px;
+width:100%;
+background:#22c55e;
+border:none;
+border-radius:6px;
+color:white;
+font-weight:bold;
+cursor:pointer;
+}
+
+button:hover{
+opacity:0.9;
+}
+
+.hidden{
+display:none;
+}
+
+.admin{
+background:#7c3aed;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>Mecshop Platform</header>
+
+<div class="container">
+
+<!-- LOGIN -->
+
+<div id="loginBox" class="card">
+
+<h3>Login</h3>
+
+<input id="user" placeholder="Usuário">
+
+<input id="pass" type="password" placeholder="Senha">
+
+<button onclick="login()">Entrar</button>
+
+<p onclick="showRegister()" style="cursor:pointer;margin-top:10px;">Criar conta</p>
+
+</div>
+
+<!-- REGISTRO -->
+
+<div id="registerBox" class="card hidden">
+
+<h3>Cadastro</h3>
+
+<input id="newUser" placeholder="Usuário">
+
+<input id="newPass" type="password" placeholder="Senha">
+
+<button onclick="register()">Cadastrar</button>
+
+</div>
+
+<!-- DASHBOARD -->
+
+<div id="dashboard" class="hidden">
+
+<div class="card">
+
+<h3>Bem-vindo <span id="username"></span></h3>
+
+<p>Saldo: R$ <span id="saldo">0</span></p>
+
+<button onclick="ganhar()">Ganhar saldo</button>
+
+</div>
+
+<div class="card">
+
+<h3>Mini Jogo</h3>
+
+<button onclick="jogar()">Girar sorte</button>
+
+<p id="resultado"></p>
+
+</div>
+
+<div id="adminPanel" class="card admin hidden">
+
+<h3>Painel Admin</h3>
+
+<p>Total de usuários: <span id="totalUsers"></span></p>
+
+<button onclick="reset()">Reset sistema</button>
+
+</div>
+
+<button onclick="logout()">Sair</button>
+
+</div>
+
+</div>
+
+<script>
+
+let users = JSON.parse(localStorage.getItem("users")) || []
+let saldo = parseFloat(localStorage.getItem("saldo")) || 0
+
+function showRegister(){
+
+document.getElementById("loginBox").classList.add("hidden")
+document.getElementById("registerBox").classList.remove("hidden")
+
+}
+
+function register(){
+
+let u = document.getElementById("newUser").value
+let p = document.getElementById("newPass").value
+
+users.push({user:u,pass:p})
+
+localStorage.setItem("users",JSON.stringify(users))
+
+alert("Conta criada")
+
+location.reload()
+
+}
+
+function login(){
+
+let u = document.getElementById("user").value
+let p = document.getElementById("pass").value
+
+let found = users.find(x => x.user==u && x.pass==p)
+
+if(u=="admin" && p=="123"){
+
+openDashboard(u,true)
+
+return
+
+}
+
+if(found){
+
+openDashboard(u,false)
+
+}else{
+
+alert("Login inválido")
+
+}
+
+}
+
+function openDashboard(user,isAdmin){
+
+document.getElementById("loginBox").classList.add("hidden")
+document.getElementById("dashboard").classList.remove("hidden")
+
+document.getElementById("username").innerText=user
+
+document.getElementById("saldo").innerText=saldo
+
+if(isAdmin){
+
+document.getElementById("adminPanel").classList.remove("hidden")
+
+document.getElementById("totalUsers").innerText=users.length
+
+}
+
+}
+
+function ganhar(){
+
+saldo += 10
+
+localStorage.setItem("saldo",saldo)
+
+document.getElementById("saldo").innerText=saldo
+
+}
+
+function jogar(){
+
+let win = Math.random()
+
+if(win > 0.5){
+
+saldo += 20
+
+document.getElementById("resultado").innerText="Você ganhou 20"
+
+}else{
+
+saldo -= 5
+
+document.getElementById("resultado").innerText="Você perdeu 5"
+
+}
+
+localStorage.setItem("saldo",saldo)
+
+document.getElementById("saldo").innerText=saldo
+
+}
+
+function logout(){
+
+location.reload()
+
+}
+
+function reset(){
+
+localStorage.clear()
+
+location.reload()
+
+}
+
+</script>
+
+</body>
+</html>
