@@ -3,49 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MEC-BET INFINITY | V18 FULL</title>
+    <title>MEC-BET INFINITY | V19 FULL</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --p: #ff5e00; --g: #00ff41; --gold: #d4af37; --danger: #ff3b30; --bg: #050505; --card: #0d0d0d; --border: #1a1a1a; --pink: #ff007a; }
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: #fff; height: 100vh; overflow: hidden; }
 
-        /* VIEWS & ANIMATIONS */
+        /* NAVEGAÇÃO E VIEWS */
         .view { position: absolute; inset: 0; display: none; flex-direction: column; background: var(--bg); z-index: 10; overflow-y: auto; padding-bottom: 110px; }
-        .view.active { display: flex; animation: slideIn 0.3s ease-out; }
-        @keyframes slideIn { from { transform: translateX(30px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .view.active { display: flex; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         header { height: 70px; background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; padding: 0 15px; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px); }
         .logo { font-weight: 900; font-size: 22px; color: var(--gold); }
 
         .card { background: var(--card); margin: 10px; padding: 18px; border-radius: 20px; border: 1px solid var(--border); }
         .btn { border: none; border-radius: 14px; font-weight: 900; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; }
-        .btn:active { transform: scale(0.95); }
         .btn-p { background: linear-gradient(90deg, #ff5e00, #ff8c00); color: #fff; padding: 16px; width: 100%; }
         .btn-g { background: linear-gradient(90deg, #00ff41, #00cc33); color: #000; padding: 16px; width: 100%; }
-
-        /* MINES GRID */
-        .m-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: #000; padding: 10px; border-radius: 15px; }
-        .tile { aspect-ratio: 1/1; background: #111; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; border-bottom: 3px solid #000; color: #222; transition: 0.2s; }
-        .tile.open { border-bottom: none; background: #1a1a1a; transform: translateY(2px); }
+        
+        /* GRID MINES */
+        .m-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: #000; padding: 12px; border-radius: 18px; }
+        .tile { aspect-ratio: 1/1; background: #111; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; border-bottom: 4px solid #000; color: #222; }
+        .tile.open { border-bottom: none; background: #1a1a1a; }
         .is-gem { color: var(--g); text-shadow: 0 0 10px var(--g); }
         .is-bomb { color: var(--danger); text-shadow: 0 0 10px var(--danger); }
 
-        /* CRASH AREA */
-        #crash-area { height: 220px; background: #000; border-radius: 15px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); }
-        #rocket { position: absolute; bottom: 20px; left: 20px; font-size: 30px; color: var(--p); z-index: 10; transition: transform 0.1s linear; }
-        #mult-display { font-size: 50px; font-weight: 900; z-index: 5; }
-        .history { display: flex; gap: 8px; overflow-x: auto; padding: 10px; scrollbar-width: none; }
-        .vela { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; background: #111; border: 1px solid #222; }
+        /* CRASH & DOUBLE AREA */
+        #crash-area { height: 200px; background: #000; border-radius: 15px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); }
+        #rocket { position: absolute; bottom: 20px; left: 20px; font-size: 30px; color: var(--p); transition: 0.1s linear; }
+        #mult-display { font-size: 45px; font-weight: 900; z-index: 5; }
+        .history { display: flex; gap: 6px; overflow-x: auto; padding: 10px; }
+        .vela { padding: 4px 8px; border-radius: 5px; font-size: 10px; font-weight: 800; background: #111; border: 1px solid #222; }
 
-        /* CHAT & VIP */
-        .chat-fake { height: 60px; font-size: 10px; color: #444; padding: 5px 15px; overflow: hidden; }
-        .vip-box { height: 6px; background: #111; border-radius: 10px; margin-top: 8px; }
-        .vip-fill { height: 100%; background: var(--gold); border-radius: 10px; transition: 0.5s; }
+        /* DOUBLE (ROLETA) */
+        .wheel-container { height: 60px; background: #111; border-radius: 10px; overflow: hidden; position: relative; border: 1px solid var(--border); }
+        .wheel { display: flex; transition: transform 4s cubic-bezier(0.1, 0, 0.1, 1); width: 2000px; }
+        .w-box { min-width: 50px; height: 60px; display: flex; align-items: center; justify-content: center; font-weight: 900; border-right: 1px solid #000; }
+        .w-red { background: var(--danger); } .w-black { background: #222; } .w-white { background: #fff; color: #000; }
 
         input { width:100%; padding:18px; background:var(--card); border:1px solid var(--border); border-radius:15px; color:#fff; margin-bottom:12px; outline:none; }
         nav { position: fixed; bottom: 15px; left: 15px; right: 15px; height: 75px; background: rgba(10,10,10,0.95); border: 1px solid var(--border); border-radius: 25px; display: none; justify-content: space-around; align-items: center; z-index: 1000; }
-        .nav-link { color: #444; font-size: 10px; font-weight: 900; text-align: center; flex: 1; }
+        .nav-link { color: #444; font-size: 10px; font-weight: 900; text-align: center; }
         .nav-link.active { color: var(--gold); }
     </style>
 </head>
@@ -55,52 +55,51 @@
         <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:35px;">
             <div class="logo" style="font-size:45px; margin-bottom:30px;">MEC-BET</div>
             <input type="text" id="u-in" placeholder="USUÁRIO">
-            <button class="btn btn-p" onclick="App.Auth.login()">ENTRAR AGORA</button>
-            <p style="margin-top:20px; font-size:12px; color:var(--gold)" onclick="App.Router.go('scr-reg')">NÃO TEM CONTA? CADASTRE-SE</p>
+            <button class="btn btn-p" onclick="App.Auth.login()">ENTRAR</button>
+            <small style="margin-top:20px; color:var(--gold)" onclick="App.Router.go('scr-reg')">CRIAR CONTA</small>
         </div>
     </div>
 
     <div id="scr-reg" class="view">
         <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:35px;">
-            <h2 style="margin-bottom:20px;">CADASTRO RÁPIDO</h2>
+            <h2 style="margin-bottom:20px;">CADASTRO</h2>
             <input type="text" placeholder="CPF">
             <input type="email" placeholder="E-MAIL">
-            <input type="password" placeholder="SENHA">
-            <button class="btn btn-g" onclick="App.Router.go('scr-auth')">CRIAR MINHA CONTA</button>
+            <button class="btn btn-g" onclick="App.Router.go('scr-auth')">FINALIZAR</button>
         </div>
     </div>
 
     <div id="scr-lobby" class="view">
-        <header><div class="logo">MEC-BET</div><div id="u-saldo-top" style="color:var(--g)">R$ 0,00</div></header>
-        <div class="card">
+        <header><div class="logo">MEC-BET</div><div id="u-saldo-top" style="color:var(--g); font-weight:900;">R$ 0,00</div></header>
+        <div class="card" style="border-left: 5px solid var(--gold);">
             <small style="color:#666">SALDO DISPONÍVEL</small>
             <h1 id="u-saldo-main" style="font-size:40px;">R$ 0,00</h1>
-            <div class="vip-box"><div class="vip-fill" id="vip-f"></div></div>
-            <button class="btn btn-g" style="margin-top:15px;" onclick="App.System.deposit()">+ DEPOSITAR PIX</button>
+            <button class="btn btn-g" style="margin-top:15px;" onclick="App.System.deposit()">+ DEPOSITAR (PIX)</button>
         </div>
-        <div class="chat-fake" id="chat"></div>
-        <div style="padding:0 10px; display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-            <div class="card" onclick="App.Router.go('scr-mines')" style="margin:0; text-align:center;"><i class="fa-solid fa-gem" style="color:var(--gold)"></i><br>MINES</div>
-            <div class="card" onclick="App.Router.go('scr-crash')" style="margin:0; text-align:center;"><i class="fa-solid fa-rocket" style="color:var(--p)"></i><br>CRASH</div>
+        <div style="padding:0 12px; display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+            <div class="card" onclick="App.Router.go('scr-mines')" style="margin:0; text-align:center;"><i class="fa-solid fa-gem"></i><br>MINES</div>
+            <div class="card" onclick="App.Router.go('scr-crash')" style="margin:0; text-align:center;"><i class="fa-solid fa-rocket"></i><br>CRASH</div>
+            <div class="card" onclick="App.Router.go('scr-double')" style="margin:0; text-align:center;"><i class="fa-solid fa-circle-dot"></i><br>DOUBLE</div>
+            <div class="card" onclick="alert('Penalty em breve')" style="margin:0; text-align:center; opacity:0.5;"><i class="fa-solid fa-futbol"></i><br>PENALTY</div>
         </div>
     </div>
 
     <div id="scr-mines" class="view">
-        <header><i class="fa-solid fa-chevron-left" onclick="App.Router.go('scr-lobby')"></i><div id="m-saldo" style="color:var(--g)">R$ 0,00</div><div></div></header>
+        <header><i class="fa-solid fa-chevron-left" onclick="App.Router.go('scr-lobby')"></i><div id="m-saldo" style="color:var(--g)">R$ 0,00</div><i class="fa-solid fa-rotate"></i></header>
         <div style="padding:15px;">
             <div class="m-grid" id="m-board"></div>
-            <div style="display:flex; justify-content:space-between; margin:20px 0;">
-                <button class="btn" style="background:#111; width:50px;" onclick="App.Game.changeBet(-5)">-</button>
-                <b id="bet-m" style="color:var(--gold)">R$ 10</b>
-                <button class="btn" style="background:#111; width:50px;" onclick="App.Game.changeBet(5)">+</button>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin:20px 0;">
+                <button class="btn" style="background:#111; width:50px; height:50px;" onclick="App.Game.changeBet(-5)">-</button>
+                <b id="bet-m" style="font-size:20px; color:var(--gold)">R$ 10</b>
+                <button class="btn" style="background:#111; width:50px; height:50px;" onclick="App.Game.changeBet(5)">+</button>
             </div>
-            <button id="m-start" class="btn btn-p" onclick="App.Game.Mines.start()">JOGAR MINES</button>
+            <button id="m-start" class="btn btn-p" onclick="App.Game.Mines.start()">INICIAR MINES</button>
             <button id="m-cash" class="btn btn-g" style="display:none;" onclick="App.Game.Mines.cashout()">SACAR</button>
         </div>
     </div>
 
     <div id="scr-crash" class="view">
-        <header><i class="fa-solid fa-chevron-left" onclick="App.Router.go('scr-lobby')"></i><div id="c-saldo" style="color:var(--g)">R$ 0,00</div><div></div></header>
+        <header><i class="fa-solid fa-chevron-left" onclick="App.Router.go('scr-lobby')"></i><div id="c-saldo" style="color:var(--g)">R$ 0,00</div><i class="fa-solid fa-chart-line"></i></header>
         <div class="history" id="c-hist"></div>
         <div style="padding:15px;">
             <div id="crash-area">
@@ -108,20 +107,27 @@
                 <div id="rocket"><i class="fa-solid fa-rocket"></i></div>
             </div>
             <div class="card" style="background:#000; margin-top:15px;">
-                <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
-                    <button class="btn" style="background:#111; width:50px;" onclick="App.Game.changeBet(-5)">-</button>
-                    <b id="bet-c" style="color:var(--gold)">R$ 10</b>
-                    <button class="btn" style="background:#111; width:50px;" onclick="App.Game.changeBet(5)">+</button>
-                </div>
-                <button id="c-start" class="btn btn-p" onclick="App.Game.Crash.start()">LANÇAR</button>
+                <button id="c-start" class="btn btn-p" onclick="App.Game.Crash.start()">APOSTAR</button>
                 <button id="c-cash" class="btn btn-g" style="display:none;" onclick="App.Game.Crash.cashout()">CASHOUT</button>
-                <button id="c-wait" class="btn" style="display:none; background:#111; color:#444;" disabled>AGUARDE...</button>
+                <button id="c-wait" class="btn" style="display:none; background:#111; color:#444;" disabled>PRÓXIMA EM 5s</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="scr-double" class="view">
+        <header><i class="fa-solid fa-chevron-left" onclick="App.Router.go('scr-lobby')"></i><div id="d-saldo" style="color:var(--g)">R$ 0,00</div><i class="fa-solid fa-circle-dot"></i></header>
+        <div style="padding:15px;">
+            <div class="wheel-container"><div class="wheel" id="d-wheel"></div></div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px; margin-top:20px;">
+                <button class="btn" style="background:var(--danger); height:50px;" onclick="App.Game.Double.bet('red')">2X</button>
+                <button class="btn" style="background:#fff; color:#000; height:50px;" onclick="App.Game.Double.bet('white')">14X</button>
+                <button class="btn" style="background:#222; height:50px;" onclick="App.Game.Double.bet('black')">2X</button>
             </div>
         </div>
     </div>
 
     <div id="scr-admin" class="view">
-        <header><div class="logo" style="color:var(--p)">SHARK CONTROL</div></header>
+        <header><div class="logo" style="color:var(--p)">SHARK CONTROL</div><i class="fa-solid fa-crown"></i></header>
         <div id="adm-list" style="padding:15px;"></div>
     </div>
 
@@ -132,82 +138,87 @@
 
     <script>
         const App = {
-            db: JSON.parse(localStorage.getItem('MEC_V18_FINAL')) || [],
+            db: JSON.parse(localStorage.getItem('MEC_OMNI_DB')) || [],
             curr: null, bet: 10,
             init() {
                 const s = sessionStorage.getItem('MEC_SESS');
                 if(s) { this.curr = this.db.find(u => u.user === s); if(this.curr) this.System.unlock(); }
-                this.Game.Mines.render(); this.System.chat();
+                this.Game.Mines.render(); this.Game.Double.init();
             },
             Auth: {
                 login() {
                     let u = document.getElementById('u-in').value.toUpperCase(); if(!u) return;
                     let user = App.db.find(x => x.user === u);
-                    if(!user) { user = { user: u, saldo: 0, role: u === 'ADMIN' ? 'admin' : 'player', mode: 'auto', xp: 10 }; App.db.push(user); App.System.save(); }
+                    if(!user) { user = { user: u, saldo: 0, role: u === 'ADMIN' ? 'admin' : 'player', mode: 'auto' }; App.db.push(user); App.System.save(); }
                     sessionStorage.setItem('MEC_SESS', u); location.reload();
                 }
             },
             Game: {
-                changeBet(v) { App.bet += v; if(App.bet < 5) App.bet = 5; document.getElementById('bet-m').innerText = `R$ ${App.bet}`; document.getElementById('bet-c').innerText = `R$ ${App.bet}`; },
+                changeBet(v) { App.bet += v; if(App.bet < 5) App.bet = 5; document.getElementById('bet-m').innerText = `R$ ${App.bet}`; },
                 Mines: {
                     playing: false, mult: 1, bPos: 0,
                     start() {
                         if(App.curr.saldo < App.bet) return alert("SALDO!");
                         App.curr.saldo -= App.bet; App.System.saveSync();
                         this.playing = true; this.mult = 1; this.bPos = Math.floor(Math.random()*25);
-                        document.getElementById('m-start').style.display = 'none';
-                        document.getElementById('m-cash').style.display = 'block';
+                        document.getElementById('m-start').style.display = 'none'; document.getElementById('m-cash').style.display = 'block';
                         this.render();
                     },
                     render() {
-                        const board = document.getElementById('m-board'); board.innerHTML = '';
+                        const b = document.getElementById('m-board'); b.innerHTML = '';
                         for(let i=0; i<25; i++) {
-                            let t = document.createElement('div'); t.className = 'tile'; t.innerHTML = '<i class="fa-solid fa-cube"></i>';
+                            let t = document.createElement('div'); t.className = 'tile'; t.innerHTML = '<i class="fa-solid fa-cube" style="opacity:0.1"></i>';
                             t.onclick = () => {
                                 if(!this.playing || t.classList.contains('open')) return;
                                 t.classList.add('open');
                                 let bomb = (i === this.bPos);
                                 if(App.curr.mode === 'win') bomb = false; if(App.curr.mode === 'lose') bomb = true;
                                 if(bomb) { t.innerHTML = '<i class="fa-solid fa-bomb"></i>'; t.classList.add('is-bomb'); this.end(false); }
-                                else { t.innerHTML = '<i class="fa-solid fa-gem"></i>'; t.classList.add('is-gem'); this.mult += 0.5; document.getElementById('m-cash').innerText = `SACAR R$ ${(App.bet * this.mult).toFixed(2)}`; }
-                            };
-                            board.appendChild(t);
+                                else { t.innerHTML = '<i class="fa-solid fa-gem"></i>'; t.classList.add('is-gem'); this.mult += 0.6; document.getElementById('m-cash').innerText = `SACAR R$ ${(App.bet*this.mult).toFixed(2)}`; }
+                            }; b.appendChild(t);
                         }
                     },
                     cashout() { App.curr.saldo += (App.bet * this.mult); this.end(true); },
-                    end(win) { this.playing = false; document.getElementById('m-start').style.display = 'block'; document.getElementById('m-cash').style.display = 'none'; App.System.saveSync(); if(win) alert("GANHOU!"); }
+                    end(win) { this.playing = false; document.getElementById('m-start').style.display = 'block'; document.getElementById('m-cash').style.display = 'none'; App.System.saveSync(); }
                 },
                 Crash: {
-                    timer: null, mult: 1.00, running: false,
+                    timer: null, mult: 1.00,
                     start() {
                         if(App.curr.saldo < App.bet) return alert("SALDO!");
                         App.curr.saldo -= App.bet; App.System.saveSync();
-                        this.running = true; this.mult = 1.00;
-                        document.getElementById('c-start').style.display = 'none';
-                        document.getElementById('c-cash').style.display = 'block';
-                        let limit = (Math.random() * 4 + 1.1);
-                        if(App.curr.mode === 'lose') limit = 1.05; if(App.curr.mode === 'win') limit = 10.0;
+                        this.mult = 1.00; document.getElementById('c-start').style.display = 'none'; document.getElementById('c-cash').style.display = 'block';
+                        let limit = (Math.random() * 5 + 1.1); if(App.curr.mode === 'lose') limit = 1.05;
                         this.timer = setInterval(() => {
                             this.mult += (this.mult * 0.015);
-                            document.getElementById('mult-display').innerText = this.mult.toFixed(2) + 'x';
-                            document.getElementById('rocket').style.transform = `translate(${this.mult*8}px, -${this.mult*8}px)`;
+                            document.getElementById('mult-display').innerText = this.mult.toFixed(2)+'x';
+                            document.getElementById('rocket').style.transform = `translate(${this.mult*7}px, -${this.mult*7}px)`;
                             if(this.mult >= limit) this.explode();
                         }, 100);
                     },
                     explode() {
-                        clearInterval(this.timer); this.running = false;
-                        document.getElementById('mult-display').innerText = "CRASHED!";
-                        document.getElementById('c-cash').style.display = 'none';
-                        document.getElementById('c-wait').style.display = 'block';
+                        clearInterval(this.timer); document.getElementById('c-cash').style.display = 'none'; document.getElementById('c-wait').style.display = 'block';
                         const v = document.createElement('div'); v.className = 'vela'; v.innerText = this.mult.toFixed(2)+'x'; document.getElementById('c-hist').prepend(v);
-                        setTimeout(() => {
-                            document.getElementById('c-wait').style.display = 'none';
-                            document.getElementById('c-start').style.display = 'block';
-                            document.getElementById('mult-display').innerText = "1.00x";
-                            document.getElementById('rocket').style.transform = "translate(0,0)";
-                        }, 3000);
+                        setTimeout(() => { document.getElementById('c-wait').style.display = 'none'; document.getElementById('c-start').style.display = 'block'; document.getElementById('rocket').style.transform = 'translate(0,0)'; }, 4000);
                     },
-                    cashout() { if(!this.running) return; App.curr.saldo += (App.bet * this.mult); clearInterval(this.timer); this.running = false; App.System.saveSync(); alert("GANHOU!"); this.explode(); }
+                    cashout() { App.curr.saldo += (App.bet * this.mult); clearInterval(this.timer); App.System.saveSync(); this.explode(); }
+                },
+                Double: {
+                    init() {
+                        const w = document.getElementById('d-wheel'); w.innerHTML = '';
+                        for(let i=0; i<50; i++) {
+                            const r = document.createElement('div'); r.className = `w-box ${i%2===0?'w-red':'w-black'}`; if(i===7) r.className = 'w-box w-white';
+                            r.innerText = i%14; w.appendChild(r);
+                        }
+                    },
+                    bet(type) {
+                        if(App.curr.saldo < App.bet) return;
+                        App.curr.saldo -= App.bet; App.System.saveSync();
+                        const w = document.getElementById('d-wheel');
+                        let stop = Math.floor(Math.random()*1500) + 500;
+                        if(App.curr.mode === 'lose') stop = 350; // Força uma perda básica
+                        w.style.transform = `translateX(-${stop}px)`;
+                        setTimeout(() => { alert("Rodada encerrada!"); w.style.transition = 'none'; w.style.transform = 'translateX(0)'; setTimeout(()=>w.style.transition='transform 4s cubic-bezier(0.1, 0, 0.1, 1)', 50); }, 5000);
+                    }
                 }
             },
             System: {
@@ -220,25 +231,17 @@
                 syncUI() {
                     const s = `R$ ${App.curr.saldo.toFixed(2)}`;
                     document.getElementById('u-saldo-top').innerText = s; document.getElementById('u-saldo-main').innerText = s;
-                    document.getElementById('m-saldo').innerText = s; document.getElementById('c-saldo').innerText = s;
-                    document.getElementById('vip-f').style.width = (App.curr.xp % 100) + '%';
+                    document.getElementById('m-saldo').innerText = s; document.getElementById('c-saldo').innerText = s; document.getElementById('d-saldo').innerText = s;
                     if(App.curr.role === 'admin') this.loadShark();
-                },
-                chat() {
-                    setInterval(() => {
-                        const c = document.getElementById('chat');
-                        const l = document.createElement('div'); l.innerText = `Usuário sacou R$ ${(Math.random()*100).toFixed(2)} agora!`;
-                        c.prepend(l); if(c.children.length > 2) c.lastChild.remove();
-                    }, 4000);
                 },
                 loadShark() {
                     const l = document.getElementById('adm-list');
                     l.innerHTML = App.db.filter(u => u.role !== 'admin').map(u => `
                         <div class="card" style="margin:5px 0; display:flex; justify-content:space-between; align-items:center;">
                             <div><b>${u.user}</b><br>R$ ${u.saldo.toFixed(2)}</div>
-                            <div style="display:flex; gap:4px;">
-                                <button onclick="App.System.mod('${u.user}', 50)" style="background:var(--g); border:none; padding:10px;">+</button>
-                                <button onclick="App.System.mod('${u.user}', -50)" style="background:red; border:none; padding:10px; color:#fff;">-</button>
+                            <div style="display:flex; gap:5px;">
+                                <button onclick="App.System.mod('${u.user}', 100)" style="background:var(--g); border:none; padding:10px;">+</button>
+                                <button onclick="App.System.mod('${u.user}', -100)" style="background:red; border:none; padding:10px; color:#fff;">-</button>
                                 <button onclick="App.System.mode('${u.user}','win')" style="background:var(--gold); border:none; padding:10px;">🏆</button>
                                 <button onclick="App.System.mode('${u.user}','lose')" style="background:#222; border:none; padding:10px; color:#fff;">💀</button>
                             </div>
@@ -246,9 +249,9 @@
                 },
                 mod(n, v) { let u = App.db.find(x => x.user === n); u.saldo += v; this.saveSync(); },
                 mode(n, m) { let u = App.db.find(x => x.user === n); u.mode = m; this.saveSync(); },
-                save() { localStorage.setItem('MEC_V18_FINAL', JSON.stringify(App.db)); },
+                save() { localStorage.setItem('MEC_OMNI_DB', JSON.stringify(App.db)); },
                 saveSync() { this.save(); this.syncUI(); },
-                deposit() { App.curr.saldo += 100; App.curr.xp += 10; this.saveSync(); }
+                deposit() { App.curr.saldo += 100; this.saveSync(); }
             },
             Router: {
                 go(id, el) {
