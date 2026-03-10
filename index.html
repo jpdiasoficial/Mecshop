@@ -3,224 +3,268 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MEC-BET ELITE V33</title>
+    <title>MEC-BET | PLATAFORMA OFICIAL</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --p: #ff5e00; --g: #00ff41; --bg: #030303; --card: #0d0d0d; --brd: #1a1a1a; }
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+        :root { --p: #ff5e00; --g: #00ff41; --bg: #050505; --card: #0f0f0f; --brd: #1c1c1c; }
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: #fff; height: 100vh; overflow: hidden; position: fixed; width: 100%; }
 
         /* HEADER */
-        header { height: 75px; background: #000; border-bottom: 1px solid var(--brd); display: flex; justify-content: space-between; align-items: center; padding: 0 20px; z-index: 1000; }
-        .logo { font-family: 'Orbitron', sans-serif; color: var(--p); font-size: 20px; font-weight: 900; }
-        .bal-pill { background: #111; padding: 10px 18px; border-radius: 15px; border: 1px solid var(--brd); color: var(--g); font-weight: 800; }
+        header { height: 70px; background: #000; border-bottom: 1px solid var(--brd); display: none; justify-content: space-between; align-items: center; padding: 0 20px; z-index: 1000; }
+        .logo { font-family: 'Orbitron'; color: var(--p); font-weight: 900; font-size: 22px; }
+        .balance-box { background: #111; padding: 8px 15px; border-radius: 12px; border: 1px solid var(--brd); color: var(--g); font-weight: 800; font-size: 14px; }
 
-        /* VIEWS */
-        .view { position: absolute; inset: 75px 0 95px 0; display: none; flex-direction: column; background: var(--bg); padding: 20px; overflow-y: auto; }
-        .view.active { display: flex; }
+        /* TELAS */
+        .view { position: absolute; inset: 0; display: none; flex-direction: column; background: var(--bg); padding: 20px; overflow-y: auto; padding-bottom: 110px; }
+        .view.active { display: flex; animation: fadeIn 0.2s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* AUTH (MODO RÁPIDO) */
-        #v-auth { inset: 0; z-index: 5000; display: flex; background: radial-gradient(circle at top, #1a1a1a, #000); justify-content: center; align-items: center; padding: 40px; }
-        .auth-card { width: 100%; max-width: 400px; text-align: center; }
-
-        /* PERFIL REDONDINHO */
-        .profile-header { display: flex; align-items: center; gap: 15px; background: var(--card); padding: 20px; border-radius: 20px; border: 1px solid var(--brd); margin-bottom: 20px; }
-        .avatar { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(45deg, var(--p), #ffae00); display: flex; align-items: center; justify-content: center; font-size: 25px; border: 2px solid #333; }
-
-        /* GAMES */
-        .game-screen { height: 260px; background: #000; border-radius: 25px; border: 1px solid var(--brd); position: relative; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        #mult-text { font-family: 'Orbitron'; font-size: 55px; font-weight: 900; z-index: 10; }
-        .grid-mines { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; padding: 15px; width: 100%; }
-        .tile { aspect-ratio: 1; background: #151515; border-radius: 10px; border: 1px solid #222; display: flex; align-items: center; justify-content: center; font-size: 18px; }
-        .tile.active-g { background: var(--g); color: #000; box-shadow: 0 0 15px var(--g); border: none; }
+        /* LOGIN / CADASTRO */
+        #v-auth { z-index: 5000; background: radial-gradient(circle at top, #151515, #000); justify-content: center; }
+        .auth-card { width: 100%; max-width: 380px; margin: 0 auto; }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 11px; color: #666; font-weight: 800; margin-bottom: 5px; text-transform: uppercase; }
+        .in-auth { width: 100%; padding: 18px; background: #0a0a0a; border: 1px solid #222; border-radius: 15px; color: #fff; font-size: 16px; font-weight: 600; }
 
         /* BOTÕES */
-        .btn { padding: 18px; border: none; border-radius: 18px; font-weight: 800; cursor: pointer; text-transform: uppercase; width: 100%; transition: 0.2s; }
-        .btn-p { background: var(--p); color: #fff; box-shadow: 0 5px 15px rgba(255,94,0,0.3); }
-        .btn-g { background: var(--g); color: #000; }
-        .btn:active { transform: scale(0.96); }
+        .btn { border: none; border-radius: 15px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: 0.2s; width: 100%; }
+        .btn-p { padding: 18px; background: var(--p); color: #fff; box-shadow: 0 5px 0 #9c3a00; }
+        .btn-g { padding: 18px; background: var(--g); color: #000; box-shadow: 0 5px 0 #008a22; }
+        .btn:active { transform: translateY(3px); box-shadow: none; }
 
-        /* ADMIN */
-        .stat-card { background: var(--card); border: 1px solid var(--brd); padding: 15px; border-radius: 15px; margin-bottom: 10px; border-left: 4px solid var(--p); }
+        /* LOBBY & PERFIL */
+        .p-card { background: var(--card); border: 1px solid var(--brd); border-radius: 20px; padding: 20px; display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+        .p-avatar { width: 65px; height: 65px; border-radius: 50%; background: linear-gradient(45deg, #111, var(--p)); border: 2px solid #333; display: flex; align-items: center; justify-content: center; font-size: 28px; }
+
+        /* JOGOS */
+        .game-frame { height: 260px; background: #000; border-radius: 25px; border: 1px solid var(--brd); position: relative; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        #mult-val { font-family: 'Orbitron'; font-size: 60px; font-weight: 900; z-index: 10; }
+        .m-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; width: 100%; padding: 15px; }
+        .tile { aspect-ratio: 1; background: #111; border-radius: 10px; border: 1px solid #222; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .tile.win { background: var(--g); color: #000; box-shadow: 0 0 15px var(--g); border: none; }
 
         /* NAV */
-        nav { position: fixed; bottom: 0; left: 0; right: 0; height: 95px; background: #000; border-top: 1px solid var(--brd); display: flex; justify-content: space-around; align-items: center; padding-bottom: 20px; }
-        .nav-item { color: #444; text-align: center; font-size: 11px; font-weight: 700; }
-        .nav-item.active { color: var(--p); }
-        .nav-item i { font-size: 24px; display: block; margin-bottom: 5px; }
+        nav { position: fixed; bottom: 0; left: 0; right: 0; height: 95px; background: #000; border-top: 1px solid var(--brd); display: none; justify-content: space-around; align-items: center; padding-bottom: 20px; z-index: 999; }
+        .nav-link { color: #444; text-align: center; font-size: 11px; font-weight: 700; text-decoration: none; }
+        .nav-link.active { color: var(--p); }
+        .nav-link i { font-size: 24px; display: block; margin-bottom: 5px; }
 
+        /* ADMIN */
+        .adm-row { background: #111; padding: 15px; border-radius: 12px; border: 1px solid #222; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
         canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
     </style>
 </head>
-<body onload="App.start()">
+<body onload="Core.init()">
 
     <div id="v-auth" class="view active">
         <div class="auth-card">
-            <h1 class="logo" style="font-size:45px; margin-bottom:10px;">MEC<span>BET</span></h1>
-            <p style="color:#555; letter-spacing:3px; margin-bottom:40px;">ELITE EDITION V33</p>
-            <input type="text" id="user-name" style="width:100%; padding:20px; background:#111; border:1px solid #222; border-radius:15px; color:#fff; margin-bottom:15px;" placeholder="Nome de Usuário (Ex: ADMIN)">
-            <button class="btn btn-p" onclick="App.login()">ENTRAR NA PLATAFORMA</button>
+            <h1 class="logo" style="font-size:45px; text-align:center; margin-bottom:40px;">MEC<span>BET</span></h1>
+            <div id="form-login">
+                <div class="input-group"><label>Nome de Usuário</label><input type="text" id="log-u" class="in-auth" placeholder="Ex: ADMIN"></div>
+                <div class="input-group"><label>Senha</label><input type="password" id="log-p" class="in-auth" placeholder="****"></div>
+                <button class="btn btn-p" onclick="Core.Auth.login()">Entrar na Plataforma</button>
+                <p style="text-align:center; margin-top:20px; font-size:13px; color:#666;" onclick="document.getElementById('form-login').style.display='none'; document.getElementById('form-reg').style.display='block';">Criar conta nova</p>
+            </div>
+            <div id="form-reg" style="display:none;">
+                <div class="input-group"><label>Novo Usuário</label><input type="text" id="reg-u" class="in-auth"></div>
+                <div class="input-group"><label>Senha</label><input type="password" id="reg-p" class="in-auth"></div>
+                <button class="btn btn-p" onclick="Core.Auth.reg()">Cadastrar Agora</button>
+                <p style="text-align:center; margin-top:20px; font-size:13px; color:#666;" onclick="document.getElementById('form-login').style.display='block'; document.getElementById('form-reg').style.display='none';">Já tenho conta</p>
+            </div>
         </div>
     </div>
 
-    <header id="h-main" style="display:none;">
+    <header id="h-main">
         <div class="logo">MEC-BET</div>
-        <div class="bal-pill">R$ <span id="val-bal">0.00</span></div>
+        <div class="balance-box">R$ <span id="h-bal">0.00</span></div>
     </header>
 
     <div id="v-lobby" class="view">
-        <div class="profile-header" onclick="App.go('v-profile')">
-            <div class="avatar"><i class="fa-solid fa-user-tie"></i></div>
-            <div><h3 id="user-display">Player</h3><p style="font-size:12px; color:#555;">ID Protegido • Ver Perfil</p></div>
+        <div class="p-card" onclick="Core.go('v-profile')">
+            <div class="p-avatar"><i class="fa-solid fa-user-astronaut"></i></div>
+            <div><h3 id="l-user">Carregando...</h3><p style="font-size:12px; color:#555;">ID: #<span id="l-id">0000</span> • Ver Dados</p></div>
         </div>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:20px;">
-            <div class="stat-card" onclick="App.go('v-crash')" style="text-align:center;"><i class="fa-solid fa-rocket" style="font-size:30px; color:var(--p);"></i><br><br><b>CRASH</b></div>
-            <div class="stat-card" onclick="App.go('v-mines')" style="text-align:center;"><i class="fa-solid fa-gem" style="font-size:30px; color:var(--g);"></i><br><br><b>MINES</b></div>
+            <div class="p-card" onclick="Core.go('v-crash')" style="flex-direction:column; text-align:center; gap:10px;"><i class="fa-solid fa-rocket" style="font-size:30px; color:var(--p);"></i><b>CRASH</b></div>
+            <div class="p-card" onclick="Core.go('v-mines')" style="flex-direction:column; text-align:center; gap:10px;"><i class="fa-solid fa-gem" style="font-size:30px; color:var(--g);"></i><b>MINES</b></div>
         </div>
-        <button class="btn btn-g" onclick="App.go('v-wallet')">ADICIONAR SALDO (PIX)</button>
+        <button class="btn btn-g" onclick="Core.go('v-wallet')">Depositar via PIX</button>
     </div>
 
     <div id="v-crash" class="view">
-        <div class="game-screen"><canvas id="canvas-c"></canvas><div id="mult-text">1.00x</div></div>
-        <div class="stat-card">
-            <div style="display:flex; justify-content:space-between; margin-bottom:20px;"><b>VALOR</b><b>R$ <span id="bet-amt">10</span></b></div>
-            <button id="btn-c-start" class="btn btn-p" onclick="App.Game.Crash.run()">INICIAR VOO</button>
-            <button id="btn-c-cash" class="btn btn-g" style="display:none;" onclick="App.Game.Crash.cash()">CASH OUT</button>
+        <div class="game-frame"><canvas id="c-canvas"></canvas><div id="mult-val">1.00x</div></div>
+        <div class="p-card" style="flex-direction:column;">
+            <div style="display:flex; justify-content:space-between; width:100%; margin-bottom:15px;"><b>APOSTA</b><b>R$ <span id="c-bet-val">10</span></b></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; width:100%; margin-bottom:15px;">
+                <button class="btn" style="background:#222; color:#fff; height:45px;" onclick="Core.Game.adj(-10)">-10</button>
+                <button class="btn" style="background:#222; color:#fff; height:45px;" onclick="Core.Game.adj(10)">+10</button>
+            </div>
+            <button id="btn-c-play" class="btn btn-p" onclick="Core.Game.Crash.play()">INICIAR VOO</button>
+            <button id="btn-c-cash" class="btn btn-g" style="display:none;" onclick="Core.Game.Crash.cash()">CASH OUT</button>
         </div>
     </div>
 
     <div id="v-mines" class="view">
-        <div class="game-screen" style="height:auto;"><div class="grid-mines" id="grid-m"></div></div>
-        <div class="stat-card">
-            <button id="btn-m-start" class="btn btn-p" onclick="App.Game.Mines.start()">JOGAR MINES (R$ 10)</button>
-            <button id="btn-m-cash" class="btn btn-g" style="display:none;" onclick="App.Game.Mines.cash()">RESGATAR</button>
+        <div class="game-frame" style="height:auto;"><div class="m-grid" id="m-grid"></div></div>
+        <div class="p-card">
+            <button id="btn-m-play" class="btn btn-p" onclick="Core.Game.Mines.play()">JOGAR MINES (R$ 10)</button>
+            <button id="btn-m-cash" class="btn btn-g" style="display:none;" onclick="Core.Game.Mines.cash()">RESGATAR</button>
         </div>
     </div>
 
     <div id="v-profile" class="view">
-        <h2>MEUS DADOS</h2>
-        <div class="stat-card" style="margin-top:20px;">
-            <p>Usuário: <b id="prof-user">---</b></p>
-            <p>Status: <span style="color:var(--g)">Verificado</span></p>
+        <h2>PERFIL DO USUÁRIO</h2>
+        <div class="p-card" style="flex-direction:column; text-align:center; margin-top:20px;">
+            <div class="p-avatar" style="width:100px; height:100px; font-size:40px;"></div>
+            <h2 id="prof-u" style="margin-top:10px;">---</h2>
+            <p id="prof-id" style="color:#555;">ID: #0000</p>
         </div>
-        <div class="stat-card">
-            <label>Nova Senha</label>
-            <input type="password" id="new-pass" style="width:100%; padding:15px; background:#000; border:1px solid #222; border-radius:10px; color:#fff; margin:10px 0;">
-            <button class="btn btn-p" style="height:45px; font-size:12px;" onclick="alert('Senha Atualizada!')">SALVAR ALTERAÇÃO</button>
+        <div class="p-card" style="flex-direction:column; gap:10px;">
+            <label style="font-size:11px; color:#666;">ALTERAR SENHA</label>
+            <input type="password" id="p-new-pass" class="in-auth" placeholder="Nova Senha">
+            <button class="btn btn-p" style="height:45px;" onclick="Core.Auth.change()">Salvar Alterações</button>
         </div>
-        <button class="btn" style="background:red; color:#fff; margin-top:20px;" onclick="location.reload()">SAIR</button>
+        <button class="btn" style="background:red; color:#fff; margin-top:20px;" onclick="location.reload()">Sair da Conta</button>
     </div>
 
     <div id="v-wallet" class="view">
         <h2>FINANCEIRO</h2>
-        <div class="stat-card" style="margin-top:20px;">
-            <small>DEPÓSITO RÁPIDO</small>
-            <input type="number" id="in-val" style="width:100%; padding:15px; background:#000; border:1px solid #222; border-radius:10px; color:#fff; margin:10px 0;" placeholder="Valor R$">
-            <button class="btn btn-g" onclick="App.Sys.dep()">GERAR PIX</button>
+        <div class="p-card" style="margin-top:20px; flex-direction:column;">
+            <small>ADICIONAR SALDO</small>
+            <input type="number" id="w-in" class="in-auth" style="margin:10px 0;" placeholder="Valor R$">
+            <button class="btn btn-g" onclick="Core.Sys.wallet()">Gerar QR Code PIX</button>
         </div>
     </div>
 
     <div id="v-admin" class="view">
-        <h2 style="color:var(--p)">SHARK PANEL</h2>
-        <div id="adm-list" style="margin-top:20px;"></div>
+        <h2 style="color:var(--p); font-family:'Orbitron';">SHARK PANEL</h2>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:20px 0;">
+            <div class="p-card" style="margin:0; flex-direction:column;"><h3>GGR</h3><h2 id="st-ggr" style="color:var(--g)">R$ 0.00</h2></div>
+            <div class="p-card" style="margin:0; flex-direction:column;"><h3>PLAYERS</h3><h2 id="st-users">0</h2></div>
+        </div>
+        <h3>GERENCIAR USUÁRIOS</h3>
+        <div id="adm-list" style="margin-top:15px;"></div>
     </div>
 
-    <nav id="nav-main" style="display:none;">
-        <div class="nav-item active" onclick="App.go('v-lobby', this)"><i class="fa-solid fa-house"></i>HOME</div>
-        <div class="nav-item" onclick="App.go('v-wallet', this)"><i class="fa-solid fa-wallet"></i>CARTEIRA</div>
-        <div id="n-adm" class="nav-item" style="display:none; color:var(--p)" onclick="App.go('v-admin', this)"><i class="fa-solid fa-shrimp"></i>SHARK</div>
-        <div class="nav-item" onclick="App.go('v-profile', this)"><i class="fa-solid fa-user"></i>PERFIL</div>
+    <nav id="main-nav">
+        <a class="nav-link active" onclick="Core.go('v-lobby', this)"><i class="fa-solid fa-house"></i>HOME</a>
+        <a class="nav-link" onclick="Core.go('v-wallet', this)"><i class="fa-solid fa-wallet"></i>CARTEIRA</a>
+        <a id="nav-adm" class="nav-link" style="display:none; color:var(--p);" onclick="Core.go('v-admin', this)"><i class="fa-solid fa-shrimp"></i>SHARK</a>
+        <a class="nav-link" onclick="Core.go('v-profile', this)"><i class="fa-solid fa-user"></i>PERFIL</a>
     </nav>
 
     <script>
-        const App = {
-            u: { name: 'Player', bal: 500, role: 'user', mode: 'auto' },
-            db: JSON.parse(localStorage.getItem('MEC_V33_DB')) || [],
-            start() { 
-                const s = sessionStorage.getItem('MEC_V33_S');
-                if(s) { this.u = JSON.parse(s); this.unlock(); }
+        const Core = {
+            db: JSON.parse(localStorage.getItem('MEC_FINAL_DB')) || [],
+            st: JSON.parse(localStorage.getItem('MEC_FINAL_ST')) || { ggr: 0 },
+            u: null, bet: 10,
+            init() {
+                const s = sessionStorage.getItem('MEC_SESS');
+                if(s) { this.u = this.db.find(x => x.user === s); if(this.u) this.unlock(); }
             },
-            login() {
-                let n = document.getElementById('user-name').value.toUpperCase() || 'PLAYER';
-                this.u.name = n; this.u.role = (n === 'ADMIN' ? 'admin' : 'user');
-                this.unlock();
+            Auth: {
+                reg() {
+                    const n = document.getElementById('reg-u').value.toUpperCase().trim();
+                    const p = document.getElementById('reg-p').value.trim();
+                    if(!n || !p) return;
+                    if(Core.db.find(x => x.user === n)) return alert("Existe!");
+                    Core.db.push({ user: n, pass: p, bal: 100, role: (n==='ADMIN'?'admin':'user'), id: Math.floor(Math.random()*9999), mode: 'normal' });
+                    Core.Sys.save(); document.getElementById('form-reg').style.display='none'; document.getElementById('form-login').style.display='block';
+                },
+                login() {
+                    const n = document.getElementById('log-u').value.toUpperCase().trim();
+                    const p = document.getElementById('log-p').value.trim();
+                    const user = Core.db.find(x => x.user === n && x.pass === p);
+                    if(user) { Core.u = user; sessionStorage.setItem('MEC_SESS', n); Core.unlock(); } else alert("Erro!");
+                },
+                change() { const np = document.getElementById('p-new-pass').value; if(np) { Core.u.pass = np; Core.Sys.save(); alert("Ok!"); } }
             },
             unlock() {
                 document.getElementById('v-auth').classList.remove('active');
                 document.getElementById('h-main').style.display = 'flex';
-                document.getElementById('nav-main').style.display = 'flex';
-                if(this.u.role === 'admin') document.getElementById('n-adm').style.display = 'block';
-                sessionStorage.setItem('MEC_V33_S', JSON.stringify(this.u));
-                this.go('v-lobby'); this.Sys.sync();
+                document.getElementById('main-nav').style.display = 'flex';
+                if(this.u.role === 'admin') document.getElementById('nav-adm').style.display = 'block';
+                this.go('v-lobby'); Core.Sys.sync();
             },
             go(id, el) {
                 document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
                 document.getElementById(id).classList.add('active');
-                if(el) { document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); el.classList.add('active'); }
-                if(id === 'v-crash') this.Game.Crash.init();
-                if(id === 'v-mines') this.Game.Mines.render();
+                if(el) { document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active')); el.classList.add('active'); }
+                if(id === 'v-crash') Core.Game.Crash.prep();
+                if(id === 'v-mines') Core.Game.Mines.render();
+                Core.Sys.sync();
             },
             Game: {
+                adj(v) { Core.bet = Math.max(10, Core.bet + v); document.getElementById('c-bet-val').innerText = Core.bet; },
                 Crash: {
                     m: 1.0, active: false, pts: [],
-                    init() { this.cvs = document.getElementById('canvas-c'); this.ctx = this.cvs.getContext('2d'); this.cvs.width = this.cvs.offsetWidth; this.cvs.height = this.cvs.offsetHeight; },
-                    run() {
-                        if(App.u.bal < 10) return; App.u.bal -= 10; App.Sys.sync();
+                    prep() { this.cvs = document.getElementById('c-canvas'); this.ctx = this.cvs.getContext('2d'); this.cvs.width = this.cvs.offsetWidth; this.cvs.height = this.cvs.offsetHeight; },
+                    play() {
+                        if(Core.u.bal < Core.bet) return; Core.u.bal -= Core.bet; Core.st.ggr += Core.bet; Core.Sys.sync();
                         this.active = true; this.m = 1.0; this.pts = [];
-                        document.getElementById('btn-c-start').style.display = 'none';
-                        document.getElementById('btn-c-cash').style.display = 'block';
-                        let lim = Math.random()*4 + 1.1; if(App.u.mode === 'lose') lim = 1.05;
+                        document.getElementById('btn-c-play').style.display = 'none'; document.getElementById('btn-c-cash').style.display = 'block';
+                        let lim = Math.random()*5 + 1.1; if(Core.u.mode === 'lose') lim = 1.04;
                         this.loop = setInterval(() => {
-                            this.m += (this.m * 0.04); document.getElementById('mult-text').innerText = this.m.toFixed(2)+'x';
+                            this.m += (this.m * 0.04); document.getElementById('mult-val').innerText = this.m.toFixed(2)+'x';
                             this.draw(); if(this.m >= lim) this.end();
                         }, 100);
                     },
                     draw() {
-                        this.ctx.clearRect(0,0,300,300); this.ctx.strokeStyle = '#ff5e00'; this.ctx.lineWidth = 5;
-                        let x = (this.m-1)*40; let y = 260 - (this.m-1)*40; this.pts.push({x,y});
+                        this.ctx.clearRect(0,0,this.cvs.width, this.cvs.height); this.ctx.strokeStyle = '#ff5e00'; this.ctx.lineWidth = 5;
+                        let x = (this.m-1)*40; let y = this.cvs.height - (this.m-1)*40; this.pts.push({x,y});
                         this.ctx.beginPath(); this.pts.forEach((p,i)=> i===0?this.ctx.moveTo(p.x,p.y):this.ctx.lineTo(p.x,p.y)); this.ctx.stroke();
                     },
                     end() { 
-                        clearInterval(this.loop); this.active = false; document.getElementById('mult-text').style.color='red';
-                        setTimeout(() => { document.getElementById('mult-text').style.color='#fff'; document.getElementById('btn-c-start').style.display='block'; document.getElementById('btn-c-cash').style.display='none'; }, 2000);
+                        clearInterval(this.loop); this.active = false; document.getElementById('mult-val').style.color='red';
+                        setTimeout(() => { document.getElementById('mult-val').style.color='#fff'; document.getElementById('btn-c-play').style.display='block'; document.getElementById('btn-c-cash').style.display='none'; }, 2000);
                     },
-                    cash() { if(!this.active) return; App.u.bal += (10 * this.m); this.active = false; clearInterval(this.loop); App.Sys.sync(); this.end(); }
+                    cash() { if(!this.active) return; let w = Core.bet * this.m; Core.u.bal += w; Core.st.ggr -= w; this.active = false; clearInterval(this.loop); Core.Sys.sync(); this.end(); }
                 },
                 Mines: {
-                    active: false, bombs: [],
+                    active: false, bombs: [], opened: 0,
                     render() {
-                        const g = document.getElementById('grid-m'); g.innerHTML = '';
-                        for(let i=0; i<25; i++) g.innerHTML += `<div class="tile" onclick="App.Game.Mines.click(${i})" id="tile-${i}">?</div>`;
+                        const g = document.getElementById('m-grid'); g.innerHTML = '';
+                        for(let i=0; i<25; i++) g.innerHTML += `<div class="tile" onclick="Core.Game.Mines.click(${i})" id="t-${i}">?</div>`;
                     },
-                    start() {
-                        if(App.u.bal < 10) return; App.u.bal -= 10; App.Sys.sync();
-                        this.active = true; this.bombs = [Math.floor(Math.random()*25)];
-                        this.render(); document.getElementById('btn-m-start').style.display='none'; document.getElementById('btn-m-cash').style.display='block';
+                    play() {
+                        if(Core.u.bal < 10) return; Core.u.bal -= 10; Core.st.ggr += 10; Core.Sys.sync();
+                        this.active = true; this.opened = 0; this.bombs = [Math.floor(Math.random()*25)];
+                        this.render(); document.getElementById('btn-m-play').style.display='none'; document.getElementById('btn-m-cash').style.display='block';
                     },
                     click(i) {
-                        if(!this.active) return; const t = document.getElementById('tile-'+i);
-                        if(this.bombs.includes(i)) { t.innerHTML = '💣'; t.style.background = 'red'; this.active = false; setTimeout(()=>this.start(), 2000); }
-                        else { t.classList.add('active-g'); t.innerHTML = '💎'; }
+                        if(!this.active) return; const t = document.getElementById('t-'+i);
+                        if(this.bombs.includes(i)) { t.innerHTML='💣'; t.style.background='red'; this.active=false; setTimeout(()=>this.reset(), 1500); }
+                        else { t.classList.add('win'); t.innerHTML='💎'; this.opened++; }
                     },
-                    cash() { App.u.bal += 15; this.active = false; App.Sys.sync(); document.getElementById('btn-m-start').style.display='block'; document.getElementById('btn-m-cash').style.display='none'; }
+                    cash() { let w = 10 * (1+(this.opened*0.3)); Core.u.bal += w; Core.st.ggr -= w; this.reset(); Core.Sys.sync(); },
+                    reset() { this.active=false; document.getElementById('btn-m-play').style.display='block'; document.getElementById('btn-m-cash').style.display='none'; }
                 }
             },
             Sys: {
                 sync() {
-                    document.getElementById('val-bal').innerText = App.u.bal.toFixed(2);
-                    document.getElementById('user-display').innerText = App.u.name;
-                    document.getElementById('prof-user').innerText = App.u.name;
-                    if(App.u.role === 'admin') this.adm();
-                    sessionStorage.setItem('MEC_V33_S', JSON.stringify(App.u));
+                    document.getElementById('h-bal').innerText = Core.u.bal.toFixed(2);
+                    document.getElementById('l-user').innerText = "Olá, " + Core.u.user;
+                    document.getElementById('l-id').innerText = Core.u.id;
+                    document.getElementById('prof-u').innerText = Core.u.user;
+                    document.getElementById('prof-id').innerText = "ID: #" + Core.u.id;
+                    if(Core.u.role === 'admin') this.adm();
+                    this.save();
                 },
-                dep() { let v = parseFloat(document.getElementById('in-val').value) || 0; App.u.bal += v; this.sync(); alert("Saldo Adicionado!"); },
+                wallet() { let v = parseFloat(document.getElementById('w-in').value)||0; Core.u.bal += v; this.sync(); alert("Sucesso!"); },
                 adm() {
-                    document.getElementById('adm-list').innerHTML = `
-                        <div class="stat-card"><h3>PLAYER: ${App.u.name}</h3><p>Saldo: R$ ${App.u.bal.toFixed(2)}</p>
-                        <button class="btn btn-p" style="height:35px; padding:0; margin-top:10px;" onclick="App.u.mode='lose'; App.Sys.sync(); alert('MODO LOSS ATIVADO')">FORÇAR LOSS</button></div>
-                    `;
-                }
+                    document.getElementById('st-ggr').innerText = "R$ " + Core.st.ggr.toFixed(2);
+                    document.getElementById('st-users').innerText = Core.db.length;
+                    document.getElementById('adm-list').innerHTML = Core.db.filter(x=>x.role!=='admin').map(u => `
+                        <div class="adm-row">
+                            <div><b>${u.user}</b><br><small>R$ ${u.bal.toFixed(2)}</small></div>
+                            <button onclick="Core.Sys.lose('${u.user}')" style="background:${u.mode==='lose'?'red':'#333'}; border:none; color:#fff; padding:8px; border-radius:8px;">${u.mode==='lose'?'TIRAR LOSS':'FORÇAR LOSS'}</button>
+                        </div>
+                    `).join('');
+                },
+                lose(n) { const u = Core.db.find(x=>x.user===n); u.mode = u.mode==='lose'?'normal':'lose'; this.sync(); },
+                save() { localStorage.setItem('MEC_FINAL_DB', JSON.stringify(Core.db)); localStorage.setItem('MEC_FINAL_ST', JSON.stringify(Core.st)); }
             }
         };
     </script>
