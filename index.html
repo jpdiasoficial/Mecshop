@@ -1,344 +1,162 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JP Platform</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JP PLATFORM | SHARK EDITION</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --green: #22c55e; --red: #ef4444; --gold: #d4af37; --bg: #020617; --card: #1e293b; --purple: #7c3aed; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', Arial; }
+        body { margin: 0; background: var(--bg); color: white; text-align: center; }
+        
+        header { background: #000; padding: 20px; font-size: 24px; font-weight: 900; border-bottom: 2px solid var(--gold); }
+        .container { max-width: 500px; margin: auto; padding: 20px; }
+        .card { background: var(--card); padding: 20px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #334155; }
+        
+        input { width: 100%; padding: 12px; margin-top: 10px; border-radius: 8px; border: none; background: #0f172a; color: white; }
+        button { width: 100%; padding: 15px; margin-top: 10px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-green { background: var(--green); color: white; }
+        .btn-purple { background: var(--purple); color: white; }
+        
+        .hidden { display: none; }
+        
+        /* ROLETA MELHORADA */
+        #wheel { width: 220px; height: 220px; border-radius: 50%; border: 8px solid #334155; margin: 20px auto; 
+                 background: conic-gradient(var(--green) 0deg 90deg, #111 90deg 180deg, var(--green) 180deg 270deg, #111 270deg 360deg);
+                 transition: transform 4s cubic-bezier(0.1, 0, 0, 1); position: relative; }
+        #wheel::after { content: '▼'; position: absolute; top: -25px; left: 50%; transform: translateX(-50%); color: var(--gold); font-size: 30px; }
 
-<style>
-
-body{
-margin:0;
-font-family:Arial;
-background:#0f172a;
-color:white;
-text-align:center;
-}
-
-header{
-background:#020617;
-padding:15px;
-font-size:22px;
-font-weight:bold;
-}
-
-.container{
-max-width:600px;
-margin:auto;
-padding:20px;
-}
-
-.card{
-background:#1e293b;
-padding:20px;
-border-radius:10px;
-margin-bottom:20px;
-}
-
-input{
-width:100%;
-padding:12px;
-margin-top:10px;
-border:none;
-border-radius:6px;
-}
-
-button{
-width:100%;
-padding:12px;
-margin-top:10px;
-background:#22c55e;
-border:none;
-border-radius:6px;
-color:white;
-font-weight:bold;
-cursor:pointer;
-}
-
-button:hover{
-opacity:0.9;
-}
-
-.hidden{
-display:none;
-}
-
-.admin{
-background:#7c3aed;
-}
-
-#wheel{
-width:200px;
-height:200px;
-border-radius:50%;
-border:10px solid white;
-margin:auto;
-background:conic-gradient(
-#22c55e 0deg 90deg,
-#ef4444 90deg 180deg,
-#22c55e 180deg 270deg,
-#ef4444 270deg 360deg
-);
-transition:transform 3s;
-}
-
-</style>
-
+        /* LISTA DE USUÁRIOS NO ADMIN */
+        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #334155; font-size: 13px; }
+    </style>
 </head>
-
 <body>
 
-<header>JP Platform</header>
+<header>JP PLATFORM <small style="font-size: 10px; color: var(--gold);">V4.0</small></header>
 
 <div class="container">
+    <div id="authBox" class="card">
+        <h3 id="authTitle">LOGIN</h3>
+        <input id="userIn" placeholder="Usuário">
+        <input id="passIn" type="password" placeholder="Senha">
+        <button class="btn-green" onclick="App.handleAuth()">ENTRAR / CADASTRAR</button>
+        <p style="font-size: 12px; margin-top: 15px; color: #94a3b8;">SISTEMA MULTI-USUÁRIO ATIVO</p>
+    </div>
 
-<div id="loginBox" class="card">
+    <div id="dash" class="hidden">
+        <div class="card" style="border-bottom: 4px solid var(--green);">
+            <h3>OLÁ, <span id="uName" style="color: var(--gold);"></span></h3>
+            <p style="font-size: 25px; font-weight: bold;">R$ <span id="uSaldo">0.00</span></p>
+            <canvas id="grafico" width="300" height="100" style="margin-top: 10px;"></canvas>
+        </div>
 
-<h3>Login</h3>
+        <div class="card">
+            <div id="wheel"></div>
+            <button class="btn-green" id="btnGirar" onclick="App.Game.girar()">APOSTAR R$ 10.00</button>
+            <p id="res" style="margin-top: 10px; font-weight: bold;"></p>
+        </div>
 
-<input id="user" placeholder="Usuário">
-<input id="pass" type="password" placeholder="Senha">
+        <div id="adminBox" class="card hidden" style="background: #2e1065; border: 1px solid var(--gold);">
+            <h3 style="color: var(--gold);"><i class="fa-solid fa-crown"></i> PAINEL SHARK</h3>
+            <div id="userList" style="text-align: left; margin-top: 15px;"></div>
+            <button class="btn-purple" style="margin-top: 20px;" onclick="App.System.reset()">RESETA SISTEMA</button>
+        </div>
 
-<button onclick="login()">Entrar</button>
-
-<p onclick="showRegister()" style="cursor:pointer">Criar conta</p>
-
-</div>
-
-<div id="registerBox" class="card hidden">
-
-<h3>Cadastro</h3>
-
-<input id="newUser" placeholder="Usuário">
-<input id="newPass" type="password" placeholder="Senha">
-
-<button onclick="register()">Cadastrar</button>
-
-</div>
-
-<div id="dashboard" class="hidden">
-
-<div class="card">
-
-<h3>Bem-vindo <span id="username"></span></h3>
-
-<p>Saldo: R$ <span id="saldo">0</span></p>
-
-<button onclick="ganhar()">Ganhar saldo</button>
-
-</div>
-
-<div class="card">
-
-<h3>Roleta da sorte</h3>
-
-<div id="wheel"></div>
-
-<button onclick="girar()">Girar</button>
-
-<p id="resultado"></p>
-
-</div>
-
-<div class="card">
-
-<h3>Histórico saldo</h3>
-
-<canvas id="grafico" width="300" height="150"></canvas>
-
-</div>
-
-<div id="adminPanel" class="card admin hidden">
-
-<h3>Painel Admin</h3>
-
-<p>Total usuários: <span id="totalUsers"></span></p>
-
-<button onclick="reset()">Reset sistema</button>
-
-</div>
-
-<button onclick="logout()">Sair</button>
-
-</div>
-
+        <button onclick="location.reload()" style="background: transparent; color: #64748b; border: 1px solid #334155;">SAIR DA CONTA</button>
+    </div>
 </div>
 
 <script>
-
-let users = JSON.parse(localStorage.getItem("users")) || []
-
-let saldo = parseFloat(localStorage.getItem("saldo")) || 0
-
-let historico = JSON.parse(localStorage.getItem("hist")) || []
-
-function showRegister(){
-
-loginBox.classList.add("hidden")
-
-registerBox.classList.remove("hidden")
-
-}
-
-function register(){
-
-let u=newUser.value
-let p=newPass.value
-
-users.push({user:u,pass:p})
-
-localStorage.setItem("users",JSON.stringify(users))
-
-alert("Conta criada")
-
-location.reload()
-
-}
-
-function login(){
-
-let u=user.value
-let p=pass.value
-
-let found = users.find(x=>x.user==u && x.pass==p)
-
-if(u=="admin" && p=="123"){
-
-openDashboard(u,true)
-
-return
-
-}
-
-if(found){
-
-openDashboard(u,false)
-
-}else{
-
-alert("Login inválido")
-
-}
-
-}
-
-function openDashboard(user,isAdmin){
-
-loginBox.classList.add("hidden")
-
-dashboard.classList.remove("hidden")
-
-username.innerText=user
-
-saldoEl = document.getElementById("saldo")
-
-saldoEl.innerText=saldo
-
-if(isAdmin){
-
-adminPanel.classList.remove("hidden")
-
-totalUsers.innerText=users.length
-
-}
-
-drawChart()
-
-}
-
-function ganhar(){
-
-saldo+=10
-
-saveSaldo()
-
-}
-
-function girar(){
-
-let deg=Math.floor(Math.random()*360)+720
-
-wheel.style.transform="rotate("+deg+"deg)"
-
-setTimeout(()=>{
-
-if(deg%2==0){
-
-saldo+=20
-
-resultado.innerText="Você ganhou 20"
-
-}else{
-
-saldo-=10
-
-resultado.innerText="Você perdeu 10"
-
-}
-
-saveSaldo()
-
-},3000)
-
-}
-
-function saveSaldo(){
-
-localStorage.setItem("saldo",saldo)
-
-saldoEl.innerText=saldo
-
-historico.push(saldo)
-
-localStorage.setItem("hist",JSON.stringify(historico))
-
-drawChart()
-
-}
-
-function drawChart(){
-
-let c=document.getElementById("grafico")
-
-let ctx=c.getContext("2d")
-
-ctx.clearRect(0,0,c.width,c.height)
-
-ctx.beginPath()
-
-historico.forEach((v,i)=>{
-
-let x=i*30
-
-let y=150-v
-
-if(i==0)ctx.moveTo(x,y)
-
-else ctx.lineTo(x,y)
-
-})
-
-ctx.strokeStyle="lime"
-
-ctx.stroke()
-
-}
-
-function logout(){
-
-location.reload()
-
-}
-
-function reset(){
-
-localStorage.clear()
-
-location.reload()
-
-}
-
+const App = {
+    users: JSON.parse(localStorage.getItem("JP_USERS")) || [],
+    current: null,
+
+    handleAuth() {
+        let u = userIn.value, p = passIn.value;
+        if(!u || !p) return alert("Preencha tudo!");
+
+        let found = this.users.find(x => x.user == u);
+        
+        if(found) { // Login
+            if(found.pass == p) this.start(found);
+            else alert("Senha errada!");
+        } else { // Cadastro automático
+            let newUser = { user: u, pass: p, saldo: 0, hist: [0], role: u == 'admin' ? 'admin' : 'player' };
+            this.users.push(newUser);
+            this.save();
+            this.start(newUser);
+        }
+    },
+
+    start(user) {
+        this.current = user;
+        authBox.classList.add("hidden");
+        dash.classList.remove("hidden");
+        uName.innerText = user.user;
+        if(user.role == 'admin') this.System.loadAdmin();
+        this.System.updateUI();
+    },
+
+    Game: {
+        girar() {
+            if(App.current.saldo < 10 && App.current.role != 'admin') return alert("Saldo insuficiente!");
+            App.current.saldo -= 10;
+            btnGirar.disabled = true;
+            let deg = Math.floor(Math.random() * 3600) + 1080;
+            wheel.style.transform = `rotate(${deg}deg)`;
+
+            setTimeout(() => {
+                let win = (deg % 2 == 0); // Lógica simples: se par, ganha
+                let premio = win ? 25 : 0;
+                App.current.saldo += premio;
+                App.current.hist.push(App.current.saldo);
+                res.innerText = win ? "GANHOU R$ 25!" : "PERDEU!";
+                res.style.color = win ? "lime" : "red";
+                btnGirar.disabled = false;
+                App.save();
+                App.System.updateUI();
+            }, 4000);
+        }
+    },
+
+    System: {
+        updateUI() {
+            uSaldo.innerText = App.current.saldo.toFixed(2);
+            this.drawChart();
+        },
+        drawChart() {
+            let ctx = grafico.getContext("2d");
+            ctx.clearRect(0,0,300,100);
+            ctx.beginPath(); ctx.strokeStyle = "#22c55e";
+            App.current.hist.slice(-10).forEach((v, i) => {
+                let x = i * 30, y = 100 - (v / 2);
+                i == 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+        },
+        loadAdmin() {
+            adminBox.classList.remove("hidden");
+            userList.innerHTML = App.users.map(u => `
+                <div class="user-row">
+                    <span>${u.user}</span>
+                    <button onclick="App.System.addSaldo('${u.user}')" style="width: auto; padding: 5px; font-size: 10px; background: var(--green);">+ R$50</button>
+                    <span>R$ ${u.saldo.toFixed(2)}</span>
+                </div>
+            `).join('');
+        },
+        addSaldo(username) {
+            let user = App.users.find(u => u.user == username);
+            user.saldo += 50;
+            App.save();
+            this.loadAdmin();
+            if(App.current.user == username) this.updateUI();
+        },
+        reset() { localStorage.clear(); location.reload(); }
+    },
+
+    save() { localStorage.setItem("JP_USERS", JSON.stringify(this.users)); }
+};
 </script>
-
 </body>
 </html>
