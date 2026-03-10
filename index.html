@@ -3,242 +3,310 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MEC-BET | OS PLATFORM</title>
+    <title>MEC-BET INFINITY | OS v4.0</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #ff5e00; --primary-glow: rgba(255, 94, 0, 0.4);
-            --gold: #d4af37; --green: #00ff41; --danger: #ff3b30;
-            --bg-deep: #050505; --bg-card: #0d0d0d; --border: #1a1a1a;
-            --text-dim: #555;
+            --green: #00ff41; --gold: #d4af37; --bg: #000; --card: #0a0a0a;
+            --primary: #ff5e00; --danger: #ff3b30; --blue: #007aff; --gray: #1a1a1a;
+            --neon-shadow: 0 0 15px rgba(255, 94, 0, 0.3);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; -webkit-font-smoothing: antialiased; }
-        body { background: var(--bg-deep); color: #fff; height: 100vh; overflow: hidden; width: 100vw; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Segoe UI', sans-serif; text-transform: uppercase; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: #fff; height: 100vh; overflow: hidden; width: 100vw; }
 
-        /* VIRTUAL DOM / SCREEN MANAGER */
-        .viewport { position: relative; height: 100%; width: 100%; }
-        .screen { 
-            position: absolute; inset: 0; display: none; 
-            flex-direction: column; background: var(--bg-deep);
-            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        /* ENGINE DE TELAS (SINGLE PAGE ARCHITECTURE) */
+        .app-shell { position: relative; height: 100%; width: 100%; display: flex; flex-direction: column; }
+        .view { 
+            position: absolute; inset: 0; display: none; flex-direction: column; 
+            background: var(--bg); z-index: 10;
         }
-        .screen.active { display: flex; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .view.active { display: flex; animation: view-transition 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        @keyframes view-transition { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
 
-        /* COMPONENTES DE ELITE */
-        .glass-header { 
+        /* COMPONENTES DE DESIGN (BASEADO NAS FOTOS 4507-4518) */
+        .header-elite { 
             padding: 20px; display: flex; justify-content: space-between; align-items: center; 
-            background: rgba(0,0,0,0.8); backdrop-filter: blur(15px); border-bottom: 1px solid var(--border);
-            z-index: 100;
+            background: rgba(0,0,0,0.9); backdrop-filter: blur(20px); border-bottom: 1px solid var(--gray);
+            height: 75px; flex-shrink: 0;
         }
-        .logo-brand { font-weight: 900; font-size: 20px; letter-spacing: -1px; color: var(--gold); text-transform: uppercase; }
-
-        /* AUTH MODULE */
-        .auth-wrap { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 30px; }
-        .input-group { margin-bottom: 20px; }
-        .input-group label { display: block; font-size: 10px; font-weight: 900; color: var(--text-dim); margin-bottom: 8px; text-transform: uppercase; }
-        .input-field { 
-            width: 100%; background: #000; border: 1px solid var(--border); padding: 18px; 
-            border-radius: 12px; color: #fff; font-weight: 600; outline: none; transition: 0.3s;
+        .logo-infinity { font-weight: 900; font-size: 22px; color: var(--gold); letter-spacing: -1px; }
+        
+        /* BANCA MEC-BET (ESTILO FOTO 4510) */
+        .wallet-container { 
+            background: linear-gradient(180deg, #0d0d0d 0%, #000 100%); 
+            margin: 20px; padding: 30px; border-radius: 25px; border: 1px solid var(--gray);
+            border-bottom: 4px solid var(--green); position: relative;
         }
-        .input-field:focus { border-color: var(--primary); box-shadow: 0 0 15px var(--primary-glow); }
+        .wallet-label { font-size: 10px; color: #555; font-weight: 900; margin-bottom: 8px; letter-spacing: 1px; }
+        .wallet-value { font-size: 48px; font-weight: 900; letter-spacing: -2px; margin-bottom: 25px; }
 
-        .btn-supreme { 
+        .btn-action { 
             width: 100%; padding: 18px; border-radius: 12px; border: none; font-weight: 900; 
-            font-size: 14px; cursor: pointer; transition: 0.2s; text-transform: uppercase;
+            font-size: 13px; cursor: pointer; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex; align-items: center; justify-content: center; gap: 10px;
         }
-        .btn-primary { background: var(--primary); color: #fff; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px var(--primary-glow); }
+        .btn-deposit { background: var(--green); color: #000; box-shadow: 0 0 20px rgba(0, 255, 65, 0.15); }
+        .btn-withdraw { background: #111; color: #fff; border: 1px solid #222; margin-top: 10px; }
+        .btn-action:active { transform: scale(0.95); }
 
-        /* DASHBOARD CORE */
-        .scroll-area { flex: 1; overflow-y: auto; padding-bottom: 100px; }
-        .banca-panel { 
-            background: linear-gradient(145deg, #0d0d0d 0%, #050505 100%); 
-            margin: 20px; padding: 30px; border-radius: 24px; border: 1px solid var(--border);
-            position: relative; overflow: hidden;
+        /* GRID DE GAMES (FOTO 4513) */
+        .game-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; flex: 1; overflow-y: auto; padding-bottom: 120px; }
+        .game-item { 
+            background: var(--card); height: 180px; border-radius: 20px; border: 1px solid var(--gray);
+            display: flex; flex-direction: column; justify-content: flex-end; padding: 20px;
+            position: relative; transition: 0.3s;
         }
-        .banca-panel::before { content: ''; position: absolute; top: 0; right: 0; width: 100px; height: 100px; background: var(--primary); filter: blur(80px); opacity: 0.2; }
-        .banca-val { font-size: 45px; font-weight: 900; letter-spacing: -2px; margin: 10px 0; font-variant-numeric: tabular-nums; }
-        
-        .game-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 0 20px; }
-        .card-game { 
-            background: var(--bg-card); border-radius: 20px; height: 180px; padding: 20px;
-            display: flex; flex-direction: column; justify-content: flex-end; border: 1px solid var(--border);
-            position: relative; overflow: hidden; cursor: pointer;
+        .game-item i { position: absolute; top: 20px; right: 20px; font-size: 32px; color: #151515; }
+        .game-item span { font-weight: 900; font-size: 12px; line-height: 1.2; }
+        .game-item.gold { border-bottom: 4px solid var(--gold); }
+        .game-item.blue { border-bottom: 4px solid var(--blue); }
+
+        /* ROLETA MEC-BET (FOTO 4518) */
+        .wheel-box { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        .wheel-outer { 
+            width: 320px; height: 320px; border: 12px solid #1a1a1a; border-radius: 50%;
+            background: conic-gradient(var(--primary) 0 12.5%, #000 12.5% 25%, var(--primary) 25% 37.5%, #000 37.5% 50%, var(--primary) 50% 62.5%, #000 62.5% 75%, var(--primary) 75% 87.5%, #000 87.5% 100%);
+            transition: 5s cubic-bezier(0.1, 0, 0, 1); box-shadow: 0 0 80px rgba(0,0,0,1); position: relative;
         }
-        .card-game i { position: absolute; top: 15px; right: 15px; font-size: 32px; color: #1a1a1a; transition: 0.3s; }
-        .card-game:hover i { color: var(--primary); transform: scale(1.1); }
-        .card-game.vip { border-bottom: 4px solid var(--gold); }
+        .wheel-pin { width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 30px solid var(--gold); position: absolute; top: -25px; left: 50%; transform: translateX(-50%); z-index: 100; }
 
-        /* ADMIN CONTROL (SHARK MODE) */
-        .admin-stat { background: #000; border: 1px solid var(--border); padding: 25px; border-radius: 15px; margin-bottom: 15px; border-left: 5px solid var(--gold); }
-        .stat-n { font-size: 28px; font-weight: 900; color: #fff; }
+        /* ADMIN SHARK (FOTO 4507) */
+        .shark-panel { padding: 20px; }
+        .shark-card { background: #080808; border-left: 5px solid var(--gold); padding: 25px; border-radius: 12px; margin-bottom: 15px; border-top: 1px solid #111; }
+        .shark-label { color: #444; font-size: 9px; font-weight: 900; margin-bottom: 5px; }
+        .shark-val { font-size: 28px; font-weight: 900; letter-spacing: -1px; }
 
-        /* NAV BAR */
+        /* NAVBAR (FOTO 4514) */
         nav { 
-            position: fixed; bottom: 0; width: 100%; background: rgba(5,5,5,0.9); 
-            backdrop-filter: blur(20px); border-top: 1px solid var(--border);
-            display: none; justify-content: space-around; padding: 15px 0; z-index: 1000;
+            position: fixed; bottom: 0; width: 100%; height: 85px; background: rgba(0,0,0,0.95); 
+            backdrop-filter: blur(15px); border-top: 1px solid var(--gray); display: none;
+            justify-content: space-around; align-items: center; z-index: 1000;
         }
-        .nav-item { color: var(--text-dim); text-align: center; font-size: 9px; font-weight: 800; cursor: pointer; flex: 1; transition: 0.3s; }
-        .nav-item.active { color: var(--gold); }
-        .nav-item i { font-size: 22px; display: block; margin-bottom: 4px; }
+        .nav-link { color: #333; text-align: center; font-size: 9px; font-weight: 900; flex: 1; cursor: pointer; transition: 0.3s; }
+        .nav-link.active { color: var(--gold); }
+        .nav-link i { font-size: 24px; display: block; margin-bottom: 6px; }
+
+        /* AUTH (FOTO 4511/4515) */
+        .auth-screen { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; }
+        .auth-input { width: 100%; background: #080808; border: 1.5px solid #1a1a1a; padding: 20px; border-radius: 15px; color: #fff; margin-bottom: 15px; font-weight: 700; outline: none; transition: 0.3s; }
+        .auth-input:focus { border-color: var(--primary); background: #0c0c0c; }
     </style>
 </head>
-<body>
+<body onload="Engine.start()">
 
-<div class="viewport">
-    
-    <section id="scr-auth" class="screen active">
-        <div class="auth-wrap">
-            <h1 class="logo-brand" style="font-size: 40px; margin-bottom: 40px; text-align: center;">MEC-BET</h1>
-            <div id="auth-logic">
-                <div class="input-group">
-                    <label>Identificação de Acesso</label>
-                    <input type="text" id="in-user" class="input-field" placeholder="USUÁRIO">
+    <div class="app-shell">
+        
+        <div id="scr-auth" class="view active">
+            <div class="auth-screen">
+                <div class="logo-infinity" style="font-size: 40px; margin-bottom: 10px;">MEC-BET</div>
+                <p style="color: #333; font-size: 10px; margin-bottom: 40px; font-weight: 900;">SECURITY ACCESS SYSTEM</p>
+                
+                <div id="login-box" style="width: 100%; max-width: 400px;">
+                    <input type="text" id="user-in" class="auth-input" placeholder="USUÁRIO">
+                    <input type="password" id="pass-in" class="auth-input" placeholder="SENHA">
+                    <button class="btn-action" style="background: var(--primary); color: #fff;" onclick="Engine.Auth.login()">ENTRAR NO SISTEMA</button>
+                    <div style="display:flex; justify-content:space-between; margin-top:25px; font-size:10px; font-weight:900;">
+                        <span style="color:var(--primary); cursor:pointer;" onclick="Engine.Auth.toggle(true)">CRIAR CONTA</span>
+                        <span style="color:#333; cursor:pointer;" onclick="alert('CONTATE O SUPORTE PARA RECUPERAR.')">ESQUECI A SENHA</span>
+                    </div>
                 </div>
-                <div class="input-group">
-                    <label>Chave de Segurança</label>
-                    <input type="password" id="in-pass" class="input-field" placeholder="••••••••">
+
+                <div id="reg-box" style="width: 100%; max-width: 400px; display: none;">
+                    <input type="text" id="reg-user" class="auth-input" placeholder="DEFINIR USUÁRIO">
+                    <input type="password" id="reg-pass" class="auth-input" placeholder="DEFINIR SENHA">
+                    <button class="btn-action" style="background: var(--primary); color: #fff;" onclick="Engine.Auth.register()">CONFIRMAR CADASTRO</button>
+                    <p style="text-align:center; color:var(--gold); margin-top:20px; font-size:10px; font-weight:900; cursor:pointer;" onclick="Engine.Auth.toggle(false)">VOLTAR AO LOGIN</p>
                 </div>
-                <button class="btn-supreme btn-primary" onclick="Core.Auth.init()">Autenticar no Kernel</button>
             </div>
         </div>
-    </section>
 
-    <section id="scr-lobby" class="screen">
-        <div class="glass-header">
-            <div class="logo-brand">MEC-BET OS</div>
-            <div style="display: flex; gap: 15px; align-items: center;">
-                <span id="u-tag" style="font-size: 10px; font-weight: 900; background: #111; padding: 5px 12px; border-radius: 4px; color: var(--gold);">PLAYER</span>
-                <i class="fa-solid fa-power-off" style="color: var(--danger); cursor: pointer;" onclick="Core.Auth.logout()"></i>
-            </div>
-        </div>
-        <div class="scroll-area">
-            <div class="banca-panel">
-                <p style="font-size: 10px; font-weight: 900; color: var(--text-dim);">LIQUIDEZ DISPONÍVEL</p>
-                <h2 class="banca-val" id="u-saldo">R$ 0,00</h2>
-                <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <button class="btn-supreme" style="background: var(--green); color: #000; flex: 1;">Depósito via PIX</button>
-                    <button class="btn-supreme" style="background: #151515; color: #fff; border: 1px solid #222; flex: 1;">Saque</button>
+        <div id="scr-lobby" class="view">
+            <header class="header-elite">
+                <div class="logo-infinity">MEC-BET</div>
+                <div style="display:flex; align-items:center; gap:15px;">
+                    <span id="lvl-tag" style="font-size: 10px; font-weight: 900; border: 1px solid var(--gold); color: var(--gold); padding: 4px 10px; border-radius: 4px;">LVL 1</span>
+                    <i class="fa-solid fa-right-from-bracket" style="color:var(--danger); font-size:20px; cursor:pointer;" onclick="Engine.Auth.logout()"></i>
                 </div>
+            </header>
+            <div class="wallet-container">
+                <p class="wallet-label">SALDO DISPONÍVEL (BRL)</p>
+                <h2 class="wallet-value" id="disp-banca">R$ 0,00</h2>
+                <button class="btn-action btn-deposit">DEPOSITAR VIA PIX</button>
+                <button class="btn-action btn-withdraw">SACAR SALDO</button>
             </div>
             <div class="game-grid">
-                <div class="card-game vip" onclick="Core.Router.go('scr-wheel')">
+                <div class="game-item gold" onclick="Engine.Router.go('scr-roleta')">
                     <i class="fa-solid fa-dharmachakra"></i>
-                    <p style="font-weight: 900; font-size: 12px;">ROLETA<br><span style="color: var(--gold);">PREMIUM</span></p>
+                    <span>ROLETA ELITE<br><small style="color:var(--gold)">ON-LINE</small></span>
                 </div>
-                <div class="card-game" style="border-bottom: 4px solid var(--primary);">
+                <div class="game-item blue">
                     <i class="fa-solid fa-plane-up"></i>
-                    <p style="font-weight: 900; font-size: 12px;">AVIATOR<br><span style="color: var(--primary);">SHARK SINAL</span></p>
+                    <span>AVIATOR PRO<br><small style="color:var(--blue)">SINAL ATIVO</small></span>
                 </div>
-                <div class="card-game" style="border-bottom: 4px solid var(--blue);">
+                <div class="game-item" style="border-bottom-color: var(--green);">
                     <i class="fa-solid fa-gem"></i>
-                    <p style="font-weight: 900; font-size: 12px;">MINES<br><span style="color: var(--blue);">ALGORITMO</span></p>
+                    <span>MINES MEC<br><small style="color:var(--green)">100% ASSERTIVO</small></span>
                 </div>
-                <div class="card-game" style="border-bottom: 4px solid var(--green);">
-                    <i class="fa-solid fa-bolt"></i>
-                    <p style="font-weight: 900; font-size: 12px;">TIGER<br><span style="color: var(--green);">TURBO</span></p>
+                <div class="game-item" style="border-bottom-color: var(--danger);">
+                    <i class="fa-solid fa-fire"></i>
+                    <span>TIGER VIP<br><small style="color:var(--danger)">HOT GAME</small></span>
                 </div>
             </div>
         </div>
-    </section>
 
-    <section id="scr-admin" class="screen">
-        <div class="glass-header"><div class="logo-brand">SHARK CONTROL</div><i class="fa-solid fa-xmark" onclick="Core.Router.go('scr-lobby')"></i></div>
-        <div class="scroll-area" style="padding: 20px;">
-            <div class="admin-stat">
-                <p style="font-size: 10px; color: var(--text-dim); font-weight: 900;">GGR (LUCRO DA CASA)</p>
-                <div class="stat-n" style="color: var(--green);">R$ 72.050,00</div>
+        <div id="scr-roleta" class="view">
+            <header class="header-elite">
+                <div class="logo-infinity" style="color:var(--primary)">SORTEIO VIP</div>
+                <i class="fa-solid fa-chevron-left" style="font-size:20px;" onclick="Engine.Router.go('scr-lobby')"></i>
+            </header>
+            <div class="wheel-box">
+                <div id="main-wheel" class="wheel-outer">
+                    <div class="wheel-pin"></div>
+                </div>
+                <button id="spin-btn" class="btn-action" style="background:var(--primary); color:#fff; width:80%; margin-top:50px;" onclick="Engine.Game.spin()">INICIAR SORTEIO</button>
+                <div id="win-display" style="margin-top:20px; font-weight:900; color:var(--green); font-size:20px;"></div>
             </div>
-            <div class="admin-stat" style="border-left-color: var(--danger);">
-                <p style="font-size: 10px; color: var(--text-dim); font-weight: 900;">PAYOUT ATUAL</p>
-                <div class="stat-n">92%</div>
-            </div>
-            <button class="btn-supreme" style="background: var(--danger); color: #fff;" onclick="Core.System.kill()">Derrubar Plataforma</button>
         </div>
-    </section>
 
-    <nav id="navbar">
-        <div class="nav-item active" onclick="Core.Router.go('scr-lobby')"><i class="fa-solid fa-house"></i>INÍCIO</div>
-        <div class="nav-item" onclick="Core.Router.go('scr-wheel')"><i class="fa-solid fa-gamepad"></i>JOGOS</div>
-        <div id="adm-trigger" class="nav-item" style="display: none; color: var(--gold);" onclick="Core.Router.go('scr-admin')"><i class="fa-solid fa-crown"></i>SHARK</div>
-    </nav>
+        <div id="scr-admin" class="view">
+            <header class="header-elite" style="border-bottom-color: var(--gold);">
+                <div class="logo-infinity">SHARK ADMIN</div>
+                <i class="fa-solid fa-eye-slash" style="color:var(--gold)" onclick="Engine.Router.go('scr-lobby')"></i>
+            </header>
+            <div class="shark-panel">
+                <div class="shark-card">
+                    <p class="shark-label">GGR TOTAL (FATURAMENTO)</p>
+                    <div class="shark-val">R$ 154.200,00</div>
+                </div>
+                <div class="shark-card" style="border-left-color: var(--danger);">
+                    <p class="shark-label">PAYOUT (PRÊMIOS PAGOS)</p>
+                    <div class="shark-val" style="color:var(--danger);">R$ 82.150,00</div>
+                </div>
+                <div class="shark-card" style="border-left-color: var(--green);">
+                    <p class="shark-label">LUCRO LÍQUIDO (CASA)</p>
+                    <div class="shark-val" style="color:var(--green);">R$ 72.050,00</div>
+                </div>
+                <button class="btn-action" style="background:var(--danger); color:#fff; margin-top:20px;" onclick="Engine.System.reset()">KILL SWITCH (REPOR PLATAFORMA)</button>
+            </div>
+        </div>
 
-</div>
+        <nav id="navbar">
+            <div class="nav-link active" onclick="Engine.Router.go('scr-lobby')"><i class="fa-solid fa-house"></i>INÍCIO</div>
+            <div class="nav-link" onclick="Engine.Router.go('scr-roleta')"><i class="fa-solid fa-gamepad"></i>JOGOS</div>
+            <div class="nav-link" onclick="alert('CENTRAL DE SUPORTE 24H CONECTADA.')"><i class="fa-solid fa-headset"></i>SUPORTE</div>
+            <div id="nav-shark" class="nav-link" style="display:none; color:var(--gold);" onclick="Engine.Router.go('scr-admin')"><i class="fa-solid fa-crown"></i>SHARK</div>
+        </nav>
 
-<script>
-    /* CORE ENGINE: O CÉREBRO DA INTELIGÊNCIA ARTIFICIAL
-       Gerencia Sessão, Rotas e Lógica de Negócio 
-    */
-    const Core = {
-        State: {
-            user: JSON.parse(localStorage.getItem('MEC_SESSION')) || null,
-            saldo: parseFloat(localStorage.getItem('MEC_SALDO')) || 0.00
-        },
+    </div>
 
-        Auth: {
-            init() {
-                const u = document.getElementById('in-user').value;
-                const p = document.getElementById('in-pass').value;
-
-                if(!u || !p) return alert("ERRO DE AUTENTICAÇÃO");
-
-                // SEPARAÇÃO DE CARGOS POR KERNEL
-                const role = (u.toLowerCase() === 'admin' && p === '9910') ? 'SHARK' : 'PLAYER';
-                
-                Core.State.user = { name: u.toUpperCase(), role: role };
-                localStorage.setItem('MEC_SESSION', JSON.stringify(Core.State.user));
-                
-                location.reload();
+    <script>
+        /* MOTOR DE INTELIGÊNCIA MEC-BET v4.0 */
+        const Engine = {
+            state: {
+                user: JSON.parse(localStorage.getItem('MEC_SESS')),
+                banca: parseFloat(localStorage.getItem('MEC_CASH')) || 0.00,
+                lvl: parseInt(localStorage.getItem('MEC_LVL')) || 1,
+                isBusy: false
             },
-            logout() {
-                if(confirm("FINALIZAR SESSÃO?")) {
-                    localStorage.removeItem('MEC_SESSION');
+
+            start() {
+                if(this.state.user) {
+                    this.System.buildUI();
+                    this.Router.go('scr-lobby');
+                }
+            },
+
+            Auth: {
+                toggle(isReg) {
+                    document.getElementById('login-box').style.display = isReg ? 'none' : 'block';
+                    document.getElementById('reg-box').style.display = isReg ? 'block' : 'none';
+                },
+                login() {
+                    const u = document.getElementById('user-in').value;
+                    const p = document.getElementById('pass-in').value;
+                    if(!u) return alert("ERRO DE CREDENCIAIS.");
+                    
+                    const role = (u.toLowerCase() === 'admin' && p === '9910') ? 'admin' : 'player';
+                    Engine.state.user = { nome: u.toUpperCase(), role: role };
+                    localStorage.setItem('MEC_SESS', JSON.stringify(Engine.state.user));
                     location.reload();
+                },
+                register() {
+                    const u = document.getElementById('reg-user').value;
+                    if(!u) return;
+                    Engine.state.user = { nome: u.toUpperCase(), role: 'player' };
+                    localStorage.setItem('MEC_SESS', JSON.stringify(Engine.state.user));
+                    location.reload();
+                },
+                logout() {
+                    if(confirm("DESEJA DESLOGAR DO SISTEMA?")) {
+                        localStorage.removeItem('MEC_SESS');
+                        location.reload();
+                    }
                 }
-            }
-        },
+            },
 
-        Router: {
-            go(screenId) {
-                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-                document.getElementById(screenId).classList.add('active');
-                
-                // Update Nav Active State
-                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-                const map = {'scr-lobby': 0, 'scr-wheel': 1, 'scr-admin': 2};
-                if(map[screenId] !== undefined) document.querySelectorAll('.nav-item')[map[screenId]].classList.add('active');
-            }
-        },
+            Router: {
+                go(id) {
+                    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+                    document.getElementById(id).classList.add('active');
+                    
+                    document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+                    const map = {'scr-lobby': 0, 'scr-roleta': 1, 'scr-admin': 3};
+                    if(map[id] !== undefined) document.querySelectorAll('.nav-link')[map[id]].classList.add('active');
+                }
+            },
 
-        System: {
-            boot() {
-                if(Core.State.user) {
+            Game: {
+                spin() {
+                    if(Engine.state.isBusy) return;
+                    Engine.state.isBusy = true;
+                    
+                    const btn = document.getElementById('spin-btn');
+                    const wheel = document.getElementById('main-wheel');
+                    const winDisplay = document.getElementById('win-display');
+                    
+                    btn.disabled = true;
+                    winDisplay.innerText = "";
+                    
+                    const win = (Math.random() * 200).toFixed(2);
+                    const deg = Math.floor(Math.random() * 3600) + 7200; // Multiplos giros
+                    
+                    wheel.style.transform = `rotate(${deg}deg)`;
+
+                    setTimeout(() => {
+                        Engine.state.banca += parseFloat(win);
+                        Engine.state.lvl += 1;
+                        localStorage.setItem('MEC_CASH', Engine.state.banca);
+                        localStorage.setItem('MEC_LVL', Engine.state.lvl);
+                        
+                        Engine.System.update();
+                        winDisplay.innerText = "VOCÊ GANHOU R$ " + win;
+                        btn.disabled = false;
+                        Engine.state.isBusy = false;
+                    }, 5000);
+                }
+            },
+
+            System: {
+                buildUI() {
                     document.getElementById('navbar').style.display = 'flex';
-                    document.getElementById('u-tag').innerText = Core.State.user.role;
-                    document.getElementById('u-tag').style.color = Core.State.user.role === 'SHARK' ? '#d4af37' : '#00ff41';
-                    
-                    if(Core.State.user.role === 'SHARK') document.getElementById('adm-trigger').style.display = 'block';
-                    
-                    Core.System.updateDisplay();
-                    Core.Router.go('scr-lobby');
-                }
-            },
-            updateDisplay() {
-                document.getElementById('u-saldo').innerText = Core.State.saldo.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-            },
-            kill() {
-                if(confirm("CONFIRMAR DESLIGAMENTO?")) {
-                    document.body.innerHTML = "<div style='height:100vh; display:flex; align-items:center; justify-content:center; flex-direction:column;'><h1 style='color:red; font-family:serif;'>PLATFORM TERMINATED</h1><button onclick='location.reload()' style='margin-top:20px;'>RESTART</button></div>";
+                    if(Engine.state.user.role === 'admin') document.getElementById('nav-shark').style.display = 'block';
+                    this.update();
+                },
+                update() {
+                    document.getElementById('disp-banca').innerText = "R$ " + Engine.state.banca.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                    document.getElementById('lvl-tag').innerText = "LVL " + Engine.state.lvl;
+                },
+                reset() {
+                    if(confirm("REDEFINIR TODO O BANCO DE DADOS LOCAL?")) {
+                        localStorage.clear();
+                        location.reload();
+                    }
                 }
             }
-        }
-    };
-
-    window.onload = Core.System.boot();
-</script>
+        };
+    </script>
 </body>
 </html>
