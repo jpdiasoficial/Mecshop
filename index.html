@@ -1,121 +1,245 @@
-// --- CONFIGURAÇÕES DE ESTADO DO SISTEMA ---
-const MEC_SYSTEM = {
-    user: JSON.parse(localStorage.getItem('mec_user')) || { nome: "Visitante", saldo: 0.00, role: "USER", logado: false },
-    
-    // Simulação de Banco de Dados local para o Admin
-    db: [
-        {id: 1, nome: "Marcos_Bet", saldo: 250.00, cargo: "Usuário"},
-        {id: 2, nome: "Ana_Luck", saldo: 1200.50, cargo: "VIP"},
-        {id: 3, nome: "Admin_Elite", saldo: 9999.00, cargo: "Admin"}
-    ],
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ELITEBET | ENTERPRISE V3.1</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #ff5e00; --secondary: #00ff41; --bg: #0b0e11; --card: #161a1e; --border: #2b3139; --text: #ffffff; --muted: #929aa5; --danger: #ff3b30; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: var(--text); overflow: hidden; height: 100vh; }
 
-    // --- MOTOR DE INICIALIZAÇÃO ---
-    init() {
-        if(this.user.logado) {
-            this.renderizarSessao();
-        } else {
-            irPara('scr-login');
+        /* HEADER */
+        header { position: fixed; top: 0; width: 100%; height: 65px; background: #1e2329; display: flex; align-items: center; padding: 0 20px; border-bottom: 2px solid var(--primary); z-index: 1000; justify-content: space-between; display: none; }
+        .logo { font-weight: 900; font-style: italic; font-size: 18px; }
+        .logo span { color: var(--primary); }
+        
+        /* APP CONTENT */
+        .app-content { padding: 85px 15px 100px; max-width: 500px; margin: 0 auto; height: 100vh; overflow-y: auto; }
+        .screen { display: none; }
+        .active { display: block; animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* CARDS E BOTÕES */
+        .card { background: var(--card); border-radius: 12px; padding: 20px; border: 1px solid var(--border); margin-bottom: 15px; }
+        .btn { width: 100%; padding: 16px; border-radius: 8px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 12px; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-main { background: var(--primary); color: #fff; box-shadow: 0 4px 0px #b84300; }
+        .btn-main:active { transform: translateY(2px); box-shadow: 0 2px 0px #b84300; }
+        .btn-danger { background: var(--danger); color: #fff; }
+        
+        input { width: 100%; background: #0b0e11; border: 1px solid var(--border); padding: 14px; border-radius: 8px; color: #fff; margin-bottom: 12px; }
+
+        /* ROLETA */
+        .wheel-box { position: relative; width: 240px; height: 240px; margin: 20px auto; border: 8px solid #1e2329; border-radius: 50%; box-shadow: 0 0 20px rgba(255, 94, 0, 0.2); }
+        .wheel-img { width: 100%; height: 100%; border-radius: 50%; background: conic-gradient(#111 0% 12.5%, #ff5e00 12.5% 25%, #111 25% 37.5%, #ff5e00 37.5% 50%, #111 50% 62.5%, #ff5e00 62.5% 75%, #111 75% 87.5%, #ff5e00 87.5% 100%); transition: 4s cubic-bezier(0.1, 0, 0.1, 1); }
+
+        /* TABELA ADMIN */
+        table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        th { color: var(--muted); text-align: left; padding: 10px; border-bottom: 1px solid var(--border); }
+        td { padding: 12px 10px; border-bottom: 1px solid #1e2329; }
+
+        /* NAV INFERIOR */
+        nav { position: fixed; bottom: 0; width: 100%; height: 70px; background: #1e2329; border-top: 1px solid var(--border); display: none; justify-content: space-around; align-items: center; z-index: 1000; }
+        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; color: var(--muted); font-size: 9px; font-weight: 700; cursor: pointer; }
+        .nav-item.active { color: var(--primary); }
+        .nav-item i { font-size: 20px; margin-bottom: 4px; }
+    </style>
+</head>
+<body>
+
+    <header id="h-master">
+        <div class="logo">ELITE<span>BET</span></div>
+        <div style="display:flex; align-items:center; gap:12px;">
+            <div id="h-saldo" style="font-weight:900; color:var(--secondary); background:#2b3139; padding:6px 12px; border-radius:6px; font-size:14px;">R$ 0,00</div>
+            <i class="fa-solid fa-circle-user" style="font-size:24px; color:var(--primary);" onclick="location.reload()"></i>
+        </div>
+    </header>
+
+    <div class="app-content">
+
+        <div id="scr-login" class="screen active">
+            <div style="text-align:center; margin-bottom:40px; margin-top: 40px;">
+                <h1 style="font-size:32px; font-weight:900;">ELITE ACCESS</h1>
+                <p style="color:var(--muted);">ENTRE COM SUA CHAVE DE OPERAÇÃO</p>
+            </div>
+            <div class="card">
+                <input type="text" id="l-user" placeholder="USUÁRIO">
+                <input type="password" id="l-pass" placeholder="SENHA">
+                <button class="btn btn-main" onclick="entrar()">AUTENTICAR SISTEMA</button>
+            </div>
+        </div>
+
+        <div id="scr-lobby" class="screen">
+            <div class="card" style="text-align:center; border-bottom: 4px solid var(--primary);">
+                <span style="font-size:10px; color:var(--muted); font-weight:800;">BANCA DISPONÍVEL</span>
+                <h1 id="m-saldo" style="font-size:42px; color:var(--text); margin:10px 0;">R$ 0,00</h1>
+                <button class="btn btn-main">DEPOSITAR VIA PIX</button>
+            </div>
+
+            <div class="card" onclick="irPara('scr-roleta')" style="cursor:pointer; border-left:4px solid var(--primary);">
+                <div style="display:flex; align-items:center; gap:15px;">
+                    <i class="fa-solid fa-dharmachakra" style="font-size:30px; color:var(--primary);"></i>
+                    <div>
+                        <h3 style="font-size:14px;">ROLETA DE GIROS</h3>
+                        <p style="font-size:10px; color:var(--muted);">GERE LUCRO DIÁRIO AGORA</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="scr-roleta" class="screen">
+            <div class="card" style="text-align:center;">
+                <h2 style="font-size:16px; letter-spacing: 1px;">SORTEIO EM TEMPO REAL</h2>
+                <div class="wheel-box">
+                    <div id="wheel" class="wheel-img"></div>
+                </div>
+                <button id="btn-girar" class="btn btn-main" onclick="girarRoleta()">INICIAR GIRO</button>
+                
+                <div style="margin-top:25px; border-top: 1px solid var(--border); padding-top:15px;">
+                    <h4 style="font-size:10px; color:var(--primary); margin-bottom:10px;">HISTÓRICO DE GANHOS</h4>
+                    <table id="ganhos-recentes">
+                        <tr><td>USUÁRIO_45</td><td style="color:var(--secondary);">R$ 45,00</td><td>AGORA</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="scr-suporte" class="screen">
+            <div class="card" style="height:400px; display:flex; flex-direction:column;">
+                <h3 style="font-size:12px; margin-bottom:15px;">CHAT OPERACIONAL</h3>
+                <div id="chat-box" style="flex:1; overflow-y:auto; background:#0b0e11; border-radius:8px; padding:15px; font-size:11px;">
+                    <p style="color:var(--primary); margin-bottom:10px;"><b>[SISTEMA]:</b> AGUARDANDO OPERADOR...</p>
+                </div>
+                <div style="margin-top:15px; display:flex; gap:5px;">
+                    <input type="text" id="chat-msg" placeholder="DIGITE..." style="margin:0;">
+                    <button class="btn btn-main" style="width:50px;" onclick="enviarMsg()"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div id="scr-admin" class="screen">
+            <div class="card">
+                <h3 style="margin-bottom:15px; color:var(--primary);">PAINEL DO SHARK</h3>
+                <table>
+                    <thead>
+                        <tr><th>USER</th><th>SALDO</th><th>AÇÃO</th></tr>
+                    </thead>
+                    <tbody id="admin-users"></tbody>
+                </table>
+                <button class="btn btn-danger" style="margin-top:20px;" onclick="location.reload()">DESLOGAR TODOS</button>
+            </div>
+        </div>
+
+    </div>
+
+    <nav id="navbar">
+        <div class="nav-item active" onclick="irPara('scr-lobby')"><i class="fa-solid fa-house"></i>INÍCIO</div>
+        <div class="nav-item" onclick="irPara('scr-roleta')"><i class="fa-solid fa-dharmachakra"></i>ROLETA</div>
+        <div class="nav-item" onclick="irPara('scr-suporte')"><i class="fa-solid fa-headset"></i>SUPORTE</div>
+        <div id="n-adm" class="nav-item" onclick="irPara('scr-admin')" style="display:none; color:var(--primary);"><i class="fa-solid fa-shield"></i>ADMIN</div>
+    </nav>
+
+    <script>
+        // --- ESTADO DO SISTEMA (DANDO VIDA) ---
+        let state = JSON.parse(localStorage.getItem('elite_state')) || {
+            saldo: 0.00,
+            user: "VISITANTE",
+            role: "USER",
+            logado: false
+        };
+
+        function init() {
+            if(state.logado) {
+                renderApp();
+            }
         }
-        this.updateUI();
-    },
 
-    // --- LÓGICA DE ENTRADA (UNIFICADA) ---
-    autenticar() {
-        const userField = document.getElementById('l-user').value;
-        const passField = document.getElementById('l-pass').value;
-
-        if(!userField || !passField) return alert("Preencha todos os campos.");
-
-        // Lógica de Perfil
-        this.user.nome = userField;
-        this.user.logado = true;
-        
-        // Gatilho do Shark Admin
-        if(userField.toLowerCase() === 'admin' && passField === '9910') {
-            this.user.role = "ADMIN";
-            document.getElementById('n-adm').style.display = 'flex';
-        } else {
-            this.user.role = "USER";
+        function irPara(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            const idx = { 'scr-lobby': 0, 'scr-roleta': 1, 'scr-suporte': 2, 'scr-admin': 3 };
+            if(idx[id] !== undefined) document.querySelectorAll('.nav-item')[idx[id]].classList.add('active');
         }
 
-        this.salvar();
-        this.renderizarSessao();
-        irPara('scr-lobby');
-    },
+        function entrar() {
+            const u = document.getElementById('l-user').value;
+            const p = document.getElementById('l-pass').value;
 
-    renderizarSessao() {
-        document.getElementById('u-name').innerText = this.user.nome;
-        document.getElementById('h-master').style.display = 'flex';
-        document.getElementById('navbar').style.display = 'flex';
-        
-        if(this.user.role === "ADMIN") {
-            document.getElementById('n-adm').style.display = 'flex';
-            const badge = document.getElementById('u-badge');
-            badge.innerText = "ADMINISTRADOR MASTER";
-            badge.className = "badge badge-admin";
-            this.renderAdmin();
+            if(!u) return alert("INSIRA O USUÁRIO");
+
+            state.user = u.toUpperCase();
+            state.logado = true;
+            
+            if(u.toLowerCase() === 'admin' && p === '9910') {
+                state.role = "ADMIN";
+            }
+
+            localStorage.setItem('elite_state', JSON.stringify(state));
+            renderApp();
+            irPara('scr-lobby');
         }
-    },
 
-    // --- MOTOR DA ROLETA (GANHO REAL) ---
-    executarSorteio() {
-        const wheel = document.getElementById('wheel');
-        const btn = event.target;
-        
-        btn.disabled = true; // Evita cliques múltiplos
-        btn.innerText = "PROCESSANDO...";
+        function renderApp() {
+            document.getElementById('h-master').style.display = 'flex';
+            document.getElementById('navbar').style.display = 'flex';
+            if(state.role === "ADMIN") {
+                document.getElementById('n-adm').style.display = 'flex';
+                renderAdmin();
+            }
+            updateUI();
+        }
 
-        const sorteio = parseFloat((Math.random() * 50).toFixed(2));
-        const giroExtra = Math.floor(Math.random() * 3600) + 7200;
-        
-        wheel.style.transform = `rotate(${giroExtra}deg)`;
+        function girarRoleta() {
+            const btn = document.getElementById('btn-girar');
+            const wheel = document.getElementById('wheel');
+            btn.disabled = true;
+            btn.innerText = "PROCESSANDO...";
 
-        setTimeout(() => {
-            this.user.saldo += sorteio;
-            this.salvar();
-            this.updateUI();
-            
-            alert(`SISTEMA: R$ ${sorteio} CREDITADOS COM SUCESSO!`);
-            
-            // Log de Ganhos
-            const table = document.getElementById('ganhos-recentes');
-            table.innerHTML = `<tr><td>${this.user.nome}***</td><td style="color:var(--secondary);">R$ ${sorteio}</td><td>Agora</td></tr>` + table.innerHTML;
-            
-            btn.disabled = false;
-            btn.innerText = "GIRAR AGORA";
-        }, 4000);
-    },
+            const win = parseFloat((Math.random() * 100).toFixed(2));
+            const deg = Math.floor(Math.random() * 3600) + 7200;
+            wheel.style.transform = `rotate(${deg}deg)`;
 
-    // --- INTERFACE E PERSISTÊNCIA ---
-    updateUI() {
-        const fmt = "R$ " + this.user.saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
-        document.getElementById('h-saldo').innerText = fmt;
-        document.getElementById('m-saldo').innerText = fmt;
-    },
+            setTimeout(() => {
+                state.saldo += win;
+                localStorage.setItem('elite_state', JSON.stringify(state));
+                updateUI();
+                alert(`LUCRO CONFIRMADO: R$ ${win.toFixed(2)}`);
+                btn.disabled = false;
+                btn.innerText = "INICIAR GIRO";
+            }, 4000);
+        }
 
-    salvar() {
-        localStorage.setItem('mec_user', JSON.stringify(this.user));
-    },
+        function updateUI() {
+            const val = "R$ " + state.saldo.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+            document.getElementById('h-saldo').innerText = val;
+            document.getElementById('m-saldo').innerText = val;
+        }
 
-    renderAdmin() {
-        const list = document.getElementById('admin-user-list');
-        list.innerHTML = this.db.map(u => `
-            <tr>
-                <td><b>${u.nome}</b></td>
-                <td><input type="number" value="${u.saldo}" class="admin-input-small"></td>
-                <td><span class="badge ${u.cargo==='Admin'?'badge-admin':'badge-user'}">${u.cargo}</span></td>
-                <td><i class="fa-solid fa-check" onclick="alert('Saldo de ${u.nome} Atualizado!')"></i></td>
-            </tr>
-        `).join('');
-    },
+        function renderAdmin() {
+            const list = document.getElementById('admin-users');
+            list.innerHTML = `
+                <tr><td>${state.user}</td><td>${state.saldo}</td><td><i class="fa-solid fa-pen"></i></td></tr>
+                <tr><td>MEC_USER_02</td><td>250.00</td><td><i class="fa-solid fa-pen"></i></td></tr>
+            `;
+        }
 
-    logout() {
-        localStorage.clear();
-        location.reload();
-    }
-};
+        function enviarMsg() {
+            const m = document.getElementById('chat-msg');
+            if(!m.value) return;
+            const box = document.getElementById('chat-box');
+            box.innerHTML += `<p style="text-align:right; margin-bottom:8px;">${m.value}</p>`;
+            m.value = "";
+            setTimeout(() => {
+                box.innerHTML += `<p style="color:var(--primary); margin-bottom:8px;"><b>[SUPORTE]:</b> SOLICITAÇÃO RECEBIDA.</p>`;
+                box.scrollTop = box.scrollHeight;
+            }, 1000);
+        }
 
-// --- AJUSTES DE FUNÇÕES GLOBAIS ---
-window.entrar = () => MEC_SYSTEM.autenticar();
-window.girarRoleta = () => MEC_SYSTEM.executarSorteio();
-window.onload = () => MEC_SYSTEM.init();
+        window.onload = init;
+    </script>
+</body>
+    </html>
