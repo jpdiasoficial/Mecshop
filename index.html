@@ -3,95 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MEC-BANK V45 | Shark Final</title>
+    <title>MEC-BANK V45 GOLD</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --primary: #00ff88; --bg: #050505; --card: #121212; --text: #fff; --danger: #ff4444; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Inter', sans-serif; transition: 0.25s; }
+        :root { --primary: #00ff88; --bg: #000000; --card: #121212; --text: #fff; --danger: #ff4444; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Inter', sans-serif; }
         body { background: var(--bg); color: var(--text); margin: 0; overflow: hidden; height: 100vh; }
 
-        /* --- SISTEMA DE TELAS --- */
         .screen { display: none; height: 100vh; padding: 20px; flex-direction: column; overflow-y: auto; padding-bottom: 100px; }
-        .active { display: flex; animation: slideUp 0.3s ease; }
+        .active { display: flex; animation: fadeIn 0.3s ease; }
 
-        /* --- AUTH (IMAGEM 4805) --- */
-        .auth-center { justify-content: center; align-items: center; text-align: center; }
-        .logo-bank { font-size: 38px; font-weight: 900; color: var(--primary); letter-spacing: 3px; margin-bottom: 50px; }
-        .input-auth { width: 100%; max-width: 320px; background: #111; border: 1px solid #333; padding: 18px; border-radius: 12px; color: #fff; margin-bottom: 15px; text-align: center; }
-        .btn-auth { width: 100%; max-width: 320px; background: var(--primary); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
+        /* --- LOGIN (IMAGEM 4805) --- */
+        .auth-container { justify-content: center; align-items: center; }
+        .logo-text { font-size: 35px; font-weight: 900; color: var(--primary); margin-bottom: 40px; letter-spacing: 2px; }
+        .input-group { width: 100%; max-width: 320px; margin-bottom: 15px; }
+        input { width: 100%; padding: 18px; background: #111; border: 1px solid #333; color: #fff; border-radius: 12px; font-size: 16px; outline: none; }
+        input:focus { border-color: var(--primary); }
+        .btn-login { width: 100%; max-width: 320px; background: var(--primary); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
 
-        /* --- DASHBOARD CLIENTE (IMAGEM 4803) --- */
+        /* --- DASHBOARD (IMAGEM 4803/4806) --- */
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .user-info { display: flex; align-items: center; gap: 12px; }
-        .avatar { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 900; color: var(--primary); }
+        .profile { display: flex; align-items: center; gap: 12px; }
+        .avatar { width: 45px; height: 45px; background: #002b1a; border: 2px solid var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary); font-weight: bold; }
         
-        .card-balance { background: var(--card); border-radius: 25px; padding: 25px; border: 1px solid rgba(255,255,255,0.05); }
-        .blur { filter: blur(12px); }
-        .btn-extrato { background: transparent; border: 1px solid var(--primary); color: var(--primary); width: 100%; padding: 12px; border-radius: 12px; margin-top: 15px; font-weight: 600; cursor: pointer; }
+        .balance-box { background: var(--card); border-radius: 20px; padding: 25px; border: 1px solid #222; }
+        .blur { filter: blur(10px); }
+        .btn-extrato { width: 100%; background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 12px; border-radius: 12px; margin-top: 15px; font-weight: 600; }
 
-        .action-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 30px 0; }
-        .action-item { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 11px; color: #888; }
-        .icon-box { width: 60px; height: 60px; background: #181818; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: var(--primary); border: 1px solid rgba(255,255,255,0.03); }
+        /* GRID COM ÍCONES REAIS (O QUE FALTAVA) */
+        .grid-actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 30px 0; }
+        .action-card { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 11px; color: #888; }
+        .icon-circle { width: 60px; height: 60px; background: #1a1a1a; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: var(--primary); }
 
-        /* --- CARD BLACK --- */
-        .platinum-card { background: linear-gradient(145deg, #1a1a1a, #000); border-radius: 20px; padding: 25px; border: 1px solid #333; height: 190px; position: relative; }
-        .chip { width: 35px; height: 28px; background: #222; border-radius: 4px; position: absolute; right: 25px; bottom: 25px; }
+        /* CARD BLACK */
+        .card-black { background: linear-gradient(145deg, #1a1a1a, #000); border-radius: 20px; padding: 25px; border: 1px solid #333; height: 180px; position: relative; margin-top: 10px; }
+        .chip { width: 40px; height: 30px; background: #333; border-radius: 5px; position: absolute; right: 25px; bottom: 25px; }
 
-        /* --- PAINEL CONTROL (IMAGEM 4804) --- */
-        .master-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        .stat-card { background: var(--card); padding: 20px; border-radius: 15px; border-left: 4px solid var(--primary); }
-        .upload-area { border: 2px dashed var(--primary); background: rgba(0, 255, 136, 0.05); padding: 30px; border-radius: 15px; text-align: center; cursor: pointer; margin-bottom: 20px; }
-        .admin-btn { width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        /* MENU INFERIOR (IMAGEM 4806) */
+        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.95); display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #222; }
+        .nav-item { color: #555; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 10px; cursor: pointer; text-decoration: none; }
+        .nav-item.active { color: var(--primary); }
+        .nav-item.exit { color: var(--danger); }
 
-        /* --- MENU INFERIOR --- */
-        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(10,10,10,0.98); backdrop-filter: blur(15px); display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #222; z-index: 1000; }
-        .nav-link { color: #444; text-align: center; font-size: 10px; text-decoration: none; cursor: pointer; }
-        .nav-link.active-nav { color: var(--primary); }
-        .nav-link i { font-size: 20px; margin-bottom: 4px; display: block; }
-
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <div id="scr-auth" class="screen active auth-center">
-        <div class="logo-bank">MEC-BANK</div>
-        <input type="text" id="login-user" class="input-auth" placeholder="Usuário Master ou Cliente">
-        <button class="btn-auth" onclick="handleLogin()">Acessar Conta</button>
+    <div id="scr-auth" class="screen active auth-container">
+        <div class="logo-text">MEC-BANK</div>
+        <div class="input-group">
+            <input type="text" id="user" placeholder="Usuário Master ou Cliente">
+        </div>
+        <div class="input-group">
+            <input type="password" id="pass" placeholder="Sua senha">
+        </div>
+        <button class="btn-login" onclick="login()">Acessar Conta</button>
     </div>
 
     <div id="scr-home" class="screen">
         <header class="header">
-            <div class="user-info">
-                <div class="avatar" id="user-avatar">J</div>
-                <span id="user-display" style="font-weight: 800; font-size: 18px;">Jp</span>
+            <div class="profile">
+                <div class="avatar" id="av">J</div>
+                <span id="name" style="font-weight: 800;">Jp</span>
             </div>
-            <i class="fa-solid fa-bell-concierge" style="color: var(--primary); font-size: 20px;"></i>
+            <i class="fa-solid fa-bell" style="color: var(--primary); font-size: 20px;"></i>
         </header>
 
-        <div class="card-balance">
-            <small style="color: #666; font-size: 12px; display: flex; align-items: center; gap: 8px;">
-                Saldo em conta <i class="fa-solid fa-eye" onclick="toggleBlur()"></i>
-            </small>
-            <div id="main-bal" class="blur" style="font-size: 34px; font-weight: 900; margin: 12px 0;">R$ 145.850,90</div>
-            <button class="btn-extrato" onclick="changeTab('scr-extrato')">Ver Extrato Detalhado</button>
+        <div class="balance-box">
+            <small style="color: #666;">Saldo em conta <i class="fa-solid fa-eye" onclick="document.getElementById('bal').classList.toggle('blur')"></i></small>
+            <div id="bal" class="blur" style="font-size: 32px; font-weight: 800; margin: 10px 0;">R$ 145.850,90</div>
+            <button class="btn-extrato">Ver Extrato Detalhado</button>
         </div>
 
-        <div class="action-grid">
-            <div class="action-item"><div class="icon-box"><i class="fa-solid fa-qrcode"></i></div><span>Pix</span></div>
-            <div class="action-item"><div class="icon-box"><i class="fa-solid fa-barcode"></i></div><span>Pagar</span></div>
-            <div class="action-item"><div class="icon-box"><i class="fa-solid fa-money-bill-transfer"></i></div><span>Transf.</span></div>
-            <div class="action-item"><div class="icon-box"><i class="fa-solid fa-mobile-screen"></i></div><span>Recarga</span></div>
-            <div class="action-item"><div class="icon-box"><i class="fa-solid fa-hand-holding-dollar"></i></div><span>Empréstimo</span></div>
-            <div class="action-item"><div class="icon-box"><i class="fa-solid fa-shield-halved"></i></div><span>Seguros</span></div>
-            <div class="action-item"><div class="icon-box"><i class="fa-solid fa-gift"></i></div><span>Mimos</span></div>
-            <div class="action-item" onclick="changeTab('scr-support')"><div class="icon-box"><i class="fa-solid fa-circle-question"></i></div><span>Ajuda</span></div>
+        <div class="grid-actions">
+            <div class="action-card"><div class="icon-circle"><i class="fa-solid fa-qrcode"></i></div><span>Pix</span></div>
+            <div class="action-card"><div class="icon-circle"><i class="fa-solid fa-barcode"></i></div><span>Pagar</span></div>
+            <div class="action-card"><div class="icon-circle"><i class="fa-solid fa-money-bill-transfer"></i></div><span>Transf.</span></div>
+            <div class="action-card"><div class="icon-circle"><i class="fa-solid fa-mobile-screen"></i></div><span>Recarga</span></div>
+            <div class="action-card"><div class="icon-circle"><i class="fa-solid fa-hand-holding-dollar"></i></div><span>Empréstimo</span></div>
+            <div class="action-card"><div class="icon-circle"><i class="fa-solid fa-shield-heart"></i></div><span>Seguros</span></div>
+            <div class="action-card"><div class="icon-circle"><i class="fa-solid fa-gift"></i></div><span>Mimos</span></div>
+            <div class="action-card"><div class="icon-circle"><i class="fa-solid fa-circle-question"></i></div><span>Ajuda</span></div>
         </div>
 
-        <div class="platinum-card">
-            <small style="color: var(--primary); font-weight: 800; font-size: 10px; letter-spacing: 2px;">SHARK PLATINUM</small>
-            <div style="margin-top: 40px; font-size: 20px; letter-spacing: 4px; font-family: monospace;">•••• •••• •••• 8835</div>
+        <div class="card-black">
+            <small style="color: var(--primary); font-weight: bold; letter-spacing: 2px;">SHARK PLATINUM</small>
+            <div style="margin-top: 40px; font-size: 20px; letter-spacing: 4px;">•••• •••• •••• 8835</div>
             <div style="position: absolute; bottom: 25px;">
                 <small style="color: #666; display: block;">Limite</small>
                 <strong>R$ 50.000,00</strong>
@@ -101,88 +100,49 @@
     </div>
 
     <div id="scr-master" class="screen">
-        <h2 style="color: var(--primary); margin-bottom: 5px;">Shark Control Panel</h2>
-        <small style="color: #666; display: block; margin-bottom: 25px;">Gestão de Operações Bancárias</small>
-
-        <div class="master-stats">
-            <div class="stat-card"><small>SALDO TOTAL</small><h3 id="m-val">R$ 1.450.850</h3></div>
-            <div class="stat-card"><small>CONTAS ATIVAS</small><h3>842</h3></div>
+        <h2 style="color: var(--primary);">Shark Control Panel</h2>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+            <div class="balance-box" style="padding: 15px;">SALDO TOTAL<br><h3>R$ 1.450.850</h3></div>
+            <div class="balance-box" style="padding: 15px;">CONTAS<br><h3>842</h3></div>
         </div>
-
-        <div class="upload-area" onclick="document.getElementById('xl').click()">
-            <i class="fa-solid fa-cloud-arrow-up" style="font-size: 30px; color: var(--primary); margin-bottom: 10px;"></i>
-            <p style="font-weight: 600;">SUBIR PLANILHA DE DADOS (XLSX)</p>
-            <input type="file" id="xl" hidden onchange="alert('Shark, Dados Sincronizados!')">
+        <div class="balance-box" style="border: 2px dashed var(--primary); text-align: center; background: rgba(0,255,136,0.05);">
+            <i class="fa-solid fa-file-excel" style="font-size: 30px; color: var(--primary);"></i>
+            <p>SUBIR PLANILHA (XLSX)</p>
         </div>
-
-        <button class="admin-btn" style="background: #1a1a1a; color: var(--primary); border: 1px solid var(--primary);">
-            <i class="fa-solid fa-file-invoice"></i> GERAR RELATÓRIO DO DIA
-        </button>
-        <button class="admin-btn" style="background: var(--danger); color: #fff;">
-            <i class="fa-solid fa-user-slash"></i> BLOQUEIO GERAL DO SISTEMA
-        </button>
-        <button class="admin-btn" style="background: #fff; color: #000;">
-            <i class="fa-solid fa-user-plus"></i> CRIAR NOVA CONTA MASTER
-        </button>
+        <button class="btn-login" style="background: #111; color: var(--primary); border: 1px solid var(--primary); margin-top: 20px; width: 100%;">GERAR RELATÓRIO</button>
+        <button class="btn-login" style="background: var(--danger); color: #fff; margin-top: 10px; width: 100%;">BLOQUEIO GERAL</button>
     </div>
 
-    <div id="scr-extrato" class="screen">
-        <h3>Extrato Detalhado</h3>
-        <div class="card-balance" style="margin-bottom: 10px;">
-            <strong>Recebimento Pix</strong><br><small>Hoje às 14:00</small>
-            <span style="float: right; color: var(--primary);">+ R$ 250,00</span>
-        </div>
-    </div>
-
-    <div id="scr-support" class="screen">
-        <h3>Suporte Shark</h3>
-        <div class="card-balance">
-            <p>Como podemos ajudar na sua operação?</p>
-            <button class="btn-auth" onclick="alert('Conectando ao Especialista...')">CHAMAR NO CHAT</button>
-        </div>
-    </div>
-
-    <nav class="nav-bar" id="main-nav" style="display: none;">
-        <div class="nav-link active-nav" onclick="changeTab('scr-home')"><i class="fa-solid fa-house"></i>Início</div>
-        <div class="nav-link" onclick="changeTab('scr-extrato')"><i class="fa-solid fa-list-ul"></i>Extrato</div>
-        <div class="nav-link" onclick="changeTab('scr-home')"><i class="fa-solid fa-credit-card"></i>Cartões</div>
-        <div class="nav-link" onclick="changeTab('scr-support')"><i class="fa-solid fa-headset"></i>Suporte</div>
-        <div class="nav-link" onclick="location.reload()" style="color: var(--danger);"><i class="fa-solid fa-power-off"></i>Sair</div>
+    <nav class="nav-bar" id="nb" style="display: none;">
+        <div class="nav-item active" onclick="tab('scr-home')"><i class="fa-solid fa-house"></i>Início</div>
+        <div class="nav-item"><i class="fa-solid fa-list-ul"></i>Extrato</div>
+        <div class="nav-item"><i class="fa-solid fa-credit-card"></i>Cartões</div>
+        <div class="nav-item"><i class="fa-solid fa-headset"></i>Suporte</div>
+        <div class="nav-item exit" onclick="location.reload()"><i class="fa-solid fa-power-off"></i>Sair</div>
     </nav>
 
     <script>
-        // Lógica de Login Shark (Baseado no seu combinado)
-        function handleLogin() {
-            const user = document.getElementById('login-user').value.toLowerCase();
-            if(!user) return alert("Diga quem é você!");
+        function login() {
+            const u = document.getElementById('user').value;
+            const p = document.getElementById('pass').value;
+            
+            if(!u || !p) return alert("Preencha usuário e senha!");
 
             document.getElementById('scr-auth').classList.remove('active');
             
-            if(user === 'shark') {
-                // VISÃO DONO (IMAGEM 4804)
+            if(u.toLowerCase() === 'shark') {
                 document.getElementById('scr-master').classList.add('active');
-                document.getElementById('main-nav').style.display = 'flex';
             } else {
-                // VISÃO CLIENTE (IMAGEM 4803)
-                document.getElementById('user-display').innerText = user;
-                document.getElementById('user-avatar').innerText = user[0].toUpperCase();
+                document.getElementById('name').innerText = u;
+                document.getElementById('av').innerText = u[0].toUpperCase();
                 document.getElementById('scr-home').classList.add('active');
-                document.getElementById('main-nav').style.display = 'flex';
+                document.getElementById('nb').style.display = 'flex';
             }
         }
 
-        // Navegação entre abas
-        function changeTab(tabId) {
+        function tab(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-nav'));
-            
-            document.getElementById(tabId).classList.add('active');
-            // Ativa o ícone correto no menu
-            event.currentTarget.classList.add('active-nav');
-        }
-
-        function toggleBlur() {
-            document.getElementById('main-bal').classList.toggle('blur');
+            document.getElementById(id).classList.add('active');
         }
     </script>
 </body>
