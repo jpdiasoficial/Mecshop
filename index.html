@@ -7,19 +7,17 @@
 
 <style>
 
-*{box-sizing:border-box}
-
 body{
 margin:0;
 font-family:Arial;
 background:#0f172a;
 color:white;
+text-align:center;
 }
 
 header{
 background:#020617;
 padding:15px;
-text-align:center;
 font-size:22px;
 font-weight:bold;
 }
@@ -69,6 +67,21 @@ display:none;
 background:#7c3aed;
 }
 
+#wheel{
+width:200px;
+height:200px;
+border-radius:50%;
+border:10px solid white;
+margin:auto;
+background:conic-gradient(
+#22c55e 0deg 90deg,
+#ef4444 90deg 180deg,
+#22c55e 180deg 270deg,
+#ef4444 270deg 360deg
+);
+transition:transform 3s;
+}
+
 </style>
 
 </head>
@@ -88,9 +101,7 @@ background:#7c3aed;
 
 <button onclick="login()">Entrar</button>
 
-<p onclick="showRegister()" style="cursor:pointer;margin-top:10px;">
-Criar conta
-</p>
+<p onclick="showRegister()" style="cursor:pointer">Criar conta</p>
 
 </div>
 
@@ -119,11 +130,21 @@ Criar conta
 
 <div class="card">
 
-<h3>Mini jogo</h3>
+<h3>Roleta da sorte</h3>
 
-<button onclick="jogar()">Tentar sorte</button>
+<div id="wheel"></div>
+
+<button onclick="girar()">Girar</button>
 
 <p id="resultado"></p>
+
+</div>
+
+<div class="card">
+
+<h3>Histórico saldo</h3>
+
+<canvas id="grafico" width="300" height="150"></canvas>
 
 </div>
 
@@ -149,27 +170,20 @@ let users = JSON.parse(localStorage.getItem("users")) || []
 
 let saldo = parseFloat(localStorage.getItem("saldo")) || 0
 
+let historico = JSON.parse(localStorage.getItem("hist")) || []
+
 function showRegister(){
 
-document.getElementById("loginBox").classList.add("hidden")
+loginBox.classList.add("hidden")
 
-document.getElementById("registerBox").classList.remove("hidden")
+registerBox.classList.remove("hidden")
 
 }
 
 function register(){
 
-let u = document.getElementById("newUser").value
-
-let p = document.getElementById("newPass").value
-
-if(!u || !p){
-
-alert("Preencha os campos")
-
-return
-
-}
+let u=newUser.value
+let p=newPass.value
 
 users.push({user:u,pass:p})
 
@@ -183,11 +197,10 @@ location.reload()
 
 function login(){
 
-let u = document.getElementById("user").value
+let u=user.value
+let p=pass.value
 
-let p = document.getElementById("pass").value
-
-let found = users.find(x => x.user==u && x.pass==p)
+let found = users.find(x=>x.user==u && x.pass==p)
 
 if(u=="admin" && p=="123"){
 
@@ -211,55 +224,103 @@ alert("Login inválido")
 
 function openDashboard(user,isAdmin){
 
-document.getElementById("loginBox").classList.add("hidden")
+loginBox.classList.add("hidden")
 
-document.getElementById("dashboard").classList.remove("hidden")
+dashboard.classList.remove("hidden")
 
-document.getElementById("username").innerText=user
+username.innerText=user
 
-document.getElementById("saldo").innerText=saldo
+saldoEl = document.getElementById("saldo")
+
+saldoEl.innerText=saldo
 
 if(isAdmin){
 
-document.getElementById("adminPanel").classList.remove("hidden")
+adminPanel.classList.remove("hidden")
 
-document.getElementById("totalUsers").innerText=users.length
+totalUsers.innerText=users.length
 
 }
+
+drawChart()
 
 }
 
 function ganhar(){
 
-saldo += 10
+saldo+=10
 
-localStorage.setItem("saldo",saldo)
-
-document.getElementById("saldo").innerText=saldo
+saveSaldo()
 
 }
 
-function jogar(){
+function girar(){
 
-let r = Math.random()
+let deg=Math.floor(Math.random()*360)+720
 
-if(r > 0.5){
+wheel.style.transform="rotate("+deg+"deg)"
 
-saldo += 20
+setTimeout(()=>{
 
-document.getElementById("resultado").innerText="Você ganhou 20"
+if(deg%2==0){
+
+saldo+=20
+
+resultado.innerText="Você ganhou 20"
 
 }else{
 
-saldo -= 5
+saldo-=10
 
-document.getElementById("resultado").innerText="Você perdeu 5"
+resultado.innerText="Você perdeu 10"
 
 }
 
+saveSaldo()
+
+},3000)
+
+}
+
+function saveSaldo(){
+
 localStorage.setItem("saldo",saldo)
 
-document.getElementById("saldo").innerText=saldo
+saldoEl.innerText=saldo
+
+historico.push(saldo)
+
+localStorage.setItem("hist",JSON.stringify(historico))
+
+drawChart()
+
+}
+
+function drawChart(){
+
+let c=document.getElementById("grafico")
+
+let ctx=c.getContext("2d")
+
+ctx.clearRect(0,0,c.width,c.height)
+
+ctx.beginPath()
+
+historico.forEach((v,i)=>{
+
+let x=i*30
+
+let y=150-v
+
+if(i==0)ctx.moveTo(x,y)
+
+else ctx.lineTo(x,y)
+
+})
+
+ctx.strokeStyle="lime"
+
+ctx.stroke()
 
 }
 
