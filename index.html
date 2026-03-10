@@ -3,166 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MecShop Corporate v10</title>
+    <title>MecShop OS | Evolution</title>
     <script src="https://unpkg.com/html5-qrcode"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --red: #ea1d2c; --gold: #c5a059; --dark: #0d0d0d; --card: #1a1a1a; --nu: #820ad1; --green: #25d366; }
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--dark); color: #fff; font-family: 'Inter', sans-serif; height: 100vh; overflow: hidden; }
+        :root { --main: #ea1d2c; --shark: #c5a059; --bg: #000; --card: #0a0a0a; --accent: #820ad1; }
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; overflow: hidden; height: 100vh; }
         
-        .screen { display: none; height: 100vh; flex-direction: column; animation: fadeIn 0.3s ease; }
-        .active { display: flex !important; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* Sistema de Camadas Inteligentes */
+        .layer { display: none; height: 100vh; flex-direction: column; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .layer.active { display: flex; animation: slideUp 0.4s ease; }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        /* HEADER ESTILO CORPORATE */
-        header { padding: 18px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; background: #000; }
-        .logo-text { font-family: 'Orbitron'; color: #fff; font-size: 13px; letter-spacing: 1px; }
+        /* Interface Estilo "OS" (Sistema Operacional) */
+        .glass-header { padding: 20px; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); border-bottom: 1px solid #1a1a1a; display: flex; justify-content: space-between; align-items: center; }
+        .os-logo { font-family: 'Orbitron'; font-weight: 900; background: linear-gradient(45deg, #fff, var(--main)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 18px; }
 
-        /* HUB - GRID IGUAL À IMAGEM */
-        .hub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; overflow-y: auto; }
-        .hub-card { background: var(--card); border-radius: 20px; padding: 25px; border: 1px solid #333; text-align: center; cursor: pointer; transition: 0.2s; }
-        .hub-card:active { transform: scale(0.95); border-color: var(--red); }
-        .hub-card i { font-size: 30px; display: block; margin-bottom: 10px; }
-        .hub-card span { font-family: 'Orbitron'; font-size: 9px; color: #fff; }
+        /* Grid Inteligente */
+        .app-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 20px; overflow-y: auto; flex: 1; }
+        .app-tile { background: var(--card); border: 1px solid #1a1a1a; border-radius: 24px; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .app-tile::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--main); opacity: 0.3; }
+        .app-tile i { font-size: 28px; margin-bottom: 12px; }
+        .app-tile span { font-family: 'Orbitron'; font-size: 9px; letter-spacing: 1px; color: #888; }
 
-        /* SELETOR DE MODO (SHARK VS CLIENTE) */
-        .mode-selector { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 20px; padding: 25px; }
-        .mode-btn { width: 100%; padding: 25px; border-radius: 18px; border: 1px solid #444; background: #111; cursor: pointer; text-align: left; }
-        .mode-btn h2 { font-family: 'Orbitron'; font-size: 16px; margin-bottom: 5px; }
-        .mode-btn.shark { border-color: var(--gold); color: var(--gold); }
-        .mode-btn.user { border-color: var(--red); color: var(--red); }
+        /* Widgets do Shark */
+        .shark-panel { background: linear-gradient(135deg, #111, #000); border: 1px solid var(--shark); border-radius: 25px; padding: 20px; margin: 20px; }
+        .balance-label { font-size: 10px; color: var(--shark); text-transform: uppercase; letter-spacing: 2px; }
+        .balance-value { font-size: 32px; font-weight: 800; font-family: 'Orbitron'; margin: 5px 0; }
 
-        /* INTERFACES ESPECÍFICAS (MEC-BANK, ROTA, ETC) */
-        .content-area { flex: 1; padding: 20px; overflow-y: auto; }
-        
-        /* MEC-BANK STYLE */
-        .nu-card { background: var(--nu); padding: 25px; border-radius: 20px; margin-bottom: 15px; position: relative; }
-        .nu-card h2 { font-size: 22px; margin-top: 10px; }
-        
-        /* SERGEL/HOT-MEC STYLE (GRID DE PRODUTOS) */
-        .prod-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .prod-card { background: #1a1a1a; border-radius: 15px; padding: 10px; text-align: center; border: 1px solid #333; }
-        .prod-card img { width: 100%; border-radius: 10px; margin-bottom: 8px; }
+        /* Botões Estilo "Tesla" */
+        .btn-action { width: 100%; padding: 20px; border-radius: 18px; border: none; font-weight: 700; font-family: 'Orbitron'; font-size: 12px; cursor: pointer; transition: 0.3s; margin-top: 15px; }
+        .btn-primary { background: var(--main); color: #fff; box-shadow: 0 10px 20px rgba(234, 29, 44, 0.2); }
+        .btn-shark { background: var(--shark); color: #000; }
 
-        /* SHARK DASHBOARD (GRÁFICOS) */
-        .chart-box { background: #111; border: 1px solid var(--gold); border-radius: 15px; padding: 15px; margin-bottom: 10px; }
-        .chart-line { height: 60px; border-bottom: 2px solid #333; position: relative; display: flex; align-items: flex-end; gap: 5px; padding-bottom: 5px; }
-        .bar { flex: 1; background: var(--gold); border-radius: 2px; }
-
-        .btn-action { width: 100%; padding: 18px; border-radius: 15px; border: none; font-weight: 800; font-family: 'Orbitron'; cursor: pointer; margin-top: 10px; text-transform: uppercase; font-size: 11px; }
-        #reader { width: 100%; border-radius: 20px; display: none; margin-bottom: 15px; border: 2px solid var(--red); }
+        /* Barra de Navegação Inferior */
+        .nav-bar { height: 70px; background: #050505; border-top: 1px solid #111; display: flex; justify-content: space-around; align-items: center; }
+        .nav-item { color: #444; font-size: 20px; cursor: pointer; }
+        .nav-item.active { color: var(--main); }
     </style>
 </head>
-<body onload="checkSession()">
+<body onload="initOS()">
 
-<div id="scr-login" class="screen active" style="justify-content:center; align-items:center; padding:30px;">
-    <div style="font-family:'Orbitron'; font-size:30px; margin-bottom:40px;">MecShop</div>
-    <input type="password" id="access-key" placeholder="ACCESS KEY 9910" style="width:100%; max-width:280px; padding:18px; background:#111; border:1px solid #333; color:#fff; border-radius:15px; text-align:center; font-family:'Orbitron';">
-    <button onclick="doLogin()" class="btn-action" style="background:var(--red); color:#fff; max-width:280px;">LOGIN</button>
-</div>
-
-<div id="scr-hub" class="screen">
-    <header><span class="logo-text">Corporate v10</span><button onclick="logout()" style="background:none; border:none; color:#fff; font-size:11px;">SAIR</button></header>
-    <div class="hub-grid">
-        <div class="hub-card" onclick="selectMod('bank', 'MEC-BANK')"><i style="color:var(--nu)">💳</i><span>MEC-BANK</span></div>
-        <div class="hub-card" onclick="selectMod('log', 'LOG-PRO WMS')"><i style="color:var(--gold)">📦</i><span>LOG-PRO WMS</span></div>
-        <div class="hub-card" onclick="selectMod('sergel', 'SERGEL DELIVERY')"><i style="color:#fff">🍦</i><span>SERGEL DELIVERY</span></div>
-        <div class="hub-card" onclick="selectMod('rota', 'ESTRATÉGIA ROTA')"><i style="color:var(--red)">📍</i><span>ESTRATÉGIA ROTA</span></div>
-        <div class="hub-card" onclick="selectMod('hot', 'HOT-MEC')"><i style="color:#007bff">📚</i><span>HOT-MEC</span></div>
-        <div class="hub-card" onclick="selectMod('bet', 'BET GAME')"><i style="color:var(--green)">🎰</i><span>GAMES & BET</span></div>
+<div id="layer-login" class="layer active" style="justify-content:center; align-items:center; padding:40px;">
+    <div class="os-logo" style="font-size:40px; margin-bottom:60px;">MECSHOP</div>
+    <div style="width:100%; max-width:300px;">
+        <input type="password" id="sys-key" placeholder="IDENTIFYING..." style="width:100%; padding:20px; background:#0a0a0a; border:1px solid #222; border-radius:20px; color:#fff; text-align:center; font-family:'Orbitron'; margin-bottom:20px;">
+        <button onclick="bootSystem()" class="btn-action btn-primary">UNLOCK SYSTEM</button>
     </div>
 </div>
 
-<div id="scr-mode" class="screen">
-    <header><b id="mod-title" style="font-family:'Orbitron';"></b><button onclick="go('scr-hub')">VOLTAR</button></header>
-    <div class="mode-selector">
-        <div class="mode-btn shark" onclick="start('shark')"><h2>SHARK</h2><p>Performance Dashboard & Audit.</p></div>
-        <div class="mode-btn user" onclick="start('user')"><h2>OPERADOR / CLIENTE</h2><p>Direct Action & Terminal.</p></div>
+<div id="layer-hub" class="layer">
+    <div class="glass-header">
+        <div class="os-logo">CORE OS v10</div>
+        <div style="width:35px; height:35px; border-radius:50%; background:var(--shark); display:flex; align-items:center; justify-content:center; color:#000; font-weight:bold; font-size:10px;">SH</div>
+    </div>
+    
+    <div class="shark-panel" onclick="openMod('shark-main')">
+        <p class="balance-label">Total Holding Revenue</p>
+        <h2 class="balance-value">R$ 1.250.000</h2>
+        <div style="width:100%; height:2px; background:#222; margin:15px 0;"></div>
+        <p style="font-size:10px; color:var(--green)">+ 12.5% vs last month</p>
+    </div>
+
+    <div class="app-container">
+        <div class="app-tile" onclick="openMod('bank')"><i style="color:var(--accent)">💳</i><span>MEC-BANK</span></div>
+        <div class="app-tile" onclick="openMod('log')"><i style="color:var(--shark)">📦</i><span>LOG-PRO</span></div>
+        <div class="app-tile" onclick="openMod('sergel')"><i style="color:#fff">🍦</i><span>SERGEL</span></div>
+        <div class="app-tile" onclick="openMod('rota')"><i style="color:var(--main)">📍</i><span>ROTAS</span></div>
+        <div class="app-tile" onclick="openMod('hot')"><i style="color:#007bff">📚</i><span>AFILIADOS</span></div>
+        <div class="app-tile" onclick="openMod('bet')"><i style="color:#25d366">🎰</i><span>GAMES</span></div>
+    </div>
+
+    <div class="nav-bar">
+        <div class="nav-item active">🏠</div>
+        <div class="nav-item">📊</div>
+        <div class="nav-item">⚙️</div>
     </div>
 </div>
 
-<div id="scr-exec" class="screen">
-    <header><b id="exec-title" style="font-size:11px; font-family:'Orbitron';"></b><button onclick="closeApp()">VOLTAR</button></header>
-    <div id="ui-body" class="content-area"></div>
+<div id="layer-mod" class="layer">
+    <div class="glass-header">
+        <button onclick="backToHub()" style="background:none; border:none; color:#fff; font-size:20px;">←</button>
+        <div id="mod-name" class="os-logo" style="font-size:12px;">MODULE</div>
+        <div id="role-tag" style="font-size:8px; border:1px solid var(--main); padding:4px 8px; border-radius:10px;">OPERATOR</div>
+    </div>
+    <div id="mod-content" style="flex:1; overflow-y:auto; padding:20px;"></div>
 </div>
 
 <script>
-    let currentRole = "user";
-    let currentMod = "";
-    let qrcode = null;
+    let session = { role: 'shark', app: '' };
 
-    function doLogin() { if(document.getElementById('access-key').value === "9910") { localStorage.setItem('m_auth', '1'); go('scr-hub'); } }
-    function selectMod(id, name) { currentMod = id; document.getElementById('mod-title').innerText = name; go('scr-mode'); }
-
-    function start(role) {
-        currentRole = role;
-        document.getElementById('exec-title').innerText = `${currentMod.toUpperCase()} | ${role.toUpperCase()}`;
-        const body = document.getElementById('ui-body');
-        go('scr-exec');
-
-        if(role === 'shark') {
-            renderShark(body);
-        } else {
-            renderUser(body);
+    function bootSystem() {
+        if(document.getElementById('sys-key').value === "9910") {
+            switchLayer('layer-hub');
         }
     }
 
-    function renderShark(body) {
-        body.innerHTML = `
-            <div class="chart-box">
-                <small style="color:var(--gold)">BALANCE</small>
-                <h2 style="font-family:'Orbitron'">R$ 350.400,00</h2>
-            </div>
-            <div class="chart-box">
-                <small>PERFORMANCE DASHBOARD</small>
-                <div class="chart-line">
-                    <div class="bar" style="height:30%"></div><div class="bar" style="height:60%"></div><div class="bar" style="height:45%"></div>
-                    <div class="bar" style="height:90%"></div><div class="bar" style="height:70%"></div>
+    function openMod(id) {
+        session.app = id;
+        document.getElementById('mod-name').innerText = id.toUpperCase();
+        const content = document.getElementById('mod-content');
+        switchLayer('layer-mod');
+
+        if(id === 'bank') {
+            content.innerHTML = `
+                <div style="background:var(--accent); padding:30px; border-radius:30px; margin-bottom:20px; box-shadow:0 20px 40px rgba(130,10,209,0.3);">
+                    <p style="font-size:12px; opacity:0.8;">Available Balance</p>
+                    <h2 style="font-size:32px; font-family:'Orbitron';">R$ 4.520,00</h2>
                 </div>
-            </div>
-            <div class="chart-box">
-                <p style="font-size:10px">AUDIT SHIELD: <span style="color:var(--green)">ACTIVE</span></p>
-                <p style="font-size:10px">ESTRATEGIA: <span style="color:var(--red)">HORTOLÂNDIA v10</span></p>
-            </div>`;
-    }
-
-    function renderUser(body) {
-        if(currentMod === 'bank') {
-            body.innerHTML = `
-                <div class="nu-card"><h4>nu</h4><h2>R$ 4.520,00</h2></div>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                    <button class="btn-action" style="background:#222">PIX</button><button class="btn-action" style="background:#222">PAY</button>
-                </div>`;
-        } else if(currentMod === 'log') {
-            body.innerHTML = `<div id="reader"></div><button class="btn-action" style="background:var(--red)" onclick="startScan()">C79 SCANNER</button><div id="log-list" style="font-size:10px; margin-top:10px; color:var(--green)"></div>`;
-        } else if(currentMod === 'rota') {
-            body.innerHTML = `<div style="background:#111; height:200px; border-radius:20px; border:1px solid #333; display:flex; align-items:center; justify-content:center; color:#555">ESTRATÉGIA ROTA MAP</div><button class="btn-action" style="background:var(--red)">OTIMIZAR ROTA</button>`;
-        } else if(currentMod === 'sergel') {
-            body.innerHTML = `<div class="prod-grid">
-                <div class="prod-card"><div style="background:#333; height:80px; border-radius:10px; margin-bottom:5px"></div><b>SORVETE V10</b><button class="btn-action" style="background:var(--green)" onclick="zap()">WHATSAPP</button></div>
-                <div class="prod-card"><div style="background:#333; height:80px; border-radius:10px; margin-bottom:5px"></div><b>AÇAÍ V10</b><button class="btn-action" style="background:var(--green)" onclick="zap()">WHATSAPP</button></div>
-            </div>`;
-        } else if(currentMod === 'hot') {
-            body.innerHTML = `<h3>COURSES/E-BOOKS</h3><div class="stat" style="background:#111; padding:15px; border-radius:15px; margin-top:10px"><b>ESTRATÉGIA SHARK</b><br><small>Comissão: 60%</small><button class="btn-action" style="background:var(--red)">COPIAR LINK</button></div>`;
+                <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:15px; text-align:center;">
+                    <div style="background:#111; padding:15px; border-radius:20px;">PIX</div>
+                    <div style="background:#111; padding:15px; border-radius:20px;">PAY</div>
+                    <div style="background:#111; padding:15px; border-radius:20px;">CARD</div>
+                </div>
+            `;
+        } else if(id === 'log') {
+            content.innerHTML = `
+                <div id="reader-container" style="width:100%; border-radius:30px; overflow:hidden; border:2px solid var(--main); margin-bottom:20px; display:none;">
+                    <div id="reader" style="width:100%;"></div>
+                </div>
+                <button class="btn-action btn-primary" onclick="startScanner()">ACTIVATE SCANNER C79</button>
+                <div id="bipe-log" style="margin-top:20px; font-family:'Orbitron'; font-size:10px; color:var(--shark);"></div>
+            `;
+        } else if(id === 'shark-main') {
+             content.innerHTML = `
+                <div class="shark-panel" style="margin:0; border-color:var(--main);">
+                    <p class="balance-label" style="color:var(--main);">Shark Global Audit</p>
+                    <h2 class="balance-value">R$ 45.200,00</h2>
+                    <p style="font-size:10px; opacity:0.5;">Daily Net Profit</p>
+                </div>
+                <button class="btn-action btn-shark">GENERATE FULL AUDIT</button>
+                <button class="btn-action" style="background:#111; color:#fff;">SYSTEM REBOOT</button>
+            `;
         } else {
-            body.innerHTML = `<div style="background:#111; border:1px solid var(--green); padding:20px; border-radius:20px"><b>GAME LIVE</b><br><span style="color:var(--green)">ODD: 2.50</span></div><button class="btn-action" style="background:var(--green)">APOSTAR</button>`;
+            content.innerHTML = `<div style="text-align:center; padding:100px 0; opacity:0.2;">MOD_READY_FOR_SYNC</div>`;
         }
     }
 
-    function startScan() {
-        document.getElementById('reader').style.display='block';
-        qrcode = new Html5Qrcode("reader");
-        qrcode.start({ facingMode: "environment" }, { fps: 30, qrbox: 250 }, (t) => {
-            document.getElementById('log-list').innerHTML += `> BIPE: ${t}<br>`;
+    function startScanner() {
+        document.getElementById('reader-container').style.display = 'block';
+        const scanner = new Html5Qrcode("reader");
+        scanner.start({ facingMode: "environment" }, { fps: 30, qrbox: 250 }, (t) => {
+            document.getElementById('bipe-log').innerHTML += `> SCAN_SUCCESS: ${t}<br>`;
         });
     }
 
-    function zap() { window.open("https://wa.me/5519991234567?text=Pedido-MecShop"); }
-    function go(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-    function closeApp() { if(qrcode) { qrcode.stop(); qrcode = null; } go('scr-mode'); }
-    function checkSession() { if(localStorage.getItem('m_auth')) go('scr-hub'); }
-    function logout() { localStorage.clear(); location.reload(); }
+    function switchLayer(id) {
+        document.querySelectorAll('.layer').forEach(l => l.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    function backToHub() { switchLayer('layer-hub'); }
+    function initOS() { /* Ready */ }
 </script>
 </body>
 </html>
