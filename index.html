@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mecshop Platform</title>
+<title>JP Platform</title>
 
 <style>
+
+*{box-sizing:border-box}
 
 body{
 margin:0;
@@ -23,9 +25,9 @@ font-weight:bold;
 }
 
 .container{
-padding:20px;
-max-width:500px;
+max-width:600px;
 margin:auto;
+padding:20px;
 }
 
 .card{
@@ -37,16 +39,16 @@ margin-bottom:20px;
 
 input{
 width:100%;
-padding:10px;
+padding:12px;
 margin-top:10px;
 border:none;
 border-radius:6px;
 }
 
 button{
-padding:10px;
-margin-top:10px;
 width:100%;
+padding:12px;
+margin-top:10px;
 background:#22c55e;
 border:none;
 border-radius:6px;
@@ -73,41 +75,35 @@ background:#7c3aed;
 
 <body>
 
-<header>Mecshop Platform</header>
+<header>JP Platform</header>
 
 <div class="container">
-
-<!-- LOGIN -->
 
 <div id="loginBox" class="card">
 
 <h3>Login</h3>
 
 <input id="user" placeholder="Usuário">
-
 <input id="pass" type="password" placeholder="Senha">
 
 <button onclick="login()">Entrar</button>
 
-<p onclick="showRegister()" style="cursor:pointer;margin-top:10px;">Criar conta</p>
+<p onclick="showRegister()" style="cursor:pointer;margin-top:10px;">
+Criar conta
+</p>
 
 </div>
-
-<!-- REGISTRO -->
 
 <div id="registerBox" class="card hidden">
 
 <h3>Cadastro</h3>
 
 <input id="newUser" placeholder="Usuário">
-
 <input id="newPass" type="password" placeholder="Senha">
 
 <button onclick="register()">Cadastrar</button>
 
 </div>
-
-<!-- DASHBOARD -->
 
 <div id="dashboard" class="hidden">
 
@@ -123,9 +119,9 @@ background:#7c3aed;
 
 <div class="card">
 
-<h3>Mini Jogo</h3>
+<h3>Mini jogo</h3>
 
-<button onclick="jogar()">Girar sorte</button>
+<button onclick="jogar()">Tentar sorte</button>
 
 <p id="resultado"></p>
 
@@ -135,7 +131,7 @@ background:#7c3aed;
 
 <h3>Painel Admin</h3>
 
-<p>Total de usuários: <span id="totalUsers"></span></p>
+<p>Total usuários: <span id="totalUsers"></span></p>
 
 <button onclick="reset()">Reset sistema</button>
 
@@ -150,11 +146,13 @@ background:#7c3aed;
 <script>
 
 let users = JSON.parse(localStorage.getItem("users")) || []
+
 let saldo = parseFloat(localStorage.getItem("saldo")) || 0
 
 function showRegister(){
 
 document.getElementById("loginBox").classList.add("hidden")
+
 document.getElementById("registerBox").classList.remove("hidden")
 
 }
@@ -162,7 +160,16 @@ document.getElementById("registerBox").classList.remove("hidden")
 function register(){
 
 let u = document.getElementById("newUser").value
+
 let p = document.getElementById("newPass").value
+
+if(!u || !p){
+
+alert("Preencha os campos")
+
+return
+
+}
 
 users.push({user:u,pass:p})
 
@@ -177,6 +184,7 @@ location.reload()
 function login(){
 
 let u = document.getElementById("user").value
+
 let p = document.getElementById("pass").value
 
 let found = users.find(x => x.user==u && x.pass==p)
@@ -204,6 +212,7 @@ alert("Login inválido")
 function openDashboard(user,isAdmin){
 
 document.getElementById("loginBox").classList.add("hidden")
+
 document.getElementById("dashboard").classList.remove("hidden")
 
 document.getElementById("username").innerText=user
@@ -232,9 +241,9 @@ document.getElementById("saldo").innerText=saldo
 
 function jogar(){
 
-let win = Math.random()
+let r = Math.random()
 
-if(win > 0.5){
+if(r > 0.5){
 
 saldo += 20
 
