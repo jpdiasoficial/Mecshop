@@ -3,243 +3,300 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MEC-BET INFINITY | OFFICIAL</title>
+    <title>MEC-BET | GOD MODE v5.0</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #ff5e00; --green: #00ff41; --gold: #d4af37;
-            --bg: #000; --card: #0a0a0a; --gray: #1a1a1a;
+            --primary: #ff5e00; --green: #00ff41; --gold: #d4af37; --danger: #ff3b30;
+            --bg: #000; --surface: #0a0a0a; --border: #1a1a1a;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; text-transform: uppercase; }
-        body { background: var(--bg); color: #fff; height: 100vh; overflow: hidden; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: #fff; height: 100vh; overflow: hidden; font-size: 14px; }
 
-        /* NAVEGAÇÃO ENTRE TELAS */
-        .view { position: absolute; inset: 0; display: none; flex-direction: column; background: var(--bg); z-index: 10; }
-        .view.active { display: flex; animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .view { position: absolute; inset: 0; display: none; flex-direction: column; background: var(--bg); z-index: 10; overflow-y: auto; padding-bottom: 100px; }
+        .view.active { display: flex; animation: zoomIn 0.3s ease; }
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
 
-        /* CABEÇALHO ELITE */
-        .header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--gray); height: 75px; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); }
-        .logo { font-weight: 900; font-size: 20px; color: var(--gold); letter-spacing: -1px; }
+        /* HEADER PREMIUM */
+        .header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--border); height: 70px; sticky: top; }
+        .logo { font-weight: 900; font-size: 20px; color: var(--gold); text-shadow: 0 0 10px rgba(212,175,55,0.3); }
 
-        /* BANCA E CARDS */
-        .wallet { background: linear-gradient(180deg, #0d0d0d 0%, #000 100%); margin: 20px; padding: 25px; border-radius: 20px; border: 1px solid var(--gray); border-bottom: 4px solid var(--green); }
-        .wallet-val { font-size: 42px; font-weight: 900; margin: 10px 0; letter-spacing: -2px; }
+        /* BANCA ESTILO APLICATIVO */
+        .card-main { background: linear-gradient(145deg, #0f0f0f, #000); margin: 15px; padding: 25px; border-radius: 24px; border: 1px solid var(--border); position: relative; }
+        .lvl-badge { position: absolute; top: 15px; right: 15px; background: var(--gold); color: #000; padding: 4px 10px; border-radius: 50px; font-size: 10px; font-weight: 900; }
+        
+        .btn { width: 100%; padding: 16px; border-radius: 14px; border: none; font-weight: 900; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; }
+        .btn-primary { background: var(--primary); color: #fff; box-shadow: 0 5px 15px rgba(255, 94, 0, 0.2); }
+        .btn-green { background: var(--green); color: #000; }
 
-        .btn { width: 100%; padding: 18px; border-radius: 12px; border: none; font-weight: 900; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-deposit { background: var(--green); color: #000; box-shadow: 0 0 15px rgba(0,255,65,0.2); }
-        .btn-play { background: var(--primary); color: #fff; margin-top: 40px; }
+        /* MINES BOARD */
+        .mines-config { padding: 0 20px; margin-bottom: 15px; display: flex; gap: 10px; }
+        .mines-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; padding: 20px; background: #050505; border-radius: 20px; margin: 0 15px; border: 1px solid var(--border); }
+        .tile { aspect-ratio: 1/1; background: #151515; border-radius: 10px; border-bottom: 4px solid #000; display: flex; align-items: center; justify-content: center; font-size: 22px; transition: 0.2s; cursor: pointer; }
+        .tile.open { background: #222; border-bottom: none; transform: translateY(2px); }
 
-        /* GAMES GRID */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; flex: 1; overflow-y: auto; }
-        .game-card { background: var(--card); height: 160px; border-radius: 20px; border: 1px solid var(--gray); display: flex; flex-direction: column; justify-content: flex-end; padding: 15px; position: relative; }
-        .game-card i { position: absolute; top: 15px; right: 15px; font-size: 30px; color: #151515; }
+        /* ADMIN SHARK */
+        .shark-stat { background: #080808; padding: 15px; border-radius: 15px; margin-bottom: 10px; border-left: 4px solid var(--primary); }
+        .switch { position: relative; display: inline-block; width: 50px; height: 24px; }
 
-        /* ROLETA */
-        .wheel-box { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .wheel { width: 300px; height: 300px; border: 10px solid #111; border-radius: 50%; background: conic-gradient(var(--primary) 0 12.5%, #000 12.5% 25%, var(--primary) 25% 37.5%, #000 37.5% 50%, var(--primary) 50% 62.5%, #000 62.5% 75%, var(--primary) 75% 87.5%, #000 87.5% 100%); transition: 4s cubic-bezier(0.1, 0, 0, 1); position: relative; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
-        .wheel::after { content: ''; position: absolute; top: -20px; left: 50%; transform: translateX(-50%); border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 25px solid var(--gold); }
-
-        /* ADMIN AREA */
-        .admin-row { background: #080808; padding: 15px; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border-left: 3px solid var(--gold); }
-
-        /* AUTH INPUTS */
-        .auth-screen { padding: 30px; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .input-auth { width: 100%; background: #080808; border: 1px solid #1a1a1a; padding: 20px; border-radius: 15px; color: #fff; margin-bottom: 15px; }
-
-        nav { position: fixed; bottom: 0; width: 100%; height: 80px; background: rgba(0,0,0,0.9); border-top: 1px solid var(--gray); display: none; justify-content: space-around; align-items: center; }
-        .nav-item { color: #333; font-size: 10px; font-weight: 900; text-align: center; }
-        .nav-item.active { color: var(--gold); }
+        nav { position: fixed; bottom: 0; width: 100%; height: 75px; background: rgba(0,0,0,0.95); border-top: 1px solid var(--border); display: none; justify-content: space-around; align-items: center; z-index: 100; }
+        .nav-link { color: #333; text-align: center; font-size: 9px; font-weight: 900; }
+        .nav-link.active { color: var(--gold); }
     </style>
 </head>
-<body onload="Core.init()">
+<body onload="GodMode.init()">
 
-    <div class="app-shell">
-        
-        <div id="scr-auth" class="view active">
-            <div class="auth-screen">
-                <h1 class="logo" style="font-size: 45px; margin-bottom: 10px;">MEC-BET</h1>
-                <p style="color: #222; font-size: 10px; margin-bottom: 40px;">SISTEMA DE ACESSO CRIPTOGRAFADO</p>
-                <div style="width: 100%;" id="auth-form">
-                    <input type="text" id="user-in" class="input-auth" placeholder="USUÁRIO">
-                    <input type="password" id="pass-in" class="input-auth" placeholder="SENHA">
-                    <button class="btn" style="background:var(--primary)" onclick="Core.Auth.handle()">ENTRAR NO SISTEMA</button>
-                    <p style="text-align:center; font-size:10px; margin-top:20px; color:#444">ACESSO RESTRITO A MAIORES DE 18 ANOS</p>
-                </div>
-            </div>
+    <div id="scr-auth" class="view active">
+        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px;">
+            <div class="logo" style="font-size: 50px; margin-bottom: 40px;">MEC<span style="color:#fff">-BET</span></div>
+            <input type="text" id="u-in" class="btn" style="background:#080808; border:1px solid #111; color:#fff; margin-bottom:10px; text-align:left;" placeholder="USUÁRIO">
+            <input type="password" id="p-in" class="btn" style="background:#080808; border:1px solid #111; color:#fff; margin-bottom:20px; text-align:left;" placeholder="SENHA">
+            <button class="btn btn-primary" onclick="GodMode.Auth.enter()">ACESSAR INFINITY</button>
         </div>
-
-        <div id="scr-lobby" class="view">
-            <header class="header">
-                <div class="logo">MEC-BET</div>
-                <div style="display:flex; align-items:center; gap:15px;">
-                    <span id="lvl-tag" style="border:1px solid var(--gold); color:var(--gold); padding:4px 8px; border-radius:4px; font-size:10px;">LVL 1</span>
-                    <i class="fa-solid fa-power-off" style="color:var(--danger)" onclick="Core.Auth.logout()"></i>
-                </div>
-            </header>
-            <div class="wallet">
-                <p style="font-size:10px; color:#444">BANCA DISPONÍVEL</p>
-                <h2 class="wallet-val" id="disp-saldo">R$ 0,00</h2>
-                <button class="btn btn-deposit" onclick="Core.Game.demoCash()">DEPOSITAR VIA PIX</button>
-            </div>
-            <div class="grid">
-                <div class="game-card" style="border-bottom: 3px solid var(--gold)" onclick="Core.Router.go('scr-game')">
-                    <i class="fa-solid fa-dharmachakra"></i>
-                    <span>ROLETA VIP<br><small style="color:var(--gold)">ONLINE</small></span>
-                </div>
-                <div class="game-card" style="border-bottom: 3px solid var(--blue)">
-                    <i class="fa-solid fa-plane-up"></i>
-                    <span>AVIATOR<br><small style="color:var(--blue)">SINAL ATIVO</small></span>
-                </div>
-            </div>
-        </div>
-
-        <div id="scr-game" class="view">
-            <header class="header">
-                <i class="fa-solid fa-chevron-left" onclick="Core.Router.go('scr-lobby')"></i>
-                <div class="logo">ROLETA</div>
-                <div id="disp-saldo-game" style="color:var(--green); font-weight:900;">R$ 0,00</div>
-            </header>
-            <div class="wheel-box">
-                <div id="wheel-obj" class="wheel"></div>
-                <button id="spin-btn" class="btn btn-play" onclick="Core.Game.spin()">GIRAR ROLETA (R$ 10)</button>
-                <div id="win-msg" style="margin-top:20px; font-weight:900; font-size:20px; color:var(--green)"></div>
-            </div>
-        </div>
-
-        <div id="scr-admin" class="view">
-            <header class="header">
-                <div class="logo">SHARK ADMIN</div>
-                <i class="fa-solid fa-xmark" onclick="Core.Router.go('scr-lobby')"></i>
-            </header>
-            <div style="padding: 20px;" id="admin-list">
-                </div>
-            <div style="padding: 20px;">
-                <button class="btn" style="background:var(--danger); color:#fff" onclick="Core.System.reset()">RESETAR DATABASE</button>
-            </div>
-        </div>
-
-        <nav id="navbar">
-            <div class="nav-item active" onclick="Core.Router.go('scr-lobby')"><i class="fa-solid fa-house"></i><br>HOME</div>
-            <div class="nav-item" onclick="Core.Router.go('scr-game')"><i class="fa-solid fa-gamepad"></i><br>JOGOS</div>
-            <div id="nav-shark" class="nav-item" style="display:none; color:var(--gold)" onclick="Core.Router.go('scr-admin')"><i class="fa-solid fa-crown"></i><br>SHARK</div>
-        </nav>
-
     </div>
 
+    <div id="scr-lobby" class="view">
+        <header class="header">
+            <div class="logo">MEC-BET</div>
+            <div id="vip-status" style="font-size: 10px; font-weight: 900; color: var(--gold);">BRONZE MEMBER</div>
+        </header>
+        <div class="card-main">
+            <div class="lvl-badge" id="u-lvl">LVL 1</div>
+            <p style="color:#444; font-size:11px; font-weight:900;">SALDO DISPONÍVEL</p>
+            <h1 style="font-size:45px; letter-spacing:-2px;" id="u-saldo">R$ 0,00</h1>
+            <div style="display:flex; gap:10px; margin-top:20px;">
+                <button class="btn btn-green" style="flex:1" onclick="GodMode.System.addCash()">DEPOSITAR</button>
+                <button class="btn" style="flex:1; background:#111; border:1px solid #222;" onclick="GodMode.Router.go('scr-affiliate')">AFILIADO</button>
+            </div>
+        </div>
+        <div style="padding:0 15px;">
+            <div onclick="GodMode.Router.go('scr-mines')" style="background:var(--surface); padding:25px; border-radius:20px; border:1px solid var(--border); display:flex; align-items:center; gap:20px;">
+                <div style="width:60px; height:60px; background:var(--primary); border-radius:15px; display:flex; align-items:center; justify-content:center; font-size:30px;"><i class="fa-solid fa-gem"></i></div>
+                <div><b style="font-size:16px;">MINES INFINITY</b><br><small style="color:var(--green)">SINAL 98% ASSERTIVO</small></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="scr-mines" class="view">
+        <header class="header">
+            <i class="fa-solid fa-chevron-left" onclick="GodMode.Router.go('scr-lobby')"></i>
+            <div class="logo">MINES</div>
+            <div id="m-saldo" style="color:var(--green); font-weight:900;">R$ 0,00</div>
+        </header>
+        <div style="padding:20px 20px 10px 20px;">
+            <p style="font-size:10px; color:#444; margin-bottom:10px;">CONFIGURAR APOSTA</p>
+            <div style="display:flex; gap:10px;">
+                <input type="number" id="m-bet" class="btn" style="background:#080808; border:1px solid #111; color:#fff; flex:1;" value="10">
+                <select id="m-bombs" class="btn" style="background:#080808; border:1px solid #111; color:#fff; flex:1;">
+                    <option value="3">3 BOMBAS</option>
+                    <option value="5">5 BOMBAS</option>
+                    <option value="10">10 BOMBAS</option>
+                </select>
+            </div>
+        </div>
+        <div class="mines-grid" id="m-board"></div>
+        <div style="padding:20px;">
+            <button id="m-btn" class="btn btn-primary" onclick="GodMode.Game.Mines.start()">COMEÇAR JOGO</button>
+            <button id="m-cashout" class="btn btn-green" style="display:none;" onclick="GodMode.Game.Mines.cashout()">CASHOUT</button>
+        </div>
+    </div>
+
+    <div id="scr-affiliate" class="view">
+        <header class="header"><i class="fa-solid fa-chevron-left" onclick="GodMode.Router.go('scr-lobby')"></i><div class="logo">AFILIADOS</div><div></div></header>
+        <div style="padding:20px;">
+            <div class="card-main" style="margin:0; border-left-color:var(--primary)">
+                <h3>CONVIDE E GANHE</h3>
+                <p style="font-size:12px; margin:10px 0; color:#666;">Ganhe 10% sobre cada depósito de seus amigos convidados.</p>
+                <input id="aff-link" class="btn" style="background:#000; border:1px solid #222; color:var(--gold); text-transform:none;" readonly>
+                <button class="btn btn-primary" style="margin-top:10px;" onclick="alert('LINK COPIADO!')">COPIAR LINK</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="scr-admin" class="view">
+        <header class="header"><div class="logo">SHARK CONTROL</div><i class="fa-solid fa-xmark" onclick="GodMode.Router.go('scr-lobby')"></i></header>
+        <div style="padding:20px;">
+            <div class="shark-stat">
+                <p>MODO DE GANHO (RTP)</p>
+                <select id="rtp-control" class="btn" style="background:#000; margin-top:10px;" onchange="GodMode.System.setRTP()">
+                    <option value="auto">AUTOMÁTICO (ALEATÓRIO)</option>
+                    <option value="win">FORÇAR GANHO (MARKETING)</option>
+                    <option value="lose">FORÇAR PERDA (DRENAGEM)</option>
+                </select>
+            </div>
+            <div id="admin-user-list"></div>
+        </div>
+    </div>
+
+    <nav id="navbar">
+        <div class="nav-link active" onclick="GodMode.Router.go('scr-lobby')"><i class="fa-solid fa-house"></i><br>INÍCIO</div>
+        <div class="nav-link" onclick="GodMode.Router.go('scr-mines')"><i class="fa-solid fa-gem"></i><br>MINES</div>
+        <div id="nav-shark" class="nav-link" style="display:none; color:var(--gold)" onclick="GodMode.Router.go('scr-admin')"><i class="fa-solid fa-crown"></i><br>SHARK</div>
+        <div class="nav-link" onclick="GodMode.Auth.logout()"><i class="fa-solid fa-user"></i><br>SAIR</div>
+    </nav>
+
     <script>
-        const Core = {
-            db: JSON.parse(localStorage.getItem('MEC_DATABASE')) || [],
+        const GodMode = {
+            db: JSON.parse(localStorage.getItem('MEC_GOD_DB')) || [],
             session: null,
+            rtp: 'auto',
 
             init() {
-                const user = localStorage.getItem('MEC_SESSION');
-                if(user) {
-                    this.session = this.db.find(u => u.user === user);
-                    if(this.session) this.System.startUI();
+                const s = localStorage.getItem('MEC_GOD_SESS');
+                if(s) {
+                    this.session = this.db.find(u => u.user === s);
+                    if(this.session) this.System.unlock();
                 }
+                this.rtp = localStorage.getItem('MEC_RTP') || 'auto';
+                document.getElementById('rtp-control').value = this.rtp;
             },
 
             Auth: {
-                handle() {
-                    let u = document.getElementById('user-in').value.toUpperCase();
-                    let p = document.getElementById('pass-in').value;
-                    if(!u || !p) return alert("PREENCHA OS CAMPOS!");
-
-                    let user = Core.db.find(x => x.user === u);
+                enter() {
+                    let u = document.getElementById('u-in').value.toUpperCase();
+                    let p = document.getElementById('p-in').value;
+                    if(!u || !p) return;
+                    let user = GodMode.db.find(x => x.user === u);
                     if(user) {
-                        if(user.pass === p) {
-                            this.success(u);
-                        } else { alert("SENHA INCORRETA!"); }
+                        if(user.pass === p) this.start(u);
+                        else alert("SENHA INCORRETA");
                     } else {
-                        let newUser = { user: u, pass: p, saldo: 0, lvl: 1, role: u === 'ADMIN' ? 'admin' : 'player' };
-                        Core.db.push(newUser);
-                        Core.System.save();
-                        this.success(u);
+                        let n = { user: u, pass: p, saldo: 0, lvl: 1, role: u === 'ADMIN' ? 'admin' : 'player' };
+                        GodMode.db.push(n);
+                        GodMode.System.save();
+                        this.start(u);
                     }
                 },
-                success(u) {
-                    localStorage.setItem('MEC_SESSION', u);
-                    location.reload();
-                },
-                logout() {
-                    localStorage.removeItem('MEC_SESSION');
-                    location.reload();
-                }
+                start(u) { localStorage.setItem('MEC_GOD_SESS', u); location.reload(); },
+                logout() { localStorage.removeItem('MEC_GOD_SESS'); location.reload(); }
             },
 
             Game: {
-                demoCash() {
-                    Core.session.saldo += 100;
-                    Core.System.sync();
-                    alert("DEPÓSITO DE R$ 100 REALIZADO!");
-                },
-                spin() {
-                    if(Core.session.saldo < 10) return alert("SALDO INSUFICIENTE!");
-                    Core.session.saldo -= 10;
-                    Core.System.sync();
-
-                    const btn = document.getElementById('spin-btn');
-                    const wheel = document.getElementById('wheel-obj');
-                    btn.disabled = true;
-                    
-                    let deg = Math.floor(Math.random() * 3600) + 7200;
-                    wheel.style.transform = `rotate(${deg}deg)`;
-
-                    setTimeout(() => {
-                        let win = Math.random() > 0.6 ? 25 : 0;
-                        Core.session.saldo += win;
-                        if(win > 0) Core.session.lvl += 1;
+                Mines: {
+                    playing: false,
+                    bombs: [],
+                    multiplier: 1,
+                    bet: 0,
+                    start() {
+                        this.bet = parseFloat(document.getElementById('m-bet').value);
+                        if(GodMode.session.saldo < this.bet) return alert("SALDO INSUFICIENTE");
                         
-                        document.getElementById('win-msg').innerText = win > 0 ? `GANHOU R$ ${win}` : "PERDEU!";
-                        btn.disabled = false;
-                        Core.System.sync();
-                    }, 4000);
+                        GodMode.session.saldo -= this.bet;
+                        GodMode.System.sync();
+                        
+                        this.playing = true;
+                        this.multiplier = 1;
+                        let bCount = parseInt(document.getElementById('m-bombs').value);
+                        
+                        // LÓGICA DE RTP (SHARK CONTROL)
+                        this.bombs = [];
+                        while(this.bombs.length < bCount) {
+                            let r = Math.floor(Math.random() * 25);
+                            if(!this.bombs.includes(r)) this.bombs.push(r);
+                        }
+
+                        document.getElementById('m-btn').style.display = 'none';
+                        document.getElementById('m-cashout').style.display = 'block';
+                        document.getElementById('m-cashout').innerText = `CASHOUT (R$ 0.00)`;
+                        this.render();
+                    },
+                    render() {
+                        const board = document.getElementById('m-board');
+                        board.innerHTML = '';
+                        for(let i=0; i<25; i++) {
+                            let t = document.createElement('div');
+                            t.className = 'tile';
+                            t.onclick = () => this.reveal(t, i);
+                            board.appendChild(t);
+                        }
+                    },
+                    reveal(t, i) {
+                        if(!this.playing || t.classList.contains('open')) return;
+                        t.classList.add('open');
+                        
+                        let isBomb = this.bombs.includes(i);
+
+                        // INTERVENÇÃO SHARK
+                        if(GodMode.rtp === 'win') isBomb = false;
+                        if(GodMode.rtp === 'lose' && Math.random() > 0.3) isBomb = true;
+
+                        if(isBomb) {
+                            t.innerHTML = '💣'; t.style.color = 'var(--danger)';
+                            this.end(false);
+                        } else {
+                            t.innerHTML = '💎'; t.style.color = 'var(--green)';
+                            this.multiplier += 0.4;
+                            let possible = (this.bet * this.multiplier).toFixed(2);
+                            document.getElementById('m-cashout').innerText = `CASHOUT (R$ ${possible})`;
+                        }
+                    },
+                    cashout() {
+                        let win = this.bet * this.multiplier;
+                        GodMode.session.saldo += win;
+                        this.end(true);
+                    },
+                    end(win) {
+                        this.playing = false;
+                        document.getElementById('m-btn').style.display = 'block';
+                        document.getElementById('m-cashout').style.display = 'none';
+                        if(win) GodMode.session.lvl += 1;
+                        GodMode.System.sync();
+                    }
                 }
             },
 
             System: {
-                startUI() {
+                unlock() {
                     document.getElementById('scr-auth').classList.remove('active');
                     document.getElementById('scr-lobby').classList.add('active');
                     document.getElementById('navbar').style.display = 'flex';
-                    if(Core.session.role === 'admin') {
+                    document.getElementById('aff-link').value = `mecbet.io/reg?ref=${GodMode.session.user.toLowerCase()}`;
+                    if(GodMode.session.role === 'admin') {
                         document.getElementById('nav-shark').style.display = 'block';
                         this.loadAdmin();
                     }
                     this.sync();
+                    GodMode.Game.Mines.render();
                 },
                 sync() {
-                    document.getElementById('disp-saldo').innerText = "R$ " + Core.session.saldo.toFixed(2);
-                    document.getElementById('disp-saldo-game').innerText = "R$ " + Core.session.saldo.toFixed(2);
-                    document.getElementById('lvl-tag').innerText = "LVL " + Core.session.lvl;
+                    document.getElementById('u-saldo').innerText = "R$ " + GodMode.session.saldo.toFixed(2);
+                    document.getElementById('m-saldo').innerText = "R$ " + GodMode.session.saldo.toFixed(2);
+                    document.getElementById('u-lvl').innerText = "LVL " + GodMode.session.lvl;
+                    
+                    if(GodMode.session.lvl > 10) {
+                        document.getElementById('vip-status').innerText = "GOLD MEMBER";
+                        document.getElementById('vip-status').style.color = "var(--gold)";
+                    }
                     this.save();
                 },
-                save() { localStorage.setItem('MEC_DATABASE', JSON.stringify(Core.db)); },
+                save() { localStorage.setItem('MEC_GOD_DB', JSON.stringify(GodMode.db)); },
+                addCash() { GodMode.session.saldo += 100; this.sync(); },
+                setRTP() {
+                    GodMode.rtp = document.getElementById('rtp-control').value;
+                    localStorage.setItem('MEC_RTP', GodMode.rtp);
+                },
                 loadAdmin() {
-                    const list = document.getElementById('admin-list');
-                    list.innerHTML = Core.db.map(u => `
-                        <div class="admin-row">
-                            <div><b>${u.user}</b><br><small>R$ ${u.saldo}</small></div>
-                            <button onclick="Core.System.addSaldo('${u.user}')" style="background:var(--green); border:none; padding:5px 10px; border-radius:5px; font-weight:900;">+50</button>
+                    const list = document.getElementById('admin-user-list');
+                    list.innerHTML = GodMode.db.map(u => `
+                        <div class="shark-stat" style="display:flex; justify-content:space-between; align-items:center;">
+                            <div><b>${u.user}</b><br><small>SALDO: R$ ${u.saldo}</small></div>
+                            <button onclick="GodMode.System.gift('${u.user}')" class="btn" style="width:auto; padding:5px 10px; background:var(--green); font-size:10px;">+50</button>
                         </div>
                     `).join('');
                 },
-                addSaldo(uName) {
-                    let user = Core.db.find(x => x.user === uName);
-                    user.saldo += 50;
-                    this.save();
-                    this.loadAdmin();
-                    if(Core.session.user === uName) this.sync();
-                },
-                reset() { if(confirm("RESETA TUDO?")) { localStorage.clear(); location.reload(); } }
+                gift(name) {
+                    let u = GodMode.db.find(x => x.user === name);
+                    u.saldo += 50; this.save(); this.loadAdmin();
+                    if(GodMode.session.user === name) this.sync();
+                }
             },
 
             Router: {
                 go(id) {
                     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
                     document.getElementById(id).classList.add('active');
+                    document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
                 }
             }
         };
