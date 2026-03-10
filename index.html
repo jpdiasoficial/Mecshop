@@ -3,95 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MEC-BET | ELITE SYSTEM</title>
+    <title>MEC-BET | ENTERPRISE OS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Orbitron:wght@700&display=swap" rel="stylesheet">
     <style>
-        :root { --green: #00ff41; --gold: #d4af37; --bg: #000; --card: #0d0d0d; --primary: #ff5e00; --danger: #ff3b30; }
+        :root { --green: #00ff41; --gold: #d4af37; --bg: #000; --card: #0d0d0d; --primary: #ff5e00; --danger: #ff3b30; --blue: #007aff; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; text-transform: uppercase; }
         body { background: var(--bg); color: #fff; height: 100vh; overflow: hidden; }
 
-        /* NAVEGAÇÃO E TELAS */
+        /* UTILITÁRIOS */
         .screen { display: none; height: 100vh; overflow-y: auto; padding-bottom: 90px; }
         .active { display: block !important; }
+        .btn { border: none; border-radius: 8px; font-weight: 900; cursor: pointer; transition: 0.3s; }
+        input { width: 100%; background: #080808; border: 1px solid #1a1a1a; padding: 16px; border-radius: 8px; color: #fff; margin-bottom: 12px; }
 
-        /* LOGIN / CADASTRO (IGUAL IMAGEM 4511/4515) */
-        .auth-container { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 25px; }
-        .auth-box { width: 100%; max-width: 400px; background: var(--card); border-radius: 15px; padding: 30px; border: 1px solid #1a1a1a; }
-        input { width: 100%; background: #000; border: 1px solid #222; padding: 16px; border-radius: 8px; color: #fff; margin-bottom: 12px; font-size: 12px; }
-        .btn-auth { width: 100%; background: var(--primary); color: #fff; border: none; padding: 18px; border-radius: 8px; font-weight: 900; cursor: pointer; margin-top: 10px; }
-
-        /* HEADER (IGUAL IMAGEM 4509) */
-        header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #111; background: #000; }
-        .logo-mec { font-weight: 900; color: var(--gold); font-size: 18px; letter-spacing: 2px; }
-        .lvl-tag { font-size: 10px; color: var(--gold); border: 1px solid var(--gold); padding: 2px 6px; border-radius: 4px; }
-
-        /* CARD SALDO (IGUAL IMAGEM 4509) */
-        .card-saldo { background: var(--card); border: 1px solid #1a1a1a; border-radius: 15px; padding: 25px; margin: 15px; border-bottom: 2px solid var(--green); }
-        .label-pix { color: #555; font-size: 9px; font-weight: 800; margin-bottom: 8px; }
-        .val-saldo { font-size: 32px; font-weight: 900; margin-bottom: 20px; }
-        .grid-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .btn-green { background: var(--green); color: #000; border: none; padding: 15px; border-radius: 8px; font-weight: 900; cursor: pointer; }
-        .btn-dark { background: #1a1a1a; color: #fff; border: 1px solid #333; padding: 15px; border-radius: 8px; font-weight: 900; cursor: pointer; }
-
-        /* GRID JOGOS (IGUAL IMAGEM 4513) */
+        /* --- INTERFACE DO JOGADOR (DESIGN MEC-BET) --- */
+        header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #111; background: #000; position: sticky; top: 0; z-index: 100; }
+        .logo-mec { font-family: 'Orbitron'; font-weight: 900; color: var(--gold); font-size: 18px; }
+        
+        .card-saldo { background: var(--card); border: 1px solid #1a1a1a; border-radius: 15px; padding: 25px; margin: 15px; border-bottom: 3px solid var(--green); }
+        .main-balance { font-size: 35px; font-weight: 900; letter-spacing: -1px; margin: 10px 0; }
+        
         .grid-jogos { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 15px; }
-        .game-card { background: var(--card); border: 1px solid #1a1a1a; height: 140px; border-radius: 12px; display: flex; align-items: flex-end; padding: 12px; position: relative; border-bottom: 3px solid var(--gold); }
-        .game-card span { font-size: 9px; font-weight: 900; }
+        .game-card { background: var(--card); border: 1px solid #1a1a1a; height: 150px; border-radius: 12px; display: flex; align-items: flex-end; padding: 15px; border-bottom: 4px solid var(--gold); position: relative; transition: 0.3s; }
+        .game-card:active { transform: scale(0.95); }
 
-        /* PAINEL ADMIN SHARK (IGUAL IMAGEM 4507) */
-        .admin-stat { background: #0a0a0a; border: 1px solid #1a1a1a; border-left: 4px solid var(--gold); padding: 15px; border-radius: 5px; margin: 15px; }
-        .admin-val { font-size: 20px; font-weight: 900; margin-top: 5px; }
+        /* --- PAINEL SHARK ADMIN (O LADO OCULTO) --- */
+        .admin-sidebar { background: #050505; border-bottom: 2px solid var(--gold); padding: 20px; text-align: center; }
+        .stat-box { background: #0d0d0d; border-left: 4px solid var(--gold); padding: 20px; margin: 15px; border-radius: 5px; }
+        .stat-label { font-size: 9px; color: #555; font-weight: 900; }
+        .stat-value { font-size: 24px; font-weight: 900; margin-top: 5px; color: #fff; }
 
-        /* ROLETA (IGUAL IMAGEM 4518) */
-        .wheel-box { width: 260px; height: 260px; border: 8px solid #1a1a1a; border-radius: 50%; margin: 30px auto; background: conic-gradient(var(--primary) 0% 12.5%, #000 12.5% 25%, var(--primary) 25% 37.5%, #000 37.5% 50%, var(--primary) 50% 62.5%, #000 62.5% 75%, var(--primary) 75% 87.5%, #000 87.5% 100%); transition: 4s cubic-bezier(0.1, 0, 0.1, 1); }
+        /* --- ROLETA ELITE --- */
+        .wheel-area { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; }
+        .wheel { width: 280px; height: 280px; border: 10px solid #1a1a1a; border-radius: 50%; position: relative; background: conic-gradient(var(--primary) 0% 12.5%, #000 12.5% 25%, var(--primary) 25% 37.5%, #000 37.5% 50%, var(--primary) 50% 62.5%, #000 62.5% 75%, var(--primary) 75% 87.5%, #000 87.5% 100%); transition: 4s cubic-bezier(0.1, 0, 0.1, 1); box-shadow: 0 0 50px rgba(255, 94, 0, 0.2); }
+        .wheel-pointer { width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 30px solid var(--gold); position: absolute; top: -15px; left: 50%; transform: translateX(-50%); z-index: 10; }
 
-        /* NAV FIXA */
+        /* BARRA DE NAVEGAÇÃO */
         nav { position: fixed; bottom: 0; width: 100%; background: #000; border-top: 1px solid #111; display: none; justify-content: space-around; padding: 15px; z-index: 1000; }
         .nav-item { color: #444; font-size: 9px; font-weight: 900; text-align: center; cursor: pointer; }
         .nav-item.active { color: var(--gold); }
-        .nav-item i { font-size: 18px; margin-bottom: 5px; display: block; }
+        .nav-item i { font-size: 20px; margin-bottom: 5px; display: block; }
     </style>
 </head>
 <body onload="checkSessao()">
 
-    <div id="scr-login" class="screen active">
-        <div class="auth-container">
-            <h1 style="font-size: 32px; margin-bottom: 5px;">ACESSO</h1>
-            <p style="color: #555; margin-bottom: 30px; font-size: 12px;">ENTRE NA ELITE DAS APOSTAS.</p>
-            <div class="auth-box">
-                <input type="text" id="l-user" placeholder="USUÁRIO OU CPF">
-                <input type="password" id="l-pass" placeholder="PALAVRA-PASSE">
-                <button class="btn-auth" onclick="entrar()">ENTRAR NO SISTEMA</button>
-                <div style="display:flex; justify-content:space-between; margin-top:20px; font-size:10px;">
-                    <span style="color:var(--primary); cursor:pointer;" onclick="irPara('scr-cadastro')">CRIAR CONTA</span>
-                    <span style="color:#555; cursor:pointer;" onclick="irPara('scr-recuperar')">ESQUECI A SENHA</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="scr-cadastro" class="screen">
-        <div class="auth-container">
-            <h1 style="font-size: 32px; margin-bottom: 5px;">CADASTRO</h1>
-            <div class="auth-box">
-                <input type="text" id="r-nome" placeholder="NOME COMPLETO">
-                <input type="text" id="r-user" placeholder="NOME DE USUÁRIO">
-                <input type="text" placeholder="CPF (PARA SAQUES)">
-                <input type="password" id="r-pass" placeholder="CRIE UMA SENHA">
-                <button class="btn-auth" onclick="registrar()">FINALIZAR CADASTRO</button>
-                <button class="btn-auth" style="background:#1a1a1a; margin-top:10px;" onclick="irPara('scr-login')">VOLTAR</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="scr-recuperar" class="screen">
-        <div class="auth-container">
-            <h1 style="font-size: 24px; margin-bottom: 5px;">RECUPERAR</h1>
-            <div class="auth-box">
-                <p style="font-size: 10px; color: #555; margin-bottom: 15px;">INSIRA SEU E-MAIL OU USUÁRIO PARA RECEBER O LINK.</p>
-                <input type="text" placeholder="E-MAIL CADASTRADO">
-                <button class="btn-auth" onclick="alert('LINK ENVIADO!'); irPara('scr-login')">ENVIAR INSTRUÇÕES</button>
+    <div id="scr-auth" class="screen active">
+        <div style="padding: 40px 25px; text-align: center; margin-top: 50px;">
+            <h1 id="auth-title" style="font-size: 35px; font-family: 'Orbitron';">SISTEMA MEC</h1>
+            <p id="auth-desc" style="color: #444; font-size: 11px; margin: 15px 0 40px;">AGUARDANDO AUTENTICAÇÃO...</p>
+            
+            <input type="text" id="user-field" placeholder="USUÁRIO">
+            <input type="password" id="pass-field" placeholder="SENHA">
+            <button class="btn" style="width: 100%; padding: 20px; background: var(--primary); color: #fff;" onclick="engine.login()">ACESSAR PLATAFORMA</button>
+            
+            <div id="auth-footer" style="margin-top: 25px; display: flex; justify-content: space-between; font-size: 10px;">
+                <span onclick="engine.switchAuth(true)" style="color: var(--gold);">REGISTRAR CONTA</span>
+                <span onclick="alert('CONTATE O SUPORTE VIA TELEGRAM')" style="color: #444;">ESQUECI A SENHA</span>
             </div>
         </div>
     </div>
@@ -99,122 +67,190 @@
     <div id="scr-lobby" class="screen">
         <header>
             <div class="logo-mec">MEC-BET</div>
-            <div class="lvl-tag">LVL: 45 <span id="u-tag">JP</span></div>
+            <div style="text-align: right;">
+                <div id="u-tag" style="font-size: 10px; color: var(--gold); border: 1px solid var(--gold); padding: 2px 8px; border-radius: 40px;">PLAYER</div>
+            </div>
         </header>
+
         <div class="card-saldo">
-            <div class="label-pix">SEU SALDO TOTAL (PIX)</div>
-            <div class="val-saldo" id="main-saldo">R$ 0,00</div>
-            <div style="color: var(--green); font-size: 8px; margin-bottom: 15px;">● SISTEMA CONECTADO</div>
-            <div class="grid-btns">
-                <button class="btn-green">DEPOSITAR</button>
-                <button class="btn-dark">SACAR</button>
+            <div style="font-size: 9px; color: #555; font-weight: 900;">BANCA DISPONÍVEL</div>
+            <div class="main-balance" id="display-saldo">R$ 0,00</div>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn" style="flex: 2; background: var(--green); padding: 15px; color: #000;">DEPOSITAR PIX</button>
+                <button class="btn" style="flex: 1; background: #111; border: 1px solid #222; color: #fff;">SACAR</button>
             </div>
         </div>
-        <div style="padding: 0 15px;"><p style="font-size: 10px; color: #555;">JOGOS EM ALTA</p></div>
+
         <div class="grid-jogos">
-            <div class="game-card" style="border-bottom-color: var(--green);" onclick="irPara('scr-roleta')"><span>FORTUNE TIGER</span></div>
-            <div class="game-card"><span>AVIATOR LIVE</span></div>
-            <div class="game-card" style="border-bottom-color: #007aff;"><span>ROULETTE VIP</span></div>
-            <div class="game-card"><span>MINES SHARK</span></div>
+            <div class="game-card" onclick="engine.irPara('scr-roleta')" style="border-bottom-color: var(--primary);">
+                <i class="fa-solid fa-dharmachakra" style="position: absolute; top: 15px; right: 15px; font-size: 30px; color: #1a1a1a;"></i>
+                <span>ROLETA ELITE<br><small style="color:var(--primary)">ATIVO AGORA</small></span>
+            </div>
+            <div class="game-card" style="border-bottom-color: var(--blue);"><span>AVIATOR SHARK</span></div>
+            <div class="game-card"><span>MINES MEC</span></div>
+            <div class="game-card"><span>TIGER FORTUNE</span></div>
         </div>
     </div>
 
     <div id="scr-roleta" class="screen">
-        <header><div class="logo-mec" style="color:var(--primary)">SORTEIO ELITE</div><i class="fa-solid fa-xmark" onclick="irPara('scr-lobby')"></i></header>
-        <div style="text-align: center; padding: 20px;">
-            <div id="wheel" class="wheel-box"></div>
-            <button class="btn-auth" id="btn-spin" onclick="girar()">GIRAR AGORA</button>
+        <header><div class="logo-mec">GIRAR & GANHAR</div><i class="fa-solid fa-xmark" onclick="engine.irPara('scr-lobby')"></i></header>
+        <div class="wheel-area">
+            <div class="wheel" id="main-wheel"><div class="wheel-pointer"></div></div>
+            <button id="btn-spin" class="btn" style="margin-top: 50px; width: 100%; padding: 20px; background: var(--primary); color: #fff;" onclick="engine.playRoleta()">EXECUTAR GIRO DIÁRIO</button>
+            <p style="margin-top: 20px; font-size: 10px; color: #444;">PROBABILIDADE DE GANHO: 88%</p>
         </div>
     </div>
 
     <div id="scr-admin" class="screen">
-        <header><div class="logo-mec">SHARK-BET ADMIN</div><div style="color:var(--green); font-size:8px;">● LIVE</div></header>
-        <div class="admin-stat">
-            <div class="label-pix">GGR TOTAL (ENTRADAS)</div>
-            <div class="admin-val">R$ 154.200,00</div>
+        <div class="admin-sidebar">
+            <div class="logo-mec" style="color: var(--gold); font-size: 24px;">SHARK CONTROL</div>
+            <p style="font-size: 8px; color: var(--green); margin-top: 5px;">MODO ADMINISTRADOR MASTER ATIVO</p>
         </div>
-        <div class="admin-stat" style="border-left-color: var(--danger);">
-            <div class="label-pix">PAYOUT TOTAL (SAÍDAS)</div>
-            <div class="admin-val" style="color:var(--danger)">R$ 82.150,00</div>
+        
+        <div class="stat-box">
+            <div class="stat-label">LUCRO LÍQUIDO (CASA)</div>
+            <div class="stat-value" id="adm-lucro">R$ 72.050,00</div>
         </div>
-        <div style="background:rgba(255,59,48,0.1); border:1px solid var(--danger); margin:15px; padding:15px; border-radius:8px; font-size:9px; color:var(--danger);">
-            ALERTA: ATIVIDADE SUSPEITA DETECTADA NO GATEWAY.
+
+        <div style="padding: 15px;">
+            <p style="font-size: 10px; color: #333; margin-bottom: 10px;">USUÁRIOS ONLINE AGORA</p>
+            <div id="adm-user-list" style="background: #080808; border-radius: 8px; padding: 10px;">
+                </div>
         </div>
-        <button class="btn-auth" style="background:var(--danger); width: calc(100% - 30px); margin: 15px;" onclick="location.reload()">CUT-OFF (DESLIGAR)</button>
+
+        <div style="padding: 15px;">
+            <button class="btn" style="width: 100%; padding: 15px; background: var(--danger); color: #fff;" onclick="engine.killSwitch()">DESLIGAR PLATAFORMA (OFFLINE)</button>
+        </div>
     </div>
 
-    <nav id="main-nav">
-        <div class="nav-item active" onclick="irPara('scr-lobby')"><i class="fa-solid fa-house"></i>INÍCIO</div>
-        <div class="nav-item" onclick="irPara('scr-roleta')"><i class="fa-solid fa-dharmachakra"></i>JOGOS</div>
-        <div class="nav-item" onclick="alert('SUPORTE INDISPONÍVEL')"><i class="fa-solid fa-headset"></i>SUPORTE</div>
-        <div id="adm-btn" class="nav-item" style="display:none;" onclick="irPara('scr-admin')"><i class="fa-solid fa-shield-halved"></i>SHARK</div>
+    <nav id="navbar">
+        <div class="nav-item active" onclick="engine.irPara('scr-lobby')"><i class="fa-solid fa-house"></i>INÍCIO</div>
+        <div class="nav-item" onclick="engine.irPara('scr-roleta')"><i class="fa-solid fa-gamepad"></i>JOGOS</div>
+        <div class="nav-item" onclick="alert('SUPORTE OPERACIONAL 24H')"><i class="fa-solid fa-headset"></i>SUPORTE</div>
+        <div id="nav-adm" class="nav-item" onclick="engine.irPara('scr-admin')" style="display:none; color: var(--gold);"><i class="fa-solid fa-crown"></i>ADMIN</div>
     </nav>
 
     <script>
-        let banca = parseFloat(localStorage.getItem('banca')) || 0.00;
-        let user = JSON.parse(localStorage.getItem('user')) || null;
+        const engine = {
+            // DADOS DO SISTEMA
+            state: {
+                user: JSON.parse(localStorage.getItem('sys_user')) || null,
+                saldo: parseFloat(localStorage.getItem('sys_saldo')) || 0.00,
+                isRegister: false
+            },
 
-        function checkSessao() {
-            if(user) {
-                document.getElementById('u-tag').innerText = user.nome.substring(0,2).toUpperCase();
-                document.getElementById('main-nav').style.display = 'flex';
-                if(user.role === 'admin') document.getElementById('adm-btn').style.display = 'block';
-                updateUI();
-                irPara('scr-lobby');
+            // INICIALIZAÇÃO BLINDADA
+            init() {
+                if(this.state.user) {
+                    this.renderSessao();
+                    this.irPara('scr-lobby');
+                }
+            },
+
+            // LÓGICA DE LOGIN COM DISTINÇÃO DE CARGO
+            login() {
+                const u = document.getElementById('user-field').value;
+                const p = document.getElementById('pass-field').value;
+
+                if(!u || !p) return alert("AUTENTICAÇÃO NEGADA: CAMPOS VAZIOS");
+
+                // SEPARAÇÃO INTELIGENTE
+                let role = "PLAYER";
+                if(u.toLowerCase() === 'admin' && p === '9910') {
+                    role = "ADMIN";
+                }
+
+                this.state.user = { nome: u, cargo: role };
+                localStorage.setItem('sys_user', JSON.stringify(this.state.user));
+                
+                location.reload(); // Recarrega para aplicar as travas de segurança
+            },
+
+            renderSessao() {
+                document.getElementById('navbar').style.display = 'flex';
+                document.getElementById('u-tag').innerText = this.state.user.nome.toUpperCase();
+                
+                // TRAVA DE ADMIN: SÓ APARECE SE O CARGO FOR CORRETO
+                if(this.state.user.cargo === "ADMIN") {
+                    document.getElementById('nav-adm').style.display = 'block';
+                    document.getElementById('u-tag').style.borderColor = 'var(--primary)';
+                    document.getElementById('u-tag').style.color = 'var(--primary)';
+                    this.renderAdminData();
+                }
+                this.updateSaldo();
+            },
+
+            // MOTOR DA ROLETA COM GANHO REAL
+            playRoleta() {
+                const btn = document.getElementById('btn-spin');
+                const wheel = document.getElementById('main-wheel');
+                
+                btn.disabled = true;
+                btn.innerText = "SORTEANDO...";
+
+                const ganho = (Math.random() * 40 + 10).toFixed(2); // Ganha entre 10 e 50
+                const deg = Math.floor(Math.random() * 3600) + 7200;
+                
+                wheel.style.transform = `rotate(${deg}deg)`;
+
+                setTimeout(() => {
+                    this.state.saldo += parseFloat(ganho);
+                    localStorage.setItem('sys_saldo', this.state.saldo);
+                    this.updateSaldo();
+                    
+                    alert(`SUCESSO! VOCÊ GANHOU R$ ${ganho}`);
+                    btn.disabled = false;
+                    btn.innerText = "EXECUTAR GIRO DIÁRIO";
+                    this.irPara('scr-lobby');
+                }, 4000);
+            },
+
+            updateSaldo() {
+                const f = "R$ " + this.state.saldo.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                document.getElementById('display-saldo').innerText = f;
+            },
+
+            renderAdminData() {
+                const list = document.getElementById('adm-user-list');
+                const users = [
+                    {n: "JP_ELITE", s: 450.00},
+                    {n: "MARCOS_77", s: 12.50},
+                    {n: this.state.user.nome, s: this.state.saldo}
+                ];
+                
+                list.innerHTML = users.map(u => `
+                    <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #111; font-size:10px;">
+                        <span>${u.n}</span>
+                        <span style="color:var(--green)">R$ ${u.s.toFixed(2)}</span>
+                    </div>
+                `).join('');
+            },
+
+            // CONTROLE DE TELAS
+            irPara(id) {
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                document.getElementById(id).classList.add('active');
+                
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                // Ajuste de ícone ativo
+                if(id === 'scr-lobby') document.querySelectorAll('.nav-item')[0].classList.add('active');
+                if(id === 'scr-roleta') document.querySelectorAll('.nav-item')[1].classList.add('active');
+                if(id === 'scr-admin') document.querySelectorAll('.nav-item')[3].classList.add('active');
+            },
+
+            switchAuth(reg) {
+                document.getElementById('auth-title').innerText = reg ? "NOVO CADASTRO" : "SISTEMA MEC";
+                document.getElementById('auth-footer').innerHTML = reg ? `<span onclick="engine.switchAuth(false)" style="color:var(--gold)">VOLTAR AO LOGIN</span>` : `<span onclick="engine.switchAuth(true)" style="color:var(--gold)">REGISTRAR CONTA</span><span style="color:#444">ESQUECI A SENHA</span>`;
+            },
+
+            killSwitch() {
+                if(confirm("DESEJA REALMENTE DERRUBAR O SERVIDOR?")) {
+                    document.body.innerHTML = "<div style='display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;'><h1 style='color:red;font-family:Orbitron'>SYSTEM OFFLINE</h1><button onclick='location.reload()' style='margin-top:20px;padding:10px;background:#111;color:#fff;border:none;'>RESTART</button></div>";
+                }
             }
-        }
+        };
 
-        function irPara(id) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            // Lógica simples de active na nav
-            if(id === 'scr-lobby') document.querySelectorAll('.nav-item')[0].classList.add('active');
-            if(id === 'scr-roleta') document.querySelectorAll('.nav-item')[1].classList.add('active');
-        }
-
-        function entrar() {
-            const u = document.getElementById('l-user').value;
-            const p = document.getElementById('l-pass').value;
-            if(!u || !p) return alert("PREENCHA TUDO");
-
-            let role = (u.toLowerCase() === 'admin' && p === '9910') ? 'admin' : 'user';
-            user = { nome: u, role: role };
-            localStorage.setItem('user', JSON.stringify(user));
-            location.reload();
-        }
-
-        function registrar() {
-            const u = document.getElementById('r-user').value;
-            if(!u) return alert("ERRO NO CADASTRO");
-            user = { nome: u, role: 'user' };
-            localStorage.setItem('user', JSON.stringify(user));
-            alert("CONTA CRIADA!");
-            location.reload();
-        }
-
-        function girar() {
-            const btn = document.getElementById('btn-spin');
-            const wheel = document.getElementById('wheel');
-            btn.disabled = true;
-            const win = (Math.random() * 100).toFixed(2);
-            const deg = Math.floor(Math.random() * 3600) + 7200;
-            wheel.style.transform = `rotate(${deg}deg)`;
-
-            setTimeout(() => {
-                banca += parseFloat(win);
-                localStorage.setItem('banca', banca);
-                updateUI();
-                alert("GANHOU R$ " + win);
-                btn.disabled = false;
-                irPara('scr-lobby');
-            }, 4000);
-        }
-
-        function updateUI() {
-            const f = "R$ " + banca.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-            document.getElementById('main-saldo').innerText = f;
-        }
+        window.checkSessao = () => engine.init();
     </script>
 </body>
 </html>
