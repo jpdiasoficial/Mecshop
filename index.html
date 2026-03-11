@@ -3,217 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MEC-BANK | SHARK BLACK EDITION</title>
+    <title>MEC-BANK | SHARK EDITION</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Orbitron:wght@900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --p: #00ffa3; --bg: #000; --c: #0a0a0a; --b: #1a1a1a; --t: #fff; }
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: var(--t); height: 100vh; overflow: hidden; position: fixed; width: 100%; }
+        :root { --p: #00ffa3; --bg: #000; --c: #0d0d0d; --b: #1a1a1a; --t: #fff; }
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Plus Jakarta Sans', sans-serif; }
+        body { background: var(--bg); color: var(--t); overflow: hidden; }
 
-        /* HEADER PREMIUM */
-        header { height: 80px; background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid var(--b); display: none; justify-content: space-between; align-items: center; padding: 0 25px; position: fixed; top: 0; width: 100%; z-index: 2000; }
-        .rank-tag { font-size: 9px; color: var(--p); border: 1px solid var(--p); padding: 2px 8px; border-radius: 5px; font-weight: 900; }
+        /* HEADER */
+        header { height: 80px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; border-bottom: 1px solid var(--b); position: fixed; top: 0; width: 100%; z-index: 100; background: black; }
+        .badge { background: rgba(0,255,163,0.1); color: var(--p); border: 1px solid var(--p); padding: 5px 12px; border-radius: 10px; font-weight: 800; font-size: 14px; }
 
-        /* SISTEMA DE TELAS */
-        .view { position: absolute; inset: 0; display: none; flex-direction: column; padding: 100px 20px 110px 20px; overflow-y: auto; opacity: 0; transform: scale(0.98); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .view.active { display: flex; opacity: 1; transform: scale(1); }
+        /* VIEWS */
+        .view { position: absolute; inset: 0; display: none; padding: 100px 20px; overflow-y: auto; }
+        .view.active { display: block; }
 
-        /* CARDS ESTILO APPLE */
-        .card { background: var(--c); border: 1px solid var(--b); border-radius: 28px; padding: 25px; margin-bottom: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-        .card-p { background: linear-gradient(135deg, #111 0%, #000 100%); border: 1px solid #222; position: relative; overflow: hidden; }
-        .card-p::before { content: ''; position: absolute; top: 0; right: 0; width: 60px; height: 60px; background: var(--p); filter: blur(50px); opacity: 0.1; }
-        .blur { filter: blur(15px); opacity: 0.3; }
+        /* CARDS */
+        .card { background: var(--c); border: 1px solid var(--b); border-radius: 24px; padding: 25px; margin-bottom: 20px; }
+        .blur-value { filter: blur(8px); transition: 0.3s; }
+        .eye-btn { cursor: pointer; color: #444; font-size: 18px; transition: 0.2s; }
+        .eye-btn:active { transform: scale(0.9); }
 
-        /* BOTÕES DE ELITE */
-        .btn { border: none; border-radius: 18px; font-weight: 800; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-main { background: var(--p); color: #000; width: 100%; padding: 20px; font-size: 15px; text-transform: uppercase; box-shadow: 0 10px 25px rgba(0,255,163,0.2); }
-        .btn-main:active { transform: scale(0.95); }
+        /* GRID OPS */
+        .ops { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 25px 0; }
+        .op { text-align: center; }
+        .op-i { width: 60px; height: 60px; background: var(--c); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: var(--p); margin: 0 auto 8px; border: 1px solid var(--b); }
 
-        /* GRID DE OPERAÇÕES */
-        .ops { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 30px 0; }
-        .op { display: flex; flex-direction: column; align-items: center; gap: 10px; }
-        .op-i { width: 65px; height: 65px; background: var(--c); border: 1px solid var(--b); border-radius: 22px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: var(--p); }
-
-        /* NAVEGAÇÃO FLUTUANTE */
-        nav { position: fixed; bottom: 25px; left: 5%; width: 90%; height: 75px; background: rgba(15,15,15,0.85); backdrop-filter: blur(25px); border-radius: 25px; display: none; justify-content: space-around; align-items: center; border: 1px solid var(--b); z-index: 2000; }
-        .nav-l { color: #444; text-decoration: none; text-align: center; font-size: 10px; font-weight: 700; }
+        /* NAV */
+        nav { position: fixed; bottom: 0; width: 100%; height: 80px; background: #080808; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid var(--b); }
+        .nav-l { color: #555; text-decoration: none; text-align: center; font-size: 11px; font-weight: 600; cursor: pointer; }
         .nav-l.active { color: var(--p); }
-        .nav-l i { font-size: 22px; display: block; margin-bottom: 4px; }
-
-        /* LOGIN */
-        input { width: 100%; padding: 22px; background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 20px; color: #fff; margin-bottom: 15px; text-align: center; font-size: 16px; }
-        input:focus { border-color: var(--p); outline: none; }
+        .nav-l i { font-size: 22px; margin-bottom: 4px; display: block; }
     </style>
 </head>
-<body onload="Shark.init()">
+<body>
 
-    <header id="h">
-        <div style="display:flex; align-items:center; gap:12px;">
-            <div style="width:45px; height:45px; background:#111; border-radius:15px; border:1px solid var(--b); display:flex; align-items:center; justify-content:center; color:var(--p); font-weight:900;" id="av">J</div>
+    <header>
+        <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:40px; height:40px; background:#111; border-radius:12px; display:flex; align-items:center; justify-content:center; border:1px solid var(--b); font-weight:900; color:var(--p);">A</div>
             <div>
-                <div style="font-size:13px; font-weight:800;" id="un">USUÁRIO</div>
-                <div class="rank-tag" id="rk">RANK: GOLD</div>
+                <div style="font-size:12px; font-weight:800;">ADMIN</div>
+                <div style="font-size:9px; color:var(--p); font-weight:800;">RANK: PLATINUM SHARK</div>
             </div>
         </div>
-        <div style="background:rgba(0,255,163,0.1); padding:10px 18px; border-radius:15px; border:1px solid var(--p); color:var(--p); font-weight:800; font-size:14px;">R$ <span id="ub">0,00</span></div>
+        <div class="badge">R$ <span id="top-balance" class="value-text">1.450.000</span></div>
     </header>
 
-    <div id="view-auth" class="view active" style="justify-content:center; text-align:center; padding:30px;">
-        <div style="font-family:'Orbitron'; color:var(--p); font-size:45px; letter-spacing:5px; margin-bottom:10px;">MEC-BANK</div>
-        <div style="color:#333; font-size:10px; letter-spacing:8px; font-weight:900; margin-bottom:50px;">SHARK BLACK EDITION</div>
+    <div id="home" class="view active">
         <div class="card">
-            <input type="text" id="login_u" placeholder="USUÁRIO (OU ADMIN)">
-            <input type="password" id="login_p" placeholder="SENHA">
-            <button class="btn btn-main" onclick="Shark.Auth.login()">Autenticar Acesso</button>
-        </div>
-    </div>
-
-    <div id="view-home" class="view">
-        <div class="card card-p">
-            <div style="display:flex; justify-content:space-between; font-size:11px; color:#444; font-weight:800; letter-spacing:1px;">
-                <span>SALDO DISPONÍVEL</span>
-                <i class="fa-solid fa-eye-slash" onclick="document.getElementById('mb').classList.toggle('blur')"></i>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                <span style="font-size:11px; color:#666; font-weight:800;">SALDO DISPONÍVEL</span>
+                <i class="fa-solid fa-eye eye-btn" id="toggle-eye" onclick="Shark.toggleVisibility()"></i>
             </div>
-            <div id="mb" class="blur" style="font-size:38px; font-weight:800; margin:15px 0; letter-spacing:-1.5px;">R$ 0,00</div>
-            <div style="display:flex; gap:10px;">
-                <button class="btn" style="background:var(--p); color:#000; flex:1; padding:12px; font-size:11px; border-radius:12px;" onclick="Shark.go('view-extrato')">Extrato</button>
-                <button class="btn" style="background:#1a1a1a; color:#fff; flex:1; padding:12px; font-size:11px; border-radius:12px;">Cartões</button>
+            <h1 style="font-size:36px; letter-spacing:-1px;">R$ <span id="main-balance" class="value-text blur-value">1.450.000,00</span></h1>
+            <div style="display:flex; gap:10px; margin-top:20px;">
+                <button style="flex:1; padding:15px; border-radius:12px; border:none; background:var(--p); font-weight:800;">Extrato</button>
+                <button style="flex:1; padding:15px; border-radius:12px; border:none; background:#1a1a1a; color:#fff; font-weight:800;">Cartões</button>
             </div>
         </div>
 
         <div class="ops">
             <div class="op"><div class="op-i"><i class="fa-solid fa-bolt"></i></div><small>Pix</small></div>
             <div class="op"><div class="op-i"><i class="fa-solid fa-barcode"></i></div><small>Boletos</small></div>
-            <div class="op"><div class="op-i"><i class="fa-solid fa-arrow-up-right-from-square"></i></div><small>TED</small></div>
-            <div class="op" onclick="Shark.go('view-jobs')"><div class="op-i"><i class="fa-solid fa-briefcase"></i></div><small>Jobs</small></div>
+            <div class="op"><div class="op-i"><i class="fa-solid fa-arrow-trend-up"></i></div><small>Investir</small></div>
+            <div class="op"><div class="op-i"><i class="fa-solid fa-briefcase"></i></div><small>Jobs</small></div>
         </div>
 
-        <div style="background:#000; height:200px; border-radius:30px; border:1px solid #1a1a1a; padding:30px; position:relative; overflow:hidden;">
-            <div style="font-family:'Orbitron'; font-size:14px; letter-spacing:3px; color:var(--p);">SHARK PLATINUM</div>
-            <div style="margin-top:50px; font-size:20px; letter-spacing:6px; color:#333;">•••• •••• •••• 8835</div>
-            <div style="position:absolute; bottom:30px; left:30px; font-weight:800; font-size:18px;">R$ 50.000,00</div>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" style="position:absolute; bottom:30px; right:30px; width:45px; opacity:0.2;">
+        <div class="card" style="background: linear-gradient(135deg, #0a0a0a 0%, #000 100%);">
+            <div style="color:var(--p); font-size:10px; font-weight:900; letter-spacing:2px; margin-bottom:40px;">SHARK PLATINUM</div>
+            <div style="font-size:18px; letter-spacing:4px; margin-bottom:20px;">•••• •••• •••• 8835</div>
+            <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+                <div>
+                    <small style="color:#444; display:block; margin-bottom:5px;">LIMITE DISPONÍVEL</small>
+                    <b style="font-size:18px;">R$ <span class="value-text blur-value">50.000,00</span></b>
+                </div>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" width="40" style="opacity:0.5">
+            </div>
         </div>
     </div>
 
-    <div id="view-jobs" class="view">
-        <h2 style="margin-bottom:20px;">Meus Projetos Elite</h2>
-        <div id="pj-list"></div>
-    </div>
-
-    <div id="view-extrato" class="view">
+    <div id="extrato" class="view">
         <h2 style="margin-bottom:20px;">Movimentações</h2>
-        <div id="ex-list">
-            <div style="padding:20px; text-align:center; color:#333;">Nenhuma atividade recente encontrada.</div>
-        </div>
+        <div style="color:#444; text-align:center; margin-top:50px;">Nenhuma atividade recente encontrada.</div>
     </div>
 
-    <div id="view-admin" class="view">
-        <div style="background:var(--p); color:#000; padding:30px; border-radius:25px; margin-bottom:20px;">
-            <div style="font-weight:900; font-size:12px; letter-spacing:2px;">VOLUME OPERACIONAL</div>
-            <h2 style="font-size:32px; font-weight:900;">R$ 1.450.850,00</h2>
+    <div id="admin" class="view">
+        <div class="card" style="background:var(--p); color:#000;">
+            <small style="font-weight:900;">VOLUME OPERACIONAL</small>
+            <h2 style="font-size:28px;">R$ 1.450.850,00</h2>
         </div>
-        <div class="card" style="height:250px;"><canvas id="chart"></canvas></div>
-        <button class="btn btn-main" style="background:#111; color:var(--p); border:1px solid var(--p);" onclick="document.getElementById('xlsx').click()">
-            <i class="fa-solid fa-file-excel"></i> Sincronizar via Excel
-        </button>
-        <input type="file" id="xlsx" hidden onchange="Shark.Admin.loadXLSX(event)">
+        <div class="card"><canvas id="adminChart"></canvas></div>
     </div>
 
-    <nav id="n">
-        <a class="nav-l active" onclick="Shark.go('view-home', this)"><i class="fa-solid fa-house-user"></i>Home</a>
-        <a class="nav-l" onclick="Shark.go('view-extrato', this)"><i class="fa-solid fa-chart-pie"></i>Extrato</a>
-        <a class="nav-l" id="adm-l" style="display:none;" onclick="Shark.go('view-admin', this)"><i class="fa-solid fa-shield-halved"></i>Admin</a>
-        <a class="nav-l" onclick="location.reload()" style="color:#ff4444;"><i class="fa-solid fa-power-off"></i>Sair</a>
+    <nav>
+        <div class="nav-l active" onclick="Shark.nav('home', this)"><i class="fa-solid fa-house"></i>Home</div>
+        <div class="nav-l" onclick="Shark.nav('extrato', this)"><i class="fa-solid fa-chart-pie"></i>Extrato</div>
+        <div class="nav-l" onclick="Shark.nav('admin', this)"><i class="fa-solid fa-shield-halved"></i>Admin</div>
+        <div class="nav-l" style="color:#ff4444;" onclick="location.reload()"><i class="fa-solid fa-power-off"></i>Sair</div>
     </nav>
 
     <script>
         const Shark = {
-            u: null,
-            pjs: [
-                {n: 'Log Pro', d: 'Design de marcas de alto padrão.', c: 'Identidade'},
-                {n: 'Sorveteria Sergel', d: 'Otimização de vendas locais via SEO.', c: 'Local'},
-                {n: 'MecBet', d: 'Cassino Online V-Ultimate com API real.', c: 'iGaming'},
-                {n: 'MEC Shop', d: 'E-commerce ultra-rápido em HTML5.', c: 'Vendas'}
-            ],
+            isHidden: true,
 
-            init() { this.renderJobs(); },
-
-            Auth: {
-                login() {
-                    const name = document.getElementById('login_u').value.toUpperCase().trim();
-                    if(!name) return alert("Identifique-se");
-                    Shark.u = { name, bal: name === 'ADMIN' ? 1450000.00 : 1500.00, role: name === 'ADMIN' ? 'admin' : 'user' };
-                    Shark.unlock();
-                }
-            },
-
-            unlock() {
-                document.getElementById('view-auth').classList.remove('active');
-                document.getElementById('h').style.display = 'flex';
-                document.getElementById('n').style.display = 'flex';
-                if(Shark.u.role === 'admin') document.getElementById('adm-l').style.display = 'block';
-                Shark.sync(); Shark.go('view-home');
-            },
-
-            go(id, el) {
+            nav(id, el) {
                 document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
                 document.getElementById(id).classList.add('active');
-                if(el) { document.querySelectorAll('.nav-l').forEach(l => l.classList.remove('active')); el.classList.add('active'); }
-                if(id === 'view-admin') Shark.Admin.draw();
+                document.querySelectorAll('.nav-l').forEach(l => l.classList.remove('active'));
+                el.classList.add('active');
+                if(id === 'admin') this.initChart();
             },
 
-            sync() {
-                const b = Shark.u.bal.toLocaleString('pt-BR');
-                document.getElementById('ub').innerText = b;
-                document.getElementById('mb').innerText = "R$ " + b;
-                document.getElementById('un').innerText = Shark.u.name;
-                document.getElementById('av').innerText = Shark.u.name[0];
-                document.getElementById('rk').innerText = Shark.u.role === 'admin' ? "RANK: PLATINUM SHARK" : "RANK: CLIENTE GOLD";
+            toggleVisibility() {
+                this.isHidden = !this.isHidden;
+                const values = document.querySelectorAll('.value-text');
+                const icon = document.getElementById('toggle-eye');
+
+                values.forEach(v => {
+                    if (this.isHidden) {
+                        v.classList.add('blur-value');
+                    } else {
+                        v.classList.remove('blur-value');
+                    }
+                });
+
+                icon.classList.toggle('fa-eye');
+                icon.classList.toggle('fa-eye-slash');
             },
 
-            renderJobs() {
-                document.getElementById('pj-list').innerHTML = this.pjs.map(p => `
-                    <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
-                        <div>
-                            <small style="color:var(--p); font-weight:800; font-size:10px;">${p.c}</small>
-                            <h3 style="margin:5px 0;">${p.n}</h3>
-                            <p style="font-size:12px; color:#444;">${p.d}</p>
-                        </div>
-                        <i class="fa-solid fa-chevron-right" style="color:#222"></i>
-                    </div>
-                `).join('');
-            },
-
-            Admin: {
-                draw() {
-                    const ctx = document.getElementById('chart').getContext('2d');
-                    new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: ['1h', '2h', '3h', '4h', '5h', '6h'],
-                            datasets: [{ data: [30, 45, 32, 70, 55, 90], borderColor: '#00ffa3', tension: 0.4, borderWeight: 4, pointRadius: 0 }]
-                        },
-                        options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
-                    });
-                },
-                loadXLSX(e) {
-                    const f = e.target.files[0], r = new FileReader();
-                    r.onload = (evt) => {
-                        const d = evt.target.result, wb = XLSX.read(d, {type:'binary'}), json = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-                        document.getElementById('ex-list').innerHTML = json.map(i => `
-                            <div class="card" style="display:flex; justify-content:space-between; padding:20px; margin-bottom:10px;">
-                                <div><b>${i.Descricao || 'Movimentação'}</b><br><small style="color:#222">${i.Data || 'Hoje'}</small></div>
-                                <b style="color:${String(i.Valor).includes('-') ? '#ff4444' : 'var(--p)'}">R$ ${i.Valor}</b>
-                            </div>
-                        `).join('');
-                        alert("Sistema Sincronizado!"); Shark.go('view-extrato');
-                    };
-                    r.readAsBinaryString(f);
-                }
+            initChart() {
+                const ctx = document.getElementById('adminChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['1h', '2h', '3h', '4h', '5h', '6h'],
+                        datasets: [{
+                            data: [10, 25, 15, 40, 30, 60],
+                            borderColor: '#00ffa3',
+                            tension: 0.4,
+                            borderWidth: 3,
+                            pointRadius: 0
+                        }]
+                    },
+                    options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
+                });
             }
         };
     </script>
