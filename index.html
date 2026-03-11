@@ -3,142 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MEC-BANK V45 | Shark Platinum</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <title>MEC-BANK V45 | Shark Edition</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --primary: #00ff88; --bg: #000; --card: #121212; --text: #fff; --danger: #ff4444; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: var(--text); margin: 0; overflow: hidden; height: 100vh; }
+        :root { --primary: #00ff88; --bg: #000; --card: #111; --text: #fff; --gray: #888; --danger: #ff4444; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { background: var(--bg); color: var(--text); margin: 0; height: 100vh; overflow: hidden; }
 
-        .screen { display: none; height: 100vh; padding: 20px; flex-direction: column; overflow-y: auto; padding-bottom: 100px; }
-        .active { display: flex; animation: fadeIn 0.3s ease; }
+        .screen { display: none; height: 100vh; flex-direction: column; overflow-y: auto; padding-bottom: 90px; }
+        .active { display: flex; animation: slideUp 0.3s ease-out; }
 
-        /* HEADER ESTILO IMAGEM 4803 */
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .user-info { display: flex; align-items: center; gap: 12px; }
-        .avatar { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 900; color: var(--primary); background: rgba(0,255,136,0.1); }
+        /* TELA DE ACESSO (LOGIN) */
+        #scr-login { justify-content: center; align-items: center; padding: 40px; text-align: center; }
+        .logo-main { font-size: 32px; font-weight: 900; color: var(--primary); letter-spacing: -1px; margin-bottom: 40px; }
+        .input-group { width: 100%; margin-bottom: 15px; text-align: left; }
+        .input-group label { font-size: 12px; color: var(--gray); margin-left: 5px; }
+        .input-group input { width: 100%; background: #1a1a1a; border: 1px solid #333; padding: 18px; border-radius: 12px; color: #fff; margin-top: 5px; font-size: 16px; }
+        .btn-login { width: 100%; background: var(--primary); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 800; font-size: 16px; margin-top: 20px; cursor: pointer; }
 
-        /* CARDS DE SALDO */
-        .card-main { background: var(--card); border-radius: 25px; padding: 25px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 20px; }
-        .blur { filter: blur(10px); }
+        /* HOME ESTILO MERCADO PAGO / PLATINUM */
+        .header-home { padding: 20px; display: flex; justify-content: space-between; align-items: center; background: var(--bg); }
+        .user-pill { display: flex; align-items: center; gap: 10px; background: #1a1a1a; padding: 5px 15px 5px 5px; border-radius: 30px; }
+        .avatar-circle { width: 35px; height: 35px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-weight: bold; }
+        
+        .balance-card { padding: 20px; margin: 0 15px; background: #111; border-radius: 20px; border: 1px solid #222; }
+        .balance-blur { filter: blur(8px); }
 
-        /* GRID DE AÇÕES - AGORA COM TODOS OS ÍCONES (45 MELHORIAS) */
-        .action-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 25px 0; }
-        .action-item { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 11px; color: #888; cursor: pointer; }
-        .icon-box { width: 60px; height: 60px; background: #181818; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: var(--primary); border: 1px solid rgba(255,255,255,0.03); }
-        .action-item:active .icon-box { transform: scale(0.9); background: var(--primary); color: #000; }
+        /* GRID DE MELHORIAS (TODOS OS ÍCONES DA IMAGEM 4803/4810) */
+        .shortcut-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 20px; }
+        .shortcut-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .icon-circle { width: 55px; height: 55px; background: #1a1a1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; color: var(--primary); transition: 0.2s; }
+        .shortcut-item span { font-size: 11px; color: var(--gray); font-weight: 500; }
+        .icon-circle:active { transform: scale(0.9); background: var(--primary); color: #000; }
 
-        /* CONTROL PANEL (IDENTICO À IMAGEM 4804/4808) */
-        .admin-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        .stat-card { background: var(--card); padding: 20px; border-radius: 18px; border-left: 4px solid var(--primary); }
-        .stat-card small { color: #666; text-transform: uppercase; font-size: 10px; font-weight: 700; }
-        .stat-card h3 { margin: 5px 0 0 0; font-size: 20px; }
+        /* SHARK CONTROL PANEL (IMAGEM 4808) */
+        .admin-header { padding: 20px; border-bottom: 1px solid #222; }
+        .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
+        .stat-box { background: #111; padding: 15px; border-radius: 15px; border-left: 4px solid var(--primary); }
+        .stat-box small { color: var(--gray); font-size: 10px; text-transform: uppercase; }
+        .stat-box div { font-size: 18px; font-weight: 700; margin-top: 5px; }
 
-        .btn-upload { border: 2px dashed var(--primary); background: rgba(0,255,136,0.02); padding: 35px; border-radius: 20px; text-align: center; cursor: pointer; margin-bottom: 15px; }
-        .btn-admin { width: 100%; padding: 18px; border-radius: 12px; border: none; font-weight: 800; margin-bottom: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .upload-area { margin: 15px; padding: 30px; border: 2px dashed #333; border-radius: 20px; text-align: center; color: var(--primary); }
+        .btn-action { margin: 0 15px 10px 15px; padding: 15px; border-radius: 12px; border: none; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; }
 
-        /* BARRA DE NAVEGAÇÃO */
-        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #050505; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #1a1a1a; z-index: 1000; }
-        .nav-link { color: #444; text-align: center; font-size: 10px; text-decoration: none; }
-        .nav-link.active-link { color: var(--primary); }
-        .nav-link i { font-size: 22px; margin-bottom: 5px; display: block; }
+        /* NAV BAR */
+        .nav-bar { position: fixed; bottom: 0; width: 100%; background: #080808; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #1a1a1a; }
+        .nav-item { color: #555; text-align: center; font-size: 10px; text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .nav-item.active-nav { color: var(--primary); }
+        .nav-item i { font-size: 20px; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <div id="scr-home" class="screen active">
-        <header class="header">
-            <div class="user-info">
-                <div class="avatar">J</div>
-                <div style="display:flex; flex-direction:column;">
-                    <span style="font-size: 12px; color: #666;">Bem-vindo,</span>
-                    <span style="font-weight: 800; font-size: 18px;">Jp</span>
+    <div id="scr-login" class="screen active">
+        <div class="logo-main">MEC-BANK</div>
+        <div class="input-group">
+            <label>Usuário Master ou Cliente</label>
+            <input type="text" id="user-input" placeholder="Shark ou Jp">
+        </div>
+        <div class="input-group">
+            <label>Senha de Acesso</label>
+            <input type="password" placeholder="••••••••">
+        </div>
+        <button class="btn-login" onclick="realizarLogin()">ENTRAR COM SEGURANÇA</button>
+        <p style="font-size: 10px; color: #444; margin-top: 30px;">Versão V45.8835 Platinum</p>
+    </div>
+
+    <div id="scr-home" class="screen">
+        <div class="header-home">
+            <div class="user-pill">
+                <div class="avatar-circle">J</div>
+                <span style="font-size: 14px; font-weight: 600;">Olá, Jp</span>
+            </div>
+            <div style="display: flex; gap: 20px; font-size: 20px;">
+                <i class="fa-solid fa-gear" style="color: #444;"></i>
+                <i class="fa-solid fa-bell" style="color: var(--primary);"></i>
+            </div>
+        </div>
+
+        <div class="balance-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="color: var(--gray); font-size: 13px;">Saldo em conta</span>
+                <i class="fa-solid fa-eye" id="eye-toggle" onclick="toggleBalance()"></i>
+            </div>
+            <div id="user-balance" class="balance-blur" style="font-size: 28px; font-weight: 800; margin: 10px 0;">R$ 145.850,90</div>
+            <div style="background: rgba(0,255,136,0.1); color: var(--primary); padding: 5px 10px; border-radius: 8px; font-size: 12px; display: inline-block;">
+                Rendendo 105% do CDI
+            </div>
+            <button onclick="openScreen('scr-extrato')" style="width:100%; background:transparent; border:1px solid #333; color:#fff; padding:12px; border-radius:10px; margin-top:15px; font-size:13px;">Ver Extrato Detalhado</button>
+        </div>
+
+        <div class="shortcut-grid">
+            <div class="shortcut-item"><div class="icon-circle"><i class="fa-solid fa-qrcode"></i></div><span>Pix</span></div>
+            <div class="shortcut-item"><div class="icon-circle"><i class="fa-solid fa-barcode"></i></div><span>Pagar</span></div>
+            <div class="shortcut-item"><div class="icon-circle"><i class="fa-solid fa-money-bill-transfer"></i></div><span>Transf.</span></div>
+            <div class="shortcut-item"><div class="icon-circle"><i class="fa-solid fa-mobile-screen"></i></div><span>Recarga</span></div>
+            <div class="shortcut-item"><div class="icon-circle"><i class="fa-solid fa-hand-holding-dollar"></i></div><span>Empréstimo</span></div>
+            <div class="shortcut-item"><div class="icon-circle"><i class="fa-solid fa-shield-halved"></i></div><span>Seguros</span></div>
+            <div class="shortcut-item"><div class="icon-circle"><i class="fa-solid fa-gift"></i></div><span>Mimos</span></div>
+            <div class="shortcut-item" onclick="openScreen('scr-suporte')"><div class="icon-circle"><i class="fa-solid fa-circle-question"></i></div><span>Ajuda</span></div>
+        </div>
+
+        <div style="padding: 0 15px;">
+            <div style="background: linear-gradient(135deg, #1a1a1a 0%, #000 100%); padding: 25px; border-radius: 20px; border: 1px solid #222; position: relative;">
+                <small style="color: var(--primary); font-weight: 800; font-size: 10px; letter-spacing: 1px;">SHARK PLATINUM</small>
+                <div style="font-size: 18px; margin: 25px 0; letter-spacing: 3px;">•••• •••• •••• 8835</div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div>
+                        <small style="color: #555; display: block; font-size: 10px;">Limite disponível</small>
+                        <span style="font-weight: 700;">R$ 50.000,00</span>
+                    </div>
+                    <i class="fa-solid fa-microchip" style="font-size: 28px; color: #333;"></i>
                 </div>
             </div>
-            <i class="fa-solid fa-bell" style="color: var(--primary); font-size: 20px;"></i>
-        </header>
-
-        <div class="card-main">
-            <div style="display: flex; justify-content: space-between; color: #666; font-size: 13px;">
-                <span>Saldo em conta <i class="fa-solid fa-eye-slash" onclick="toggleBlur()"></i></span>
-            </div>
-            <div id="balance" class="blur" style="font-size: 32px; font-weight: 900; margin: 15px 0;">R$ 145.850,90</div>
-            <div style="color: var(--primary); font-size: 13px; font-weight: 700;">Rendendo 105% do CDI</div>
-            <button onclick="openScreen('scr-extrato')" style="width:100%; background:transparent; border:1px solid var(--primary); color:var(--primary); padding:12px; border-radius:12px; margin-top:20px; font-weight:700;">Ver Extrato Detalhado</button>
-        </div>
-
-        <div class="action-grid">
-            <div class="action-item" onclick="abrirCam('Pix')"><div class="icon-box"><i class="fa-solid fa-qrcode"></i></div><span>Pix</span></div>
-            <div class="action-item" onclick="abrirCam('Boleto')"><div class="icon-box"><i class="fa-solid fa-barcode"></i></div><span>Pagar</span></div>
-            <div class="action-item"><div class="icon-box"><i class="fa-solid fa-money-bill-transfer"></i></div><span>Transf.</span></div>
-            <div class="action-item"><div class="icon-box"><i class="fa-solid fa-mobile-screen"></i></div><span>Recarga</span></div>
-            <div class="action-item"><div class="icon-box"><i class="fa-solid fa-hand-holding-dollar"></i></div><span>Empréstimo</span></div>
-            <div class="action-item"><div class="icon-box"><i class="fa-solid fa-shield-halved"></i></div><span>Seguros</span></div>
-            <div class="action-item"><div class="icon-box"><i class="fa-solid fa-gift"></i></div><span>Mimos</span></div>
-            <div class="action-item" onclick="openScreen('scr-suporte')"><div class="icon-box"><i class="fa-solid fa-circle-question"></i></div><span>Ajuda</span></div>
-        </div>
-
-        <div class="card-main" style="background: linear-gradient(145deg, #1a1a1a, #000); position: relative; height: 180px;">
-            <span style="color: var(--primary); font-weight: 900; font-size: 11px;">SHARK PLATINUM</span>
-            <div style="margin-top: 40px; font-size: 20px; letter-spacing: 4px;">•••• •••• •••• 8835</div>
-            <div style="position: absolute; bottom: 25px;">
-                <small style="color: #666; display: block;">Limite disponível</small>
-                <strong style="font-size: 18px;">R$ 50.000,00</strong>
-            </div>
-            <i class="fa-solid fa-microchip" style="position: absolute; right: 25px; bottom: 25px; font-size: 30px; color: #333;"></i>
         </div>
     </div>
 
     <div id="scr-master" class="screen">
-        <header style="margin-bottom: 30px;">
-            <h2 style="color: var(--primary); margin: 0;">Control Panel</h2>
-            <span style="color: #555; font-size: 12px;">Shark Administrador Master</span>
-        </header>
-
-        <div class="admin-stats">
-            <div class="stat-card"><small>Saldos Totais</small><h3>R$ 1.450.850</h3></div>
-            <div class="stat-card"><small>Usuários</small><h3>842</h3></div>
+        <div class="admin-header">
+            <h2 style="margin:0; color:var(--primary); font-size:22px;">Control Panel</h2>
+            <p style="margin:5px 0 0 0; color:#555; font-size:12px;">Shark Administrador Master</p>
         </div>
 
-        <div class="btn-upload" onclick="document.getElementById('fileIn').click()">
-            <i class="fa-solid fa-file-excel" style="font-size: 35px; color: var(--primary); margin-bottom: 10px;"></i>
-            <div style="font-weight: 800; font-size: 14px;">SINCRONIZAR PLANILHA XLSX</div>
-            <input type="file" id="fileIn" hidden onchange="alert('Planilha Sincronizada!')">
+        <div class="stat-row">
+            <div class="stat-box"><small>Saldos Totais</small><div>R$ 1.450.850</div></div>
+            <div class="stat-box"><small>Contas Ativas</small><div>842</div></div>
         </div>
 
-        <button class="btn-admin" style="background: #181818; color: var(--primary); border: 1px solid var(--primary);"><i class="fa-solid fa-file-lines"></i> GERAR RELATÓRIO OPERACIONAL</button>
-        <button class="btn-admin" style="background: var(--danger); color: #fff;"><i class="fa-solid fa-lock"></i> BLOQUEIO GERAL DE SISTEMA</button>
-        <button class="btn-admin" style="background: #fff; color: #000;"><i class="fa-solid fa-user-plus"></i> CADASTRAR NOVO MASTER</button>
+        <div class="upload-area" onclick="alert('Selecione sua planilha XLSX')">
+            <i class="fa-solid fa-file-excel" style="font-size: 30px; margin-bottom: 10px;"></i>
+            <div style="font-weight: 700; font-size: 14px;">SINCRONIZAR PLANILHA XLSX</div>
+            <small style="color:#444; display:block; margin-top:5px;">Atualiza saldos e extratos instantaneamente</small>
+        </div>
+
+        <button class="btn-action" style="background:#1a1a1a; color:var(--primary); border:1px solid var(--primary);">
+            <i class="fa-solid fa-file-invoice"></i> GERAR RELATÓRIO OPERACIONAL
+        </button>
+        <button class="btn-action" style="background:var(--danger); color:#fff;">
+            <i class="fa-solid fa-lock"></i> BLOQUEIO GERAL DO SISTEMA
+        </button>
+        <button class="btn-action" style="background:#fff; color:#000;">
+            <i class="fa-solid fa-user-plus"></i> CADASTRAR NOVO MASTER
+        </button>
     </div>
 
     <div id="scr-suporte" class="screen">
-        <h3>Suporte Especializado</h3>
-        <div class="card-main" style="text-align: center; padding: 40px 20px;">
-            <p style="color: #888;">Olá Shark, nossa equipe está pronta para te atender.</p>
-            <button style="background: var(--primary); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; width: 100%; margin-top: 20px;">ABRIR CHAT AGORA</button>
+        <div style="padding: 20px;">
+            <h3>Suporte Especializado</h3>
+            <div style="background:#111; padding:30px; border-radius:20px; text-align:center; border:1px solid #222; margin-top:20px;">
+                <p style="color:var(--gray); margin-bottom:25px;">Olá Shark, nossa equipe está pronta para te atender agora.</p>
+                <button style="background:var(--primary); width:100%; border:none; padding:18px; border-radius:12px; font-weight:800; font-size:15px;">ABRIR CHAT AGORA</button>
+            </div>
         </div>
     </div>
 
     <div id="scr-extrato" class="screen">
-        <div style="display:flex; align-items:center; gap:15px; margin-bottom:20px;">
+        <div style="padding: 20px; border-bottom:1px solid #111; display:flex; align-items:center; gap:15px;">
             <i class="fa-solid fa-chevron-left" onclick="openScreen('scr-home')"></i>
-            <h3>Extrato de Conta</h3>
+            <h3 style="margin:0;">Extrato de Conta</h3>
         </div>
-        <div class="card-main" style="display: flex; justify-content: space-between; align-items: center;">
-            <div><strong style="display:block;">Depósito Recebido</strong><small style="color:#555">Hoje, 10:45</small></div>
-            <span style="color: var(--primary); font-weight: 800;">+ R$ 1.500,00</span>
+        <div style="padding: 15px;">
+            <div style="background:#111; padding:15px; border-radius:15px; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <strong style="display:block; font-size:14px;">Depósito Recebido</strong>
+                    <small style="color:#444;">Hoje, 10:45</small>
+                </div>
+                <span style="color:var(--primary); font-weight:700;">+ R$ 1.500,00</span>
+            </div>
         </div>
     </div>
 
     <nav class="nav-bar">
-        <a href="#" class="nav-link active-link" onclick="openScreen('scr-home', this)"><i class="fa-solid fa-house"></i>Início</a>
-        <a href="#" class="nav-link" onclick="openScreen('scr-extrato', this)"><i class="fa-solid fa-list-ul"></i>Extrato</a>
-        <a href="#" class="nav-link" onclick="openScreen('scr-master', this)"><i class="fa-solid fa-gears"></i>Painel</a>
-        <a href="#" class="nav-link" onclick="openScreen('scr-suporte', this)"><i class="fa-solid fa-headset"></i>Suporte</a>
-        <a href="#" class="nav-link" style="color: var(--danger);" onclick="location.reload()"><i class="fa-solid fa-power-off"></i>Sair</a>
+        <a href="javascript:void(0)" class="nav-item active-nav" onclick="openScreen('scr-home', this)"><i class="fa-solid fa-house"></i>Início</a>
+        <a href="javascript:void(0)" class="nav-item" onclick="openScreen('scr-extrato', this)"><i class="fa-solid fa-list-ul"></i>Extrato</a>
+        <a href="javascript:void(0)" class="nav-item" onclick="openScreen('scr-master', this)"><i class="fa-solid fa-gears"></i>Painel</a>
+        <a href="javascript:void(0)" class="nav-item" onclick="openScreen('scr-suporte', this)"><i class="fa-solid fa-headset"></i>Suporte</a>
+        <a href="javascript:void(0)" class="nav-item" style="color:var(--danger)" onclick="location.reload()"><i class="fa-solid fa-power-off"></i>Sair</a>
     </nav>
 
     <script>
@@ -146,27 +188,27 @@
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             if(el) {
-                document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active-link'));
-                el.classList.add('active-link');
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
+                el.classList.add('active-nav');
             }
         }
 
-        function toggleBlur() {
-            document.getElementById('balance').classList.toggle('blur');
+        function realizarLogin() {
+            const user = document.getElementById('user-input').value.toLowerCase();
+            if(user === 'shark') {
+                openScreen('scr-master');
+            } else {
+                openScreen('scr-home');
+            }
         }
 
-        async function abrirCam(tipo) {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-                const modal = document.createElement('div');
-                modal.style = "position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:2000; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px;";
-                modal.innerHTML = `<h3 style='color:var(--primary)'>Escaneando ${tipo}...</h3><video id="v" style="width:100%; border-radius:20px;"></video><button onclick="this.parentElement.remove()" style="margin-top:20px; padding:15px; width:100%; background:var(--danger); color:#fff; border:none; border-radius:12px; font-weight:800;">FECHAR</button>`;
-                document.body.appendChild(modal);
-                document.getElementById('v').srcObject = stream;
-                document.getElementById('v').play();
-            } catch(e) { alert("Câmera não disponível."); }
+        function toggleBalance() {
+            const bal = document.getElementById('user-balance');
+            const icon = document.getElementById('eye-toggle');
+            bal.classList.toggle('balance-blur');
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
         }
     </script>
 </body>
-            </html>
-                
+</html>
