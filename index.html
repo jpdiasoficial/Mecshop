@@ -3,199 +3,252 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MEC-BANK V46 | SHARK INFINITY</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>MEC-BANK | SHARK ULTIMATE V-FINAL</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Orbitron:wght@900&display=swap" rel="stylesheet">
     <style>
-        :root { --p: #00ffa3; --bg: #000000; --card: #0a0a0a; --brd: rgba(255,255,255,0.08); }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.3s ease; }
-        body { background: var(--bg); color: #fff; margin: 0; overflow: hidden; height: 100vh; }
+        :root { --p: #00ffa3; --bg: #030303; --card: #0d0d0d; --brd: #1a1a1a; --txt: #ffffff; --m: #555; }
+        
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        body { background: var(--bg); color: var(--txt); height: 100vh; overflow: hidden; position: fixed; width: 100%; font-weight: 400; }
 
-        /* TELAS */
-        .screen { display: none; height: 100vh; padding: 25px; flex-direction: column; overflow-y: auto; padding-bottom: 120px; }
-        .active { display: flex; animation: fadeIn 0.4s ease forwards; }
-        @keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+        /* HEADER PREMIUM (STATE MANAGEMENT) */
+        header { 
+            height: 75px; background: rgba(0,0,0,0.98); border-bottom: 1px solid var(--brd); 
+            display: none; justify-content: space-between; align-items: center; padding: 0 20px; 
+            position: fixed; top: 0; width: 100%; z-index: 2000; backdrop-filter: blur(20px); 
+        }
+        .u-box { display: flex; align-items: center; gap: 12px; }
+        .u-rank { font-size: 9px; background: #000; color: var(--p); padding: 2px 6px; border-radius: 4px; font-weight: 900; text-transform: uppercase; border: 1px solid var(--p); }
+        .bal-tag { background: rgba(0,255,163,0.08); padding: 10px 15px; border-radius: 12px; border: 1px solid var(--g); color: var(--g); font-weight: 800; font-size: 14px; box-shadow: 0 0 10px rgba(0,255,163,0.1); }
 
-        /* AUTH */
-        .auth-screen { justify-content: center; align-items: center; text-align: center; }
-        .sh-logo { font-family: 'Orbitron'; font-size: 35px; color: var(--p); letter-spacing: 5px; margin-bottom: 40px; }
-        input { width: 100%; max-width: 300px; background: #111; border: 1px solid var(--brd); padding: 18px; border-radius: 15px; color: #fff; margin-bottom: 12px; text-align: center; }
-        .btn-p { width: 100%; max-width: 300px; background: var(--p); color: #000; border: none; padding: 18px; border-radius: 15px; font-weight: 800; cursor: pointer; }
+        /* VIEWS & SHARK TRANSITIONS */
+        .view { position: absolute; inset: 0; display: none; flex-direction: column; padding: 90px 20px 110px 20px; overflow-y: auto; overflow-x: hidden; }
+        .view.active { display: flex; animation: viewIn 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        @keyframes viewIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* HEADER */
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .avatar { width: 45px; height: 45px; border-radius: 15px; background: #111; border: 1px solid var(--brd); display: flex; align-items: center; justify-content: center; color: var(--p); font-weight: 800; }
+        /* CARDS & UI ELEMENTS (GLASSMORPHISM) */
+        .card { background: var(--card); border: 1px solid var(--brd); border-radius: 24px; padding: 22px; margin-bottom: 15px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+        .card-bal { background: linear-gradient(135deg, #111, #050505); border: 1px solid #222; position: relative; }
+        .card-bal::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(45deg, transparent, rgba(0,255,163,0.03), transparent); transform: rotate(45deg); pointer-events: none; }
+        
+        .btn { width: 100%; padding: 18px; border: none; border-radius: 15px; font-weight: 800; text-transform: uppercase; cursor: pointer; transition: 0.2s; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-p { background: linear-gradient(135deg, var(--p), #00cc33); color: #000; box-shadow: 0 5px 20px rgba(0, 255, 163, 0.2); }
+        .btn-p:active { transform: scale(0.96); opacity: 0.9; }
+        .btn-s { background: #1a1a1a; color: #fff; border: 1px solid #333; }
+        .btn-access { background: none; border: 1px solid var(--p); color: var(--p); padding: 10px 20px; border-radius: 10px; font-size: 11px; margin-top: 15px; }
 
-        /* CARDS */
-        .card-bal { background: linear-gradient(135deg, #0f0f0f, #050505); border-radius: 25px; padding: 25px; border: 1px solid var(--brd); position: relative; }
-        .blur { filter: blur(12px); }
+        /* AÇÕES & ÍCONES */
+        .grid-ops { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 30px 0; }
+        .op-item { display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none; text-align: center; }
+        .op-box { width: 62px; height: 62px; background: var(--card); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: #fff; border: 1px solid var(--brd); transition: 0.3s; }
+        .op-box:active { background: var(--p); color: #000; transform: translateY(-3px); }
+        .op-item small { font-size: 11px; color: var(--m); font-weight: 600; }
 
-        /* GRID */
-        .action-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 25px 0; }
-        .icon-box { aspect-ratio: 1; background: var(--card); border-radius: 18px; border: 1px solid var(--brd); display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--p); }
-        .action-item span { font-size: 10px; color: #555; display: block; text-align: center; margin-top: 5px; }
+        /* EXTRATO DINÂMICO */
+        .ex-list { margin-top: 20px; }
+        .ex-item { display: flex; justify-content: space-between; align-items: center; padding: 18px; background: #080808; border-radius: 18px; margin-bottom: 10px; border: 1px solid #1a1a1a; }
+        .ex-desc { display: flex; align-items: center; gap: 15px; }
+        .ex-ic { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
 
-        /* EXTRATO */
-        .extrato-item { display: flex; justify-content: space-between; padding: 15px; background: #080808; border-radius: 15px; margin-bottom: 10px; border-left: 3px solid var(--p); }
+        /* CARTÃO PLATINUM BLACK */
+        .card-bl { background: #000; height: 210px; border-radius: 30px; padding: 30px; border: 1px solid #222; position: relative; box-shadow: 0 15px 40px rgba(0,0,0,0.6); background-image: url('https://www.transparenttextures.com/patterns/pinstriped-suit.png'); }
+        .card-bal-blur { filter: blur(12px); opacity: 0.2; }
 
-        /* NAV */
-        nav { position: fixed; bottom: 20px; left: 5%; width: 90%; background: rgba(10,10,10,0.9); backdrop-filter: blur(20px); border-radius: 20px; display: none; justify-content: space-around; padding: 12px; border: 1px solid var(--brd); z-index: 999; }
-        .nav-link { color: #444; text-align: center; font-size: 10px; text-decoration: none; }
-        .active-link { color: var(--p); }
+        /* ADMIN MASTER */
+        .adm-header { background: var(--p); color: #000; padding: 25px; border-radius: 20px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .stat-gr { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .chart-box { background: var(--card); padding: 20px; border-radius: 25px; border: 1px solid var(--brd); height: 250px; }
+
+        /* NAVBAR (STATE MANAGEMENT) */
+        nav { position: fixed; bottom: 0; width: 100%; height: 90px; background: rgba(0,0,0,0.98); border-top: 1px solid var(--brd); display: none; justify-content: space-around; align-items: center; padding-bottom: 20px; z-index: 2000; }
+        .nav-link { color: #444; text-decoration: none; text-align: center; font-size: 11px; font-weight: 800; cursor: pointer; }
+        .nav-link.active-link { color: var(--p); }
+        .nav-link i { font-size: 24px; display: block; margin-bottom: 5px; }
+
+        input { width: 100%; padding: 18px; background: #000; border: 1px solid #222; border-radius: 15px; color: #fff; margin-bottom: 12px; font-weight: 700; font-size: 14px; }
     </style>
 </head>
 <body onload="Shark.init()">
 
-    <div id="scr-auth" class="screen active auth-screen">
-        <div class="sh-logo">MEC-BANK</div>
-        <input type="text" id="u-login" placeholder="ID SHARK">
-        <input type="password" id="u-pass" placeholder="SENHA">
-        <button class="btn-p" onclick="Shark.login()">ENTRAR</button>
-    </div>
-
-    <div id="scr-home" class="screen">
-        <div class="header">
-            <div style="display:flex; align-items:center; gap:12px;">
-                <div class="avatar" id="av-char">J</div>
-                <div><small style="color:#444; font-weight:800;">BEM-VINDO</small><div id="u-disp" style="font-weight:800;">JP Dias</div></div>
-            </div>
-            <i class="fa-solid fa-gear" style="color:#222"></i>
-        </div>
-
-        <div class="card-bal">
-            <div style="display:flex; justify-content:space-between; font-size:11px; color:#444; font-weight:800;">
-                <span>SALDO EM CONTA</span>
-                <i class="fa-solid fa-eye" onclick="document.getElementById('main-bal').classList.toggle('blur')"></i>
-            </div>
-            <div id="main-bal" class="blur" style="font-size:32px; font-weight:800; margin:10px 0;">R$ 0,00</div>
-            <div style="color:var(--p); font-size:11px; font-weight:800;">PLATINUM MEMBER</div>
-        </div>
-
-        <div class="action-grid">
-            <div class="action-item"><div class="icon-box"><i class="fa-solid fa-qrcode"></i></div><span>Pix</span></div>
-            <div class="action-item" onclick="Shark.nav('scr-extrato')"><div class="icon-box"><i class="fa-solid fa-list"></i></div><span>Extrato</span></div>
-            <div class="action-item"><div class="icon-box"><i class="fa-solid fa-credit-card"></i></div><span>Cartões</span></div>
-            <div class="action-item" onclick="Shark.nav('scr-port')"><div class="icon-box"><i class="fa-solid fa-briefcase"></i></div><span>Jobs</span></div>
-        </div>
-
-        <div style="background:#0a0a0a; border-radius:20px; padding:20px; border:1px solid var(--brd);">
-            <b style="font-size:13px;">Sugestões para você</b>
-            <div style="margin-top:15px; display:flex; gap:10px; overflow-x:auto;">
-                <div style="min-width:140px; height:80px; background:#111; border-radius:15px; padding:12px; font-size:10px;">Empréstimo Shark: <br><b>R$ 50.000,00</b></div>
-                <div style="min-width:140px; height:80px; background:#111; border-radius:15px; padding:12px; font-size:10px;">Investir em <br><b>Cripto Ativos</b></div>
+    <header id="h-main">
+        <div class="u-box">
+            <i class="fa-solid fa-circle-user" style="color:var(--p); font-size: 24px;"></i>
+            <div>
+                <div style="font-size: 12px; font-weight: 800;" id="u-name">USUÁRIO</div>
+                <div class="u-rank" id="u-rank">BRONZE</div>
             </div>
         </div>
-    </div>
+        <div class="bal-tag" onclick="Shark.nav('scr-extrato')">R$ <span id="u-bal">0.00</span></div>
+    </header>
 
-    <div id="scr-extrato" class="screen">
-        <h3 style="margin-bottom:20px;"><i class="fa-solid fa-chevron-left" onclick="Shark.nav('scr-home')" style="margin-right:15px;"></i> Movimentações</h3>
-        <div id="lista-extrato">
-            <div class="extrato-item"><span>Aguardando Sincronização...</span></div>
+    <div id="scr-auth" class="view active" style="justify-content:center; padding: 20px;">
+        <div style="text-align:center; margin-bottom:40px;">
+            <h1 style="font-family:'Orbitron'; color:var(--p); font-size:40px; letter-spacing:3px;">MEC<span>BET</span></h1>
+            <p style="color:#444; font-size:10px; letter-spacing:4px; font-weight:900;">V-ULTIMATE INTEGRAL SYSTEM</p>
+        </div>
+        <div class="card">
+            <input type="text" id="l-user" placeholder="USUÁRIO (Ex: Shark ou JP)">
+            <input type="password" id="l-pass" placeholder="SENHA (Ex: 123)">
+            <button class="btn btn-p" onclick="Shark.Auth.login()"><i class="fa-solid fa-shield-halved"></i> Acessar Terminal</button>
         </div>
     </div>
 
-    <div id="scr-port" class="screen">
-        <h3 style="margin-bottom:20px;"><i class="fa-solid fa-chevron-left" onclick="Shark.nav('scr-home')" style="margin-right:15px;"></i> Meus Projetos</h3>
-        <div id="port-list"></div>
+    <div id="scr-lobby" class="view">
+        <div class="card" style="border-left: 5px solid var(--p); background: linear-gradient(90deg, #0d0d0d, #151515);">
+            <h3>MEC-BANK Platinum</h3>
+            <small style="color:#555">Sessão criptografada de alta segurança.</small>
+        </div>
+        
+        <div class="card card-bal">
+            <div style="display:flex; justify-content:space-between; align-items:center; color:#444; font-size:12px; font-weight:800;">
+                <span>SALDO DISPONÍVEL</span>
+                <i class="fa-solid fa-eye-slash" onclick="Shark.Games.toggleBlur('u-bal-m')"></i>
+            </div>
+            <div id="u-bal-m" class="blur" style="font-size:36px; font-weight:800; margin:15px 0;">R$ 0,00</div>
+            <button class="btn-access" onclick="Shark.nav('scr-extrato')">Ver Extrato Completo</button>
+        </div>
+
+        <div class="grid-ops">
+            <div class="op-item"><div class="op-box"><i class="fa-solid fa-bolt"></i></div><small>Pix</small></div>
+            <div class="op-item" onclick="Shark.nav('scr-extrato')"><div class="op-box"><i class="fa-solid fa-receipt"></i></div><small>Pagar</small></div>
+            <div class="op-item"><div class="op-box"><i class="fa-solid fa-repeat"></i></div><small>Transf.</small></div>
+            <div class="op-item"><div class="op-box"><i class="fa-solid fa-rocket"></i></div><small>Cripto</small></div>
+        </div>
+
+        <div class="card-bl">
+            <span style="font-family:'Orbitron'; color:var(--p); font-size:12px; letter-spacing:3px;">PLATINUM SHARK</span>
+            <div style="margin-top:40px; font-size:20px; letter-spacing:5px; color:#444;">•••• •••• •••• 8835</div>
+            <div style="position:absolute; bottom:30px; left:30px;">
+                <small style="color:#333; font-weight:800; font-size:10px;">LIMIT</small>
+                <div style="font-weight:700; font-size:18px;">R$ 50.000,00</div>
+            </div>
+            <div style="position:absolute; bottom:30px; right:30px; background:#222; width:50px; height:35px; border-radius:8px;"></div>
+        </div>
     </div>
 
-    <div id="scr-admin" class="screen">
-        <div style="background:var(--p); color:#000; padding:25px; border-radius:20px; margin-bottom:20px;">
-            <small>LUCRO OPERACIONAL</small>
-            <h2 id="adm-lucro">R$ 0,00</h2>
-        </div>
-        <div style="background:#0a0a0a; border:2px dashed var(--p); padding:30px; text-align:center; border-radius:20px; cursor:pointer;" onclick="document.getElementById('f-up').click()">
-            <i class="fa-solid fa-file-excel" style="font-size:30px; color:var(--p);"></i>
-            <p>UPLOAD PLANILHA XLSX</p>
-            <input type="file" id="f-up" hidden onchange="Shark.Admin.handleFile(event)">
+    <div id="scr-extrato" class="view">
+        <h3>Movimentações de Banca</h3>
+        <div class="ex-list" id="lista-extrato">
+            <div class="ex-item"><span>Aguardando Sincronização XLSX...</span></div>
         </div>
     </div>
 
-    <nav id="navbar">
-        <a class="nav-link active-link" onclick="Shark.nav('scr-home', this)"><i class="fa-solid fa-house"></i>Home</a>
-        <a class="nav-link" onclick="Shark.nav('scr-extrato', this)"><i class="fa-solid fa-money-bill-transfer"></i>Extrato</a>
-        <a class="nav-link" id="adm-link" style="display:none;" onclick="Shark.nav('scr-admin', this)"><i class="fa-solid fa-shield-halved"></i>Admin</a>
-        <a class="nav-link" onclick="location.reload()" style="color:#ff4444;"><i class="fa-solid fa-power-off"></i>Sair</a>
+    <div id="scr-admin" class="view">
+        <div class="adm-header">
+            <div><b style="font-size:18px;">Controle Master</b><br><small>Hierarquia de Elite</small></div>
+            <div class="u-rank" style="color:#000; border-color:#000; font-weight:900;">SUPER_ADM</div>
+        </div>
+        
+        <div class="stat-gr">
+            <div class="card"><small style="color:var(--m)">GGR LÍQUIDO</small><h2 id="adm-lucro" style="color:var(--p)">R$ 0,00</h2></div>
+            <div class="card"><small style="color:var(--m)">USUÁRIOS</small><h2>124</h2></div>
+        </div>
+
+        <div class="chart-box"><canvas id="adm-chart"></canvas></div>
+
+        <button class="btn btn-g" style="margin-top:20px;" onclick="document.getElementById('f-xlsx').click()"><i class="fa-solid fa-file-excel"></i> SINCRONIZAR XLSX</button>
+        <input type="file" id="f-xlsx" hidden onchange="Shark.Admin.handleXLSX(event)">
+    </div>
+
+    <nav id="n-main">
+        <a class="nav-link active-link" onclick="Shark.nav('scr-lobby', this)"><i class="fa-solid fa-house"></i>Início</a>
+        <a class="nav-link" onclick="Shark.nav('scr-extrato', this)"><i class="fa-solid fa-wallet"></i>Extrato</a>
+        <a class="nav-link" id="n-adm-link" style="display:none;" onclick="Shark.nav('scr-admin', this)"><i class="fa-solid fa-shield-halved"></i>ADMIN</a>
+        <a class="nav-link exit-btn" onclick="Shark.Auth.logout()"><i class="fa-solid fa-power-off"></i>Sair</a>
     </nav>
 
     <script>
         const Shark = {
-            user: null,
-            projects: [
-                {n: 'Log Pro', d: 'Identidade visual de alta autoridade.'},
-                {n: 'Sorveteria Sergel', d: 'Otimização de cardápio e SEO local.'},
-                {n: 'MecBet', d: 'Plataforma de iGaming V-Ultimate.'},
-                {n: 'MEC Shop', d: 'E-commerce de alta conversão em HTML.'}
-            ],
+            user: null, ggr: 0,
+            db: JSON.parse(localStorage.getItem('M_B_SHARK_VINAL')) || [{name:'ADMIN', pass:'123', bal:145000, role:'admin'}],
 
             init() {
-                const s = sessionStorage.getItem('SHARK_SESS');
+                const s = sessionStorage.getItem('M_SESS_VINAL');
                 if(s) { this.user = JSON.parse(s); this.unlock(); }
-                this.renderPort();
             },
 
-            login() {
-                const u = document.getElementById('u-login').value.toUpperCase();
-                const p = document.getElementById('u-pass').value;
-                if(!u || !p) return;
-                
-                this.user = { name: u, bal: 145850.90, role: u === 'SHARK' ? 'admin' : 'user' };
-                sessionStorage.setItem('SHARK_SESS', JSON.stringify(this.user));
-                this.unlock();
+            Auth: {
+                login() {
+                    const n = document.getElementById('l-user').value.toUpperCase().trim();
+                    const p = document.getElementById('l-pass').value.trim();
+                    let u = Shark.db.find(x => x.name === n);
+                    if(!u) { u = { name:n, pass:p, bal:100, role:'user' }; Shark.db.push(u); }
+                    else if(u.pass !== p) return alert("Dados inválidos");
+                    
+                    Shark.user = u; sessionStorage.setItem('M_SESS_VINAL', JSON.stringify(u)); this.unlock();
+                },
+                logout() { sessionStorage.removeItem('M_SESS_VINAL'); location.reload(); }
             },
 
             unlock() {
                 document.getElementById('scr-auth').classList.remove('active');
-                document.getElementById('navbar').style.display = 'flex';
-                document.getElementById('u-disp').innerText = this.user.name;
-                document.getElementById('av-char').innerText = this.user.name[0];
-                document.getElementById('main-bal').innerText = "R$ " + this.user.bal.toLocaleString('pt-BR');
-                if(this.user.role === 'admin') document.getElementById('adm-link').style.display = 'block';
-                this.nav('scr-home');
+                document.getElementById('h-main').style.display = 'flex';
+                document.getElementById('n-main').style.display = 'flex';
+                if(this.user.role === 'admin') document.getElementById('n-adm-link').style.display = 'block';
+                this.sync(); this.nav('scr-lobby');
             },
 
             nav(id, el) {
-                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                document.querySelectorAll('.view').forEach(s => s.classList.remove('active'));
                 document.getElementById(id).classList.add('active');
                 if(el) { document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active-link')); el.classList.add('active-link'); }
+                if(id === 'scr-admin') this.Admin.init();
             },
 
-            renderPort() {
-                const div = document.getElementById('port-list');
-                div.innerHTML = this.projects.map(p => `
-                    <div style="background:#0a0a0a; border:1px solid var(--brd); padding:20px; border-radius:20px; margin-bottom:15px;">
-                        <b style="color:var(--p)">${p.n}</b>
-                        <p style="font-size:12px; color:#555; margin:10px 0;">${p.d}</p>
-                        <button style="background:none; border:1px solid #222; color:#fff; padding:8px 15px; border-radius:10px; font-size:10px;">Ver Case</button>
-                    </div>
-                `).join('');
+            sync() {
+                const b = this.user.bal.toLocaleString('pt-BR');
+                document.getElementById('u-bal').innerText = b;
+                document.getElementById('u-bal-m').innerText = "R$ " + b;
+                document.getElementById('u-name').innerText = this.user.name;
+                
+                // RANK SYSTEM
+                let r = "BRONZE", c = "#555";
+                if(this.user.bal > 5000) { r = "GOLD"; c = "#FFD700"; }
+                if(this.user.bal > 50000) { r = "PLATINUM SHARK"; c = "#00ffa3"; }
+                document.getElementById('u-rank').innerText = r; document.getElementById('u-rank').style.color = c; document.getElementById('u-rank').style.borderColor = c;
+
+                localStorage.setItem('M_B_SHARK_VINAL', JSON.stringify(this.db));
             },
+
+            Games: { toggleBlur(id) { document.getElementById(id).classList.toggle('blur'); } },
 
             Admin: {
-                handleFile(e) {
-                    const file = e.target.files[0];
-                    const reader = new FileReader();
-                    reader.onload = (evt) => {
-                        const data = evt.target.result;
-                        const workbook = XLSX.read(data, {type: 'binary'});
-                        const sheet = workbook.Sheets[workbook.SheetNames[0]];
-                        const json = XLSX.utils.sheet_to_json(sheet);
+                init() {
+                    const ctx = document.getElementById('adm-chart').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+                            datasets: [{ label: 'Depósitos', data: [12, 19, 15, 25, 22, 30], borderColor: '#00ffa3', tension: 0.4 }]
+                        },
+                        options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
+                    });
+                },
+                handleXLSX(e) {
+                    const f = e.target.files[0], r = new FileReader();
+                    r.onload = (evt) => {
+                        const d = evt.target.result, wb = XLSX.read(d, {type:'binary'}), json = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
                         
-                        // Atualiza extrato do cliente com os dados da planilha
-                        const lista = document.getElementById('lista-extrato');
-                        lista.innerHTML = json.map(i => `
-                            <div class="extrato-item">
-                                <div><b>${i.Descricao || 'Transferência'}</b><br><small style="color:#444">${i.Data || 'Hoje'}</small></div>
-                                <b style="color:${String(i.Valor).includes('-') ? '#ff4444' : 'var(--p)'}">R$ ${i.Valor}</b>
-                            </div>
-                        `).join('');
-
-                        alert("Sincronização Platinum Concluída!");
-                        Shark.nav('scr-home');
+                        document.getElementById('lista-extrato').innerHTML = json.map(i => {
+                            const val = String(i.Valor), isOut = val.includes('-');
+                            return `
+                                <div class="ex-item">
+                                    <div class="ex-desc">
+                                        <div class="ex-ic" style="background:${isOut?'#ff444422':'#00ff8822'}; color:${isOut?'#ff4444':'#00ff88'}">
+                                            <i class="fa-solid fa-${isOut?'arrow-down':'arrow-up'}"></i>
+                                        </div>
+                                        <div><b>${i.Descricao || 'Movimentação'}</b><br><small style="color:#333">${i.Data || 'Hoje'}</small></div>
+                                    </div>
+                                    <b style="color:${isOut?'#ff4444':'var(--p)'}">R$ ${i.Valor}</b>
+                                </div>`;
+                        }).join('');
+                        alert("Banca Sincronizada via Visão Shark!"); Shark.sync(); Shark.nav('scr-extrato');
                     };
-                    reader.readAsBinaryString(file);
+                    r.readAsBinaryString(f);
                 }
             }
         };
