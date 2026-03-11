@@ -3,63 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SHARK-BET | CONTROLE TOTAL</title>
+    <title>MEC-BET | SHARK ULTIMATE V4</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --p: #ff5e00; --g: #00ff41; --bg: #030303; --card: #0d0d0d; --brd: #1a1a1a; }
+        :root { --p: #ff5e00; --g: #00ff41; --bg: #030303; --card: #0d0d0d; --brd: #1a1a1a; --txt: #ffffff; }
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; outline: none; }
-        body { background: var(--bg); color: #fff; height: 100vh; overflow: hidden; position: fixed; width: 100%; }
+        body { background: var(--bg); color: var(--txt); height: 100vh; overflow: hidden; position: fixed; width: 100%; }
 
-        /* FIX: HEADER FIXO E INDEPENDENTE */
+        /* HEADER PREMIUM */
         header { 
-            height: 70px; 
-            background: rgba(0,0,0,0.95); 
-            border-bottom: 1px solid var(--brd); 
-            display: none; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 0 20px; 
-            position: fixed; 
-            top: 0; 
-            width: 100%; 
-            z-index: 2000; 
-            backdrop-filter: blur(10px); 
+            height: 70px; background: rgba(0,0,0,0.98); border-bottom: 1px solid var(--brd); 
+            display: none; justify-content: space-between; align-items: center; padding: 0 15px; 
+            position: fixed; top: 0; width: 100%; z-index: 2000; backdrop-filter: blur(20px); 
         }
-        .logo { font-family: 'Orbitron', sans-serif; color: var(--p); font-size: 20px; font-weight: 900; }
-        .bal-box { background: #000; border: 1px solid var(--g); padding: 8px 12px; border-radius: 12px; color: var(--g); font-weight: 800; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+        .u-info { display: flex; align-items: center; gap: 10px; }
+        .u-rank { font-size: 9px; background: var(--p); color: #000; padding: 2px 6px; border-radius: 4px; font-weight: 900; text-transform: uppercase; }
+        .bal-display { background: #000; border: 1px solid var(--g); padding: 8px 12px; border-radius: 12px; color: var(--g); font-weight: 800; font-size: 13px; box-shadow: 0 0 10px rgba(0,255,65,0.1); }
 
-        /* VIEWS COM PADDING PARA NÃO BATER NO HEADER */
-        .view { position: absolute; inset: 0; display: none; flex-direction: column; padding: 90px 20px 110px 20px; overflow-y: auto; }
-        .view.active { display: flex; animation: sharkIn 0.3s ease-out; }
-        @keyframes sharkIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        /* VIEWS & TRANSITIONS */
+        .view { position: absolute; inset: 0; display: none; flex-direction: column; padding: 85px 15px 100px 15px; overflow-y: auto; overflow-x: hidden; }
+        .view.active { display: flex; animation: viewIn 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        @keyframes viewIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* UI ELEMENTS */
-        .card { background: var(--card); border: 1px solid var(--brd); border-radius: 20px; padding: 20px; margin-bottom: 15px; position: relative; overflow: hidden; }
-        .btn { width: 100%; padding: 16px; border: none; border-radius: 14px; font-weight: 800; text-transform: uppercase; cursor: pointer; transition: 0.2s; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-p { background: var(--p); color: #fff; }
+        /* CARDS & INPUTS */
+        .card { background: var(--card); border: 1px solid var(--brd); border-radius: 20px; padding: 18px; margin-bottom: 15px; position: relative; }
+        .btn { width: 100%; padding: 16px; border: none; border-radius: 14px; font-weight: 800; text-transform: uppercase; cursor: pointer; transition: 0.15s; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-p { background: var(--p); color: #fff; box-shadow: 0 4px 15px rgba(255, 94, 0, 0.2); }
+        .btn-p:active { transform: scale(0.96); }
         .btn-g { background: var(--g); color: #000; }
         .btn-s { background: #1a1a1a; color: #fff; border: 1px solid #333; }
 
         /* ENGINE DE APOSTA */
-        .bet-engine { display: flex; align-items: center; justify-content: space-between; background: #000; border: 1px solid #222; border-radius: 14px; padding: 6px; margin: 15px 0; }
-        .ctrl { width: 40px; height: 40px; background: #1a1a1a; border: none; border-radius: 10px; color: #fff; font-size: 18px; cursor: pointer; }
-        .v-bet { font-family: 'Orbitron'; color: var(--p); font-weight: 900; }
+        .bet-box { display: flex; align-items: center; justify-content: space-between; background: #000; border: 1px solid #222; border-radius: 14px; padding: 5px; margin: 15px 0; }
+        .bet-btn { width: 42px; height: 42px; background: #161616; border: none; border-radius: 10px; color: #fff; font-size: 18px; cursor: pointer; }
+        .bet-txt { font-family: 'Orbitron'; color: var(--p); font-weight: 900; }
 
-        /* GAMES */
-        .m-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
-        .m-tile { aspect-ratio: 1; background: #111; border-radius: 10px; border: 1px solid #222; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-        .m-tile.win { background: var(--g); color: #000; box-shadow: 0 0 15px var(--g); border: none; }
-        .m-tile.lose { background: #ff0033; color: #fff; box-shadow: 0 0 15px #ff0033; border: none; }
+        /* MINES GRID */
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+        .tile { aspect-ratio: 1; background: #111; border-radius: 10px; border: 1px solid #222; display: flex; align-items: center; justify-content: center; font-size: 20px; transition: 0.2s; }
+        .tile.win { background: var(--g); color: #000; box-shadow: 0 0 15px var(--g); border: none; animation: pop 0.2s ease; }
+        .tile.lose { background: #ff0033; color: #fff; box-shadow: 0 0 15px #ff0033; border: none; }
+        @keyframes pop { 50% { transform: scale(1.1); } }
 
-        .c-area { height: 160px; background: #000; border-radius: 15px; border: 1px solid #222; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; }
-        .c-num { font-family: 'Orbitron'; font-size: 45px; font-weight: 900; color: var(--g); }
+        /* CRASH ANIMATION */
+        .c-screen { height: 160px; background: #000; border-radius: 18px; border: 1px solid #222; margin-bottom: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .c-val { font-family: 'Orbitron'; font-size: 48px; font-weight: 900; color: var(--g); z-index: 5; }
 
         /* NAV BAR */
-        nav { position: fixed; bottom: 0; width: 100%; height: 85px; background: #000; border-top: 1px solid var(--brd); display: none; justify-content: space-around; align-items: center; padding-bottom: 15px; z-index: 2000; }
-        .n-item { color: #555; text-decoration: none; text-align: center; font-size: 10px; font-weight: 800; cursor: pointer; }
-        .n-item.active { color: var(--p); }
-        .n-item i { font-size: 22px; display: block; margin-bottom: 4px; }
+        nav { position: fixed; bottom: 0; width: 100%; height: 85px; background: rgba(0,0,0,0.98); border-top: 1px solid var(--brd); display: none; justify-content: space-around; align-items: center; padding-bottom: 15px; z-index: 2000; }
+        .n-link { color: #444; text-decoration: none; text-align: center; font-size: 10px; font-weight: 800; cursor: pointer; }
+        .n-link.active { color: var(--p); }
+        .n-link i { font-size: 22px; display: block; margin-bottom: 4px; }
 
         input { width: 100%; padding: 16px; background: #000; border: 1px solid #222; border-radius: 12px; color: #fff; margin-bottom: 10px; font-weight: 600; }
     </style>
@@ -67,62 +62,82 @@
 <body onload="Shark.init()">
 
     <header id="h-main">
-        <div class="logo">SHARK CONTROL</div>
-        <div class="bal-box" onclick="Shark.nav('scr-fin')">R$ <span id="u-bal">0.00</span></div>
+        <div class="u-info">
+            <i class="fa-solid fa-circle-user" style="color:var(--p); font-size: 24px;"></i>
+            <div>
+                <div style="font-size: 11px; font-weight: 800;" id="u-name">USUÁRIO</div>
+                <div class="u-rank" id="u-rank">BRONZE</div>
+            </div>
+        </div>
+        <div class="bal-display" onclick="Shark.nav('scr-fin')">R$ <span id="u-bal">0.00</span></div>
     </header>
 
-    <div id="scr-auth" class="view active" style="justify-content:center; padding: 20px;">
-        <div style="text-align:center; margin-bottom:30px;">
-            <h1 class="logo" style="font-size:40px;">SHARK<span>BET</span></h1>
-            <p style="color:#444; font-size:10px; letter-spacing:2px;">PLATAFORMA V-ULTIMATE</p>
+    <div id="scr-auth" class="view active" style="justify-content:center; padding: 25px;">
+        <div style="text-align:center; margin-bottom:40px;">
+            <h1 style="font-family:'Orbitron'; color:var(--p); font-size:42px;">MEC<span>BET</span></h1>
+            <p style="color:#444; font-size:10px; letter-spacing:3px; font-weight:900;">VISÃO SHARK ENTERPRISE</p>
         </div>
         <div class="card">
             <input type="text" id="l-user" placeholder="USUÁRIO">
             <input type="password" id="l-pass" placeholder="SENHA">
-            <button class="btn btn-p" onclick="Shark.Auth.run()">Acessar Terminal</button>
+            <button class="btn btn-p" onclick="Shark.Auth.login()">Acessar Plataforma</button>
+            <p style="text-align:center; font-size:11px; color:#555; margin-top:20px;">Conexão Segura SSL 256-bits</p>
         </div>
     </div>
 
     <div id="scr-lobby" class="view">
-        <div class="card" style="border-left: 4px solid var(--g);">
-            <h2 id="u-welcome">Olá, Shark</h2>
-            <small style="color:var(--g)">Sessão criptografada e segura.</small>
+        <div class="card" style="border-left: 4px solid var(--p); background: linear-gradient(90deg, #0d0d0d, #151515);">
+            <h3>Painel de Operações</h3>
+            <p style="font-size:11px; color:#555;">Selecione o mercado para iniciar a escala.</p>
         </div>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
-            <div class="card" onclick="Shark.nav('scr-mines')" style="text-align:center;">
-                <i class="fa-solid fa-gem" style="color:var(--g); font-size:30px; margin-bottom:10px;"></i><br><b>MINES PRO</b>
+        
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+            <div class="card" onclick="Shark.nav('scr-mines')" style="text-align:center; cursor:pointer;">
+                <i class="fa-solid fa-gem" style="color:var(--g); font-size:32px; margin-bottom:8px;"></i><br><b>MINES PRO</b>
             </div>
-            <div class="card" onclick="Shark.nav('scr-crash')" style="text-align:center;">
-                <i class="fa-solid fa-rocket" style="color:var(--p); font-size:30px; margin-bottom:10px;"></i><br><b>CRASH</b>
+            <div class="card" onclick="Shark.nav('scr-crash')" style="text-align:center; cursor:pointer;">
+                <i class="fa-solid fa-rocket" style="color:var(--p); font-size:32px; margin-bottom:8px;"></i><br><b>CRASH</b>
             </div>
         </div>
-        <button class="btn btn-g" onclick="Shark.nav('scr-fin')">DEPOSITAR AGORA</button>
+
+        <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <b>Feed de Ganhos</b>
+                <span style="color:var(--g); font-size:10px;"><i class="fa-solid fa-circle"></i> AO VIVO</span>
+            </div>
+            <div id="live-feed" style="margin-top:10px; font-size:11px; color:#666;">
+                O player @SHARK_02 acabou de lucrar R$ 145,00
+            </div>
+        </div>
     </div>
 
     <div id="scr-mines" class="view">
         <div class="card">
-            <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
                 <b style="color:var(--g)">MINES PRO</b>
-                <span style="font-size:10px; background:#000; padding:4px 8px; border-radius:5px;">3 BOMBAS</span>
+                <div class="u-rank">3 Minas</div>
             </div>
-            <div class="m-grid" id="m-grid"></div>
-            <div class="bet-engine">
-                <button class="ctrl" onclick="Shark.adj(-10)">-</button>
-                <div class="v-bet">R$ <span id="m-bet-val">10.00</span></div>
-                <button class="ctrl" onclick="Shark.adj(10)">+</button>
+            <div class="grid" id="m-grid"></div>
+            <div class="bet-box">
+                <button class="bet-btn" onclick="Shark.adj(-10)">-</button>
+                <div class="bet-txt">R$ <span id="m-bet-v">10.00</span></div>
+                <button class="bet-btn" onclick="Shark.adj(10)">+</button>
             </div>
-            <button id="m-btn" class="btn btn-p" onclick="Shark.Games.Mines.play()">INICIAR JOGO</button>
+            <button id="m-btn" class="btn btn-p" onclick="Shark.Games.Mines.play()">INICIAR OPERAÇÃO</button>
         </div>
     </div>
 
     <div id="scr-crash" class="view">
         <div class="card">
-            <h3 style="text-align:center; margin-bottom:15px; color:var(--p)">CRASH SHARK</h3>
-            <div class="c-area"><div id="c-mult" class="c-num">1.00x</div></div>
-            <div class="bet-engine">
-                <button class="ctrl" onclick="Shark.adj(-10)">-</button>
-                <div class="v-bet">R$ <span id="c-bet-val">10.00</span></div>
-                <button class="ctrl" onclick="Shark.adj(10)">+</button>
+            <h3 style="text-align:center; margin-bottom:15px;">MEC-CRASH</h3>
+            <div class="c-screen">
+                <div id="c-mult" class="c-val">1.00x</div>
+                <div style="font-size:10px; color:#444; margin-top:10px;">MULTIPLICADOR ATUAL</div>
+            </div>
+            <div class="bet-box">
+                <button class="bet-btn" onclick="Shark.adj(-10)">-</button>
+                <div class="bet-txt">R$ <span id="c-bet-v">10.00</span></div>
+                <button class="bet-btn" onclick="Shark.adj(10)">+</button>
             </div>
             <button id="c-btn" class="btn btn-g" onclick="Shark.Games.Crash.start()">APOSTAR</button>
         </div>
@@ -130,68 +145,59 @@
 
     <div id="scr-fin" class="view">
         <div class="card">
-            <small>Saldo para Saque</small>
-            <h2 style="color:var(--g); margin:10px 0;">R$ <span id="f-bal">0.00</span></h2>
-            <button class="btn btn-g" style="margin-bottom:10px;">DEPOSITAR</button>
-            <button class="btn btn-s" onclick="Shark.Finance.withdraw()">SOLICITAR SAQUE PIX</button>
+            <small>Disponível para Saque</small>
+            <h1 style="color:var(--g); margin:10px 0;">R$ <span id="f-bal">0.00</span></h1>
+            <button class="btn btn-g" style="margin-bottom:10px;"><i class="fa-brands fa-pix"></i> DEPOSITAR AGORA</button>
+            <button class="btn btn-s" onclick="Shark.Finance.withdraw()">SACAR VIA PIX</button>
+        </div>
+        <div class="card">
+            <b>Histórico Financeiro</b>
+            <p style="font-size:12px; color:#444; margin-top:10px;">Nenhuma transação pendente.</p>
         </div>
     </div>
 
     <div id="scr-admin" class="view">
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-            <div class="card"><small>LUCRO CASA</small><h2 id="a-ggr" style="color:var(--g)">R$ 0.00</h2></div>
-            <div class="card"><small>USUÁRIOS</small><h2 id="a-count">1</h2></div>
+        <h3 style="color:var(--p); margin-bottom:15px;">CONTROLE SHARK</h3>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:15px;">
+            <div class="card" style="margin:0;"><small>LUCRO CASA</small><h2 id="a-ggr" style="color:var(--g)">R$ 0.00</h2></div>
+            <div class="card" style="margin:0;"><small>ONLINE</small><h2>1</h2></div>
         </div>
         <div id="a-list"></div>
     </div>
 
     <nav id="n-main">
-        <a class="n-item active" onclick="Shark.nav('scr-lobby', this)"><i class="fa-solid fa-house"></i>HOME</a>
-        <a class="n-item" onclick="Shark.nav('scr-fin', this)"><i class="fa-solid fa-wallet"></i>BANCA</a>
-        <a class="n-item" id="n-adm" style="display:none;" onclick="Shark.nav('scr-admin', this)"><i class="fa-solid fa-shield-halved"></i>ADMIN</a>
-        <a class="n-item" onclick="location.reload()"><i class="fa-solid fa-right-from-bracket"></i>SAIR</a>
+        <a class="n-link active" onclick="Shark.nav('scr-lobby', this)"><i class="fa-solid fa-house"></i>HOME</a>
+        <a class="n-link" onclick="Shark.nav('scr-fin', this)"><i class="fa-solid fa-wallet"></i>BANCA</a>
+        <a class="n-link" id="n-adm" style="display:none;" onclick="Shark.nav('scr-admin', this)"><i class="fa-solid fa-shield-halved"></i>ADMIN</a>
+        <a class="n-link" onclick="Shark.Auth.logout()"><i class="fa-solid fa-right-from-bracket"></i>SAIR</a>
     </nav>
 
     <script>
         const Shark = {
-            db: JSON.parse(localStorage.getItem('SHARK_V3')) || [{name:'ADMIN', pass:'123', bal:100, role:'admin', mode:'normal'}],
+            db: JSON.parse(localStorage.getItem('MEC_V4')) || [{name:'ADMIN', pass:'123', bal:100, role:'admin', mode:'normal'}],
             u: null, bet: 10, ggr: 0,
 
             init() {
-                const s = sessionStorage.getItem('SHARK_SESS');
+                const s = sessionStorage.getItem('MEC_SESS');
                 if(s) { this.u = this.db.find(x => x.name === s); if(this.u) this.unlock(); }
+                this.liveFeed();
             },
 
             Auth: {
-                run() {
+                login() {
                     const n = document.getElementById('l-user').value.toUpperCase().trim();
                     const p = document.getElementById('l-pass').value.trim();
                     let u = Shark.db.find(x => x.name === n);
-                    if(!u || u.pass !== p) return alert("Acesso negado");
-                    Shark.u = u; sessionStorage.setItem('SHARK_SESS', n); Shark.unlock();
+                    if(!u) {
+                        u = { name: n, pass: p, bal: 50, role: (n==='ADMIN'?'admin':'user'), mode: 'normal' };
+                        Shark.db.push(u);
+                    } else if(u.pass !== p) return alert("Senha incorreta");
+                    Shark.u = u; sessionStorage.setItem('MEC_SESS', n); Shark.unlock();
+                },
+                logout() {
+                    sessionStorage.removeItem('MEC_SESS');
+                    location.reload();
                 }
-            },
-
-            // FIX: NAVEGAÇÃO QUE RESOLVE O BUG DO TOPO
-            nav(id, el) {
-                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-                const target = document.getElementById(id);
-                target.classList.add('active');
-                target.scrollTop = 0; // Reseta o scroll da tela nova
-
-                if(el) {
-                    document.querySelectorAll('.n-item').forEach(l => l.classList.remove('active'));
-                    el.classList.add('active');
-                }
-
-                // Força o header a se comportar
-                const header = document.getElementById('h-main');
-                header.style.display = 'flex';
-                
-                this.sync(); 
-
-                if(id === 'scr-mines') this.Games.Mines.render();
-                if(id === 'scr-admin') this.Admin.render();
             },
 
             unlock() {
@@ -202,19 +208,49 @@
                 this.nav('scr-lobby');
             },
 
+            nav(id, el) {
+                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+                document.getElementById(id).classList.add('active');
+                if(el) { document.querySelectorAll('.n-link').forEach(l => l.classList.remove('active')); el.classList.add('active'); }
+                if(id === 'scr-mines') this.Games.Mines.render();
+                if(id === 'scr-admin') this.Admin.render();
+                this.sync();
+            },
+
             sync() {
                 document.getElementById('u-bal').innerText = this.u.bal.toFixed(2);
                 document.getElementById('f-bal').innerText = this.u.bal.toFixed(2);
-                document.getElementById('m-bet-val').innerText = this.bet.toFixed(2);
-                document.getElementById('c-bet-val').innerText = this.bet.toFixed(2);
-                document.getElementById('u-welcome').innerText = "Olá, " + this.u.name;
-                localStorage.setItem('SHARK_V3', JSON.stringify(this.db));
+                document.getElementById('u-name').innerText = this.u.name;
+                document.getElementById('m-bet-v').innerText = this.bet.toFixed(2);
+                document.getElementById('c-bet-v').innerText = this.bet.toFixed(2);
+                
+                // Rank Inteligente
+                let rank = "BRONZE";
+                if(this.u.bal > 500) rank = "PRATA";
+                if(this.u.bal > 2000) rank = "SHARK";
+                document.getElementById('u-rank').innerText = rank;
+
+                localStorage.setItem('MEC_V4', JSON.stringify(this.db));
             },
 
             adj(v) { this.bet = Math.max(1, this.bet + v); this.sync(); },
 
+            liveFeed() {
+                const names = ["JP_SHARK", "MEC_DEV", "REI_DO_PIX", "Beto_12", "Dona_Maria"];
+                setInterval(() => {
+                    const n = names[Math.floor(Math.random() * names.length)];
+                    const v = (Math.random() * 200 + 10).toFixed(2);
+                    const el = document.getElementById('live-feed');
+                    if(el) el.innerText = `O player @${n} acabou de lucrar R$ ${v}`;
+                }, 4000);
+            },
+
             Finance: {
-                withdraw() { alert("Saque PIX processando..."); Shark.u.bal = 0; Shark.sync(); }
+                withdraw() {
+                    if(Shark.u.bal < 50) return alert("Mínimo R$ 50 para saque");
+                    alert("Saque solicitado para chave PIX!");
+                    Shark.u.bal = 0; Shark.sync();
+                }
             },
 
             Games: {
@@ -222,10 +258,10 @@
                     active: false,
                     render() {
                         const g = document.getElementById('m-grid'); g.innerHTML = '';
-                        for(let i=0; i<25; i++) g.innerHTML += `<div class="m-tile" id="t-${i}" onclick="Shark.Games.Mines.click(${i})"><i class="fa-solid fa-gem" style="opacity:0.1"></i></div>`;
+                        for(let i=0; i<25; i++) g.innerHTML += `<div class="tile" id="t-${i}" onclick="Shark.Games.Mines.click(${i})"><i class="fa-solid fa-gem" style="opacity:0.05"></i></div>`;
                     },
                     play() {
-                        if(this.active) { alert("Saque realizado!"); this.active = false; Shark.sync(); return; }
+                        if(this.active) { alert("Saque efetuado!"); this.active = false; Shark.sync(); return; }
                         if(Shark.u.bal < Shark.bet) return alert("Sem saldo");
                         Shark.u.bal -= Shark.bet; Shark.ggr += Shark.bet; Shark.sync();
                         this.active = true; this.render();
@@ -236,10 +272,10 @@
                         const t = document.getElementById('t-'+i);
                         if(Shark.u.mode === 'lose') {
                             t.classList.add('lose'); t.innerHTML = '💣'; this.active = false;
-                            setTimeout(() => { this.render(); document.getElementById('m-btn').innerText = "INICIAR JOGO"; }, 1000);
-                        } else { 
-                            t.classList.add('win'); t.innerHTML = '💎'; 
-                            Shark.u.bal += (Shark.bet * 0.2); Shark.sync();
+                            setTimeout(() => { this.render(); document.getElementById('m-btn').innerText = "INICIAR OPERAÇÃO"; }, 1500);
+                        } else {
+                            t.classList.add('win'); t.innerHTML = '💎';
+                            Shark.u.bal += (Shark.bet * 0.15); Shark.sync();
                         }
                     }
                 },
@@ -249,33 +285,32 @@
                         if(this.running) {
                             clearInterval(this.timer); this.running = false;
                             let win = Shark.bet * this.mult; Shark.u.bal += win; Shark.ggr -= win;
-                            alert("Win: R$ " + win.toFixed(2)); this.reset(); return;
+                            alert("GANHOU R$ " + win.toFixed(2)); this.reset(); return;
                         }
-                        if(Shark.u.bal < Shark.bet) return;
+                        if(Shark.u.bal < Shark.bet) return alert("Sem saldo");
                         Shark.u.bal -= Shark.bet; Shark.ggr += Shark.bet; Shark.sync();
                         this.running = true; this.mult = 1.0;
                         document.getElementById('c-btn').innerText = "CASH OUT";
                         this.timer = setInterval(() => {
-                            this.mult += 0.05;
+                            this.mult += 0.04;
                             document.getElementById('c-mult').innerText = this.mult.toFixed(2) + "x";
-                            if(Shark.u.mode === 'lose' && this.mult > 1.2) this.crash();
-                            if(Math.random() < 0.03) this.crash();
+                            if(Shark.u.mode === 'lose' && this.mult > 1.25) this.crash();
+                            if(Math.random() < 0.025) this.crash();
                         }, 100);
                     },
-                    crash() { clearInterval(this.timer); this.running = false; document.getElementById('c-mult').innerText = "BUST!"; setTimeout(() => this.reset(), 1500); },
-                    reset() { document.getElementById('c-mult').innerText = "1.00x"; document.getElementById('c-btn').innerText = "APOSTAR"; Shark.sync(); }
+                    crash() { clearInterval(this.timer); this.running = false; document.getElementById('c-mult').innerText = "BUST!"; document.getElementById('c-mult').style.color = "red"; setTimeout(() => this.reset(), 2000); },
+                    reset() { document.getElementById('c-mult').style.color = "var(--g)"; document.getElementById('c-mult').innerText = "1.00x"; document.getElementById('c-btn').innerText = "APOSTAR"; Shark.sync(); }
                 }
             },
 
             Admin: {
                 render() {
                     document.getElementById('a-ggr').innerText = "R$ " + Shark.ggr.toFixed(2);
-                    document.getElementById('a-count').innerText = Shark.db.length;
                     const l = document.getElementById('a-list');
                     l.innerHTML = Shark.db.filter(x => x.role !== 'admin').map(u => `
-                        <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
-                            <div><b>${u.name}</b><br><small>R$ ${u.bal.toFixed(2)}</small></div>
-                            <button onclick="Shark.Admin.toggle('${u.name}')" class="btn" style="width:80px; padding:8px; background:${u.mode==='lose'?'red':'#222'}">${u.mode==='lose'?'LOSS':'NORM'}</button>
+                        <div class="card" style="display:flex; justify-content:space-between; align-items:center; padding:12px;">
+                            <div><b>${u.name}</b><br><small>Saldo: R$ ${u.bal.toFixed(2)}</small></div>
+                            <button onclick="Shark.Admin.toggle('${u.name}')" class="btn" style="width:80px; padding:8px; background:${u.mode==='lose'?'red':'#333'}">${u.mode==='lose'?'LOSS':'NORM'}</button>
                         </div>
                     `).join('');
                 },
