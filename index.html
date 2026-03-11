@@ -5,200 +5,200 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MEC-BANK V46 | SHARK INFINITY</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Orbitron:wght@900&display=swap" rel="stylesheet">
     <style>
-        :root { --p: #00ffa3; --p-dark: #00a368; --bg: #000000; --card: #0a0a0a; --glass: rgba(255,255,255,0.03); --brd: rgba(255,255,255,0.08); }
-        
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); }
-        
-        body { background: var(--bg); color: #fff; margin: 0; overflow: hidden; height: 100vh; font-weight: 400; }
+        :root { --p: #00ffa3; --bg: #000000; --card: #0a0a0a; --brd: rgba(255,255,255,0.08); }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.3s ease; }
+        body { background: var(--bg); color: #fff; margin: 0; overflow: hidden; height: 100vh; }
 
-        /* --- BACKGROUND DINÂMICO --- */
-        .bg-glow { position: fixed; top: -10%; left: -10%; width: 40%; height: 40%; background: radial-gradient(circle, rgba(0,255,163,0.08) 0%, transparent 70%); z-index: -1; filter: blur(60px); }
+        /* TELAS */
+        .screen { display: none; height: 100vh; padding: 25px; flex-direction: column; overflow-y: auto; padding-bottom: 120px; }
+        .active { display: flex; animation: fadeIn 0.4s ease forwards; }
+        @keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
 
-        /* --- TELAS --- */
-        .screen { display: none; height: 100vh; padding: 25px; flex-direction: column; overflow-y: auto; padding-bottom: 110px; opacity: 0; transform: translateY(20px); }
-        .active { display: flex; opacity: 1; transform: translateY(0); }
+        /* AUTH */
+        .auth-screen { justify-content: center; align-items: center; text-align: center; }
+        .sh-logo { font-family: 'Orbitron'; font-size: 35px; color: var(--p); letter-spacing: 5px; margin-bottom: 40px; }
+        input { width: 100%; max-width: 300px; background: #111; border: 1px solid var(--brd); padding: 18px; border-radius: 15px; color: #fff; margin-bottom: 12px; text-align: center; }
+        .btn-p { width: 100%; max-width: 300px; background: var(--p); color: #000; border: none; padding: 18px; border-radius: 15px; font-weight: 800; cursor: pointer; }
 
-        /* --- LOGIN FUTURISTA --- */
-        .auth-screen { justify-content: center; align-items: center; background: #000; }
-        .sh-logo { font-family: 'Orbitron'; font-size: 38px; color: var(--p); letter-spacing: 8px; margin-bottom: 5px; }
-        .sh-tag { font-size: 10px; color: #444; letter-spacing: 5px; margin-bottom: 40px; font-weight: 800; }
-        
-        .input-group { width: 100%; max-width: 320px; position: relative; }
-        input { width: 100%; background: var(--card); border: 1px solid var(--brd); padding: 20px; border-radius: 20px; color: #fff; margin-bottom: 15px; font-size: 15px; text-align: center; }
-        input:focus { border-color: var(--p); box-shadow: 0 0 20px rgba(0,255,163,0.1); background: #111; }
-        
-        .btn-main { width: 100%; background: var(--p); color: #000; border: none; padding: 20px; border-radius: 20px; font-weight: 800; font-size: 15px; cursor: pointer; letter-spacing: 1px; }
-        .btn-main:active { transform: scale(0.96); opacity: 0.8; }
+        /* HEADER */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .avatar { width: 45px; height: 45px; border-radius: 15px; background: #111; border: 1px solid var(--brd); display: flex; align-items: center; justify-content: center; color: var(--p); font-weight: 800; }
 
-        /* --- DASHBOARD CLIENTE --- */
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; margin-top: 10px; }
-        .user-box { display: flex; align-items: center; gap: 15px; }
-        .avatar { width: 50px; height: 50px; border-radius: 18px; background: linear-gradient(135deg, #111, #222); border: 1px solid var(--brd); display: flex; align-items: center; justify-content: center; color: var(--p); font-weight: 800; }
-        
-        .balance-card { background: linear-gradient(135deg, #0f0f0f 0%, #050505 100%); border-radius: 32px; padding: 30px; border: 1px solid var(--brd); position: relative; overflow: hidden; }
-        .balance-card::before { content: ''; position: absolute; top: 0; right: 0; width: 100px; height: 100px; background: var(--p); filter: blur(80px); opacity: 0.1; }
-        .blur { filter: blur(15px); opacity: 0.3; }
+        /* CARDS */
+        .card-bal { background: linear-gradient(135deg, #0f0f0f, #050505); border-radius: 25px; padding: 25px; border: 1px solid var(--brd); position: relative; }
+        .blur { filter: blur(12px); }
 
-        /* --- ICONES DE AÇÃO --- */
-        .action-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 35px 0; }
-        .action-item { display: flex; flex-direction: column; align-items: center; gap: 10px; text-decoration: none; }
-        .icon-box { width: 62px; height: 62px; background: var(--card); border-radius: 22px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: #fff; border: 1px solid var(--brd); }
-        .action-item span { font-size: 11px; color: #666; font-weight: 600; }
-        .action-item:active .icon-box { background: var(--p); color: #000; transform: translateY(-5px); }
+        /* GRID */
+        .action-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 25px 0; }
+        .icon-box { aspect-ratio: 1; background: var(--card); border-radius: 18px; border: 1px solid var(--brd); display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--p); }
+        .action-item span { font-size: 10px; color: #555; display: block; text-align: center; margin-top: 5px; }
 
-        /* --- CARTÃO VIRTUAL --- */
-        .card-preview { background: #000; height: 200px; border-radius: 28px; border: 1px solid #222; padding: 30px; position: relative; background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png'); }
-        .card-brand { position: absolute; top: 30px; right: 30px; width: 45px; }
+        /* EXTRATO */
+        .extrato-item { display: flex; justify-content: space-between; padding: 15px; background: #080808; border-radius: 15px; margin-bottom: 10px; border-left: 3px solid var(--p); }
 
-        /* --- PANEL ADMIN MASTER --- */
-        .admin-header { background: var(--p); color: #000; padding: 30px 25px; margin: -25px -25px 30px -25px; border-radius: 0 0 40px 40px; }
-        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .stat-card { background: rgba(0,0,0,0.1); padding: 15px; border-radius: 20px; }
-        .chart-container { background: var(--card); padding: 20px; border-radius: 28px; border: 1px solid var(--brd); margin-bottom: 20px; }
-
-        /* --- BARRA DE NAVEGAÇÃO --- */
-        .nav-bar { position: fixed; bottom: 25px; left: 5%; width: 90%; background: rgba(10,10,10,0.8); backdrop-filter: blur(25px); border-radius: 25px; display: none; justify-content: space-around; padding: 15px 10px; border: 1px solid var(--brd); z-index: 9999; }
-        .nav-link { color: #555; text-align: center; font-size: 10px; text-decoration: none; }
-        .nav-link i { font-size: 20px; margin-bottom: 5px; display: block; }
-        .nav-link.active-link { color: var(--p); }
+        /* NAV */
+        nav { position: fixed; bottom: 20px; left: 5%; width: 90%; background: rgba(10,10,10,0.9); backdrop-filter: blur(20px); border-radius: 20px; display: none; justify-content: space-around; padding: 12px; border: 1px solid var(--brd); z-index: 999; }
+        .nav-link { color: #444; text-align: center; font-size: 10px; text-decoration: none; }
+        .active-link { color: var(--p); }
     </style>
 </head>
-<body>
-
-    <div class="bg-glow"></div>
+<body onload="Shark.init()">
 
     <div id="scr-auth" class="screen active auth-screen">
         <div class="sh-logo">MEC-BANK</div>
-        <div class="sh-tag">INFINITY PRIVATE</div>
-        <div class="input-group">
-            <input type="text" id="u-name" placeholder="ID de Acesso">
-            <input type="password" id="u-pass" placeholder="Senha Shark">
-            <button class="btn-main" onclick="sharkEntry()">AUTENTICAR</button>
-        </div>
+        <input type="text" id="u-login" placeholder="ID SHARK">
+        <input type="password" id="u-pass" placeholder="SENHA">
+        <button class="btn-p" onclick="Shark.login()">ENTRAR</button>
     </div>
 
     <div id="scr-home" class="screen">
         <div class="header">
-            <div class="user-box">
-                <div class="avatar" id="avt">J</div>
-                <div>
-                    <div style="font-size: 11px; color: #444; font-weight: 700;">PRIVATE ACCOUNT</div>
-                    <div id="usr-txt" style="font-size: 18px; font-weight: 800;">JP Dias</div>
-                </div>
+            <div style="display:flex; align-items:center; gap:12px;">
+                <div class="avatar" id="av-char">J</div>
+                <div><small style="color:#444; font-weight:800;">BEM-VINDO</small><div id="u-disp" style="font-weight:800;">JP Dias</div></div>
             </div>
-            <i class="fa-solid fa-bell" style="font-size: 20px; color: #333;"></i>
+            <i class="fa-solid fa-gear" style="color:#222"></i>
         </div>
 
-        <div class="balance-card">
-            <div style="display: flex; justify-content: space-between; color: #444; font-weight: 700; font-size: 12px;">
-                <span>SALDO DISPONÍVEL</span>
-                <i class="fa-solid fa-eye" onclick="toggleBlur()"></i>
+        <div class="card-bal">
+            <div style="display:flex; justify-content:space-between; font-size:11px; color:#444; font-weight:800;">
+                <span>SALDO EM CONTA</span>
+                <i class="fa-solid fa-eye" onclick="document.getElementById('main-bal').classList.toggle('blur')"></i>
             </div>
-            <div id="bal" style="font-size: 36px; font-weight: 800; margin: 15px 0; letter-spacing: -1px;">R$ 145.850,90</div>
-            <div style="font-size: 12px; color: var(--p);">+ R$ 2.400,00 este mês</div>
+            <div id="main-bal" class="blur" style="font-size:32px; font-weight:800; margin:10px 0;">R$ 0,00</div>
+            <div style="color:var(--p); font-size:11px; font-weight:800;">PLATINUM MEMBER</div>
         </div>
 
         <div class="action-grid">
-            <div class="action-item"><div class="icon-box"><i class="fa-solid fa-bolt"></i></div><span>Pix</span></div>
-            <div class="action-item"><div class="icon-box"><i class="fa-solid fa-barcode"></i></div><span>Pagar</span></div>
-            <div class="action-item"><div class="icon-box"><i class="fa-solid fa-arrow-right-arrow-left"></i></div><span>Transf.</span></div>
-            <div class="action-item"><div class="icon-box"><i class="fa-solid fa-chart-line"></i></div><span>Investir</span></div>
+            <div class="action-item"><div class="icon-box"><i class="fa-solid fa-qrcode"></i></div><span>Pix</span></div>
+            <div class="action-item" onclick="Shark.nav('scr-extrato')"><div class="icon-box"><i class="fa-solid fa-list"></i></div><span>Extrato</span></div>
+            <div class="action-item"><div class="icon-box"><i class="fa-solid fa-credit-card"></i></div><span>Cartões</span></div>
+            <div class="action-item" onclick="Shark.nav('scr-port')"><div class="icon-box"><i class="fa-solid fa-briefcase"></i></div><span>Jobs</span></div>
         </div>
 
-        <div class="card-preview">
-            <div style="font-family: 'Orbitron'; font-size: 14px; letter-spacing: 2px;">SHARK BLACK</div>
-            <div style="margin-top: 45px; font-size: 18px; letter-spacing: 4px; color: #555;">•••• •••• •••• 8835</div>
-            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 30px;">
-                <div>
-                    <small style="color: #333; font-weight: 800; font-size: 9px;">LIMIT</small>
-                    <div style="font-weight: 700;">R$ 50.000,00</div>
-                </div>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" width="40">
+        <div style="background:#0a0a0a; border-radius:20px; padding:20px; border:1px solid var(--brd);">
+            <b style="font-size:13px;">Sugestões para você</b>
+            <div style="margin-top:15px; display:flex; gap:10px; overflow-x:auto;">
+                <div style="min-width:140px; height:80px; background:#111; border-radius:15px; padding:12px; font-size:10px;">Empréstimo Shark: <br><b>R$ 50.000,00</b></div>
+                <div style="min-width:140px; height:80px; background:#111; border-radius:15px; padding:12px; font-size:10px;">Investir em <br><b>Cripto Ativos</b></div>
             </div>
         </div>
+    </div>
+
+    <div id="scr-extrato" class="screen">
+        <h3 style="margin-bottom:20px;"><i class="fa-solid fa-chevron-left" onclick="Shark.nav('scr-home')" style="margin-right:15px;"></i> Movimentações</h3>
+        <div id="lista-extrato">
+            <div class="extrato-item"><span>Aguardando Sincronização...</span></div>
+        </div>
+    </div>
+
+    <div id="scr-port" class="screen">
+        <h3 style="margin-bottom:20px;"><i class="fa-solid fa-chevron-left" onclick="Shark.nav('scr-home')" style="margin-right:15px;"></i> Meus Projetos</h3>
+        <div id="port-list"></div>
     </div>
 
     <div id="scr-admin" class="screen">
-        <div class="admin-header">
-            <div style="font-weight: 800; font-size: 22px;">Shark Control Center</div>
-            <div class="stat-grid">
-                <div class="stat-card"><small>Saldos em Custódia</small><div style="font-size: 18px; font-weight: 800;">R$ 1.4M</div></div>
-                <div class="stat-card"><small>Novos Users</small><div style="font-size: 18px; font-weight: 800;">+12 hoje</div></div>
-            </div>
+        <div style="background:var(--p); color:#000; padding:25px; border-radius:20px; margin-bottom:20px;">
+            <small>LUCRO OPERACIONAL</small>
+            <h2 id="adm-lucro">R$ 0,00</h2>
         </div>
-
-        <div class="chart-container">
-            <canvas id="myChart" height="200"></canvas>
-        </div>
-
-        <button class="btn-main" style="background: #111; color: var(--p); border: 1px solid var(--p); margin-bottom: 15px;" onclick="document.getElementById('file-up').click()">
-            <i class="fa-solid fa-file-excel"></i> SINCRONIZAR XLSX
-        </button>
-        <input type="file" id="file-up" hidden onchange="alert('Planilha Shark Processada!')">
-
-        <div id="users-list">
-            <div style="display: flex; justify-content: space-between; background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 10px; border: 1px solid var(--brd);">
-                <span>JP Dias (Master)</span>
-                <span style="color: var(--p);">ATIVO</span>
-            </div>
+        <div style="background:#0a0a0a; border:2px dashed var(--p); padding:30px; text-align:center; border-radius:20px; cursor:pointer;" onclick="document.getElementById('f-up').click()">
+            <i class="fa-solid fa-file-excel" style="font-size:30px; color:var(--p);"></i>
+            <p>UPLOAD PLANILHA XLSX</p>
+            <input type="file" id="f-up" hidden onchange="Shark.Admin.handleFile(event)">
         </div>
     </div>
 
-    <nav class="nav-bar" id="navbar">
-        <a class="nav-link active-link" onclick="go('scr-home', this)"><i class="fa-solid fa-house-chimney"></i>Início</a>
-        <a class="nav-link" onclick="go('scr-home', this)"><i class="fa-solid fa-wallet"></i>Carteira</a>
-        <a class="nav-link" onclick="go('scr-home', this)"><i class="fa-solid fa-gear"></i>Ajustes</a>
-        <a class="nav-link" onclick="location.reload()" style="color: #ff4444;"><i class="fa-solid fa-power-off"></i>Sair</a>
+    <nav id="navbar">
+        <a class="nav-link active-link" onclick="Shark.nav('scr-home', this)"><i class="fa-solid fa-house"></i>Home</a>
+        <a class="nav-link" onclick="Shark.nav('scr-extrato', this)"><i class="fa-solid fa-money-bill-transfer"></i>Extrato</a>
+        <a class="nav-link" id="adm-link" style="display:none;" onclick="Shark.nav('scr-admin', this)"><i class="fa-solid fa-shield-halved"></i>Admin</a>
+        <a class="nav-link" onclick="location.reload()" style="color:#ff4444;"><i class="fa-solid fa-power-off"></i>Sair</a>
     </nav>
 
     <script>
-        function sharkEntry() {
-            const u = document.getElementById('u-name').value.toLowerCase();
-            document.getElementById('scr-auth').classList.remove('active');
-            document.getElementById('navbar').style.display = 'flex';
-            
-            if(u === 'shark') {
-                document.getElementById('scr-admin').classList.add('active');
-                initChart();
-            } else {
-                document.getElementById('usr-txt').innerText = u.toUpperCase();
-                document.getElementById('avt').innerText = u[0].toUpperCase();
-                document.getElementById('scr-home').classList.add('active');
+        const Shark = {
+            user: null,
+            projects: [
+                {n: 'Log Pro', d: 'Identidade visual de alta autoridade.'},
+                {n: 'Sorveteria Sergel', d: 'Otimização de cardápio e SEO local.'},
+                {n: 'MecBet', d: 'Plataforma de iGaming V-Ultimate.'},
+                {n: 'MEC Shop', d: 'E-commerce de alta conversão em HTML.'}
+            ],
+
+            init() {
+                const s = sessionStorage.getItem('SHARK_SESS');
+                if(s) { this.user = JSON.parse(s); this.unlock(); }
+                this.renderPort();
+            },
+
+            login() {
+                const u = document.getElementById('u-login').value.toUpperCase();
+                const p = document.getElementById('u-pass').value;
+                if(!u || !p) return;
+                
+                this.user = { name: u, bal: 145850.90, role: u === 'SHARK' ? 'admin' : 'user' };
+                sessionStorage.setItem('SHARK_SESS', JSON.stringify(this.user));
+                this.unlock();
+            },
+
+            unlock() {
+                document.getElementById('scr-auth').classList.remove('active');
+                document.getElementById('navbar').style.display = 'flex';
+                document.getElementById('u-disp').innerText = this.user.name;
+                document.getElementById('av-char').innerText = this.user.name[0];
+                document.getElementById('main-bal').innerText = "R$ " + this.user.bal.toLocaleString('pt-BR');
+                if(this.user.role === 'admin') document.getElementById('adm-link').style.display = 'block';
+                this.nav('scr-home');
+            },
+
+            nav(id, el) {
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                document.getElementById(id).classList.add('active');
+                if(el) { document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active-link')); el.classList.add('active-link'); }
+            },
+
+            renderPort() {
+                const div = document.getElementById('port-list');
+                div.innerHTML = this.projects.map(p => `
+                    <div style="background:#0a0a0a; border:1px solid var(--brd); padding:20px; border-radius:20px; margin-bottom:15px;">
+                        <b style="color:var(--p)">${p.n}</b>
+                        <p style="font-size:12px; color:#555; margin:10px 0;">${p.d}</p>
+                        <button style="background:none; border:1px solid #222; color:#fff; padding:8px 15px; border-radius:10px; font-size:10px;">Ver Case</button>
+                    </div>
+                `).join('');
+            },
+
+            Admin: {
+                handleFile(e) {
+                    const file = e.target.files[0];
+                    const reader = new FileReader();
+                    reader.onload = (evt) => {
+                        const data = evt.target.result;
+                        const workbook = XLSX.read(data, {type: 'binary'});
+                        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                        const json = XLSX.utils.sheet_to_json(sheet);
+                        
+                        // Atualiza extrato do cliente com os dados da planilha
+                        const lista = document.getElementById('lista-extrato');
+                        lista.innerHTML = json.map(i => `
+                            <div class="extrato-item">
+                                <div><b>${i.Descricao || 'Transferência'}</b><br><small style="color:#444">${i.Data || 'Hoje'}</small></div>
+                                <b style="color:${String(i.Valor).includes('-') ? '#ff4444' : 'var(--p)'}">R$ ${i.Valor}</b>
+                            </div>
+                        `).join('');
+
+                        alert("Sincronização Platinum Concluída!");
+                        Shark.nav('scr-home');
+                    };
+                    reader.readAsBinaryString(file);
+                }
             }
-        }
-
-        function go(id, el) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active-link'));
-            document.getElementById(id).classList.add('active');
-            el.classList.add('active-link');
-        }
-
-        function toggleBlur() {
-            document.getElementById('bal').classList.toggle('blur');
-        }
-
-        function initChart() {
-            const ctx = document.getElementById('myChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
-                    datasets: [{
-                        label: 'Volume de Depósitos',
-                        data: [12, 19, 15, 25, 22, 30],
-                        borderColor: '#00ffa3',
-                        tension: 0.4,
-                        borderWidth: 3,
-                        pointRadius: 0
-                    }]
-                },
-                options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
-            });
-        }
+        };
     </script>
 </body>
 </html>
