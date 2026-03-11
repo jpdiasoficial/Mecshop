@@ -3,320 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MEC-BET | SHARK ULTIMATE V4</title>
+    <title>MEC-BANK V46 | SHARK INFINITY</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Orbitron:wght@900&display=swap" rel="stylesheet">
     <style>
-        :root { --p: #ff5e00; --g: #00ff41; --bg: #030303; --card: #0d0d0d; --brd: #1a1a1a; --txt: #ffffff; }
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; outline: none; }
-        body { background: var(--bg); color: var(--txt); height: 100vh; overflow: hidden; position: fixed; width: 100%; }
+        :root { --p: #00ffa3; --p-dark: #00a368; --bg: #000000; --card: #0a0a0a; --glass: rgba(255,255,255,0.03); --brd: rgba(255,255,255,0.08); }
+        
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); }
+        
+        body { background: var(--bg); color: #fff; margin: 0; overflow: hidden; height: 100vh; font-weight: 400; }
 
-        /* HEADER PREMIUM */
-        header { 
-            height: 70px; background: rgba(0,0,0,0.98); border-bottom: 1px solid var(--brd); 
-            display: none; justify-content: space-between; align-items: center; padding: 0 15px; 
-            position: fixed; top: 0; width: 100%; z-index: 2000; backdrop-filter: blur(20px); 
-        }
-        .u-info { display: flex; align-items: center; gap: 10px; }
-        .u-rank { font-size: 9px; background: var(--p); color: #000; padding: 2px 6px; border-radius: 4px; font-weight: 900; text-transform: uppercase; }
-        .bal-display { background: #000; border: 1px solid var(--g); padding: 8px 12px; border-radius: 12px; color: var(--g); font-weight: 800; font-size: 13px; box-shadow: 0 0 10px rgba(0,255,65,0.1); }
+        /* --- BACKGROUND DINÂMICO --- */
+        .bg-glow { position: fixed; top: -10%; left: -10%; width: 40%; height: 40%; background: radial-gradient(circle, rgba(0,255,163,0.08) 0%, transparent 70%); z-index: -1; filter: blur(60px); }
 
-        /* VIEWS & TRANSITIONS */
-        .view { position: absolute; inset: 0; display: none; flex-direction: column; padding: 85px 15px 100px 15px; overflow-y: auto; overflow-x: hidden; }
-        .view.active { display: flex; animation: viewIn 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        @keyframes viewIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* --- TELAS --- */
+        .screen { display: none; height: 100vh; padding: 25px; flex-direction: column; overflow-y: auto; padding-bottom: 110px; opacity: 0; transform: translateY(20px); }
+        .active { display: flex; opacity: 1; transform: translateY(0); }
 
-        /* CARDS & INPUTS */
-        .card { background: var(--card); border: 1px solid var(--brd); border-radius: 20px; padding: 18px; margin-bottom: 15px; position: relative; }
-        .btn { width: 100%; padding: 16px; border: none; border-radius: 14px; font-weight: 800; text-transform: uppercase; cursor: pointer; transition: 0.15s; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-p { background: var(--p); color: #fff; box-shadow: 0 4px 15px rgba(255, 94, 0, 0.2); }
-        .btn-p:active { transform: scale(0.96); }
-        .btn-g { background: var(--g); color: #000; }
-        .btn-s { background: #1a1a1a; color: #fff; border: 1px solid #333; }
+        /* --- LOGIN FUTURISTA --- */
+        .auth-screen { justify-content: center; align-items: center; background: #000; }
+        .sh-logo { font-family: 'Orbitron'; font-size: 38px; color: var(--p); letter-spacing: 8px; margin-bottom: 5px; }
+        .sh-tag { font-size: 10px; color: #444; letter-spacing: 5px; margin-bottom: 40px; font-weight: 800; }
+        
+        .input-group { width: 100%; max-width: 320px; position: relative; }
+        input { width: 100%; background: var(--card); border: 1px solid var(--brd); padding: 20px; border-radius: 20px; color: #fff; margin-bottom: 15px; font-size: 15px; text-align: center; }
+        input:focus { border-color: var(--p); box-shadow: 0 0 20px rgba(0,255,163,0.1); background: #111; }
+        
+        .btn-main { width: 100%; background: var(--p); color: #000; border: none; padding: 20px; border-radius: 20px; font-weight: 800; font-size: 15px; cursor: pointer; letter-spacing: 1px; }
+        .btn-main:active { transform: scale(0.96); opacity: 0.8; }
 
-        /* ENGINE DE APOSTA */
-        .bet-box { display: flex; align-items: center; justify-content: space-between; background: #000; border: 1px solid #222; border-radius: 14px; padding: 5px; margin: 15px 0; }
-        .bet-btn { width: 42px; height: 42px; background: #161616; border: none; border-radius: 10px; color: #fff; font-size: 18px; cursor: pointer; }
-        .bet-txt { font-family: 'Orbitron'; color: var(--p); font-weight: 900; }
+        /* --- DASHBOARD CLIENTE --- */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; margin-top: 10px; }
+        .user-box { display: flex; align-items: center; gap: 15px; }
+        .avatar { width: 50px; height: 50px; border-radius: 18px; background: linear-gradient(135deg, #111, #222); border: 1px solid var(--brd); display: flex; align-items: center; justify-content: center; color: var(--p); font-weight: 800; }
+        
+        .balance-card { background: linear-gradient(135deg, #0f0f0f 0%, #050505 100%); border-radius: 32px; padding: 30px; border: 1px solid var(--brd); position: relative; overflow: hidden; }
+        .balance-card::before { content: ''; position: absolute; top: 0; right: 0; width: 100px; height: 100px; background: var(--p); filter: blur(80px); opacity: 0.1; }
+        .blur { filter: blur(15px); opacity: 0.3; }
 
-        /* MINES GRID */
-        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
-        .tile { aspect-ratio: 1; background: #111; border-radius: 10px; border: 1px solid #222; display: flex; align-items: center; justify-content: center; font-size: 20px; transition: 0.2s; }
-        .tile.win { background: var(--g); color: #000; box-shadow: 0 0 15px var(--g); border: none; animation: pop 0.2s ease; }
-        .tile.lose { background: #ff0033; color: #fff; box-shadow: 0 0 15px #ff0033; border: none; }
-        @keyframes pop { 50% { transform: scale(1.1); } }
+        /* --- ICONES DE AÇÃO --- */
+        .action-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 35px 0; }
+        .action-item { display: flex; flex-direction: column; align-items: center; gap: 10px; text-decoration: none; }
+        .icon-box { width: 62px; height: 62px; background: var(--card); border-radius: 22px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: #fff; border: 1px solid var(--brd); }
+        .action-item span { font-size: 11px; color: #666; font-weight: 600; }
+        .action-item:active .icon-box { background: var(--p); color: #000; transform: translateY(-5px); }
 
-        /* CRASH ANIMATION */
-        .c-screen { height: 160px; background: #000; border-radius: 18px; border: 1px solid #222; margin-bottom: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-        .c-val { font-family: 'Orbitron'; font-size: 48px; font-weight: 900; color: var(--g); z-index: 5; }
+        /* --- CARTÃO VIRTUAL --- */
+        .card-preview { background: #000; height: 200px; border-radius: 28px; border: 1px solid #222; padding: 30px; position: relative; background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png'); }
+        .card-brand { position: absolute; top: 30px; right: 30px; width: 45px; }
 
-        /* NAV BAR */
-        nav { position: fixed; bottom: 0; width: 100%; height: 85px; background: rgba(0,0,0,0.98); border-top: 1px solid var(--brd); display: none; justify-content: space-around; align-items: center; padding-bottom: 15px; z-index: 2000; }
-        .n-link { color: #444; text-decoration: none; text-align: center; font-size: 10px; font-weight: 800; cursor: pointer; }
-        .n-link.active { color: var(--p); }
-        .n-link i { font-size: 22px; display: block; margin-bottom: 4px; }
+        /* --- PANEL ADMIN MASTER --- */
+        .admin-header { background: var(--p); color: #000; padding: 30px 25px; margin: -25px -25px 30px -25px; border-radius: 0 0 40px 40px; }
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .stat-card { background: rgba(0,0,0,0.1); padding: 15px; border-radius: 20px; }
+        .chart-container { background: var(--card); padding: 20px; border-radius: 28px; border: 1px solid var(--brd); margin-bottom: 20px; }
 
-        input { width: 100%; padding: 16px; background: #000; border: 1px solid #222; border-radius: 12px; color: #fff; margin-bottom: 10px; font-weight: 600; }
+        /* --- BARRA DE NAVEGAÇÃO --- */
+        .nav-bar { position: fixed; bottom: 25px; left: 5%; width: 90%; background: rgba(10,10,10,0.8); backdrop-filter: blur(25px); border-radius: 25px; display: none; justify-content: space-around; padding: 15px 10px; border: 1px solid var(--brd); z-index: 9999; }
+        .nav-link { color: #555; text-align: center; font-size: 10px; text-decoration: none; }
+        .nav-link i { font-size: 20px; margin-bottom: 5px; display: block; }
+        .nav-link.active-link { color: var(--p); }
     </style>
 </head>
-<body onload="Shark.init()">
+<body>
 
-    <header id="h-main">
-        <div class="u-info">
-            <i class="fa-solid fa-circle-user" style="color:var(--p); font-size: 24px;"></i>
-            <div>
-                <div style="font-size: 11px; font-weight: 800;" id="u-name">USUÁRIO</div>
-                <div class="u-rank" id="u-rank">BRONZE</div>
-            </div>
-        </div>
-        <div class="bal-display" onclick="Shark.nav('scr-fin')">R$ <span id="u-bal">0.00</span></div>
-    </header>
+    <div class="bg-glow"></div>
 
-    <div id="scr-auth" class="view active" style="justify-content:center; padding: 25px;">
-        <div style="text-align:center; margin-bottom:40px;">
-            <h1 style="font-family:'Orbitron'; color:var(--p); font-size:42px;">MEC<span>BET</span></h1>
-            <p style="color:#444; font-size:10px; letter-spacing:3px; font-weight:900;">VISÃO SHARK ENTERPRISE</p>
-        </div>
-        <div class="card">
-            <input type="text" id="l-user" placeholder="USUÁRIO">
-            <input type="password" id="l-pass" placeholder="SENHA">
-            <button class="btn btn-p" onclick="Shark.Auth.login()">Acessar Plataforma</button>
-            <p style="text-align:center; font-size:11px; color:#555; margin-top:20px;">Conexão Segura SSL 256-bits</p>
+    <div id="scr-auth" class="screen active auth-screen">
+        <div class="sh-logo">MEC-BANK</div>
+        <div class="sh-tag">INFINITY PRIVATE</div>
+        <div class="input-group">
+            <input type="text" id="u-name" placeholder="ID de Acesso">
+            <input type="password" id="u-pass" placeholder="Senha Shark">
+            <button class="btn-main" onclick="sharkEntry()">AUTENTICAR</button>
         </div>
     </div>
 
-    <div id="scr-lobby" class="view">
-        <div class="card" style="border-left: 4px solid var(--p); background: linear-gradient(90deg, #0d0d0d, #151515);">
-            <h3>Painel de Operações</h3>
-            <p style="font-size:11px; color:#555;">Selecione o mercado para iniciar a escala.</p>
-        </div>
-        
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
-            <div class="card" onclick="Shark.nav('scr-mines')" style="text-align:center; cursor:pointer;">
-                <i class="fa-solid fa-gem" style="color:var(--g); font-size:32px; margin-bottom:8px;"></i><br><b>MINES PRO</b>
+    <div id="scr-home" class="screen">
+        <div class="header">
+            <div class="user-box">
+                <div class="avatar" id="avt">J</div>
+                <div>
+                    <div style="font-size: 11px; color: #444; font-weight: 700;">PRIVATE ACCOUNT</div>
+                    <div id="usr-txt" style="font-size: 18px; font-weight: 800;">JP Dias</div>
+                </div>
             </div>
-            <div class="card" onclick="Shark.nav('scr-crash')" style="text-align:center; cursor:pointer;">
-                <i class="fa-solid fa-rocket" style="color:var(--p); font-size:32px; margin-bottom:8px;"></i><br><b>CRASH</b>
-            </div>
+            <i class="fa-solid fa-bell" style="font-size: 20px; color: #333;"></i>
         </div>
 
-        <div class="card">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <b>Feed de Ganhos</b>
-                <span style="color:var(--g); font-size:10px;"><i class="fa-solid fa-circle"></i> AO VIVO</span>
+        <div class="balance-card">
+            <div style="display: flex; justify-content: space-between; color: #444; font-weight: 700; font-size: 12px;">
+                <span>SALDO DISPONÍVEL</span>
+                <i class="fa-solid fa-eye" onclick="toggleBlur()"></i>
             </div>
-            <div id="live-feed" style="margin-top:10px; font-size:11px; color:#666;">
-                O player @SHARK_02 acabou de lucrar R$ 145,00
+            <div id="bal" style="font-size: 36px; font-weight: 800; margin: 15px 0; letter-spacing: -1px;">R$ 145.850,90</div>
+            <div style="font-size: 12px; color: var(--p);">+ R$ 2.400,00 este mês</div>
+        </div>
+
+        <div class="action-grid">
+            <div class="action-item"><div class="icon-box"><i class="fa-solid fa-bolt"></i></div><span>Pix</span></div>
+            <div class="action-item"><div class="icon-box"><i class="fa-solid fa-barcode"></i></div><span>Pagar</span></div>
+            <div class="action-item"><div class="icon-box"><i class="fa-solid fa-arrow-right-arrow-left"></i></div><span>Transf.</span></div>
+            <div class="action-item"><div class="icon-box"><i class="fa-solid fa-chart-line"></i></div><span>Investir</span></div>
+        </div>
+
+        <div class="card-preview">
+            <div style="font-family: 'Orbitron'; font-size: 14px; letter-spacing: 2px;">SHARK BLACK</div>
+            <div style="margin-top: 45px; font-size: 18px; letter-spacing: 4px; color: #555;">•••• •••• •••• 8835</div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 30px;">
+                <div>
+                    <small style="color: #333; font-weight: 800; font-size: 9px;">LIMIT</small>
+                    <div style="font-weight: 700;">R$ 50.000,00</div>
+                </div>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" width="40">
             </div>
         </div>
     </div>
 
-    <div id="scr-mines" class="view">
-        <div class="card">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                <b style="color:var(--g)">MINES PRO</b>
-                <div class="u-rank">3 Minas</div>
+    <div id="scr-admin" class="screen">
+        <div class="admin-header">
+            <div style="font-weight: 800; font-size: 22px;">Shark Control Center</div>
+            <div class="stat-grid">
+                <div class="stat-card"><small>Saldos em Custódia</small><div style="font-size: 18px; font-weight: 800;">R$ 1.4M</div></div>
+                <div class="stat-card"><small>Novos Users</small><div style="font-size: 18px; font-weight: 800;">+12 hoje</div></div>
             </div>
-            <div class="grid" id="m-grid"></div>
-            <div class="bet-box">
-                <button class="bet-btn" onclick="Shark.adj(-10)">-</button>
-                <div class="bet-txt">R$ <span id="m-bet-v">10.00</span></div>
-                <button class="bet-btn" onclick="Shark.adj(10)">+</button>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="myChart" height="200"></canvas>
+        </div>
+
+        <button class="btn-main" style="background: #111; color: var(--p); border: 1px solid var(--p); margin-bottom: 15px;" onclick="document.getElementById('file-up').click()">
+            <i class="fa-solid fa-file-excel"></i> SINCRONIZAR XLSX
+        </button>
+        <input type="file" id="file-up" hidden onchange="alert('Planilha Shark Processada!')">
+
+        <div id="users-list">
+            <div style="display: flex; justify-content: space-between; background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 10px; border: 1px solid var(--brd);">
+                <span>JP Dias (Master)</span>
+                <span style="color: var(--p);">ATIVO</span>
             </div>
-            <button id="m-btn" class="btn btn-p" onclick="Shark.Games.Mines.play()">INICIAR OPERAÇÃO</button>
         </div>
     </div>
 
-    <div id="scr-crash" class="view">
-        <div class="card">
-            <h3 style="text-align:center; margin-bottom:15px;">MEC-CRASH</h3>
-            <div class="c-screen">
-                <div id="c-mult" class="c-val">1.00x</div>
-                <div style="font-size:10px; color:#444; margin-top:10px;">MULTIPLICADOR ATUAL</div>
-            </div>
-            <div class="bet-box">
-                <button class="bet-btn" onclick="Shark.adj(-10)">-</button>
-                <div class="bet-txt">R$ <span id="c-bet-v">10.00</span></div>
-                <button class="bet-btn" onclick="Shark.adj(10)">+</button>
-            </div>
-            <button id="c-btn" class="btn btn-g" onclick="Shark.Games.Crash.start()">APOSTAR</button>
-        </div>
-    </div>
-
-    <div id="scr-fin" class="view">
-        <div class="card">
-            <small>Disponível para Saque</small>
-            <h1 style="color:var(--g); margin:10px 0;">R$ <span id="f-bal">0.00</span></h1>
-            <button class="btn btn-g" style="margin-bottom:10px;"><i class="fa-brands fa-pix"></i> DEPOSITAR AGORA</button>
-            <button class="btn btn-s" onclick="Shark.Finance.withdraw()">SACAR VIA PIX</button>
-        </div>
-        <div class="card">
-            <b>Histórico Financeiro</b>
-            <p style="font-size:12px; color:#444; margin-top:10px;">Nenhuma transação pendente.</p>
-        </div>
-    </div>
-
-    <div id="scr-admin" class="view">
-        <h3 style="color:var(--p); margin-bottom:15px;">CONTROLE SHARK</h3>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:15px;">
-            <div class="card" style="margin:0;"><small>LUCRO CASA</small><h2 id="a-ggr" style="color:var(--g)">R$ 0.00</h2></div>
-            <div class="card" style="margin:0;"><small>ONLINE</small><h2>1</h2></div>
-        </div>
-        <div id="a-list"></div>
-    </div>
-
-    <nav id="n-main">
-        <a class="n-link active" onclick="Shark.nav('scr-lobby', this)"><i class="fa-solid fa-house"></i>HOME</a>
-        <a class="n-link" onclick="Shark.nav('scr-fin', this)"><i class="fa-solid fa-wallet"></i>BANCA</a>
-        <a class="n-link" id="n-adm" style="display:none;" onclick="Shark.nav('scr-admin', this)"><i class="fa-solid fa-shield-halved"></i>ADMIN</a>
-        <a class="n-link" onclick="Shark.Auth.logout()"><i class="fa-solid fa-right-from-bracket"></i>SAIR</a>
+    <nav class="nav-bar" id="navbar">
+        <a class="nav-link active-link" onclick="go('scr-home', this)"><i class="fa-solid fa-house-chimney"></i>Início</a>
+        <a class="nav-link" onclick="go('scr-home', this)"><i class="fa-solid fa-wallet"></i>Carteira</a>
+        <a class="nav-link" onclick="go('scr-home', this)"><i class="fa-solid fa-gear"></i>Ajustes</a>
+        <a class="nav-link" onclick="location.reload()" style="color: #ff4444;"><i class="fa-solid fa-power-off"></i>Sair</a>
     </nav>
 
     <script>
-        const Shark = {
-            db: JSON.parse(localStorage.getItem('MEC_V4')) || [{name:'ADMIN', pass:'123', bal:100, role:'admin', mode:'normal'}],
-            u: null, bet: 10, ggr: 0,
-
-            init() {
-                const s = sessionStorage.getItem('MEC_SESS');
-                if(s) { this.u = this.db.find(x => x.name === s); if(this.u) this.unlock(); }
-                this.liveFeed();
-            },
-
-            Auth: {
-                login() {
-                    const n = document.getElementById('l-user').value.toUpperCase().trim();
-                    const p = document.getElementById('l-pass').value.trim();
-                    let u = Shark.db.find(x => x.name === n);
-                    if(!u) {
-                        u = { name: n, pass: p, bal: 50, role: (n==='ADMIN'?'admin':'user'), mode: 'normal' };
-                        Shark.db.push(u);
-                    } else if(u.pass !== p) return alert("Senha incorreta");
-                    Shark.u = u; sessionStorage.setItem('MEC_SESS', n); Shark.unlock();
-                },
-                logout() {
-                    sessionStorage.removeItem('MEC_SESS');
-                    location.reload();
-                }
-            },
-
-            unlock() {
-                document.getElementById('scr-auth').classList.remove('active');
-                document.getElementById('h-main').style.display = 'flex';
-                document.getElementById('n-main').style.display = 'flex';
-                if(this.u.role === 'admin') document.getElementById('n-adm').style.display = 'flex';
-                this.nav('scr-lobby');
-            },
-
-            nav(id, el) {
-                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-                document.getElementById(id).classList.add('active');
-                if(el) { document.querySelectorAll('.n-link').forEach(l => l.classList.remove('active')); el.classList.add('active'); }
-                if(id === 'scr-mines') this.Games.Mines.render();
-                if(id === 'scr-admin') this.Admin.render();
-                this.sync();
-            },
-
-            sync() {
-                document.getElementById('u-bal').innerText = this.u.bal.toFixed(2);
-                document.getElementById('f-bal').innerText = this.u.bal.toFixed(2);
-                document.getElementById('u-name').innerText = this.u.name;
-                document.getElementById('m-bet-v').innerText = this.bet.toFixed(2);
-                document.getElementById('c-bet-v').innerText = this.bet.toFixed(2);
-                
-                // Rank Inteligente
-                let rank = "BRONZE";
-                if(this.u.bal > 500) rank = "PRATA";
-                if(this.u.bal > 2000) rank = "SHARK";
-                document.getElementById('u-rank').innerText = rank;
-
-                localStorage.setItem('MEC_V4', JSON.stringify(this.db));
-            },
-
-            adj(v) { this.bet = Math.max(1, this.bet + v); this.sync(); },
-
-            liveFeed() {
-                const names = ["JP_SHARK", "MEC_DEV", "REI_DO_PIX", "Beto_12", "Dona_Maria"];
-                setInterval(() => {
-                    const n = names[Math.floor(Math.random() * names.length)];
-                    const v = (Math.random() * 200 + 10).toFixed(2);
-                    const el = document.getElementById('live-feed');
-                    if(el) el.innerText = `O player @${n} acabou de lucrar R$ ${v}`;
-                }, 4000);
-            },
-
-            Finance: {
-                withdraw() {
-                    if(Shark.u.bal < 50) return alert("Mínimo R$ 50 para saque");
-                    alert("Saque solicitado para chave PIX!");
-                    Shark.u.bal = 0; Shark.sync();
-                }
-            },
-
-            Games: {
-                Mines: {
-                    active: false,
-                    render() {
-                        const g = document.getElementById('m-grid'); g.innerHTML = '';
-                        for(let i=0; i<25; i++) g.innerHTML += `<div class="tile" id="t-${i}" onclick="Shark.Games.Mines.click(${i})"><i class="fa-solid fa-gem" style="opacity:0.05"></i></div>`;
-                    },
-                    play() {
-                        if(this.active) { alert("Saque efetuado!"); this.active = false; Shark.sync(); return; }
-                        if(Shark.u.bal < Shark.bet) return alert("Sem saldo");
-                        Shark.u.bal -= Shark.bet; Shark.ggr += Shark.bet; Shark.sync();
-                        this.active = true; this.render();
-                        document.getElementById('m-btn').innerText = "CASH OUT";
-                    },
-                    click(i) {
-                        if(!this.active) return;
-                        const t = document.getElementById('t-'+i);
-                        if(Shark.u.mode === 'lose') {
-                            t.classList.add('lose'); t.innerHTML = '💣'; this.active = false;
-                            setTimeout(() => { this.render(); document.getElementById('m-btn').innerText = "INICIAR OPERAÇÃO"; }, 1500);
-                        } else {
-                            t.classList.add('win'); t.innerHTML = '💎';
-                            Shark.u.bal += (Shark.bet * 0.15); Shark.sync();
-                        }
-                    }
-                },
-                Crash: {
-                    running: false, mult: 1, timer: null,
-                    start() {
-                        if(this.running) {
-                            clearInterval(this.timer); this.running = false;
-                            let win = Shark.bet * this.mult; Shark.u.bal += win; Shark.ggr -= win;
-                            alert("GANHOU R$ " + win.toFixed(2)); this.reset(); return;
-                        }
-                        if(Shark.u.bal < Shark.bet) return alert("Sem saldo");
-                        Shark.u.bal -= Shark.bet; Shark.ggr += Shark.bet; Shark.sync();
-                        this.running = true; this.mult = 1.0;
-                        document.getElementById('c-btn').innerText = "CASH OUT";
-                        this.timer = setInterval(() => {
-                            this.mult += 0.04;
-                            document.getElementById('c-mult').innerText = this.mult.toFixed(2) + "x";
-                            if(Shark.u.mode === 'lose' && this.mult > 1.25) this.crash();
-                            if(Math.random() < 0.025) this.crash();
-                        }, 100);
-                    },
-                    crash() { clearInterval(this.timer); this.running = false; document.getElementById('c-mult').innerText = "BUST!"; document.getElementById('c-mult').style.color = "red"; setTimeout(() => this.reset(), 2000); },
-                    reset() { document.getElementById('c-mult').style.color = "var(--g)"; document.getElementById('c-mult').innerText = "1.00x"; document.getElementById('c-btn').innerText = "APOSTAR"; Shark.sync(); }
-                }
-            },
-
-            Admin: {
-                render() {
-                    document.getElementById('a-ggr').innerText = "R$ " + Shark.ggr.toFixed(2);
-                    const l = document.getElementById('a-list');
-                    l.innerHTML = Shark.db.filter(x => x.role !== 'admin').map(u => `
-                        <div class="card" style="display:flex; justify-content:space-between; align-items:center; padding:12px;">
-                            <div><b>${u.name}</b><br><small>Saldo: R$ ${u.bal.toFixed(2)}</small></div>
-                            <button onclick="Shark.Admin.toggle('${u.name}')" class="btn" style="width:80px; padding:8px; background:${u.mode==='lose'?'red':'#333'}">${u.mode==='lose'?'LOSS':'NORM'}</button>
-                        </div>
-                    `).join('');
-                },
-                toggle(n) { const u = Shark.db.find(x => x.name === n); u.mode = u.mode === 'lose' ? 'normal' : 'lose'; this.render(); Shark.sync(); }
+        function sharkEntry() {
+            const u = document.getElementById('u-name').value.toLowerCase();
+            document.getElementById('scr-auth').classList.remove('active');
+            document.getElementById('navbar').style.display = 'flex';
+            
+            if(u === 'shark') {
+                document.getElementById('scr-admin').classList.add('active');
+                initChart();
+            } else {
+                document.getElementById('usr-txt').innerText = u.toUpperCase();
+                document.getElementById('avt').innerText = u[0].toUpperCase();
+                document.getElementById('scr-home').classList.add('active');
             }
-        };
+        }
+
+        function go(id, el) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active-link'));
+            document.getElementById(id).classList.add('active');
+            el.classList.add('active-link');
+        }
+
+        function toggleBlur() {
+            document.getElementById('bal').classList.toggle('blur');
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('myChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+                    datasets: [{
+                        label: 'Volume de Depósitos',
+                        data: [12, 19, 15, 25, 22, 30],
+                        borderColor: '#00ffa3',
+                        tension: 0.4,
+                        borderWidth: 3,
+                        pointRadius: 0
+                    }]
+                },
+                options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
+            });
+        }
     </script>
 </body>
 </html>
