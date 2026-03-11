@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MEC-BANK | SHARK ULTIMATE V45</title>
+    <title>MEC-BANK | SHARK V45 FULL</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -19,47 +19,31 @@
         .rank-tag { font-size: 9px; color: var(--p); border: 1px solid var(--p); padding: 2px 8px; border-radius: 5px; font-weight: 900; margin-top: 4px; display: inline-block; }
 
         /* VIEWS */
-        .view { position: absolute; inset: 0; display: none; flex-direction: column; padding: 100px 20px 110px 20px; overflow-y: auto; opacity: 0; transform: translateY(15px); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .view { position: absolute; inset: 0; display: none; flex-direction: column; padding: 100px 20px 110px 20px; overflow-y: auto; opacity: 0; transform: translateY(15px); transition: 0.4s ease; }
         .view.active { display: flex; opacity: 1; transform: translateY(0); }
 
         /* CARDS */
-        .card { background: var(--c); border: 1px solid var(--b); border-radius: 28px; padding: 25px; margin-bottom: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); position: relative; }
-        .card-p { background: linear-gradient(135deg, #0f0f0f 0%, #000 100%); border: 1px solid #222; overflow: hidden; }
-
-        /* BLUR PRIVACY */
+        .card { background: var(--c); border: 1px solid var(--b); border-radius: 28px; padding: 25px; margin-bottom: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
         .val-blur { filter: blur(12px); opacity: 0.1; transition: 0.4s ease; }
-        .val-visible { filter: blur(0); opacity: 1; }
 
-        /* BUTTONS */
-        .btn { border: none; border-radius: 18px; font-weight: 800; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-main { background: var(--p); color: #000; width: 100%; padding: 20px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 10px 25px var(--s); }
-        .btn-main:active { transform: scale(0.95); }
-
-        /* OPS GRID */
+        /* BOTÕES */
+        .btn-main { background: var(--p); color: #000; border: none; border-radius: 18px; padding: 20px; width: 100%; font-weight: 800; text-transform: uppercase; cursor: pointer; box-shadow: 0 10px 25px var(--s); }
+        
+        /* GRID OPERAÇÕES */
         .ops { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 25px 0; }
         .op { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 10px; font-weight: 700; color: #555; cursor: pointer; }
         .op-i { width: 65px; height: 65px; background: var(--c); border: 1px solid var(--b); border-radius: 22px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: var(--p); }
 
         /* NAV */
         nav { position: fixed; bottom: 25px; left: 5%; width: 90%; height: 75px; background: rgba(10,10,10,0.9); backdrop-filter: blur(25px); border-radius: 25px; display: none; justify-content: space-around; align-items: center; border: 1px solid var(--b); z-index: 2000; }
-        .nav-l { color: #333; text-decoration: none; text-align: center; font-size: 10px; font-weight: 800; }
+        .nav-l { color: #333; text-decoration: none; text-align: center; font-size: 10px; font-weight: 800; cursor: pointer; }
         .nav-l.active { color: var(--p); }
         .nav-l i { font-size: 22px; display: block; margin-bottom: 4px; }
 
-        input { width: 100%; padding: 22px; background: #050505; border: 1px solid #1a1a1a; border-radius: 20px; color: #fff; margin-bottom: 15px; text-align: center; font-size: 16px; }
-
-        /* CAMERA OVERLAY */
-        #camera-view { position: fixed; inset: 0; background: #000; z-index: 5000; display: none; flex-direction: column; align-items: center; justify-content: center; }
-        video { width: 100%; height: 100%; object-fit: cover; }
+        input { width: 100%; padding: 22px; background: #050505; border: 1px solid #1a1a1a; border-radius: 20px; color: #fff; margin-bottom: 15px; text-align: center; }
     </style>
 </head>
 <body onload="Shark.init()">
-
-    <div id="camera-view">
-        <video id="video" autoplay playsinline></video>
-        <div style="position:absolute; top:40px; color:#fff; font-weight:800;">ESCANEANDO...</div>
-        <button class="btn btn-main" style="position:absolute; bottom:40px; width:80%;" onclick="Shark.closeCamera()">CANCELAR</button>
-    </div>
 
     <header id="h">
         <div style="display:flex; align-items:center; gap:12px;">
@@ -75,100 +59,70 @@
     </header>
 
     <div id="view-auth" class="view active" style="justify-content:center; text-align:center;">
-        <div style="font-family:'Orbitron'; color:var(--p); font-size:42px; letter-spacing:6px; margin-bottom:5px; text-shadow: 0 0 20px var(--s);">MEC-BANK</div>
-        <div style="color:#222; font-size:9px; letter-spacing:8px; font-weight:900; margin-bottom:50px;">SHARK BLACK EDITION V45</div>
+        <div style="font-family:'Orbitron'; color:var(--p); font-size:40px; letter-spacing:5px; margin-bottom:40px;">MEC-BANK</div>
         <div class="card">
             <input type="text" id="login_u" placeholder="USUÁRIO">
             <input type="password" id="login_p" placeholder="SENHA">
-            <button class="btn btn-main" onclick="Shark.Auth.login()">Autenticar Acesso</button>
+            <button class="btn-main" onclick="Shark.Auth.login()">ENTRAR</button>
         </div>
     </div>
 
     <div id="view-home" class="view">
-        <div class="card card-p">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span style="font-size:10px; color:#444; font-weight:800; letter-spacing:1px;">SALDO TOTAL</span>
-                <i class="fa-solid fa-eye" id="eye-icon" style="color:var(--p); cursor:pointer; font-size:18px;" onclick="Shark.togglePrivacy()"></i>
+        <div class="card" style="background: linear-gradient(135deg, #0f0f0f 0%, #000 100%);">
+            <div style="display:flex; justify-content:space-between;">
+                <span style="font-size:10px; color:#444; font-weight:800;">SALDO TOTAL</span>
+                <i class="fa-solid fa-eye" id="eye" style="color:var(--p); cursor:pointer;" onclick="Shark.togglePrivacy()"></i>
             </div>
-            <div id="mb" class="val-blur" style="font-size:40px; font-weight:900; margin:15px 0; letter-spacing:-2px;">R$ 0,00</div>
-            <div style="display:flex; gap:12px;">
-                <button class="btn" style="background:var(--p); color:#000; flex:1; padding:12px; font-size:11px; border-radius:12px;" onclick="Shark.go('view-extrato')">Extrato</button>
-                <button class="btn" style="background:#111; color:#fff; flex:1; border:1px solid #222; padding:12px; font-size:11px; border-radius:12px;">Cartões</button>
-            </div>
+            <div id="mb" class="val-blur" style="font-size:40px; font-weight:900; margin:15px 0;">R$ 0,00</div>
+            <button class="btn-main" style="padding:12px; font-size:11px;" onclick="Shark.go('view-extrato')">VER EXTRATO</button>
         </div>
 
         <div class="ops">
-            <div class="op" onclick="Shark.opAction('pix')"><div class="op-i"><i class="fa-solid fa-bolt"></i></div><span>PIX</span></div>
-            <div class="op" onclick="Shark.opAction('boleto')"><div class="op-i"><i class="fa-solid fa-barcode"></i></div><span>BOLETOS</span></div>
-            <div class="op" onclick="Shark.opAction('invest')"><div class="op-i"><i class="fa-solid fa-arrow-trend-up"></i></div><span>INVESTIR</span></div>
-            <div class="op" onclick="Shark.go('view-jobs')"><div class="op-i"><i class="fa-solid fa-briefcase"></i></div><span>JOBS</span></div>
+            <div class="op" onclick="alert('Simulando PIX...')"><div class="op-i"><i class="fa-solid fa-bolt"></i></div>PIX</div>
+            <div class="op"><div class="op-i"><i class="fa-solid fa-barcode"></i></div>BOLETOS</div>
+            <div class="op"><div class="op-i"><i class="fa-solid fa-arrow-trend-up"></i></div>INVESTIR</div>
+            <div class="op"><div class="op-i"><i class="fa-solid fa-briefcase"></i></div>JOBS</div>
         </div>
-
-        <div style="background:linear-gradient(145deg, #0a0a0a, #000); height:210px; border-radius:30px; border:1px solid #1a1a1a; padding:30px; position:relative; overflow:hidden;">
-            <div style="font-family:'Orbitron'; font-size:12px; letter-spacing:3px; color:var(--p); opacity:0.8;">SHARK PLATINUM</div>
-            <div style="margin-top:55px; font-size:19px; letter-spacing:5px; color:#222; font-weight:400;">•••• •••• •••• 8835</div>
-            <div style="position:absolute; bottom:30px; left:30px;">
-                <small style="color:#1a1a1a; font-weight:900; font-size:9px; letter-spacing:1px;">LIMITE DISPONÍVEL</small>
-                <div id="lb" class="val-blur" style="font-weight:800; font-size:18px;">R$ 50.000,00</div>
-            </div>
-        </div>
-    </div>
-
-    <div id="view-extrato" class="view">
-        <h2 style="font-weight:800; margin-bottom:20px;">Fluxo de Caixa</h2>
-        <div id="ex-list"></div>
     </div>
 
     <div id="view-admin" class="view">
         <div style="background:var(--p); color:#000; padding:30px; border-radius:28px; margin-bottom:20px;">
-            <div style="font-weight:900; font-size:11px; opacity:0.6;">VOLUME TOTAL</div>
-            <h2 id="admin-bal" style="font-size:32px; font-weight:900;">R$ 0,00</h2>
+            <small style="font-weight:900;">GGR - VOLUME TOTAL</small>
+            <h2 id="adm-val" style="font-size:32px; font-weight:900;">R$ 0,00</h2>
         </div>
-        <div class="card" style="height:260px; padding:15px;"><canvas id="chart"></canvas></div>
-        <button class="btn btn-main" style="background:#111; color:var(--p); border:1px solid #222;" onclick="document.getElementById('xlsx').click()">IMPORTAR XLSX</button>
-        <input type="file" id="xlsx" hidden onchange="Shark.Admin.loadXLSX(event)">
+        <div class="card" style="height:250px; padding:15px;"><canvas id="chart"></canvas></div>
+    </div>
+
+    <div id="view-extrato" class="view">
+        <h2 style="margin-bottom:20px;">Extrato</h2>
+        <div id="ex-list" style="text-align:center; padding:40px; color:#222; font-weight:800;">SEM MOVIMENTAÇÕES</div>
     </div>
 
     <nav id="n">
         <a class="nav-l active" onclick="Shark.go('view-home', this)"><i class="fa-solid fa-house"></i>Home</a>
         <a class="nav-l" onclick="Shark.go('view-extrato', this)"><i class="fa-solid fa-receipt"></i>Extrato</a>
         <a class="nav-l" id="adm-l" style="display:none;" onclick="Shark.go('view-admin', this)"><i class="fa-solid fa-crown"></i>Admin</a>
-        <a class="nav-l" onclick="Shark.Auth.logout()" style="color:#ff4444;"><i class="fa-solid fa-power-off"></i>Sair</a>
+        <a class="nav-l" onclick="location.reload()" style="color:#ff4444;"><i class="fa-solid fa-power-off"></i>Sair</a>
     </nav>
 
     <script>
         const Shark = {
-            u: JSON.parse(localStorage.getItem('shark_u')) || null,
+            u: null,
             isPrivate: true,
-            transactions: JSON.parse(localStorage.getItem('shark_tx')) || [],
 
-            init() {
-                if(this.u) this.unlock();
-                this.renderTransactions();
-            },
-
-            togglePrivacy() {
-                this.isPrivate = !this.isPrivate;
-                const els = [document.getElementById('ub'), document.getElementById('mb'), document.getElementById('lb')];
-                els.forEach(el => el.className = this.isPrivate ? 'val-blur' : 'val-visible');
-                document.getElementById('eye-icon').className = `fa-solid ${this.isPrivate ? 'fa-eye' : 'fa-eye-slash'}`;
-            },
+            init() {},
 
             Auth: {
                 login() {
-                    const user = document.getElementById('login_u').value.toUpperCase().trim();
-                    if(!user) return alert("Insira um usuário");
-                    Shark.u = { 
-                        name: user, 
-                        bal: user === 'ADMIN' ? 1450000.00 : 2500.00, 
-                        role: user === 'ADMIN' ? 'admin' : 'user' 
-                    };
-                    localStorage.setItem('shark_u', JSON.stringify(Shark.u));
+                    const user = document.getElementById('login_u').value.trim().toUpperCase();
+                    if(!user) return alert("Digite o usuário");
+
+                    if(user === 'ADMIN') {
+                        Shark.u = { name: 'JP DIAS', bal: 1450850.00, role: 'admin' };
+                    } else {
+                        Shark.u = { name: user, bal: 2500.00, role: 'user' };
+                    }
                     Shark.unlock();
-                },
-                logout() {
-                    localStorage.removeItem('shark_u');
-                    location.reload();
                 }
             },
 
@@ -182,86 +136,45 @@
             },
 
             sync() {
-                const val = this.u.bal.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-                document.getElementById('ub').innerText = val;
-                document.getElementById('mb').innerText = "R$ " + val;
+                const v = this.u.bal.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                document.getElementById('ub').innerText = v;
+                document.getElementById('mb').innerText = "R$ " + v;
                 document.getElementById('un').innerText = this.u.name;
                 document.getElementById('av').innerText = this.u.name[0];
                 document.getElementById('rk').innerText = this.u.role === 'admin' ? "RANK: PLATINUM" : "RANK: GOLD";
-                if(this.u.role === 'admin') document.getElementById('admin-bal').innerText = "R$ " + val;
+                if(this.u.role === 'admin') document.getElementById('adm-val').innerText = "R$ " + v;
+            },
+
+            togglePrivacy() {
+                this.isPrivate = !this.isPrivate;
+                document.getElementById('ub').classList.toggle('val-blur', this.isPrivate);
+                document.getElementById('mb').classList.toggle('val-blur', this.isPrivate);
+                document.getElementById('eye').className = `fa-solid ${this.isPrivate ? 'fa-eye' : 'fa-eye-slash'}`;
             },
 
             go(id, el) {
                 document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
                 document.getElementById(id).classList.add('active');
-                if(el) { document.querySelectorAll('.nav-l').forEach(l => l.classList.remove('active')); el.classList.add('active'); }
-                if(id === 'view-admin') this.Admin.draw();
-            },
-
-            opAction(type) {
-                if(type === 'pix' || type === 'boleto') {
-                    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
-                    .then(stream => {
-                        const video = document.getElementById('video');
-                        video.srcObject = stream;
-                        document.getElementById('camera-view').style.display = 'flex';
-                        
-                        // Simular leitura após 3 segundos
-                        setTimeout(() => {
-                            this.closeCamera();
-                            this.processTransaction(type);
-                        }, 3000);
-                    }).catch(() => {
-                        this.processTransaction(type); // Fallback se não tiver camera
-                    });
+                if(el) {
+                    document.querySelectorAll('.nav-l').forEach(l => l.classList.remove('active'));
+                    el.classList.add('active');
                 }
+                if(id === 'view-admin') this.draw();
             },
 
-            closeCamera() {
-                const video = document.getElementById('video');
-                if(video.srcObject) video.srcObject.getTracks().forEach(t => t.stop());
-                document.getElementById('camera-view').style.display = 'none';
-            },
-
-            processTransaction(type) {
-                const amount = type === 'pix' ? 50.00 : 120.00;
-                if(this.u.bal < amount) return alert("Saldo insuficiente");
-
-                this.u.bal -= amount;
-                const tx = {
-                    desc: type.toUpperCase() + " REALIZADO",
-                    date: new Date().toLocaleString(),
-                    val: amount,
-                    type: 'out'
-                };
-                this.transactions.unshift(tx);
-                localStorage.setItem('shark_u', JSON.stringify(this.u));
-                localStorage.setItem('shark_tx', JSON.stringify(this.transactions));
-                this.sync();
-                this.renderTransactions();
-                alert("Operação realizada com sucesso!");
-            },
-
-            renderTransactions() {
-                const list = document.getElementById('ex-list');
-                if(!list) return;
-                list.innerHTML = this.transactions.map(t => `
-                    <div class="card" style="display:flex; justify-content:space-between; align-items:center; padding:15px;">
-                        <div>
-                            <b style="font-size:14px;">${t.desc}</b><br>
-                            <small style="color:#555;">${t.date}</small>
-                        </div>
-                        <b style="color:#ff4444;">- R$ ${t.val.toFixed(2)}</b>
-                    </div>
-                `).join('') || '<div style="text-align:center; padding:40px; color:#222;">SEM MOVIMENTAÇÕES</div>';
-            },
-
-            Admin: {
-                draw() {
-                    const ctx = document.getElementById('chart').getContext('2d');
-                    if(window.myChart) window.myChart.destroy();
-                    window.myChart = new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: ['00h', '04h', '0
-        
+            draw() {
+                const ctx = document.getElementById('chart').getContext('2d');
+                if(window.myChart) window.myChart.destroy();
+                window.myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['00h', '04h', '08h', '12h', '16h', '20h'],
+                        datasets: [{ data: [30, 50, 40, 90, 70, 110], borderColor: '#00ffa3', tension: 0.4, fill: true, backgroundColor: 'rgba(0, 255, 163, 0.05)' }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
+                });
+            }
+        };
+    </script>
+</body>
+</html>
