@@ -3,119 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SHARK-BET | V-ULTIMATE ENTERPRISE</title>
+    <title>SHARK-BET | ULTIMATE ENTERPRISE</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --p: #ff5e00; --g: #00ff41; --bg: #050505; --card: #0d0d0d; --brd: #1a1a1a; --txt: #ffffff; }
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; outline: none; }
-        body { background: var(--bg); color: var(--txt); height: 100vh; overflow: hidden; width: 100%; position: fixed; }
+        :root { --p: #ff5e00; --g: #00ff41; --bg: #060708; --card: #0d0f12; --brd: #1c2127; --txt: #ffffff; --m: #94a3b8; }
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: var(--txt); height: 100vh; width: 100%; overflow: hidden; position: fixed; }
 
-        /* HEADER & UI */
-        header { height: 70px; background: rgba(0,0,0,0.95); border-bottom: 2px solid var(--brd); display: none; justify-content: space-between; align-items: center; padding: 0 20px; z-index: 1000; backdrop-filter: blur(10px); }
-        .logo-shark { font-family: 'Orbitron', sans-serif; color: var(--p); font-size: 20px; font-weight: 900; letter-spacing: 2px; }
-        .balance-box { background: #111; padding: 8px 15px; border-radius: 12px; border: 1px solid var(--g); color: var(--g); font-weight: 800; font-size: 14px; }
+        /* HEADER PREMIUM */
+        header { height: 75px; background: rgba(13, 15, 18, 0.95); border-bottom: 1px solid var(--brd); display: none; justify-content: space-between; align-items: center; padding: 0 20px; z-index: 1000; backdrop-filter: blur(15px); }
+        .logo { font-family: 'Orbitron', sans-serif; color: var(--p); font-size: 18px; font-weight: 900; letter-spacing: 1px; }
+        .bal-box { background: rgba(0, 255, 65, 0.05); padding: 10px 16px; border-radius: 12px; border: 1px solid rgba(0, 255, 65, 0.2); color: var(--g); font-weight: 800; font-size: 14px; display: flex; align-items: center; gap: 8px; }
 
-        /* VIEWS & ANIMATIONS */
-        .view { position: absolute; inset: 0; display: none; flex-direction: column; padding: 20px; overflow-y: auto; padding-bottom: 110px; }
-        .view.active { display: flex; animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        /* NAVEGAÇÃO & TELAS */
+        .view { position: absolute; inset: 0; display: none; flex-direction: column; padding: 20px 15px; overflow-y: auto; padding-bottom: 100px; }
+        .view.active { display: flex; animation: sharkFade 0.4s ease-out; }
+        @keyframes sharkFade { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
 
-        /* CARDS & COMPONENTS */
-        .card { background: var(--card); border: 1px solid var(--brd); border-radius: 20px; padding: 20px; margin-bottom: 15px; position: relative; border-left: 4px solid var(--p); }
-        .btn-shark { width: 100%; padding: 18px; border: none; border-radius: 15px; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: 0.2s; font-size: 13px; margin-top: 10px; }
-        .btn-p { background: linear-gradient(135deg, var(--p), #ff8c00); color: #fff; box-shadow: 0 4px 15px rgba(255, 94, 0, 0.2); }
+        /* COMPONENTES DE LUXO */
+        .card { background: var(--card); border: 1px solid var(--brd); border-radius: 20px; padding: 20px; margin-bottom: 15px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .btn { width: 100%; padding: 18px; border: none; border-radius: 14px; font-weight: 800; text-transform: uppercase; cursor: pointer; transition: 0.2s; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-p { background: linear-gradient(135deg, var(--p), #ff8c00); color: #fff; box-shadow: 0 4px 20px rgba(255, 94, 0, 0.3); }
         .btn-g { background: linear-gradient(135deg, var(--g), #00cc33); color: #000; }
-        .btn-shark:active { transform: scale(0.96); }
+        .btn:active { transform: translateY(2px); opacity: 0.9; }
 
-        /* JOGOS */
-        .grid-m { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 20px 0; }
-        .tile { aspect-ratio: 1; background: #161616; border-radius: 10px; border: 1px solid #222; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-        .tile.win { background: var(--g); color: #000; box-shadow: 0 0 15px var(--g); border: none; }
-        .tile.loss { background: #ff3b3b; color: #fff; box-shadow: 0 0 15px #ff3b3b; border: none; }
+        /* JOGO: MINES */
+        .m-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 20px 0; }
+        .m-tile { aspect-ratio: 1; background: #161a1e; border-radius: 12px; border: 1px solid var(--brd); display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; transition: 0.3s; }
+        .m-tile.open-w { background: var(--g); color: #000; box-shadow: 0 0 20px var(--g); border: none; }
+        .m-tile.open-l { background: #ef4444; color: #fff; box-shadow: 0 0 20px #ef4444; border: none; }
 
-        .wheel-box { position: relative; width: 240px; height: 240px; margin: 20px auto; border: 6px solid #1a1a1a; border-radius: 50%; overflow: hidden; }
-        #wheel { width: 100%; height: 100%; transition: transform 4s cubic-bezier(0.1, 0, 0.1, 1); background: conic-gradient(#111 0% 12.5%, var(--p) 12.5% 25%, #111 25% 37.5%, var(--p) 37.5% 50%, #111 50% 62.5%, var(--p) 62.5% 75%, #111 75% 87.5%, var(--p) 87.5% 100%); }
+        /* JOGO: CRASH */
+        .c-display { height: 180px; background: #000; border-radius: 15px; margin: 15px 0; display: flex; align-items: center; justify-content: center; border: 1px dashed var(--brd); position: relative; overflow: hidden; }
+        .c-mult { font-family: 'Orbitron'; font-size: 50px; font-weight: 900; color: var(--g); text-shadow: 0 0 20px rgba(0,255,65,0.4); z-index: 2; }
+
+        /* PAINEL ADMIN INTELIGENTE */
+        .adm-stat { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .stat-card { background: #111418; padding: 15px; border-radius: 15px; border-left: 3px solid var(--p); }
+        .u-row { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #161a1e; border-radius: 12px; margin-bottom: 10px; border: 1px solid var(--brd); }
 
         /* NAVBAR */
-        nav { position: fixed; bottom: 0; width: 100%; height: 85px; background: rgba(0,0,0,0.95); border-top: 1px solid var(--brd); display: none; justify-content: space-around; align-items: center; padding-bottom: 15px; z-index: 1000; }
-        .nav-link { color: #444; text-align: center; font-size: 10px; font-weight: 800; text-decoration: none; }
-        .nav-link.active { color: var(--p); }
-        .nav-link i { font-size: 22px; display: block; margin-bottom: 4px; }
+        nav { position: fixed; bottom: 0; width: 100%; height: 85px; background: rgba(13, 15, 18, 0.98); border-top: 1px solid var(--brd); display: none; justify-content: space-around; align-items: center; padding-bottom: 15px; z-index: 1000; }
+        .n-link { color: var(--m); text-decoration: none; text-align: center; font-size: 10px; font-weight: 700; }
+        .n-link.active { color: var(--p); }
+        .n-link i { font-size: 20px; display: block; margin-bottom: 5px; }
 
-        input { width: 100%; padding: 15px; background: #000; border: 1px solid #222; border-radius: 12px; color: #fff; margin-bottom: 10px; font-weight: 600; }
+        input { width: 100%; padding: 16px; background: #000; border: 1px solid var(--brd); border-radius: 12px; color: #fff; margin-bottom: 12px; }
     </style>
 </head>
 <body onload="Shark.init()">
 
-    <div id="scr-auth" class="view active" style="justify-content:center; background: radial-gradient(circle at top, #111, #000);">
-        <div style="text-align:center; margin-bottom:30px;">
-            <h1 class="logo-shark" style="font-size:35px;">SHARK<span>BET</span></h1>
-            <p style="color:#444; font-size:10px; font-weight:800;">PLATAFORMA V-ULTIMATE</p>
+    <div id="scr-auth" class="view active" style="justify-content:center; background: radial-gradient(circle at top, #161a1e, #050505);">
+        <div style="text-align:center; margin-bottom:40px;">
+            <div class="logo" style="font-size:40px; margin-bottom:10px;">SHARK<span>BET</span></div>
+            <p style="color:var(--m); font-size:12px; letter-spacing:2px;">ENTERPRISE V-ULTIMATE</p>
         </div>
-        <div class="card" style="margin:0;">
+        <div class="card" style="margin:0 10px;">
             <input type="text" id="l-user" placeholder="USUÁRIO">
             <input type="password" id="l-pass" placeholder="SENHA">
-            <button class="btn-shark btn-p" onclick="Shark.Auth.login()">Acessar Terminal</button>
+            <button class="btn btn-p" onclick="Shark.Auth.login()">Acessar Terminal</button>
         </div>
     </div>
 
     <header id="h-main">
-        <div class="logo-shark">SHARK<span>BET</span></div>
-        <div class="balance-box">R$ <span id="u-bal">0.00</span></div>
+        <div class="logo">SHARK<span>BET</span></div>
+        <div class="bal-box"><i class="fa-solid fa-wallet"></i> R$ <span id="u-bal">0.00</span></div>
     </header>
 
     <div id="scr-lobby" class="view">
-        <div class="card">
-            <h3 id="u-welcome">Bem-vindo, Shark</h3>
-            <p style="font-size:11px; color:#555;">Status da conexão: <span style="color:var(--g)">Segura</span></p>
+        <div class="card" style="border-left: 4px solid var(--g);">
+            <h2 id="u-name" style="font-size:20px;">Bem-vindo, Shark</h2>
+            <p style="font-size:12px; color:var(--m);">Sessão criptografada e segura.</p>
         </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-            <div class="card" style="margin:0; text-align:center; cursor:pointer;" onclick="Shark.nav('scr-mines')"><i class="fa-solid fa-gem" style="font-size:25px; color:var(--g)"></i><br><small>MINES PRO</small></div>
-            <div class="card" style="margin:0; text-align:center; cursor:pointer;" onclick="Shark.nav('scr-wheel')"><i class="fa-solid fa-dharmachakra" style="font-size:25px; color:var(--p)"></i><br><small>ROLETA VIP</small></div>
+        
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:15px;">
+            <div class="card" style="margin:0; text-align:center; cursor:pointer;" onclick="Shark.nav('scr-mines')">
+                <i class="fa-solid fa-gem" style="font-size:30px; color:var(--g); margin-bottom:10px;"></i><br><b>MINES PRO</b>
+            </div>
+            <div class="card" style="margin:0; text-align:center; cursor:pointer;" onclick="Shark.nav('scr-crash')">
+                <i class="fa-solid fa-rocket" style="font-size:30px; color:var(--p); margin-bottom:10px;"></i><br><b>CRASH</b>
+            </div>
         </div>
-        <button class="btn-shark btn-g" style="margin-top:20px;">DEPOSITAR VIA PIX</button>
+        
+        <div class="card" style="text-align:center; cursor:pointer;" onclick="Shark.nav('scr-wheel')">
+            <div style="display:flex; align-items:center; justify-content:center; gap:20px;">
+                <i class="fa-solid fa-dharmachakra" style="font-size:35px; color:var(--p);"></i>
+                <div style="text-align:left;">
+                    <b style="font-size:16px;">ROLETA VIP</b><br>
+                    <small style="color:var(--m);">Gire para prêmios diários</small>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn btn-g"><i class="fa-brands fa-pix"></i> DEPOSITAR AGORA</button>
     </div>
 
     <div id="scr-mines" class="view">
         <div class="card" style="text-align:center;">
-            <h3>MINES PRO</h3>
-            <div class="grid-m" id="m-grid"></div>
-            <button id="m-btn" class="btn-shark btn-p" onclick="Shark.Games.Mines.play()">JOGAR (R$ 10,00)</button>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <b style="color:var(--g);">MINES PRO</b>
+                <span style="font-size:10px; background:#000; padding:4px 8px; border-radius:5px;">3 BOMBAS</span>
+            </div>
+            <div class="m-grid" id="m-grid"></div>
+            <button id="m-btn" class="btn btn-p" onclick="Shark.Games.Mines.play()">Iniciar Operação</button>
+        </div>
+    </div>
+
+    <div id="scr-crash" class="view">
+        <div class="card" style="text-align:center;">
+            <b style="color:var(--p);">SHARK CRASH</b>
+            <div class="c-display">
+                <div id="c-mult" class="c-mult">1.00x</div>
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                <input type="number" id="c-amt" value="10" style="margin:0; text-align:center;">
+                <button id="c-btn" class="btn btn-g" onclick="Shark.Games.Crash.start()">APOSTAR</button>
+            </div>
         </div>
     </div>
 
     <div id="scr-wheel" class="view">
         <div class="card" style="text-align:center;">
-            <h3>ROLETA DE CRÉDITOS</h3>
-            <div class="wheel-box"><div id="wheel"></div></div>
-            <button id="w-btn" class="btn-shark btn-p" onclick="Shark.Games.Wheel.spin()">GIRAR (R$ 5,00)</button>
+            <b>ROLETA DE CRÉDITOS</b>
+            <div style="position:relative; width:220px; height:220px; margin:30px auto;">
+                <div style="position:absolute; top:-15px; left:50%; transform:translateX(-50%); z-index:10; color:var(--p); font-size:25px;"><i class="fa-solid fa-caret-down"></i></div>
+                <div id="wheel" style="width:100%; height:100%; border-radius:50%; background: conic-gradient(#111 0% 12.5%, var(--p) 12.5% 25%, #111 25% 37.5%, var(--p) 37.5% 50%, #111 50% 62.5%, var(--p) 62.5% 75%, #111 75% 87.5%, var(--p) 87.5% 100%); transition: 4s cubic-bezier(0.1, 0, 0.1, 1); border: 5px solid var(--brd);"></div>
+            </div>
+            <button id="w-btn" class="btn btn-p" onclick="Shark.Games.Wheel.spin()">GIRAR ROLETA</button>
         </div>
     </div>
 
     <div id="scr-admin" class="view">
-        <h2 style="color:var(--p); margin-bottom:15px; font-family:'Orbitron';">SHARK CONTROL</h2>
-        <div class="card" style="display:flex; justify-content:space-around; text-align:center; border-left-color:var(--g);">
-            <div><small>GGR TOTAL</small><h2 id="adm-ggr" style="color:var(--g);">R$ 0.00</h2></div>
-            <div><small>USUÁRIOS</small><h2 id="adm-users">0</h2></div>
+        <h2 style="font-family:'Orbitron'; color:var(--p); margin-bottom:20px;">CONTROLE SHARK</h2>
+        <div class="adm-stat">
+            <div class="stat-card"><small style="color:var(--m);">GGR BRUTO</small><h3 id="adm-ggr" style="color:var(--g);">R$ 0.00</h3></div>
+            <div class="stat-card"><small style="color:var(--m);">PLAYERS</small><h3 id="adm-count">0</h3></div>
         </div>
         <div id="adm-list"></div>
     </div>
 
     <nav id="n-main">
-        <a class="nav-link active" onclick="Shark.nav('scr-lobby', this)"><i class="fa-solid fa-house"></i>HOME</a>
-        <a class="nav-link" id="n-adm" style="display:none; color:var(--p);" onclick="Shark.nav('scr-admin', this)"><i class="fa-solid fa-shield-halved"></i>ADMIN</a>
-        <a class="nav-link" onclick="location.reload()"><i class="fa-solid fa-right-from-bracket"></i>SAIR</a>
+        <a class="n-link active" onclick="Shark.nav('scr-lobby', this)"><i class="fa-solid fa-house"></i>HOME</a>
+        <a class="n-link" id="n-adm" style="display:none;" onclick="Shark.nav('scr-admin', this)"><i class="fa-solid fa-shield-halved"></i>ADMIN</a>
+        <a class="n-link" onclick="location.reload()"><i class="fa-solid fa-right-from-bracket"></i>SAIR</a>
     </nav>
 
     <script>
         const Shark = {
-            db: JSON.parse(localStorage.getItem('S_DB')) || [],
+            db: JSON.parse(localStorage.getItem('SHARK_DATA')) || [],
             u: null, ggr: 0,
 
             init() {
-                const s = sessionStorage.getItem('S_SESS');
-                if(s) { this.u = this.db.find(x => x.name === s); if(this.u) this.unlock(); }
+                const sess = sessionStorage.getItem('SHARK_SESS');
+                if(sess) { this.u = this.db.find(x => x.name === sess); if(this.u) this.unlock(); }
             },
 
             Auth: {
@@ -127,15 +168,15 @@
                     if(!user) {
                         user = { name: n, pass: p, bal: 50.00, role: (n === 'ADMIN' ? 'admin' : 'user'), mode: 'normal' };
                         Shark.db.push(user);
-                    } else if(user.pass !== p) return alert("Senha Incorreta");
-                    Shark.u = user; sessionStorage.setItem('S_SESS', n); Shark.unlock();
+                    } else if(user.pass !== p) return alert("Senha incorreta");
+                    Shark.u = user; sessionStorage.setItem('SHARK_SESS', n); Shark.unlock();
                 }
             },
 
             nav(id, el) {
                 document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
                 document.getElementById(id).classList.add('active');
-                if(el) { document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active')); el.classList.add('active'); }
+                if(el) { document.querySelectorAll('.n-link').forEach(l => l.classList.remove('active')); el.classList.add('active'); }
                 if(id === 'scr-mines') this.Games.Mines.render();
                 if(id === 'scr-admin') this.Admin.render();
                 this.sync();
@@ -151,8 +192,8 @@
 
             sync() {
                 document.getElementById('u-bal').innerText = this.u.bal.toFixed(2);
-                document.getElementById('u-welcome').innerText = "Olá, " + this.u.name;
-                localStorage.setItem('S_DB', JSON.stringify(this.db));
+                document.getElementById('u-name').innerText = "Olá, " + this.u.name;
+                localStorage.setItem('SHARK_DATA', JSON.stringify(this.db));
             },
 
             Games: {
@@ -160,21 +201,57 @@
                     active: false, bombs: [],
                     render() {
                         const g = document.getElementById('m-grid'); g.innerHTML = '';
-                        for(let i=0; i<25; i++) g.innerHTML += `<div class="tile" id="t-${i}" onclick="Shark.Games.Mines.click(${i})"><i class="fa-solid fa-gem" style="opacity:0.05"></i></div>`;
+                        for(let i=0; i<25; i++) g.innerHTML += `<div class="m-tile" id="t-${i}" onclick="Shark.Games.Mines.click(${i})"><i class="fa-solid fa-gem" style="opacity:0.05"></i></div>`;
                     },
                     play() {
-                        if(Shark.u.bal < 10) return alert("Saldo baixo");
+                        if(Shark.u.bal < 10) return alert("Saldo insuficiente");
                         Shark.u.bal -= 10; Shark.ggr += 10; Shark.sync();
-                        this.active = true; this.bombs = [Math.floor(Math.random()*25)];
+                        this.active = true; this.bombs = Array.from({length: 3}, () => Math.floor(Math.random() * 25));
                         this.render(); document.getElementById('m-btn').innerText = "SAQUE DISPONÍVEL";
                     },
                     click(i) {
                         if(!this.active) return;
                         const t = document.getElementById('t-'+i);
                         if(this.bombs.includes(i) || Shark.u.mode === 'lose') {
-                            t.classList.add('loss'); t.innerHTML = '💣'; this.active = false;
-                            setTimeout(() => { this.render(); document.getElementById('m-btn').innerText = "JOGAR (R$ 10,00)"; }, 1500);
-                        } else { t.classList.add('win'); t.innerHTML = '💎'; }
+                            t.classList.add('open-l'); t.innerHTML = '<i class="fa-solid fa-bomb"></i>'; this.active = false;
+                            setTimeout(() => { this.render(); document.getElementById('m-btn').innerText = "Iniciar Operação"; }, 1500);
+                        } else { t.classList.add('open-w'); t.innerHTML = '<i class="fa-solid fa-gem"></i>'; }
+                    }
+                },
+                Crash: {
+                    running: false, mult: 1.0, timer: null,
+                    start() {
+                        if(this.running) { this.stop(); return; }
+                        if(Shark.u.bal < 10) return;
+                        Shark.u.bal -= 10; Shark.ggr += 10; Shark.sync();
+                        this.running = true; this.mult = 1.0;
+                        document.getElementById('c-btn').innerText = "CASH OUT";
+                        document.getElementById('c-btn').className = "btn btn-p";
+                        this.timer = setInterval(() => {
+                            this.mult += 0.05;
+                            document.getElementById('c-mult').innerText = this.mult.toFixed(2) + "x";
+                            if(Shark.u.mode === 'lose' && this.mult > 1.5) this.crash();
+                            if(Math.random() < 0.02) this.crash();
+                        }, 100);
+                    },
+                    stop() {
+                        clearInterval(this.timer); this.running = false;
+                        let win = 10 * this.mult; Shark.u.bal += win; Shark.ggr -= win;
+                        alert("Ganhou R$ " + win.toFixed(2));
+                        this.reset();
+                    },
+                    crash() {
+                        clearInterval(this.timer); this.running = false;
+                        document.getElementById('c-mult').style.color = "red";
+                        document.getElementById('c-mult').innerText = "CRASHED!";
+                        setTimeout(() => this.reset(), 2000);
+                    },
+                    reset() {
+                        document.getElementById('c-mult').style.color = "var(--g)";
+                        document.getElementById('c-mult').innerText = "1.00x";
+                        document.getElementById('c-btn').innerText = "APOSTAR";
+                        document.getElementById('c-btn').className = "btn btn-g";
+                        Shark.sync();
                     }
                 },
                 Wheel: {
@@ -188,11 +265,11 @@
                         w.style.transform = `rotate(${deg}deg)`;
                         setTimeout(() => {
                             this.spinning = false;
-                            let p = Shark.u.mode === 'lose' ? 0 : (Math.random() * 15).toFixed(2);
-                            if(p > 0) { Shark.u.bal += parseFloat(p); Shark.ggr -= p; alert("Ganhou R$ " + p); }
-                            else alert("Tente novamente");
+                            let p = Shark.u.mode === 'lose' ? 0 : (Math.random() * 20).toFixed(2);
+                            if(p > 0) { Shark.u.bal += parseFloat(p); Shark.ggr -= p; alert("Prêmio: R$ " + p); }
+                            else alert("Não foi dessa vez!");
                             w.style.transition = 'none'; w.style.transform = 'rotate(0deg)';
-                            setTimeout(() => w.style.transition = 'transform 4s cubic-bezier(0.1, 0, 0.1, 1)', 50);
+                            setTimeout(() => w.style.transition = '4s cubic-bezier(0.1, 0, 0.1, 1)', 50);
                             Shark.sync();
                         }, 4100);
                     }
@@ -202,16 +279,16 @@
             Admin: {
                 render() {
                     document.getElementById('adm-ggr').innerText = "R$ " + Shark.ggr.toFixed(2);
-                    document.getElementById('adm-users').innerText = Shark.db.length;
+                    document.getElementById('adm-count').innerText = Shark.db.length;
                     const list = document.getElementById('adm-list');
                     list.innerHTML = Shark.db.filter(x => x.role !== 'admin').map(u => `
-                        <div class="card" style="display:flex; justify-content:space-between; align-items:center; border-left-color:${u.mode==='lose'?'red':''} ">
-                            <div><b>${u.name}</b><br><small>R$ ${u.bal.toFixed(2)}</small></div>
-                            <button onclick="Shark.Admin.toggle('${u.name}')" class="btn-shark" style="width:100px; background:${u.mode==='lose'?'red':'#222'}; color:#fff; margin:0; padding:10px; font-size:10px;">${u.mode==='lose'?'LOSS ATIVO':'NORMAL'}</button>
+                        <div class="u-row">
+                            <div><b>${u.name}</b><br><small style="color:var(--m)">R$ ${u.bal.toFixed(2)}</small></div>
+                            <button onclick="Shark.Admin.toggle('${u.name}')" class="btn" style="width:100px; padding:10px; background:${u.mode==='lose'?'#ef4444':'#222'}; color:#fff; font-size:10px;">${u.mode==='lose'?'LOSS':'NORMAL'}</button>
                         </div>
                     `).join('');
                 },
-                toggle(n) { const u = Shark.db.find(x => x.name === n); u.mode = u.mode === 'lose' ? 'normal' : 'lose'; this.render(); }
+                toggle(n) { const u = Shark.db.find(x => x.name === n); u.mode = u.mode === 'lose' ? 'normal' : 'lose'; this.render(); Shark.sync(); }
             }
         };
     </script>
