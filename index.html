@@ -3,240 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HG MOTORS | Vitrine de Elite V80</title>
+    <title>HG MOTORS | V80 Shark Machine</title>
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 
     <style>
-        /* PROTOCOLO V80 - 45 MELHORIAS DE ALTA CONVERSÃO INTEGRADAS */
         :root {
-            --primary: #e63946;    /* Vermelho Esportivo da Fachada */
-            --secondary: #25d366;  /* Verde WhatsApp */
-            --bg: #050505;         /* Fundo Black Total */
-            --surface: #121212;    /* Cards e Elementos */
-            --border: #222222;     /* Divisores Discretos */
-            --text-main: #ffffff;
-            --text-dim: #888888;
+            --primary: #e63946;
+            --secondary: #25d366;
+            --bg: #050505;
+            --surface: #121212;
+            --border: #222;
+            --text: #fff;
+            --text-dim: #888;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-        
-        body { 
-            background-color: var(--bg); 
-            color: var(--text-main); 
-            line-height: 1.5; 
-            -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
-            padding-bottom: 50px;
-        }
+        body { background: var(--bg); color: var(--text); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 
-        /* HEADER V80 - IDENTIDADE DA FACHADA (PRETO E VERMELHO) */
+        /* HEADER SHARK - AUTORIDADE IMEDIATA */
         header { 
-            background: #000; padding: 25px 15px; text-align: center; 
-            border-bottom: 3px solid var(--primary);
-            position: sticky; top: 0; z-index: 1000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.95); padding: 25px 0; text-align: center; 
+            border-bottom: 3px solid var(--primary); position: sticky; top: 0; z-index: 1000;
+            backdrop-filter: blur(15px);
         }
-        .logo { font-size: 26px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; }
+        .logo { font-size: 26px; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; }
         .logo span { color: var(--primary); }
-        .slogan { font-size: 10px; color: var(--text-dim); text-transform: uppercase; margin-top: 5px; letter-spacing: 1px; }
+        .badge-loc { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-top: 4px; }
 
-        /* PAINEL DE NAVEGAÇÃO COMPLETO (45 Melhorias - UX de Elite) */
+        /* NAVEGAÇÃO DE PERFORMANCE (UX APP) */
         .v80-nav {
-            display: flex; gap: 12px; padding: 15px; overflow-x: auto;
+            display: flex; gap: 10px; padding: 15px; overflow-x: auto;
             background: #080808; border-bottom: 1px solid var(--border);
-            position: sticky; top: 84px; z-index: 999;
-            backdrop-filter: blur(10px);
+            position: sticky; top: 86px; z-index: 999;
         }
         .v80-nav::-webkit-scrollbar { display: none; }
-        .nav-link {
-            background: rgba(255,255,255,0.03); color: #fff; padding: 10px 22px;
-            border-radius: 4px; font-size: 11px; font-weight: 800;
-            text-decoration: none; border: 1px solid var(--border);
-            white-space: nowrap; text-transform: uppercase; letter-spacing: 1px;
-            transition: 0.3s;
+        .nav-btn {
+            background: var(--surface); color: var(--text-dim); padding: 10px 22px;
+            border-radius: 6px; font-size: 11px; font-weight: 800; border: 1px solid var(--border);
+            text-transform: uppercase; white-space: nowrap; transition: 0.3s; cursor: pointer;
         }
-        .nav-link.active { background: var(--primary); border-color: var(--primary); box-shadow: 0 0 15px rgba(230, 57, 70, 0.4); }
+        .nav-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-        /* FEED ESPINHA DE PEIXE V80 (Otimizado Mobile) */
-        .catalog-container { max-width: 480px; margin: 0 auto; padding: 20px 15px; }
+        /* GRID DE PRODUTOS - FOCO V80 */
+        .main-catalog { max-width: 500px; margin: 0 auto; padding: 20px 15px; }
 
-        .v-item {
-            background: var(--surface); border-radius: 12px; margin-bottom: 35px;
+        .card {
+            background: var(--surface); border-radius: 15px; margin-bottom: 35px;
             overflow: hidden; border: 1px solid var(--border);
-            transition: transform 0.3s ease;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+            animation: fadeIn 0.8s ease forwards;
         }
 
-        .media-box { position: relative; width: 100%; height: 380px; background: #000; }
-        .media-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        .media-area { position: relative; width: 100%; height: 380px; background: #000; }
+        .media-area img { width: 100%; height: 100%; object-fit: cover; }
         
-        /* GATILHO DE VÍDEO (REEL DISPONÍVEL) */
-        .reel-badge {
-            position: absolute; top: 18px; right: 18px;
-            background: rgba(0,0,0,0.8); padding: 6px 14px;
-            border-radius: 20px; font-size: 9px; font-weight: 900;
-            color: #fff; border: 1px solid var(--primary);
-            text-transform: uppercase;
+        .badge-reel {
+            position: absolute; top: 20px; left: 20px;
+            background: rgba(230, 57, 70, 0.9); padding: 6px 14px;
+            border-radius: 4px; font-size: 10px; font-weight: 900; color: #fff;
         }
 
-        .details-box { padding: 25px; }
-        .brand-tag { color: var(--primary); font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; display: block; }
-        .v-title { font-size: 26px; font-weight: 900; margin-bottom: 15px; text-transform: uppercase; letter-spacing: -1px; }
+        .details { padding: 25px; }
+        .tag { color: var(--primary); font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; }
+        .title { font-size: 26px; font-weight: 900; margin: 5px 0 15px; text-transform: uppercase; }
         
-        /* Melhoria 24: Grid de Specs Simplificado */
-        .specs-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; }
-        .spec-pill { background: #1f1f1f; padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; color: #bbb; }
+        .specs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 25px; }
+        .spec-pill { background: #1a1a1a; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #aaa; }
 
         .price-row { 
-            display: flex; justify-content: space-between; align-items: center; 
-            margin-bottom: 25px; padding-top: 20px; border-top: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: baseline; 
+            margin-bottom: 25px; padding-top: 15px; border-top: 1px solid var(--border);
         }
-        .price-main { font-size: 32px; font-weight: 900; color: #fff; letter-spacing: -1px; }
+        .price-val { font-size: 32px; font-weight: 900; color: #fff; }
 
-        /* BOTÃO SHARK V80 - CONVERSÃO IMEDIATA */
-        .btn-negociar {
+        /* BOTÃO DE AÇÃO SHARK */
+        .btn-zap {
             display: flex; align-items: center; justify-content: center;
-            gap: 12px; background: var(--secondary); color: #fff; text-decoration: none;
-            padding: 20px; border-radius: 15px; font-weight: 900; font-size: 16px;
+            background: var(--secondary); color: #fff; text-decoration: none;
+            padding: 20px; border-radius: 12px; font-weight: 900; font-size: 15px;
             text-transform: uppercase; letter-spacing: 1px;
-            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
-            transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2);
         }
-        .btn-negociar:active { transform: scale(0.96); brightness(1.2); }
 
-        /* FOOTER DE AUTORIDADE */
-        footer { text-align: center; padding: 60px 20px; color: #333; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; }
+        footer { text-align: center; padding: 50px 20px; color: #222; font-size: 10px; font-weight: 900; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
     <header>
         <div class="logo">HG <span>MOTORS</span></div>
-        <div class="slogan">Excelência em Veículos • Hortolândia</div>
+        <div class="badge-loc">Hortolândia • Seminovos Premium</div>
     </header>
 
-    <nav class="v80-nav">
-        <a href="#" class="nav-link active" data-filter="all">ESTOQUE COMPLEXO (23)</a>
-        <a href="#" class="nav-link" data-filter="hatch">🚗 HATCH</a>
-        <a href="#" class="nav-link" data-filter="sedan">🚗 SEDAN</a>
-        <a href="#" class="nav-link" data-filter="suv">🚗 SUV</a>
-        <a href="#" class="nav-link" data-filter="moto">🏍️ MOTOS</a>
-        <a href="#" class="nav-link" data-filter="jet-ski">⚓ JET SKI</a>
+    <div class="v80-nav">
+        <div class="nav-btn active" onclick="filter('all')">ESTOQUE COMPLETO</div>
+        <div class="nav-btn" onclick="filter('car')">CARROS</div>
+        <div class="nav-btn" onclick="filter('moto')">MOTOS</div>
+        <div class="nav-btn" onclick="filter('jet')">JET SKI</div>
     </div>
 
-    <div class="catalog-container">
-        
-        <div class="v-item" data-category="hatch">
-            <div class="media-box">
-                <div class="reel-badge">▶ REEL DISPONÍVEL</div>
-                <img src="https://via.placeholder.com/480x380/1a1a1a/e63946?text=VEÍCULO+REEL" alt="Carro Popular HG">
+    <div class="main-catalog" id="catalog">
+        <div class="card" data-cat="car">
+            <div class="media-area">
+                <div class="badge-reel">VER VÍDEO DO REEL</div>
+                <img src="https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=800" alt="Onix">
             </div>
-            <div class="details-box">
-                <span class="brand-tag">Chevrolet Selecionado</span>
-                <h2 class="v-title">Onix Turbo Premier</h2>
-                <div class="specs-grid">
+            <div class="details">
+                <span class="tag">Destaque HG</span>
+                <h2 class="title">Chevrolet Onix Turbo</h2>
+                <div class="specs">
                     <span class="spec-pill">2023</span>
                     <span class="spec-pill">Automático</span>
-                    <span class="spec-pill">Flex</span>
+                    <span class="spec-pill">Completo</span>
                 </div>
-                <div class="price-row">
-                    <span class="price-main">R$ 89.900</span>
-                </div>
-                <a href="https://wa.me/5519998463668?text=Quero saber mais sobre o Onix Premier V80" class="btn-negociar">NEGOCIAR NO WHATSAPP</a>
+                <div class="price-row"><span class="price-val">R$ 89.900</span></div>
+                <a href="https://wa.me/5519998463668?text=Olá, vi o Onix Turbo no catálogo!" class="btn-zap">NEGOCIAR AGORA</a>
             </div>
         </div>
 
-        <div class="v-item" data-category="sedan">
-            <div class="media-box">
-                <div class="reel-badge">▶ REEL DISPONÍVEL</div>
-                <img src="https://via.placeholder.com/480x380/1a1a1a/e63946?text=VEÍCULO+REEL" alt="Toyota Corolla">
+        <div class="card" data-cat="moto">
+            <div class="media-area">
+                <div class="badge-reel">VÍDEO REAL</div>
+                <img src="https://images.unsplash.com/photo-1558981403-c5f91cbcf523?w=800" alt="Moto">
             </div>
-            <div class="details-box">
-                <span class="brand-tag">Toyota Premium</span>
-                <h2 class="v-title">Corolla Altis Hybrid</h2>
-                <div class="specs-grid">
+            <div class="details">
+                <span class="tag">Duas Rodas Nacional</span>
+                <h2 class="title">Honda CB 500X ABS</h2>
+                <div class="specs">
                     <span class="spec-pill">2022</span>
-                    <span class="spec-pill">CVT</span>
-                    <span class="spec-pill">Híbrido Flex</span>
+                    <span class="spec-pill">12.000 KM</span>
                 </div>
-                <div class="price-row">
-                    <span class="price-main">R$ 139.500</span>
-                </div>
-                <a href="https://wa.me/5519998463668?text=Quero saber mais sobre o Corolla Híbrido V80" class="btn-negociar">NEGOCIAR NO WHATSAPP</a>
+                <div class="price-row"><span class="price-val">R$ 43.500</span></div>
+                <a href="https://wa.me/5519998463668?text=Olá, vi a CB 500X no catálogo!" class="btn-zap">NEGOCIAR AGORA</a>
             </div>
         </div>
 
-        <div class="v-item" data-category="moto">
-            <div class="media-box">
-                <div class="reel-badge">▶ REEL DISPONÍVEL</div>
-                <img src="https://via.placeholder.com/480x380/1a1a1a/e63946?text=MOTO+REEL" alt="Moto Pop">
+        <div class="card" data-cat="jet">
+            <div class="media-area">
+                <div class="badge-reel">VÍDEO REAL</div>
+                <img src="https://images.unsplash.com/photo-1621251912693-02f459141f92?w=800" alt="Jet">
             </div>
-            <div class="details-box">
-                <span class="brand-tag">Honda Nacional</span>
-                <h2 class="v-title">CB 500F Abs</h2>
-                <div class="specs-grid">
-                    <span class="spec-pill">2021</span>
-                    <span class="spec-pill">Duas Cilindradas</span>
-                    <span class="spec-pill">15.000 KM</span>
-                </div>
-                <div class="price-row">
-                    <span class="price-main">R$ 38.900</span>
-                </div>
-                <a href="https://wa.me/5519998463668?text=Quero saber mais sobre a CB 500F V80" class="btn-negociar">NEGOCIAR NO WHATSAPP</a>
-            </div>
-        </div>
-
-        <div class="v-item" data-category="jet-ski">
-            <div class="media-box">
-                <div class="reel-badge">▶ REEL DISPONÍVEL</div>
-                <img src="https://via.placeholder.com/480x380/1a1a1a/e63946?text=JET+SKI+REEL" alt="Jet Ski Premium">
-            </div>
-            <div class="details-box">
-                <span class="brand-tag">Nautica Premium</span>
-                <h2 class="v-title">Sea-Doo GTI 130hp</h2>
-                <div class="specs-grid">
+            <div class="details">
+                <span class="tag">Náutica Selecionada</span>
+                <h2 class="title">Sea-Doo GTI 130hp</h2>
+                <div class="specs">
                     <span class="spec-pill">2020</span>
                     <span class="spec-pill">80 Horas</span>
-                    <span class="spec-pill">Impecável</span>
                 </div>
-                <div class="price-row">
-                    <span class="price-main">R$ 85.000</span>
-                </div>
-                <a href="https://wa.me/5519998463668?text=Quero saber mais sobre o Jet Ski Sea-Doo V80" class="btn-negociar">NEGOCIAR NO WHATSAPP</a>
+                <div class="price-row"><span class="price-val">R$ 82.000</span></div>
+                <a href="https://wa.me/5519998463668?text=Olá, vi o Jet Ski no catálogo!" class="btn-zap">NEGOCIAR AGORA</a>
             </div>
         </div>
 
     </div>
 
     <footer>
-        HG MOTORS HORTOLÂNDIA | POWERED BY PROTOCOLO V80 <br>
-        DESIGN POR JP DIAS
+        DESIGN & ESTRUTURA POR JP DIAS • VISÃO SHARK V80
     </footer>
 
     <script>
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // Remove classe active e adicione no link clicado
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Filtra o conteúdo
-                const filter = this.getAttribute('data-filter');
-                document.querySelectorAll('.v-item').forEach(item => {
-                    if (filter === 'all' || item.getAttribute('data-category') === filter) {
-                        item.style.display = 'block';
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
-            });
-        });
-    </script>
+        function filter(category) {
+            const cards = document.querySelectorAll('.card');
+            const btns = document.querySelectorAll('.nav-btn');
+            
+            btns.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
 
+            cards.forEach(card => {
+                if(category === 'all' || card.getAttribute('data-cat') === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
 </body>
 </html>
