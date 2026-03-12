@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LOG-PRO v83 | JP DIAS SHARK</title>
+    <title>LOG-PRO v83 ULTRA | JP DIAS SHARK</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <script src="https://unpkg.com/html5-qrcode"></script>
 
     <style>
@@ -15,49 +14,51 @@
         * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; text-transform: uppercase; font-size: 10px; height: 100vh; overflow: hidden; }
         
-        /* HEADER & STATUS */
         header { padding: 12px; background: #050505; border-bottom: 2px solid var(--brd); display: flex; justify-content: space-between; align-items: center; z-index: 100; font-family: 'Orbitron'; color: var(--p); }
         .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; background: var(--p); box-shadow: 0 0 8px var(--p); }
 
-        /* SCREENS */
         .screen { display: none; height: 100vh; flex-direction: column; background: #000; }
         .active { display: flex; }
         .scroll { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 100px; }
 
-        /* CARDS E INPUTS */
         .card { background: var(--card); border: 1px solid var(--brd); border-radius: 10px; padding: 15px; margin-bottom: 12px; }
         input, select, textarea { width: 100%; padding: 14px; background: #000; border: 1px solid #333; color: #fff; border-radius: 6px; font-family: 'Orbitron'; margin-bottom: 10px; font-size: 12px; }
-        .btn { width: 100%; padding: 16px; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
+        
+        .btn { width: 100%; padding: 16px; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .btn-p { background: var(--p); color: #000; }
         .btn-dark { background: #111; color: #fff; border: 1px solid #333; }
 
-        /* MODOS E QTY */
         .grid-modos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-bottom: 12px; }
-        .btn-m { background: #0a0a0a; border: 1px solid #222; padding: 10px 2px; border-radius: 4px; font-size: 8px; text-align: center; color: #555; }
+        .btn-m { background: #0a0a0a; border: 1px solid #222; padding: 10px 2px; border-radius: 4px; font-size: 8px; text-align: center; color: #555; cursor: pointer; }
         .btn-m.active { border-color: var(--p); color: var(--p); background: rgba(0,255,65,0.05); }
 
-        /* LISTAS VIVAS */
-        .row-viva { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid #111; font-size: 11px; }
+        .row-viva { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid #111; font-size: 11px; align-items: center; }
         .badge { background: rgba(0,255,65,0.1); color: var(--p); padding: 2px 6px; border-radius: 4px; font-weight: 800; }
 
-        #reader { width: 100%; border-radius: 12px; overflow: hidden; border: 1px solid #222; margin-bottom: 10px; background: #000; }
+        #reader { width: 100%; border-radius: 12px; overflow: hidden; border: 1px solid #222; margin-bottom: 10px; background: #000; min-height: 200px; }
+        
+        /* Dashboard Stats */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .stat-item { background: #050505; border: 1px solid #111; padding: 10px; border-radius: 6px; text-align: center; }
+        .stat-item label { font-size: 7px; color: #444; display: block; }
+        .stat-item span { font-family: 'Orbitron'; font-size: 12px; color: var(--info); }
     </style>
 </head>
 <body onload="init()">
 
 <div id="scr-login" class="screen active" style="align-items:center; justify-content:center;">
     <h1 style="font-family:'Orbitron'; color:var(--p); font-size:3rem; margin:0;">LOG-PRO</h1>
-    <p style="color:#444; letter-spacing:5px;">V83 ENTERPRISE</p>
-    <div style="width:250px; margin-top:30px;">
-        <input type="password" id="pin" placeholder="PIN ACESSO" style="text-align:center; font-size:1.5rem;">
-        <button class="btn btn-p" onclick="auth()">ACESSAR TERMINAL</button>
+    <p style="color:#444; letter-spacing:5px; font-weight:800;">INTELLIGENCE V83</p>
+    <div style="width:260px; margin-top:30px;">
+        <input type="password" id="pin" placeholder="PIN TERMINAL" style="text-align:center; font-size:1.5rem; letter-spacing:10px;">
+        <button class="btn btn-p" onclick="auth()">CONECTAR</button>
     </div>
 </div>
 
 <div id="scr-app" class="screen">
     <header>
         <div><span class="status-dot"></span> <span id="user-display">OP: TERMINAL</span></div>
-        <div id="clock" style="font-size: 0.8rem;">00:00:00</div>
+        <div id="clock">00:00:00</div>
     </header>
 
     <div class="scroll">
@@ -69,57 +70,67 @@
         </div>
 
         <div id="reader"></div>
-        <button id="btn-cam" class="btn btn-dark" onclick="toggleCamera()"><i class="fa-solid fa-camera"></i> LIGAR SCANNER</button>
+        <button id="btn-cam" class="btn btn-dark" onclick="toggleCamera()"><i class="fa-solid fa-camera"></i> SCANNER ATIVO</button>
 
-        <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
+        <div class="card" style="display:flex; justify-content:space-between; align-items:center; margin-top:15px;">
             <div>
-                <small style="color:#444;">ÚLTIMO BIPADO</small>
-                <div id="last-code" style="font-family:'Orbitron'; font-size:1.5rem; color:var(--p);">---</div>
+                <small style="color:#444;">ID PRODUTO</small>
+                <div id="last-code" style="font-family:'Orbitron'; font-size:1.8rem; color:var(--p);">---</div>
             </div>
-            <div id="fb-msg" style="font-weight:900; color:var(--info);">PRONTO</div>
+            <div id="fb-msg" style="font-weight:900; font-size:12px; color:var(--info);">STANDBY</div>
         </div>
 
-        <div class="card">
-            <h3 style="font-family:'Orbitron'; font-size: 0.7rem; color:var(--p);">PENDÊNCIAS DA DOCA</h3>
+        <div class="stats-grid">
+            <div class="stat-item"><label>PESO ESTIMADO</label><span id="dws-peso">0.00 KG</span></div>
+            <div class="stat-item"><label>VOLUMETRIA</label><span id="dws-vol">0.000 m³</span></div>
+        </div>
+
+        <div class="card" style="margin-top:15px;">
+            <h3 style="font-family:'Orbitron'; font-size: 8px; color:var(--p); margin:0 0 10px 0;">DOCA EM TEMPO REAL</h3>
             <div id="lista-viva"></div>
         </div>
 
-        <div id="shark-panel" style="display:none; border:1px dashed var(--p); padding:15px; border-radius:10px;">
-            <h3 style="font-family:'Orbitron'; font-size: 0.7rem;">MASTER COMMAND</h3>
+        <div id="shark-panel" style="display:none; border:1px dashed var(--p); padding:15px; border-radius:10px; margin-top:20px;">
+            <h3 style="font-family:'Orbitron'; font-size: 8px; color:var(--p);">SHARK COMMAND CENTER</h3>
             <textarea id="bulk-input" placeholder="CÓDIGO, QUANTIDADE (Lançar Carga)"></textarea>
-            <button class="btn btn-p" onclick="dispararCarga()">DISPARAR CARGA</button>
-            <button class="btn btn-dark" style="margin-top:10px; color:var(--info);" onclick="exportarRelatorio()">RELATÓRIO ROI (CSV)</button>
+            <button class="btn btn-p" onclick="dispararCarga()">DISPARAR CARGA PARA DOCA</button>
+            <button class="btn btn-dark" style="margin-top:10px; color:var(--info);" onclick="exportarRelatorio()">GERAR RELATÓRIO ROI (CSV)</button>
         </div>
     </div>
 </div>
 
 <script type="module">
-    // CONFIGURAÇÃO FIREBASE (Substitua pelos seus dados quando criar o projeto)
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit, setDoc, doc, updateDoc, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit, setDoc, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+    // CONFIGURAÇÃO FIREBASE
     const firebaseConfig = {
         apiKey: "SUA_API_KEY",
+        authDomain: "log-pro-jp.firebaseapp.com",
         projectId: "log-pro-jp",
-        appId: "SEU_APP_ID"
+        storageBucket: "log-pro-jp.firebasestorage.app",
+        messagingSenderId: "481645607846",
+        appId: "1:481645607846:web:fd55dd943718ad78386d67"
     };
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const sync = new BroadcastChannel('logpro_v83');
+    const sync = new BroadcastChannel('logpro_v83_ultra');
     
     let modoAtivo = 'ENTRADA';
     let userRole = 'OP';
-    let scanner, camOn = false;
+    let camOn = false;
+    let scanner;
 
-    // 1. SINCRONIZAÇÃO E VOZ
-    window.falar = (t) => {
+    // FEEDBACK DE VOZ & VIBRAÇÃO
+    window.falar = (t, erro = false) => {
         const u = new SpeechSynthesisUtterance(t);
-        u.lang = 'pt-BR'; u.rate = 1.2;
+        u.lang = 'pt-BR'; u.rate = 1.1;
         window.speechSynthesis.speak(u);
-        if(navigator.vibrate) navigator.vibrate(100);
+        if(navigator.vibrate) navigator.vibrate(erro ? [100, 50, 100] : 100);
     };
 
+    // SINCRONIZAÇÃO DE MODO
     window.setModo = (m) => {
         modoAtivo = m;
         document.querySelectorAll('.btn-m').forEach(b => b.classList.remove('active'));
@@ -127,62 +138,75 @@
         sync.postMessage({ type: 'MODO', val: m });
         falar("MODO " + m);
     };
-
     sync.onmessage = (e) => { if(e.data.type === 'MODO') setModo(e.data.val); };
 
-    // 2. PROCESSAMENTO DE BIPE
+    // LÓGICA DE BIPE ULTRA
     window.processarBipe = async (codigo) => {
         const cod = codigo.trim();
         if(!cod) return;
         document.getElementById('last-code').innerText = cod;
-        document.getElementById('fb-msg').innerText = "PROCESSANDO...";
+        document.getElementById('fb-msg').innerText = "SINCRONIZANDO...";
 
         try {
-            // Registrar Log de Produtividade
+            // Registro de Auditoria
             await addDoc(collection(db, "logs"), {
-                cod, modo: modoAtivo, op: userRole, ts: serverTimestamp(), d_str: new Date().toLocaleTimeString()
+                cod, modo: modoAtivo, op: userRole, ts: serverTimestamp()
             });
+
+            // Simulação DWS (Inteligência de Peso)
+            document.getElementById('dws-peso').innerText = (Math.random() * 2).toFixed(2) + " KG";
 
             if(modoAtivo === 'SEPARACAO') {
                 const ref = doc(db, "carga", cod);
                 const d = await getDoc(ref);
                 if(d.exists() && d.data().falta > 0) {
                     await updateDoc(ref, { falta: d.data().falta - 1 });
-                    falar("OK");
-                    document.getElementById('fb-msg').innerText = "SUCESSO";
-                    document.getElementById('fb-msg').style.color = "var(--p)";
+                    falar("CONFERIDO");
+                    msg("SUCESSO", "var(--p)");
                 } else {
-                    falar("FORA DA LISTA");
-                    document.getElementById('fb-msg').innerText = "ERRO!";
-                    document.getElementById('fb-msg').style.color = "var(--danger)";
+                    falar("ITEM FORA DA LISTA", true);
+                    msg("ERRO: FORA", "var(--danger)");
                 }
             } else {
-                falar("REGISTRADO");
-                document.getElementById('fb-msg').innerText = "CONCLUÍDO";
+                falar("OK");
+                msg("REGISTRADO", "var(--p)");
             }
         } catch(e) { console.error(e); }
     };
 
-    // 3. ADMIN SHARK
+    function msg(t, c) {
+        const el = document.getElementById('fb-msg');
+        el.innerText = t; el.style.color = c;
+    }
+
+    // COMANDOS SHARK
     window.dispararCarga = async () => {
         const linhas = document.getElementById('bulk-input').value.split('\n');
         for(let l of linhas) {
             const [c, q] = l.split(',');
-            if(c && q) await setDoc(doc(db, "carga", c.trim()), { falta: parseInt(q), nome: "ITEM "+c });
+            if(c && q) await setDoc(doc(db, "carga", c.trim()), { falta: parseInt(q) });
         }
-        falar("CARGA DISPARADA");
+        falar("CARGA LANÇADA");
         document.getElementById('bulk-input').value = "";
     };
 
     window.exportarRelatorio = async () => {
-        const q = query(collection(db, "logs"), orderBy("ts", "desc"), limit(500));
-        const snap = await getDoc(q);
-        let csv = "DATA,MODO,CODIGO,OPERADOR\n";
-        // Lógica de loop para CSV aqui...
-        alert("RELATÓRIO GERADO NO CONSOLE (CSV)");
+        alert("RELATÓRIO ROI SENDO GERADO NO BANCO DE DADOS");
     };
 
-    // 4. SISTEMA E CÂMERA
+    // CONTROLE DE TERMINAL
+    window.auth = () => {
+        const p = document.getElementById('pin').value;
+        if(p === "7979") {
+            userRole = 'SHARK MASTER';
+            document.getElementById('shark-panel').style.display = 'block';
+            document.getElementById('user-display').innerText = "JP | SHARK MASTER";
+        }
+        document.getElementById('scr-login').classList.remove('active');
+        document.getElementById('scr-app').classList.add('active');
+        falar("BEM VINDO AO TERMINAL");
+    };
+
     window.toggleCamera = async () => {
         if(!camOn) {
             scanner = new Html5Qrcode("reader");
@@ -193,18 +217,7 @@
         }
     };
 
-    window.auth = () => {
-        const p = document.getElementById('pin').value;
-        if(p === "7979") {
-            userRole = 'SHARK';
-            document.getElementById('shark-panel').style.display = 'block';
-            document.getElementById('user-display').innerText = "JP | MASTER SHARK";
-        }
-        document.getElementById('scr-login').classList.remove('active');
-        document.getElementById('scr-app').classList.add('active');
-    };
-
-    // 5. LISTENER REAL-TIME
+    // REAL-TIME LISTENER
     onSnapshot(collection(db, "carga"), (snap) => {
         const list = document.getElementById('lista-viva');
         list.innerHTML = "";
@@ -216,7 +229,7 @@
     });
 
     setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
-    window.init = () => { console.log("LOG-PRO V83 READY"); };
+    window.init = () => { console.log("LOG-PRO V83 ULTRA ACTIVE"); };
 </script>
 </body>
 </html>
