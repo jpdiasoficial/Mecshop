@@ -2,325 +2,125 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HG MOTORS | Estoque Premium Hortolândia</title>
-    
-    <!-- Google Fonts & Font Awesome -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>HG MOTORS | Estoque Premium</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
     <style>
-        :root {
-            --p: #e63946;
-            --s: #25d366;
-            --bg: #050505;
-            --sf: #111111;
-            --t: #ffffff;
-            --td: #888888;
-            --r: 15px;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: var(--t); overflow-x: hidden; line-height: 1.5; }
-        
-        header {
-            background: rgba(5,5,5,0.97);
-            padding: 20px;
-            text-align: center;
-            border-bottom: 3px solid var(--p);
-            position: sticky; top: 0; z-index: 1000;
-            backdrop-filter: blur(10px);
-        }
-
-        .logo { font-family: 'Bebas Neue'; font-size: 32px; letter-spacing: 5px; text-transform: uppercase; }
-        .logo span { color: var(--p); }
-
-        .intro {
-            max-width: 500px; margin: 15px auto; padding: 15px;
-            background: var(--sf); border-radius: var(--r);
-            border: 1px solid #222; font-size: 12px; color: var(--td);
-        }
-        .intro b { color: var(--t); display: block; margin-bottom: 5px; font-size: 14px; }
-
-        .v80-nav {
-            display: flex; gap: 10px; padding: 12px 15px;
-            overflow-x: auto; background: #080808;
-            border-bottom: 1px solid #222;
-            position: sticky; top: 85px; z-index: 999;
-        }
-        .v80-nav::-webkit-scrollbar { display: none; }
-        .nav-link {
-            background: var(--sf); color: var(--td); padding: 10px 20px;
-            border-radius: 8px; font-size: 11px; font-weight: 700;
-            border: 1px solid #222; text-transform: uppercase;
-            white-space: nowrap; cursor: pointer; transition: 0.3s;
-        }
-        .nav-link.active { background: var(--p); color: #fff; border-color: var(--p); }
-
-        .catalog { max-width: 500px; margin: 0 auto; padding: 20px 15px; }
-
-        .card {
-            background: var(--sf); border-radius: var(--r);
-            margin-bottom: 30px; overflow: hidden;
-            border: 1px solid #222; position: relative;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-        }
-
-        .media { position: relative; width: 100%; height: 280px; background: #1a1a1a; }
-        .media img { width: 100%; height: 100%; object-fit: cover; }
-
-        .badge {
-            position: absolute; top: 12px; left: 12px;
-            padding: 5px 12px; border-radius: 8px;
-            font-size: 9px; font-weight: 900;
-            text-transform: uppercase; background: var(--p); color: #fff;
-        }
-
-        .info { padding: 20px; }
-        .tag { color: var(--p); font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
-        .name { font-family: 'Bebas Neue'; font-size: 30px; margin: 5px 0 15px; text-transform: uppercase; }
-
-        .specs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
-        .pill { background: #181818; padding: 6px 12px; border-radius: 8px; font-size: 12px; color: #bbb; border: 1px solid #222; }
-
-        .price-row {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 20px; padding-top: 15px; border-top: 1px solid #222;
-        }
-        .price { font-size: 32px; font-weight: 900; color: #fff; }
-
-        .btn-zap {
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            background: var(--s); color: #fff; text-decoration: none;
-            padding: 18px; border-radius: var(--r); font-weight: 900;
-            font-size: 14px; text-transform: uppercase;
-            box-shadow: 0 12px 25px rgba(37,211,102,0.25); transition: 0.3s;
-        }
-        .btn-zap:hover { background: #1da851; transform: translateY(-2px); }
-
-        .social-section { max-width: 500px; margin: 0 auto; padding: 0 15px 30px; }
-        .social-title { font-family: 'Bebas Neue'; font-size: 22px; margin-bottom: 15px; color: var(--p); display: flex; align-items: center; gap: 10px; }
-        .social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .social-card { background: var(--sf); border-radius: var(--r); border: 1px solid #222; padding: 12px; font-size: 11px; color: var(--td); }
-        .social-card img { width: 100%; height: 110px; object-fit: cover; border-radius: 10px; margin-bottom: 10px; }
-
-        .float-zap {
-            position: fixed; bottom: 25px; right: 20px; z-index: 8888;
-            background: var(--s); color: #fff; width: 60px; height: 60px;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 28px; box-shadow: 0 10px 30px rgba(37,211,102,0.4); text-decoration: none;
-        }
-
-        footer { background: #080808; padding: 40px 20px; text-align: center; font-size: 11px; color: var(--td); border-top: 1px solid #222; }
-        .footer-logo { font-family: 'Bebas Neue'; font-size: 26px; letter-spacing: 4px; margin-bottom: 15px; }
-        .footer-logo span { color: var(--p); }
+        :root{--p:#e63946;--s:#25d366;--bg:#050505;--sf:#111;--t:#fff;--td:#888;--r:15px}
+        *{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif}
+        body{background:var(--bg);color:var(--t);overflow-x:hidden}
+        header{background:rgba(5,5,5,.97);padding:15px;text-align:center;border-bottom:3px solid var(--p);position:sticky;top:0;z-index:1000;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(10px)}
+        .logo{font-family:'Bebas Neue';font-size:28px;letter-spacing:4px;text-transform:uppercase;flex:1}.logo span{color:var(--p)}
+        .admin-btn{background:var(--sf);border:1px solid #222;color:var(--td);padding:8px 12px;border-radius:8px;cursor:pointer;font-size:10px;font-weight:700}
+        .intro{max-width:500px;margin:15px auto;padding:15px;background:var(--sf);border-radius:var(--r);border:1px solid #222;font-size:12px;color:var(--td)}
+        .intro b{color:var(--t);display:block;margin-bottom:5px;font-size:14px}
+        .search-bar{max-width:500px;margin:10px auto;padding:0 15px}
+        .search-input{width:100%;background:var(--sf);border:1px solid #222;color:var(--t);padding:12px;border-radius:var(--r);font-size:13px}
+        .v80-nav{display:flex;gap:10px;padding:12px;overflow-x:auto;background:#080808;border-bottom:1px solid #222;position:sticky;top:70px;z-index:999}
+        .nav-link{background:var(--sf);color:var(--td);padding:8px 15px;border-radius:8px;font-size:10px;font-weight:700;border:1px solid #222;text-transform:uppercase;white-space:nowrap;cursor:pointer}
+        .nav-link.active{background:var(--p);color:#fff;border-color:var(--p)}
+        .catalog{max-width:500px;margin:0 auto;padding:15px}
+        .card{background:var(--sf);border-radius:var(--r);margin-bottom:25px;overflow:hidden;border:1px solid #222;position:relative;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+        .media{position:relative;width:100%;height:250px}.media img{width:100%;height:100%;object-fit:cover}
+        .badge{position:absolute;top:10px;left:10px;padding:4px 10px;border-radius:6px;font-size:8px;font-weight:900;text-transform:uppercase;background:var(--p);color:#fff}
+        .disponivel{position:absolute;top:10px;right:10px;padding:4px 10px;border-radius:6px;font-size:8px;font-weight:900;text-transform:uppercase;background:var(--s);color:#fff;animation:pulse 1.5s infinite}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+        .info{padding:15px}.tag{color:var(--p);font-size:9px;font-weight:900;text-transform:uppercase}.name{font-family:'Bebas Neue';font-size:26px;margin:5px 0 10px;text-transform:uppercase}
+        .desc{font-size:11px;color:var(--td);margin-bottom:12px}.specs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+        .pill{background:#181818;padding:5px 10px;border-radius:6px;font-size:11px;color:#bbb;border:1px solid #222}
+        .price-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding-top:12px;border-top:1px solid #222}
+        .price{font-size:28px;font-weight:900;color:#fff}
+        .btn-zap{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--s);color:#fff;text-decoration:none;padding:15px;border-radius:var(--r);font-weight:900;font-size:13px;text-transform:uppercase}
+        .admin-panel{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:9999;padding:20px;overflow-y:auto}
+        .admin-panel.open{display:block}.admin-content{max-width:500px;margin:0 auto;background:var(--sf);border-radius:var(--r);padding:20px;border:1px solid #222}
+        .admin-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:2px solid var(--p);padding-bottom:10px}
+        .admin-header h2{font-family:'Bebas Neue';color:var(--p)}
+        .form-group{margin-bottom:12px}.form-group label{display:block;font-size:11px;margin-bottom:4px}
+        .form-group input,.form-group select,.form-group textarea{width:100%;background:#181818;border:1px solid #222;color:#fff;padding:10px;border-radius:8px;font-size:12px}
+        .btn-submit{background:var(--p);color:#fff;border:none;padding:12px;border-radius:8px;width:100%;font-weight:900;cursor:pointer}
+        .float-zap{position:fixed;bottom:20px;right:20px;background:var(--s);color:#fff;width:55px;height:55px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;z-index:888}
+        footer{background:#080808;padding:30px;text-align:center;font-size:10px;color:var(--td);border-top:1px solid #222}
     </style>
 </head>
 <body>
-
     <header>
         <div class="logo">HG <span>MOTORS</span></div>
-        <div style="font-size:10px; color:var(--td); margin-top:8px;">● ESTOQUE PREMIUM HORTOLÂNDIA</div>
+        <button class="admin-btn" onclick="openAdmin()">PAINEL</button>
     </header>
-
-    <div class="intro">
-        <b>Conduzindo Seu Sonho, Superando Expectativas!</b>
-        Atuamos a mais de 15 anos no mercado de carros e motos com procedência, qualidade e confiança. 
-        <br><br>
-        <i class="fa-solid fa-location-dot"></i> Av. Faustino Bertolino, 440, Hortolândia, SP.
-    </div>
-
+    <div class="intro"><b>Conduzindo Seu Sonho!</b>Atuamos a mais de 15 anos com qualidade e confiança. Av. Faustino Bertolino, 440, Hortolândia, SP.</div>
+    <div class="search-bar"><input type="text" class="search-input" id="searchInput" placeholder="🔍 Buscar veículo..."></div>
     <div class="v80-nav">
-        <div class="nav-link active" onclick="filter('all', this)">Todos</div>
-        <div class="nav-link" onclick="filter('hatch', this)">Hatch</div>
-        <div class="nav-link" onclick="filter('sedan', this)">Sedan</div>
-        <div class="nav-link" onclick="filter('suv', this)">SUV</div>
-        <div class="nav-link" onclick="filter('moto', this)">Motos</div>
+        <div class="nav-link active" onclick="filter('all',this)">Todos</div>
+        <div class="nav-link" onclick="filter('hatch',this)">Hatch</div>
+        <div class="nav-link" onclick="filter('sedan',this)">Sedan</div>
+        <div class="nav-link" onclick="filter('suv',this)">SUV</div>
+        <div class="nav-link" onclick="filter('moto',this)">Motos</div>
     </div>
-
     <div class="catalog" id="catalog">
-        
-        <!-- ONIX -->
-        <div class="card" data-cat="hatch">
-            <div class="media">
-                <img src="https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=600&q=80">
-                <div class="badge">Destaque</div>
-            </div>
+        <!-- VEICULO 1 -->
+        <div class="card" data-cat="hatch" data-name="onix turbo premier">
+            <div class="media"><img src="https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=600&q=80"><div class="badge">Destaque</div><div class="disponivel">Disponível</div></div>
             <div class="info">
-                <div class="tag">Chevrolet</div>
-                <h2 class="name">Onix Turbo Premier</h2>
-                <div class="specs">
-                    <span class="pill">2023</span>
-                    <span class="pill">15k KM</span>
-                    <span class="pill">Automático</span>
-                </div>
-                <div class="price-row">
-                    <div class="price">R$ 89.900</div>
-                    <div style="color:var(--s); font-weight:900;">-6% OFF</div>
-                </div>
-                <a href="https://wa.me/5519998463668?text=Olá! Vi o Onix Turbo 2023 no site." class="btn-zap">
-                    <i class="fa-brands fa-whatsapp"></i> NEGOCIAR AGORA
-                </a>
+                <div class="tag">Chevrolet</div><h2 class="name">Onix Turbo Premier</h2>
+                <p class="desc">Hatch moderno com motor turbo e acabamento premium.</p>
+                <div class="specs"><span class="pill">2023</span><span class="pill">15k KM</span><span class="pill">Automático</span></div>
+                <div class="price-row"><div class="price">R$ 89.900</div><div style="color:var(--s);font-weight:900">-6% OFF</div></div>
+                <a href="https://wa.me/5519998463668?text=Vi o Onix 2023 no site" class="btn-zap"><i class="fa-brands fa-whatsapp"></i> NEGOCIAR</a>
             </div>
         </div>
-
-        <!-- COROLLA -->
-        <div class="card" data-cat="sedan">
-            <div class="media">
-                <img src="https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=600&q=80">
-                <div class="badge" style="background:#1e90ff">Híbrido</div>
-            </div>
+        <!-- VEICULO 2 -->
+        <div class="card" data-cat="sedan" data-name="corolla altis hybrid">
+            <div class="media"><img src="https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=600&q=80"><div class="badge" style="background:#1e90ff">Híbrido</div><div class="disponivel">Disponível</div></div>
             <div class="info">
-                <div class="tag">Toyota</div>
-                <h2 class="name">Corolla Altis Hybrid</h2>
-                <div class="specs">
-                    <span class="pill">2022</span>
-                    <span class="pill">28k KM</span>
-                    <span class="pill">CVT</span>
-                </div>
-                <div class="price-row">
-                    <div class="price">R$ 138.900</div>
-                    <div style="color:var(--s); font-weight:900;">OFERTA</div>
-                </div>
-                <a href="https://wa.me/5519998463668?text=Olá! Vi o Corolla Altis 2022 no site." class="btn-zap">
-                    <i class="fa-brands fa-whatsapp"></i> NEGOCIAR AGORA
-                </a>
+                <div class="tag">Toyota</div><h2 class="name">Corolla Altis Hybrid</h2>
+                <p class="desc">Sedan híbrido de última geração com tecnologia Toyota.</p>
+                <div class="specs"><span class="pill">2022</span><span class="pill">28k KM</span><span class="pill">CVT</span></div>
+                <div class="price-row"><div class="price">R$ 138.900</div><div style="color:var(--s);font-weight:900">OFERTA</div></div>
+                <a href="https://wa.me/5519998463668?text=Vi o Corolla 2022 no site" class="btn-zap"><i class="fa-brands fa-whatsapp"></i> NEGOCIAR</a>
             </div>
         </div>
-
-        <!-- XRE 300 -->
-        <div class="card" data-cat="moto">
-            <div class="media">
-                <img src="https://images.unsplash.com/photo-1558981403-c5f91cbcf523?w=600&q=80">
-                <div class="badge">Destaque Facebook</div>
-            </div>
+        <!-- VEICULO 3 -->
+        <div class="card" data-cat="moto" data-name="honda xre 300">
+            <div class="media"><img src="https://images.unsplash.com/photo-1558981403-c5f91cbcf523?w=600&q=80"><div class="badge">Facebook</div><div class="disponivel">Disponível</div></div>
             <div class="info">
-                <div class="tag">Honda</div>
-                <h2 class="name">Honda XRE 300</h2>
-                <div class="specs">
-                    <span class="pill">2012</span>
-                    <span class="pill">53k KM</span>
-                    <span class="pill">Manual</span>
-                </div>
-                <div class="price-row">
-                    <div class="price">R$ 18.800</div>
-                    <div style="color:var(--s); font-weight:900;">ECONÔMICA</div>
-                </div>
-                <a href="https://wa.me/5519998463668?text=Olá! Vi a Honda XRE 300 2012 no site." class="btn-zap">
-                    <i class="fa-brands fa-whatsapp"></i> NEGOCIAR AGORA
-                </a>
+                <div class="tag">Honda</div><h2 class="name">Honda XRE 300</h2>
+                <p class="desc">Moto trail confiável e econômica para o dia a dia.</p>
+                <div class="specs"><span class="pill">2012</span><span class="pill">53k KM</span><span class="pill">Manual</span></div>
+                <div class="price-row"><div class="price">R$ 18.800</div><div style="color:var(--s);font-weight:900">TOP</div></div>
+                <a href="https://wa.me/5519998463668?text=Vi a XRE 300 no site" class="btn-zap"><i class="fa-brands fa-whatsapp"></i> NEGOCIAR</a>
             </div>
         </div>
-
-        <!-- COMPASS -->
-        <div class="card" data-cat="suv">
-            <div class="media">
-                <img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=600&q=80">
-                <div class="badge" style="background:#f4c430; color:#000;">Diesel</div>
-            </div>
+        <!-- VEICULO 4 -->
+        <div class="card" data-cat="suv" data-name="jeep compass limited">
+            <div class="media"><img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=600&q=80"><div class="badge" style="background:#f4c430;color:#000">Diesel</div><div class="disponivel">Disponível</div></div>
             <div class="info">
-                <div class="tag">Jeep</div>
-                <h2 class="name">Compass Limited</h2>
-                <div class="specs">
-                    <span class="pill">2023</span>
-                    <span class="pill">18k KM</span>
-                    <span class="pill">4x4</span>
-                </div>
-                <div class="price-row">
-                    <div class="price">R$ 149.900</div>
-                    <div style="color:var(--s); font-weight:900;">PREMIUM</div>
-                </div>
-                <a href="https://wa.me/5519998463668?text=Olá! Vi o Compass Limited 2023 no site." class="btn-zap">
-                    <i class="fa-brands fa-whatsapp"></i> NEGOCIAR AGORA
-                </a>
-            </div>
-        </div>
-
-        <!-- MT-07 -->
-        <div class="card" data-cat="moto">
-            <div class="media">
-                <img src="https://images.unsplash.com/photo-1558981852-426c349d2a4a?w=600&q=80">
-                <div class="badge">689cc</div>
-            </div>
-            <div class="info">
-                <div class="tag">Yamaha</div>
-                <h2 class="name">Yamaha MT-07 ABS</h2>
-                <div class="specs">
-                    <span class="pill">2022</span>
-                    <span class="pill">9k KM</span>
-                    <span class="pill">ABS</span>
-                </div>
-                <div class="price-row">
-                    <div class="price">R$ 58.900</div>
-                    <div style="color:var(--s); font-weight:900;">ESPORTIVA</div>
-                </div>
-                <a href="https://wa.me/5519998463668?text=Olá! Vi a Yamaha MT-07 2022 no site." class="btn-zap">
-                    <i class="fa-brands fa-whatsapp"></i> NEGOCIAR AGORA
-                </a>
-            </div>
-        </div>
-
-        <!-- TRACKER -->
-        <div class="card" data-cat="suv">
-            <div class="media">
-                <img src="https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=600&q=80">
-                <div class="badge">Turbo</div>
-            </div>
-            <div class="info">
-                <div class="tag">Chevrolet</div>
-                <h2 class="name">Tracker Premier</h2>
-                <div class="specs">
-                    <span class="pill">2023</span>
-                    <span class="pill">20k KM</span>
-                    <span class="pill">Automático</span>
-                </div>
-                <div class="price-row">
-                    <div class="price">R$ 109.900</div>
-                    <div style="color:var(--s); font-weight:900;">OFERTA</div>
-                </div>
-                <a href="https://wa.me/5519998463668?text=Olá! Vi o Tracker Premier 2023 no site." class="btn-zap">
-                    <i class="fa-brands fa-whatsapp"></i> NEGOCIAR AGORA
-                </a>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="social-section">
-        <div class="social-title"><i class="fa-brands fa-facebook"></i> Últimos Posts</div>
-        <div class="social-grid">
-            <div class="social-card">
-                <img src="https://images.unsplash.com/photo-1621251912693-02f459141f92?w=400&q=80">
-                <b>Novidades Náuticas</b>
-                Confira nossos Jet Skis Sea-Doo em estoque!
-            </div>
-            <div class="social-card">
-                <img src="https://images.unsplash.com/photo-1558981852-426c349d2a4a?w=400&q=80">
-                <b>Motos Premium</b>
-                Yamaha MT-07 e muito mais para você.
+                <div class="tag">Jeep</div><h2 class="name">Compass Limited</h2>
+                <p class="desc">SUV robusto com motor diesel e tração 4x4.</p>
+                <div class="specs"><span class="pill">2023</span><span class="pill">18k KM</span><span class="pill">4x4</span></div>
+                <div class="price-row"><div class="price">R$ 149.900</div><div style="color:var(--s);font-weight:900">PREMIUM</div></div>
+                <a href="https://wa.me/5519998463668?text=Vi o Compass no site" class="btn-zap"><i class="fa-brands fa-whatsapp"></i> NEGOCIAR</a>
             </div>
         </div>
     </div>
-
-    <a href="https://wa.me/5519998463668" class="float-zap" target="_blank">
-        <i class="fa-brands fa-whatsapp"></i>
-    </a>
-
-    <footer>
-        <div class="footer-logo">HG <span>MOTORS</span></div>
-        © 2025 HG MOTORS · Hortolândia · SP<br>
-        Design by JP Dias · V80 Shark Gold
-    </footer>
-
+    <div class="admin-panel" id="adminPanel">
+        <div class="admin-content">
+            <div class="admin-header"><h2>Painel Lojista</h2><button onclick="closeAdmin()" style="background:none;border:none;color:#fff;font-size:20px">×</button></div>
+            <form onsubmit="event.preventDefault();alert('Em breve!')">
+                <div class="form-group"><label>Modelo</label><input type="text" placeholder="Ex: Onix"></div>
+                <div class="form-group"><label>Preço</label><input type="number" placeholder="89900"></div>
+                <div class="form-group"><label>Categoria</label><select><option>Hatch</option><option>Sedan</option><option>SUV</option><option>Moto</option></select></div>
+                <button class="btn-submit">ADICIONAR</button>
+            </form>
+        </div>
+    </div>
+    <a href="https://wa.me/5519998463668" class="float-zap"><i class="fa-brands fa-whatsapp"></i></a>
+    <footer><div class="footer-logo">HG <span>MOTORS</span></div>© 2025 HG MOTORS · Hortolândia · SP</footer>
     <script>
-        function filter(c, e) {
-            document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
-            e.classList.add('active');
-            document.querySelectorAll('.card').forEach(card => {
-                card.style.display = (c === 'all' || card.getAttribute('data-cat') === c) ? 'block' : 'none';
-            });
-        }
+        function filter(c,e){document.querySelectorAll('.nav-link').forEach(b=>b.classList.remove('active'));e.classList.add('active');document.querySelectorAll('.card').forEach(card=>{card.style.display=(c==='all'||card.getAttribute('data-cat')===c)?'block':'none'})}
+        document.getElementById('searchInput').addEventListener('input',function(){let q=this.value.toLowerCase();document.querySelectorAll('.card').forEach(card=>{card.style.display=card.getAttribute('data-name').includes(q)?'block':'none'})});
+        function openAdmin(){document.getElementById('adminPanel').classList.add('open')}
+        function closeAdmin(){document.getElementById('adminPanel').classList.remove('open')}
     </script>
 </body>
 </html>
