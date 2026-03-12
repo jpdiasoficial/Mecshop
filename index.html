@@ -3,293 +3,259 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LOG-PRO v80 | ULTRA SHARK EDITION</title>
-    <!-- Fontes e Icons -->
+    <title>LOG-PRO v83 | SHARK ENTERPRISE</title>
+    
+    <!-- Bibliotecas de Combate -->
     <link href="https://fonts.googleapis.com" rel="stylesheet">
     <script src="https://unpkg.com"></script>
-    <!-- Firebase SDK (Modular para velocidade) -->
+    <script src="https://cdn.jsdelivr.net"></script>
     <script src="https://www.gstatic.com"></script>
     <script src="https://www.gstatic.com"></script>
 
     <style>
-        :root { 
-            --neon: #00ff41; --bg: #000; --card: #111; --danger: #ff3e3e; 
-            --warning: #ffcc00; --blue: #00d4ff;
-        }
+        :root { --neon: #00ff41; --bg: #000; --card: #0d0d0d; --danger: #ff3131; --blue: #00d4ff; --dark-gray: #1a1a1a; }
         * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
-        
-        body { 
-            background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; 
-            margin: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden;
-        }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        .shark-font { font-family: 'Orbitron', sans-serif; color: var(--neon); text-shadow: 0 0 10px rgba(0,255,65,0.4); }
 
-        /* 1. EFEITO MATRIX/SHARK */
-        .neon-border { border: 1px solid var(--neon); box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); }
-        .shark-font { font-family: 'Orbitron', sans-serif; color: var(--neon); text-shadow: 0 0 5px var(--neon); }
-
-        /* 2. LAYOUT DINÂMICO */
-        header { 
-            padding: 10px 20px; border-bottom: 2px solid #222; 
-            display: flex; justify-content: space-between; align-items: center; background: #080808;
-        }
-
-        #app { display: none; flex: 1; overflow-y: auto; padding: 15px; }
-
-        /* 3. MODOS DE OPERAÇÃO - UI MELHORADA */
-        .grid-modos { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 15px; }
-        .btn-modo { 
-            background: #151515; border: 1px solid #333; padding: 12px; border-radius: 8px; 
-            font-size: 0.75rem; text-align: center; cursor: pointer; transition: 0.2s;
-            font-weight: bold; color: #888;
-        }
-        .btn-modo.active { border-color: var(--neon); color: var(--neon); background: rgba(0,255,65,0.05); }
-
-        /* 4. ÁREA DE SCANNER */
-        #reader { width: 100%; max-width: 500px; margin: 0 auto; border-radius: 12px; border: 2px solid #222; }
-        .last-action { 
-            background: var(--card); padding: 15px; border-radius: 10px; margin: 15px 0;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-
-        /* 5. PAINEL DE CARGA (REAL-TIME) */
-        .container-monitor { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .painel-lista { background: #0a0a0a; border-radius: 10px; padding: 15px; border: 1px solid #222; height: 350px; overflow-y: auto; }
-        .item-row { 
-            display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #1a1a1a;
-            animation: fadeIn 0.3s ease;
-        }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* 6. STATUS DE CONEXÃO */
-        .status-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 5px; }
+        /* HEADER & STATUS */
+        header { padding: 10px 20px; background: #050505; border-bottom: 2px solid var(--dark-gray); display: flex; justify-content: space-between; align-items: center; z-index: 10; }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 5px; }
         .online { background: var(--neon); box-shadow: 0 0 8px var(--neon); }
-        .offline { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
+        .offline { background: var(--danger); box-shadow: 0 0 8px var(--danger); animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
 
-        /* 7. BOTÕES DE AÇÃO SHARK */
-        .admin-controls { margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .btn-action { padding: 12px; border: none; border-radius: 6px; font-family: 'Orbitron'; font-size: 0.7rem; cursor: pointer; }
-        .btn-green { background: var(--neon); color: #000; }
-        .btn-blue { background: var(--blue); color: #000; }
+        /* APP LAYOUT */
+        #app { display: none; flex: 1; overflow-y: auto; padding: 15px; }
+        .grid-main { display: grid; grid-template-columns: 1fr 350px; gap: 15px; }
 
-        /* INPUT ESCONDIDO PARA LEITORES USB */
+        /* MODOS E SCANNER */
+        .modos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 15px; }
+        .btn-m { background: #111; border: 1px solid #333; padding: 12px 5px; border-radius: 6px; font-size: 0.65rem; color: #666; font-weight: bold; cursor: pointer; text-align: center; }
+        .btn-m.active { border-color: var(--neon); color: var(--neon); background: rgba(0,255,65,0.1); }
+        #reader { width: 100%; border-radius: 12px; border: 1px solid #222; overflow: hidden; margin-bottom: 10px; }
+
+        /* DASHBOARD & INFO */
+        .card { background: var(--card); border: 1px solid var(--dark-gray); border-radius: 10px; padding: 15px; margin-bottom: 15px; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .stat-val { font-family: 'Orbitron'; font-size: 1.1rem; color: var(--blue); }
+
+        /* LISTAS VIVAS */
+        .scroll-list { height: 250px; overflow-y: auto; border: 1px solid #111; border-radius: 5px; background: #050505; }
+        .row { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #111; font-size: 0.8rem; }
+        .badge { background: rgba(0,255,65,0.1); color: var(--neon); padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+
+        /* PAINEL SHARK (ADMIN) */
+        #shark-only { display: none; margin-top: 10px; border: 1px dashed var(--neon); padding: 15px; }
+        textarea { width: 100%; height: 60px; background: #000; color: var(--neon); border: 1px solid #333; padding: 8px; font-size: 0.75rem; margin-bottom: 10px; resize: none; }
+        .btn-shark { width: 100%; padding: 10px; border: none; border-radius: 4px; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; margin-bottom: 5px; }
+
         #hidden-input { position: absolute; left: -9999px; }
-
-        @media (max-width: 700px) { .container-monitor { grid-template-columns: 1fr; } }
+        @media (max-width: 900px) { .grid-main { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-    <!-- TELA LOGIN -->
-    <div id="tela-login" style="height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+    <!-- LOGIN -->
+    <div id="login-screen" style="height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;">
         <h1 class="shark-font" style="font-size: 3rem; margin:0;">LOG-PRO</h1>
-        <p style="color:var(--neon); letter-spacing: 5px;">V80 SHARK</p>
-        <input type="password" id="pin" class="neon-border" style="background:#000; color:var(--neon); padding:15px; width:250px; text-align:center; margin:20px; font-size:1.5rem;" placeholder="PIN SHARK">
-        <button class="btn-green btn-action" style="width:250px; font-size:1rem;" onclick="autenticar()">ACESSAR TERMINAL</button>
+        <p style="color:var(--neon); letter-spacing: 5px; font-size: 0.8rem;">V83 ENTERPRISE</p>
+        <input type="password" id="pin" style="background:#000; color:var(--neon); border:1px solid var(--neon); padding:15px; width:200px; text-align:center; margin:20px; font-size:1.5rem;" placeholder="PIN">
+        <button class="btn-shark" style="background:var(--neon); width:200px;" onclick="logar()">ACESSO TERMINAL</button>
     </div>
 
-    <!-- SISTEMA PRINCIPAL -->
+    <!-- APP -->
     <div id="app">
         <header>
             <div>
-                <span id="status-icon" class="status-dot online"></span>
-                <span class="shark-font" style="font-size: 0.8rem;" id="display-user">OPERADOR</span>
+                <span id="net-dot" class="status-dot online"></span>
+                <span id="user-info" class="shark-font" style="font-size: 0.7rem;">OP: TERMINAL</span>
             </div>
-            <div class="shark-font" style="font-size: 0.9rem; color: var(--neon);" id="clock">00:00:00</div>
+            <div id="clock" class="shark-font" style="font-size: 0.8rem;">00:00:00</div>
         </header>
 
-        <div class="grid-modos">
-            <div class="btn-modo active" id="m-entrada" onclick="mudarModo('ENTRADA')">📥 ENTRADA</div>
-            <div class="btn-modo" id="m-separa" onclick="mudarModo('SEPARAÇÃO')">📦 SEPARAÇÃO</div>
-            <div class="btn-modo" id="m-avaria" onclick="mudarModo('AVARIA')">⚠️ AVARIA</div>
-            <div class="btn-modo" id="m-saida" onclick="mudarModo('SAÍDA')">🚚 SAÍDA</div>
-        </div>
+        <div class="grid-main">
+            <!-- COLUNA ESQUERDA: OPERAÇÃO -->
+            <div class="col">
+                <div class="modos">
+                    <div class="btn-m active" id="m-ENTRADA" onclick="setModo('ENTRADA')">ENTRADA</div>
+                    <div class="btn-m" id="m-SEPARACAO" onclick="setModo('SEPARACAO')">SEP.</div>
+                    <div class="btn-m" id="m-AVARIA" onclick="setModo('AVARIA')">AVARIA</div>
+                    <div class="btn-m" id="m-SAIDA" onclick="setModo('SAIDA')">SAÍDA</div>
+                </div>
 
-        <div id="reader"></div>
-        <input type="text" id="hidden-input">
+                <div id="reader"></div>
+                <input type="text" id="hidden-input">
 
-        <div class="last-action neon-border">
-            <div>
-                <small style="color:#666; display:block;">ÚLTIMA LEITURA:</small>
-                <span id="last-barcode" class="shark-font">---</span>
-            </div>
-            <div id="last-status" style="font-size: 0.7rem; font-weight: bold;">AGUARDANDO...</div>
-        </div>
-
-        <div class="container-monitor">
-            <!-- Coluna Operacional -->
-            <div class="painel-lista">
-                <h3 class="shark-font" style="font-size: 0.7rem; border-bottom: 1px solid #333; padding-bottom: 5px;">PENDÊNCIAS DE CARGA</h3>
-                <div id="lista-pendencias"></div>
-            </div>
-
-            <!-- Coluna Shark (Admin) -->
-            <div id="shark-only" style="display: none;">
-                <div class="painel-lista">
-                    <h3 class="shark-font" style="font-size: 0.7rem; border-bottom: 1px solid #333; padding-bottom: 5px;">COMANDOS DO DONO</h3>
-                    <textarea id="csv-input" style="width:100%; height:100px; background:#111; color:var(--neon); border:1px solid #333; font-size:0.8rem; padding:10px;" placeholder="COLE AQUI: CODIGO,QTD (Ex: 7891,10)"></textarea>
-                    
-                    <div class="admin-controls">
-                        <button class="btn-green btn-action" onclick="gerarCarga()">🚀 LANÇAR CARGA</button>
-                        <button class="btn-blue btn-action" onclick="exportarCSV()">📊 LOGS (CSV)</button>
-                        <button class="btn-action" style="background:#ff3e3e; grid-column: span 2;" onclick="resetarSistema()">🧨 RESET GERAL</button>
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between;">
+                        <div>
+                            <small style="color:#555;">ÚLTIMO BIP</small>
+                            <div id="last-code" class="shark-font" style="font-size: 1.5rem;">---</div>
+                        </div>
+                        <div id="feedback" style="font-weight:bold; color:var(--blue);">AGUARDANDO...</div>
                     </div>
+                    <!-- DADOS DWS -->
+                    <div class="stats-grid">
+                        <div><label style="font-size:0.6rem; color:#444;">PESO</label><div class="stat-val" id="dws-peso">0.0kg</div></div>
+                        <div><label style="font-size:0.6rem; color:#444;">VOL.</label><div class="stat-val" id="dws-vol">0m³</div></div>
+                        <div><label style="font-size:0.6rem; color:#444;">STATUS</label><div class="stat-val" id="dws-st" style="font-size:0.7rem; color:var(--neon);">PRONTO</div></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 class="shark-font" style="font-size: 0.7rem; margin:0 0 10px 0;">PENDÊNCIAS EM TEMPO REAL</h3>
+                    <div class="scroll-list" id="lista-viva"></div>
+                </div>
+            </div>
+
+            <!-- COLUNA DIREITA: DASHBOARD SHARK -->
+            <div class="col">
+                <div class="card">
+                    <h3 class="shark-font" style="font-size: 0.7rem; margin:0;">KPI PRODUTIVIDADE (H)</h3>
+                    <canvas id="prodChart" height="200"></canvas>
+                </div>
+
+                <div id="shark-only" class="card">
+                    <h3 class="shark-font" style="font-size: 0.7rem; margin:0 0 10px 0;">MASTER COMMAND</h3>
+                    <textarea id="cmd-input" placeholder="CODIGO, QTD (Lançar Carga)"></textarea>
+                    <button class="btn-shark" style="background:var(--neon);" onclick="lancarCarga()">DISPARAR CARGA</button>
+                    <button class="btn-shark" style="background:var(--blue);" onclick="exportarCSV()">RELATÓRIO ROI (CSV)</button>
+                    <button class="btn-shark" style="background:var(--danger); color:white;" onclick="resetar()">LIMPAR DOCAS</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // 1. CONFIGURAÇÃO FIREBASE (Substitua pelos seus dados)
-        const firebaseConfig = { apiKey: "AIza...", projectId: "logpro-v80", appId: "1:..." };
+        // 1. FIREBASE & OFFLINE-FIRST
+        const firebaseConfig = { apiKey: "AIza...", projectId: "logpro-shark", appId: "1:..." };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        
-        // 2. CANAL DE COMUNICAÇÃO ENTRE ABAS (SYNC)
-        const syncChannel = new BroadcastChannel('logpro_sync');
+        db.enablePersistence().catch(e => console.warn(e.code));
 
-        let userState = { role: 'OP', modo: 'ENTRADA' };
+        let state = { role: 'OP', modo: 'ENTRADA', count: 0 };
+        const sync = new BroadcastChannel('shark_v83');
 
-        // 3. RELÓGIO E CONEXÃO
-        setInterval(() => {
-            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
-            document.getElementById('status-icon').className = navigator.onLine ? 'status-dot online' : 'status-dot offline';
-        }, 1000);
+        // 2. VOZ & NOTIFICAÇÃO
+        function falar(t, err = false) {
+            const u = new SpeechSynthesisUtterance(t);
+            u.lang = 'pt-PT'; u.rate = 1.1;
+            window.speechSynthesis.speak(u);
+            if(navigator.vibrate) navigator.vibrate(err ? [100, 50, 100] : 100);
+        }
 
-        // 4. AUTENTICAÇÃO
-        function autenticar() {
-            const pin = document.getElementById('pin').value;
-            if (pin === "7979") { // PIN SHARK
-                userState.role = 'SHARK';
+        // 3. LOGIN & DASHBOARD
+        let chart;
+        function initChart() {
+            const ctx = document.getElementById('prodChart').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: { labels: ['08h','10h','12h','14h','16h','18h'], datasets: [{ label: 'Bipes', data: [0,0,0,0,0,0], borderColor: '#00ff41', tension: 0.4 }] },
+                options: { plugins: { legend: { display: false } }, scales: { y: { display: false } } }
+            });
+        }
+
+        function logar() {
+            const p = document.getElementById('pin').value;
+            if(p === "7979") {
+                state.role = 'SHARK';
                 document.getElementById('shark-only').style.display = 'block';
-                document.getElementById('display-user').innerText = "JP | SHARK";
+                document.getElementById('user-info').innerText = "JP | SHARK MASTER";
             }
-            document.getElementById('tela-login').style.display = 'none';
-            document.getElementById('app').style.display = 'flex';
-            iniciarLeitores();
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+            initChart();
+            startSystems();
         }
 
-        // 5. MUDANÇA DE MODO COM SYNC ENTRE ABAS
-        function mudarModo(novoModo) {
-            userState.modo = novoModo;
-            document.querySelectorAll('.btn-modo').forEach(b => b.classList.remove('active'));
-            const btnId = novoModo === 'ENTRADA' ? 'm-entrada' : novoModo === 'SEPARAÇÃO' ? 'm-separa' : novoModo === 'AVARIA' ? 'm-avaria' : 'm-saida';
-            document.getElementById(btnId).classList.add('active');
-            vibrar(60);
-            
-            // Avisa a outra aba que mudei o modo aqui
-            syncChannel.postMessage({ type: 'MODO_CHANGED', val: novoModo });
+        // 4. MUDANÇA DE MODO (SYNC TOTAL)
+        function setModo(m) {
+            state.modo = m;
+            document.querySelectorAll('.btn-m').forEach(b => b.classList.remove('active'));
+            document.getElementById('m-'+m.replace('Ç','C')).classList.add('active');
+            sync.postMessage({ type: 'MODO', val: m });
+            falar("Modo " + m);
         }
+        sync.onmessage = (e) => { if(e.data.type === 'MODO') setModo(e.data.val); };
 
-        syncChannel.onmessage = (ev) => {
-            if (ev.data.type === 'MODO_CHANGED') {
-                mudarModo(ev.data.val);
-            }
-        };
-
-        // 6. PROCESSAMENTO DE BIPE (CÉREBRO)
+        // 5. CÉREBRO LOGÍSTICO (BIPE + DWS)
         async function processarBipe(codigo) {
-            const code = codigo.trim();
-            if (!code) return;
-
-            vibrar(100);
-            document.getElementById('last-barcode').innerText = code;
-            document.getElementById('last-status').innerText = "PROCESSANDO...";
-            document.getElementById('last-status').style.color = 'var(--blue)';
+            const cod = codigo.trim(); if(!cod) return;
+            document.getElementById('last-code').innerText = cod;
+            document.getElementById('feedback').innerText = "PROCESSANDO...";
 
             try {
-                // Registo de Log Global
-                await db.collection("logs").add({
-                    code, modo: userState.modo, user: userState.role, time: firebase.firestore.FieldValue.serverTimestamp()
-                });
+                // Registro de Log (ROI)
+                await db.collection("logs").add({ cod, modo: state.modo, user: state.role, ts: firebase.firestore.FieldValue.serverTimestamp() });
+                
+                // Simulação DWS (Pode ligar a balança real aqui via API)
+                const pesoSim = (Math.random() * 5).toFixed(2);
+                document.getElementById('dws-peso').innerText = pesoSim + "kg";
+                document.getElementById('dws-vol').innerText = "0.0" + Math.floor(Math.random()*9) + "m³";
 
-                // Lógica de Separação em Tempo Real
-                if (userState.modo === "SEPARAÇÃO") {
-                    const sepRef = db.collection("carga_ativa").doc(code);
-                    const doc = await sepRef.get();
-                    if (doc.exists && doc.data().falta > 0) {
-                        await sepRef.update({ falta: firebase.firestore.FieldValue.increment(-1) });
-                        document.getElementById('last-status').innerText = "OK: BAIXA REALIZADA";
-                        document.getElementById('last-status').style.color = 'var(--neon)';
+                if(state.modo === "SEPARACAO") {
+                    const ref = db.collection("carga").doc(cod);
+                    const doc = await ref.get();
+                    if(doc.exists && doc.data().falta > 0) {
+                        await ref.update({ falta: firebase.firestore.FieldValue.increment(-1) });
+                        falar("OK");
+                        document.getElementById('feedback').style.color = "var(--neon)";
                     } else {
-                        document.getElementById('last-status').innerText = "ERRO: FORA DA LISTA";
-                        document.getElementById('last-status').style.color = 'var(--danger)';
+                        falar("Item fora da carga", true);
+                        document.getElementById('feedback').style.color = "var(--danger)";
                     }
-                } else {
-                    document.getElementById('last-status').innerText = "OK: REGISTADO";
-                    document.getElementById('last-status').style.color = 'var(--neon)';
-                }
-            } catch (e) {
-                console.error(e);
-            }
-            
+                } else { falar("Registado"); }
+            } catch(e) { console.error(e); }
             document.getElementById('hidden-input').value = "";
         }
 
-        // 7. ESCUTA DE CARGA (REAL-TIME)
-        db.collection("carga_ativa").orderBy("falta", "desc").onSnapshot(snap => {
-            const container = document.getElementById('lista-pendencias');
-            container.innerHTML = "";
-            snap.forEach(doc => {
-                const data = doc.data();
-                if (data.falta > 0) {
-                    container.innerHTML += `
-                        <div class="item-row">
-                            <span>📦 ${doc.id}</span>
-                            <span class="shark-font" style="font-size:0.8rem;">FALTAM: ${data.falta}</span>
-                        </div>
-                    `;
+        // 6. SNAPSHOTS REAL-TIME
+        db.collection("carga").onSnapshot(snap => {
+            const list = document.getElementById('lista-viva');
+            list.innerHTML = "";
+            snap.forEach(d => {
+                if(d.data().falta > 0) {
+                    list.innerHTML += `<div class="row"><span>📦 ${d.id}</span><span class="badge">${d.data().falta}</span></div>`;
                 }
             });
         });
 
-        // 8. FUNÇÕES SHARK (ADMIN)
-        async function gerarCarga() {
-            const data = document.getElementById('csv-input').value.split('\n');
+        // 7. FUNÇÕES SHARK
+        async function lancarCarga() {
+            const lines = document.getElementById('cmd-input').value.split('\n');
             const batch = db.batch();
-            data.forEach(line => {
-                const [cod, qtd] = line.split(',');
-                if (cod && qtd) {
-                    const ref = db.collection("carga_ativa").doc(cod.trim());
-                    batch.set(ref, { falta: parseInt(qtd.trim()) });
-                }
+            lines.forEach(l => {
+                const [c, q] = l.split(',');
+                if(c && q) batch.set(db.collection("carga").doc(c.trim()), { falta: parseInt(q) });
             });
             await batch.commit();
-            document.getElementById('csv-input').value = "";
-            alert("CARGA LANÇADA NO SISTEMA!");
+            falar("Carga disparada para as docas");
+            document.getElementById('cmd-input').value = "";
         }
 
         async function exportarCSV() {
-            const logs = await db.collection("logs").orderBy("time", "desc").limit(500).get();
-            let csv = "DATA,MODO,CODIGO,USER\n";
-            logs.forEach(d => {
-                const log = d.data();
-                csv += `${log.time?.toDate().toLocaleString()},${log.modo},${log.code},${log.user}\n`;
-            });
+            const snap = await db.collection("logs").orderBy("ts", "desc").limit(500).get();
+            let csv = "DATA,MODO,CODIGO,OPERADOR\n";
+            snap.forEach(d => { const l = d.data(); csv += `${l.ts?.toDate().toLocaleString()},${l.modo},${l.cod},${l.user}\n`; });
             const blob = new Blob([csv], { type: 'text/csv' });
             const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `LOGPRO_EXPORT.csv`;
-            a.click();
+            const a = document.createElement('a'); a.href = url; a.download = `SHARK_LOGS.csv`; a.click();
         }
 
-        function vibrar(ms) { if (navigator.vibrate) navigator.vibrate(ms); }
+        async function resetar() { if(confirm("LIMPAR DOCAS?")) { const s = await db.collection("carga").get(); s.forEach(d => d.ref.delete()); } }
 
-        function iniciarLeitores() {
-            // Scanner Câmara
+        // MONITOR
+        setInterval(() => {
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+            document.getElementById('net-dot').className = navigator.onLine ? "status-dot online" : "status-dot offline";
+        }, 1000);
+
+        function startSystems() {
             const scanner = new Html5Qrcode("reader");
-            scanner.start({ facingMode: "environment" }, { fps: 25, qrbox: 250 }, (txt) => processarBipe(txt));
-
-            // Scanner Físico (USB/BT)
-            document.addEventListener('keydown', () => document.getElementById('hidden-input').focus());
+            scanner.start({ facingMode: "environment" }, { fps: 30, qrbox: 250 }, (t) => processarBipe(t));
+            setInterval(() => document.getElementById('hidden-input').focus(), 1000);
             document.getElementById('hidden-input').addEventListener('change', (e) => processarBipe(e.target.value));
-        }
-
-        async function resetarSistema() {
-            if(confirm("LIMPAR TODA A OPERAÇÃO?")) {
-                const snap = await db.collection("carga_ativa").get();
-                snap.forEach(d => d.ref.delete());
-            }
         }
     </script>
 </body>
