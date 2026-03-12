@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HG MOTORS | Galaxy Edition</title>
+    <title>HG MOTORS | Galaxy V80</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --accent: #ff002e;     /* High-Performance Red */
-            --success: #00ff66;    /* Neon WhatsApp */
-            --bg: #000000;         /* Deep Space */
-            --card-bg: rgba(20, 20, 20, 0.7);
-            --glass: rgba(255, 255, 255, 0.03);
+            --accent: #ff002e;     /* Red Shark */
+            --success: #25d366;    /* WhatsApp Green */
+            --bg: #000000;         
+            --surface: rgba(25, 25, 25, 0.8);
             --border: rgba(255, 255, 255, 0.1);
         }
 
@@ -22,149 +21,180 @@
         
         body { 
             background: var(--bg); color: #fff; 
-            overflow-x: hidden; scroll-behavior: smooth;
-            background-image: radial-gradient(circle at 50% -20%, #1a0005 0%, #000 80%);
+            background-image: radial-gradient(circle at 50% -10%, #200005 0%, #000 70%);
+            min-height: 100vh;
         }
 
-        /* HEADER ULTRA-TECH */
+        /* HEADER ULTRA-LIGHT */
         header { 
-            height: 120px; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000;
-            background: rgba(0,0,0,0.8); backdrop-filter: blur(20px);
+            padding: 25px; text-align: center; border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; z-index: 1000; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px);
         }
-        .logo { font-size: 32px; font-weight: 900; letter-spacing: 8px; text-transform: uppercase; color: #fff; }
-        .logo span { color: var(--accent); text-shadow: 0 0 20px rgba(255, 0, 46, 0.5); }
-        .status-bar { font-size: 9px; text-transform: uppercase; letter-spacing: 3px; color: var(--accent); margin-top: 8px; font-weight: 600; }
+        .logo { font-size: 26px; font-weight: 900; letter-spacing: 5px; text-transform: uppercase; }
+        .logo span { color: var(--accent); }
+        .status { font-size: 9px; color: var(--accent); letter-spacing: 2px; margin-top: 5px; font-weight: 700; }
 
-        /* NAV TAB-BAR (APP FEEL) */
-        .v80-tabs {
-            display: flex; justify-content: center; gap: 8px; padding: 15px;
-            position: sticky; top: 120px; z-index: 999; background: rgba(0,0,0,0.5);
+        /* NAVEGAÇÃO APP-STYLE */
+        .v80-nav {
+            display: flex; gap: 8px; padding: 15px; overflow-x: auto;
+            background: rgba(0,0,0,0.3); border-bottom: 1px solid var(--border);
+            position: sticky; top: 90px; z-index: 999;
         }
-        .tab {
-            background: var(--glass); border: 1px solid var(--border); color: #888;
-            padding: 10px 20px; border-radius: 100px; font-size: 11px; font-weight: 700;
-            text-transform: uppercase; cursor: pointer; transition: 0.4s;
+        .v80-nav::-webkit-scrollbar { display: none; }
+        .nav-btn {
+            background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #888;
+            padding: 10px 20px; border-radius: 50px; font-size: 11px; font-weight: 700;
+            text-transform: uppercase; white-space: nowrap; transition: 0.3s;
         }
-        .tab.active { background: #fff; color: #000; border-color: #fff; box-shadow: 0 0 30px rgba(255,255,255,0.2); }
+        .nav-btn.active { background: #fff; color: #000; border-color: #fff; }
 
-        /* GRID GALAXY */
-        .grid { max-width: 450px; margin: 0 auto; padding: 40px 15px; }
+        /* GRID DE PERFORMANCE */
+        .catalog { max-width: 480px; margin: 0 auto; padding: 25px 15px; }
 
-        .v-card {
-            background: var(--card-bg); border-radius: 24px; margin-bottom: 60px;
+        .card {
+            background: var(--surface); border-radius: 24px; margin-bottom: 40px;
             border: 1px solid var(--border); overflow: hidden;
-            backdrop-filter: blur(10px); transition: transform 0.5s;
-            animation: reveal 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+            animation: fadeIn 0.6s ease-out forwards;
         }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .img-box { position: relative; width: 100%; height: 380px; background: #111; }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 0.5s; }
+        .img-box img.loaded { opacity: 1; }
         
-        @keyframes reveal { from { opacity: 0; transform: translateY(40px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
-
-        .v-img-box { position: relative; width: 100%; height: 420px; overflow: hidden; }
-        .v-img-box img { width: 100%; height: 100%; object-fit: cover; transition: 1.2s cubic-bezier(0.2, 1, 0.2, 1); }
-        .v-card:hover .v-img-box img { transform: scale(1.1); }
-
-        .v-overlay {
-            position: absolute; bottom: 0; left: 0; right: 0; padding: 40px 20px 20px;
-            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+        .badge {
+            position: absolute; top: 15px; left: 15px;
+            background: var(--accent); padding: 6px 14px; border-radius: 6px;
+            font-size: 9px; font-weight: 900; text-transform: uppercase;
         }
 
-        .v-content { padding: 30px 25px; }
-        .v-title { font-size: 32px; font-weight: 900; text-transform: uppercase; letter-spacing: -1px; line-height: 0.9; margin-bottom: 15px; }
+        .details { padding: 25px; }
+        .v-brand { color: var(--accent); font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; }
+        .v-name { font-size: 28px; font-weight: 900; margin: 5px 0 20px; text-transform: uppercase; letter-spacing: -1px; }
         
-        .v-specs-row { display: flex; gap: 10px; margin-bottom: 30px; }
-        .v-pill { 
-            background: rgba(255,255,255,0.05); border: 1px solid var(--border);
-            padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; color: #aaa;
-        }
+        .specs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 25px; }
+        .pill { background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #bbb; }
 
-        .v-price-box { 
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 25px 0; border-top: 1px solid var(--border);
+        .price-row { 
+            display: flex; justify-content: space-between; align-items: baseline; 
+            margin-bottom: 25px; padding-top: 20px; border-top: 1px solid var(--border);
         }
-        .v-price { font-size: 42px; font-weight: 900; color: #fff; }
-        .v-price span { font-size: 16px; color: var(--accent); vertical-align: top; margin-right: 4px; }
+        .price { font-size: 36px; font-weight: 900; color: #fff; }
+        .price span { font-size: 16px; color: var(--accent); margin-right: 4px; }
 
-        /* BOTÃO MAGNÉTICO */
-        .v-cta {
-            background: var(--success); color: #000; text-decoration: none;
+        .btn-zap {
             display: flex; align-items: center; justify-content: center;
-            height: 70px; border-radius: 18px; font-weight: 900; font-size: 17px;
-            text-transform: uppercase; letter-spacing: 1px;
-            box-shadow: 0 20px 40px rgba(0, 255, 102, 0.2);
-            transition: 0.3s;
+            background: var(--success); color: #000; text-decoration: none;
+            padding: 20px; border-radius: 15px; font-weight: 900; font-size: 15px;
+            text-transform: uppercase; box-shadow: 0 10px 30px rgba(37, 211, 102, 0.2);
         }
-        .v-cta:active { transform: scale(0.95); filter: brightness(1.2); }
+        .btn-zap:active { transform: scale(0.95); }
 
-        footer { text-align: center; padding: 100px 20px; opacity: 0.2; font-size: 10px; font-weight: 900; letter-spacing: 5px; }
+        footer { text-align: center; padding: 60px 20px; color: #333; font-size: 9px; font-weight: 900; letter-spacing: 4px; }
     </style>
 </head>
 <body>
 
     <header>
         <div class="logo">HG <span>MOTORS</span></div>
-        <div class="status-bar">SISTEMA V80 ONLINE • HORTOLÂNDIA</div>
+        <div class="status">SISTEMA V80 GALAXY • ATIVO</div>
     </header>
 
-    <div class="v80-tabs">
-        <div class="tab active" onclick="filter('all')">Estoque Total</div>
-        <div class="tab" onclick="filter('premium')">Premium</div>
-        <div class="tab" onclick="filter('sport')">Sport</div>
+    <div class="v80-nav">
+        <div class="nav-btn active" onclick="filter('all')">Todos</div>
+        <div class="nav-btn" onclick="filter('hatch')">Carros Hatch</div>
+        <div class="nav-btn" onclick="filter('sedan')">Carros Sedan</div>
+        <div class="nav-btn" onclick="filter('moto')">Motos</div>
+        <div class="nav-btn" onclick="filter('jet')">Jet Ski</div>
     </div>
 
-    <div class="grid" id="main-grid">
+    <div class="catalog" id="main-catalog">
         
-        <div class="v-card" data-cat="premium">
-            <div class="v-img-box">
-                <img src="5565.png" alt="Onix" onerror="this.src='https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=800'">
-                <div class="v-overlay">
-                    <div class="v-pill" style="background: var(--accent); color: #fff; border: none;">DISPONÍVEL AGORA</div>
-                </div>
+        <div class="card" data-cat="hatch">
+            <div class="img-box">
+                <div class="badge">Disponível</div>
+                <img src="5565.png" alt="Onix" onload="this.classList.add('loaded')" onerror="this.src='https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=800'">
             </div>
-            <div class="v-content">
-                <h2 class="v-title">Onix Turbo<br>Premier</h2>
-                <div class="v-specs-row">
-                    <div class="v-pill">2023</div>
-                    <div class="v-pill">Automático</div>
+            <div class="details">
+                <span class="v-brand">Chevrolet</span>
+                <h2 class="v-name">Onix Turbo Premier</h2>
+                <div class="specs">
+                    <span class="pill">2023</span>
+                    <span class="pill">Automático</span>
+                    <span class="pill">15k KM</span>
                 </div>
-                <div class="v-price-box">
-                    <div class="v-price"><span>R$</span>89.900</div>
-                </div>
-                <a href="https://wa.me/5519998463668" class="v-cta">Negociar em Segundos</a>
+                <div class="price-row"><span class="price"><span>R$</span>89.900</span></div>
+                <a href="https://wa.me/5519998463668?text=Quero o Onix Turbo" class="btn-zap">Garantir Agora</a>
             </div>
         </div>
 
-        <div class="v-card" data-cat="sport">
-            <div class="v-img-box">
-                <img src="5588.png" alt="Moto" onerror="this.src='https://images.unsplash.com/photo-1558981403-c5f91cbcf523?w=800'">
-                <div class="v-overlay">
-                    <div class="v-pill" style="background: #fff; color: #000; border: none;">ALTA PERFORMANCE</div>
-                </div>
+        <div class="card" data-cat="sedan">
+            <div class="img-box">
+                <div class="badge">Oportunidade</div>
+                <img src="5564.png" alt="Corolla" onload="this.classList.add('loaded')" onerror="this.src='https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=800'">
             </div>
-            <div class="v-content">
-                <h2 class="v-title">CB 500X<br>ABS HONDA</h2>
-                <div class="v-specs-row">
-                    <div class="v-pill">2021</div>
-                    <div class="v-pill">12k KM</div>
+            <div class="details">
+                <span class="v-brand">Toyota Premium</span>
+                <h2 class="v-name">Corolla Altis Hybrid</h2>
+                <div class="specs">
+                    <span class="pill">2022</span>
+                    <span class="pill">Híbrido</span>
+                    <span class="pill">Top de Linha</span>
                 </div>
-                <div class="v-price-box">
-                    <div class="v-price"><span>R$</span>42.500</div>
+                <div class="price-row"><span class="price"><span>R$</span>138.900</span></div>
+                <a href="https://wa.me/5519998463668?text=Quero o Corolla Altis" class="btn-zap">Garantir Agora</a>
+            </div>
+        </div>
+
+        <div class="card" data-cat="moto">
+            <div class="img-box">
+                <div class="badge">Alta Performance</div>
+                <img src="5588.png" alt="CB 500X" onload="this.classList.add('loaded')" onerror="this.src='https://images.unsplash.com/photo-1558981403-c5f91cbcf523?w=800'">
+            </div>
+            <div class="details">
+                <span class="v-brand">Honda</span>
+                <h2 class="v-name">CB 500X ABS</h2>
+                <div class="specs">
+                    <span class="pill">2021</span>
+                    <span class="pill">12k KM</span>
                 </div>
-                <a href="https://wa.me/5519998463668" class="v-cta">Negociar em Segundos</a>
+                <div class="price-row"><span class="price"><span>R$</span>42.500</span></div>
+                <a href="https://wa.me/5519998463668?text=Quero a CB 500X" class="btn-zap">Garantir Agora</a>
+            </div>
+        </div>
+
+        <div class="card" data-cat="jet">
+            <div class="img-box">
+                <div class="badge">Lazer Premium</div>
+                <img src="5589.png" alt="Jet Ski" onload="this.classList.add('loaded')" onerror="this.src='https://images.unsplash.com/photo-1621251912693-02f459141f92?w=800'">
+            </div>
+            <div class="details">
+                <span class="v-brand">Náutica Sea-Doo</span>
+                <h2 class="v-name">GTI 130hp</h2>
+                <div class="specs">
+                    <span class="pill">2020</span>
+                    <span class="pill">80 Horas</span>
+                </div>
+                <div class="price-row"><span class="price"><span>R$</span>84.900</span></div>
+                <a href="https://wa.me/5519998463668?text=Quero o Jet Ski" class="btn-zap">Garantir Agora</a>
             </div>
         </div>
 
     </div>
 
     <footer>
-        GALAXY INTERFACE BY JP DIAS
+        GALAXY NATIVE INTERFACE • JP DIAS
     </footer>
 
     <script>
         function filter(c) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            const btns = document.querySelectorAll('.nav-btn');
+            btns.forEach(b => b.classList.remove('active'));
             event.target.classList.add('active');
-            document.querySelectorAll('.v-card').forEach(card => {
+            
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
                 card.style.display = (c === 'all' || card.dataset.cat === c) ? 'block' : 'none';
             });
         }
