@@ -3,162 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LOG-PRO v80 | SHARK INTELLIGENCE</title>
+    <title>LOG-PRO v79 | JP MASTER</title>
     <script src="https://unpkg.com/html5-qrcode"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --p: #00ff41; --bg: #000; --card: #0a0a0a; --brd: #222; --danger: #ff3b30; --warn: #ffae00; --info: #007aff; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; text-transform: uppercase; font-size: 11px; height: 100vh; overflow: hidden; }
-        
-        /* ESTRUTURA DE TELAS */
+        :root { --primary: #00ff41; --bg: #000; --border: #222; --danger: #ff3b30; --warning: #ffae00; --info: #007aff; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; text-transform: uppercase; font-size: 10px; height: 100vh; overflow: hidden; }
         .screen { display: none; position: absolute; width: 100%; height: 100%; flex-direction: column; background: #000; z-index: 10; }
         .active { display: flex !important; }
-        header { padding: 15px; border-bottom: 2px solid #111; display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron'; background: #050505; color: var(--p); }
-        .scroll { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 120px; }
-
-        /* COMPONENTES SHARK */
-        .btn { width: 100%; padding: 16px; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 6px; cursor: pointer; margin-bottom: 8px; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-p { background: var(--p); color: #000; }
-        .btn-dark { background: #111; color: #fff; border: 1px solid #333; }
-        .btn-danger { background: var(--danger); color: #fff; }
-
-        .input-group { background: var(--card); border: 1px solid var(--brd); padding: 10px; border-radius: 8px; margin-bottom: 10px; }
-        label { font-size: 9px; color: #666; font-weight: 800; margin-bottom: 5px; display: block; }
-        input, select, textarea { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 4px; font-family: 'Orbitron'; font-size: 13px; }
-
-        /* TABELAS E CARDS */
-        .status-card { padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid var(--info); background: #050505; }
-        .table-wrapper { border: 1px solid var(--brd); border-radius: 8px; overflow-x: auto; background: #050505; }
-        table { width: 100%; border-collapse: collapse; min-width: 600px; }
-        th { background: #111; color: #444; padding: 10px; text-align: left; font-size: 8px; }
-        td { padding: 10px; border-bottom: 1px solid #111; font-size: 10px; }
-
-        /* INTERFACE DO LEITOR */
-        #reader { width: 100%; border-radius: 12px; overflow: hidden; border: 2px solid var(--brd); margin-bottom: 10px; background: #000; }
-        
-        /* ETIQUETA DE IMPRESSÃO */
-        .label-print { display:none; width: 40mm; height: 30mm; background:#fff; color:#000; padding:5px; text-align:center; font-family: Arial, sans-serif; position: relative; }
-        @media print { .screen, header, .nav-bar { display:none !important; } .label-print { display:block !important; border: 1px solid #000; margin: 0; } }
-
-        /* BARRA DE NAVEGAÇÃO */
-        .nav-bar { position: fixed; bottom: 0; width: 100%; background: #050505; border-top: 1px solid #222; display: flex; padding: 10px; gap: 10px; z-index: 100; }
-        .nav-item { flex: 1; text-align: center; color: #444; font-size: 9px; font-weight: 800; cursor: pointer; }
-        .nav-item.active { color: var(--p); }
-        .nav-item i { display: block; font-size: 18px; margin-bottom: 4px; }
+        header { padding: 12px; border-bottom: 1px solid #111; display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron'; background: #050505; }
+        .scroll { flex: 1; overflow-y: auto; padding: 10px; padding-bottom: 150px; }
+        .btn-green { width: 100%; padding: 15px; background: var(--primary); color: #000; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 4px; cursor: pointer; margin-bottom: 5px; }
+        input, select, textarea { width: 100%; padding: 12px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; font-family: 'Orbitron'; margin-bottom: 8px; box-sizing: border-box; }
+        .table-wrapper { border: 1px solid var(--border); border-radius: 6px; overflow-x: auto; background: #080808; margin-bottom: 15px; }
+        table { width: 100%; border-collapse: collapse; min-width: 700px; }
+        th { background: #111; color: #555; padding: 8px; text-align: left; font-size: 7px; }
+        td { padding: 8px; border-bottom: 1px solid #151515; font-size: 9px; }
+        #reader { width: 100%; border-radius: 8px; overflow: hidden; border: 2px solid #222; margin-bottom: 10px; }
+        .label-print { display:none; width: 40mm; height: 30mm; background:#fff; color:#000; padding:10px; text-align:center; font-family:Arial; }
+        @media print { .screen, header { display:none !important; } .label-print { display:block !important; border:1px solid #000; } }
     </style>
 </head>
 <body onload="init()">
 
 <div id="scr-login" class="screen active" style="align-items:center; justify-content:center;">
-    <div style="font-family:'Orbitron'; color:var(--p); font-size:32px; text-align:center;">LOG-PRO<br><span style="font-size:12px; color:#444; letter-spacing:4px;">SHARK V80</span></div>
-    <div style="width: 85%; max-width: 320px; margin-top:40px;">
-        <input type="text" id="user-name" placeholder="USUARIO" style="margin-bottom:10px;">
-        <input type="password" id="pass" placeholder="CHAVE SEGURA">
-        <button class="btn btn-p" onclick="auth()">AUTENTICAR SISTEMA</button>
+    <div style="font-family:'Orbitron'; color:var(--primary); font-size:35px; text-align:center;">LOG-PRO v79<br><span style="font-size:10px; color:#444;">WMS COMPLETE</span></div>
+    <div style="width: 80%; max-width: 300px; margin-top:30px;">
+        <input type="text" id="user-name" placeholder="USUARIO">
+        <input type="password" id="pass" placeholder="CHAVE">
+        <button class="btn-green" onclick="auth()">ACESSAR SISTEMA</button>
     </div>
 </div>
 
 <div id="scr-shark" class="screen">
-    <header><span>SHARK CONTROL</span> <span id="clock" style="font-size:10px; color:#666;">00:00</span></header>
+    <header><span style="color:var(--primary)">SHARK MASTER</span> <button onclick="logout()" style="color:var(--danger); background:none; border:none;">SAIR</button></header>
     <div class="scroll">
-        <div class="status-card" style="border-color: var(--p);">
-            <small>OCUPAÇÃO TOTAL</small>
-            <div style="display:flex; justify-content:space-between; align-items:flex-end;">
-                <h2 id="total-itens" style="margin:0; font-size:28px;">0</h2>
-                <span style="color:var(--p); font-weight:800;">ARMAZÉM VIVO</span>
-            </div>
+        <h3>BASE M (PRODUTO / MINIMO)</h3>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+            <input type="text" id="m-cod" placeholder="COD BARRAS">
+            <input type="text" id="m-nome" placeholder="NOME ITEM">
+            <input type="text" id="m-end" placeholder="ENDERECO">
+            <input type="number" id="m-min" placeholder="EST. MIN">
         </div>
-
-        <div class="input-group">
-            <label>CADASTRO / AJUSTE DE BASE M</label>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
-                <input type="text" id="m-cod" placeholder="CÓDIGO">
-                <input type="text" id="m-nome" placeholder="NOME ITEM">
-                <input type="text" id="m-end" placeholder="PICKING (A)">
-                <input type="text" id="m-pulmao" placeholder="PULMÃO (B)">
-            </div>
-            <button class="btn btn-dark" style="margin-top:10px; color:var(--p);" onclick="salvarMaster()">SALVAR NA BASE M</button>
-        </div>
-
-        <div class="input-group">
-            <label>DISPARAR ORDEM DE SAÍDA (ROTA)</label>
-            <select id="rota-select">
-                <option value="SUL">ROTA SUL (INTERIOR)</option>
-                <option value="CAPITAL">ROTA CAPITAL</option>
-                <option value="LESTE">ZONA LESTE</option>
-            </select>
-            <input type="text" id="mot-info" placeholder="MOTORISTA / PLACA" style="margin-top:8px;">
-            <textarea id="list-input" placeholder="CÓDIGO, QTD (EX: 789, 50)" style="height:60px; margin-top:8px;"></textarea>
-            <button class="btn btn-p" onclick="enviarCarga()">DISPARAR PARA DOCA</button>
-        </div>
-
+        <button class="btn-green" style="background:#222; color:var(--primary);" onclick="salvarMaster()">SALVAR NA BASE M</button>
+        
+        <hr border="1" color="#111">
+        <h3>ORDEM DE SEPARACAO</h3>
+        <input type="text" id="mot-info" placeholder="MOTORISTA / PLACA">
+        <textarea id="list-input" placeholder="COD, QTD (EX: 789, 50)" style="height:50px;"></textarea>
+        <button class="btn-green" onclick="enviarCarga()">DISPARAR PARA OPERADORES</button>
+        
+        <button class="btn-green" style="background:var(--primary); color:#000; margin-top:10px;" onclick="exportarRelatorio()">BAIXAR RELATORIO COMPLETO</button>
+        
         <div class="table-wrapper">
-            <table>
-                <thead><tr><th>HORA</th><th>OP</th><th>TIPO</th><th>ITEM</th><th>QTD</th><th>END</th></tr></thead>
-                <tbody id="audit-body"></tbody>
-            </table>
+            <table><thead><tr><th>HORA</th><th>OP</th><th>ETAPA</th><th>ITEM</th><th>QTD</th><th>VALIDADE</th><th>END</th></tr></thead>
+            <tbody id="audit-body"></tbody></table>
         </div>
     </div>
 </div>
 
 <div id="scr-op" class="screen">
-    <header><span id="display-user">OPERADOR</span> <button onclick="logout()" style="color:var(--danger); background:none; border:none; font-weight:800;">SAIR</button></header>
+    <header><span id="display-user">OPERADOR</span> <button onclick="logout()" style="color:var(--danger); background:none; border:none;">SAIR</button></header>
     <div class="scroll">
-        <div id="box-picking" style="border: 2px solid var(--p); padding:12px; background:#050505; margin-bottom:12px; border-radius:8px;">
-            <h4 style="color:var(--p); margin:0; font-size:10px;">📋 PENDENTE NA ROTA:</h4>
-            <div id="op-list-picking" style="font-size:12px; font-weight:700; margin-top:8px;"></div>
+        <div id="box-picking" style="border: 1px solid var(--primary); padding:10px; background:#050505; margin-bottom:10px; border-radius:4px;">
+            <h4 style="color:var(--primary); margin:0;">PENDENTE NO CARREGAMENTO:</h4>
+            <div id="op-list-picking" style="font-size:11px;"></div>
         </div>
 
-        <div class="input-group">
-            <label>MODO DE OPERAÇÃO</label>
-            <select id="mod-op" onchange="checkModo()">
-                <option value="ENTRADA">📥 ENTRADA (ESTOCAR)</option>
-                <option value="SEPARACAO">📦 SEPARAÇÃO (PICKING)</option>
-                <option value="SAIDA">🚚 EXPEDIÇÃO (SAÍDA)</option>
-                <option value="AVARIA">⚠️ AVARIA (BLOQUEIO)</option>
-            </select>
-        </div>
+        <select id="mod-op">
+            <option value="ENTRADA">📥 ENTRADA / ABASTECER</option>
+            <option value="SEPARACAO">📦 SEPARACAO (CARGA)</option>
+            <option value="AVARIA">⚠️ AVARIA (QUEBRA)</option>
+            <option value="SAIDA">🚚 SAIDA (MOTORISTA)</option>
+        </select>
         
-        <div style="display:flex; gap:10px; margin-bottom:10px;">
-            <div style="flex:1">
-                <label>QTD</label>
-                <div style="display:flex;">
-                    <button class="btn btn-dark" style="width:40px; margin:0;" onclick="alterarQtd(-1)">-</button>
-                    <input type="number" id="qtd-bipe" value="1" style="text-align:center; border-radius:0;">
-                    <button class="btn btn-dark" style="width:40px; margin:0;" onclick="alterarQtd(1)">+</button>
-                </div>
-            </div>
-            <div style="flex:1">
-                <label>VALIDADE</label>
-                <input type="date" id="val-bipe">
-            </div>
+        <div style="display:flex; gap:5px;">
+            <input type="number" id="qtd-bipe" value="1" style="flex:1; text-align:center;">
+            <input type="date" id="val-bipe" style="flex:2;">
         </div>
 
         <div id="reader"></div>
-        <button id="btn-cam" class="btn btn-dark" onclick="toggleCamera()">LIGAR SCANNER</button>
+        <button class="btn-green" onclick="toggleCamera()">LIGAR SCANNER</button>
         
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-            <button class="btn btn-dark" onclick="gerarEtiqueta()">🖨️ ETIQUETA</button>
-            <button class="btn btn-p" onclick="manualBipe()">BIP MANUAL</button>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+            <button class="btn-green" style="background:#333; color:#fff;" onclick="gerarEtiqueta()">🖨️ ETIQUETA</button>
+            <button class="btn-green" style="background:#333; color:#fff;" onclick="alert('CÂMERA DE FOTO PRONTA')">📸 FOTO</button>
         </div>
         
-        <div id="op-audit-body" style="color:#555; font-size:10px; margin-top:15px; border-top:1px solid #222; padding-top:10px;"></div>
+        <div id="op-audit-body" style="color:#555; font-size:9px; margin-top:10px; border-top:1px solid #111; padding-top:5px;"></div>
     </div>
 </div>
 
 <div id="print-area" class="label-print">
-    <div id="lp-nome" style="font-weight:bold; font-size:12px; margin-bottom:2px;"></div>
-    <div id="lp-cod" style="font-size:9px; border-bottom:1px solid #000; padding-bottom:2px;"></div>
-    <div style="display:flex; justify-content:space-between; margin-top:5px; align-items:center;">
-        <div id="lp-end" style="font-size:20px; font-weight:900;"></div>
-        <div style="font-size:8px; text-align:right;">LOG-PRO<br>V80</div>
-    </div>
-    <div id="lp-val" style="font-size:8px; margin-top:4px;"></div>
+    <div id="lp-nome" style="font-weight:bold; font-size:14px; margin-bottom:5px;"></div>
+    <div id="lp-cod" style="font-size:10px; color:#444;"></div>
+    <div id="lp-end" style="font-size:18px; font-weight:900; border:2px solid #000; padding:5px; margin-top:5px;"></div>
 </div>
 
 <script type="module">
-    // CONFIGURAÇÃO FIREBASE (MANTIDA DO SEU ORIGINAL)
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit, setDoc, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
@@ -173,99 +115,71 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    let BASE_M = {}; 
+    let BASE_M = {}; let MOVS = [];
     let currentUser = localStorage.getItem('LP_SESSION') || "";
     let scanner, camOn = false, ultimoCod = "";
 
-    // MONITORAMENTO EM TEMPO REAL
-    onSnapshot(collection(db, "base_master"), (snap) => { 
-        let total = 0;
-        snap.forEach(d => { 
-            BASE_M[d.id] = d.data(); 
-            total += (d.data().saldo || 0);
-        }); 
-        document.getElementById('total-itens').innerText = total;
-    });
-
-    onSnapshot(query(collection(db, "logs"), orderBy("data_hora", "desc"), limit(50)), (snap) => {
-        let h = "";
-        snap.forEach(doc => {
-            const m = doc.data();
-            h += `<tr><td>${m.d_str}</td><td>${m.op}</td><td>${m.t}</td><td>${m.n}</td><td>${m.q}</td><td>${m.end}</td></tr>`;
-        });
-        document.getElementById('audit-body').innerHTML = h;
-    });
-
+    onSnapshot(collection(db, "base_master"), (snap) => { snap.forEach(d => { BASE_M[d.id] = d.data(); }); });
+    onSnapshot(query(collection(db, "logs"), orderBy("data_hora", "desc"), limit(100)), (snap) => { MOVS = snap.docs.map(d => d.data()); renderShark(); });
     onSnapshot(collection(db, "separacao"), (s) => {
-        let h = "";
-        s.docs.forEach(d => {
-            const p = d.data(); 
-            const f = p.qtd_pedida - p.qtd_feita;
-            if(f > 0) h += `<div style='padding:8px; border-bottom:1px solid #222; color:var(--warn)'>⚠️ ${p.nome} <br> <span style='color:#fff'>FALTAM: ${f} | ROTA: ${p.rota}</span></div>`;
+        let h = ""; s.docs.forEach(d => {
+            const p = d.data(); const f = p.qtd_pedida - p.qtd_feita;
+            if(f > 0) h += `<div style='padding:4px; border-bottom:1px solid #111;'>${p.nome} (FALTAM: ${f})</div>`;
         });
-        document.getElementById('op-list-picking').innerHTML = h || "✅ TUDO CARREGADO";
+        document.getElementById('op-list-picking').innerHTML = h || "TUDO CARREGADO";
     });
 
-    // FUNÇÕES DE LÓGICA SHARK
     window.salvarMaster = async () => {
         const c = document.getElementById('m-cod').value.trim();
         const n = document.getElementById('m-nome').value.toUpperCase();
         const e = document.getElementById('m-end').value.toUpperCase();
-        const pulmao = document.getElementById('m-pulmao').value.toUpperCase();
-        if(c && n) { 
-            await setDoc(doc(db, "base_master", c), { 
-                nome:n, endereco:e, pulmao:pulmao || "G-PROX", saldo: BASE_M[c]?.saldo || 0 
-            }); 
-            alert("BASE M ATUALIZADA"); 
-        }
+        const min = document.getElementById('m-min').value || 0;
+        if(c && n) { await setDoc(doc(db, "base_master", c), { nome:n, endereco:e, min:parseInt(min) }); alert("BASE M ATUALIZADA"); }
     };
 
     window.processar = async (cod) => {
-        ultimoCod = cod.trim();
-        const q = parseInt(document.getElementById('qtd-bipe').value) || 1;
+        ultimoCod = cod.trim(); const q = parseInt(document.getElementById('qtd-bipe').value) || 1;
         const tipo = document.getElementById('mod-op').value;
         const val = document.getElementById('val-bipe').value;
 
         if(!BASE_M[ultimoCod]) {
-            const n = prompt("NOVO ITEM! NOME:");
-            if(n) {
-                await setDoc(doc(db, "base_master", ultimoCod), { nome:n.toUpperCase(), endereco:"D-01", saldo:0 });
-            } else return;
+            const n = prompt("NOVO ITEM! NOME:"); const e = prompt("ENDERECO:");
+            if(n) await setDoc(doc(db, "base_master", ultimoCod), { nome:n.toUpperCase(), endereco:e.toUpperCase() || "GERAL", min:0 }); else return;
         }
 
         const info = BASE_M[ultimoCod];
-        let endFinal = info.endereco;
-
-        // Lógica Inteligente de Entrada/Saída
-        const masterRef = doc(db, "base_master", ultimoCod);
-        if(tipo === "ENTRADA") {
-            await updateDoc(masterRef, { saldo: (info.saldo || 0) + q });
-            if(q > 50) endFinal = info.pulmao || "EXCESSO"; // Alerta de Sobra
-        } else if (tipo === "SEPARACAO" || tipo === "SAIDA") {
-            await updateDoc(masterRef, { saldo: Math.max(0, (info.saldo || 0) - q) });
-        }
-
         const mov = { 
             cod:ultimoCod, n:info.nome, t:tipo, q:q, op:currentUser, 
-            end:endFinal, val:val || "N/A", data_hora:serverTimestamp(), d_str:new Date().toLocaleTimeString() 
+            end:info.endereco, val:val || "N/A", data_hora:serverTimestamp(), d_str:new Date().toLocaleTimeString() 
         };
         
         await addDoc(collection(db, "logs"), mov);
-
-        // Atualiza Lista de Separação
         if(tipo === "SEPARACAO") {
             const sepRef = doc(db, "separacao", ultimoCod);
             const ds = await getDoc(sepRef);
             if(ds.exists()) await updateDoc(sepRef, { qtd_feita: ds.data().qtd_feita + q });
         }
+        document.getElementById('op-audit-body').innerHTML = `BIPADO: ${info.nome} (${q})<br>` + document.getElementById('op-audit-body').innerHTML;
+    };
 
-        document.getElementById('op-audit-body').innerHTML = `<b>BIPADO:</b> ${tipo} - ${info.nome} (${q}) [${endFinal}]<br>` + document.getElementById('op-audit-body').innerHTML;
-        if(window.navigator.vibrate) window.navigator.vibrate(50);
+    window.gerarEtiqueta = () => {
+        if(!ultimoCod || !BASE_M[ultimoCod]) return alert("BIPE O ITEM ANTES");
+        document.getElementById('lp-nome').innerText = BASE_M[ultimoCod].nome;
+        document.getElementById('lp-cod').innerText = ultimoCod;
+        document.getElementById('lp-end').innerText = BASE_M[ultimoCod].endereco;
+        window.print();
+    };
+
+    window.renderShark = () => {
+        let h = "";
+        MOVS.forEach(m => {
+            h += `<tr><td>${m.d_str}</td><td>${m.op}</td><td>${m.t}</td><td>${m.n}</td><td>${m.q}</td><td>${m.val}</td><td>${m.end}</td></tr>`;
+        });
+        document.getElementById('audit-body').innerHTML = h;
     };
 
     window.enviarCarga = async () => {
         const mot = document.getElementById('mot-info').value.toUpperCase();
-        const rota = document.getElementById('rota-select').value;
         const linhas = document.getElementById('list-input').value.split('\n');
         for(let l of linhas) {
             const [cod, qtd] = l.split(',');
@@ -273,44 +187,21 @@
                 const c = cod.trim();
                 await setDoc(doc(db, "separacao", c), { 
                     cod:c, nome:BASE_M[c] ? BASE_M[c].nome : "ITEM "+c, 
-                    qtd_pedida:parseInt(qtd), qtd_feita:0, motorista:mot, rota:rota 
+                    qtd_pedida:parseInt(qtd), qtd_feita:0, motorista:mot 
                 });
             }
         }
-        alert("ROTA DISPARADA PARA DOCA");
-        document.getElementById('list-input').value = "";
+        alert("CARGA DISPARADA");
     };
 
-    window.gerarEtiqueta = () => {
-        if(!ultimoCod || !BASE_M[ultimoCod]) return alert("BIPE O ITEM");
-        document.getElementById('lp-nome').innerText = BASE_M[ultimoCod].nome;
-        document.getElementById('lp-cod').innerText = "COD: " + ultimoCod;
-        document.getElementById('lp-end').innerText = BASE_M[ultimoCod].endereco;
-        document.getElementById('lp-val').innerText = "VAL: " + (document.getElementById('val-bipe').value || "N/A");
-        window.print();
-    };
-
-    window.alterarQtd = (v) => {
-        let i = document.getElementById('qtd-bipe');
-        let n = parseInt(i.value) + v;
-        if(n >= 1) i.value = n;
-    };
-
-    window.manualBipe = () => {
-        const c = prompt("DIGITE O CÓDIGO:");
-        if(c) processar(c);
-    };
-
-    window.toggleCamera = async () => {
-        const btn = document.getElementById('btn-cam');
-        if(!camOn) { 
-            scanner = new Html5Qrcode("reader"); 
-            await scanner.start({ facingMode: "environment" }, { fps: 25, qrbox: 220 }, (t)=>processar(t)); 
-            camOn=true; btn.innerText = "DESLIGAR SCANNER"; btn.style.color = "var(--danger)";
-        } else { 
-            await scanner.stop(); 
-            camOn=false; btn.innerText = "LIGAR SCANNER"; btn.style.color = "#fff";
-        }
+    window.exportarRelatorio = () => {
+        let csv = "HORA,OP,ETAPA,ITEM,QTD,VALIDADE,ENDERECO\n";
+        MOVS.forEach(m => { csv += `${m.d_str},${m.op},${m.t},${m.n},${m.q},${m.val},${m.end}\n`; });
+        const blob = new Blob([csv], {type: 'text/csv'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `LOGPRO_V79_RELATORIO.csv`;
+        a.click();
     };
 
     window.auth = () => {
@@ -318,18 +209,23 @@
         const p = document.getElementById('pass').value;
         if((u==="JP"||u==="SHARK")&&p==="9910" || u==="OP"&&p==="1234") { 
             currentUser=u; localStorage.setItem('LP_SESSION',u); location.reload(); 
-        } else alert("ACESSO NEGADO");
+        } else alert("DADOS INCORRETOS");
+    };
+
+    window.toggleCamera = async () => {
+        if(!camOn) { scanner = new Html5Qrcode("reader"); await scanner.start({ facingMode: "environment" }, { fps: 20, qrbox: 250 }, (t)=>processar(t)); camOn=true; }
+        else { await scanner.stop(); camOn=false; }
     };
 
     window.logout = () => { localStorage.removeItem('LP_SESSION'); location.reload(); };
     window.init = () => { 
-        setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
         if(currentUser) {
             document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
             document.getElementById(currentUser === "OP" ? 'scr-op' : 'scr-shark').classList.add('active');
-            if(currentUser === "OP") document.getElementById('display-user').innerText = "OP: " + currentUser;
+            if(currentUser === "OP") document.getElementById('display-user').innerText = currentUser;
         }
     };
 </script>
 </body>
 </html>
+
