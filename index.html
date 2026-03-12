@@ -1,235 +1,206 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LOG-PRO v83 ULTRA | JP DIAS SHARK</title>
+    <title>LOG-PRO v84 | SHARK COMMAND</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="https://unpkg.com"></script>
+    <script src="https://cdn.jsdelivr.net"></script>
+    <script src="https://www.gstatic.com"></script>
+    <script src="https://www.gstatic.com"></script>
+    <link href="https://fonts.googleapis.com" rel="stylesheet">
 
     <style>
-        :root { --p: #00ff41; --bg: #000; --card: #0a0a0a; --brd: #1a1a1a; --danger: #ff3b30; --warn: #ffae00; --info: #007aff; }
-        * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; text-transform: uppercase; font-size: 10px; height: 100vh; overflow: hidden; }
+        :root { --neon: #00ff41; --bg: #000; --panel: #0d0d0d; --danger: #ff3131; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; }
+        .shark-font { font-family: 'Orbitron'; color: var(--neon); }
         
-        header { padding: 12px; background: #050505; border-bottom: 2px solid var(--brd); display: flex; justify-content: space-between; align-items: center; z-index: 100; font-family: 'Orbitron'; color: var(--p); }
-        .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; background: var(--p); box-shadow: 0 0 8px var(--p); }
+        /* TELAS SEPARADAS */
+        .screen { display: none; height: 100vh; flex-direction: column; padding: 15px; box-sizing: border-box; }
+        .active-screen { display: flex; }
 
-        .screen { display: none; height: 100vh; flex-direction: column; background: #000; }
-        .active { display: flex; }
-        .scroll { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 100px; }
+        /* PAINEL SHARK (DASHBOARD) */
+        .grid-shark { display: grid; grid-template-columns: 1fr 350px; gap: 20px; flex: 1; overflow: hidden; }
+        .card { background: var(--panel); border: 1px solid #222; padding: 15px; border-radius: 10px; }
 
-        .card { background: var(--card); border: 1px solid var(--brd); border-radius: 10px; padding: 15px; margin-bottom: 12px; }
-        input, select, textarea { width: 100%; padding: 14px; background: #000; border: 1px solid #333; color: #fff; border-radius: 6px; font-family: 'Orbitron'; margin-bottom: 10px; font-size: 12px; }
-        
-        .btn { width: 100%; padding: 16px; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-p { background: var(--p); color: #000; }
-        .btn-dark { background: #111; color: #fff; border: 1px solid #333; }
+        /* PAINEL OPERADOR (SCANNER) */
+        #reader { width: 100%; border-radius: 15px; border: 2px solid var(--neon); margin-top: 10px; }
+        .btn-modo { flex: 1; padding: 15px; background: #111; border: 1px solid #333; color: #666; font-weight: bold; cursor: pointer; }
+        .btn-modo.active { border-color: var(--neon); color: var(--neon); background: rgba(0,255,65,0.1); }
 
-        .grid-modos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-bottom: 12px; }
-        .btn-m { background: #0a0a0a; border: 1px solid #222; padding: 10px 2px; border-radius: 4px; font-size: 8px; text-align: center; color: #555; cursor: pointer; }
-        .btn-m.active { border-color: var(--p); color: var(--p); background: rgba(0,255,65,0.05); }
+        /* CHAT / ORDENS */
+        .chat-box { height: 100px; overflow-y: auto; background: #000; border: 1px solid #222; padding: 5px; font-size: 0.8rem; margin-top: 10px; color: var(--neon); }
 
-        .row-viva { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid #111; font-size: 11px; align-items: center; }
-        .badge { background: rgba(0,255,65,0.1); color: var(--p); padding: 2px 6px; border-radius: 4px; font-weight: 800; }
+        /* INPUTS */
+        input, textarea { background: #000; color: var(--neon); border: 1px solid var(--neon); padding: 10px; border-radius: 5px; width: 100%; box-sizing: border-box; }
+        .btn-main { background: var(--neon); color: #000; font-weight: bold; padding: 15px; border: none; border-radius: 5px; cursor: pointer; font-family: 'Orbitron'; }
 
-        #reader { width: 100%; border-radius: 12px; overflow: hidden; border: 1px solid #222; margin-bottom: 10px; background: #000; min-height: 200px; }
-        
-        /* Dashboard Stats */
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
-        .stat-item { background: #050505; border: 1px solid #111; padding: 10px; border-radius: 6px; text-align: center; }
-        .stat-item label { font-size: 7px; color: #444; display: block; }
-        .stat-item span { font-family: 'Orbitron'; font-size: 12px; color: var(--info); }
+        #hidden-input { position: absolute; left: -9999px; }
     </style>
 </head>
-<body onload="init()">
+<body>
 
-<div id="scr-login" class="screen active" style="align-items:center; justify-content:center;">
-    <h1 style="font-family:'Orbitron'; color:var(--p); font-size:3rem; margin:0;">LOG-PRO</h1>
-    <p style="color:#444; letter-spacing:5px; font-weight:800;">INTELLIGENCE V83</p>
-    <div style="width:260px; margin-top:30px;">
-        <input type="password" id="pin" placeholder="PIN TERMINAL" style="text-align:center; font-size:1.5rem; letter-spacing:10px;">
-        <button class="btn btn-p" onclick="auth()">CONECTAR</button>
+    <!-- 1. LOGIN -->
+    <div id="screen-login" class="screen active-screen" style="justify-content: center; align-items: center;">
+        <h1 class="shark-font" style="font-size: 3rem;">LOG-PRO</h1>
+        <p style="color:var(--neon); margin-bottom: 30px;">v84 COMMAND & CONTROL</p>
+        <input type="password" id="pin" style="width: 250px; font-size: 1.5rem; text-align: center;" placeholder="PIN">
+        <button class="btn-main" style="width: 250px; margin-top: 20px;" onclick="auth()">ENTRAR NO SISTEMA</button>
     </div>
-</div>
 
-<div id="scr-app" class="screen">
-    <header>
-        <div><span class="status-dot"></span> <span id="user-display">OP: TERMINAL</span></div>
-        <div id="clock">00:00:00</div>
-    </header>
-
-    <div class="scroll">
-        <div class="grid-modos">
-            <div class="btn-m active" id="m-ENTRADA" onclick="setModo('ENTRADA')">ENTRADA</div>
-            <div class="btn-m" id="m-SEPARACAO" onclick="setModo('SEPARACAO')">SEP.</div>
-            <div class="btn-m" id="m-AVARIA" onclick="setModo('AVARIA')">AVARIA</div>
-            <div class="btn-m" id="m-SAIDA" onclick="setModo('SAIDA')">SAÍDA</div>
+    <!-- 2. TELA DO OPERADOR (MOBILE) -->
+    <div id="screen-op" class="screen">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="shark-font" id="op-modo-display">MODO: ENTRADA</span>
+            <div id="net-op" style="font-size: 0.6rem; color: var(--neon);">● ONLINE</div>
         </div>
-
+        
         <div id="reader"></div>
-        <button id="btn-cam" class="btn btn-dark" onclick="toggleCamera()"><i class="fa-solid fa-camera"></i> SCANNER ATIVO</button>
+        <input type="text" id="hidden-input">
 
-        <div class="card" style="display:flex; justify-content:space-between; align-items:center; margin-top:15px;">
-            <div>
-                <small style="color:#444;">ID PRODUTO</small>
-                <div id="last-code" style="font-family:'Orbitron'; font-size:1.8rem; color:var(--p);">---</div>
+        <div class="card" style="margin-top: 15px;">
+            <div id="last-bip" class="shark-font" style="font-size: 1.5rem;">---</div>
+            <div id="msg-op" style="color: #00d4ff; font-weight: bold; font-size: 0.8rem;">AGUARDANDO BIP...</div>
+        </div>
+
+        <div class="chat-box" id="op-chat">BEM-VINDO AO TURNO, SHARK.</div>
+    </div>
+
+    <!-- 3. TELA DO SHARK (ADMIN/DASHBOARD) -->
+    <div id="screen-shark" class="screen">
+        <div class="grid-shark">
+            <div class="col">
+                <h2 class="shark-font">DASHBOARD DE OPERAÇÃO</h2>
+                <canvas id="chartShark" height="150"></canvas>
+                
+                <div class="card" style="margin-top: 20px;">
+                    <h3>CONTROLO DE CARGA</h3>
+                    <textarea id="carga-input" placeholder="CODIGO, QTD"></textarea>
+                    <button class="btn-main" style="width: 100%; margin-top: 10px;" onclick="lancarCarga()">DISPARAR PARA OPERACIONAL</button>
+                </div>
             </div>
-            <div id="fb-msg" style="font-weight:900; font-size:12px; color:var(--info);">STANDBY</div>
-        </div>
 
-        <div class="stats-grid">
-            <div class="stat-item"><label>PESO ESTIMADO</label><span id="dws-peso">0.00 KG</span></div>
-            <div class="stat-item"><label>VOLUMETRIA</label><span id="dws-vol">0.000 m³</span></div>
-        </div>
-
-        <div class="card" style="margin-top:15px;">
-            <h3 style="font-family:'Orbitron'; font-size: 8px; color:var(--p); margin:0 0 10px 0;">DOCA EM TEMPO REAL</h3>
-            <div id="lista-viva"></div>
-        </div>
-
-        <div id="shark-panel" style="display:none; border:1px dashed var(--p); padding:15px; border-radius:10px; margin-top:20px;">
-            <h3 style="font-family:'Orbitron'; font-size: 8px; color:var(--p);">SHARK COMMAND CENTER</h3>
-            <textarea id="bulk-input" placeholder="CÓDIGO, QUANTIDADE (Lançar Carga)"></textarea>
-            <button class="btn btn-p" onclick="dispararCarga()">DISPARAR CARGA PARA DOCA</button>
-            <button class="btn btn-dark" style="margin-top:10px; color:var(--info);" onclick="exportarRelatorio()">GERAR RELATÓRIO ROI (CSV)</button>
+            <div class="col">
+                <div class="card" style="height: 100%;">
+                    <h3 class="shark-font" style="font-size: 0.8rem;">ESTADO DAS DOCAS</h3>
+                    <div id="status-docas" style="height: 300px; overflow-y: auto; font-size: 0.8rem;"></div>
+                    
+                    <h3 class="shark-font" style="font-size: 0.8rem; margin-top: 20px;">ENVIAR ORDEM DE VOZ</h3>
+                    <input type="text" id="chat-msg" placeholder="Digite para o operador ouvir...">
+                    <button class="btn-main" style="width: 100%; margin-top: 5px; font-size: 0.7rem;" onclick="enviarOrdem()">ENVIAR COMANDO</button>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit, setDoc, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
+<script>
     // CONFIGURAÇÃO FIREBASE
-    const firebaseConfig = {
-        apiKey: "SUA_API_KEY",
-        authDomain: "log-pro-jp.firebaseapp.com",
-        projectId: "log-pro-jp",
-        storageBucket: "log-pro-jp.firebasestorage.app",
-        messagingSenderId: "481645607846",
-        appId: "1:481645607846:web:fd55dd943718ad78386d67"
-    };
+    const firebaseConfig = { apiKey: "AIza...", projectId: "logpro-shark", appId: "1:..." };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const sync = new BroadcastChannel('logpro_v83_ultra');
-    
-    let modoAtivo = 'ENTRADA';
     let userRole = 'OP';
-    let camOn = false;
-    let scanner;
 
-    // FEEDBACK DE VOZ & VIBRAÇÃO
-    window.falar = (t, erro = false) => {
-        const u = new SpeechSynthesisUtterance(t);
-        u.lang = 'pt-BR'; u.rate = 1.1;
-        window.speechSynthesis.speak(u);
-        if(navigator.vibrate) navigator.vibrate(erro ? [100, 50, 100] : 100);
-    };
-
-    // SINCRONIZAÇÃO DE MODO
-    window.setModo = (m) => {
-        modoAtivo = m;
-        document.querySelectorAll('.btn-m').forEach(b => b.classList.remove('active'));
-        document.getElementById('m-'+m.replace('Í','I').replace('Ç','C')).classList.add('active');
-        sync.postMessage({ type: 'MODO', val: m });
-        falar("MODO " + m);
-    };
-    sync.onmessage = (e) => { if(e.data.type === 'MODO') setModo(e.data.val); };
-
-    // LÓGICA DE BIPE ULTRA
-    window.processarBipe = async (codigo) => {
-        const cod = codigo.trim();
-        if(!cod) return;
-        document.getElementById('last-code').innerText = cod;
-        document.getElementById('fb-msg').innerText = "SINCRONIZANDO...";
-
-        try {
-            // Registro de Auditoria
-            await addDoc(collection(db, "logs"), {
-                cod, modo: modoAtivo, op: userRole, ts: serverTimestamp()
-            });
-
-            // Simulação DWS (Inteligência de Peso)
-            document.getElementById('dws-peso').innerText = (Math.random() * 2).toFixed(2) + " KG";
-
-            if(modoAtivo === 'SEPARACAO') {
-                const ref = doc(db, "carga", cod);
-                const d = await getDoc(ref);
-                if(d.exists() && d.data().falta > 0) {
-                    await updateDoc(ref, { falta: d.data().falta - 1 });
-                    falar("CONFERIDO");
-                    msg("SUCESSO", "var(--p)");
-                } else {
-                    falar("ITEM FORA DA LISTA", true);
-                    msg("ERRO: FORA", "var(--danger)");
-                }
-            } else {
-                falar("OK");
-                msg("REGISTRADO", "var(--p)");
-            }
-        } catch(e) { console.error(e); }
-    };
-
-    function msg(t, c) {
-        const el = document.getElementById('fb-msg');
-        el.innerText = t; el.style.color = c;
+    // 1. AUTENTICAÇÃO INTELIGENTE
+    function auth() {
+        const pin = document.getElementById('pin').value;
+        document.getElementById('screen-login').classList.remove('active-screen');
+        
+        if(pin === "7979") {
+            userRole = 'SHARK';
+            document.getElementById('screen-shark').classList.add('active-screen');
+            initDashboard();
+        } else {
+            userRole = 'OP';
+            document.getElementById('screen-op').classList.add('active-screen');
+            initScanner();
+        }
+        falar("Sistema Log Pro Inicializado");
     }
 
-    // COMANDOS SHARK
-    window.dispararCarga = async () => {
-        const linhas = document.getElementById('bulk-input').value.split('\n');
-        for(let l of linhas) {
-            const [c, q] = l.split(',');
-            if(c && q) await setDoc(doc(db, "carga", c.trim()), { falta: parseInt(q) });
+    // 2. SISTEMA DE VOZ E COMUNICAÇÃO
+    function falar(t) {
+        const u = new SpeechSynthesisUtterance(t);
+        u.lang = 'pt-PT';
+        window.speechSynthesis.speak(u);
+    }
+
+    // Listener de Chat (O Operador ouve o que o Shark escreve)
+    db.collection("ordens").doc("atual").onSnapshot(doc => {
+        if(doc.exists && userRole === 'OP') {
+            const msg = doc.data().msg;
+            falar(msg);
+            document.getElementById('op-chat').innerHTML = `[ORDEM]: ${msg}<br>` + document.getElementById('op-chat').innerHTML;
         }
-        falar("CARGA LANÇADA");
-        document.getElementById('bulk-input').value = "";
-    };
-
-    window.exportarRelatorio = async () => {
-        alert("RELATÓRIO ROI SENDO GERADO NO BANCO DE DADOS");
-    };
-
-    // CONTROLE DE TERMINAL
-    window.auth = () => {
-        const p = document.getElementById('pin').value;
-        if(p === "7979") {
-            userRole = 'SHARK MASTER';
-            document.getElementById('shark-panel').style.display = 'block';
-            document.getElementById('user-display').innerText = "JP | SHARK MASTER";
-        }
-        document.getElementById('scr-login').classList.remove('active');
-        document.getElementById('scr-app').classList.add('active');
-        falar("BEM VINDO AO TERMINAL");
-    };
-
-    window.toggleCamera = async () => {
-        if(!camOn) {
-            scanner = new Html5Qrcode("reader");
-            await scanner.start({ facingMode: "environment" }, { fps: 25, qrbox: 250 }, (t) => processarBipe(t));
-            camOn = true; document.getElementById('btn-cam').style.background = "var(--danger)";
-        } else {
-            await scanner.stop(); camOn = false; document.getElementById('btn-cam').style.background = "#111";
-        }
-    };
-
-    // REAL-TIME LISTENER
-    onSnapshot(collection(db, "carga"), (snap) => {
-        const list = document.getElementById('lista-viva');
-        list.innerHTML = "";
-        snap.forEach(d => {
-            if(d.data().falta > 0) {
-                list.innerHTML += `<div class="row-viva"><span>📦 ${d.id}</span><span class="badge">${d.data().falta} UN</span></div>`;
-            }
-        });
     });
 
-    setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
-    window.init = () => { console.log("LOG-PRO V83 ULTRA ACTIVE"); };
+    function enviarOrdem() {
+        const msg = document.getElementById('chat-msg').value;
+        db.collection("ordens").doc("atual").set({ msg, ts: Date.now() });
+        document.getElementById('chat-msg').value = "";
+    }
+
+    // 3. PROCESSAMENTO DE BIPE (OP)
+    async function processar(codigo) {
+        const cod = codigo.trim();
+        if(!cod) return;
+        document.getElementById('last-bip').innerText = cod;
+
+        // Salva Log
+        await db.collection("logs").add({ cod, user: 'OP1', ts: firebase.firestore.FieldValue.serverTimestamp() });
+
+        // Lógica de Baixa na Carga
+        const ref = db.collection("carga").doc(cod);
+        const doc = await ref.get();
+        if(doc.exists && doc.data().falta > 0) {
+            await ref.update({ falta: firebase.firestore.FieldValue.increment(-1) });
+            document.getElementById('msg-op').innerText = "BAIXA CONCLUÍDA!";
+            document.getElementById('msg-op').style.color = "var(--neon)";
+            falar("Ok");
+        } else {
+            document.getElementById('msg-op').innerText = "NÃO CONSTA NA CARGA!";
+            document.getElementById('msg-op').style.color = "var(--danger)";
+            falar("Atenção, item fora da lista");
+        }
+        document.getElementById('hidden-input').value = "";
+    }
+
+    // 4. DASHBOARD (SHARK)
+    function initDashboard() {
+        const ctx = document.getElementById('chartShark').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'bar',
+            data: { labels: ['Entrada', 'Saída', 'Avaria'], datasets: [{ label: 'Volumes', data: [12, 19, 3], backgroundColor: '#00ff41' }] },
+            options: { color: '#fff' }
+        });
+
+        // Monitor de Docas Real-Time
+        db.collection("carga").onSnapshot(snap => {
+            const div = document.getElementById('status-docas');
+            div.innerHTML = "";
+            snap.forEach(d => {
+                div.innerHTML += `<div class="card" style="margin-bottom:5px;">${d.id} - Faltam: ${d.data().falta}</div>`;
+            });
+        });
+    }
+
+    // 5. AUXILIARES
+    function lancarCarga() {
+        const txt = document.getElementById('carga-input').value;
+        txt.split('\n').forEach(l => {
+            const [c, q] = l.split(',');
+            if(c && q) db.collection("carga").doc(c.trim()).set({ falta: parseInt(q) });
+        });
+        alert("Carga disparada!");
+    }
+
+    function initScanner() {
+        const sc = new Html5Qrcode("reader");
+        sc.start({ facingMode: "environment" }, { fps: 30, qrbox: 250 }, (t) => processar(t));
+        setInterval(() => document.getElementById('hidden-input').focus(), 1000);
+        document.getElementById('hidden-input').addEventListener('change', (e) => processar(e.target.value));
+    }
 </script>
 </body>
 </html>
