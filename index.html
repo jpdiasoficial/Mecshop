@@ -3,84 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LOG-PRO v80 | SHARK MODE</title>
+    <title>LOG-PRO v80 | SHARK EDITION</title>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --p: #00ff41; --bg: #000; --card: #0a0a0a; --brd: #222; --danger: #ff3b30; }
-        * { box-sizing: border-box; outline: none; }
+        :root { --p: #00ff41; --bg: #000; --card: #0a0a0a; --brd: #1a1a1a; --danger: #ff3b30; --warn: #ffae00; --info: #007aff; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; text-transform: uppercase; font-size: 10px; height: 100vh; overflow: hidden; }
         
-        header { padding: 15px; border-bottom: 2px solid #111; display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron'; background: #050505; color: var(--p); }
-        .scroll { flex: 1; overflow-y: auto; padding: 15px; height: calc(100vh - 130px); }
+        header { padding: 15px; border-bottom: 1px solid #111; display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron'; background: #050505; color: var(--p); }
+        .screen { display: none; height: 100vh; flex-direction: column; }
+        .screen.active { display: flex; }
+        .scroll { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; }
 
-        /* DASHBOARD SHARK */
+        /* DASHBOARD INTELIGENTE */
         .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
         .stat-box { background: var(--card); border: 1px solid var(--brd); padding: 12px; border-radius: 8px; border-left: 3px solid var(--p); }
-        .stat-box h2 { margin: 5px 0 0 0; font-size: 18px; font-family: 'Orbitron'; }
+        .stat-box small { color: #555; font-size: 8px; font-weight: 800; display: block; }
+        .stat-box h2 { margin: 5px 0 0 0; font-size: 18px; font-family: 'Orbitron'; color: #fff; }
 
-        /* INPUTS SHARK */
-        input, select { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 4px; font-family: 'Orbitron'; margin-bottom: 8px; }
-        .btn { width: 100%; padding: 16px; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        /* INPUTS E BOTÕES PROFISSIONAIS */
+        .card { background: var(--card); border: 1px solid var(--brd); padding: 15px; border-radius: 10px; margin-bottom: 15px; }
+        input, select, textarea { width: 100%; padding: 12px; background: #000; border: 1px solid #222; color: #fff; border-radius: 6px; font-family: 'Orbitron'; margin-bottom: 8px; font-size: 12px; border: 1px solid #333; }
+        .btn { width: 100%; padding: 16px; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; transition: 0.3s; }
         .btn-p { background: var(--p); color: #000; }
+        .btn-dark { background: #111; color: #fff; border: 1px solid #333; }
+        
+        /* CONTROLE MANUAL SHARK */
+        .qty-control { display: flex; background: #111; border: 1px solid #333; border-radius: 6px; overflow: hidden; margin-bottom: 15px; }
+        .qty-btn { flex: 1; height: 50px; background: none; border: none; color: var(--p); font-size: 20px; font-weight: 900; }
+        .qty-input { flex: 2; border: none !important; text-align: center; font-size: 18px !important; margin: 0 !important; background: #000 !important; }
 
-        /* NAV SHARK */
+        /* NAV BAR */
         .nav-bar { position: fixed; bottom: 0; width: 100%; background: #050505; border-top: 1px solid #222; display: flex; padding: 10px; z-index: 200; }
         .nav-item { flex: 1; text-align: center; color: #444; font-size: 8px; font-weight: 800; }
         .nav-item.active { color: var(--p); }
         .nav-item i { display: block; font-size: 18px; margin-bottom: 4px; }
 
-        .screen { display: none; height: 100%; }
-        .screen.active { display: block; }
+        #reader { width: 100%; border-radius: 12px; overflow: hidden; border: 2px solid #222; background: #000; margin-bottom: 10px; min-height: 250px; }
     </style>
 </head>
 <body onload="init()">
 
-<div id="scr-login" class="screen active">
-    <div style="height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px;">
-        <div style="font-family:'Orbitron'; color:var(--p); font-size:35px; text-align:center;">LOG-PRO<br><span style="font-size:10px; color:#444; letter-spacing:5px;">INTELLIGENCE</span></div>
-        <input type="text" id="user-name" placeholder="USUÁRIO" style="margin-top:30px;">
-        <input type="password" id="pass" placeholder="CHAVE">
-        <button class="btn btn-p" onclick="auth()">ACESSAR SISTEMA</button>
+<div id="scr-login" class="screen active" style="align-items:center; justify-content:center;">
+    <div style="font-family:'Orbitron'; color:var(--p); font-size:35px; text-align:center; letter-spacing:-2px; margin-bottom:40px;">LOG-PRO<br><span style="font-size:10px; color:#444; letter-spacing:5px;">SHARK EDITION</span></div>
+    <div style="width: 85%; max-width: 320px;">
+        <input type="text" id="user-name" placeholder="IDENTIFICAÇÃO">
+        <input type="password" id="pass" placeholder="CHAVE DE ACESSO">
+        <button class="btn btn-p" onclick="auth()">ENTRAR NO SISTEMA</button>
     </div>
 </div>
 
 <div id="scr-shark" class="screen">
-    <header><span>DASHBOARD ADMIN</span> <i class="fa-solid fa-tower-broadcast"></i></header>
+    <header><span>DASHBOARD GESTOR</span> <i class="fa-solid fa-chart-pie"></i></header>
     <div class="scroll">
         <div class="dash-grid">
             <div class="stat-box"><small>ESTOQUE TOTAL</small><h2 id="total-itens">0</h2></div>
-            <div class="stat-box"><small>PENDÊNCIAS</small><h2 id="total-pendente" style="color:var(--danger)">0</h2></div>
+            <div class="stat-box" style="border-color: var(--info);"><small>ROTAS ATIVAS</small><h2 id="total-rotas">0</h2></div>
         </div>
-        <div id="audit-log" style="background:#050505; border:1px solid #111; padding:10px; border-radius:8px;">
-            <small style="color:var(--p)">AUDITORIA EM TEMPO REAL</small>
-            <div id="log-list" style="margin-top:10px;"></div>
+
+        <div class="card">
+            <label style="color:var(--p); font-weight:800; display:block; margin-bottom:10px;">DISPARAR CARGA EM TEMPO REAL</label>
+            <select id="rota-select"><option>ROTA SUL</option><option>ROTA CAPITAL</option><option>ROTA LESTE</option></select>
+            <textarea id="list-input" placeholder="CÓDIGO, QUANTIDADE (EX: 123, 50)" style="height:60px;"></textarea>
+            <button class="btn btn-p" onclick="enviarCarga()">ATIVAR NA DOCA</button>
         </div>
+        
+        <div id="logs-audit" style="font-size:9px; color:#444;"></div>
     </div>
 </div>
 
 <div id="scr-op" class="screen">
-    <header><span>DOCA OPERACIONAL</span> <i class="fa-solid fa-barcode"></i></header>
+    <header><span id="display-user">OPERADOR</span> <i class="fa-solid fa-barcode"></i></header>
     <div class="scroll">
+        <div id="work-list" class="card" style="border-color:var(--p); display:none;">
+            <small style="color:var(--p)">PENDÊNCIAS DE SEPARAÇÃO:</small>
+            <div id="op-list-picking" style="margin-top:10px;"></div>
+        </div>
+
         <select id="mod-op">
-            <option value="ENTRADA">📥 ENTRADA</option>
-            <option value="SAIDA">🚚 SAÍDA</option>
+            <option value="ENTRADA">📥 ENTRADA / ABASTECER</option>
+            <option value="SEPARACAO">📦 SEPARAÇÃO DE ROTA</option>
+            <option value="AVARIA">⚠️ BLOQUEAR AVARIA</option>
         </select>
-        <input type="text" id="barcode-manual" placeholder="BIPE O CÓDIGO">
-        <button class="btn btn-p" onclick="processarManual()">REGISTRAR MOVIMENTAÇÃO</button>
-        <div id="feedback" style="margin-top:20px; text-align:center; font-weight:800;"></div>
+
+        <div class="qty-control">
+            <button class="qty-btn" onclick="alterarQtd(-1)">-</button>
+            <input type="number" id="qtd-bipe" value="1" class="qty-input">
+            <button class="qty-btn" onclick="alterarQtd(1)">+</button>
+        </div>
+
+        <div id="reader"></div>
+        <button id="btn-cam" class="btn btn-dark" onclick="toggleCamera()"><i class="fa-solid fa-camera"></i> LIGAR SCANNER</button>
+        <button class="btn btn-p" style="margin-top:10px;" onclick="manualBipe()">BIP MANUAL</button>
     </div>
 </div>
 
-<nav id="main-nav" class="nav-bar" style="display:none;">
-    <div class="nav-item active" id="nav-shark" onclick="nav('shark')"><i class="fa-solid fa-chart-line"></i>PAINEL</div>
-    <div class="nav-item" id="nav-op" onclick="nav('op')"><i class="fa-solid fa-truck-loading"></i>DOCA</div>
-</nav>
+<div id="main-nav" class="nav-bar" style="display:none;">
+    <div class="nav-item active" onclick="nav('shark')"><i class="fa-solid fa-house"></i>DASH</div>
+    <div class="nav-item" onclick="nav('op')"><i class="fa-solid fa-box-open"></i>DOCA</div>
+    <div class="nav-item" onclick="logout()" style="color:var(--danger)"><i class="fa-solid fa-power-off"></i>SAIR</div>
+</div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit, setDoc, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyDRDhONvvzZmo2csXksqHs6E6vV3MuvLSs",
@@ -93,56 +121,98 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    let currentUser = localStorage.getItem('LP_SESSION') || "";
+    let BASE_M = {}, scanner, camOn = false, currentUser = localStorage.getItem('LP_SESS') || "";
 
-    // ESCUTA REAL-TIME (DASHBOARD)
-    onSnapshot(query(collection(db, "logs"), orderBy("data_hora", "desc"), limit(10)), (snap) => {
-        let h = ""; 
-        snap.forEach(doc => {
-            const m = doc.data();
-            h += `<div style='border-bottom:1px solid #111; padding:5px 0;'>[${m.t}] ${m.cod} - ${m.op}</div>`;
-        });
-        document.getElementById('log-list').innerHTML = h;
-        document.getElementById('total-itens').innerText = snap.size;
+    // REAL-TIME SYNC
+    onSnapshot(collection(db, "base_master"), (snap) => {
+        let t = 0; snap.forEach(d => { BASE_M[d.id] = d.data(); t += d.data().saldo || 0; });
+        document.getElementById('total-itens').innerText = t;
     });
 
-    window.processarManual = async () => {
-        const cod = document.getElementById('barcode-manual').value.trim();
-        const tipo = document.getElementById('mod-op').value;
-        if(!cod) return;
-
-        await addDoc(collection(db, "logs"), { 
-            cod: cod, t: tipo, op: currentUser, data_hora: serverTimestamp() 
+    onSnapshot(collection(db, "separacao"), (snap) => {
+        let h = ""; let pend = 0;
+        snap.forEach(d => {
+            const p = d.data(); const f = p.q_p - p.q_f;
+            if(f > 0) {
+                h += `<div style="display:flex; justify-content:space-between; margin-bottom:5px; border-bottom:1px solid #222; padding:5px;">
+                        <span>${p.nome}</span> <b style="color:var(--p)">${f} UN</b>
+                      </div>`;
+                pend += f;
+            }
         });
+        document.getElementById('op-list-picking').innerHTML = h;
+        document.getElementById('work-list').style.display = pend > 0 ? 'block' : 'none';
+    });
 
-        document.getElementById('feedback').innerHTML = `<span style="color:var(--p)">REGISTRADO: ${cod}</span>`;
-        document.getElementById('barcode-manual').value = "";
+    // FUNÇÕES CORE
+    window.processar = async (cod) => {
+        const q = parseInt(document.getElementById('qtd-bipe').value);
+        const tipo = document.getElementById('mod-op').value;
+        if(!BASE_M[cod]) {
+            const n = prompt("PRODUTO NOVO! NOME:");
+            if(n) await setDoc(doc(db, "base_master", cod), { nome: n.toUpperCase(), saldo: 0 });
+            else return;
+        }
+
+        const ref = doc(db, "base_master", cod);
+        if(tipo === "ENTRADA") await updateDoc(ref, { saldo: (BASE_M[cod].saldo || 0) + q });
+        else await updateDoc(ref, { saldo: Math.max(0, (BASE_M[cod].saldo || 0) - q) });
+
+        if(tipo === "SEPARACAO") {
+            const sRef = doc(db, "separacao", cod);
+            const sDoc = await getDoc(sRef);
+            if(sDoc.exists()) await updateDoc(sRef, { q_f: sDoc.data().q_f + q });
+        }
         if(navigator.vibrate) navigator.vibrate(100);
+    };
+
+    window.toggleCamera = async () => {
+        const btn = document.getElementById('btn-cam');
+        if(!camOn) {
+            try {
+                scanner = new Html5Qrcode("reader");
+                await scanner.start({ facingMode: "environment" }, { fps: 20, qrbox: 250 }, (t) => processar(t));
+                camOn = true; btn.innerText = "DESLIGAR"; btn.style.background = "var(--danger)";
+            } catch (err) { alert("ERRO DE CÂMERA: Verifique se o site tem permissão HTTPS."); }
+        } else {
+            await scanner.stop(); camOn = false; btn.innerText = "LIGAR SCANNER"; btn.style.background = "#111";
+        }
+    };
+
+    window.enviarCarga = async () => {
+        const rota = document.getElementById('rota-select').value;
+        const linhas = document.getElementById('list-input').value.split('\n');
+        for(let l of linhas) {
+            const [c, q] = l.split(',');
+            if(c && q) await setDoc(doc(db, "separacao", c.trim()), { nome: BASE_M[c.trim()]?.nome || "ITEM "+c, q_p: parseInt(q), q_f: 0, rota: rota });
+        }
+        alert("CARGA ENVIADA!"); document.getElementById('list-input').value = "";
     };
 
     window.auth = () => {
         const u = document.getElementById('user-name').value.toUpperCase();
-        const p = document.getElementById('pass').value;
-        if((u==="JP"||u==="SHARK")&&p==="9910" || u==="OP"&&p==="1234") {
-            localStorage.setItem('LP_SESSION', u);
-            location.reload();
-        } else alert("ACESSO NEGADO");
+        if(u === 'SHARK' || u === 'OP') { localStorage.setItem('LP_SESS', u); location.reload(); }
+        else alert("ACESSO NEGADO");
     };
 
+    window.logout = () => { localStorage.clear(); location.reload(); };
     window.nav = (id) => {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        document.getElementById('scr-'+id).classList.add('active');
-        document.getElementById('nav-'+id).classList.add('active');
+        document.getElementById('scr-' + id).classList.add('active');
+        event.currentTarget.classList.add('active');
     };
 
     window.init = () => {
         if(currentUser) {
             document.getElementById('scr-login').classList.remove('active');
-            document.getElementById(currentUser === "OP" ? 'scr-op' : 'scr-shark').classList.add('active');
-            document.getElementById('main-nav').style.display = 'flex';
+            nav(currentUser === 'SHARK' ? 'shark' : 'op');
+            if(currentUser === 'SHARK') document.getElementById('main-nav').style.display = 'flex';
+            document.getElementById('display-user').innerText = "OP: " + currentUser;
         }
     };
+    window.alterarQtd = (v) => { let i = document.getElementById('qtd-bipe'); i.value = Math.max(1, parseInt(i.value) + v); };
+    window.manualBipe = () => { const c = prompt("CÓDIGO MANUAL:"); if(c) processar(c); };
 </script>
 </body>
 </html>
