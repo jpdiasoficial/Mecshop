@@ -3,62 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LOG-PRO v79 RT | JP MASTER</title>
+    <title>LOG-PRO v79 | JP MASTER</title>
     <script src="https://unpkg.com/html5-qrcode"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --p: #00ff41; --bg: #000; --card: #080808; --brd: #151515; --danger: #ff3131; --blue: #00d4ff; }
-        * { box-sizing: border-box; outline: none; }
+        :root { --primary: #00ff41; --bg: #000; --border: #222; --danger: #ff3b30; --warning: #ffae00; --info: #007aff; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; text-transform: uppercase; font-size: 10px; height: 100vh; overflow: hidden; }
-        header { padding: 12px; background: #050505; border-bottom: 2px solid var(--brd); display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron'; color: var(--p); }
-        .screen { display: none; height: 100vh; flex-direction: column; background: #000; }
+        .screen { display: none; position: absolute; width: 100%; height: 100%; flex-direction: column; background: #000; z-index: 10; }
         .active { display: flex !important; }
-        .scroll { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 150px; }
-        .btn { width: 100%; padding: 16px; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px; }
-        .btn-p { background: var(--p); color: #000; }
-        .btn-dark { background: #111; color: #fff; border: 1px solid #222; }
-        .card { background: var(--card); border: 1px solid var(--brd); border-radius: 8px; padding: 15px; margin-bottom: 12px; }
-        input, textarea { width: 100%; padding: 14px; background: #0a0a0a; border: 1px solid #222; color: var(--p); border-radius: 4px; font-family: 'Orbitron'; margin-bottom: 10px; }
-        .row-viva { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #111; align-items: center; font-size: 11px; }
-        .badge { background: rgba(0,255,65,0.1); color: var(--p); padding: 3px 8px; border-radius: 3px; font-weight: 900; border: 1px solid var(--p); }
-        #reader { width: 100%; border-radius: 10px; overflow: hidden; border: 2px solid #111; margin-bottom: 10px; background: #050505; }
-        table { width: 100%; border-collapse: collapse; }
-        th { background: #000; color: #444; padding: 10px; text-align: left; font-size: 8px; border-bottom: 2px solid #111; }
-        td { padding: 10px; border-bottom: 1px solid #080808; font-size: 10px; }
-        @media print { .screen, header { display:none !important; } #print-romaneio { display:block !important; color: #000; background: #fff; padding: 20px; } }
-        #print-romaneio { display: none; background: white; color: black; text-transform: none; }
+        header { padding: 12px; border-bottom: 1px solid #111; display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron'; background: #050505; }
+        .scroll { flex: 1; overflow-y: auto; padding: 10px; padding-bottom: 150px; }
+        .btn-green { width: 100%; padding: 15px; background: var(--primary); color: #000; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 4px; cursor: pointer; margin-bottom: 5px; }
+        input, select, textarea { width: 100%; padding: 12px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; font-family: 'Orbitron'; margin-bottom: 8px; box-sizing: border-box; }
+        .table-wrapper { border: 1px solid var(--border); border-radius: 6px; overflow-x: auto; background: #080808; margin-bottom: 15px; }
+        table { width: 100%; border-collapse: collapse; min-width: 700px; }
+        th { background: #111; color: #555; padding: 8px; text-align: left; font-size: 7px; }
+        td { padding: 8px; border-bottom: 1px solid #151515; font-size: 9px; }
+        #reader { width: 100%; border-radius: 8px; overflow: hidden; border: 2px solid #222; margin-bottom: 10px; }
+        .label-print { display:none; width: 40mm; height: 30mm; background:#fff; color:#000; padding:10px; text-align:center; font-family:Arial; }
+        @media print { .screen, header { display:none !important; } .label-print { display:block !important; border:1px solid #000; } }
     </style>
 </head>
 <body onload="init()">
 
 <div id="scr-login" class="screen active" style="align-items:center; justify-content:center;">
-    <div style="font-family:'Orbitron'; color:var(--p); font-size:35px; text-align:center;">LOG-PRO RT<br><span style="font-size:10px; color:#444;">SYNC SHARK</span></div>
-    <div style="width: 280px; margin-top:40px;">
-        <input type="text" id="user-name" placeholder="USUÁRIO">
+    <div style="font-family:'Orbitron'; color:var(--primary); font-size:35px; text-align:center;">LOG-PRO v79<br><span style="font-size:10px; color:#444;">WMS COMPLETE</span></div>
+    <div style="width: 80%; max-width: 300px; margin-top:30px;">
+        <input type="text" id="user-name" placeholder="USUARIO">
         <input type="password" id="pass" placeholder="CHAVE">
-        <button class="btn btn-p" onclick="auth()">CONECTAR TERMINAL</button>
+        <button class="btn-green" onclick="auth()">ACESSAR SISTEMA</button>
     </div>
 </div>
 
 <div id="scr-shark" class="screen">
-    <header><span>MASTER DASHBOARD</span> <button onclick="logout()" style="color:var(--danger); background:none; border:none;">SAIR</button></header>
+    <header><span style="color:var(--primary)">SHARK MASTER</span> <button onclick="logout()" style="color:var(--danger); background:none; border:none;">SAIR</button></header>
     <div class="scroll">
-        <div class="card">
-            <h3 style="color:var(--p); margin:0 0 10px 0;">GERENCIAR CARGA</h3>
-            <textarea id="list-input" placeholder="IMPORTAR: COD, QTD (EX: 789, 100)"></textarea>
-            <button class="btn btn-p" onclick="enviarCarga()">DISPARAR PARA OPERADORES</button>
-            <button class="btn btn-dark" style="color:var(--blue)" onclick="gerarRomaneio()">IMPRIMIR ROMANEIO CARGA</button>
+        <h3>BASE M (PRODUTO / MINIMO)</h3>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+            <input type="text" id="m-cod" placeholder="COD BARRAS">
+            <input type="text" id="m-nome" placeholder="NOME ITEM">
+            <input type="text" id="m-end" placeholder="ENDERECO">
+            <input type="number" id="m-min" placeholder="EST. MIN">
         </div>
-
-        <div class="card">
-            <h3 style="color:var(--p); margin:0 0 10px 0;">AUDITORIA EM TEMPO REAL</h3>
-            <div style="max-height: 200px; overflow-y: auto; background:#000; border:1px solid #111;">
-                <table>
-                    <thead><tr><th>HORA</th><th>ITEM</th><th>QTD</th><th>OP</th></tr></thead>
-                    <tbody id="audit-body"></tbody>
-                </table>
-            </div>
-            <button class="btn btn-dark" style="margin-top:10px; font-size:8px;" onclick="limparTudo()">ZERAR OPERAÇÃO ATUAL</button>
+        <button class="btn-green" style="background:#222; color:var(--primary);" onclick="salvarMaster()">SALVAR NA BASE M</button>
+        
+        <hr border="1" color="#111">
+        <h3>ORDEM DE SEPARACAO</h3>
+        <input type="text" id="mot-info" placeholder="MOTORISTA / PLACA">
+        <textarea id="list-input" placeholder="COD, QTD (EX: 789, 50)" style="height:50px;"></textarea>
+        <button class="btn-green" onclick="enviarCarga()">DISPARAR PARA OPERADORES</button>
+        
+        <button class="btn-green" style="background:var(--primary); color:#000; margin-top:10px;" onclick="exportarRelatorio()">BAIXAR RELATORIO COMPLETO</button>
+        
+        <div class="table-wrapper">
+            <table><thead><tr><th>HORA</th><th>OP</th><th>ETAPA</th><th>ITEM</th><th>QTD</th><th>VALIDADE</th><th>END</th></tr></thead>
+            <tbody id="audit-body"></tbody></table>
         </div>
     </div>
 </div>
@@ -66,159 +65,167 @@
 <div id="scr-op" class="screen">
     <header><span id="display-user">OPERADOR</span> <button onclick="logout()" style="color:var(--danger); background:none; border:none;">SAIR</button></header>
     <div class="scroll">
-        <div class="card" style="border-left: 4px solid var(--p);">
-            <h4 style="color:var(--p); margin:0; font-size:8px;">PENDENTE CARREGAMENTO:</h4>
-            <div id="op-list-picking">AGUARDANDO LISTA...</div>
+        <div id="box-picking" style="border: 1px solid var(--primary); padding:10px; background:#050505; margin-bottom:10px; border-radius:4px;">
+            <h4 style="color:var(--primary); margin:0;">PENDENTE NO CARREGAMENTO:</h4>
+            <div id="op-list-picking" style="font-size:11px;"></div>
         </div>
 
+        <select id="mod-op">
+            <option value="ENTRADA">📥 ENTRADA / ABASTECER</option>
+            <option value="SEPARACAO">📦 SEPARACAO (CARGA)</option>
+            <option value="AVARIA">⚠️ AVARIA (QUEBRA)</option>
+            <option value="SAIDA">🚚 SAIDA (MOTORISTA)</option>
+        </select>
+        
         <div style="display:flex; gap:5px;">
-            <input type="number" id="qtd-bipe" value="1" style="flex:1; font-size:20px; text-align:center;">
-            <button class="btn btn-dark" style="flex:1; margin:0;" onclick="toggleCamera()">LIGAR SCANNER</button>
+            <input type="number" id="qtd-bipe" value="1" style="flex:1; text-align:center;">
+            <input type="date" id="val-bipe" style="flex:2;">
         </div>
 
         <div id="reader"></div>
-        <div id="op-log" class="card" style="font-size:9px; color:#555; height:50px; overflow:hidden;">AGUARDANDO BIPE...</div>
+        <button class="btn-green" onclick="toggleCamera()">LIGAR SCANNER</button>
+        
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+            <button class="btn-green" style="background:#333; color:#fff;" onclick="gerarEtiqueta()">🖨️ ETIQUETA</button>
+            <button class="btn-green" style="background:#333; color:#fff;" onclick="alert('CÂMERA DE FOTO PRONTA')">📸 FOTO</button>
+        </div>
+        
+        <div id="op-audit-body" style="color:#555; font-size:9px; margin-top:10px; border-top:1px solid #111; padding-top:5px;"></div>
     </div>
 </div>
 
-<div id="print-romaneio">
-    <h2 style="text-align:center; border-bottom: 2px solid #000;">LOG-PRO | ROMANEIO DE CARGA</h2>
-    <div id="print-content"></div>
-    <p style="margin-top: 20px; font-size: 10px;">Gerado em: <span id="print-date"></span></p>
+<div id="print-area" class="label-print">
+    <div id="lp-nome" style="font-weight:bold; font-size:14px; margin-bottom:5px;"></div>
+    <div id="lp-cod" style="font-size:10px; color:#444;"></div>
+    <div id="lp-end" style="font-size:18px; font-weight:900; border:2px solid #000; padding:5px; margin-top:5px;"></div>
 </div>
 
-<script>
-    // --- SHARK SYNC ENGINE ---
-    const sharkChannel = new BroadcastChannel('shark_log_sync');
-    let BASE_M = JSON.parse(localStorage.getItem('LP_BASE')) || {};
-    let CARGA = JSON.parse(localStorage.getItem('LP_CARGA')) || {};
-    let LOGS = JSON.parse(localStorage.getItem('LP_LOGS')) || [];
-    let currentUser = localStorage.getItem('LP_SESSION') || "";
-    let scanner, camOn = false;
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit, setDoc, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    // ESCUTA EM TEMPO REAL
-    sharkChannel.onmessage = (event) => {
-        const { type, data } = event.data;
-        if (type === 'NEW_BIPE') {
-            LOGS.unshift(data);
-            if (CARGA[data.cod]) CARGA[data.cod].qtd_feita += data.q;
-            saveAndRefresh();
-        }
-        if (type === 'NEW_CARGA') {
-            CARGA = data;
-            saveAndRefresh();
-            falar("Nova carga recebida");
-        }
-        if (type === 'RESET') {
-            CARGA = {}; LOGS = [];
-            saveAndRefresh();
-        }
+    const firebaseConfig = {
+        apiKey: "AIzaSyDRDhONvvzZmo2csXksqHs6E6vV3MuvLSs",
+        authDomain: "log-pro-jp.firebaseapp.com",
+        projectId: "log-pro-jp",
+        storageBucket: "log-pro-jp.firebasestorage.app",
+        messagingSenderId: "481645607846",
+        appId: "1:481645607846:web:fd55dd943718ad78386d67"
     };
 
-    function saveAndRefresh() {
-        localStorage.setItem('LP_CARGA', JSON.stringify(CARGA));
-        localStorage.setItem('LP_LOGS', JSON.stringify(LOGS));
-        renderDoca();
-        renderShark();
-    }
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    let BASE_M = {}; let MOVS = [];
+    let currentUser = localStorage.getItem('LP_SESSION') || "";
+    let scanner, camOn = false, ultimoCod = "";
 
-    function falar(t) { window.speechSynthesis.speak(new SpeechSynthesisUtterance(t)); }
-
-    function auth() {
-        const u = document.getElementById('user-name').value.toUpperCase().trim();
-        const p = document.getElementById('pass').value;
-        if((u==="JP"||u==="SHARK") && p==="9910" || u!=="" && p==="1234") {
-            localStorage.setItem('LP_SESSION', u);
-            location.reload();
-        } else alert("ACESSO NEGADO");
-    }
-
-    function logout() { localStorage.removeItem('LP_SESSION'); location.reload(); }
-
-    function enviarCarga() {
-        const linhas = document.getElementById('list-input').value.split('\n');
-        let novaCarga = {};
-        linhas.forEach(l => {
-            const [cod, qtd] = l.split(',');
-            if(cod && qtd) novaCarga[cod.trim()] = { cod: cod.trim(), qtd_pedida: parseInt(qtd), qtd_feita: 0 };
+    onSnapshot(collection(db, "base_master"), (snap) => { snap.forEach(d => { BASE_M[d.id] = d.data(); }); });
+    onSnapshot(query(collection(db, "logs"), orderBy("data_hora", "desc"), limit(100)), (snap) => { MOVS = snap.docs.map(d => d.data()); renderShark(); });
+    onSnapshot(collection(db, "separacao"), (s) => {
+        let h = ""; s.docs.forEach(d => {
+            const p = d.data(); const f = p.qtd_pedida - p.qtd_feita;
+            if(f > 0) h += `<div style='padding:4px; border-bottom:1px solid #111;'>${p.nome} (FALTAM: ${f})</div>`;
         });
-        CARGA = novaCarga;
-        sharkChannel.postMessage({ type: 'NEW_CARGA', data: CARGA });
-        saveAndRefresh();
-        alert("CARGA ENVIADA");
-    }
+        document.getElementById('op-list-picking').innerHTML = h || "TUDO CARREGADO";
+    });
 
-    async function processar(cod) {
-        const q = parseInt(document.getElementById('qtd-bipe').value) || 1;
-        const mov = { hora: new Date().toLocaleTimeString(), cod: cod, q: q, op: currentUser };
+    window.salvarMaster = async () => {
+        const c = document.getElementById('m-cod').value.trim();
+        const n = document.getElementById('m-nome').value.toUpperCase();
+        const e = document.getElementById('m-end').value.toUpperCase();
+        const min = document.getElementById('m-min').value || 0;
+        if(c && n) { await setDoc(doc(db, "base_master", c), { nome:n, endereco:e, min:parseInt(min) }); alert("BASE M ATUALIZADA"); }
+    };
+
+    window.processar = async (cod) => {
+        ultimoCod = cod.trim(); const q = parseInt(document.getElementById('qtd-bipe').value) || 1;
+        const tipo = document.getElementById('mod-op').value;
+        const val = document.getElementById('val-bipe').value;
+
+        if(!BASE_M[ultimoCod]) {
+            const n = prompt("NOVO ITEM! NOME:"); const e = prompt("ENDERECO:");
+            if(n) await setDoc(doc(db, "base_master", ultimoCod), { nome:n.toUpperCase(), endereco:e.toUpperCase() || "GERAL", min:0 }); else return;
+        }
+
+        const info = BASE_M[ultimoCod];
+        const mov = { 
+            cod:ultimoCod, n:info.nome, t:tipo, q:q, op:currentUser, 
+            end:info.endereco, val:val || "N/A", data_hora:serverTimestamp(), d_str:new Date().toLocaleTimeString() 
+        };
         
-        sharkChannel.postMessage({ type: 'NEW_BIPE', data: mov });
-        LOGS.unshift(mov);
-        if (CARGA[cod]) CARGA[cod].qtd_feita += q;
-        
-        saveAndRefresh();
-        falar("OK");
-        document.getElementById('op-log').innerHTML = `BIPADO: ${cod} x${q}<br>` + document.getElementById('op-log').innerHTML;
-    }
+        await addDoc(collection(db, "logs"), mov);
+        if(tipo === "SEPARACAO") {
+            const sepRef = doc(db, "separacao", ultimoCod);
+            const ds = await getDoc(sepRef);
+            if(ds.exists()) await updateDoc(sepRef, { qtd_feita: ds.data().qtd_feita + q });
+        }
+        document.getElementById('op-audit-body').innerHTML = `BIPADO: ${info.nome} (${q})<br>` + document.getElementById('op-audit-body').innerHTML;
+    };
 
-    function renderDoca() {
-        if(!document.getElementById('op-list-picking')) return;
-        let h = "";
-        Object.values(CARGA).forEach(p => {
-            const falta = p.qtd_pedida - p.qtd_feita;
-            if(falta > 0) h += `<div class="row-viva"><span>${p.cod}</span> <span class="badge">FALTAM ${falta}</span></div>`;
-        });
-        document.getElementById('op-list-picking').innerHTML = h || "DOCA LIMPA ✅";
-    }
+    window.gerarEtiqueta = () => {
+        if(!ultimoCod || !BASE_M[ultimoCod]) return alert("BIPE O ITEM ANTES");
+        document.getElementById('lp-nome').innerText = BASE_M[ultimoCod].nome;
+        document.getElementById('lp-cod').innerText = ultimoCod;
+        document.getElementById('lp-end').innerText = BASE_M[ultimoCod].endereco;
+        window.print();
+    };
 
-    function renderShark() {
-        if(!document.getElementById('audit-body')) return;
+    window.renderShark = () => {
         let h = "";
-        LOGS.slice(0, 30).forEach(m => {
-            h += `<tr><td>${m.hora}</td><td>${m.cod}</td><td>${m.q}</td><td>${m.op}</td></tr>`;
+        MOVS.forEach(m => {
+            h += `<tr><td>${m.d_str}</td><td>${m.op}</td><td>${m.t}</td><td>${m.n}</td><td>${m.q}</td><td>${m.val}</td><td>${m.end}</td></tr>`;
         });
         document.getElementById('audit-body').innerHTML = h;
-    }
+    };
 
-    function gerarRomaneio() {
-        let h = "<table border='1' style='width:100%; border-collapse:collapse;'><tr><th>COD</th><th>PEDIDO</th><th>CONFERIDO</th><th>STATUS</th></tr>";
-        Object.values(CARGA).forEach(p => {
-            const status = p.qtd_feita >= p.qtd_pedida ? "OK" : "PENDENTE";
-            h += `<tr><td>${p.cod}</td><td>${p.qtd_pedida}</td><td>${p.qtd_feita}</td><td>${status}</td></tr>`;
-        });
-        h += "</table>";
-        document.getElementById('print-content').innerHTML = h;
-        document.getElementById('print-date').innerText = new Date().toLocaleString();
-        window.print();
-    }
-
-    function limparTudo() {
-        if(confirm("ZERAR TUDO?")) {
-            sharkChannel.postMessage({ type: 'RESET' });
-            CARGA = {}; LOGS = [];
-            saveAndRefresh();
+    window.enviarCarga = async () => {
+        const mot = document.getElementById('mot-info').value.toUpperCase();
+        const linhas = document.getElementById('list-input').value.split('\n');
+        for(let l of linhas) {
+            const [cod, qtd] = l.split(',');
+            if(cod && qtd) {
+                const c = cod.trim();
+                await setDoc(doc(db, "separacao", c), { 
+                    cod:c, nome:BASE_M[c] ? BASE_M[c].nome : "ITEM "+c, 
+                    qtd_pedida:parseInt(qtd), qtd_feita:0, motorista:mot 
+                });
+            }
         }
-    }
+        alert("CARGA DISPARADA");
+    };
 
-    async function toggleCamera() {
-        if(!camOn) {
-            scanner = new Html5Qrcode("reader");
-            await scanner.start({ facingMode: "environment" }, { fps: 20, qrbox: 250 }, (t) => processar(t));
-            camOn = true;
-        } else { await scanner.stop(); camOn = false; }
-    }
+    window.exportarRelatorio = () => {
+        let csv = "HORA,OP,ETAPA,ITEM,QTD,VALIDADE,ENDERECO\n";
+        MOVS.forEach(m => { csv += `${m.d_str},${m.op},${m.t},${m.n},${m.q},${m.val},${m.end}\n`; });
+        const blob = new Blob([csv], {type: 'text/csv'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `LOGPRO_V79_RELATORIO.csv`;
+        a.click();
+    };
 
-    function init() {
+    window.auth = () => {
+        const u = document.getElementById('user-name').value.toUpperCase().trim();
+        const p = document.getElementById('pass').value;
+        if((u==="JP"||u==="SHARK")&&p==="9910" || u==="OP"&&p==="1234") { 
+            currentUser=u; localStorage.setItem('LP_SESSION',u); location.reload(); 
+        } else alert("DADOS INCORRETOS");
+    };
+
+    window.toggleCamera = async () => {
+        if(!camOn) { scanner = new Html5Qrcode("reader"); await scanner.start({ facingMode: "environment" }, { fps: 20, qrbox: 250 }, (t)=>processar(t)); camOn=true; }
+        else { await scanner.stop(); camOn=false; }
+    };
+
+    window.logout = () => { localStorage.removeItem('LP_SESSION'); location.reload(); };
+    window.init = () => { 
         if(currentUser) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            const screen = (currentUser === "JP" || currentUser === "SHARK") ? 'scr-shark' : 'scr-op';
-            document.getElementById(screen).classList.add('active');
-            if(currentUser !== "JP") document.getElementById('display-user').innerText = currentUser;
-            renderDoca();
-            renderShark();
+            document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+            document.getElementById(currentUser === "OP" ? 'scr-op' : 'scr-shark').classList.add('active');
+            if(currentUser === "OP") document.getElementById('display-user').innerText = currentUser;
         }
-    }
+    };
 </script>
 </body>
-            </html>
-            
+</html>
+        
