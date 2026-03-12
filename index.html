@@ -3,176 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HG MOTORS | V80 Shark Machine</title>
+    <title>HG MOTORS | V80 Shark Authority</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
 
     <style>
+        /* Melhoria 10-18: Identidade Visual de Elite (Sem Emojis, Visual "Caro") */
         :root {
-            --primary: #e63946;
-            --secondary: #25d366;
-            --bg: #050505;
-            --surface: #121212;
-            --border: #222;
-            --text: #fff;
-            --text-dim: #888;
+            --primary: #e63946;    /* Vermelho HG */
+            --secondary: #25d366;  /* Verde Conversão */
+            --bg: #050505;         /* Preto Profundo */
+            --surface: #111111;    /* Camada de Card */
+            --border: #222222;     /* Divisores de Luxo */
+            --text-main: #ffffff;
+            --text-dim: #888888;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: var(--text); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
-
-        /* HEADER SHARK - AUTORIDADE IMEDIATA */
-        header { 
-            background: rgba(0,0,0,0.95); padding: 25px 0; text-align: center; 
-            border-bottom: 3px solid var(--primary); position: sticky; top: 0; z-index: 1000;
-            backdrop-filter: blur(15px);
+        
+        body { 
+            background-color: var(--bg); 
+            color: var(--text-main); 
+            line-height: 1.4; 
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
-        .logo { font-size: 26px; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; }
-        .logo span { color: var(--primary); }
-        .badge-loc { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-top: 4px; }
 
-        /* NAVEGAÇÃO DE PERFORMANCE (UX APP) */
-        .v80-nav {
+        /* Melhoria 19: Header Autoritário (Fixado) */
+        header { 
+            background: rgba(0,0,0,0.98); padding: 25px 15px; text-align: center; 
+            border-bottom: 3px solid var(--primary);
+            position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        .logo { font-size: 24px; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; }
+        .logo span { color: var(--primary); }
+        .loc-tag { font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-top: 4px; }
+
+        /* Melhoria 21: Navegação Web-App (Filtros Ativos) */
+        .filter-nav {
             display: flex; gap: 10px; padding: 15px; overflow-x: auto;
             background: #080808; border-bottom: 1px solid var(--border);
-            position: sticky; top: 86px; z-index: 999;
+            position: sticky; top: 84px; z-index: 999;
         }
-        .v80-nav::-webkit-scrollbar { display: none; }
-        .nav-btn {
-            background: var(--surface); color: var(--text-dim); padding: 10px 22px;
-            border-radius: 6px; font-size: 11px; font-weight: 800; border: 1px solid var(--border);
+        .filter-nav::-webkit-scrollbar { display: none; }
+        .filter-btn {
+            background: var(--surface); color: var(--text-dim); padding: 10px 20px;
+            border-radius: 4px; font-size: 11px; font-weight: 800; border: 1px solid var(--border);
             text-transform: uppercase; white-space: nowrap; transition: 0.3s; cursor: pointer;
         }
-        .nav-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+        .filter-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-        /* GRID DE PRODUTOS - FOCO V80 */
-        .main-catalog { max-width: 500px; margin: 0 auto; padding: 20px 15px; }
+        /* Melhoria 12: Feed "Espinha de Peixe" (Um item por vez) */
+        .main-content { max-width: 480px; margin: 0 auto; padding: 20px 15px; }
 
         .card {
-            background: var(--surface); border-radius: 15px; margin-bottom: 35px;
+            background: var(--surface); border-radius: 12px; margin-bottom: 40px;
             overflow: hidden; border: 1px solid var(--border);
-            animation: fadeIn 0.8s ease forwards;
+            animation: fadeIn 0.6s ease-out forwards;
         }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        .media-area { position: relative; width: 100%; height: 380px; background: #000; }
-        .media-area img { width: 100%; height: 100%; object-fit: cover; }
+        /* Melhoria 22: Mídia Blindada (Imagens que aparecem 100%) */
+        .image-container { position: relative; width: 100%; height: 380px; background: #000; }
+        .image-container img { width: 100%; height: 100%; object-fit: cover; }
         
         .badge-reel {
-            position: absolute; top: 20px; left: 20px;
-            background: rgba(230, 57, 70, 0.9); padding: 6px 14px;
-            border-radius: 4px; font-size: 10px; font-weight: 900; color: #fff;
+            position: absolute; top: 15px; left: 15px;
+            background: rgba(230, 57, 70, 0.95); padding: 6px 12px;
+            border-radius: 4px; font-size: 9px; font-weight: 900; color: #fff;
         }
 
-        .details { padding: 25px; }
-        .tag { color: var(--primary); font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; }
-        .title { font-size: 26px; font-weight: 900; margin: 5px 0 15px; text-transform: uppercase; }
+        .card-details { padding: 25px; }
+        .category-tag { color: var(--primary); font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; display: block; }
+        .v-title { font-size: 26px; font-weight: 900; text-transform: uppercase; margin-bottom: 15px; letter-spacing: -1px; }
         
+        /* Melhoria 24: Specs em Pílulas (Leitura Rápida) */
         .specs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 25px; }
-        .spec-pill { background: #1a1a1a; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #aaa; }
+        .pill { background: #1a1a1a; padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 700; color: #aaa; }
 
-        .price-row { 
+        .price-section { 
             display: flex; justify-content: space-between; align-items: baseline; 
             margin-bottom: 25px; padding-top: 15px; border-top: 1px solid var(--border);
         }
-        .price-val { font-size: 32px; font-weight: 900; color: #fff; }
+        .price-main { font-size: 32px; font-weight: 900; color: #fff; }
 
-        /* BOTÃO DE AÇÃO SHARK */
-        .btn-zap {
+        /* Melhoria 28 & 33: Botão SHARK de Conversão Brutal */
+        .cta-button {
             display: flex; align-items: center; justify-content: center;
             background: var(--secondary); color: #fff; text-decoration: none;
-            padding: 20px; border-radius: 12px; font-weight: 900; font-size: 15px;
+            padding: 20px; border-radius: 10px; font-weight: 900; font-size: 16px;
             text-transform: uppercase; letter-spacing: 1px;
-            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2);
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.2);
         }
+        .cta-button:active { transform: scale(0.96); }
 
-        footer { text-align: center; padding: 50px 20px; color: #222; font-size: 10px; font-weight: 900; letter-spacing: 2px; }
+        footer { text-align: center; padding: 60px 20px; color: #222; font-size: 10px; font-weight: 900; letter-spacing: 3px; }
     </style>
 </head>
 <body>
 
     <header>
         <div class="logo">HG <span>MOTORS</span></div>
-        <div class="badge-loc">Hortolândia • Seminovos Premium</div>
+        <div class="loc-tag">Hortolândia - Excelência em Seminovos</div>
     </header>
 
-    <div class="v80-nav">
-        <div class="nav-btn active" onclick="filter('all')">ESTOQUE COMPLETO</div>
-        <div class="nav-btn" onclick="filter('car')">CARROS</div>
-        <div class="nav-btn" onclick="filter('moto')">MOTOS</div>
-        <div class="nav-btn" onclick="filter('jet')">JET SKI</div>
+    <div class="filter-nav">
+        <div class="filter-btn active" onclick="filterCat('all')">Ver Estoque (23)</div>
+        <div class="filter-btn" onclick="filterCat('hatch')">Carros Hatch</div>
+        <div class="filter-btn" onclick="filterCat('sedan')">Carros Sedan</div>
+        <div class="filter-btn" onclick="filterCat('moto')">Motos</div>
+        <div class="filter-btn" onclick="filterCat('jet')">Jet Ski</div>
     </div>
 
-    <div class="main-catalog" id="catalog">
-        <div class="card" data-cat="car">
-            <div class="media-area">
-                <div class="badge-reel">VER VÍDEO DO REEL</div>
-                <img src="https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=800" alt="Onix">
+    <div class="main-content" id="stock">
+        
+        <div class="card" data-cat="hatch">
+            <div class="image-container">
+                <div class="badge-reel">▶ VER VÍDEO DO REEL</div>
+                <img src="https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=800&q=80" alt="Onix">
             </div>
-            <div class="details">
-                <span class="tag">Destaque HG</span>
-                <h2 class="title">Chevrolet Onix Turbo</h2>
+            <div class="card-details">
+                <span class="category-tag">Nacional Selecionado</span>
+                <h2 class="v-title">Onix 1.0 Turbo Premier</h2>
                 <div class="specs">
-                    <span class="spec-pill">2023</span>
-                    <span class="spec-pill">Automático</span>
-                    <span class="spec-pill">Completo</span>
+                    <span class="pill">2023</span>
+                    <span class="pill">Automático</span>
+                    <span class="pill">15.000 KM</span>
                 </div>
-                <div class="price-row"><span class="price-val">R$ 89.900</span></div>
-                <a href="https://wa.me/5519998463668?text=Olá, vi o Onix Turbo no catálogo!" class="btn-zap">NEGOCIAR AGORA</a>
+                <div class="price-section"><span class="price-main">R$ 89.900</span></div>
+                <a href="https://wa.me/5519998463668?text=Olá, quero negociar o Onix Premier que vi no site." class="cta-button">CONSULTAR AGORA</a>
+            </div>
+        </div>
+
+        <div class="card" data-cat="sedan">
+            <div class="image-container">
+                <div class="badge-reel">▶ VER VÍDEO DO REEL</div>
+                <img src="https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=800&q=80" alt="Corolla">
+            </div>
+            <div class="card-details">
+                <span class="category-tag">Premium Sedan</span>
+                <h2 class="v-title">Corolla Altis Hybrid</h2>
+                <div class="specs">
+                    <span class="pill">2022</span>
+                    <span class="pill">Híbrido Flex</span>
+                    <span class="pill">Único Dono</span>
+                </div>
+                <div class="price-section"><span class="price-main">R$ 138.500</span></div>
+                <a href="https://wa.me/5519998463668?text=Olá, quero negociar o Corolla Altis que vi no site." class="cta-button">CONSULTAR AGORA</a>
             </div>
         </div>
 
         <div class="card" data-cat="moto">
-            <div class="media-area">
-                <div class="badge-reel">VÍDEO REAL</div>
-                <img src="https://images.unsplash.com/photo-1558981403-c5f91cbcf523?w=800" alt="Moto">
+            <div class="image-container">
+                <div class="badge-reel">▶ VER VÍDEO DO REEL</div>
+                <img src="https://images.unsplash.com/photo-1558981403-c5f91cbcf523?w=800&q=80" alt="Moto">
             </div>
-            <div class="details">
-                <span class="tag">Duas Rodas Nacional</span>
-                <h2 class="title">Honda CB 500X ABS</h2>
+            <div class="card-details">
+                <span class="category-tag">Esportiva Nacional</span>
+                <h2 class="v-title">Honda CB 500X ABS</h2>
                 <div class="specs">
-                    <span class="spec-pill">2022</span>
-                    <span class="spec-pill">12.000 KM</span>
+                    <span class="pill">2021</span>
+                    <span class="pill">Manual</span>
+                    <span class="pill">12.000 KM</span>
                 </div>
-                <div class="price-row"><span class="price-val">R$ 43.500</span></div>
-                <a href="https://wa.me/5519998463668?text=Olá, vi a CB 500X no catálogo!" class="btn-zap">NEGOCIAR AGORA</a>
+                <div class="price-section"><span class="price-main">R$ 41.900</span></div>
+                <a href="https://wa.me/5519998463668?text=Olá, quero negociar a CB 500X que vi no site." class="cta-button">CONSULTAR AGORA</a>
             </div>
         </div>
 
         <div class="card" data-cat="jet">
-            <div class="media-area">
-                <div class="badge-reel">VÍDEO REAL</div>
-                <img src="https://images.unsplash.com/photo-1621251912693-02f459141f92?w=800" alt="Jet">
+            <div class="image-container">
+                <div class="badge-reel">▶ VER VÍDEO DO REEL</div>
+                <img src="https://images.unsplash.com/photo-1621251912693-02f459141f92?w=800&q=80" alt="Jet Ski">
             </div>
-            <div class="details">
-                <span class="tag">Náutica Selecionada</span>
-                <h2 class="title">Sea-Doo GTI 130hp</h2>
+            <div class="card-details">
+                <span class="category-tag">Náutica Premium</span>
+                <h2 class="v-title">Sea-Doo GTI 130hp</h2>
                 <div class="specs">
-                    <span class="spec-pill">2020</span>
-                    <span class="spec-pill">80 Horas</span>
+                    <span class="pill">2020</span>
+                    <span class="pill">80 Horas</span>
+                    <span class="pill">Impecável</span>
                 </div>
-                <div class="price-row"><span class="price-val">R$ 82.000</span></div>
-                <a href="https://wa.me/5519998463668?text=Olá, vi o Jet Ski no catálogo!" class="btn-zap">NEGOCIAR AGORA</a>
+                <div class="price-section"><span class="price-main">R$ 82.000</span></div>
+                <a href="https://wa.me/5519998463668?text=Olá, quero negociar o Jet Ski que vi no site." class="cta-button">CONSULTAR AGORA</a>
             </div>
         </div>
 
     </div>
 
     <footer>
-        DESIGN & ESTRUTURA POR JP DIAS • VISÃO SHARK V80
+        DESIGNED BY JP DIAS • HG MOTORS V80 <br>
+        HORTOLÂNDIA - SP
     </footer>
 
     <script>
-        function filter(category) {
+        function filterCat(cat) {
             const cards = document.querySelectorAll('.card');
-            const btns = document.querySelectorAll('.nav-btn');
+            const btns = document.querySelectorAll('.filter-btn');
             
             btns.forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
 
             cards.forEach(card => {
-                if(category === 'all' || card.getAttribute('data-cat') === category) {
+                if(cat === 'all' || card.getAttribute('data-cat') === cat) {
                     card.style.display = 'block';
                 } else {
                     card.style.display = 'none';
