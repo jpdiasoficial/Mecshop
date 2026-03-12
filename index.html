@@ -3,157 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HG MOTORS | Estoque Exclusivo</title>
+    <title>HG MOTORS | V80 Premium Catalog</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
+        /* PROTOCOLO V80: 80% Conversão Visual / 20% Interface Invisível */
         :root {
             --primary: #e63946;
             --secondary: #25d366;
-            --bg: #0d0d0d;
-            --card: #181818;
+            --bg: #050505;
+            --surface: #121212;
+            --glass: rgba(255, 255, 255, 0.03);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg); color: #fff; line-height: 1.5; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg); color: #fff; overflow-x: hidden; }
 
-        /* Header com a cara da loja */
+        /* HEADER V80 - AUTORIDADE MÁXIMA */
         header { 
-            background: #000; padding: 25px 15px; text-align: center; 
-            border-bottom: 3px solid var(--primary);
+            background: #000; padding: 30px 15px; text-align: center; 
+            border-bottom: 4px solid var(--primary);
             position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.9);
         }
-        .logo { font-size: 26px; font-weight: 900; letter-spacing: 2px; }
+        .logo { font-size: 28px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; }
         .logo span { color: var(--primary); }
-        .sub-header { font-size: 10px; color: #666; text-transform: uppercase; margin-top: 5px; }
+        .badge-premium { font-size: 10px; color: #666; letter-spacing: 2px; margin-top: 5px; text-transform: uppercase; }
 
-        /* Filtros de Categoria (Estilo Loja MEC) */
-        .categories {
-            display: flex; gap: 10px; padding: 15px; overflow-x: auto;
-            background: #111; position: sticky; top: 82px; z-index: 999;
+        /* PAINEL DE NAVEGAÇÃO COMPLETO (45 MELHORIAS - ACESSO RÁPIDO) */
+        .v80-nav {
+            display: flex; gap: 12px; padding: 20px 15px; overflow-x: auto;
+            background: #080808; border-bottom: 1px solid #1a1a1a;
+            position: sticky; top: 92px; z-index: 999;
+            backdrop-filter: blur(15px);
         }
-        .categories::-webkit-scrollbar { display: none; }
-        .cat-btn {
-            background: #222; color: #fff; padding: 10px 22px; border-radius: 30px;
-            font-size: 12px; font-weight: 800; text-decoration: none; border: 1px solid #333;
-            white-space: nowrap; transition: 0.3s;
+        .v80-nav::-webkit-scrollbar { display: none; }
+        .nav-pill {
+            background: var(--surface); color: #fff; padding: 12px 24px; border-radius: 50px;
+            font-size: 11px; font-weight: 900; text-decoration: none; border: 1px solid #222;
+            white-space: nowrap; transition: 0.3s; text-transform: uppercase;
         }
-        .cat-btn.active { background: var(--primary); border-color: var(--primary); box-shadow: 0 0 15px rgba(230, 57, 70, 0.4); }
+        .nav-pill.active { background: var(--primary); border-color: var(--primary); box-shadow: 0 0 20px rgba(230, 57, 70, 0.4); }
 
-        /* Feed Espinha de Peixe */
-        .catalog { max-width: 500px; margin: 0 auto; padding: 15px; }
+        /* GRADE DE ESTOQUE - ESPINHA DE PEIXE V80 */
+        .catalog-container { max-width: 500px; margin: 0 auto; padding: 20px 15px; }
 
-        .v-card {
-            background: var(--card); border-radius: 20px; margin-bottom: 30px;
-            overflow: hidden; border: 1px solid #252525; transition: 0.3s;
+        .v-item {
+            background: var(--surface); border-radius: 28px; margin-bottom: 40px;
+            overflow: hidden; border: 1px solid #222; position: relative;
+            animation: fadeIn 0.8s ease-out forwards;
         }
-        .v-card:active { transform: scale(0.97); }
 
-        .img-box { position: relative; width: 100%; height: 320px; background: #222; }
-        .img-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .image-wrapper { position: relative; width: 100%; height: 400px; background: #000; }
+        .image-wrapper img { width: 100%; height: 100%; object-fit: cover; }
         
-        .video-label {
-            position: absolute; top: 15px; left: 15px;
-            background: rgba(230, 57, 70, 0.9); padding: 5px 12px;
-            border-radius: 15px; font-size: 10px; font-weight: 900; color: #fff;
+        /* GATILHO DE VÍDEO REEL */
+        .reel-trigger {
+            position: absolute; top: 20px; left: 20px;
+            background: rgba(230, 57, 70, 0.9); padding: 8px 16px;
+            border-radius: 50px; font-size: 10px; font-weight: 900;
+            color: #fff; display: flex; align-items: center; gap: 6px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
-        .details { padding: 22px; }
-        .brand { font-size: 11px; color: var(--primary); font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
-        .v-name { font-size: 24px; font-weight: 900; margin: 5px 0 12px; text-transform: uppercase; letter-spacing: -1px; }
+        .details-box { padding: 30px; }
+        .tag-line { color: var(--primary); font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; display: block; }
+        .v-title { font-size: 26px; font-weight: 900; text-transform: uppercase; letter-spacing: -1px; margin-bottom: 15px; }
         
-        .specs { display: flex; gap: 10px; margin-bottom: 20px; }
-        .spec { background: #252525; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; color: #aaa; }
+        .info-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 25px; }
+        .info-pill { background: rgba(255,255,255,0.05); padding: 8px 14px; border-radius: 10px; font-size: 12px; font-weight: 700; color: #ccc; }
 
-        .price-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .price-val { font-size: 28px; font-weight: 900; color: #fff; }
+        .price-container { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 25px; border-top: 1px solid #222; padding-top: 20px; }
+        .price-label { color: #666; font-size: 12px; text-transform: uppercase; font-weight: 800; }
+        .price-main { font-size: 32px; font-weight: 900; color: #fff; letter-spacing: -1px; }
 
-        .btn-whats {
-            display: flex; align-items: center; justify-content: center; gap: 10px;
+        /* BOTÃO SHARK - CONVERSÃO V80 */
+        .btn-cta {
+            display: flex; align-items: center; justify-content: center; gap: 12px;
             background: var(--secondary); color: #fff; text-decoration: none;
-            padding: 18px; border-radius: 15px; font-weight: 800; font-size: 16px;
-            box-shadow: 0 5px 20px rgba(37, 211, 102, 0.3);
+            padding: 22px; border-radius: 20px; font-weight: 900; font-size: 16px;
+            text-transform: uppercase; letter-spacing: 1px;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+        .btn-cta:active { transform: scale(0.94); }
 
-        footer { text-align: center; padding: 40px; color: #333; font-size: 11px; text-transform: uppercase; }
+        footer { text-align: center; padding: 60px 20px; color: #222; font-size: 10px; font-weight: 800; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
     <header>
         <div class="logo">HG <span>MOTORS</span></div>
-        <div class="sub-header">Compra • Venda • Troca • Financiamento</div>
+        <div class="badge-premium">Hortolândia • Seminovos de Elite</div>
     </header>
 
-    <div class="categories">
-        <a href="#" class="cat-btn active">ESTOQUE (23)</a>
-        <a href="#" class="cat-btn">🚗 CARROS</a>
-        <a href="#" class="cat-btn">🏍️ MOTOS</a>
-        <a href="#" class="cat-btn">⚓ JET SKI</a>
-    </div>
+    <nav class="v80-nav">
+        <a href="#" class="nav-pill active">Estoque (23)</a>
+        <a href="#" class="nav-pill">🚗 Carros Populares</a>
+        <a href="#" class="nav-pill">🏍️ Motos Nacional</a>
+        <a href="#" class="nav-pill">⚓ Jet Ski</a>
+        <a href="#" class="nav-pill">💎 Premium</a>
+    </nav>
 
-    <div class="catalog">
+    <div class="catalog-container">
         
-        <div class="v-card">
-            <div class="img-box">
-                <div class="video-label">▶ REEL DISPONÍVEL</div>
-                <img src="https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&w=800&q=80">
+        <div class="v-item">
+            <div class="image-wrapper">
+                <div class="reel-trigger"><span>▶</span> VER VÍDEO REAL</div>
+                <img src="https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=800&q=80" alt="Veículo HG Motors">
             </div>
-            <div class="details">
-                <span class="brand">Chevrolet</span>
-                <h2 class="v-name">Onix Turbo Premier</h2>
-                <div class="specs">
-                    <span class="spec">2023</span>
-                    <span class="spec">Automático</span>
+            <div class="details-box">
+                <span class="tag-line">Hatch Selecionado</span>
+                <h2 class="v-title">Chevrolet Onix Turbo</h2>
+                <div class="info-grid">
+                    <span class="info-pill">2023</span>
+                    <span class="info-pill">Automático</span>
+                    <span class="info-pill">Completo</span>
                 </div>
-                <div class="price-row">
-                    <span class="price-val">R$ 89.900</span>
+                <div class="price-container">
+                    <span class="price-label">À vista</span>
+                    <span class="price-main">R$ 89.900</span>
                 </div>
-                <a href="https://wa.me/5519998463668?text=Vi o Onix no site e quero negociar" class="btn-whats">CONSULTAR NO ZAP</a>
-            </div>
-        </div>
-
-        <div class="v-card">
-            <div class="img-box">
-                <div class="video-label">▶ REEL DISPONÍVEL</div>
-                <img src="https://images.unsplash.com/photo-1558981403-c5f91cbcf523?auto=format&fit=crop&w=800&q=80">
-            </div>
-            <div class="details">
-                <span class="brand">Honda</span>
-                <h2 class="v-name">CB 500X ABS</h2>
-                <div class="specs">
-                    <span class="spec">2022</span>
-                    <span class="spec">12.000 KM</span>
-                </div>
-                <div class="price-row">
-                    <span class="price-val">R$ 43.500</span>
-                </div>
-                <a href="https://wa.me/5519998463668?text=Vi a CB 500X no site" class="btn-whats">CONSULTAR NO ZAP</a>
+                <a href="https://wa.me/5519998463668?text=Quero o Onix Turbo" class="btn-cta">CONSULTAR AGORA</a>
             </div>
         </div>
 
-        <div class="v-card">
-            <div class="img-box">
-                <div class="video-label">▶ REEL DISPONÍVEL</div>
-                <img src="https://images.unsplash.com/photo-1621251912693-02f459141f92?auto=format&fit=crop&w=800&q=80">
+        <div class="v-item">
+            <div class="image-wrapper">
+                <div class="reel-trigger"><span>▶</span> VER VÍDEO REAL</div>
+                <img src="https://images.unsplash.com/photo-1558981403-c5f91cbcf523?w=800&q=80" alt="Moto HG Motors">
             </div>
-            <div class="details">
-                <span class="brand">Sea-Doo</span>
-                <h2 class="v-name">GTI 130hp</h2>
-                <div class="specs">
-                    <span class="spec">2020</span>
-                    <span class="spec">80 Horas</span>
+            <div class="details-box">
+                <span class="tag-line">Duas Rodas Nacional</span>
+                <h2 class="v-title">Honda CB 500X ABS</h2>
+                <div class="info-grid">
+                    <span class="info-pill">2022</span>
+                    <span class="info-pill">Impecável</span>
+                    <span class="info-pill">Manual</span>
                 </div>
-                <div class="price-row">
-                    <span class="price-val">R$ 82.000</span>
+                <div class="price-container">
+                    <span class="price-label">À vista</span>
+                    <span class="price-main">R$ 43.500</span>
                 </div>
-                <a href="https://wa.me/5519998463668?text=Vi o Jet Ski no site" class="btn-whats">CONSULTAR NO ZAP</a>
+                <a href="https://wa.me/5519998463668?text=Quero a CB 500X" class="btn-cta">CONSULTAR AGORA</a>
+            </div>
+        </div>
+
+        <div class="v-item">
+            <div class="image-wrapper">
+                <div class="reel-trigger"><span>▶</span> VER VÍDEO REAL</div>
+                <img src="https://images.unsplash.com/photo-1621251912693-02f459141f92?w=800&q=80" alt="Jet Ski HG Motors">
+            </div>
+            <div class="details-box">
+                <span class="tag-line">Nautica Premium</span>
+                <h2 class="v-title">Sea-Doo GTI 130hp</h2>
+                <div class="info-grid">
+                    <span class="info-pill">2020</span>
+                    <span class="info-pill">80 Horas</span>
+                </div>
+                <div class="price-container">
+                    <span class="price-label">À vista</span>
+                    <span class="price-main">R$ 82.000</span>
+                </div>
+                <a href="https://wa.me/5519998463668?text=Quero o Jet Ski GTI" class="btn-cta">CONSULTAR AGORA</a>
             </div>
         </div>
 
     </div>
 
     <footer>
-        HG MOTORS - RUA DO COMÉRCIO, HORTOLÂNDIA/SP <br>
-        DESIGN POR JP DIAS
+        DESIGN V80 SHARK • HG MOTORS HORTOLÂNDIA
     </footer>
 
 </body>
