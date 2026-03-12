@@ -3,137 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LOG-PRO v79 SHARK | JP MASTER</title>
+    <title>LOG-PRO v79 RT | JP MASTER</title>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root { --p: #00ff41; --bg: #000; --card: #080808; --brd: #151515; --danger: #ff3131; --blue: #00d4ff; }
-        * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; outline: none; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; text-transform: uppercase; font-size: 10px; height: 100vh; overflow: hidden; }
-        
         header { padding: 12px; background: #050505; border-bottom: 2px solid var(--brd); display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron'; color: var(--p); }
         .screen { display: none; height: 100vh; flex-direction: column; background: #000; }
         .active { display: flex !important; }
         .scroll { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 150px; }
-
-        /* BOTOES VISÃO SHARK */
-        .btn { width: 100%; padding: 16px; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 4px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px; }
+        .btn { width: 100%; padding: 16px; border: none; font-family: 'Orbitron'; font-weight: 900; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px; }
         .btn-p { background: var(--p); color: #000; }
         .btn-dark { background: #111; color: #fff; border: 1px solid #222; }
-        .btn-danger { background: #200; color: var(--danger); border: 1px solid var(--danger); font-size: 8px; }
-
-        input, select, textarea { width: 100%; padding: 14px; background: #0a0a0a; border: 1px solid #222; color: var(--p); border-radius: 4px; font-family: 'Orbitron'; margin-bottom: 10px; font-size: 11px; }
-        
         .card { background: var(--card); border: 1px solid var(--brd); border-radius: 8px; padding: 15px; margin-bottom: 12px; }
-        .row-viva { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #111; align-items: center; }
+        input, textarea { width: 100%; padding: 14px; background: #0a0a0a; border: 1px solid #222; color: var(--p); border-radius: 4px; font-family: 'Orbitron'; margin-bottom: 10px; }
+        .row-viva { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #111; align-items: center; font-size: 11px; }
         .badge { background: rgba(0,255,65,0.1); color: var(--p); padding: 3px 8px; border-radius: 3px; font-weight: 900; border: 1px solid var(--p); }
-
         #reader { width: 100%; border-radius: 10px; overflow: hidden; border: 2px solid #111; margin-bottom: 10px; background: #050505; }
-        
-        /* TABELA SHARK */
-        .table-wrapper { border: 1px solid #111; border-radius: 8px; overflow-x: auto; background: #050505; }
-        table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        table { width: 100%; border-collapse: collapse; }
         th { background: #000; color: #444; padding: 10px; text-align: left; font-size: 8px; border-bottom: 2px solid #111; }
-        td { padding: 10px; border-bottom: 1px solid #080808; font-size: 10px; color: #ccc; }
-
-        /* PRINT */
-        .label-print { display:none; width: 40mm; height: 30mm; background:#fff; color:#000; padding:10px; text-align:center; }
-        @media print { .screen, header { display:none !important; } .label-print { display:block !important; } }
+        td { padding: 10px; border-bottom: 1px solid #080808; font-size: 10px; }
+        @media print { .screen, header { display:none !important; } #print-romaneio { display:block !important; color: #000; background: #fff; padding: 20px; } }
+        #print-romaneio { display: none; background: white; color: black; text-transform: none; }
     </style>
 </head>
 <body onload="init()">
 
 <div id="scr-login" class="screen active" style="align-items:center; justify-content:center;">
-    <div style="font-family:'Orbitron'; color:var(--p); font-size:40px; font-weight:900; text-align:center; line-height:0.8;">LOG-PRO<br><span style="font-size:10px; color:#333; letter-spacing:8px;">SHARK V79</span></div>
+    <div style="font-family:'Orbitron'; color:var(--p); font-size:35px; text-align:center;">LOG-PRO RT<br><span style="font-size:10px; color:#444;">SYNC SHARK</span></div>
     <div style="width: 280px; margin-top:40px;">
-        <input type="text" id="user-name" placeholder="OPERADOR">
-        <input type="password" id="pass" placeholder="CHAVE SHARK">
-        <button class="btn btn-p" onclick="auth()">ENTRAR NO FLUXO</button>
+        <input type="text" id="user-name" placeholder="USUÁRIO">
+        <input type="password" id="pass" placeholder="CHAVE">
+        <button class="btn btn-p" onclick="auth()">CONECTAR TERMINAL</button>
     </div>
 </div>
 
 <div id="scr-shark" class="screen">
-    <header><span>SHARK COMMAND</span> <button onclick="logout()" style="color:var(--danger); background:none; border:none; font-family:'Orbitron';">SAIR</button></header>
+    <header><span>MASTER DASHBOARD</span> <button onclick="logout()" style="color:var(--danger); background:none; border:none;">SAIR</button></header>
     <div class="scroll">
-        
         <div class="card">
-            <h3 style="color:var(--p); margin-top:0;">1. GESTÃO DE CARGA (IMPORTAR)</h3>
-            <textarea id="list-input" placeholder="COPIE E COLE DA PLANILHA (COD, QTD)" style="height:60px;"></textarea>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
-                <button class="btn btn-p" onclick="enviarCarga()">SUBIR LISTA</button>
-                <button class="btn btn-danger" onclick="limparCarga()">APAGAR LISTA</button>
-            </div>
+            <h3 style="color:var(--p); margin:0 0 10px 0;">GERENCIAR CARGA</h3>
+            <textarea id="list-input" placeholder="IMPORTAR: COD, QTD (EX: 789, 100)"></textarea>
+            <button class="btn btn-p" onclick="enviarCarga()">DISPARAR PARA OPERADORES</button>
+            <button class="btn btn-dark" style="color:var(--blue)" onclick="gerarRomaneio()">IMPRIMIR ROMANEIO CARGA</button>
         </div>
 
         <div class="card">
-            <h3 style="color:var(--p); margin-top:0;">2. BASE MASTER (ENDEREÇAMENTO)</h3>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
-                <input type="text" id="m-cod" placeholder="COD">
-                <input type="text" id="m-end" placeholder="ENDEREÇO">
+            <h3 style="color:var(--p); margin:0 0 10px 0;">AUDITORIA EM TEMPO REAL</h3>
+            <div style="max-height: 200px; overflow-y: auto; background:#000; border:1px solid #111;">
+                <table>
+                    <thead><tr><th>HORA</th><th>ITEM</th><th>QTD</th><th>OP</th></tr></thead>
+                    <tbody id="audit-body"></tbody>
+                </table>
             </div>
-            <button class="btn btn-dark" onclick="salvarMaster()">ATUALIZAR ENDEREÇO</button>
+            <button class="btn btn-dark" style="margin-top:10px; font-size:8px;" onclick="limparTudo()">ZERAR OPERAÇÃO ATUAL</button>
         </div>
-
-        <div class="table-wrapper">
-            <table>
-                <thead><tr><th>HORA</th><th>OP</th><th>TIPO</th><th>ITEM</th><th>QTD</th><th>END</th></tr></thead>
-                <tbody id="audit-body"></tbody>
-            </table>
-        </div>
-        <button class="btn btn-dark" style="margin-top:10px; color:var(--blue);" onclick="exportarRelatorio()">BAIXAR CSV ROI</button>
-        <button class="btn btn-danger" onclick="limparLogs()">RESETAR TODA AUDITORIA</button>
     </div>
 </div>
 
 <div id="scr-op" class="screen">
-    <header><span id="display-user">OPERADOR</span> <button onclick="logout()" style="color:var(--danger); background:none; border:none; font-family:'Orbitron';">SAIR</button></header>
+    <header><span id="display-user">OPERADOR</span> <button onclick="logout()" style="color:var(--danger); background:none; border:none;">SAIR</button></header>
     <div class="scroll">
-        
         <div class="card" style="border-left: 4px solid var(--p);">
-            <h4 style="color:var(--p); margin:0; font-size:8px;">PENDENTE NA DOCA:</h4>
-            <div id="op-list-picking" style="font-size:12px; font-weight:900; margin-top:5px;"></div>
+            <h4 style="color:var(--p); margin:0; font-size:8px;">PENDENTE CARREGAMENTO:</h4>
+            <div id="op-list-picking">AGUARDANDO LISTA...</div>
         </div>
 
-        <select id="mod-op" onchange="falar(this.value)">
-            <option value="ENTRADA">📥 ENTRADA</option>
-            <option value="SEPARACAO">📦 SEPARACAO</option>
-            <option value="AVARIA">⚠️ AVARIA</option>
-            <option value="SAIDA">🚚 EXPEDIÇÃO</option>
-        </select>
-
         <div style="display:flex; gap:5px;">
-            <input type="number" id="qtd-bipe" value="1" style="flex:1; text-align:center; font-size:20px;">
-            <button class="btn btn-dark" style="flex:1; margin:0;" onclick="toggleCamera()">SCANNER</button>
+            <input type="number" id="qtd-bipe" value="1" style="flex:1; font-size:20px; text-align:center;">
+            <button class="btn btn-dark" style="flex:1; margin:0;" onclick="toggleCamera()">LIGAR SCANNER</button>
         </div>
 
         <div id="reader"></div>
-
-        <div id="op-audit-body" class="card" style="background:#050505; color:#555; font-size:9px; height:60px; overflow:hidden;">
-            AGUARDANDO BIPE...
-        </div>
-
-        <button class="btn btn-dark" style="color:var(--blue);" onclick="gerarEtiqueta()">IMPRIMIR ETIQUETA</button>
+        <div id="op-log" class="card" style="font-size:9px; color:#555; height:50px; overflow:hidden;">AGUARDANDO BIPE...</div>
     </div>
 </div>
 
-<div id="print-area" class="label-print">
-    <div id="lp-nome" style="font-weight:bold; font-size:14px;"></div>
-    <div id="lp-cod" style="font-size:10px;"></div>
-    <div id="lp-end" style="font-size:22px; font-weight:900; border:2px solid #000; margin-top:5px;"></div>
+<div id="print-romaneio">
+    <h2 style="text-align:center; border-bottom: 2px solid #000;">LOG-PRO | ROMANEIO DE CARGA</h2>
+    <div id="print-content"></div>
+    <p style="margin-top: 20px; font-size: 10px;">Gerado em: <span id="print-date"></span></p>
 </div>
 
 <script>
-    // --- LÓGICA SHARK ENGINE ---
+    // --- SHARK SYNC ENGINE ---
+    const sharkChannel = new BroadcastChannel('shark_log_sync');
     let BASE_M = JSON.parse(localStorage.getItem('LP_BASE')) || {};
     let CARGA = JSON.parse(localStorage.getItem('LP_CARGA')) || {};
     let LOGS = JSON.parse(localStorage.getItem('LP_LOGS')) || [];
     let currentUser = localStorage.getItem('LP_SESSION') || "";
-    let scanner, camOn = false, ultimoCod = "";
+    let scanner, camOn = false;
 
-    function falar(t) {
-        const u = new SpeechSynthesisUtterance(t);
-        u.lang = 'pt-BR';
-        window.speechSynthesis.speak(u);
+    // ESCUTA EM TEMPO REAL
+    sharkChannel.onmessage = (event) => {
+        const { type, data } = event.data;
+        if (type === 'NEW_BIPE') {
+            LOGS.unshift(data);
+            if (CARGA[data.cod]) CARGA[data.cod].qtd_feita += data.q;
+            saveAndRefresh();
+        }
+        if (type === 'NEW_CARGA') {
+            CARGA = data;
+            saveAndRefresh();
+            falar("Nova carga recebida");
+        }
+        if (type === 'RESET') {
+            CARGA = {}; LOGS = [];
+            saveAndRefresh();
+        }
+    };
+
+    function saveAndRefresh() {
+        localStorage.setItem('LP_CARGA', JSON.stringify(CARGA));
+        localStorage.setItem('LP_LOGS', JSON.stringify(LOGS));
+        renderDoca();
+        renderShark();
+    }
+
+    function falar(t) { window.speechSynthesis.speak(new SpeechSynthesisUtterance(t)); }
+
+    function auth() {
+        const u = document.getElementById('user-name').value.toUpperCase().trim();
+        const p = document.getElementById('pass').value;
+        if((u==="JP"||u==="SHARK") && p==="9910" || u!=="" && p==="1234") {
+            localStorage.setItem('LP_SESSION', u);
+            location.reload();
+        } else alert("ACESSO NEGADO");
+    }
+
+    function logout() { localStorage.removeItem('LP_SESSION'); location.reload(); }
+
+    function enviarCarga() {
+        const linhas = document.getElementById('list-input').value.split('\n');
+        let novaCarga = {};
+        linhas.forEach(l => {
+            const [cod, qtd] = l.split(',');
+            if(cod && qtd) novaCarga[cod.trim()] = { cod: cod.trim(), qtd_pedida: parseInt(qtd), qtd_feita: 0 };
+        });
+        CARGA = novaCarga;
+        sharkChannel.postMessage({ type: 'NEW_CARGA', data: CARGA });
+        saveAndRefresh();
+        alert("CARGA ENVIADA");
+    }
+
+    async function processar(cod) {
+        const q = parseInt(document.getElementById('qtd-bipe').value) || 1;
+        const mov = { hora: new Date().toLocaleTimeString(), cod: cod, q: q, op: currentUser };
+        
+        sharkChannel.postMessage({ type: 'NEW_BIPE', data: mov });
+        LOGS.unshift(mov);
+        if (CARGA[cod]) CARGA[cod].qtd_feita += q;
+        
+        saveAndRefresh();
+        falar("OK");
+        document.getElementById('op-log').innerHTML = `BIPADO: ${cod} x${q}<br>` + document.getElementById('op-log').innerHTML;
+    }
+
+    function renderDoca() {
+        if(!document.getElementById('op-list-picking')) return;
+        let h = "";
+        Object.values(CARGA).forEach(p => {
+            const falta = p.qtd_pedida - p.qtd_feita;
+            if(falta > 0) h += `<div class="row-viva"><span>${p.cod}</span> <span class="badge">FALTAM ${falta}</span></div>`;
+        });
+        document.getElementById('op-list-picking').innerHTML = h || "DOCA LIMPA ✅";
+    }
+
+    function renderShark() {
+        if(!document.getElementById('audit-body')) return;
+        let h = "";
+        LOGS.slice(0, 30).forEach(m => {
+            h += `<tr><td>${m.hora}</td><td>${m.cod}</td><td>${m.q}</td><td>${m.op}</td></tr>`;
+        });
+        document.getElementById('audit-body').innerHTML = h;
+    }
+
+    function gerarRomaneio() {
+        let h = "<table border='1' style='width:100%; border-collapse:collapse;'><tr><th>COD</th><th>PEDIDO</th><th>CONFERIDO</th><th>STATUS</th></tr>";
+        Object.values(CARGA).forEach(p => {
+            const status = p.qtd_feita >= p.qtd_pedida ? "OK" : "PENDENTE";
+            h += `<tr><td>${p.cod}</td><td>${p.qtd_pedida}</td><td>${p.qtd_feita}</td><td>${status}</td></tr>`;
+        });
+        h += "</table>";
+        document.getElementById('print-content').innerHTML = h;
+        document.getElementById('print-date').innerText = new Date().toLocaleString();
+        window.print();
+    }
+
+    function limparTudo() {
+        if(confirm("ZERAR TUDO?")) {
+            sharkChannel.postMessage({ type: 'RESET' });
+            CARGA = {}; LOGS = [];
+            saveAndRefresh();
+        }
+    }
+
+    async function toggleCamera() {
+        if(!camOn) {
+            scanner = new Html5Qrcode("reader");
+            await scanner.start({ facingMode: "environment" }, { fps: 20, qrbox: 250 }, (t) => processar(t));
+            camOn = true;
+        } else { await scanner.stop(); camOn = false; }
     }
 
     function init() {
@@ -146,151 +218,7 @@
             renderShark();
         }
     }
-
-    // --- SISTEMA DE LOGIN ---
-    function auth() {
-        const u = document.getElementById('user-name').value.toUpperCase().trim();
-        const p = document.getElementById('pass').value;
-        if((u==="JP"||u==="SHARK") && p==="9910" || u!=="" && p==="1234") {
-            localStorage.setItem('LP_SESSION', u);
-            location.reload();
-        } else {
-            falar("Acesso Negado");
-            alert("CHAVE INCORRETA");
-        }
-    }
-
-    function logout() { localStorage.removeItem('LP_SESSION'); location.reload(); }
-
-    // --- GESTÃO DE CARGA (PLANILHA) ---
-    function enviarCarga() {
-        const texto = document.getElementById('list-input').value;
-        const linhas = texto.split('\n');
-        linhas.forEach(l => {
-            const [cod, qtd] = l.split(',');
-            if(cod && qtd) {
-                const c = cod.trim();
-                CARGA[c] = { cod: c, qtd_pedida: parseInt(qtd), qtd_feita: 0 };
-            }
-        });
-        localStorage.setItem('LP_CARGA', JSON.stringify(CARGA));
-        alert("CARGA SINCRONIZADA");
-        renderDoca();
-    }
-
-    function limparCarga() {
-        if(confirm("LIMPAR TODA A LISTA DE CARGA?")) {
-            CARGA = {};
-            localStorage.setItem('LP_CARGA', JSON.stringify(CARGA));
-            renderDoca();
-        }
-    }
-
-    function limparLogs() {
-        if(confirm("APAGAR HISTÓRICO DE AUDITORIA?")) {
-            LOGS = [];
-            localStorage.setItem('LP_LOGS', JSON.stringify(LOGS));
-            renderShark();
-        }
-    }
-
-    // --- OPERAÇÃO ---
-    async function processar(cod) {
-        ultimoCod = cod.trim();
-        const q = parseInt(document.getElementById('qtd-bipe').value) || 1;
-        const tipo = document.getElementById('mod-op').value;
-        
-        if(!BASE_M[ultimoCod]) {
-            falar("Novo item detectado");
-            const n = prompt("NOME DO ITEM:");
-            const e = prompt("ENDEREÇO:");
-            if(n) {
-                BASE_M[ultimoCod] = { nome: n.toUpperCase(), endereco: e.toUpperCase() };
-                localStorage.setItem('LP_BASE', JSON.stringify(BASE_M));
-            } else return;
-        }
-
-        const info = BASE_M[ultimoCod];
-        const mov = { 
-            hora: new Date().toLocaleTimeString(), 
-            op: currentUser, t: tipo, n: info.nome, q: q, end: info.endereco 
-        };
-
-        LOGS.unshift(mov);
-        localStorage.setItem('LP_LOGS', JSON.stringify(LOGS));
-
-        if(tipo === "SEPARACAO" && CARGA[ultimoCod]) {
-            CARGA[ultimoCod].qtd_feita += q;
-            localStorage.setItem('LP_CARGA', JSON.stringify(CARGA));
-            falar("Item Conferido");
-        } else {
-            falar("Bipado");
-        }
-
-        document.getElementById('op-audit-body').innerHTML = `[${mov.hora}] ${info.nome} x${q}<br>` + document.getElementById('op-audit-body').innerHTML;
-        renderDoca();
-        renderShark();
-    }
-
-    function renderDoca() {
-        if(!document.getElementById('op-list-picking')) return;
-        let h = "";
-        Object.values(CARGA).forEach(p => {
-            const falta = p.qtd_pedida - p.qtd_feita;
-            if(falta > 0) h += `<div class="row-viva"><span>${BASE_M[p.cod]?.nome || p.cod}</span> <span class="badge">FALTAM ${falta}</span></div>`;
-        });
-        document.getElementById('op-list-picking').innerHTML = h || "CARGA CONCLUÍDA ✅";
-    }
-
-    function renderShark() {
-        if(!document.getElementById('audit-body')) return;
-        let h = "";
-        LOGS.slice(0, 50).forEach(m => {
-            h += `<tr><td>${m.hora}</td><td>${m.op}</td><td>${m.t}</td><td>${m.n}</td><td>${m.q}</td><td>${m.end}</td></tr>`;
-        });
-        document.getElementById('audit-body').innerHTML = h;
-    }
-
-    // --- AUXILIARES ---
-    function salvarMaster() {
-        const c = document.getElementById('m-cod').value.trim();
-        const e = document.getElementById('m-end').value.toUpperCase();
-        if(c && BASE_M[c]) {
-            BASE_M[c].endereco = e;
-            localStorage.setItem('LP_BASE', JSON.stringify(BASE_M));
-            alert("ENDEREÇO ATUALIZADO");
-        }
-    }
-
-    async function toggleCamera() {
-        if(!camOn) {
-            scanner = new Html5Qrcode("reader");
-            await scanner.start({ facingMode: "environment" }, { fps: 20, qrbox: 250 }, (t) => processar(t));
-            camOn = true;
-        } else {
-            await scanner.stop();
-            camOn = false;
-        }
-    }
-
-    function exportarRelatorio() {
-        let csv = "HORA,OP,TIPO,ITEM,QTD,ENDERECO\n";
-        LOGS.forEach(m => { csv += `${m.hora},${m.op},${m.t},${m.n},${m.q},${m.end}\n`; });
-        const blob = new Blob([csv], {type: 'text/csv'});
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `LOGPRO_ROI_SHARK.csv`;
-        a.click();
-    }
-
-    function gerarEtiqueta() {
-        if(!ultimoCod || !BASE_M[ultimoCod]) return alert("BIPE O ITEM");
-        document.getElementById('lp-nome').innerText = BASE_M[ultimoCod].nome;
-        document.getElementById('lp-cod').innerText = ultimoCod;
-        document.getElementById('lp-end').innerText = BASE_M[ultimoCod].endereco;
-        window.print();
-    }
 </script>
 </body>
-    </html>
-    
+            </html>
+            
