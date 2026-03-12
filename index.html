@@ -3,33 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo HG Motors | Hortolândia</title>
+    <title>HG MOTORS | Catálogo Digital</title>
     <style>
+        /* Design Shark - Dark & High Tech */
+        :root {
+            --primary: #e63946;
+            --secondary: #25d366;
+            --bg: #0a0a0a;
+            --card-bg: #141414;
+            --text: #ffffff;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: #0d0d0d; color: #fff; }
-        
-        header { background: #000; padding: 20px; text-align: center; border-bottom: 2px solid #e63946; position: sticky; top: 0; z-index: 1000; }
-        .logo { font-size: 26px; font-weight: 900; }
-        .logo span { color: #e63946; }
+        body { background-color: var(--bg); color: var(--text); padding-bottom: 80px; }
 
-        .hero { padding: 40px 20px; text-align: center; background: #111; border-bottom: 1px solid #222; }
-        .hero h1 { font-size: 22px; margin-bottom: 10px; text-transform: uppercase; }
-        .hero p { color: #888; font-size: 14px; }
+        /* Header e Categorias Flutuantes */
+        header { 
+            background: rgba(0,0,0,0.9); 
+            padding: 15px; 
+            text-align: center; 
+            border-bottom: 1px solid #333;
+            position: sticky; top: 0; z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        .logo { font-size: 20px; font-weight: 900; letter-spacing: 2px; }
+        .logo span { color: var(--primary); }
 
-        .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .categories {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
+        }
+        .categories::-webkit-scrollbar { display: none; }
+        
+        .cat-btn {
+            background: #222;
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            border: 1px solid #333;
+        }
+        .cat-btn.active { background: var(--primary); border-color: var(--primary); }
 
-        .card { background: #161616; border-radius: 10px; overflow: hidden; border: 1px solid #222; position: relative; }
-        .card-img { width: 100%; height: 200px; object-fit: cover; opacity: 0.6; filter: grayscale(50%); }
-        .img-overlay { position: absolute; top: 80px; left: 0; width: 100%; text-align: center; color: #fff; font-weight: bold; text-shadow: 2px 2px 4px #000; font-size: 12px; text-transform: uppercase; border: 1px solid #e63946; background: rgba(230, 57, 70, 0.2); padding: 5px 0; }
+        /* Feed Espinha de Peixe */
+        .feed { max-width: 500px; margin: 0 auto; padding: 10px; }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 18px;
+            margin-bottom: 25px;
+            overflow: hidden;
+            border: 1px solid #222;
+            position: relative;
+        }
+
+        .card-media {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            background: #1a1a1a;
+        }
+        .card-media img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
         
-        .card-content { padding: 20px; }
-        .car-name { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
-        .price { font-size: 22px; font-weight: 900; color: #e63946; margin-bottom: 15px; }
+        /* Ícone de Play indicando que veio do Reel */
+        .play-icon {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(230, 57, 70, 0.8);
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .card-info { padding: 20px; }
+        .card-info h2 { font-size: 22px; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; }
+        .specs { display: flex; gap: 10px; color: #888; font-size: 13px; margin-bottom: 15px; }
         
-        .btn-whats { display: block; text-align: center; background: #25d366; color: #fff; text-decoration: none; padding: 12px; border-radius: 6px; font-weight: 700; font-size: 14px; }
-        
-        footer { text-align: center; padding: 40px; color: #444; font-size: 12px; }
+        .price-tag { font-size: 24px; font-weight: 900; color: #fff; margin-bottom: 20px; }
+
+        /* Botão WhatsApp Estilo MEC SHOP */
+        .btn-buy {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--secondary);
+            color: #fff;
+            text-decoration: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 15px;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.2);
+        }
+
+        /* Float Support Button */
+        .support-btn {
+            position: fixed;
+            bottom: 20px; right: 20px;
+            background: #fff; color: #000;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            text-decoration: none;
+            z-index: 999;
+        }
     </style>
 </head>
 <body>
@@ -38,50 +124,49 @@
         <div class="logo">HG <span>MOTORS</span></div>
     </header>
 
-    <div class="hero">
-        <h1>Vitrine Digital HG Motors</h1>
-        <p>Abaixo, a estrutura de carregamento rápido para o seu estoque.</p>
+    <div class="categories">
+        <a href="#" class="cat-btn active">Todos</a>
+        <a href="#" class="cat-btn">Carros</a>
+        <a href="#" class="cat-btn">Motos</a>
+        <a href="#" class="cat-btn">Jet Ski</a>
+        <a href="#" class="cat-btn">Seminovos</a>
     </div>
 
-    <div class="container">
-        <div class="grid">
-            
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&q=80&w=1000" class="card-img">
-                <div class="img-overlay">Aguardando Fotos Oficiais</div>
-                <div class="card-content">
-                    <h2 class="car-name">CHEVROLET ONIX</h2>
-                    <p class="price">CONSULTE VALOR</p>
-                    <a href="#" class="btn-whats">ESTOU INTERESSADO</a>
-                </div>
+    <div class="feed">
+        
+        <div class="card">
+            <div class="card-media">
+                <div class="play-icon">▶</div>
+                <img src="https://via.placeholder.com/500x700/1a1a1a/e63946?text=VEÍCULO+REEL" alt="Carro HG Motors">
             </div>
-
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=1000" class="card-img">
-                <div class="img-overlay">Aguardando Fotos Oficiais</div>
-                <div class="card-content">
-                    <h2 class="car-name">HONDA CIVIC</h2>
-                    <p class="price">CONSULTE VALOR</p>
-                    <a href="#" class="btn-whats">ESTOU INTERESSADO</a>
+            <div class="card-info">
+                <h2>Chevrolet Onix 1.0</h2>
+                <div class="specs">
+                    <span>2022</span> • <span>Manual</span> • <span>Ar Cond.</span>
                 </div>
+                <p class="price-tag">Consulte agora</p>
+                <a href="https://wa.me/SEU_NUMERO" class="btn-buy">TENHO INTERESSE</a>
             </div>
-
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&q=80&w=1000" class="card-img">
-                <div class="img-overlay">Aguardando Fotos Oficiais</div>
-                <div class="card-content">
-                    <h2 class="car-name">JEEP RENEGADE</h2>
-                    <p class="price">CONSULTE VALOR</p>
-                    <a href="#" class="btn-whats">ESTOU INTERESSADO</a>
-                </div>
-            </div>
-
         </div>
+        <div class="card">
+            <div class="card-media">
+                <div class="play-icon">▶</div>
+                <img src="https://via.placeholder.com/500x700/1a1a1a/e63946?text=VEÍCULO+REEL" alt="Carro HG Motors">
+            </div>
+            <div class="card-info">
+                <h2>Honda Civic LXR</h2>
+                <div class="specs">
+                    <span>2016</span> • <span>Automático</span> • <span>Couro</span>
+                </div>
+                <p class="price-tag">Consulte agora</p>
+                <a href="https://wa.me/SEU_NUMERO" class="btn-buy">TENHO INTERESSE</a>
+            </div>
+        </div>
+
     </div>
 
-    <footer>
-        PROTÓTIPO DE ALTA PERFORMANCE PARA HG MOTORS
-    </footer>
+    <a href="https://wa.me/SEU_NUMERO" class="support-btn">SUPORTE HG MOTORS</a>
 
 </body>
-</html>
+                    </html>
+                    
