@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>LOG-PRO v82 FINAL</title>
+<title>LOG-PRO v90 | TITAN</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <script src="https://unpkg.com/html5-qrcode"></script>
@@ -16,31 +16,32 @@ header{padding:15px;border-bottom:2px solid var(--brd);display:flex;justify-cont
 .c{background:var(--sf);border:1px solid var(--brd);border-radius:12px;padding:15px;margin-bottom:15px}
 h3{font-family:'Orbitron';font-size:9px;color:var(--p);margin-bottom:12px;display:flex;align-items:center;gap:8px;border-left:3px solid var(--p);padding-left:8px}
 input,select{width:100%;padding:14px;background:#050505;border:1px solid #222;color:#fff;border-radius:8px;font-size:11px;margin-bottom:10px;font-weight:700}
-.btn{width:100%;padding:16px;border:none;border-radius:10px;font-family:'Orbitron';font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;text-transform:uppercase;margin-bottom:5px}
-.b-p{background:var(--p);color:#000}.b-s{background:var(--s);color:#fff}.b-d{background:var(--dg);color:#fff}
+.btn{width:100%;padding:16px;border:none;border-radius:10px;font-family:'Orbitron';font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;text-transform:uppercase;margin-bottom:5px;transition:0.2s}
+.btn:active{transform:scale(0.95)}.b-p{background:var(--p);color:#000}.b-s{background:var(--s);color:#fff}.b-d{background:var(--dg);color:#fff}
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:15px}
 .kpi{background:#0a0a0a;border:1px solid #222;padding:10px 5px;border-radius:8px;text-align:center}
 .kpi span{font-family:'Orbitron';font-size:14px;color:var(--p);display:block}
-#r-db,#r-op,#r-mot{width:100%;background:#000;border-radius:12px;border:2px solid var(--p);min-height:200px;display:none}
+#r-op,#r-mot{width:100%;background:#000;border-radius:12px;border:2px solid var(--p);min-height:200px;display:none}
 .nav{display:flex;background:#000;border-top:2px solid var(--brd);position:fixed;bottom:0;width:100%;height:70px;z-index:100}
 .nav div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#444;font-size:8px;font-weight:800;gap:4px}
 .nav .act-tab{color:var(--p);border-top:3px solid var(--p);background:#050505}
 table{width:100%;border-collapse:collapse;font-size:9px}td{padding:12px 5px;border-bottom:1px solid #111}
 .pill{padding:4px 6px;border-radius:4px;font-weight:900;font-size:7px;color:#000}
-.pk{background:#111;padding:12px;border-radius:8px;border-left:4px solid var(--w);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.item-bipado{display:flex;justify-content:space-between;padding:10px;background:#111;border-bottom:1px solid #222;font-size:10px}
+.critico{border:2px solid var(--dg)!important;animation:blink 1s infinite}@keyframes blink{50%{opacity:0.5}}
 </style>
 </head>
 <body onload="init()">
 
 <div id="s-log" class="scr act" style="justify-content:center;align-items:center;padding:40px">
     <div style="font-family:'Orbitron';color:var(--p);font-size:35px">LOG-PRO</div>
-    <div style="color:#555;font-size:10px;margin-bottom:40px">COMPACT V82</div>
+    <div style="color:#555;font-size:10px;margin-bottom:40px">TITAN v90 | JP DIAS</div>
     <input type="password" id="pin" placeholder="PIN" style="text-align:center">
-    <button class="btn b-p" onclick="login()">ACESSAR</button>
+    <button class="btn b-p" onclick="login()">INITIALIZE</button>
 </div>
 
 <div id="s-shk" class="scr">
-    <header><span>PAINEL SHARK</span><button onclick="sair()" class="btn b-d" style="width:60px;height:30px;font-size:8px">SAIR</button></header>
+    <header><span>SHARK INTELLIGENCE</span><button onclick="sair()" class="btn b-d" style="width:60px;height:30px;font-size:8px">SAIR</button></header>
     <div class="scroll">
         <div class="grid">
             <div class="kpi"><span id="k-in">0</span><small>ENT</small></div>
@@ -48,111 +49,142 @@ table{width:100%;border-collapse:collapse;font-size:9px}td{padding:12px 5px;bord
             <div class="kpi"><span id="k-out" style="color:var(--s)">0</span><small>SAI</small></div>
             <div class="kpi"><span id="k-av" style="color:var(--dg)">0</span><small>AVA</small></div>
         </div>
+        <div id="alertas" style="margin-bottom:10px"></div>
         <div class="c">
-            <h3><i class="fa-solid fa-database"></i> DADOS</h3>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-                <button class="btn b-s" style="padding:10px;font-size:8px" onclick="exp()">EXTRAIR</button>
-                <button class="btn b-s" style="padding:10px;font-size:8px" onclick="document.getElementById('fin').click()">INSERIR</button>
-            </div>
-            <button class="btn b-d" style="margin-top:8px;padding:10px;font-size:8px" onclick="limpar()">APAGAR TUDO</button>
-            <input type="file" id="fin" style="display:none" onchange="imp(this)">
+            <h3><i class="fa-solid fa-gears"></i> SISTEMA</h3>
+            <button class="btn b-s btn-small" onclick="exp()">BACKUP JSON</button>
+            <button class="btn b-d btn-small" style="margin-top:5px" onclick="limpar()">RESET TOTAL</button>
         </div>
         <div class="c">
-            <h3><i class="fa-solid fa-boxes-packing"></i> FILA PICKING</h3>
-            <div id="fila"></div>
-        </div>
-        <div class="c">
-            <h3><i class="fa-solid fa-list"></i> LOGS</h3>
-            <input type="text" id="busc" placeholder="🔍 BUSCAR..." onkeyup="rend()">
+            <h3><i class="fa-solid fa-list"></i> HISTÓRICO GLOBAL</h3>
+            <input type="text" id="busc" placeholder="BUSCAR..." onkeyup="rend()">
             <table><tbody id="logs"></tbody></table>
         </div>
     </div>
 </div>
 
 <div id="s-op" class="scr">
-    <header><span>OPERADOR</span><button onclick="sair()" class="btn b-d" style="width:60px;height:30px;font-size:8px">SAIR</button></header>
+    <header><span>OPERADOR PRO</span><button onclick="gerarRomaneio()" class="btn b-s" style="width:80px;height:30px;font-size:8px">ROMANEIO</button></header>
     <div class="scroll">
         <div class="c">
             <div id="r-op"></div>
             <button class="btn b-p" id="b-op" onclick="cam('r-op','b-op',0)">CÂMERA</button>
         </div>
         <div class="c">
-            <input type="text" id="man" placeholder="EAN MANUAL">
-            <button class="btn b-s" onclick="bMan()">BIPAR MANUAL</button>
-        </div>
-        <div class="c">
             <select id="sel">
                 <option value="ENTRADA">📥 ENTRADA</option>
                 <option value="SEPARACAO">📦 SEPARAÇÃO</option>
-                <option value="SAIDA">🚚 SAÍDA</option>
+                <option value="SAIDA">🚚 EXPEDIÇÃO</option>
             </select>
-            <button class="btn b-d" onclick="av()">AVARIA</button>
+            <input type="text" id="man" placeholder="EAN MANUAL">
+            <button class="btn b-s" onclick="bMan()">BIPAR</button>
+        </div>
+        <div class="c">
+            <h3><i class="fa-solid fa-receipt"></i> ÚLTIMOS BIPADOS (SESSÃO)</h3>
+            <div id="lista-bipados"></div>
+            <button class="btn b-d" style="margin-top:10px;height:35px;font-size:8px" onclick="limparSessao()">LIMPAR SESSÃO</button>
         </div>
     </div>
 </div>
 
 <div id="s-mot" class="scr">
-    <header><span>ROTA</span><button onclick="sair()" class="btn b-d" style="width:60px;height:30px;font-size:8px">SAIR</button></header>
+    <header><span>ENTREGA GPS</span><button onclick="sair()" class="btn b-d" style="width:60px;height:30px;font-size:8px">SAIR</button></header>
     <div class="scroll">
         <div class="c">
             <div id="r-mot"></div>
-            <button class="btn b-s" id="b-mot" onclick="cam('r-mot','b-mot',1)">LER ROMANEIO</button>
+            <button class="btn b-s" id="b-mot" onclick="cam('r-mot','b-mot',1)">SCAN ROMANEIO</button>
         </div>
         <div id="rom" class="c" style="display:none;border-left:5px solid var(--p)">
             <h2 id="rom-id"></h2>
-            <button class="btn b-p" style="margin-top:10px" onclick="log('MOT','ROTA','SAÍDA INICIADA');document.getElementById('rom').style.display='none'">CONFIRMAR SAÍDA</button>
+            <p id="gps-info" style="font-size:8px;color:var(--p);margin:5px 0"></p>
+            <button class="btn b-p" onclick="confirmarRota()">CONFIRMAR ENTREGA (GPS)</button>
         </div>
     </div>
 </div>
 
 <div class="nav" id="nv" style="display:none">
-    <div class="act-tab" onclick="tab('s-shk',this)"><i class="fa-solid fa-chart-line fa-lg"></i>SHARK</div>
-    <div onclick="tab('s-op',this)"><i class="fa-solid fa-barcode fa-lg"></i>BIPER</div>
-    <div onclick="tab('s-mot',this)"><i class="fa-solid fa-truck fa-lg"></i>ROTA</div>
+    <div class="act-tab" onclick="tab('s-shk',this)"><i class="fa-solid fa-chart-line"></i>SHARK</div>
+    <div onclick="tab('s-op',this)"><i class="fa-solid fa-barcode"></i>OP</div>
+    <div onclick="tab('s-mot',this)"><i class="fa-solid fa-truck"></i>ROTA</div>
 </div>
 
 <script>
-let l=JSON.parse(localStorage.getItem('L_V82')||'[]'), db=JSON.parse(localStorage.getItem('D_V82')||'{}');
-let scn, cm=0, sld={};
+let l=JSON.parse(localStorage.getItem('L_V90')||'[]'), db=JSON.parse(localStorage.getItem('D_V90')||'{}'), sessao=[];
+let scn, cm=0, sld={}, gps="";
+
 function init(){rend()}
 function login(){if(document.getElementById('pin').value){document.getElementById('s-log').classList.remove('act');document.getElementById('nv').style.display='flex';tab('s-shk',document.querySelector('.nav div'))}}
 function sair(){if(cm)scn.stop();location.reload()}
 function tab(id,e){document.querySelectorAll('.scr').forEach(s=>s.classList.remove('act'));document.querySelectorAll('.nav div').forEach(t=>t.classList.remove('act-tab'));document.getElementById(id).classList.add('act');e.classList.add('act-tab');rend()}
+
 function cam(div,btn,isM){
     let b=document.getElementById(btn), d=document.getElementById(div);
     if(!cm){d.style.display='block';scn=new Html5Qrcode(div);scn.start({facingMode:"environment"},{fps:15,qrbox:250},isM?oM:oO);b.innerText="PARAR";cm=1}
     else{scn.stop().then(()=>{d.style.display='none';d.innerHTML="";b.innerText="CÂMERA";cm=0})}
 }
-function oM(c){document.getElementById('rom').style.display='block';document.getElementById('rom-id').innerText="CARGA: "+c}
-function oO(c){
-    if(!db[c]){let n=prompt("NOVO ITEM! NOME:");if(n){db[c]=n;localStorage.setItem('D_V82',JSON.stringify(db))}else return}
-    let t=document.getElementById('sel').value;
-    if(t!=='ENTRADA'&&(sld[db[c]]||0)<=0){alert("HARD-LOCK: SALDO INSUFICIENTE PARA "+t);return}
-    let q=prompt(`ITEM: ${db[c]}\nQTD PARA ${t}:`,"1");
-    if(q&&q>0)log('OP',t,`${db[c]} (${c}) | QTD: ${q}`)
+
+function oM(c){
+    document.getElementById('rom').style.display='block';
+    document.getElementById('rom-id').innerText="ROM: "+c;
+    navigator.geolocation.getCurrentPosition(p=>{
+        gps = `${p.coords.latitude},${p.coords.longitude}`;
+        document.getElementById('gps-info').innerText = "📍 GPS LOCALIZADO: " + gps;
+    });
 }
+
+function oO(c){
+    if(!db[c]){let n=prompt("PRODUTO NOVO! NOME:");if(n){db[c]=n;localStorage.setItem('D_V90',JSON.stringify(db))}else return}
+    let t=document.getElementById('sel').value;
+    if(t!=='ENTRADA'&&(sld[db[c]]||0)<=0){alert("HARD-LOCK: ESTOQUE ZERADO!");return}
+    let q=prompt(`QTD PARA ${t}:`,"1");
+    if(q&&q>0){
+        let registro = {item:db[c], cod:c, qtd:q, hora:new Date().toLocaleTimeString(), tipo:t};
+        sessao.unshift(registro);
+        log('OP',t,`${db[c]} (${c}) | QTD: ${q}`);
+        atualizarSessao();
+    }
+}
+
+function atualizarSessao(){
+    let h=""; sessao.forEach(x=>h+=`<div class="item-bipado"><span>${x.item}</span><b>${x.qtd} UN</b></div>`);
+    document.getElementById('lista-bipados').innerHTML=h;
+}
+
+function gerarRomaneio(){
+    if(sessao.length===0){alert("NADA BIPADO NA SESSÃO!");return}
+    let txt = "ROMANEIO DIGITAL LOG-PRO\n\n";
+    sessao.forEach(x=>txt+=`[${x.tipo}] ${x.item} - ${x.qtd} UN\n`);
+    alert(txt + "\nEnviando para o sistema de carga...");
+    log('OP','ROMANEIO','GEROU ROMANEIO COM '+sessao.length+' ITENS');
+}
+
 function bMan(){let c=document.getElementById('man').value;if(c)oO(c);document.getElementById('man').value=""}
-function av(){let c=prompt("EAN:");if(c){let q=prompt("QTD:");if(q)log('OP','AVARIA',`${db[c]||c} | QTD: ${q}`)}}
-function log(o,a,i){l.unshift({t:new Date().toLocaleTimeString(),o,a,i});localStorage.setItem('L_V82',JSON.stringify(l.slice(0,1000)));rend()}
-function limpar(){if(confirm("RESETAR TUDO?")){localStorage.clear();location.reload()}}
-function exp(){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify({l,db})],{type:"application/json"}));a.download="BK_V82.json";a.click()}
-function imp(i){let r=new FileReader();r.onload=e=>{let d=JSON.parse(e.target.result);if(d.l){l=d.l;db=d.db;localStorage.setItem('L_V82',JSON.stringify(l));localStorage.setItem('D_V82',JSON.stringify(db));rend();alert("OK!")}};if(i.files[0])r.readAsText(i.files[0])}
+function confirmarRota(){log('MOT','ENTREGA','CONFIRMADO EM: '+gps);alert("ENTREGA REGISTRADA NO MAPA!");sair()}
+function log(o,a,i){l.unshift({t:new Date().toLocaleTimeString(),o,a,i});localStorage.setItem('L_V90',JSON.stringify(l.slice(0,1000)));rend()}
+function limparSessao(){sessao=[];atualizarSessao()}
+function limpar(){if(confirm("LIMPAR TUDO?")){localStorage.clear();location.reload()}}
+function exp(){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify({l,db})],{type:"application/json"}));a.download="LOGPRO_TITAN.json";a.click()}
+
 function rend(){
-    let h="",e=0,sp=0,sa=0,a=0,fl={},bs=document.getElementById('busc').value.toLowerCase();sld={};
+    let h="",e=0,sp=0,sa=0,av=0,fl={},bs=document.getElementById('busc').value.toLowerCase();sld={};
     l.forEach(x=>{
         let q=parseInt(x.i.split('QTD: ')[1])||0, id=x.i.split(' (')[0].split(' |')[0];
         fl[id]=fl[id]||0;
-        if(x.a==='ENTRADA'){e+=q;fl[id]+=q}else if(x.a==='SEPARACAO'){sp+=q;fl[id]-=q}else if(x.a==='SAIDA'){sa+=q}else if(x.a==='AVARIA'){a+=q;fl[id]-=q}
+        if(x.a==='ENTRADA'){e+=q;fl[id]+=q}else if(x.a==='SEPARACAO'){sp+=q;fl[id]-=q}else if(x.a==='SAIDA'){sa+=q}
         sld[id]=fl[id];
         if((x.i+" "+x.a).toLowerCase().includes(bs)){
-            let c=x.a==='ENTRADA'?'#007aff':x.a==='SEPARACAO'?'#ffae00':x.a==='AVARIA'?'#ff3b30':'#00ff41';
-            h+=`<tr><td style="color:#888">${x.t}</td><td><span class="pill" style="background:${c}">${x.a}</span></td><td><b>${x.i}</b></td></tr>`;
+            let c=x.a==='ENTRADA'?'#007aff':x.a==='SEPARACAO'?'#ffae00':'#00ff41';
+            h+=`<tr><td>${x.t}</td><td><span class="pill" style="background:${c}">${x.a}</span></td><td><b>${x.i}</b></td></tr>`;
         }
     });
-    document.getElementById('logs').innerHTML=h;document.getElementById('k-in').innerText=e;document.getElementById('k-sep').innerText=sp;document.getElementById('k-out').innerText=sa;document.getElementById('k-av').innerText=a;
-    let fh="";for(let k in fl)if(fl[k]>0)fh+=`<div class="pk"><span>${k}</span><b style="color:var(--w)">${fl[k]} PENDENTE</b></div>`;
-    document.getElementById('fila').innerHTML=fh||'<p style="text-align:center;color:#444">TUDO LIMPO!</p>';
+    document.getElementById('logs').innerHTML=h;
+    document.getElementById('k-in').innerText=e;document.getElementById('k-sep').innerText=sp;document.getElementById('k-out').innerText=sa;
+    
+    // ALERTA DE ESTOQUE BAIXO (Pilar 3)
+    let ah=""; for(let k in fl) if(fl[k]>0 && fl[k]<5) ah+=`<div class="c critico" style="padding:10px;color:var(--dg)">⚠️ ESTOQUE BAIXO: ${k} (${fl[k]} UN)</div>`;
+    document.getElementById('alertas').innerHTML=ah;
 }
 </script>
 </body>
-</html>
+    </html>
+    
