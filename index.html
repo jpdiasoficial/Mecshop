@@ -3,96 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HG MOTORS | ULTIMATE v95</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+    <title>HG MOTORS | PREMIUM SELECTION</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        :root { --gold: #D4AF37; --bg: #050505; --glass: rgba(255, 255, 255, 0.03); --glass-border: rgba(255, 255, 255, 0.1); }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: #fff; line-height: 1.4; }
-
-        /* HEADER GLASS */
-        header { position: fixed; top: 0; width: 100%; z-index: 100; padding: 20px; background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-weight: 900; font-size: 20px; color: var(--gold); letter-spacing: -1px; }
-
-        .container { padding: 100px 15px 40px; }
-
-        /* FILTROS NATIVOS */
-        .scroller { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 20px; scrollbar-width: none; }
-        .scroller::-webkit-scrollbar { display: none; }
-        .btn-f { background: var(--glass); border: 1px solid var(--glass-border); color: #888; padding: 12px 22px; border-radius: 50px; font-size: 11px; font-weight: 900; text-transform: uppercase; white-space: nowrap; }
-        .btn-f.active { background: #fff; color: #000; border-color: #fff; }
-
-        /* CARD GALÁTICO */
-        .card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 24px; overflow: hidden; margin-bottom: 25px; transition: 0.3s; }
-        .img-area { position: relative; width: 100%; height: 280px; }
-        .img-area img { width: 100%; height: 100%; object-fit: cover; }
+        :root { 
+            --gold: #D4AF37; --bg: #0A0A0A; --card: #161616; --glass: rgba(255,255,255,0.03); 
+            --border: rgba(255,255,255,0.08); --w: #25D366; --text: #E0E0E0;
+        }
         
-        .overlay-tags { position: absolute; top: 15px; left: 15px; right: 15px; display: flex; justify-content: space-between; }
-        .tag { background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); padding: 6px 14px; border-radius: 50px; font-size: 9px; font-weight: 900; border: 1px solid rgba(255,255,255,0.1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: var(--text); overflow-x: hidden; line-height: 1.6; }
 
-        .content { padding: 20px; }
-        .car-name { font-size: 22px; font-weight: 900; text-transform: uppercase; margin-bottom: 4px; }
-        .car-info { font-size: 13px; color: #aaa; margin-bottom: 20px; }
+        /* HEADER FACEBOOK STYLE (ULTRA GLASS) */
+        header { 
+            position: fixed; top: 0; width: 100%; z-index: 1000; padding: 15px 20px;
+            background: rgba(10, 10, 10, 0.75); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo-group h1 { font-weight: 800; font-size: 19px; color: var(--gold); letter-spacing: -0.5px; }
+        .logo-group p { font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: #666; font-weight: 700; }
+
+        .container { padding: 90px 16px 40px; max-width: 600px; margin: 0 auto; }
+
+        /* STORIES/CATEGORIAS ESTILO APP */
+        .categories { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 20px; scrollbar-width: none; }
+        .categories::-webkit-scrollbar { display: none; }
+        .cat-item { 
+            min-width: 85px; height: 110px; background: var(--card); border-radius: 18px; border: 1px solid var(--border);
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; transition: 0.3s;
+        }
+        .cat-item i { font-size: 20px; color: var(--gold); }
+        .cat-item span { font-size: 10px; font-weight: 800; color: #999; }
+        .cat-item.active { border-color: var(--gold); background: rgba(212, 175, 55, 0.05); }
+        .cat-item.active span { color: #fff; }
+
+        /* CARD NIVEL GALATICO */
+        .card { 
+            background: var(--card); border-radius: 28px; overflow: hidden; margin-bottom: 25px; 
+            border: 1px solid var(--border); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .card:active { transform: scale(0.98); }
+
+        .media-box { position: relative; width: 100%; height: 350px; background: #000; overflow: hidden; }
+        .media-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s; }
         
-        .price-area { background: rgba(255,255,255,0.02); border-radius: 16px; padding: 15px; margin-bottom: 20px; border: 1px dashed rgba(255,255,255,0.1); }
-        .label { font-size: 10px; color: var(--gold); font-weight: 900; display: block; margin-bottom: 4px; }
-        .val { font-size: 26px; font-weight: 900; }
-        .parc { font-size: 12px; color: #666; font-weight: 600; }
+        /* OVERLAYS SHARK GOLD */
+        .badge-top { 
+            position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.6); 
+            backdrop-filter: blur(10px); padding: 6px 14px; border-radius: 50px; 
+            font-size: 9px; font-weight: 800; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 6px;
+        }
+        .badge-top .pulse { width: 6px; height: 6px; background: var(--w); border-radius: 50%; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 
-        .btn-zap { background: #25D366; color: #fff; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 20px; border-radius: 18px; font-weight: 900; font-size: 14px; text-transform: uppercase; }
+        .info-content { padding: 22px; }
+        .car-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .car-title { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+        .car-year { background: var(--gold); color: #000; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 900; }
+
+        .tags-row { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+        .tag { font-size: 11px; color: #888; background: rgba(255,255,255,0.04); padding: 5px 12px; border-radius: 8px; }
+
+        .price-section { 
+            display: flex; justify-content: space-between; align-items: flex-end; 
+            padding: 18px; background: rgba(255,255,255,0.02); border-radius: 20px; border: 1px solid var(--border); margin-bottom: 15px;
+        }
+        .price-label { font-size: 10px; font-weight: 700; color: var(--gold); text-transform: uppercase; display: block; }
+        .price-value { font-size: 26px; font-weight: 800; color: #fff; }
+        .price-info { font-size: 11px; color: #555; font-weight: 600; text-align: right; }
+
+        /* CTA FACEBOOK STYLE */
+        .btn-whatsapp { 
+            background: var(--w); color: #fff; text-decoration: none; display: flex; align-items: center; 
+            justify-content: center; gap: 12px; padding: 20px; border-radius: 20px; font-weight: 800; 
+            font-size: 15px; box-shadow: 0 12px 24px rgba(37, 211, 102, 0.15); transition: 0.3s;
+        }
+
+        /* SKELETON LOADING EFFECT */
+        .skeleton { background: linear-gradient(90deg, #161616 25%, #222 50%, #161616 75%); background-size: 200% 100%; animation: loading 1.5s infinite; }
+        @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
     </style>
 </head>
-<body onload="render()">
+<body onload="init()">
 
     <header>
-        <div class="logo">HG MOTORS</div>
-        <div style="font-size: 12px; font-weight: 900; color: #fff;">ESTOQUE (12)</div>
+        <div class="logo-group">
+            <h1>HG MOTORS</h1>
+            <p>Selection & Luxury</p>
+        </div>
+        <div style="font-size: 18px; color: #fff;"><i class="fa-solid fa-magnifying-glass"></i></div>
     </header>
 
     <div class="container">
-        <div class="scroller">
-            <button class="btn-f active" onclick="filter('TODOS')">Todos</button>
-            <button class="btn-f" onclick="filter('PREMIUM')">Premium</button>
-            <button class="btn-f" onclick="filter('SUV')">SUVs</button>
-            <button class="btn-f" onclick="filter('SEDAN')">Sedans</button>
+        <div class="categories">
+            <div class="cat-item active" onclick="filter('TODOS')"><i class="fa-solid fa-border-all"></i><span>TODOS</span></div>
+            <div class="cat-item" onclick="filter('SEDAN')"><i class="fa-solid fa-car-side"></i><span>SEDANS</span></div>
+            <div class="cat-item" onclick="filter('SUV')"><i class="fa-solid fa-car-rear"></i><span>SUVS</span></div>
+            <div class="cat-item" onclick="filter('ESPORTIVO')"><i class="fa-solid fa-gauge-high"></i><span>PREMIUM</span></div>
+            <div class="cat-item" onclick="filter('MOTO')"><i class="fa-solid fa-motorcycle"></i><span>MOTOS</span></div>
         </div>
 
-        <div id="vitrine"></div>
+        <div id="feed"></div>
     </div>
 
     <script>
-        const veiculos = [
-            { cat: 'PREMIUM', nome: 'BMW 320i Sport', desc: 'M Sport | Turbo | 2022 | Branca', preco: '249.900', img: '5739.jpg' },
-            { cat: 'SUV', nome: 'Jeep Compass Longitude', desc: 'Diesel 4x4 | Couro | 2021 | Prata', preco: '158.900', img: '5743.jpg' },
-            { cat: 'SEDAN', nome: 'Honda Civic G10', desc: 'EXL | Full LED | 2020 | Cinza', preco: '119.900', img: '5745.jpg' },
-            { cat: 'SUV', nome: 'Chevrolet Equinox', desc: 'Premier Turbo | Teto | 2021 | Branca', preco: '145.900', img: '5746.jpg' },
-            { cat: 'PREMIUM', nome: 'Audi A3 Sedan', desc: 'S-Line | Virtual Cockpit | 2022', preco: '189.900', img: '5752.jpg' }
+        // BANCO DE DADOS SHARK v100
+        const estoque = [
+            { id: 1, cat: 'ESPORTIVO', marca: 'BMW', modelo: '320i M Sport', ano: '2022', km: '12.000km', motor: '2.0 Turbo', preco: '249.900', img: '5739.jpg' },
+            { id: 2, cat: 'SUV', marca: 'JEEP', modelo: 'Compass Longitude', ano: '2021', km: '32.000km', motor: 'Diesel 4x4', preco: '158.900', img: '5743.jpg' },
+            { id: 3, cat: 'SEDAN', marca: 'HONDA', modelo: 'Civic G10 EXL', ano: '2020', km: '45.000km', motor: '1.5 Turbo', preco: '119.900', img: '5745.jpg' },
+            { id: 4, cat: 'SUV', marca: 'CHEVROLET', modelo: 'Equinox Premier', ano: '2021', km: '28.000km', motor: 'AWD Turbo', preco: '145.900', img: '5746.jpg' },
+            { id: 5, cat: 'ESPORTIVO', marca: 'AUDI', modelo: 'A3 Sedan S-Line', ano: '2022', km: '8.500km', motor: 'Performance', preco: '189.900', img: '5752.jpg' },
+            { id: 6, cat: 'MOTO', marca: 'HONDA', modelo: 'CB 500X Adventure', ano: '2020', km: '15.000km', motor: '500cc ABS', preco: '38.500', img: '5740.jpg' }
         ];
 
-        function render(f = 'TODOS') {
-            const vitrine = document.getElementById('vitrine');
-            const lista = f === 'TODOS' ? veiculos : veiculos.filter(v => v.cat === f);
+        function init() { render('TODOS'); }
+
+        function render(f) {
+            const feed = document.getElementById('feed');
+            const data = f === 'TODOS' ? estoque : estoque.filter(v => v.cat === f);
             
-            vitrine.innerHTML = lista.map(v => `
+            feed.innerHTML = data.map(v => `
                 <div class="card">
-                    <div class="img-area">
-                        <img src="${v.img}" alt="${v.nome}">
-                        <div class="overlay-tags">
-                            <span class="tag">${v.cat}</span>
-                            <span class="tag" style="background:var(--gold); color:#000;">NOVIDADE</span>
-                        </div>
+                    <div class="media-box">
+                        <img src="${v.img}" alt="${v.modelo}" loading="lazy" onerror="this.src='https://via.placeholder.com/600x400/161616/D4AF37?text=HG+MOTORS'">
+                        <div class="badge-top"><div class="pulse"></div> DISPONÍVEL</div>
                     </div>
-                    <div class="content">
-                        <h2 class="car-name">${v.nome}</h2>
-                        <p class="car-info">${v.desc}</p>
-                        <div class="price-area">
-                            <span class="label">VALOR À VISTA</span>
-                            <span class="val">R$ ${v.preco}</span><br>
-                            <span class="parc">Financiamento em até 60x</span>
+                    <div class="info-content">
+                        <div class="car-header">
+                            <div>
+                                <h2 class="car-title">${v.modelo}</h2>
+                                <p style="color:var(--gold); font-size:11px; font-weight:700;">${v.marca} • PERFORMANCE SELECTION</p>
+                            </div>
+                            <span class="car-year">${v.ano}</span>
                         </div>
-                        <a href="https://wa.me/5519999999999" class="btn-zap">
-                            <i class="fab fa-whatsapp"></i> Tenho Interesse
+                        <div class="tags-row">
+                            <span class="tag"><i class="fa-solid fa-road"></i> ${v.km}</span>
+                            <span class="tag"><i class="fa-solid fa-bolt"></i> ${v.motor}</span>
+                            <span class="tag"><i class="fa-solid fa-shield-check"></i> Laudo Aprovado</span>
+                        </div>
+                        <div class="price-section">
+                            <div>
+                                <span class="price-label">Oportunidade HG</span>
+                                <span class="price-value">R$ ${v.preco}</span>
+                            </div>
+                            <div class="price-info">
+                                <span style="display:block">12x R$ 12.800</span>
+                                <span style="color:var(--w)">Taxas Especiais</span>
+                            </div>
+                        </div>
+                        <a href="https://wa.me/5519999999999?text=Vi%20o%20${v.modelo}%20no%20site%20e%20quero%20negociar" class="btn-whatsapp">
+                            <i class="fa-brands fa-whatsapp" style="font-size:20px"></i> CONSULTAR AGORA
                         </a>
                     </div>
                 </div>
@@ -100,9 +162,10 @@
         }
 
         function filter(c) {
-            document.querySelectorAll('.btn-f').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
+            document.querySelectorAll('.cat-item').forEach(b => b.classList.remove('active'));
+            event.currentTarget.classList.add('active');
             render(c);
+            window.scrollTo({ top: 400, behavior: 'smooth' });
         }
     </script>
 </body>
