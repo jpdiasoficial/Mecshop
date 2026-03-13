@@ -3,189 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LOG-PRO XMS v82 | FULL FLOW</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>LOG-PRO XMS v82 | CORE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://unpkg.com/html5-qrcode"></script>
+
     <style>
-        :root { --p: #00ff41; --s: #007aff; --bg: #050505; --sf: #111; --brd: #222; --dg: #ff3b30; --wrn: #ffae00; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; font-size: 11px; height: 100vh; overflow: hidden; text-transform: uppercase; }
-        .screen { display: none; height: 100vh; flex-direction: column; background: var(--bg); }
-        .active { display: flex !important; }
-        header { padding: 15px; border-bottom: 1px solid var(--brd); display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron'; background: #000; }
-        .scroll { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 100px; }
-        .card { background: var(--sf); border: 1px solid var(--brd); border-radius: 8px; padding: 12px; margin-bottom: 12px; position: relative; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        h3 { font-family: 'Orbitron'; font-size: 11px; color: var(--p); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-        input, select, textarea { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 6px; font-size: 11px; margin-bottom: 8px; }
-        .btn { width: 100%; padding: 14px; border: none; border-radius: 6px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; text-transform: uppercase; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        :root { --p: #00ff41; --bg: #000000; --card: #111; --brd: #222; --exit: #ff3b30; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; 
+            font-size: 12px; height: 100vh; overflow: hidden; text-transform: uppercase;
+        }
+
+        /* ECONOMIA DE BATERIA: TEMA TOTAL BLACK */
+        header { 
+            padding: 20px; border-bottom: 1px solid var(--brd); 
+            display: flex; justify-content: space-between; align-items: center; 
+            background: #000; position: sticky; top: 0; z-index: 100;
+        }
+        .logo { font-family: 'Orbitron'; color: var(--p); font-size: 18px; letter-spacing: 2px; }
+        
+        .btn-exit { 
+            background: rgba(255, 59, 48, 0.1); color: var(--exit); 
+            border: 1px solid var(--exit); padding: 8px 15px; border-radius: 6px; 
+            font-family: 'Orbitron'; font-size: 10px; cursor: pointer;
+        }
+
+        .main { height: calc(100vh - 75px); overflow-y: auto; padding: 20px; padding-bottom: 100px; }
+
+        /* CAMERA BOX */
+        #reader { 
+            width: 100%; background: #080808; border-radius: 12px; 
+            border: 2px solid var(--brd); overflow: hidden; margin-bottom: 20px;
+        }
+
+        .card { background: var(--card); border: 1px solid var(--brd); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+        
+        h3 { font-family: 'Orbitron'; font-size: 11px; color: var(--p); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+
+        select, input { 
+            width: 100%; padding: 15px; background: #000; border: 1px solid #333; 
+            color: #fff; border-radius: 8px; font-size: 13px; margin-bottom: 10px; font-weight: 700;
+        }
+
+        .btn { 
+            width: 100%; padding: 18px; border: none; border-radius: 8px; 
+            font-family: 'Orbitron'; font-weight: 900; cursor: pointer; 
+            display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s;
+        }
         .btn-p { background: var(--p); color: #000; }
-        .btn-s { background: var(--s); color: #fff; }
-        .btn-dark { background: #222; color: #fff; border: 1px solid #444; }
-        .status-pill { padding: 4px 8px; border-radius: 4px; font-size: 8px; font-weight: 800; }
-        .st-in { background: var(--s); } .st-sep { background: var(--wrn); color: #000; } .st-out { background: var(--p); color: #000; } .st-av { background: var(--dg); }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 9px; }
-        th { text-align: left; color: #555; padding: 8px; border-bottom: 1px solid #222; }
-        td { padding: 8px; border-bottom: 1px solid #111; }
-        .nav-tabs { display: flex; background: #000; border-top: 1px solid var(--brd); position: fixed; bottom: 0; width: 100%; z-index: 100; }
-        .nav-tab { flex: 1; padding: 15px; text-align: center; color: #444; cursor: pointer; font-weight: 800; font-size: 9px; }
-        .nav-tab.active { color: var(--p); border-top: 2px solid var(--p); background: #0a0a0a; }
-        .kpi-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 15px; }
-        .kpi-card { background: #0a0a0a; border: 1px solid #222; padding: 10px; border-radius: 6px; text-align: center; }
-        .kpi-val { font-family: 'Orbitron'; font-size: 16px; color: var(--p); display: block; }
-        .kpi-label { font-size: 7px; color: #555; }
+        .btn-s { background: #fff; color: #000; margin-top: 10px; }
+
+        /* LISTA REAL-TIME */
+        .log-item { 
+            padding: 12px; border-bottom: 1px solid #222; display: flex; 
+            justify-content: space-between; align-items: center; font-size: 10px;
+        }
+        .time { color: #555; font-weight: 800; }
+        .qty { background: var(--p); color: #000; padding: 2px 6px; border-radius: 4px; font-weight: 900; }
+
+        /* OVERLAY LOGIN */
+        #login-overlay {
+            position: fixed; inset: 0; background: #000; z-index: 1000;
+            display: flex; flex-direction: column; justify-content: center; padding: 40px;
+        }
     </style>
 </head>
-<body onload="init()">
+<body>
 
-<div id="scr-login" class="screen active" style="justify-content:center; align-items:center; padding:40px;">
-    <div style="font-family:'Orbitron'; color:var(--p); font-size:32px; text-align:center; line-height:1;">LOG-PRO<br><span style="font-size:12px; color:#555;">FULL FLOW XMS v82</span></div>
-    <div style="width:100%; margin-top:40px;">
-        <input type="text" id="user" placeholder="USUÁRIO (SHARK / OP / MOT)">
-        <input type="password" id="pin" placeholder="PIN ACESSO">
-        <button class="btn btn-p" onclick="login()">ACESSAR SISTEMA</button>
-    </div>
+<div id="login-overlay">
+    <div style="font-family:'Orbitron'; color:var(--p); font-size:32px; text-align:center; margin-bottom:40px;">LOG-PRO<br><span style="font-size:12px; color:#555;">v82 GALAXY CORE</span></div>
+    <input type="password" id="pin" placeholder="PIN DE ACESSO" style="text-align:center;">
+    <button class="btn btn-p" onclick="acessar()">ENTRAR NO FLUXO</button>
 </div>
 
-<!-- PAINEL SHARK (GESTOR) -->
-<div id="scr-shark" class="screen">
-    <header><span>SHARK MASTER</span> <i class="fa-solid fa-crown" style="color:var(--p)"></i></header>
-    <div class="scroll">
-        <div class="kpi-grid">
-            <div class="kpi-card"><span class="kpi-val" id="kpi-in">0</span><span class="kpi-label">ENTRADAS</span></div>
-            <div class="kpi-card"><span class="kpi-val" id="kpi-sep" style="color:var(--wrn)">0</span><span class="kpi-label">SEPARAÇÃO</span></div>
-            <div class="kpi-card"><span class="kpi-val" id="kpi-out" style="color:var(--s)">0</span><span class="kpi-label">SAÍDAS</span></div>
-        </div>
-        <div class="card">
-            <h3><i class="fa-solid fa-file-export"></i> RELATÓRIO OPERACIONAL</h3>
-            <button class="btn btn-s" onclick="exportar()"><i class="fa-solid fa-download"></i> BAIXAR PLANILHA COMPLETA</button>
-        </div>
-        <div class="card">
-            <h3><i class="fa-solid fa-tower-broadcast"></i> MONITOR DE FLUXO</h3>
-            <table>
-                <thead><tr><th>HORA</th><th>ETAPA</th><th>ITEM</th><th>OP</th></tr></thead>
-                <tbody id="shark-monitor"></tbody>
-            </table>
-        </div>
-    </div>
-</div>
+<header>
+    <div class="logo">LOG-PRO <span>v82</span></div>
+    <button class="btn-exit" onclick="sair()">SAIR</button>
+</header>
 
-<!-- PAINEL OPERADOR (FLUXO COMPLETO) -->
-<div id="scr-op" class="screen">
-    <header><span>OPERADOR</span> <i class="fa-solid fa-barcode" style="color:var(--p)"></i></header>
-    <div class="scroll">
-        <div class="card">
-            <h3><i class="fa-solid fa-gears"></i> ETAPA DA OPERAÇÃO</h3>
-            <select id="mod-op">
-                <option value="ENTRADA">📥 ENTRADA / ABASTECER</option>
-                <option value="SEPARACAO">📦 SEPARAÇÃO (PICKING)</option>
-                <option value="AVARIA">⚠️ AVARIA (QUEBRA)</option>
-                <option value="SAIDA">🚚 SAÍDA (EXPEDIÇÃO)</option>
-            </select>
-            <input type="text" id="bipe-input" placeholder="BIPE O CÓDIGO..." onkeypress="if(event.key==='Enter')bipe()">
-            <div class="grid-2">
-                <input type="number" id="bipe-qtd" value="1" style="text-align:center;">
-                <button class="btn btn-p" onclick="bipe()"><i class="fa-solid fa-plus"></i> BIPAR</button>
+<div class="main">
+    
+    <div class="card">
+        <h3><i class="fa-solid fa-camera"></i> SCANNER ATIVO</h3>
+        <div id="reader"></div>
+        <button class="btn btn-s" id="cam-btn" onclick="toggleCamera()">LIGAR CÂMERA</button>
+    </div>
+
+    <div class="card">
+        <h3><i class="fa-solid fa-layer-group"></i> ETAPA ATUAL</h3>
+        <select id="current-stage">
+            <option value="ENTRADA">📥 ENTRADA</option>
+            <option value="SEPARAÇÃO">📦 SEPARAÇÃO</option>
+            <option value="EXPEDIÇÃO">🚚 EXPEDIÇÃO</option>
+        </select>
+    </div>
+
+    <div class="card">
+        <h3><i class="fa-solid fa-clock-rotate-left"></i> ÚLTIMOS BIPES</h3>
+        <div id="live-logs">
             </div>
-        </div>
-        <div class="card" style="background:#080808">
-            <h3><i class="fa-solid fa-clock-rotate-left"></i> ÚLTIMOS MOVIMENTOS</h3>
-            <div id="op-log" style="font-size:9px; color:#666;"></div>
-        </div>
     </div>
-</div>
 
-<!-- PAINEL MOTORISTA -->
-<div id="scr-mot" class="screen">
-    <header><span>MOTORISTA</span> <i class="fa-solid fa-truck-fast" style="color:var(--s)"></i></header>
-    <div class="scroll">
-        <div class="card" style="border-left: 4px solid var(--s);">
-            <h2 style="font-family:'Orbitron'; font-size:18px;">CARGA #9901</h2>
-            <p style="color:var(--s); font-weight:800;">PLACA: BRA2E19 | DESTINO: SP</p>
-        </div>
-        <div class="grid-2">
-            <button class="btn btn-dark" style="height:80px; flex-direction:column;" onclick="motAcao('INICIO ROTA')"><i class="fa-solid fa-play"></i> INICIAR</button>
-            <button class="btn btn-dark" style="height:80px; flex-direction:column;" onclick="motAcao('CHECK-IN')"><i class="fa-solid fa-location-dot"></i> CHECK-IN</button>
-        </div>
-        <button class="btn btn-p" style="margin-top:10px; height:60px;" onclick="motAcao('ENTREGUE')"><i class="fa-solid fa-check-double"></i> FINALIZAR ENTREGA</button>
-        <button class="btn btn-dg" style="margin-top:10px;" onclick="motAcao('OCORRENCIA')"><i class="fa-solid fa-triangle-exclamation"></i> REGISTRAR OCORRÊNCIA</button>
-    </div>
-</div>
-
-<div class="nav-tabs" id="main-nav" style="display:none;">
-    <div class="nav-tab active" onclick="tab('scr-shark', this)"><i class="fa-solid fa-gauge-high"></i><br>SHARK</div>
-    <div class="nav-tab" onclick="tab('scr-op', this)"><i class="fa-solid fa-barcode"></i><br>OPERADOR</div>
-    <div class="nav-tab" onclick="tab('scr-mot', this)"><i class="fa-solid fa-truck"></i><br>MOTORISTA</div>
 </div>
 
 <script>
-    let logs = JSON.parse(localStorage.getItem('LOGPRO_DATA') || '[]');
-    function login() {
-        const u = document.getElementById('user').value.toUpperCase();
-        if(u) {
-            document.getElementById('scr-login').classList.remove('active');
-            document.getElementById('main-nav').style.display = 'flex';
-            if(u === 'SHARK') tab('scr-shark', document.querySelectorAll('.nav-tab')[0]);
-            else if(u === 'OP') tab('scr-op', document.querySelectorAll('.nav-tab')[1]);
-            else tab('scr-mot', document.querySelectorAll('.nav-tab')[2]);
+    let scanner;
+    let isCameraOn = false;
+
+    // FUNÇÃO ACESSAR
+    function acessar() {
+        if(document.getElementById('pin').value !== "") {
+            document.getElementById('login-overlay').style.display = 'none';
         }
     }
-    function tab(id, el) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        el.classList.add('active');
-        renderShark();
+
+    // FUNÇÃO SAIR (LIMPA TUDO E VOLTA)
+    function sair() {
+        if(isCameraOn) toggleCamera();
+        document.getElementById('login-overlay').style.display = 'flex';
+        document.getElementById('pin').value = "";
     }
-    function bipe() {
-        const cod = document.getElementById('bipe-input').value;
-        const qtd = document.getElementById('bipe-qtd').value;
-        const etapa = document.getElementById('mod-op').value;
-        if(!cod) return;
-        addLog('OPERADOR', etapa, `${cod} (QTD: ${qtd})`);
-        document.getElementById('op-log').innerHTML = `<p>${new Date().toLocaleTimeString()} - ${etapa}: ${cod}</p>` + document.getElementById('op-log').innerHTML;
-        document.getElementById('bipe-input').value = '';
-        renderShark();
+
+    // TOGGLE CAMERA (ECONOMIA DE BATERIA)
+    function toggleCamera() {
+        const btn = document.getElementById('cam-btn');
+        if (!isCameraOn) {
+            scanner = new Html5Qrcode("reader");
+            scanner.start(
+                { facingMode: "environment" }, 
+                { fps: 10, qrbox: { width: 250, height: 250 } },
+                onScanSuccess
+            );
+            btn.innerHTML = "DESLIGAR CÂMERA";
+            btn.style.background = "#222";
+            btn.style.color = "#fff";
+            isCameraOn = true;
+        } else {
+            scanner.stop().then(() => {
+                document.getElementById('reader').innerHTML = "";
+                btn.innerHTML = "LIGAR CÂMERA";
+                btn.style.background = "#fff";
+                btn.style.color = "#000";
+                isCameraOn = false;
+            });
+        }
     }
-    function motAcao(tipo) {
-        addLog('MOTORISTA', 'AÇÃO', tipo);
-        alert(`MOTORISTA: ${tipo} REGISTRADO`);
-        renderShark();
+
+    // SUCESSO NO SCAN
+    function onScanSuccess(decodedText) {
+        // BIP SONORO (HÁPTICO)
+        if (navigator.vibrate) navigator.vibrate(100);
+        
+        // PEDIR QUANTIDADE (PROMPT GALAXY)
+        let qtd = prompt(`CÓDIGO: ${decodedText}\nINFORME A QUANTIDADE:`, "1");
+        
+        if (qtd !== null && qtd !== "") {
+            registrarBipe(decodedText, qtd);
+        }
     }
-    function addLog(origem, acao, info) {
-        const log = { hora: new Date().toLocaleTimeString(), origem, acao, info };
-        logs.unshift(log);
-        if(logs.length > 50) logs.pop();
-        localStorage.setItem('LOGPRO_DATA', JSON.stringify(logs));
+
+    // REGISTRO REAL-TIME
+    function registrarBipe(cod, qtd) {
+        const stage = document.getElementById('current-stage').value;
+        const logContainer = document.getElementById('live-logs');
+        const now = new Date().toLocaleTimeString();
+
+        // Criar elemento visual
+        const item = document.createElement('div');
+        item.className = 'log-item';
+        item.innerHTML = `
+            <div>
+                <span class="time">${now}</span><br>
+                <strong>${cod}</strong> [${stage}]
+            </div>
+            <div class="qty">${qtd}</div>
+        `;
+
+        // Insere no topo
+        logContainer.prepend(item);
+
+        // SALVAR NO LOCALSTORAGE (Sincronização Simples)
+        const logEntry = { cod, qtd, stage, time: now };
+        let history = JSON.parse(localStorage.getItem('LOGPRO_V82') || '[]');
+        history.unshift(logEntry);
+        localStorage.setItem('LOGPRO_V82', JSON.stringify(history.slice(0, 50)));
     }
-    function renderShark() {
-        let h = ""; let ent = 0; let sep = 0; let out = 0;
-        logs.forEach(l => {
-            let pill = l.acao === 'ENTRADA' ? 'st-in' : l.acao === 'SEPARACAO' ? 'st-sep' : l.acao === 'SAIDA' ? 'st-out' : 'st-av';
-            h += `<tr><td>${l.hora}</td><td><span class="status-pill ${pill}">${l.acao}</span></td><td>${l.info}</td><td>${l.origem}</td></tr>`;
-            if(l.acao === 'ENTRADA') ent++;
-            if(l.acao === 'SEPARACAO') sep++;
-            if(l.acao === 'SAIDA') out++;
+
+    // CARREGAR HISTÓRICO AO ABRIR
+    function loadHistory() {
+        let history = JSON.parse(localStorage.getItem('LOGPRO_V82') || '[]');
+        const logContainer = document.getElementById('live-logs');
+        history.forEach(l => {
+            const item = document.createElement('div');
+            item.className = 'log-item';
+            item.innerHTML = `<div><span class="time">${l.time}</span><br><strong>${l.cod}</strong> [${l.stage}]</div><div class="qty">${l.qtd}</div>`;
+            logContainer.appendChild(item);
         });
-        document.getElementById('shark-monitor').innerHTML = h;
-        document.getElementById('kpi-in').innerText = ent;
-        document.getElementById('kpi-sep').innerText = sep;
-        document.getElementById('kpi-out').innerText = out;
     }
-    function exportar() {
-        let csv = "HORA,ORIGEM,ETAPA,INFO\n";
-        logs.forEach(l => csv += `${l.hora},${l.origem},${l.acao},${l.info}\n`);
-        const blob = new Blob([csv], {type: 'text/csv'});
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = "LOGPRO_V82_REPORT.csv";
-        a.click();
-    }
-    function init() { 
-        setInterval(renderShark, 2000);
-        renderShark();
-    }
+
+    window.onload = loadHistory;
 </script>
+
 </body>
-    </html>
-    
+</html>
