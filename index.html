@@ -1,200 +1,158 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LOG-PRO v82 | ULTIMATE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script src="https://unpkg.com/html5-qrcode"></script>
-
-    <style>
-        :root { --p: #00ff41; --s: #007aff; --bg: #000; --sf: #0a0a0a; --brd: #1a1a1a; --dg: #ff3b30; --wrn: #ffae00; }
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; font-size: 11px; height: 100vh; overflow: hidden; text-transform: uppercase; }
-        .screen { display: none; height: 100vh; flex-direction: column; background: var(--bg); }
-        .active { display: flex !important; }
-        header { padding: 15px; border-bottom: 2px solid var(--brd); display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron'; background: #000; }
-        .scroll { flex: 1; overflow-y: auto; padding: 15px 15px 100px 15px; }
-        .card { background: var(--sf); border: 1px solid var(--brd); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
-        h3 { font-family: 'Orbitron'; font-size: 9px; color: var(--p); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; border-left: 3px solid var(--p); padding-left: 8px; }
-        input, select { width: 100%; padding: 14px; background: #050505; border: 1px solid #222; color: #fff; border-radius: 8px; font-size: 11px; margin-bottom: 10px; font-weight: 700; }
-        .btn { width: 100%; padding: 16px; border: none; border-radius: 10px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; margin-bottom: 5px; }
-        .btn-p { background: var(--p); color: #000; }
-        .btn-s { background: var(--s); color: #fff; }
-        .btn-dg { background: var(--dg); color: #fff; }
-        .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 15px; }
-        .kpi-card { background: #0a0a0a; border: 1px solid #222; padding: 10px 5px; border-radius: 8px; text-align: center; }
-        .kpi-val { font-family: 'Orbitron'; font-size: 13px; color: var(--p); display: block; }
-        #reader, #reader-mot { width: 100%; background: #000; border-radius: 12px; border: 2px solid var(--p); min-height: 200px; }
-        .nav-tabs { display: flex; background: #000; border-top: 2px solid var(--brd); position: fixed; bottom: 0; width: 100%; height: 70px; z-index: 100; }
-        .nav-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #444; font-size: 8px; font-weight: 800; gap: 4px; }
-        .nav-tab.active { color: var(--p); border-top: 3px solid var(--p); background: #050505; }
-        table { width: 100%; border-collapse: collapse; font-size: 9px; }
-        td { padding: 12px 5px; border-bottom: 1px solid #111; }
-        .st-pill { padding: 4px 6px; border-radius: 4px; font-weight: 900; font-size: 7px; color:#000; }
-        .picking-item { background: #111; padding: 12px; border-radius: 8px; border-left: 4px solid var(--wrn); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-    </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>LOG-PRO v82 FINAL</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://unpkg.com/html5-qrcode"></script>
+<style>
+:root{--p:#00ff41;--s:#007aff;--bg:#000;--sf:#0a0a0a;--brd:#1a1a1a;--dg:#ff3b30;--w:#ffae00}
+*{margin:0;padding:0;box-sizing:border-box;outline:none;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:#fff;font-family:'Inter',sans-serif;font-size:11px;height:100vh;overflow:hidden;text-transform:uppercase}
+.scr{display:none;height:100vh;flex-direction:column;background:var(--bg)}.act{display:flex!important}
+header{padding:15px;border-bottom:2px solid var(--brd);display:flex;justify-content:space-between;align-items:center;font-family:'Orbitron';background:#000}
+.scroll{flex:1;overflow-y:auto;padding:15px 15px 100px 15px}
+.c{background:var(--sf);border:1px solid var(--brd);border-radius:12px;padding:15px;margin-bottom:15px}
+h3{font-family:'Orbitron';font-size:9px;color:var(--p);margin-bottom:12px;display:flex;align-items:center;gap:8px;border-left:3px solid var(--p);padding-left:8px}
+input,select{width:100%;padding:14px;background:#050505;border:1px solid #222;color:#fff;border-radius:8px;font-size:11px;margin-bottom:10px;font-weight:700}
+.btn{width:100%;padding:16px;border:none;border-radius:10px;font-family:'Orbitron';font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;text-transform:uppercase;margin-bottom:5px}
+.b-p{background:var(--p);color:#000}.b-s{background:var(--s);color:#fff}.b-d{background:var(--dg);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:15px}
+.kpi{background:#0a0a0a;border:1px solid #222;padding:10px 5px;border-radius:8px;text-align:center}
+.kpi span{font-family:'Orbitron';font-size:14px;color:var(--p);display:block}
+#r-db,#r-op,#r-mot{width:100%;background:#000;border-radius:12px;border:2px solid var(--p);min-height:200px;display:none}
+.nav{display:flex;background:#000;border-top:2px solid var(--brd);position:fixed;bottom:0;width:100%;height:70px;z-index:100}
+.nav div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#444;font-size:8px;font-weight:800;gap:4px}
+.nav .act-tab{color:var(--p);border-top:3px solid var(--p);background:#050505}
+table{width:100%;border-collapse:collapse;font-size:9px}td{padding:12px 5px;border-bottom:1px solid #111}
+.pill{padding:4px 6px;border-radius:4px;font-weight:900;font-size:7px;color:#000}
+.pk{background:#111;padding:12px;border-radius:8px;border-left:4px solid var(--w);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+</style>
 </head>
 <body onload="init()">
 
-<div id="scr-login" class="screen active" style="justify-content:center; align-items:center; padding:40px;">
-    <div style="font-family:'Orbitron'; color:var(--p); font-size:35px;">LOG-PRO</div>
-    <div style="color:#333; font-size:9px; margin-bottom:40px;">v82 | ULTIMATE FINAL</div>
-    <input type="password" id="pin" placeholder="PIN">
-    <button class="btn btn-p" onclick="login()">INITIALIZE</button>
+<div id="s-log" class="scr act" style="justify-content:center;align-items:center;padding:40px">
+    <div style="font-family:'Orbitron';color:var(--p);font-size:35px">LOG-PRO</div>
+    <div style="color:#555;font-size:10px;margin-bottom:40px">COMPACT V82</div>
+    <input type="password" id="pin" placeholder="PIN" style="text-align:center">
+    <button class="btn b-p" onclick="login()">ACESSAR</button>
 </div>
 
-<div id="scr-shark" class="screen">
-    <header><span>PAINEL SHARK</span> <button onclick="sair()" class="btn-dg" style="width:60px; height:30px; font-size:8px">SAIR</button></header>
+<div id="s-shk" class="scr">
+    <header><span>PAINEL SHARK</span><button onclick="sair()" class="btn b-d" style="width:60px;height:30px;font-size:8px">SAIR</button></header>
     <div class="scroll">
-        <div class="kpi-grid">
-            <div class="kpi-card"><span class="kpi-val" id="k-in">0</span><small>ENT</small></div>
-            <div class="kpi-card"><span class="kpi-val" id="k-sep" style="color:var(--wrn)">0</span><small>SEP</small></div>
-            <div class="kpi-card"><span class="kpi-val" id="k-out" style="color:var(--s)">0</span><small>SAI</small></div>
-            <div class="kpi-card"><span class="kpi-val" id="k-av" style="color:var(--dg)">0</span><small>AVA</small></div>
+        <div class="grid">
+            <div class="kpi"><span id="k-in">0</span><small>ENT</small></div>
+            <div class="kpi"><span id="k-sep" style="color:var(--w)">0</span><small>SEP</small></div>
+            <div class="kpi"><span id="k-out" style="color:var(--s)">0</span><small>SAI</small></div>
+            <div class="kpi"><span id="k-av" style="color:var(--dg)">0</span><small>AVA</small></div>
         </div>
-        <div class="card">
-            <h3><i class="fa-solid fa-file-export"></i> BANCO DE DADOS</h3>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                <button class="btn btn-s" style="padding:10px; font-size:8px" onclick="exportar()">EXTRAIR JSON</button>
-                <button class="btn btn-s" style="padding:10px; font-size:8px" onclick="document.getElementById('fin').click()">INSERIR JSON</button>
+        <div class="c">
+            <h3><i class="fa-solid fa-database"></i> DADOS</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <button class="btn b-s" style="padding:10px;font-size:8px" onclick="exp()">EXTRAIR</button>
+                <button class="btn b-s" style="padding:10px;font-size:8px" onclick="document.getElementById('fin').click()">INSERIR</button>
             </div>
-            <button class="btn btn-dg" style="margin-top:8px; padding:10px; font-size:8px" onclick="limpar()">LIMPAR TUDO</button>
-            <input type="file" id="fin" style="display:none" onchange="importar(this)">
+            <button class="btn b-d" style="margin-top:8px;padding:10px;font-size:8px" onclick="limpar()">APAGAR TUDO</button>
+            <input type="file" id="fin" style="display:none" onchange="imp(this)">
         </div>
-        <div class="card">
-            <h3><i class="fa-solid fa-boxes-packing"></i> FILA DE PICKING</h3>
-            <div id="picking-queue"></div>
+        <div class="c">
+            <h3><i class="fa-solid fa-boxes-packing"></i> FILA PICKING</h3>
+            <div id="fila"></div>
         </div>
-        <div class="card">
-            <h3><i class="fa-solid fa-list"></i> HISTÓRICO</h3>
-            <input type="text" id="shark-search" placeholder="🔍 BUSCAR..." onkeyup="render()">
-            <table><tbody id="m-logs"></tbody></table>
+        <div class="c">
+            <h3><i class="fa-solid fa-list"></i> LOGS</h3>
+            <input type="text" id="busc" placeholder="🔍 BUSCAR..." onkeyup="rend()">
+            <table><tbody id="logs"></tbody></table>
         </div>
     </div>
 </div>
 
-<div id="scr-op" class="screen">
-    <header><span>OPERADOR</span> <button onclick="sair()" class="btn-dg" style="width:60px; height:30px; font-size:8px">SAIR</button></header>
+<div id="s-op" class="scr">
+    <header><span>OPERADOR</span><button onclick="sair()" class="btn b-d" style="width:60px;height:30px;font-size:8px">SAIR</button></header>
     <div class="scroll">
-        <div class="card">
-            <div id="reader"></div>
-            <button class="btn btn-p" id="c-btn" style="margin-top:10px" onclick="toggleCam('reader','c-btn')">ATIVAR CÂMERA</button>
+        <div class="c">
+            <div id="r-op"></div>
+            <button class="btn b-p" id="b-op" onclick="cam('r-op','b-op',0)">CÂMERA</button>
         </div>
-        <div class="card">
-            <h3><i class="fa-solid fa-keyboard"></i> MANUAL / CADASTRO</h3>
-            <input type="text" id="man-cod" placeholder="DIGITE O EAN">
-            <button class="btn btn-s" onclick="processarManual()">BIPAR MANUAL</button>
+        <div class="c">
+            <input type="text" id="man" placeholder="EAN MANUAL">
+            <button class="btn b-s" onclick="bMan()">BIPAR MANUAL</button>
         </div>
-        <div class="card">
-            <select id="m-op">
+        <div class="c">
+            <select id="sel">
                 <option value="ENTRADA">📥 ENTRADA</option>
-                <option value="SEPARACAO">📦 SEPARAÇÃO (PICKING)</option>
-                <option value="SAIDA">🚚 EXPEDIÇÃO</option>
+                <option value="SEPARACAO">📦 SEPARAÇÃO</option>
+                <option value="SAIDA">🚚 SAÍDA</option>
             </select>
-            <button class="btn btn-dg" onclick="fazerAvaria()">AVARIA</button>
+            <button class="btn b-d" onclick="av()">AVARIA</button>
         </div>
     </div>
 </div>
 
-<div id="scr-mot" class="screen">
-    <header><span>ROTA</span> <button onclick="sair()" class="btn-dg" style="width:60px; height:30px; font-size:8px">SAIR</button></header>
+<div id="s-mot" class="scr">
+    <header><span>ROTA</span><button onclick="sair()" class="btn b-d" style="width:60px;height:30px;font-size:8px">SAIR</button></header>
     <div class="scroll">
-        <div class="card">
-            <h3><i class="fa-solid fa-truck"></i> SCANNER ROTA</h3>
-            <div id="reader-mot"></div>
-            <button class="btn btn-s" id="m-btn" style="margin-top:10px" onclick="toggleCam('reader-mot','m-btn', true)">LER ROMANEIO</button>
+        <div class="c">
+            <div id="r-mot"></div>
+            <button class="btn b-s" id="b-mot" onclick="cam('r-mot','b-mot',1)">LER ROMANEIO</button>
         </div>
-        <div id="rom-box" class="card" style="display:none; border-left: 5px solid var(--p);">
+        <div id="rom" class="c" style="display:none;border-left:5px solid var(--p)">
             <h2 id="rom-id"></h2>
-            <button class="btn btn-p" style="margin-top:10px" onclick="addLog('MOT','ROTA','VIAGEM INICIADA')">CONFIRMAR ROTA</button>
+            <button class="btn b-p" style="margin-top:10px" onclick="log('MOT','ROTA','SAÍDA INICIADA');document.getElementById('rom').style.display='none'">CONFIRMAR SAÍDA</button>
         </div>
     </div>
 </div>
 
-<div class="nav-tabs" id="nav" style="display:none">
-    <div class="nav-tab active" onclick="tab('scr-shark',this)"><i class="fa-solid fa-chart-line fa-lg"></i>PAINEL</div>
-    <div class="nav-tab" onclick="tab('scr-op',this)"><i class="fa-solid fa-barcode fa-lg"></i>BIPER</div>
-    <div class="nav-tab" onclick="tab('scr-mot',this)"><i class="fa-solid fa-truck fa-lg"></i>ROTA</div>
+<div class="nav" id="nv" style="display:none">
+    <div class="act-tab" onclick="tab('s-shk',this)"><i class="fa-solid fa-chart-line fa-lg"></i>SHARK</div>
+    <div onclick="tab('s-op',this)"><i class="fa-solid fa-barcode fa-lg"></i>BIPER</div>
+    <div onclick="tab('s-mot',this)"><i class="fa-solid fa-truck fa-lg"></i>ROTA</div>
 </div>
 
 <script>
-    let logs = JSON.parse(localStorage.getItem('LOG_V82_U') || '[]');
-    let db = JSON.parse(localStorage.getItem('DB_V82_U') || '{}');
-    let scan; let cam = false;
-    let saldoGlobal = {}; // Melhoria aprovada: Memória de Saldo para Trava
-
-    function init() { render(); }
-    function login() { document.getElementById('scr-login').classList.remove('active'); document.getElementById('nav').style.display='flex'; tab('scr-shark',document.querySelector('.nav-tab')); }
-    function sair() { if(cam) scan.stop(); location.reload(); }
-    function tab(id,el) { document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active')); document.getElementById(id).classList.add('active'); el.classList.add('active'); render(); }
-
-    function toggleCam(div, btn, isM = false) {
-        const b = document.getElementById(btn);
-        if(!cam) { 
-            scan = new Html5Qrcode(div); 
-            scan.start({facingMode:"environment"},{fps:20,qrbox:250}, isM ? onMot : onSuccess); 
-            b.innerText="PARAR"; cam=true; 
-        } else { scan.stop().then(()=>{document.getElementById(div).innerHTML=""; b.innerText="ESCANEAR"; cam=false;}); }
-    }
-
-    function onMot(c) { document.getElementById('rom-box').style.display='block'; document.getElementById('rom-id').innerText="CARGA: "+c; }
-
-    function onSuccess(c) {
-        if(!db[c]) { let n = prompt("NOVO ITEM! NOME:"); if(n) { db[c]=n; localStorage.setItem('DB_V82_U', JSON.stringify(db)); } else return; }
-        let etp = document.getElementById('m-op').value;
-        
-        // MELHORIA: Trava de Saldo (Não deixa separar ou sair se não tem no estoque)
-        if(etp !== 'ENTRADA' && (saldoGlobal[db[c]] || 0) <= 0) {
-            alert("ERRO: SALDO INSUFICIENTE PARA " + etp);
-            return;
+let l=JSON.parse(localStorage.getItem('L_V82')||'[]'), db=JSON.parse(localStorage.getItem('D_V82')||'{}');
+let scn, cm=0, sld={};
+function init(){rend()}
+function login(){if(document.getElementById('pin').value){document.getElementById('s-log').classList.remove('act');document.getElementById('nv').style.display='flex';tab('s-shk',document.querySelector('.nav div'))}}
+function sair(){if(cm)scn.stop();location.reload()}
+function tab(id,e){document.querySelectorAll('.scr').forEach(s=>s.classList.remove('act'));document.querySelectorAll('.nav div').forEach(t=>t.classList.remove('act-tab'));document.getElementById(id).classList.add('act');e.classList.add('act-tab');rend()}
+function cam(div,btn,isM){
+    let b=document.getElementById(btn), d=document.getElementById(div);
+    if(!cm){d.style.display='block';scn=new Html5Qrcode(div);scn.start({facingMode:"environment"},{fps:15,qrbox:250},isM?oM:oO);b.innerText="PARAR";cm=1}
+    else{scn.stop().then(()=>{d.style.display='none';d.innerHTML="";b.innerText="CÂMERA";cm=0})}
+}
+function oM(c){document.getElementById('rom').style.display='block';document.getElementById('rom-id').innerText="CARGA: "+c}
+function oO(c){
+    if(!db[c]){let n=prompt("NOVO ITEM! NOME:");if(n){db[c]=n;localStorage.setItem('D_V82',JSON.stringify(db))}else return}
+    let t=document.getElementById('sel').value;
+    if(t!=='ENTRADA'&&(sld[db[c]]||0)<=0){alert("HARD-LOCK: SALDO INSUFICIENTE PARA "+t);return}
+    let q=prompt(`ITEM: ${db[c]}\nQTD PARA ${t}:`,"1");
+    if(q&&q>0)log('OP',t,`${db[c]} (${c}) | QTD: ${q}`)
+}
+function bMan(){let c=document.getElementById('man').value;if(c)oO(c);document.getElementById('man').value=""}
+function av(){let c=prompt("EAN:");if(c){let q=prompt("QTD:");if(q)log('OP','AVARIA',`${db[c]||c} | QTD: ${q}`)}}
+function log(o,a,i){l.unshift({t:new Date().toLocaleTimeString(),o,a,i});localStorage.setItem('L_V82',JSON.stringify(l.slice(0,1000)));rend()}
+function limpar(){if(confirm("RESETAR TUDO?")){localStorage.clear();location.reload()}}
+function exp(){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify({l,db})],{type:"application/json"}));a.download="BK_V82.json";a.click()}
+function imp(i){let r=new FileReader();r.onload=e=>{let d=JSON.parse(e.target.result);if(d.l){l=d.l;db=d.db;localStorage.setItem('L_V82',JSON.stringify(l));localStorage.setItem('D_V82',JSON.stringify(db));rend();alert("OK!")}};if(i.files[0])r.readAsText(i.files[0])}
+function rend(){
+    let h="",e=0,sp=0,sa=0,a=0,fl={},bs=document.getElementById('busc').value.toLowerCase();sld={};
+    l.forEach(x=>{
+        let q=parseInt(x.i.split('QTD: ')[1])||0, id=x.i.split(' (')[0].split(' |')[0];
+        fl[id]=fl[id]||0;
+        if(x.a==='ENTRADA'){e+=q;fl[id]+=q}else if(x.a==='SEPARACAO'){sp+=q;fl[id]-=q}else if(x.a==='SAIDA'){sa+=q}else if(x.a==='AVARIA'){a+=q;fl[id]-=q}
+        sld[id]=fl[id];
+        if((x.i+" "+x.a).toLowerCase().includes(bs)){
+            let c=x.a==='ENTRADA'?'#007aff':x.a==='SEPARACAO'?'#ffae00':x.a==='AVARIA'?'#ff3b30':'#00ff41';
+            h+=`<tr><td style="color:#888">${x.t}</td><td><span class="pill" style="background:${c}">${x.a}</span></td><td><b>${x.i}</b></td></tr>`;
         }
-
-        let q = prompt(`ITEM: ${db[c]}\nQTD ${etp}:`, "1");
-        if(q) addLog('OP', etp, `${db[c]} (${c}) | QTD: ${q}`);
-    }
-
-    function processarManual() { let c = document.getElementById('man-cod').value; if(c) onSuccess(c); }
-    function fazerAvaria() { let c = prompt("EAN:"); if(c) { let q = prompt("QTD:"); addLog('OP', 'AVARIA', `${db[c]||c} | QTD: ${q}`); } }
-
-    function addLog(orig, acao, info) {
-        logs.unshift({t: new Date().toLocaleTimeString(), orig, acao, info});
-        localStorage.setItem('LOG_V82_U', JSON.stringify(logs.slice(0,1000)));
-        render();
-    }
-
-    function limpar() { if(confirm("RESETAR SISTEMA?")) { localStorage.clear(); location.reload(); } }
-    function exportar() { let b = new Blob([JSON.stringify({logs, db})], {type:"application/json"}); let a = document.createElement('a'); a.href=URL.createObjectURL(b); a.download="LOGPRO_ULTIMATE.json"; a.click(); }
-    function importar(i) { let r = new FileReader(); r.onload=function(){ let d=JSON.parse(r.result); logs=d.logs; db=d.db; localStorage.setItem('LOG_V82_U', JSON.stringify(logs)); localStorage.setItem('DB_V82_U', JSON.stringify(db)); render(); alert("DADOS CARREGADOS!"); }; r.readAsText(i.files[0]); }
-
-    function render() {
-        let h=""; let ent=0,sep=0,out=0,av=0; let fila={}; saldoGlobal = {};
-        let s = document.getElementById('shark-search').value.toLowerCase();
-        
-        logs.forEach(l => {
-            let q = parseInt(l.info.split('QTD: ')[1]) || 0;
-            let id = l.info.split(' (')[0];
-            if(l.acao==='ENTRADA') { ent+=q; fila[id]=(fila[id]||0)+q; }
-            if(l.acao==='SEPARACAO') { sep+=q; fila[id]=(fila[id]||0)-q; }
-            if(l.acao==='SAIDA') out+=q;
-            if(l.acao==='AVARIA') { av+=q; fila[id]=(fila[id]||0)-q; }
-            saldoGlobal[id] = fila[id] || 0;
-
-            if(l.info.toLowerCase().includes(s) || l.acao.toLowerCase().includes(s)) {
-                let c = l.acao==='ENTRADA'?'#007aff':l.acao==='SEPARACAO'?'#ffae00':l.acao==='AVARIA'?'#ff3b30':'#00ff41';
-                h += `<tr><td>${l.t}</td><td><span class="st-pill" style="background:${c}">${l.acao}</span></td><td>${l.info}</td></tr>`;
-            }
-        });
-        document.getElementById('m-logs').innerHTML = h;
-        document.getElementById('k-in').innerText=ent; document.getElementById('k-sep').innerText=sep;
-        document.getElementById('k-out').innerText=out; document.getElementById('k-av').innerText=av;
-        
-        let fHtml = "";
-        for(let it in fila) if(fila[it]>0) fHtml += `<div class="picking-item"><span>${it}</span><b>${fila[it]} PENDENTE</b></div>`;
-        document.getElementById('picking-queue').innerHTML = fHtml || '<p style="text-align:center;color:#444">FILA LIMPA</p>';
-    }
+    });
+    document.getElementById('logs').innerHTML=h;document.getElementById('k-in').innerText=e;document.getElementById('k-sep').innerText=sp;document.getElementById('k-out').innerText=sa;document.getElementById('k-av').innerText=a;
+    let fh="";for(let k in fl)if(fl[k]>0)fh+=`<div class="pk"><span>${k}</span><b style="color:var(--w)">${fl[k]} PENDENTE</b></div>`;
+    document.getElementById('fila').innerHTML=fh||'<p style="text-align:center;color:#444">TUDO LIMPO!</p>';
+}
 </script>
 </body>
-                </html>
-                
+</html>
