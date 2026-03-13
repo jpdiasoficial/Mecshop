@@ -3,259 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LOG-PRO v95 | FULL INTELLIGENCE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>HG MOTORS | GALÁCTICO v100</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script src="https://unpkg.com/html5-qrcode"></script>
     <style>
-        :root { --p: #00ff41; --s: #007aff; --bg: #000; --sf: #0a0a0a; --brd: #1a1a1a; --dg: #ff3b30; --w: #ffae00; }
-        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; font-size: 11px; height: 100vh; overflow: hidden; text-transform: uppercase; }
-        .screen { display: none; height: 100vh; flex-direction: column; background: var(--bg); }
-        .active-screen { display: flex !important; }
-        header { padding: 15px; border-bottom: 2px solid var(--brd); display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron'; background: #000; }
-        .scroll-area { flex: 1; overflow-y: auto; padding: 15px 15px 100px 15px; }
-        .card { background: var(--sf); border: 1px solid var(--brd); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
-        h3 { font-family: 'Orbitron'; font-size: 9px; color: var(--p); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; border-left: 3px solid var(--p); padding-left: 8px; }
-        input, select { width: 100%; padding: 14px; background: #050505; border: 1px solid #222; color: #fff; border-radius: 8px; font-size: 11px; margin-bottom: 10px; font-weight: 700; }
-        .btn { width: 100%; padding: 16px; border: none; border-radius: 10px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; margin-bottom: 5px; }
-        .btn-p { background: var(--p); color: #000; }
-        .btn-s { background: var(--s); color: #fff; }
-        .btn-d { background: var(--dg); color: #fff; }
-        .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 15px; }
-        .kpi-box { background: #0a0a0a; border: 1px solid #222; padding: 10px 5px; border-radius: 8px; text-align: center; }
-        .kpi-box span { font-family: 'Orbitron'; font-size: 14px; color: var(--p); display: block; }
-        .scanner-view { width: 100%; background: #000; border-radius: 12px; border: 2px solid var(--p); min-height: 200px; display: none; overflow: hidden; }
-        .bottom-nav { display: flex; background: #000; border-top: 2px solid var(--brd); position: fixed; bottom: 0; width: 100%; height: 70px; z-index: 100; }
-        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #444; font-size: 8px; font-weight: 800; gap: 4px; }
-        .active-tab { color: var(--p); border-top: 3px solid var(--p); background: #050505; }
-        table { width: 100%; border-collapse: collapse; font-size: 9px; }
-        td { padding: 12px 5px; border-bottom: 1px solid #111; }
-        .pill { padding: 4px 6px; border-radius: 4px; font-weight: 900; font-size: 7px; color: #000; }
-        .alert-box { border: 2px solid var(--dg) !important; animation: blink 1s infinite; margin-bottom: 10px; padding: 10px; border-radius: 8px; color: var(--dg); font-weight: 800; }
-        @keyframes blink { 50% { opacity: 0.4; } }
+        :root { --gold: #D4AF37; --bg: #000; --glass: rgba(255, 255, 255, 0.03); --border: rgba(255, 255, 255, 0.08); --w: #25D366; }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: #fff; overflow-x: hidden; }
+
+        /* HEADER ULTRA GLASS */
+        header { position: fixed; top: 0; width: 100%; z-index: 1000; padding: 20px; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .logo-box { display: flex; flex-direction: column; }
+        .logo-box span:first-child { font-weight: 900; font-size: 20px; color: var(--gold); letter-spacing: -1px; line-height: 1; }
+        .logo-box span:last-child { font-size: 8px; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 2px; }
+
+        .container { padding: 100px 15px 40px; max-width: 500px; margin: 0 auto; }
+
+        /* FILTROS PREMIUM */
+        .filter-wrap { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 20px; scrollbar-width: none; }
+        .filter-wrap::-webkit-scrollbar { display: none; }
+        .chip { background: var(--glass); border: 1px solid var(--border); color: #666; padding: 10px 18px; border-radius: 50px; font-size: 10px; font-weight: 900; text-transform: uppercase; white-space: nowrap; transition: 0.3s; }
+        .chip.active { background: #fff; color: #000; border-color: #fff; box-shadow: 0 0 20px rgba(255,255,255,0.2); }
+
+        /* CARDS GALÁCTICOS */
+        .car-card { background: var(--glass); border: 1px solid var(--border); border-radius: 30px; overflow: hidden; margin-bottom: 30px; position: relative; animation: fadeIn 0.8s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .image-stage { width: 100%; height: 320px; position: relative; overflow: hidden; }
+        .image-stage img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .car-card:hover .image-stage img { transform: scale(1.05); }
+
+        .status-pill { position: absolute; top: 20px; left: 20px; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); padding: 6px 14px; border-radius: 50px; font-size: 9px; font-weight: 900; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 5px; }
+        .dot { width: 6px; height: 6px; background: var(--w); border-radius: 50%; box-shadow: 0 0 10px var(--w); }
+
+        .details { padding: 25px; }
+        .brand { font-size: 10px; font-weight: 900; color: var(--gold); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 5px; display: block; }
+        .model { font-size: 24px; font-weight: 900; text-transform: uppercase; margin-bottom: 8px; line-height: 1; }
+        .features { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .feat { font-size: 10px; color: #666; background: rgba(255,255,255,0.03); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border); }
+
+        .pricing { background: rgba(255,255,255,0.02); border-radius: 20px; padding: 20px; border: 1px solid var(--border); margin-bottom: 20px; position: relative; overflow: hidden; }
+        .pricing::after { content: ''; position: absolute; top: 0; right: 0; width: 40px; height: 40px; background: var(--gold); clip-path: polygon(100% 0, 0 0, 100% 100%); opacity: 0.1; }
+        
+        .val-now { font-size: 28px; font-weight: 900; display: block; color: #fff; }
+        .val-sub { font-size: 11px; color: #555; font-weight: 600; }
+
+        .cta-button { background: var(--w); color: #fff; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 12px; padding: 22px; border-radius: 20px; font-weight: 900; font-size: 14px; text-transform: uppercase; box-shadow: 0 10px 30px rgba(37, 211, 102, 0.2); transition: 0.3s; }
+        .cta-button:active { transform: scale(0.96); }
+
+        /* FOOTER SHARK */
+        footer { text-align: center; padding: 40px 20px; border-top: 1px solid var(--border); color: #333; font-size: 10px; font-weight: 900; letter-spacing: 1px; }
     </style>
 </head>
-<body onload="inicializarApp()">
+<body onload="init()">
 
-    <div id="tela-login" class="screen active-screen" style="justify-content:center; align-items:center; padding:40px;">
-        <h1 style="font-family:'Orbitron'; color:var(--p); font-size:35px;">LOG-PRO</h1>
-        <p style="color:#555; font-size:10px; margin-bottom:40px;">v95 | JP DIAS - FULL INTEGRATED</p>
-        <input type="password" id="pin-acesso" placeholder="PIN" style="text-align:center;">
-        <button class="btn btn-p" onclick="realizarLogin()">ENTRAR</button>
-    </div>
-
-    <div id="tela-shark" class="screen">
-        <header><span>SHARK PANEL</span> <button onclick="logout()" class="btn-d" style="width:50px; height:25px; border:none; font-size:7px;">SAIR</button></header>
-        <div class="scroll-area">
-            <div class="kpi-grid">
-                <div class="kpi-box"><span id="kpi-ent">0</span><small>ENT</small></div>
-                <div class="kpi-box"><span id="kpi-sep" style="color:var(--w)">0</span><small>SEP</small></div>
-                <div class="kpi-box"><span id="kpi-sai" style="color:var(--s)">0</span><small>SAI</small></div>
-                <div class="kpi-box"><span id="kpi-ava" style="color:var(--dg)">0</span><small>AVA</small></div>
-            </div>
-            <div id="container-alertas"></div>
-            <div class="card">
-                <h3><i class="fa-solid fa-database"></i> CADASTRO E BACKUP</h3>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
-                    <button class="btn btn-s" style="padding:10px; font-size:8px;" onclick="exportarBackup()">EXPORTAR</button>
-                    <button class="btn btn-s" style="padding:10px; font-size:8px;" onclick="document.getElementById('in-file').click()">IMPORTAR</button>
-                </div>
-                <input type="file" id="in-file" style="display:none;" onchange="importarBackup(this)">
-                <input type="text" id="cad-ean" placeholder="CÓDIGO EAN">
-                <input type="text" id="cad-nome" placeholder="NOME DO PRODUTO">
-                <button class="btn btn-p" style="padding:10px; font-size:8px;" onclick="cadastrarManual()">SALVAR PRODUTO</button>
-                <button class="btn btn-d" style="margin-top:10px; padding:10px; font-size:8px;" onclick="resetSistema()">RESET TOTAL</button>
-            </div>
-            <div class="card">
-                <h3><i class="fa-solid fa-boxes-packing"></i> FILA DE PICKING (SALDO ATUAL)</h3>
-                <div id="fila-picking"></div>
-            </div>
-            <div class="card">
-                <h3><i class="fa-solid fa-clock-rotate-left"></i> ÚLTIMOS LOGS</h3>
-                <table><tbody id="tabela-logs"></tbody></table>
-            </div>
+    <header>
+        <div class="logo-box">
+            <span>HG MOTORS</span>
+            <span>Excelência Automotiva</span>
         </div>
-    </div>
-
-    <div id="tela-operador" class="screen">
-        <header><span>OPERADOR</span> <button onclick="gerarRomaneio()" class="btn-s" style="width:70px; height:25px; border:none; font-size:7px;">GERAR ROMANEIO</button></header>
-        <div class="scroll-area">
-            <div class="card">
-                <div id="reader-op" class="scanner-view"></div>
-                <button class="btn btn-p" id="btn-cam-op" onclick="controleCamera('reader-op','btn-cam-op',false)">ABRIR CÂMERA</button>
-            </div>
-            <div class="card">
-                <select id="operacao-tipo">
-                    <option value="ENTRADA">📥 REGISTRAR ENTRADA</option>
-                    <option value="SEPARACAO">📦 REGISTRAR SEPARAÇÃO</option>
-                    <option value="SAIDA">🚚 REGISTRAR EXPEDIÇÃO</option>
-                </select>
-                <input type="text" id="ean-manual" placeholder="DIGITE O EAN">
-                <button class="btn btn-s" onclick="processarManual()">BIPAR MANUAL</button>
-                <button class="btn btn-d" style="margin-top:10px" onclick="registrarAvaria()">⚠️ REGISTRAR AVARIA</button>
-            </div>
-            <div class="card">
-                <h3><i class="fa-solid fa-receipt"></i> SESSÃO ATUAL</h3>
-                <div id="lista-sessao"></div>
-            </div>
+        <div style="background: var(--glass); padding: 8px 12px; border-radius: 12px; border: 1px solid var(--border);">
+            <i class="fa fa-th-large" style="color: var(--gold); font-size: 14px;"></i>
         </div>
-    </div>
+    </header>
 
-    <div id="tela-motorista" class="screen">
-        <header><span>MOTORISTA / ROTA</span></header>
-        <div class="scroll-area">
-            <div class="card">
-                <div id="reader-mot" class="scanner-view"></div>
-                <button class="btn btn-s" id="btn-cam-mot" onclick="controleCamera('reader-mot','btn-cam-mot',true)">SCAN ROMANEIO</button>
-            </div>
-            <div id="card-romaneio" class="card" style="display:none; border-left:5px solid var(--p);">
-                <h2 id="romaneio-id"></h2>
-                <p id="info-gps" style="color:var(--p); margin:10px 0; font-size:10px;"></p>
-                <button class="btn btn-p" onclick="confirmarEntrega()">CONFIRMAR ENTREGA NO MAPA</button>
-            </div>
+    <div class="container">
+        <div class="filter-wrap">
+            <button class="chip active" onclick="filter('TODOS')">Todos</button>
+            <button class="chip" onclick="filter('PREMIUM')">Premium</button>
+            <button class="chip" onclick="filter('SUV')">SUVs</button>
+            <button class="chip" onclick="filter('SEDAN')">Sedans</button>
+            <button class="chip" onclick="filter('MOTO')">Motos</button>
         </div>
+
+        <div id="app-grid"></div>
     </div>
 
-    <div class="bottom-nav" id="nav-principal" style="display:none;">
-        <div class="nav-item active-tab" onclick="navegar('tela-shark', this)"><i class="fa-solid fa-chart-line"></i>SHARK</div>
-        <div class="nav-item" onclick="navegar('tela-operador', this)"><i class="fa-solid fa-barcode"></i>OP</div>
-        <div class="nav-item" onclick="navegar('tela-motorista', this)"><i class="fa-solid fa-truck"></i>ROTA</div>
-    </div>
+    <footer>
+        DESENVOLVIDO POR JP DIAS - SHARK TECH
+    </footer>
 
     <script>
-        let logs = JSON.parse(localStorage.getItem('L95') || '[]');
-        let produtos = JSON.parse(localStorage.getItem('P95') || '{}');
-        let sessao = [];
-        let html5QrCode, isCameraOpen = false, currentGps = "";
+        const estoque = [
+            { cat: 'PREMIUM', brand: 'BMW', model: '320i Sport M', info: '2022 • Turbo • ZF8 • Teto Solar', price: '249.900', img: '5739.jpg' },
+            { cat: 'SUV', brand: 'JEEP', model: 'Compass Longitude', info: '2021 • Diesel 4x4 • Couro • 32k km', price: '158.900', img: '5743.jpg' },
+            { cat: 'SEDAN', brand: 'HONDA', model: 'Civic G10 EXL', info: '2020 • Full LED • Paddle Shift', price: '119.900', img: '5745.jpg' },
+            { cat: 'SUV', brand: 'CHEVROLET', model: 'Equinox Premier', info: '2021 • AWD Turbo • Teto Panorâmico', price: '145.900', img: '5746.jpg' },
+            { cat: 'PREMIUM', brand: 'AUDI', model: 'A3 Sedan S-Line', info: '2022 • Virtual Cockpit • New Design', price: '189.900', img: '5752.jpg' },
+            { cat: 'MOTO', brand: 'HONDA', model: 'CB 500X', info: '2020 • Adventure • ABS • Impecável', price: '38.500', img: '5740.jpg' }
+        ];
 
-        function inicializarApp() { renderizarTudo(); }
-        function realizarLogin() { document.getElementById('tela-login').classList.remove('active-screen'); document.getElementById('nav-principal').style.display='flex'; navegar('tela-shark', document.querySelector('.nav-item')); }
-        function logout() { location.reload(); }
+        function init() { render('TODOS'); }
 
-        function navegar(id, el) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-tab'));
-            document.getElementById(id).classList.add('active-screen');
-            el.classList.add('active-tab');
-            if(isCameraOpen) controleCamera();
-            renderizarTudo();
-        }
-
-        function controleCamera(div, btn, isMot) {
-            if(!isCameraOpen) {
-                document.getElementById(div).style.display = 'block';
-                html5QrCode = new Html5Qrcode(div);
-                html5QrCode.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, c => isMot ? handleMotorista(c) : handleOperador(c));
-                document.getElementById(btn).innerText = "PARAR"; isCameraOpen = true;
-            } else {
-                html5QrCode.stop().then(() => { document.querySelectorAll('.scanner-view').forEach(v=>v.style.display='none'); isCameraOpen = false; });
-            }
-        }
-
-        function handleOperador(c) {
-            if(!produtos[c]) {
-                let n = prompt("PRODUTO NÃO CADASTRADO!\nDIGITE O NOME:");
-                if(n) { produtos[c] = n; localStorage.setItem('P95', JSON.stringify(produtos)); } else return;
-            }
-            let t = document.getElementById('operacao-tipo').value;
-            let saldo = calcularSaldo(produtos[c]);
+        function render(f) {
+            const grid = document.getElementById('app-grid');
+            const data = f === 'TODOS' ? estoque : estoque.filter(i => i.cat === f);
             
-            if(t !== 'ENTRADA' && saldo <= 0) return alert("TRAVA HARD-LOCK: ESTOQUE ZERADO!");
-            
-            let q = prompt("QUANTIDADE PARA " + t + " (SALDO: " + saldo + "):", "1");
-            if(q && q > 0) {
-                if(t !== 'ENTRADA' && parseInt(q) > saldo) return alert("ERRO: SALDO INSUFICIENTE!");
-                sessao.unshift({n: produtos[c], q: q, t: t});
-                registrarLog('OP', t, `${produtos[c]} (${c}) | QTD: ${q}`);
-                atualizarSessao();
-            }
+            grid.innerHTML = data.map(v => `
+                <div class="car-card">
+                    <div class="image-stage">
+                        <img src="${v.img}" alt="${v.model}" loading="lazy">
+                        <div class="status-pill"><div class="dot"></div> DISPONÍVEL</div>
+                    </div>
+                    <div class="details">
+                        <span class="brand">${v.brand}</span>
+                        <h2 class="model">${v.model}</h2>
+                        <div class="features">
+                            ${v.info.split(' • ').map(t => `<span class="feat">${t}</span>`).join('')}
+                        </div>
+                        <div class="pricing">
+                            <span class="price-label" style="font-size:9px; color:#555; font-weight:900; text-transform:uppercase;">Condição Especial</span>
+                            <span class="val-now">R$ ${v.price}</span>
+                            <span class="val-sub">Simulação imediata via WhatsApp</span>
+                        </div>
+                        <a href="https://wa.me/5519999999999?text=Olá,%20tenho%20interesse%20no%20${v.model}" class="cta-button">
+                            <i class="fab fa-whatsapp"></i> Negociar agora
+                        </a>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        function registrarAvaria() {
-            let c = prompt("BIPE O CÓDIGO DA AVARIA:");
-            if(!c || !produtos[c]) return alert("PRODUTO NÃO LOCALIZADO!");
-            let saldo = calcularSaldo(produtos[c]);
-            if(saldo <= 0) return alert("ESTOQUE ZERADO, NÃO HÁ O QUE AVARIAR!");
-            let q = prompt("QTD AVARIADA (MAX: "+saldo+"):");
-            if(q && q > 0 && q <= saldo) {
-                registrarLog('OP', 'AVARIA', `${produtos[c]} (${c}) | QTD: ${q}`);
-                alert("AVARIA REGISTRADA!");
-            }
+        function filter(c) {
+            document.querySelectorAll('.chip').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            render(c);
         }
-
-        function calcularSaldo(nome) {
-            let s = 0;
-            logs.forEach(l => {
-                if(l.i.includes(nome)) {
-                    let q = parseInt(l.i.split('QTD: ')[1]) || 0;
-                    if(l.a === 'ENTRADA') s += q; else s -= q;
-                }
-            });
-            return s;
-        }
-
-        function handleMotorista(c) {
-            document.getElementById('card-romaneio').style.display='block';
-            document.getElementById('romaneio-id').innerText="ROMANEIO: " + c;
-            navigator.geolocation.getCurrentPosition(p => {
-                currentGps = p.coords.latitude + "," + p.coords.longitude;
-                document.getElementById('info-gps').innerText = "📍 LOCALIZAÇÃO GPS CAPTURADA: " + currentGps;
-            }, () => { alert("POR FAVOR, ATIVE O GPS!"); });
-        }
-
-        function confirmarEntrega() {
-            if(!currentGps) return alert("AGUARDANDO GPS...");
-            registrarLog('MOT', 'ENTREGA', 'GPS: ' + currentGps);
-            alert("ROTA FINALIZADA COM SUCESSO!");
-            document.getElementById('card-romaneio').style.display='none';
-        }
-
-        function registrarLog(o, a, i) {
-            logs.unshift({t: new Date().toLocaleTimeString(), o, a, i});
-            localStorage.setItem('L95', JSON.stringify(logs.slice(0, 1000)));
-            renderizarTudo();
-        }
-
-        function renderizarTudo() {
-            let h="", ent=0, sep=0, sai=0, ava=0, fila={}, alertas="";
-            logs.forEach(l => {
-                let q = parseInt(l.i.split('QTD: ')[1]) || 0;
-                let n = l.i.split(' (')[0].split(' |')[0];
-                fila[n] = fila[n] || 0;
-                if(l.a==='ENTRADA'){ ent+=q; fila[n]+=q; }
-                else if(l.a==='SEPARACAO'){ sep+=q; fila[n]-=q; }
-                else if(l.a==='SAIDA'){ sai+=q; }
-                else if(l.a==='AVARIA'){ ava+=q; fila[n]-=q; }
-                let cor = l.a==='ENTRADA'?'#007aff':l.a==='SEPARACAO'?'#ffae00':l.a==='AVARIA'?'#ff3b30':'#00ff41';
-                h += `<tr><td>${l.t}</td><td><span class="pill" style="background:${cor}">${l.a}</span></td><td><b>${l.i}</b></td></tr>`;
-            });
-            document.getElementById('tabela-logs').innerHTML = h;
-            document.getElementById('kpi-ent').innerText = ent; document.getElementById('kpi-sep').innerText = sep;
-            document.getElementById('kpi-sai').innerText = sai; document.getElementById('kpi-ava').innerText = ava;
-            let fh = "";
-            for(let k in fila) {
-                if(fila[k] > 0) {
-                    fh += `<div style="background:#111; padding:10px; border-radius:8px; margin-bottom:5px; display:flex; justify-content:space-between;"><span>${k}</span><b style="color:var(--w)">${fila[k]} UN</b></div>`;
-                    if(fila[k] < 5) alertas += `<div class="alert-box">⚠️ ESTOQUE CRÍTICO: ${k} (${fila[k]} UN)</div>`;
-                }
-            }
-            document.getElementById('fila-picking').innerHTML = fh || '<p style="text-align:center; color:#444;">NENHUM SALDO PENDENTE</p>';
-            document.getElementById('container-alertas').innerHTML = alertas;
-        }
-
-        function cadastrarManual() {
-            let e = document.getElementById('cad-ean').value;
-            let n = document.getElementById('cad-nome').value;
-            if(e && n) { produtos[e] = n; localStorage.setItem('P95', JSON.stringify(produtos)); renderizarTudo(); alert("CADASTRADO!"); document.getElementById('cad-ean').value=""; document.getElementById('cad-nome').value=""; }
-        }
-
-        function processarManual() { let e = document.getElementById('ean-manual').value; if(e) handleOperador(e); document.getElementById('ean-manual').value=""; }
-        function atualizarSessao() { let h=""; sessao.forEach(x=> h += `<div style="padding:8px; border-bottom:1px solid #222; font-size:9px; color:#aaa;">${x.n} - ${x.q} UN [${x.t}]</div>`); document.getElementById('lista-sessao').innerHTML = h; }
-        function gerarRomaneio() { if(sessao.length===0) return alert("SESSÃO VAZIA!"); let r="ROMANEIO DE CARGA\n\n"; sessao.forEach(x=>r+=`${x.n}: ${x.q} UN\n`); alert(r); sessao=[]; atualizarSessao(); }
-        function resetSistema() { if(confirm("DESEJA APAGAR TODO O BANCO DE DADOS?")) { localStorage.clear(); location.reload(); } }
-        function exportarBackup() { let a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify({logs, produtos})], {type: "application/json"})); a.download = "LOGPRO_BACKUP.json"; a.click(); }
-        function importarBackup(i) { let f = new FileReader(); f.onload = e => { let d = JSON.parse(e.target.result); logs = d.logs; produtos = d.produtos; localStorage.setItem('P95', JSON.stringify(produtos)); localStorage.setItem('L95', JSON.stringify(logs)); renderizarTudo(); alert("IMPORTADO COM SUCESSO!"); }; f.readAsText(i.files[0]); }
     </script>
 </body>
 </html>
