@@ -1,126 +1,190 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>HG MOTORS | Estoque Premium</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LOG-PRO XMS v82 | FULL FLOW</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        :root{--p:#e63946;--s:#25d366;--bg:#050505;--sf:#111;--t:#fff;--td:#888;--r:15px}
-        *{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif}
-        body{background:var(--bg);color:var(--t);overflow-x:hidden}
-        header{background:rgba(5,5,5,.97);padding:15px;text-align:center;border-bottom:3px solid var(--p);position:sticky;top:0;z-index:1000;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(10px)}
-        .logo{font-family:'Bebas Neue';font-size:28px;letter-spacing:4px;text-transform:uppercase;flex:1}.logo span{color:var(--p)}
-        .admin-btn{background:var(--sf);border:1px solid #222;color:var(--td);padding:8px 12px;border-radius:8px;cursor:pointer;font-size:10px;font-weight:700}
-        .intro{max-width:500px;margin:15px auto;padding:15px;background:var(--sf);border-radius:var(--r);border:1px solid #222;font-size:12px;color:var(--td)}
-        .intro b{color:var(--t);display:block;margin-bottom:5px;font-size:14px}
-        .search-bar{max-width:500px;margin:10px auto;padding:0 15px}
-        .search-input{width:100%;background:var(--sf);border:1px solid #222;color:var(--t);padding:12px;border-radius:var(--r);font-size:13px}
-        .v80-nav{display:flex;gap:10px;padding:12px;overflow-x:auto;background:#080808;border-bottom:1px solid #222;position:sticky;top:70px;z-index:999}
-        .nav-link{background:var(--sf);color:var(--td);padding:8px 15px;border-radius:8px;font-size:10px;font-weight:700;border:1px solid #222;text-transform:uppercase;white-space:nowrap;cursor:pointer}
-        .nav-link.active{background:var(--p);color:#fff;border-color:var(--p)}
-        .catalog{max-width:500px;margin:0 auto;padding:15px}
-        .card{background:var(--sf);border-radius:var(--r);margin-bottom:25px;overflow:hidden;border:1px solid #222;position:relative;box-shadow:0 10px 30px rgba(0,0,0,.5)}
-        .media{position:relative;width:100%;height:250px}.media img{width:100%;height:100%;object-fit:cover}
-        .badge{position:absolute;top:10px;left:10px;padding:4px 10px;border-radius:6px;font-size:8px;font-weight:900;text-transform:uppercase;background:var(--p);color:#fff}
-        .disponivel{position:absolute;top:10px;right:10px;padding:4px 10px;border-radius:6px;font-size:8px;font-weight:900;text-transform:uppercase;background:var(--s);color:#fff;animation:pulse 1.5s infinite}
-        @keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
-        .info{padding:15px}.tag{color:var(--p);font-size:9px;font-weight:900;text-transform:uppercase}.name{font-family:'Bebas Neue';font-size:26px;margin:5px 0 10px;text-transform:uppercase}
-        .desc{font-size:11px;color:var(--td);margin-bottom:12px}.specs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
-        .pill{background:#181818;padding:5px 10px;border-radius:6px;font-size:11px;color:#bbb;border:1px solid #222}
-        .price-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding-top:12px;border-top:1px solid #222}
-        .price{font-size:28px;font-weight:900;color:#fff}
-        .btn-zap{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--s);color:#fff;text-decoration:none;padding:15px;border-radius:var(--r);font-weight:900;font-size:13px;text-transform:uppercase}
-        .admin-panel{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:9999;padding:20px;overflow-y:auto}
-        .admin-panel.open{display:block}.admin-content{max-width:500px;margin:0 auto;background:var(--sf);border-radius:var(--r);padding:20px;border:1px solid #222}
-        .admin-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:2px solid var(--p);padding-bottom:10px}
-        .admin-header h2{font-family:'Bebas Neue';color:var(--p)}
-        .form-group{margin-bottom:12px}.form-group label{display:block;font-size:11px;margin-bottom:4px}
-        .form-group input,.form-group select,.form-group textarea{width:100%;background:#181818;border:1px solid #222;color:#fff;padding:10px;border-radius:8px;font-size:12px}
-        .btn-submit{background:var(--p);color:#fff;border:none;padding:12px;border-radius:8px;width:100%;font-weight:900;cursor:pointer}
-        .float-zap{position:fixed;bottom:20px;right:20px;background:var(--s);color:#fff;width:55px;height:55px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;z-index:888}
-        footer{background:#080808;padding:30px;text-align:center;font-size:10px;color:var(--td);border-top:1px solid #222}
+        :root { --p: #00ff41; --s: #007aff; --bg: #050505; --sf: #111; --brd: #222; --dg: #ff3b30; --wrn: #ffae00; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; font-size: 11px; height: 100vh; overflow: hidden; text-transform: uppercase; }
+        .screen { display: none; height: 100vh; flex-direction: column; background: var(--bg); }
+        .active { display: flex !important; }
+        header { padding: 15px; border-bottom: 1px solid var(--brd); display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron'; background: #000; }
+        .scroll { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 100px; }
+        .card { background: var(--sf); border: 1px solid var(--brd); border-radius: 8px; padding: 12px; margin-bottom: 12px; position: relative; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        h3 { font-family: 'Orbitron'; font-size: 11px; color: var(--p); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        input, select, textarea { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 6px; font-size: 11px; margin-bottom: 8px; }
+        .btn { width: 100%; padding: 14px; border: none; border-radius: 6px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; text-transform: uppercase; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-p { background: var(--p); color: #000; }
+        .btn-s { background: var(--s); color: #fff; }
+        .btn-dark { background: #222; color: #fff; border: 1px solid #444; }
+        .status-pill { padding: 4px 8px; border-radius: 4px; font-size: 8px; font-weight: 800; }
+        .st-in { background: var(--s); } .st-sep { background: var(--wrn); color: #000; } .st-out { background: var(--p); color: #000; } .st-av { background: var(--dg); }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 9px; }
+        th { text-align: left; color: #555; padding: 8px; border-bottom: 1px solid #222; }
+        td { padding: 8px; border-bottom: 1px solid #111; }
+        .nav-tabs { display: flex; background: #000; border-top: 1px solid var(--brd); position: fixed; bottom: 0; width: 100%; z-index: 100; }
+        .nav-tab { flex: 1; padding: 15px; text-align: center; color: #444; cursor: pointer; font-weight: 800; font-size: 9px; }
+        .nav-tab.active { color: var(--p); border-top: 2px solid var(--p); background: #0a0a0a; }
+        .kpi-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .kpi-card { background: #0a0a0a; border: 1px solid #222; padding: 10px; border-radius: 6px; text-align: center; }
+        .kpi-val { font-family: 'Orbitron'; font-size: 16px; color: var(--p); display: block; }
+        .kpi-label { font-size: 7px; color: #555; }
     </style>
 </head>
-<body>
-    <header>
-        <div class="logo">HG <span>MOTORS</span></div>
-        <button class="admin-btn" onclick="openAdmin()">PAINEL</button>
-    </header>
-    <div class="intro"><b>Conduzindo Seu Sonho!</b>Atuamos a mais de 15 anos com qualidade e confiança. Av. Faustino Bertolino, 440, Hortolândia, SP.</div>
-    <div class="search-bar"><input type="text" class="search-input" id="searchInput" placeholder="🔍 Buscar veículo..."></div>
-    <div class="v80-nav">
-        <div class="nav-link active" onclick="filter('all',this)">Todos</div>
-        <div class="nav-link" onclick="filter('hatch',this)">Hatch</div>
-        <div class="nav-link" onclick="filter('sedan',this)">Sedan</div>
-        <div class="nav-link" onclick="filter('suv',this)">SUV</div>
-        <div class="nav-link" onclick="filter('moto',this)">Motos</div>
+<body onload="init()">
+
+<div id="scr-login" class="screen active" style="justify-content:center; align-items:center; padding:40px;">
+    <div style="font-family:'Orbitron'; color:var(--p); font-size:32px; text-align:center; line-height:1;">LOG-PRO<br><span style="font-size:12px; color:#555;">FULL FLOW XMS v82</span></div>
+    <div style="width:100%; margin-top:40px;">
+        <input type="text" id="user" placeholder="USUÁRIO (SHARK / OP / MOT)">
+        <input type="password" id="pin" placeholder="PIN ACESSO">
+        <button class="btn btn-p" onclick="login()">ACESSAR SISTEMA</button>
     </div>
-    <div class="catalog" id="catalog">
-        <!-- VEICULO 1 -->
-        <div class="card" data-cat="hatch" data-name="onix turbo premier">
-            <div class="media"><img src="https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=600&q=80"><div class="badge">Destaque</div><div class="disponivel">Disponível</div></div>
-            <div class="info">
-                <div class="tag">Chevrolet</div><h2 class="name">Onix Turbo Premier</h2>
-                <p class="desc">Hatch moderno com motor turbo e acabamento premium.</p>
-                <div class="specs"><span class="pill">2023</span><span class="pill">15k KM</span><span class="pill">Automático</span></div>
-                <div class="price-row"><div class="price">R$ 89.900</div><div style="color:var(--s);font-weight:900">-6% OFF</div></div>
-                <a href="https://wa.me/5519998463668?text=Vi o Onix 2023 no site" class="btn-zap"><i class="fa-brands fa-whatsapp"></i> NEGOCIAR</a>
-            </div>
+</div>
+
+<!-- PAINEL SHARK (GESTOR) -->
+<div id="scr-shark" class="screen">
+    <header><span>SHARK MASTER</span> <i class="fa-solid fa-crown" style="color:var(--p)"></i></header>
+    <div class="scroll">
+        <div class="kpi-grid">
+            <div class="kpi-card"><span class="kpi-val" id="kpi-in">0</span><span class="kpi-label">ENTRADAS</span></div>
+            <div class="kpi-card"><span class="kpi-val" id="kpi-sep" style="color:var(--wrn)">0</span><span class="kpi-label">SEPARAÇÃO</span></div>
+            <div class="kpi-card"><span class="kpi-val" id="kpi-out" style="color:var(--s)">0</span><span class="kpi-label">SAÍDAS</span></div>
         </div>
-        <!-- VEICULO 2 -->
-        <div class="card" data-cat="sedan" data-name="corolla altis hybrid">
-            <div class="media"><img src="https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=600&q=80"><div class="badge" style="background:#1e90ff">Híbrido</div><div class="disponivel">Disponível</div></div>
-            <div class="info">
-                <div class="tag">Toyota</div><h2 class="name">Corolla Altis Hybrid</h2>
-                <p class="desc">Sedan híbrido de última geração com tecnologia Toyota.</p>
-                <div class="specs"><span class="pill">2022</span><span class="pill">28k KM</span><span class="pill">CVT</span></div>
-                <div class="price-row"><div class="price">R$ 138.900</div><div style="color:var(--s);font-weight:900">OFERTA</div></div>
-                <a href="https://wa.me/5519998463668?text=Vi o Corolla 2022 no site" class="btn-zap"><i class="fa-brands fa-whatsapp"></i> NEGOCIAR</a>
-            </div>
+        <div class="card">
+            <h3><i class="fa-solid fa-file-export"></i> RELATÓRIO OPERACIONAL</h3>
+            <button class="btn btn-s" onclick="exportar()"><i class="fa-solid fa-download"></i> BAIXAR PLANILHA COMPLETA</button>
         </div>
-        <!-- VEICULO 3 -->
-        <div class="card" data-cat="moto" data-name="honda xre 300">
-            <div class="media"><img src="https://images.unsplash.com/photo-1558981403-c5f91cbcf523?w=600&q=80"><div class="badge">Facebook</div><div class="disponivel">Disponível</div></div>
-            <div class="info">
-                <div class="tag">Honda</div><h2 class="name">Honda XRE 300</h2>
-                <p class="desc">Moto trail confiável e econômica para o dia a dia.</p>
-                <div class="specs"><span class="pill">2012</span><span class="pill">53k KM</span><span class="pill">Manual</span></div>
-                <div class="price-row"><div class="price">R$ 18.800</div><div style="color:var(--s);font-weight:900">TOP</div></div>
-                <a href="https://wa.me/5519998463668?text=Vi a XRE 300 no site" class="btn-zap"><i class="fa-brands fa-whatsapp"></i> NEGOCIAR</a>
-            </div>
-        </div>
-        <!-- VEICULO 4 -->
-        <div class="card" data-cat="suv" data-name="jeep compass limited">
-            <div class="media"><img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=600&q=80"><div class="badge" style="background:#f4c430;color:#000">Diesel</div><div class="disponivel">Disponível</div></div>
-            <div class="info">
-                <div class="tag">Jeep</div><h2 class="name">Compass Limited</h2>
-                <p class="desc">SUV robusto com motor diesel e tração 4x4.</p>
-                <div class="specs"><span class="pill">2023</span><span class="pill">18k KM</span><span class="pill">4x4</span></div>
-                <div class="price-row"><div class="price">R$ 149.900</div><div style="color:var(--s);font-weight:900">PREMIUM</div></div>
-                <a href="https://wa.me/5519998463668?text=Vi o Compass no site" class="btn-zap"><i class="fa-brands fa-whatsapp"></i> NEGOCIAR</a>
-            </div>
+        <div class="card">
+            <h3><i class="fa-solid fa-tower-broadcast"></i> MONITOR DE FLUXO</h3>
+            <table>
+                <thead><tr><th>HORA</th><th>ETAPA</th><th>ITEM</th><th>OP</th></tr></thead>
+                <tbody id="shark-monitor"></tbody>
+            </table>
         </div>
     </div>
-    <div class="admin-panel" id="adminPanel">
-        <div class="admin-content">
-            <div class="admin-header"><h2>Painel Lojista</h2><button onclick="closeAdmin()" style="background:none;border:none;color:#fff;font-size:20px">×</button></div>
-            <form onsubmit="event.preventDefault();alert('Em breve!')">
-                <div class="form-group"><label>Modelo</label><input type="text" placeholder="Ex: Onix"></div>
-                <div class="form-group"><label>Preço</label><input type="number" placeholder="89900"></div>
-                <div class="form-group"><label>Categoria</label><select><option>Hatch</option><option>Sedan</option><option>SUV</option><option>Moto</option></select></div>
-                <button class="btn-submit">ADICIONAR</button>
-            </form>
+</div>
+
+<!-- PAINEL OPERADOR (FLUXO COMPLETO) -->
+<div id="scr-op" class="screen">
+    <header><span>OPERADOR</span> <i class="fa-solid fa-barcode" style="color:var(--p)"></i></header>
+    <div class="scroll">
+        <div class="card">
+            <h3><i class="fa-solid fa-gears"></i> ETAPA DA OPERAÇÃO</h3>
+            <select id="mod-op">
+                <option value="ENTRADA">📥 ENTRADA / ABASTECER</option>
+                <option value="SEPARACAO">📦 SEPARAÇÃO (PICKING)</option>
+                <option value="AVARIA">⚠️ AVARIA (QUEBRA)</option>
+                <option value="SAIDA">🚚 SAÍDA (EXPEDIÇÃO)</option>
+            </select>
+            <input type="text" id="bipe-input" placeholder="BIPE O CÓDIGO..." onkeypress="if(event.key==='Enter')bipe()">
+            <div class="grid-2">
+                <input type="number" id="bipe-qtd" value="1" style="text-align:center;">
+                <button class="btn btn-p" onclick="bipe()"><i class="fa-solid fa-plus"></i> BIPAR</button>
+            </div>
+        </div>
+        <div class="card" style="background:#080808">
+            <h3><i class="fa-solid fa-clock-rotate-left"></i> ÚLTIMOS MOVIMENTOS</h3>
+            <div id="op-log" style="font-size:9px; color:#666;"></div>
         </div>
     </div>
-    <a href="https://wa.me/5519998463668" class="float-zap"><i class="fa-brands fa-whatsapp"></i></a>
-    <footer><div class="footer-logo">HG <span>MOTORS</span></div>© 2025 HG MOTORS · Hortolândia · SP</footer>
-    <script>
-        function filter(c,e){document.querySelectorAll('.nav-link').forEach(b=>b.classList.remove('active'));e.classList.add('active');document.querySelectorAll('.card').forEach(card=>{card.style.display=(c==='all'||card.getAttribute('data-cat')===c)?'block':'none'})}
-        document.getElementById('searchInput').addEventListener('input',function(){let q=this.value.toLowerCase();document.querySelectorAll('.card').forEach(card=>{card.style.display=card.getAttribute('data-name').includes(q)?'block':'none'})});
-        function openAdmin(){document.getElementById('adminPanel').classList.add('open')}
-        function closeAdmin(){document.getElementById('adminPanel').classList.remove('open')}
-    </script>
+</div>
+
+<!-- PAINEL MOTORISTA -->
+<div id="scr-mot" class="screen">
+    <header><span>MOTORISTA</span> <i class="fa-solid fa-truck-fast" style="color:var(--s)"></i></header>
+    <div class="scroll">
+        <div class="card" style="border-left: 4px solid var(--s);">
+            <h2 style="font-family:'Orbitron'; font-size:18px;">CARGA #9901</h2>
+            <p style="color:var(--s); font-weight:800;">PLACA: BRA2E19 | DESTINO: SP</p>
+        </div>
+        <div class="grid-2">
+            <button class="btn btn-dark" style="height:80px; flex-direction:column;" onclick="motAcao('INICIO ROTA')"><i class="fa-solid fa-play"></i> INICIAR</button>
+            <button class="btn btn-dark" style="height:80px; flex-direction:column;" onclick="motAcao('CHECK-IN')"><i class="fa-solid fa-location-dot"></i> CHECK-IN</button>
+        </div>
+        <button class="btn btn-p" style="margin-top:10px; height:60px;" onclick="motAcao('ENTREGUE')"><i class="fa-solid fa-check-double"></i> FINALIZAR ENTREGA</button>
+        <button class="btn btn-dg" style="margin-top:10px;" onclick="motAcao('OCORRENCIA')"><i class="fa-solid fa-triangle-exclamation"></i> REGISTRAR OCORRÊNCIA</button>
+    </div>
+</div>
+
+<div class="nav-tabs" id="main-nav" style="display:none;">
+    <div class="nav-tab active" onclick="tab('scr-shark', this)"><i class="fa-solid fa-gauge-high"></i><br>SHARK</div>
+    <div class="nav-tab" onclick="tab('scr-op', this)"><i class="fa-solid fa-barcode"></i><br>OPERADOR</div>
+    <div class="nav-tab" onclick="tab('scr-mot', this)"><i class="fa-solid fa-truck"></i><br>MOTORISTA</div>
+</div>
+
+<script>
+    let logs = JSON.parse(localStorage.getItem('LOGPRO_DATA') || '[]');
+    function login() {
+        const u = document.getElementById('user').value.toUpperCase();
+        if(u) {
+            document.getElementById('scr-login').classList.remove('active');
+            document.getElementById('main-nav').style.display = 'flex';
+            if(u === 'SHARK') tab('scr-shark', document.querySelectorAll('.nav-tab')[0]);
+            else if(u === 'OP') tab('scr-op', document.querySelectorAll('.nav-tab')[1]);
+            else tab('scr-mot', document.querySelectorAll('.nav-tab')[2]);
+        }
+    }
+    function tab(id, el) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        el.classList.add('active');
+        renderShark();
+    }
+    function bipe() {
+        const cod = document.getElementById('bipe-input').value;
+        const qtd = document.getElementById('bipe-qtd').value;
+        const etapa = document.getElementById('mod-op').value;
+        if(!cod) return;
+        addLog('OPERADOR', etapa, `${cod} (QTD: ${qtd})`);
+        document.getElementById('op-log').innerHTML = `<p>${new Date().toLocaleTimeString()} - ${etapa}: ${cod}</p>` + document.getElementById('op-log').innerHTML;
+        document.getElementById('bipe-input').value = '';
+        renderShark();
+    }
+    function motAcao(tipo) {
+        addLog('MOTORISTA', 'AÇÃO', tipo);
+        alert(`MOTORISTA: ${tipo} REGISTRADO`);
+        renderShark();
+    }
+    function addLog(origem, acao, info) {
+        const log = { hora: new Date().toLocaleTimeString(), origem, acao, info };
+        logs.unshift(log);
+        if(logs.length > 50) logs.pop();
+        localStorage.setItem('LOGPRO_DATA', JSON.stringify(logs));
+    }
+    function renderShark() {
+        let h = ""; let ent = 0; let sep = 0; let out = 0;
+        logs.forEach(l => {
+            let pill = l.acao === 'ENTRADA' ? 'st-in' : l.acao === 'SEPARACAO' ? 'st-sep' : l.acao === 'SAIDA' ? 'st-out' : 'st-av';
+            h += `<tr><td>${l.hora}</td><td><span class="status-pill ${pill}">${l.acao}</span></td><td>${l.info}</td><td>${l.origem}</td></tr>`;
+            if(l.acao === 'ENTRADA') ent++;
+            if(l.acao === 'SEPARACAO') sep++;
+            if(l.acao === 'SAIDA') out++;
+        });
+        document.getElementById('shark-monitor').innerHTML = h;
+        document.getElementById('kpi-in').innerText = ent;
+        document.getElementById('kpi-sep').innerText = sep;
+        document.getElementById('kpi-out').innerText = out;
+    }
+    function exportar() {
+        let csv = "HORA,ORIGEM,ETAPA,INFO\n";
+        logs.forEach(l => csv += `${l.hora},${l.origem},${l.acao},${l.info}\n`);
+        const blob = new Blob([csv], {type: 'text/csv'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = "LOGPRO_V82_REPORT.csv";
+        a.click();
+    }
+    function init() { 
+        setInterval(renderShark, 2000);
+        renderShark();
+    }
+</script>
 </body>
 </html>
