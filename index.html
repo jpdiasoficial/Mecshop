@@ -3,169 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HG MOTORS | PREMIUM SELECTION</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>HG MOTORS | EXCELÊNCIA AUTOMOTIVA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
     <style>
-        :root { 
-            --gold: #D4AF37; --bg: #0A0A0A; --card: #161616; --glass: rgba(255,255,255,0.03); 
-            --border: rgba(255,255,255,0.08); --w: #25D366; --text: #E0E0E0;
+        :root {
+            --gold: #D4AF37; --dark: #050505; --card: #111111; --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08); --w: #25D366; --text-dim: #888;
+            --grad: linear-gradient(135deg, #D4AF37 0%, #f2d06b 100%);
         }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: var(--text); overflow-x: hidden; line-height: 1.6; }
 
-        /* HEADER FACEBOOK STYLE (ULTRA GLASS) */
+        /* 1-5: Reset e Scroll Smooth */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; }
+        body { background: var(--dark); color: #fff; overflow-x: hidden; }
+
+        /* 6-10: Header Ultra Glass */
         header { 
-            position: fixed; top: 0; width: 100%; z-index: 1000; padding: 15px 20px;
-            background: rgba(10, 10, 10, 0.75); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            position: fixed; top: 0; width: 100%; z-index: 2000; padding: 15px 20px;
+            background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;
         }
-        .logo-group h1 { font-weight: 800; font-size: 19px; color: var(--gold); letter-spacing: -0.5px; }
-        .logo-group p { font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: #666; font-weight: 700; }
+        .logo-img { height: 40px; filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.3)); }
 
-        .container { padding: 90px 16px 40px; max-width: 600px; margin: 0 auto; }
-
-        /* STORIES/CATEGORIAS ESTILO APP */
-        .categories { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 20px; scrollbar-width: none; }
-        .categories::-webkit-scrollbar { display: none; }
-        .cat-item { 
-            min-width: 85px; height: 110px; background: var(--card); border-radius: 18px; border: 1px solid var(--border);
-            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; transition: 0.3s;
+        /* 11-15: Hero Section (Impacto Landing Page) */
+        .hero { 
+            padding: 120px 20px 40px; text-align: center; 
+            background: radial-gradient(circle at top, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
         }
-        .cat-item i { font-size: 20px; color: var(--gold); }
-        .cat-item span { font-size: 10px; font-weight: 800; color: #999; }
-        .cat-item.active { border-color: var(--gold); background: rgba(212, 175, 55, 0.05); }
-        .cat-item.active span { color: #fff; }
+        .hero h2 { font-size: 32px; font-weight: 800; letter-spacing: -1px; margin-bottom: 10px; }
+        .hero p { color: var(--text-dim); font-size: 14px; max-width: 300px; margin: 0 auto 25px; }
 
-        /* CARD NIVEL GALATICO */
-        .card { 
-            background: var(--card); border-radius: 28px; overflow: hidden; margin-bottom: 25px; 
-            border: 1px solid var(--border); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        /* 16-20: Categorias Estilo App */
+        .nav-cats { display: flex; gap: 12px; overflow-x: auto; padding: 10px 20px; scrollbar-width: none; margin-bottom: 30px; }
+        .nav-cats::-webkit-scrollbar { display: none; }
+        .cat-card { 
+            min-width: 100px; padding: 20px 10px; background: var(--card); border: 1px solid var(--border);
+            border-radius: 20px; text-align: center; transition: 0.3s;
         }
-        .card:active { transform: scale(0.98); }
+        .cat-card i { font-size: 20px; color: var(--gold); margin-bottom: 8px; display: block; }
+        .cat-card span { font-size: 10px; font-weight: 800; color: var(--text-dim); text-transform: uppercase; }
+        .cat-card.active { border-color: var(--gold); background: rgba(212, 175, 55, 0.05); transform: translateY(-5px); }
+        .cat-card.active span { color: #fff; }
 
-        .media-box { position: relative; width: 100%; height: 350px; background: #000; overflow: hidden; }
-        .media-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s; }
+        /* 21-30: Feed de Veículos (Grid Galático) */
+        .feed { padding: 0 20px 100px; max-width: 600px; margin: 0 auto; }
+        .item-card { 
+            background: var(--card); border-radius: 30px; border: 1px solid var(--border);
+            margin-bottom: 30px; overflow: hidden; position: relative;
+            animation: slideUp 0.6s ease-out forwards;
+        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        .item-img { width: 100%; height: 350px; position: relative; }
+        .item-img img { width: 100%; height: 100%; object-fit: cover; }
         
-        /* OVERLAYS SHARK GOLD */
-        .badge-top { 
-            position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.6); 
-            backdrop-filter: blur(10px); padding: 6px 14px; border-radius: 50px; 
-            font-size: 9px; font-weight: 800; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 6px;
+        /* 31-35: Badges e Info Flutuante */
+        .status-tag { 
+            position: absolute; top: 20px; left: 20px; background: rgba(0,0,0,0.6); 
+            backdrop-filter: blur(10px); padding: 7px 15px; border-radius: 50px;
+            font-size: 10px; font-weight: 800; border: 1px solid rgba(255,255,255,0.1);
+            display: flex; align-items: center; gap: 6px;
         }
-        .badge-top .pulse { width: 6px; height: 6px; background: var(--w); border-radius: 50%; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+        .status-tag::before { content: ''; width: 8px; height: 8px; background: var(--w); border-radius: 50%; box-shadow: 0 0 10px var(--w); }
 
-        .info-content { padding: 22px; }
-        .car-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
-        .car-title { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
-        .car-year { background: var(--gold); color: #000; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 900; }
+        .item-details { padding: 25px; }
+        .item-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .item-name { font-size: 24px; font-weight: 800; text-transform: uppercase; line-height: 1; }
+        .item-meta { font-size: 11px; color: var(--gold); font-weight: 700; letter-spacing: 1px; }
 
-        .tags-row { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-        .tag { font-size: 11px; color: #888; background: rgba(255,255,255,0.04); padding: 5px 12px; border-radius: 8px; }
-
-        .price-section { 
-            display: flex; justify-content: space-between; align-items: flex-end; 
-            padding: 18px; background: rgba(255,255,255,0.02); border-radius: 20px; border: 1px solid var(--border); margin-bottom: 15px;
+        /* 36-40: Pricing Box Shark Gold */
+        .pricing-box { 
+            background: rgba(255,255,255,0.02); border-radius: 20px; padding: 20px;
+            border: 1px solid var(--border); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end;
         }
-        .price-label { font-size: 10px; font-weight: 700; color: var(--gold); text-transform: uppercase; display: block; }
-        .price-value { font-size: 26px; font-weight: 800; color: #fff; }
-        .price-info { font-size: 11px; color: #555; font-weight: 600; text-align: right; }
+        .price-now { font-size: 28px; font-weight: 800; color: #fff; display: block; }
+        .price-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; font-weight: 700; }
 
-        /* CTA FACEBOOK STYLE */
+        /* 41-45: Botão de Conversão (CTA) */
         .btn-whatsapp { 
-            background: var(--w); color: #fff; text-decoration: none; display: flex; align-items: center; 
-            justify-content: center; gap: 12px; padding: 20px; border-radius: 20px; font-weight: 800; 
-            font-size: 15px; box-shadow: 0 12px 24px rgba(37, 211, 102, 0.15); transition: 0.3s;
+            background: var(--w); color: #fff; text-decoration: none; display: flex;
+            align-items: center; justify-content: center; gap: 12px; padding: 22px;
+            border-radius: 20px; font-weight: 800; font-size: 15px; text-transform: uppercase;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.2); transition: 0.3s;
         }
+        .btn-whatsapp:active { transform: scale(0.95); background: #1da851; }
 
-        /* SKELETON LOADING EFFECT */
-        .skeleton { background: linear-gradient(90deg, #161616 25%, #222 50%, #161616 75%); background-size: 200% 100%; animation: loading 1.5s infinite; }
-        @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        /* Footer simples */
+        footer { text-align: center; padding: 40px; color: #333; font-size: 10px; font-weight: 800; letter-spacing: 2px; }
     </style>
 </head>
-<body onload="init()">
+<body onload="render('TODOS')">
 
     <header>
-        <div class="logo-group">
-            <h1>HG MOTORS</h1>
-            <p>Selection & Luxury</p>
-        </div>
-        <div style="font-size: 18px; color: #fff;"><i class="fa-solid fa-magnifying-glass"></i></div>
+        <img src="https://i.ibb.co/vzY3fS9/logo-hg.png" alt="HG MOTORS" class="logo-img">
+        <a href="https://wa.me/5519999999999" style="color: #fff; font-size: 20px;"><i class="fa-brands fa-whatsapp"></i></a>
     </header>
 
-    <div class="container">
-        <div class="categories">
-            <div class="cat-item active" onclick="filter('TODOS')"><i class="fa-solid fa-border-all"></i><span>TODOS</span></div>
-            <div class="cat-item" onclick="filter('SEDAN')"><i class="fa-solid fa-car-side"></i><span>SEDANS</span></div>
-            <div class="cat-item" onclick="filter('SUV')"><i class="fa-solid fa-car-rear"></i><span>SUVS</span></div>
-            <div class="cat-item" onclick="filter('ESPORTIVO')"><i class="fa-solid fa-gauge-high"></i><span>PREMIUM</span></div>
-            <div class="cat-item" onclick="filter('MOTO')"><i class="fa-solid fa-motorcycle"></i><span>MOTOS</span></div>
-        </div>
+    <section class="hero">
+        <p>HORTOLÂNDIA • SP</p>
+        <h2>HG MOTORS</h2>
+        <p>Veículos selecionados com garantia e procedência Shark Gold.</p>
+    </section>
 
-        <div id="feed"></div>
+    <div class="nav-cats">
+        <div class="cat-card active" onclick="tab(this, 'TODOS')"><i class="fa-solid fa-grid-2"></i><span>Todos</span></div>
+        <div class="cat-card" onclick="tab(this, 'SEDAN')"><i class="fa-solid fa-car-side"></i><span>Sedans</span></div>
+        <div class="cat-card" onclick="tab(this, 'SUV')"><i class="fa-solid fa-car-rear"></i><span>SUVs</span></div>
+        <div class="cat-card" onclick="tab(this, 'PREMIUM')"><i class="fa-solid fa-crown"></i><span>Premium</span></div>
+        <div class="cat-card" onclick="tab(this, 'MOTO')"><i class="fa-solid fa-motorcycle"></i><span>Motos</span></div>
     </div>
 
+    <main class="feed" id="vitrine"></main>
+
+    <footer>
+        DESENVOLVIDO POR JP DIAS • SHARK TECH 2026
+    </footer>
+
     <script>
-        // BANCO DE DADOS SHARK v100
-        const estoque = [
-            { id: 1, cat: 'ESPORTIVO', marca: 'BMW', modelo: '320i M Sport', ano: '2022', km: '12.000km', motor: '2.0 Turbo', preco: '249.900', img: '5739.jpg' },
-            { id: 2, cat: 'SUV', marca: 'JEEP', modelo: 'Compass Longitude', ano: '2021', km: '32.000km', motor: 'Diesel 4x4', preco: '158.900', img: '5743.jpg' },
-            { id: 3, cat: 'SEDAN', marca: 'HONDA', modelo: 'Civic G10 EXL', ano: '2020', km: '45.000km', motor: '1.5 Turbo', preco: '119.900', img: '5745.jpg' },
-            { id: 4, cat: 'SUV', marca: 'CHEVROLET', modelo: 'Equinox Premier', ano: '2021', km: '28.000km', motor: 'AWD Turbo', preco: '145.900', img: '5746.jpg' },
-            { id: 5, cat: 'ESPORTIVO', marca: 'AUDI', modelo: 'A3 Sedan S-Line', ano: '2022', km: '8.500km', motor: 'Performance', preco: '189.900', img: '5752.jpg' },
-            { id: 6, cat: 'MOTO', marca: 'HONDA', modelo: 'CB 500X Adventure', ano: '2020', km: '15.000km', motor: '500cc ABS', preco: '38.500', img: '5740.jpg' }
+        // Banco de Dados Unificado (Puxando as fotos reais que você mandou)
+        const db = [
+            { cat: 'PREMIUM', nome: 'BMW 320i Sport', info: '2022 • Turbo • ZF8 • Teto Solar', preco: '249.900', img: '5739.jpg' },
+            { cat: 'SUV', nome: 'Jeep Compass', info: '2021 • Longitude • Diesel 4x4', preco: '158.900', img: '5743.jpg' },
+            { cat: 'SEDAN', nome: 'Civic G10 EXL', info: '2020 • Full LED • Paddle Shift', preco: '119.900', img: '5745.jpg' },
+            { cat: 'SUV', nome: 'Chevrolet Equinox', info: '2021 • Premier • Teto Panorâmico', preco: '145.900', img: '5746.jpg' },
+            { cat: 'PREMIUM', nome: 'Audi A3 Sedan', desc: '2022 • S-Line • New Design', preco: '189.900', img: '5752.jpg' },
+            { cat: 'MOTO', nome: 'Honda CB 500X', info: '2020 • Adventure • ABS', preco: '38.500', img: '5740.jpg' }
         ];
 
-        function init() { render('TODOS'); }
-
-        function render(f) {
-            const feed = document.getElementById('feed');
-            const data = f === 'TODOS' ? estoque : estoque.filter(v => v.cat === f);
+        function render(filtro) {
+            const vitrine = document.getElementById('vitrine');
+            const lista = filtro === 'TODOS' ? db : db.filter(v => v.cat === filtro);
             
-            feed.innerHTML = data.map(v => `
-                <div class="card">
-                    <div class="media-box">
-                        <img src="${v.img}" alt="${v.modelo}" loading="lazy" onerror="this.src='https://via.placeholder.com/600x400/161616/D4AF37?text=HG+MOTORS'">
-                        <div class="badge-top"><div class="pulse"></div> DISPONÍVEL</div>
+            vitrine.innerHTML = lista.map(v => `
+                <article class="item-card">
+                    <div class="item-img">
+                        <img src="${v.img}" alt="${v.nome}" loading="lazy">
+                        <div class="status-tag">DISPONÍVEL</div>
                     </div>
-                    <div class="info-content">
-                        <div class="car-header">
+                    <div class="item-details">
+                        <div class="item-header">
                             <div>
-                                <h2 class="car-title">${v.modelo}</h2>
-                                <p style="color:var(--gold); font-size:11px; font-weight:700;">${v.marca} • PERFORMANCE SELECTION</p>
+                                <span class="item-meta">${v.cat} • EXCLUSIVE</span>
+                                <h3 class="item-name">${v.nome}</h3>
                             </div>
-                            <span class="car-year">${v.ano}</span>
                         </div>
-                        <div class="tags-row">
-                            <span class="tag"><i class="fa-solid fa-road"></i> ${v.km}</span>
-                            <span class="tag"><i class="fa-solid fa-bolt"></i> ${v.motor}</span>
-                            <span class="tag"><i class="fa-solid fa-shield-check"></i> Laudo Aprovado</span>
-                        </div>
-                        <div class="price-section">
+                        <p style="font-size: 13px; color: #666; margin-bottom: 20px;">${v.info || 'Completo, revisado e com garantia.'}</p>
+                        <div class="pricing-box">
                             <div>
-                                <span class="price-label">Oportunidade HG</span>
-                                <span class="price-value">R$ ${v.preco}</span>
+                                <span class="price-label">Valor de Repasse</span>
+                                <span class="price-now">R$ ${v.preco}</span>
                             </div>
-                            <div class="price-info">
-                                <span style="display:block">12x R$ 12.800</span>
-                                <span style="color:var(--w)">Taxas Especiais</span>
+                            <div style="text-align: right">
+                                <span style="font-size: 10px; color: var(--w); font-weight: 800;">Oportunidade</span>
                             </div>
                         </div>
-                        <a href="https://wa.me/5519999999999?text=Vi%20o%20${v.modelo}%20no%20site%20e%20quero%20negociar" class="btn-whatsapp">
-                            <i class="fa-brands fa-whatsapp" style="font-size:20px"></i> CONSULTAR AGORA
+                        <a href="https://wa.me/5519999999999?text=Tenho%20interesse%20no%20${v.nome}" class="btn-whatsapp">
+                            <i class="fa-brands fa-whatsapp"></i> Consultar Agora
                         </a>
                     </div>
-                </div>
+                </article>
             `).join('');
         }
 
-        function filter(c) {
-            document.querySelectorAll('.cat-item').forEach(b => b.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-            render(c);
-            window.scrollTo({ top: 400, behavior: 'smooth' });
+        function tab(el, cat) {
+            document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            render(cat);
         }
     </script>
 </body>
