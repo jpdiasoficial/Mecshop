@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LOG-PRO v90 TITAN | FULL SYSTEM</title>
+    <title>LOG-PRO v95 | FULL INTELLIGENCE</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="https://unpkg.com/html5-qrcode"></script>
@@ -40,9 +40,9 @@
 
     <div id="tela-login" class="screen active-screen" style="justify-content:center; align-items:center; padding:40px;">
         <h1 style="font-family:'Orbitron'; color:var(--p); font-size:35px;">LOG-PRO</h1>
-        <p style="color:#555; font-size:10px; margin-bottom:40px;">v90 | FULL INTEGRATED</p>
+        <p style="color:#555; font-size:10px; margin-bottom:40px;">v95 | JP DIAS - FULL INTEGRATED</p>
         <input type="password" id="pin-acesso" placeholder="PIN" style="text-align:center;">
-        <button class="btn btn-p" onclick="realizarLogin()">INITIALIZE</button>
+        <button class="btn btn-p" onclick="realizarLogin()">ENTRAR</button>
     </div>
 
     <div id="tela-shark" class="screen">
@@ -56,48 +56,54 @@
             </div>
             <div id="container-alertas"></div>
             <div class="card">
-                <h3><i class="fa-solid fa-plus-circle"></i> CADASTRO MANUAL</h3>
+                <h3><i class="fa-solid fa-database"></i> CADASTRO E BACKUP</h3>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+                    <button class="btn btn-s" style="padding:10px; font-size:8px;" onclick="exportarBackup()">EXPORTAR</button>
+                    <button class="btn btn-s" style="padding:10px; font-size:8px;" onclick="document.getElementById('in-file').click()">IMPORTAR</button>
+                </div>
+                <input type="file" id="in-file" style="display:none;" onchange="importarBackup(this)">
                 <input type="text" id="cad-ean" placeholder="CÓDIGO EAN">
                 <input type="text" id="cad-nome" placeholder="NOME DO PRODUTO">
-                <button class="btn btn-p" onclick="cadastrarManual()">SALVAR</button>
+                <button class="btn btn-p" style="padding:10px; font-size:8px;" onclick="cadastrarManual()">SALVAR PRODUTO</button>
+                <button class="btn btn-d" style="margin-top:10px; padding:10px; font-size:8px;" onclick="resetSistema()">RESET TOTAL</button>
             </div>
             <div class="card">
-                <h3><i class="fa-solid fa-boxes-packing"></i> FILA DE PICKING</h3>
+                <h3><i class="fa-solid fa-boxes-packing"></i> FILA DE PICKING (SALDO ATUAL)</h3>
                 <div id="fila-picking"></div>
             </div>
             <div class="card">
-                <h3><i class="fa-solid fa-clock-rotate-left"></i> HISTÓRICO</h3>
+                <h3><i class="fa-solid fa-clock-rotate-left"></i> ÚLTIMOS LOGS</h3>
                 <table><tbody id="tabela-logs"></tbody></table>
             </div>
         </div>
     </div>
 
     <div id="tela-operador" class="screen">
-        <header><span>OPERADOR</span> <button onclick="gerarRomaneio()" class="btn-s" style="width:70px; height:25px; border:none; font-size:7px;">ROMANEIO</button></header>
+        <header><span>OPERADOR</span> <button onclick="gerarRomaneio()" class="btn-s" style="width:70px; height:25px; border:none; font-size:7px;">GERAR ROMANEIO</button></header>
         <div class="scroll-area">
             <div class="card">
                 <div id="reader-op" class="scanner-view"></div>
-                <button class="btn btn-p" id="btn-cam-op" onclick="controleCamera('reader-op','btn-cam-op',false)">CÂMERA</button>
+                <button class="btn btn-p" id="btn-cam-op" onclick="controleCamera('reader-op','btn-cam-op',false)">ABRIR CÂMERA</button>
             </div>
             <div class="card">
                 <select id="operacao-tipo">
-                    <option value="ENTRADA">📥 ENTRADA</option>
-                    <option value="SEPARACAO">📦 SEPARAÇÃO</option>
-                    <option value="SAIDA">🚚 EXPEDIÇÃO</option>
+                    <option value="ENTRADA">📥 REGISTRAR ENTRADA</option>
+                    <option value="SEPARACAO">📦 REGISTRAR SEPARAÇÃO</option>
+                    <option value="SAIDA">🚚 REGISTRAR EXPEDIÇÃO</option>
                 </select>
-                <input type="text" id="ean-manual" placeholder="BIPAGEM MANUAL">
-                <button class="btn btn-s" onclick="processarManual()">BIPAR</button>
+                <input type="text" id="ean-manual" placeholder="DIGITE O EAN">
+                <button class="btn btn-s" onclick="processarManual()">BIPAR MANUAL</button>
                 <button class="btn btn-d" style="margin-top:10px" onclick="registrarAvaria()">⚠️ REGISTRAR AVARIA</button>
             </div>
-            <div class="card" id="card-sessao">
-                <h3><i class="fa-solid fa-receipt"></i> SESSÃO</h3>
+            <div class="card">
+                <h3><i class="fa-solid fa-receipt"></i> SESSÃO ATUAL</h3>
                 <div id="lista-sessao"></div>
             </div>
         </div>
     </div>
 
     <div id="tela-motorista" class="screen">
-        <header><span>ROTA GPS</span></header>
+        <header><span>MOTORISTA / ROTA</span></header>
         <div class="scroll-area">
             <div class="card">
                 <div id="reader-mot" class="scanner-view"></div>
@@ -105,8 +111,8 @@
             </div>
             <div id="card-romaneio" class="card" style="display:none; border-left:5px solid var(--p);">
                 <h2 id="romaneio-id"></h2>
-                <p id="info-gps" style="color:var(--p); margin:10px 0;"></p>
-                <button class="btn btn-p" onclick="confirmarEntrega()">CONFIRMAR ENTREGA</button>
+                <p id="info-gps" style="color:var(--p); margin:10px 0; font-size:10px;"></p>
+                <button class="btn btn-p" onclick="confirmarEntrega()">CONFIRMAR ENTREGA NO MAPA</button>
             </div>
         </div>
     </div>
@@ -118,8 +124,8 @@
     </div>
 
     <script>
-        let logs = JSON.parse(localStorage.getItem('L90') || '[]');
-        let produtos = JSON.parse(localStorage.getItem('P90') || '{}');
+        let logs = JSON.parse(localStorage.getItem('L95') || '[]');
+        let produtos = JSON.parse(localStorage.getItem('P95') || '{}');
         let sessao = [];
         let html5QrCode, isCameraOpen = false, currentGps = "";
 
@@ -149,16 +155,17 @@
 
         function handleOperador(c) {
             if(!produtos[c]) {
-                let n = prompt("NOVO PRODUTO! NOME:");
-                if(n) { produtos[c] = n; localStorage.setItem('P90', JSON.stringify(produtos)); } else return;
+                let n = prompt("PRODUTO NÃO CADASTRADO!\nDIGITE O NOME:");
+                if(n) { produtos[c] = n; localStorage.setItem('P95', JSON.stringify(produtos)); } else return;
             }
             let t = document.getElementById('operacao-tipo').value;
             let saldo = calcularSaldo(produtos[c]);
-            if(t !== 'ENTRADA' && saldo <= 0) return alert("HARD-LOCK: SEM ESTOQUE!");
             
-            let q = prompt("QTD PARA " + t + ":", "1");
+            if(t !== 'ENTRADA' && saldo <= 0) return alert("TRAVA HARD-LOCK: ESTOQUE ZERADO!");
+            
+            let q = prompt("QUANTIDADE PARA " + t + " (SALDO: " + saldo + "):", "1");
             if(q && q > 0) {
-                if(t !== 'ENTRADA' && q > saldo) return alert("SALDO INSUFICIENTE!");
+                if(t !== 'ENTRADA' && parseInt(q) > saldo) return alert("ERRO: SALDO INSUFICIENTE!");
                 sessao.unshift({n: produtos[c], q: q, t: t});
                 registrarLog('OP', t, `${produtos[c]} (${c}) | QTD: ${q}`);
                 atualizarSessao();
@@ -166,10 +173,10 @@
         }
 
         function registrarAvaria() {
-            let c = prompt("EAN DA AVARIA:");
-            if(!c || !produtos[c]) return alert("NÃO CADASTRADO!");
+            let c = prompt("BIPE O CÓDIGO DA AVARIA:");
+            if(!c || !produtos[c]) return alert("PRODUTO NÃO LOCALIZADO!");
             let saldo = calcularSaldo(produtos[c]);
-            if(saldo <= 0) return alert("SEM SALDO!");
+            if(saldo <= 0) return alert("ESTOQUE ZERADO, NÃO HÁ O QUE AVARIAR!");
             let q = prompt("QTD AVARIADA (MAX: "+saldo+"):");
             if(q && q > 0 && q <= saldo) {
                 registrarLog('OP', 'AVARIA', `${produtos[c]} (${c}) | QTD: ${q}`);
@@ -190,18 +197,23 @@
 
         function handleMotorista(c) {
             document.getElementById('card-romaneio').style.display='block';
-            document.getElementById('romaneio-id').innerText="CARGA: "+c;
+            document.getElementById('romaneio-id').innerText="ROMANEIO: " + c;
             navigator.geolocation.getCurrentPosition(p => {
                 currentGps = p.coords.latitude + "," + p.coords.longitude;
-                document.getElementById('info-gps').innerText = "📍 GPS: " + currentGps;
-            });
+                document.getElementById('info-gps').innerText = "📍 LOCALIZAÇÃO GPS CAPTURADA: " + currentGps;
+            }, () => { alert("POR FAVOR, ATIVE O GPS!"); });
         }
 
-        function confirmarEntrega() { registrarLog('MOT', 'ENTREGA', 'GPS: ' + currentGps); alert("ENTREGUE!"); location.reload(); }
+        function confirmarEntrega() {
+            if(!currentGps) return alert("AGUARDANDO GPS...");
+            registrarLog('MOT', 'ENTREGA', 'GPS: ' + currentGps);
+            alert("ROTA FINALIZADA COM SUCESSO!");
+            document.getElementById('card-romaneio').style.display='none';
+        }
 
         function registrarLog(o, a, i) {
             logs.unshift({t: new Date().toLocaleTimeString(), o, a, i});
-            localStorage.setItem('L90', JSON.stringify(logs.slice(0, 1000)));
+            localStorage.setItem('L95', JSON.stringify(logs.slice(0, 1000)));
             renderizarTudo();
         }
 
@@ -225,23 +237,25 @@
             for(let k in fila) {
                 if(fila[k] > 0) {
                     fh += `<div style="background:#111; padding:10px; border-radius:8px; margin-bottom:5px; display:flex; justify-content:space-between;"><span>${k}</span><b style="color:var(--w)">${fila[k]} UN</b></div>`;
-                    if(fila[k] < 5) alertas += `<div class="alert-box">ESTOQUE BAIXO: ${k} (${fila[k]} UN)</div>`;
+                    if(fila[k] < 5) alertas += `<div class="alert-box">⚠️ ESTOQUE CRÍTICO: ${k} (${fila[k]} UN)</div>`;
                 }
             }
-            document.getElementById('fila-picking').innerHTML = fh;
+            document.getElementById('fila-picking').innerHTML = fh || '<p style="text-align:center; color:#444;">NENHUM SALDO PENDENTE</p>';
             document.getElementById('container-alertas').innerHTML = alertas;
         }
 
         function cadastrarManual() {
             let e = document.getElementById('cad-ean').value;
             let n = document.getElementById('cad-nome').value;
-            if(e && n) { produtos[e] = n; localStorage.setItem('P90', JSON.stringify(produtos)); renderizarTudo(); alert("OK!"); }
+            if(e && n) { produtos[e] = n; localStorage.setItem('P95', JSON.stringify(produtos)); renderizarTudo(); alert("CADASTRADO!"); document.getElementById('cad-ean').value=""; document.getElementById('cad-nome').value=""; }
         }
 
         function processarManual() { let e = document.getElementById('ean-manual').value; if(e) handleOperador(e); document.getElementById('ean-manual').value=""; }
-        function atualizarSessao() { let h=""; sessao.forEach(x=> h += `<div style="padding:5px; border-bottom:1px solid #222; font-size:9px;">${x.n} - ${x.q} [${x.t}]</div>`); document.getElementById('lista-sessao').innerHTML = h; }
-        function gerarRomaneio() { if(sessao.length===0) return; let r="ROMANEIO\n\n"; sessao.forEach(x=>r+=`${x.n}: ${x.q}\n`); alert(r); sessao=[]; atualizarSessao(); }
+        function atualizarSessao() { let h=""; sessao.forEach(x=> h += `<div style="padding:8px; border-bottom:1px solid #222; font-size:9px; color:#aaa;">${x.n} - ${x.q} UN [${x.t}]</div>`); document.getElementById('lista-sessao').innerHTML = h; }
+        function gerarRomaneio() { if(sessao.length===0) return alert("SESSÃO VAZIA!"); let r="ROMANEIO DE CARGA\n\n"; sessao.forEach(x=>r+=`${x.n}: ${x.q} UN\n`); alert(r); sessao=[]; atualizarSessao(); }
+        function resetSistema() { if(confirm("DESEJA APAGAR TODO O BANCO DE DADOS?")) { localStorage.clear(); location.reload(); } }
+        function exportarBackup() { let a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify({logs, produtos})], {type: "application/json"})); a.download = "LOGPRO_BACKUP.json"; a.click(); }
+        function importarBackup(i) { let f = new FileReader(); f.onload = e => { let d = JSON.parse(e.target.result); logs = d.logs; produtos = d.produtos; localStorage.setItem('P95', JSON.stringify(produtos)); localStorage.setItem('L95', JSON.stringify(logs)); renderizarTudo(); alert("IMPORTADO COM SUCESSO!"); }; f.readAsText(i.files[0]); }
     </script>
 </body>
-    </html>
-    
+</html>
