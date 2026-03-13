@@ -3,182 +3,259 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HG MOTORS | DIAMOND SELECTION</title>
-    <link href="https://fonts.googleapis.com" rel="stylesheet">
+    <title>LOG-PRO v95 | FULL INTELLIGENCE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://unpkg.com/html5-qrcode"></script>
     <style>
-        :root {
-            --gold: #D4AF37; --bg: #000000; --glass: rgba(255, 255, 255, 0.04);
-            --border: rgba(255, 255, 255, 0.1); --w: #25D366; --text: #f0f0f0;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
-        body { background: var(--bg); color: var(--text); overflow-x: hidden; }
-
-        /* Barra de Progresso Superior */
-        #scroll-progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--gold); z-index: 3000; width: 0%; transition: 0.1s; }
-
-        header {
-            position: fixed; top: 0; width: 100%; z-index: 2000; padding: 15px;
-            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            border-bottom: 1px solid var(--border); display: flex; justify-content: center;
-        }
-        .logo-main { height: 45px; transition: 0.3s; cursor: pointer; filter: drop-shadow(0 0 8px rgba(255,255,255,0.2)); }
-        .logo-main:hover { transform: scale(1.05); }
-
-        .hero { padding: 140px 20px 40px; text-align: center; background: radial-gradient(circle at top, #111 0%, #000 100%); }
-        .hero h2 { font-size: clamp(24px, 8vw, 36px); font-weight: 800; letter-spacing: -1px; text-transform: uppercase; }
-        .hero p { color: var(--gold); font-size: 11px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; margin-top: 8px; }
-
-        .container { padding: 20px; max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
-        
-        .lux-card {
-            background: var(--glass); border: 1px solid var(--border);
-            border-radius: 28px; overflow: hidden; position: relative;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            animation: slideUp 0.8s ease backwards;
-        }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .lux-card:hover { transform: translateY(-10px); border-color: var(--gold); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-
-        .lux-img-box { width: 100%; height: 240px; position: relative; overflow: hidden; }
-        .lux-img-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s; }
-        .lux-card:hover .lux-img-box img { transform: scale(1.1); }
-        
-        .lux-badge {
-            position: absolute; top: 15px; left: 15px;
-            background: var(--gold); color: #000; padding: 5px 12px;
-            border-radius: 10px; font-size: 10px; font-weight: 900; z-index: 10;
-        }
-
-        .lux-info { padding: 22px; }
-        .lux-title { font-size: 20px; font-weight: 800; margin-bottom: 4px; color: #fff; }
-        .lux-sub { font-size: 12px; color: #888; margin-bottom: 20px; min-height: 36px; }
-        
-        .lux-pricing {
-            background: rgba(255,255,255,0.03); border-radius: 18px; padding: 18px;
-            border: 1px solid var(--border); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;
-        }
-        .val { font-size: 24px; font-weight: 800; color: #fff; }
-        .label { font-size: 9px; color: var(--gold); font-weight: 800; text-transform: uppercase; display: block; }
-
-        .lux-btn {
-            background: var(--w); color: #fff; text-decoration: none;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            padding: 16px; border-radius: 16px; font-weight: 800; font-size: 13px;
-            text-transform: uppercase; transition: 0.3s;
-        }
-        .lux-btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
-
-        /* Botão WhatsApp Flutuante */
-        .wpp-float {
-            position: fixed; bottom: 25px; right: 25px; width: 60px; height: 60px;
-            background: var(--w); color: white; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 30px; z-index: 2500; box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-            transition: 0.3s;
-        }
-        .wpp-float:hover { transform: scale(1.1) rotate(10deg); }
-
-        /* Seção Especial: Pedidos */
-        .encomenda { grid-column: 1 / -1; background: linear-gradient(90deg, #111, #050505); padding: 40px; border-radius: 28px; text-align: center; border: 1px dashed var(--border); margin-top: 20px; }
-        .encomenda h3 { font-weight: 800; margin-bottom: 10px; color: var(--gold); }
-        .encomenda p { font-size: 14px; color: #666; margin-bottom: 20px; }
-
-        footer { text-align: center; padding: 60px 20px; color: #444; font-size: 10px; font-weight: 700; letter-spacing: 2px; }
-        .social-icons { margin-bottom: 20px; display: flex; justify-content: center; gap: 20px; font-size: 18px; }
-        .social-icons a { color: #333; transition: 0.3s; }
-        .social-icons a:hover { color: var(--gold); }
+        :root { --p: #00ff41; --s: #007aff; --bg: #000; --sf: #0a0a0a; --brd: #1a1a1a; --dg: #ff3b30; --w: #ffae00; }
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; font-size: 11px; height: 100vh; overflow: hidden; text-transform: uppercase; }
+        .screen { display: none; height: 100vh; flex-direction: column; background: var(--bg); }
+        .active-screen { display: flex !important; }
+        header { padding: 15px; border-bottom: 2px solid var(--brd); display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron'; background: #000; }
+        .scroll-area { flex: 1; overflow-y: auto; padding: 15px 15px 100px 15px; }
+        .card { background: var(--sf); border: 1px solid var(--brd); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+        h3 { font-family: 'Orbitron'; font-size: 9px; color: var(--p); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; border-left: 3px solid var(--p); padding-left: 8px; }
+        input, select { width: 100%; padding: 14px; background: #050505; border: 1px solid #222; color: #fff; border-radius: 8px; font-size: 11px; margin-bottom: 10px; font-weight: 700; }
+        .btn { width: 100%; padding: 16px; border: none; border-radius: 10px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; margin-bottom: 5px; }
+        .btn-p { background: var(--p); color: #000; }
+        .btn-s { background: var(--s); color: #fff; }
+        .btn-d { background: var(--dg); color: #fff; }
+        .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 15px; }
+        .kpi-box { background: #0a0a0a; border: 1px solid #222; padding: 10px 5px; border-radius: 8px; text-align: center; }
+        .kpi-box span { font-family: 'Orbitron'; font-size: 14px; color: var(--p); display: block; }
+        .scanner-view { width: 100%; background: #000; border-radius: 12px; border: 2px solid var(--p); min-height: 200px; display: none; overflow: hidden; }
+        .bottom-nav { display: flex; background: #000; border-top: 2px solid var(--brd); position: fixed; bottom: 0; width: 100%; height: 70px; z-index: 100; }
+        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #444; font-size: 8px; font-weight: 800; gap: 4px; }
+        .active-tab { color: var(--p); border-top: 3px solid var(--p); background: #050505; }
+        table { width: 100%; border-collapse: collapse; font-size: 9px; }
+        td { padding: 12px 5px; border-bottom: 1px solid #111; }
+        .pill { padding: 4px 6px; border-radius: 4px; font-weight: 900; font-size: 7px; color: #000; }
+        .alert-box { border: 2px solid var(--dg) !important; animation: blink 1s infinite; margin-bottom: 10px; padding: 10px; border-radius: 8px; color: var(--dg); font-weight: 800; }
+        @keyframes blink { 50% { opacity: 0.4; } }
     </style>
 </head>
-<body onscroll="updateScroll()">
+<body onload="inicializarApp()">
 
-    <div id="scroll-progress"></div>
-
-    <header>
-        <img src="5565.png" alt="HG MOTORS" class="logo-main" onclick="window.scrollTo(0,0)">
-    </header>
-
-    <div class="hero">
-        <h2>CARROS E MOTOS</h2>
-        <p>A excelência que você merece</p>
+    <div id="tela-login" class="screen active-screen" style="justify-content:center; align-items:center; padding:40px;">
+        <h1 style="font-family:'Orbitron'; color:var(--p); font-size:35px;">LOG-PRO</h1>
+        <p style="color:#555; font-size:10px; margin-bottom:40px;">v95 | JP DIAS - FULL INTEGRATED</p>
+        <input type="password" id="pin-acesso" placeholder="PIN" style="text-align:center;">
+        <button class="btn btn-p" onclick="realizarLogin()">ENTRAR</button>
     </div>
 
-    <main class="container" id="vitrine"></main>
-
-    <a href="https://wa.me/5519999999999" class="wpp-float" target="_blank">
-        <i class="fa-brands fa-whatsapp"></i>
-    </a>
-
-    <footer>
-        <div class="social-icons">
-            <a href="#"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#"><i class="fa-brands fa-facebook"></i></a>
-            <a href="#"><i class="fa-solid fa-location-dot"></i></a>
+    <div id="tela-shark" class="screen">
+        <header><span>SHARK PANEL</span> <button onclick="logout()" class="btn-d" style="width:50px; height:25px; border:none; font-size:7px;">SAIR</button></header>
+        <div class="scroll-area">
+            <div class="kpi-grid">
+                <div class="kpi-box"><span id="kpi-ent">0</span><small>ENT</small></div>
+                <div class="kpi-box"><span id="kpi-sep" style="color:var(--w)">0</span><small>SEP</small></div>
+                <div class="kpi-box"><span id="kpi-sai" style="color:var(--s)">0</span><small>SAI</small></div>
+                <div class="kpi-box"><span id="kpi-ava" style="color:var(--dg)">0</span><small>AVA</small></div>
+            </div>
+            <div id="container-alertas"></div>
+            <div class="card">
+                <h3><i class="fa-solid fa-database"></i> CADASTRO E BACKUP</h3>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+                    <button class="btn btn-s" style="padding:10px; font-size:8px;" onclick="exportarBackup()">EXPORTAR</button>
+                    <button class="btn btn-s" style="padding:10px; font-size:8px;" onclick="document.getElementById('in-file').click()">IMPORTAR</button>
+                </div>
+                <input type="file" id="in-file" style="display:none;" onchange="importarBackup(this)">
+                <input type="text" id="cad-ean" placeholder="CÓDIGO EAN">
+                <input type="text" id="cad-nome" placeholder="NOME DO PRODUTO">
+                <button class="btn btn-p" style="padding:10px; font-size:8px;" onclick="cadastrarManual()">SALVAR PRODUTO</button>
+                <button class="btn btn-d" style="margin-top:10px; padding:10px; font-size:8px;" onclick="resetSistema()">RESET TOTAL</button>
+            </div>
+            <div class="card">
+                <h3><i class="fa-solid fa-boxes-packing"></i> FILA DE PICKING (SALDO ATUAL)</h3>
+                <div id="fila-picking"></div>
+            </div>
+            <div class="card">
+                <h3><i class="fa-solid fa-clock-rotate-left"></i> ÚLTIMOS LOGS</h3>
+                <table><tbody id="tabela-logs"></tbody></table>
+            </div>
         </div>
-        HG MOTORS • DIAMOND POPULAR<br>
-        RUA DO SUCESSO, 777 - AMERICANA/SP<br><br>
-        DESENVOLVIDO POR JP DIAS • 2026
-    </footer>
+    </div>
+
+    <div id="tela-operador" class="screen">
+        <header><span>OPERADOR</span> <button onclick="gerarRomaneio()" class="btn-s" style="width:70px; height:25px; border:none; font-size:7px;">GERAR ROMANEIO</button></header>
+        <div class="scroll-area">
+            <div class="card">
+                <div id="reader-op" class="scanner-view"></div>
+                <button class="btn btn-p" id="btn-cam-op" onclick="controleCamera('reader-op','btn-cam-op',false)">ABRIR CÂMERA</button>
+            </div>
+            <div class="card">
+                <select id="operacao-tipo">
+                    <option value="ENTRADA">📥 REGISTRAR ENTRADA</option>
+                    <option value="SEPARACAO">📦 REGISTRAR SEPARAÇÃO</option>
+                    <option value="SAIDA">🚚 REGISTRAR EXPEDIÇÃO</option>
+                </select>
+                <input type="text" id="ean-manual" placeholder="DIGITE O EAN">
+                <button class="btn btn-s" onclick="processarManual()">BIPAR MANUAL</button>
+                <button class="btn btn-d" style="margin-top:10px" onclick="registrarAvaria()">⚠️ REGISTRAR AVARIA</button>
+            </div>
+            <div class="card">
+                <h3><i class="fa-solid fa-receipt"></i> SESSÃO ATUAL</h3>
+                <div id="lista-sessao"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tela-motorista" class="screen">
+        <header><span>MOTORISTA / ROTA</span></header>
+        <div class="scroll-area">
+            <div class="card">
+                <div id="reader-mot" class="scanner-view"></div>
+                <button class="btn btn-s" id="btn-cam-mot" onclick="controleCamera('reader-mot','btn-cam-mot',true)">SCAN ROMANEIO</button>
+            </div>
+            <div id="card-romaneio" class="card" style="display:none; border-left:5px solid var(--p);">
+                <h2 id="romaneio-id"></h2>
+                <p id="info-gps" style="color:var(--p); margin:10px 0; font-size:10px;"></p>
+                <button class="btn btn-p" onclick="confirmarEntrega()">CONFIRMAR ENTREGA NO MAPA</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-nav" id="nav-principal" style="display:none;">
+        <div class="nav-item active-tab" onclick="navegar('tela-shark', this)"><i class="fa-solid fa-chart-line"></i>SHARK</div>
+        <div class="nav-item" onclick="navegar('tela-operador', this)"><i class="fa-solid fa-barcode"></i>OP</div>
+        <div class="nav-item" onclick="navegar('tela-motorista', this)"><i class="fa-solid fa-truck"></i>ROTA</div>
+    </div>
 
     <script>
-        const estoque = [
-            { nome: 'Chevrolet Onix LTZ', info: '2021 • Automático • MyLink • Único Dono', preco: '72.900', img: '5756.jpg', badge: 'MAIS VENDIDO' },
-            { nome: 'Volkswagen Gol G8', info: '2022 • Ar Condicionado • Completo • Baixa KM', preco: '58.500', img: '5751.jpg', badge: 'ECONÔMICO' },
-            { nome: 'Fiat Argo Drive', info: '2021 • Multimídia • Econômico • Impecável', preco: '64.900', img: '5749.jpg', badge: 'OPORTUNIDADE' },
-            { nome: 'Ford Ka SE Plus', info: '2020 • Motor 1.5 • Revisado • Garantia', preco: '52.900', img: '5750.jpg', badge: 'REVISADO' },
-            { nome: 'Hyundai HB20 Vision', info: '2021 • Direção Elétrica • Super Conservado', preco: '67.900', img: '5754.jpg', badge: 'VIP' }
-        ];
+        let logs = JSON.parse(localStorage.getItem('L95') || '[]');
+        let produtos = JSON.parse(localStorage.getItem('P95') || '{}');
+        let sessao = [];
+        let html5QrCode, isCameraOpen = false, currentGps = "";
 
-        function render() {
-            const vitrine = document.getElementById('vitrine');
-            let cards = estoque.map((v, index) => `
-                <article class="lux-card" style="animation-delay: ${index * 0.1}s">
-                    <div class="lux-img-box">
-                        <img src="${v.img}" alt="${v.nome}" loading="lazy">
-                        <div class="lux-badge">${v.badge}</div>
-                    </div>
-                    <div class="lux-info">
-                        <h3 class="lux-title">${v.nome}</h3>
-                        <p class="lux-sub">${v.info}</p>
-                        <div class="lux-pricing">
-                            <div>
-                                <span class="label">Valor à vista</span>
-                                <span class="val">R$ ${v.preco}</span>
-                            </div>
-                            <i class="fa-solid fa-shield-check" style="color: #222; font-size: 20px;"></i>
-                        </div>
-                        <a href="https://wa.me! Vi o ${v.nome} no estoque e quero mais detalhes." class="lux-btn">
-                            <i class="fa-brands fa-whatsapp"></i> Consultar Veículo
-                        </a>
-                    </div>
-                </article>
-            `).join('');
+        function inicializarApp() { renderizarTudo(); }
+        function realizarLogin() { document.getElementById('tela-login').classList.remove('active-screen'); document.getElementById('nav-principal').style.display='flex'; navegar('tela-shark', document.querySelector('.nav-item')); }
+        function logout() { location.reload(); }
 
-            // Adiciona Card de Encomenda ao final
-            cards += `
-                <div class="encomenda">
-                    <h3>NÃO ACHOU O QUE PROCURAVA?</h3>
-                    <p>Nós encontramos o carro ou moto dos seus sonhos para você.</p>
-                    <a href="https://wa.me encomendar um veículo específico" 
-                       style="color: var(--gold); text-decoration:none; font-weight:800; font-size:12px; letter-spacing:1px;">
-                       FALAR COM CONSULTOR DIAMOND →
-                    </a>
-                </div>
-            `;
+        function navegar(id, el) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-tab'));
+            document.getElementById(id).classList.add('active-screen');
+            el.classList.add('active-tab');
+            if(isCameraOpen) controleCamera();
+            renderizarTudo();
+        }
+
+        function controleCamera(div, btn, isMot) {
+            if(!isCameraOpen) {
+                document.getElementById(div).style.display = 'block';
+                html5QrCode = new Html5Qrcode(div);
+                html5QrCode.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, c => isMot ? handleMotorista(c) : handleOperador(c));
+                document.getElementById(btn).innerText = "PARAR"; isCameraOpen = true;
+            } else {
+                html5QrCode.stop().then(() => { document.querySelectorAll('.scanner-view').forEach(v=>v.style.display='none'); isCameraOpen = false; });
+            }
+        }
+
+        function handleOperador(c) {
+            if(!produtos[c]) {
+                let n = prompt("PRODUTO NÃO CADASTRADO!\nDIGITE O NOME:");
+                if(n) { produtos[c] = n; localStorage.setItem('P95', JSON.stringify(produtos)); } else return;
+            }
+            let t = document.getElementById('operacao-tipo').value;
+            let saldo = calcularSaldo(produtos[c]);
             
-            vitrine.innerHTML = cards;
+            if(t !== 'ENTRADA' && saldo <= 0) return alert("TRAVA HARD-LOCK: ESTOQUE ZERADO!");
+            
+            let q = prompt("QUANTIDADE PARA " + t + " (SALDO: " + saldo + "):", "1");
+            if(q && q > 0) {
+                if(t !== 'ENTRADA' && parseInt(q) > saldo) return alert("ERRO: SALDO INSUFICIENTE!");
+                sessao.unshift({n: produtos[c], q: q, t: t});
+                registrarLog('OP', t, `${produtos[c]} (${c}) | QTD: ${q}`);
+                atualizarSessao();
+            }
         }
 
-        function updateScroll() {
-            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrolled = (winScroll / height) * 100;
-            document.getElementById("scroll-progress").style.width = scrolled + "%";
+        function registrarAvaria() {
+            let c = prompt("BIPE O CÓDIGO DA AVARIA:");
+            if(!c || !produtos[c]) return alert("PRODUTO NÃO LOCALIZADO!");
+            let saldo = calcularSaldo(produtos[c]);
+            if(saldo <= 0) return alert("ESTOQUE ZERADO, NÃO HÁ O QUE AVARIAR!");
+            let q = prompt("QTD AVARIADA (MAX: "+saldo+"):");
+            if(q && q > 0 && q <= saldo) {
+                registrarLog('OP', 'AVARIA', `${produtos[c]} (${c}) | QTD: ${q}`);
+                alert("AVARIA REGISTRADA!");
+            }
         }
 
-        render();
+        function calcularSaldo(nome) {
+            let s = 0;
+            logs.forEach(l => {
+                if(l.i.includes(nome)) {
+                    let q = parseInt(l.i.split('QTD: ')[1]) || 0;
+                    if(l.a === 'ENTRADA') s += q; else s -= q;
+                }
+            });
+            return s;
+        }
+
+        function handleMotorista(c) {
+            document.getElementById('card-romaneio').style.display='block';
+            document.getElementById('romaneio-id').innerText="ROMANEIO: " + c;
+            navigator.geolocation.getCurrentPosition(p => {
+                currentGps = p.coords.latitude + "," + p.coords.longitude;
+                document.getElementById('info-gps').innerText = "📍 LOCALIZAÇÃO GPS CAPTURADA: " + currentGps;
+            }, () => { alert("POR FAVOR, ATIVE O GPS!"); });
+        }
+
+        function confirmarEntrega() {
+            if(!currentGps) return alert("AGUARDANDO GPS...");
+            registrarLog('MOT', 'ENTREGA', 'GPS: ' + currentGps);
+            alert("ROTA FINALIZADA COM SUCESSO!");
+            document.getElementById('card-romaneio').style.display='none';
+        }
+
+        function registrarLog(o, a, i) {
+            logs.unshift({t: new Date().toLocaleTimeString(), o, a, i});
+            localStorage.setItem('L95', JSON.stringify(logs.slice(0, 1000)));
+            renderizarTudo();
+        }
+
+        function renderizarTudo() {
+            let h="", ent=0, sep=0, sai=0, ava=0, fila={}, alertas="";
+            logs.forEach(l => {
+                let q = parseInt(l.i.split('QTD: ')[1]) || 0;
+                let n = l.i.split(' (')[0].split(' |')[0];
+                fila[n] = fila[n] || 0;
+                if(l.a==='ENTRADA'){ ent+=q; fila[n]+=q; }
+                else if(l.a==='SEPARACAO'){ sep+=q; fila[n]-=q; }
+                else if(l.a==='SAIDA'){ sai+=q; }
+                else if(l.a==='AVARIA'){ ava+=q; fila[n]-=q; }
+                let cor = l.a==='ENTRADA'?'#007aff':l.a==='SEPARACAO'?'#ffae00':l.a==='AVARIA'?'#ff3b30':'#00ff41';
+                h += `<tr><td>${l.t}</td><td><span class="pill" style="background:${cor}">${l.a}</span></td><td><b>${l.i}</b></td></tr>`;
+            });
+            document.getElementById('tabela-logs').innerHTML = h;
+            document.getElementById('kpi-ent').innerText = ent; document.getElementById('kpi-sep').innerText = sep;
+            document.getElementById('kpi-sai').innerText = sai; document.getElementById('kpi-ava').innerText = ava;
+            let fh = "";
+            for(let k in fila) {
+                if(fila[k] > 0) {
+                    fh += `<div style="background:#111; padding:10px; border-radius:8px; margin-bottom:5px; display:flex; justify-content:space-between;"><span>${k}</span><b style="color:var(--w)">${fila[k]} UN</b></div>`;
+                    if(fila[k] < 5) alertas += `<div class="alert-box">⚠️ ESTOQUE CRÍTICO: ${k} (${fila[k]} UN)</div>`;
+                }
+            }
+            document.getElementById('fila-picking').innerHTML = fh || '<p style="text-align:center; color:#444;">NENHUM SALDO PENDENTE</p>';
+            document.getElementById('container-alertas').innerHTML = alertas;
+        }
+
+        function cadastrarManual() {
+            let e = document.getElementById('cad-ean').value;
+            let n = document.getElementById('cad-nome').value;
+            if(e && n) { produtos[e] = n; localStorage.setItem('P95', JSON.stringify(produtos)); renderizarTudo(); alert("CADASTRADO!"); document.getElementById('cad-ean').value=""; document.getElementById('cad-nome').value=""; }
+        }
+
+        function processarManual() { let e = document.getElementById('ean-manual').value; if(e) handleOperador(e); document.getElementById('ean-manual').value=""; }
+        function atualizarSessao() { let h=""; sessao.forEach(x=> h += `<div style="padding:8px; border-bottom:1px solid #222; font-size:9px; color:#aaa;">${x.n} - ${x.q} UN [${x.t}]</div>`); document.getElementById('lista-sessao').innerHTML = h; }
+        function gerarRomaneio() { if(sessao.length===0) return alert("SESSÃO VAZIA!"); let r="ROMANEIO DE CARGA\n\n"; sessao.forEach(x=>r+=`${x.n}: ${x.q} UN\n`); alert(r); sessao=[]; atualizarSessao(); }
+        function resetSistema() { if(confirm("DESEJA APAGAR TODO O BANCO DE DADOS?")) { localStorage.clear(); location.reload(); } }
+        function exportarBackup() { let a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify({logs, produtos})], {type: "application/json"})); a.download = "LOGPRO_BACKUP.json"; a.click(); }
+        function importarBackup(i) { let f = new FileReader(); f.onload = e => { let d = JSON.parse(e.target.result); logs = d.logs; produtos = d.produtos; localStorage.setItem('P95', JSON.stringify(produtos)); localStorage.setItem('L95', JSON.stringify(logs)); renderizarTudo(); alert("IMPORTADO COM SUCESSO!"); }; f.readAsText(i.files[0]); }
     </script>
 </body>
 </html>
