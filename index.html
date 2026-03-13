@@ -3,180 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HG MOTORS | DIAMOND EDITION</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <title>HG MOTORS | DIAMOND SELECTION</title>
+    <link href="https://fonts.googleapis.com" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root {
-            --gold: #D4AF37; --platinum: #E5E4E2; --bg: #030303;
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --neon-gold: rgba(212, 175, 55, 0.2);
+            --gold: #D4AF37; --bg: #000000; --glass: rgba(255, 255, 255, 0.04);
+            --border: rgba(255, 255, 255, 0.1); --w: #25D366; --text: #f0f0f0;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: #fff; overflow-x: hidden; letter-spacing: -0.02em; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
+        body { background: var(--bg); color: var(--text); overflow-x: hidden; }
 
-        /* HEADER DIAMOND */
+        /* Barra de Progresso Superior */
+        #scroll-progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--gold); z-index: 3000; width: 0%; transition: 0.1s; }
+
         header {
-            position: fixed; top: 0; width: 100%; z-index: 2000; padding: 25px;
-            background: linear-gradient(to bottom, rgba(3,3,3,0.9), transparent);
-            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid var(--glass-border);
+            position: fixed; top: 0; width: 100%; z-index: 2000; padding: 15px;
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border); display: flex; justify-content: center;
         }
-        .logo-box img { height: 45px; filter: drop-shadow(0 0 15px var(--neon-gold)); }
+        .logo-main { height: 45px; transition: 0.3s; cursor: pointer; filter: drop-shadow(0 0 8px rgba(255,255,255,0.2)); }
+        .logo-main:hover { transform: scale(1.05); }
 
-        /* HERO VISUAL SECTION */
-        .hero-visual {
-            height: 100vh; width: 100%; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; text-align: center;
-            background: radial-gradient(circle at center, #1a1a1a 0%, var(--bg) 80%);
-            position: relative; overflow: hidden;
-        }
-        .hero-visual::before {
-            content: ''; position: absolute; top: -50%; width: 200%; height: 200%;
-            background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
-            opacity: 0.05; animation: rotate 60s linear infinite;
-        }
-        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .hero { padding: 140px 20px 40px; text-align: center; background: radial-gradient(circle at top, #111 0%, #000 100%); }
+        .hero h2 { font-size: clamp(24px, 8vw, 36px); font-weight: 800; letter-spacing: -1px; text-transform: uppercase; }
+        .hero p { color: var(--gold); font-size: 11px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; margin-top: 8px; }
 
-        .hero-content h2 { font-size: 10vw; font-weight: 800; line-height: 0.9; text-transform: uppercase; margin-bottom: 10px; background: linear-gradient(180deg, #fff 0%, #444 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero-content p { font-size: 14px; letter-spacing: 5px; color: var(--gold); font-weight: 300; text-transform: uppercase; }
-
-        /* CATEGORIAS FLOATING */
-        .floating-nav {
-            display: flex; gap: 15px; padding: 30px 20px; overflow-x: auto;
-            scrollbar-width: none; position: relative; z-index: 10;
-        }
-        .floating-nav::-webkit-scrollbar { display: none; }
-        .nav-item {
-            min-width: 120px; height: 160px; background: var(--glass-bg);
-            border: 1px solid var(--glass-border); border-radius: 30px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: 0.5s cubic-bezier(0.2, 1, 0.3, 1);
-        }
-        .nav-item.active { background: #fff; border-color: #fff; transform: translateY(-10px); }
-        .nav-item i { font-size: 24px; color: var(--gold); margin-bottom: 15px; transition: 0.3s; }
-        .nav-item.active i { color: #000; }
-        .nav-item span { font-size: 10px; font-weight: 800; text-transform: uppercase; color: #555; }
-        .nav-item.active span { color: #000; }
-
-        /* VITRINE DE LUXO */
-        .lux-feed { padding: 40px 20px; display: grid; grid-template-columns: 1fr; gap: 40px; max-width: 800px; margin: 0 auto; }
+        .container { padding: 20px; max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
         
         .lux-card {
-            background: var(--glass-bg); border: 1px solid var(--glass-border);
-            border-radius: 40px; padding: 10px; position: relative;
-            transition: 0.5s;
+            background: var(--glass); border: 1px solid var(--border);
+            border-radius: 28px; overflow: hidden; position: relative;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: slideUp 0.8s ease backwards;
         }
-        .lux-card:hover { transform: scale(1.02); border-color: var(--gold); }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .lux-card:hover { transform: translateY(-10px); border-color: var(--gold); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
 
-        .lux-img-box {
-            width: 100%; height: 400px; border-radius: 32px; overflow: hidden;
-            position: relative;
-        }
-        .lux-img-box img { width: 100%; height: 100%; object-fit: cover; }
+        .lux-img-box { width: 100%; height: 240px; position: relative; overflow: hidden; }
+        .lux-img-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s; }
+        .lux-card:hover .lux-img-box img { transform: scale(1.1); }
         
         .lux-badge {
-            position: absolute; bottom: 20px; left: 20px;
-            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px);
-            padding: 10px 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);
-            font-size: 11px; font-weight: 700;
+            position: absolute; top: 15px; left: 15px;
+            background: var(--gold); color: #000; padding: 5px 12px;
+            border-radius: 10px; font-size: 10px; font-weight: 900; z-index: 10;
         }
 
-        .lux-info { padding: 30px 20px; }
-        .lux-brand { color: var(--gold); font-size: 12px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
-        .lux-title { font-size: 32px; font-weight: 800; margin: 5px 0 20px; line-height: 1; }
+        .lux-info { padding: 22px; }
+        .lux-title { font-size: 20px; font-weight: 800; margin-bottom: 4px; color: #fff; }
+        .lux-sub { font-size: 12px; color: #888; margin-bottom: 20px; min-height: 36px; }
         
-        .lux-price-tag {
-            background: #fff; color: #000; padding: 25px; border-radius: 25px;
-            display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        .lux-pricing {
+            background: rgba(255,255,255,0.03); border-radius: 18px; padding: 18px;
+            border: 1px solid var(--border); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;
         }
-        .lux-price-tag .val { font-size: 30px; font-weight: 800; }
-        .lux-price-tag .label { font-size: 10px; font-weight: 700; text-transform: uppercase; opacity: 0.5; }
+        .val { font-size: 24px; font-weight: 800; color: #fff; }
+        .label { font-size: 9px; color: var(--gold); font-weight: 800; text-transform: uppercase; display: block; }
 
         .lux-btn {
-            margin-top: 15px; width: 100%; background: var(--bg); color: #fff;
-            padding: 22px; border-radius: 25px; border: 1px solid var(--glass-border);
-            font-weight: 800; text-transform: uppercase; font-size: 13px;
+            background: var(--w); color: #fff; text-decoration: none;
             display: flex; align-items: center; justify-content: center; gap: 10px;
-            transition: 0.3s; cursor: pointer;
+            padding: 16px; border-radius: 16px; font-weight: 800; font-size: 13px;
+            text-transform: uppercase; transition: 0.3s;
         }
-        .lux-btn:hover { background: var(--gold); color: #000; border-color: var(--gold); }
+        .lux-btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
 
+        /* Botão WhatsApp Flutuante */
+        .wpp-float {
+            position: fixed; bottom: 25px; right: 25px; width: 60px; height: 60px;
+            background: var(--w); color: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 30px; z-index: 2500; box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            transition: 0.3s;
+        }
+        .wpp-float:hover { transform: scale(1.1) rotate(10deg); }
+
+        /* Seção Especial: Pedidos */
+        .encomenda { grid-column: 1 / -1; background: linear-gradient(90deg, #111, #050505); padding: 40px; border-radius: 28px; text-align: center; border: 1px dashed var(--border); margin-top: 20px; }
+        .encomenda h3 { font-weight: 800; margin-bottom: 10px; color: var(--gold); }
+        .encomenda p { font-size: 14px; color: #666; margin-bottom: 20px; }
+
+        footer { text-align: center; padding: 60px 20px; color: #444; font-size: 10px; font-weight: 700; letter-spacing: 2px; }
+        .social-icons { margin-bottom: 20px; display: flex; justify-content: center; gap: 20px; font-size: 18px; }
+        .social-icons a { color: #333; transition: 0.3s; }
+        .social-icons a:hover { color: var(--gold); }
     </style>
 </head>
-<body onload="render('TODOS')">
+<body onscroll="updateScroll()">
+
+    <div id="scroll-progress"></div>
 
     <header>
-        <div class="logo-box"><img src="5565.png" alt="HG LOGO"></div>
-        <div class="menu-trigger" style="color: var(--gold);"><i class="fa-solid fa-ellipsis-vertical"></i></div>
+        <img src="5565.png" alt="HG MOTORS" class="logo-main" onclick="window.scrollTo(0,0)">
     </header>
 
-    <section class="hero-visual">
-        <div class="hero-content">
-            <p>Selection & Luxury</p>
-            <h2>HG MOTORS</h2>
-            <p style="color: #fff; letter-spacing: 2px; margin-top: 10px; opacity: 0.5;">Sinta a Experiência Diamond</p>
-        </div>
-    </section>
-
-    <div class="floating-nav">
-        <div class="nav-item active" onclick="tab(this, 'TODOS')"><i class="fa-solid fa-chess-king"></i><span>Elite</span></div>
-        <div class="nav-item" onclick="tab(this, 'SEDAN')"><i class="fa-solid fa-car-side"></i><span>Sedans</span></div>
-        <div class="nav-item" onclick="tab(this, 'SUV')"><i class="fa-solid fa-shuttle-space"></i><span>SUVs</span></div>
-        <div class="nav-item" onclick="tab(this, 'MOTO')"><i class="fa-solid fa-bolt"></i><span>Motos</span></div>
+    <div class="hero">
+        <h2>CARROS E MOTOS</h2>
+        <p>A excelência que você merece</p>
     </div>
 
-    <main class="lux-feed" id="main-vitrine"></main>
+    <main class="container" id="vitrine"></main>
+
+    <a href="https://wa.me/5519999999999" class="wpp-float" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <footer>
+        <div class="social-icons">
+            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#"><i class="fa-brands fa-facebook"></i></a>
+            <a href="#"><i class="fa-solid fa-location-dot"></i></a>
+        </div>
+        HG MOTORS • DIAMOND POPULAR<br>
+        RUA DO SUCESSO, 777 - AMERICANA/SP<br><br>
+        DESENVOLVIDO POR JP DIAS • 2026
+    </footer>
 
     <script>
         const estoque = [
-            { cat: 'SEDAN', marca: 'BMW', nome: '320i M Sport', preco: '249.900', img: '5739.jpg', specs: 'Carbon Fiber Interior' },
-            { cat: 'SUV', marca: 'JEEP', nome: 'Compass Longitude', preco: '158.900', img: '5743.jpg', specs: 'Diesel High Torque' },
-            { cat: 'SEDAN', marca: 'HONDA', nome: 'Civic G10 EXL', preco: '119.900', img: '5745.jpg', specs: 'Perfect Conditions' },
-            { cat: 'SUV', marca: 'CHEVROLET', nome: 'Equinox Premier', preco: '145.900', img: '5746.jpg', specs: 'Full AWD System' },
-            { cat: 'MOTO', marca: 'HONDA', nome: 'CB 500X', preco: '38.500', img: '5740.jpg', specs: 'Adventure Ready' }
+            { nome: 'Chevrolet Onix LTZ', info: '2021 • Automático • MyLink • Único Dono', preco: '72.900', img: '5756.jpg', badge: 'MAIS VENDIDO' },
+            { nome: 'Volkswagen Gol G8', info: '2022 • Ar Condicionado • Completo • Baixa KM', preco: '58.500', img: '5751.jpg', badge: 'ECONÔMICO' },
+            { nome: 'Fiat Argo Drive', info: '2021 • Multimídia • Econômico • Impecável', preco: '64.900', img: '5749.jpg', badge: 'OPORTUNIDADE' },
+            { nome: 'Ford Ka SE Plus', info: '2020 • Motor 1.5 • Revisado • Garantia', preco: '52.900', img: '5750.jpg', badge: 'REVISADO' },
+            { nome: 'Hyundai HB20 Vision', info: '2021 • Direção Elétrica • Super Conservado', preco: '67.900', img: '5754.jpg', badge: 'VIP' }
         ];
 
-        function render(f) {
-            const vitrine = document.getElementById('main-vitrine');
-            const lista = f === 'TODOS' ? estoque : estoque.filter(v => v.cat === f);
-            
-            vitrine.innerHTML = lista.map(v => `
-                <article class="lux-card">
+        function render() {
+            const vitrine = document.getElementById('vitrine');
+            let cards = estoque.map((v, index) => `
+                <article class="lux-card" style="animation-delay: ${index * 0.1}s">
                     <div class="lux-img-box">
                         <img src="${v.img}" alt="${v.nome}" loading="lazy">
-                        <div class="lux-badge">${v.specs}</div>
+                        <div class="lux-badge">${v.badge}</div>
                     </div>
                     <div class="lux-info">
-                        <span class="lux-brand">${v.marca} // PREMIUM</span>
                         <h3 class="lux-title">${v.nome}</h3>
-                        
-                        <div class="lux-price-tag">
+                        <p class="lux-sub">${v.info}</p>
+                        <div class="lux-pricing">
                             <div>
-                                <span class="label">Investment</span>
+                                <span class="label">Valor à vista</span>
                                 <span class="val">R$ ${v.preco}</span>
                             </div>
-                            <i class="fa-solid fa-arrow-up-right-from-square" style="opacity: 0.2"></i>
+                            <i class="fa-solid fa-shield-check" style="color: #222; font-size: 20px;"></i>
                         </div>
-                        
-                        <button class="lux-btn" onclick="window.open('https://wa.me/5519999999999')">
-                            <i class="fa-brands fa-whatsapp"></i> Reserve esta Unidade
-                        </button>
+                        <a href="https://wa.me! Vi o ${v.nome} no estoque e quero mais detalhes." class="lux-btn">
+                            <i class="fa-brands fa-whatsapp"></i> Consultar Veículo
+                        </a>
                     </div>
                 </article>
             `).join('');
+
+            // Adiciona Card de Encomenda ao final
+            cards += `
+                <div class="encomenda">
+                    <h3>NÃO ACHOU O QUE PROCURAVA?</h3>
+                    <p>Nós encontramos o carro ou moto dos seus sonhos para você.</p>
+                    <a href="https://wa.me encomendar um veículo específico" 
+                       style="color: var(--gold); text-decoration:none; font-weight:800; font-size:12px; letter-spacing:1px;">
+                       FALAR COM CONSULTOR DIAMOND →
+                    </a>
+                </div>
+            `;
+            
+            vitrine.innerHTML = cards;
         }
 
-        function tab(el, cat) {
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            el.classList.add('active');
-            render(cat);
-            window.scrollTo({ top: window.innerHeight + 100, behavior: 'smooth' });
+        function updateScroll() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("scroll-progress").style.width = scrolled + "%";
         }
+
+        render();
     </script>
 </body>
 </html>
