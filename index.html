@@ -3,41 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LOG-PRO v82 | FULL INTELLIGENCE</title>
+    <title>LOG-PRO v82 | ULTIMATE</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="https://unpkg.com/html5-qrcode"></script>
 
     <style>
         :root { --p: #00ff41; --s: #007aff; --bg: #000; --sf: #0a0a0a; --brd: #1a1a1a; --dg: #ff3b30; --wrn: #ffae00; }
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; font-size: 11px; height: 100vh; overflow: hidden; text-transform: uppercase; }
-        
         .screen { display: none; height: 100vh; flex-direction: column; background: var(--bg); }
         .active { display: flex !important; }
         header { padding: 15px; border-bottom: 2px solid var(--brd); display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron'; background: #000; }
         .scroll { flex: 1; overflow-y: auto; padding: 15px 15px 100px 15px; }
-        
         .card { background: var(--sf); border: 1px solid var(--brd); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
         h3 { font-family: 'Orbitron'; font-size: 9px; color: var(--p); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; border-left: 3px solid var(--p); padding-left: 8px; }
-        
         input, select { width: 100%; padding: 14px; background: #050505; border: 1px solid #222; color: #fff; border-radius: 8px; font-size: 11px; margin-bottom: 10px; font-weight: 700; }
         .btn { width: 100%; padding: 16px; border: none; border-radius: 10px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; margin-bottom: 5px; }
         .btn-p { background: var(--p); color: #000; }
         .btn-s { background: var(--s); color: #fff; }
         .btn-dg { background: var(--dg); color: #fff; }
-        .btn-sm { padding: 8px; font-size: 8px; height: 35px; }
-
         .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 15px; }
         .kpi-card { background: #0a0a0a; border: 1px solid #222; padding: 10px 5px; border-radius: 8px; text-align: center; }
         .kpi-val { font-family: 'Orbitron'; font-size: 13px; color: var(--p); display: block; }
-        
-        #reader, #reader-mot, #reader-db { width: 100%; background: #000; border-radius: 12px; border: 2px solid var(--p); overflow: hidden; min-height: 200px; }
-        
-        .nav-tabs { display: flex; background: #000; border-top: 2px solid var(--brd); position: fixed; bottom: 0; width: 100%; z-index: 100; height: 70px; }
+        #reader, #reader-mot { width: 100%; background: #000; border-radius: 12px; border: 2px solid var(--p); min-height: 200px; }
+        .nav-tabs { display: flex; background: #000; border-top: 2px solid var(--brd); position: fixed; bottom: 0; width: 100%; height: 70px; z-index: 100; }
         .nav-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #444; font-size: 8px; font-weight: 800; gap: 4px; }
         .nav-tab.active { color: var(--p); border-top: 3px solid var(--p); background: #050505; }
-        
         table { width: 100%; border-collapse: collapse; font-size: 9px; }
         td { padding: 12px 5px; border-bottom: 1px solid #111; }
         .st-pill { padding: 4px 6px; border-radius: 4px; font-weight: 900; font-size: 7px; color:#000; }
@@ -48,13 +40,13 @@
 
 <div id="scr-login" class="screen active" style="justify-content:center; align-items:center; padding:40px;">
     <div style="font-family:'Orbitron'; color:var(--p); font-size:35px;">LOG-PRO</div>
-    <div style="color:#333; font-size:9px; margin-bottom:40px;">v82 | COMPLETE STACK</div>
+    <div style="color:#333; font-size:9px; margin-bottom:40px;">v82 | ULTIMATE FINAL</div>
     <input type="password" id="pin" placeholder="PIN">
-    <button class="btn btn-p" onclick="login()">ACESSAR</button>
+    <button class="btn btn-p" onclick="login()">INITIALIZE</button>
 </div>
 
 <div id="scr-shark" class="screen">
-    <header><span>PAINEL SHARK</span> <button onclick="sair()" class="btn-dg btn-sm" style="width:60px">SAIR</button></header>
+    <header><span>PAINEL SHARK</span> <button onclick="sair()" class="btn-dg" style="width:60px; height:30px; font-size:8px">SAIR</button></header>
     <div class="scroll">
         <div class="kpi-grid">
             <div class="kpi-card"><span class="kpi-val" id="k-in">0</span><small>ENT</small></div>
@@ -62,24 +54,21 @@
             <div class="kpi-card"><span class="kpi-val" id="k-out" style="color:var(--s)">0</span><small>SAI</small></div>
             <div class="kpi-card"><span class="kpi-val" id="k-av" style="color:var(--dg)">0</span><small>AVA</small></div>
         </div>
-
         <div class="card">
-            <h3><i class="fa-solid fa-file-export"></i> DADOS</h3>
+            <h3><i class="fa-solid fa-file-export"></i> BANCO DE DADOS</h3>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                <button class="btn btn-s btn-sm" onclick="exportar()"><i class="fa-solid fa-download"></i> EXTRAIR</button>
-                <button class="btn btn-s btn-sm" onclick="document.getElementById('fin').click()"><i class="fa-solid fa-upload"></i> INSERIR</button>
+                <button class="btn btn-s" style="padding:10px; font-size:8px" onclick="exportar()">EXTRAIR JSON</button>
+                <button class="btn btn-s" style="padding:10px; font-size:8px" onclick="document.getElementById('fin').click()">INSERIR JSON</button>
             </div>
-            <button class="btn btn-dg btn-sm" style="margin-top:8px" onclick="limpar()"><i class="fa-solid fa-trash"></i> APAGAR TUDO</button>
+            <button class="btn btn-dg" style="margin-top:8px; padding:10px; font-size:8px" onclick="limpar()">LIMPAR TUDO</button>
             <input type="file" id="fin" style="display:none" onchange="importar(this)">
         </div>
-
         <div class="card">
-            <h3><i class="fa-solid fa-boxes-packing"></i> FILA DE SEPARAÇÃO</h3>
+            <h3><i class="fa-solid fa-boxes-packing"></i> FILA DE PICKING</h3>
             <div id="picking-queue"></div>
         </div>
-
         <div class="card">
-            <h3><i class="fa-solid fa-list"></i> LOGS DO SISTEMA</h3>
+            <h3><i class="fa-solid fa-list"></i> HISTÓRICO</h3>
             <input type="text" id="shark-search" placeholder="🔍 BUSCAR..." onkeyup="render()">
             <table><tbody id="m-logs"></tbody></table>
         </div>
@@ -87,39 +76,39 @@
 </div>
 
 <div id="scr-op" class="screen">
-    <header><span>BIPAGEM</span> <button onclick="sair()" class="btn-dg btn-sm" style="width:60px">SAIR</button></header>
+    <header><span>OPERADOR</span> <button onclick="sair()" class="btn-dg" style="width:60px; height:30px; font-size:8px">SAIR</button></header>
     <div class="scroll">
         <div class="card">
             <div id="reader"></div>
-            <button class="btn btn-p" id="c-btn" style="margin-top:10px" onclick="toggleCam('reader','c-btn')">LIGAR SCANNER</button>
+            <button class="btn btn-p" id="c-btn" style="margin-top:10px" onclick="toggleCam('reader','c-btn')">ATIVAR CÂMERA</button>
         </div>
         <div class="card">
             <h3><i class="fa-solid fa-keyboard"></i> MANUAL / CADASTRO</h3>
-            <input type="text" id="man-cod" placeholder="EAN / CÓDIGO">
-            <button class="btn btn-s" onclick="processarManual()">PROCESSAR ITEM</button>
+            <input type="text" id="man-cod" placeholder="DIGITE O EAN">
+            <button class="btn btn-s" onclick="processarManual()">BIPAR MANUAL</button>
         </div>
         <div class="card">
             <select id="m-op">
                 <option value="ENTRADA">📥 ENTRADA</option>
-                <option value="SEPARACAO">📦 SEPARAÇÃO</option>
-                <option value="SAIDA">🚚 SAÍDA</option>
+                <option value="SEPARACAO">📦 SEPARAÇÃO (PICKING)</option>
+                <option value="SAIDA">🚚 EXPEDIÇÃO</option>
             </select>
-            <button class="btn btn-dg" onclick="fazerAvaria()"><i class="fa-solid fa-hammer"></i> REGISTRAR AVARIA</button>
+            <button class="btn btn-dg" onclick="fazerAvaria()">AVARIA</button>
         </div>
     </div>
 </div>
 
 <div id="scr-mot" class="screen">
-    <header><span>ROTA</span> <button onclick="sair()" class="btn-dg btn-sm" style="width:60px">SAIR</button></header>
+    <header><span>ROTA</span> <button onclick="sair()" class="btn-dg" style="width:60px; height:30px; font-size:8px">SAIR</button></header>
     <div class="scroll">
         <div class="card">
-            <h3><i class="fa-solid fa-truck"></i> SCANNER DE CARGA</h3>
+            <h3><i class="fa-solid fa-truck"></i> SCANNER ROTA</h3>
             <div id="reader-mot"></div>
-            <button class="btn btn-s" id="m-btn" style="margin-top:10px" onclick="toggleCam('reader-mot','m-btn', true)">BIPAR ROMANEIO</button>
+            <button class="btn btn-s" id="m-btn" style="margin-top:10px" onclick="toggleCam('reader-mot','m-btn', true)">LER ROMANEIO</button>
         </div>
         <div id="rom-box" class="card" style="display:none; border-left: 5px solid var(--p);">
             <h2 id="rom-id"></h2>
-            <button class="btn btn-p" style="margin-top:10px" onclick="addLog('MOT','ROTA','SAÍDA CONFIRMADA')">INICIAR VIAGEM</button>
+            <button class="btn btn-p" style="margin-top:10px" onclick="addLog('MOT','ROTA','VIAGEM INICIADA')">CONFIRMAR ROTA</button>
         </div>
     </div>
 </div>
@@ -127,54 +116,60 @@
 <div class="nav-tabs" id="nav" style="display:none">
     <div class="nav-tab active" onclick="tab('scr-shark',this)"><i class="fa-solid fa-chart-line fa-lg"></i>PAINEL</div>
     <div class="nav-tab" onclick="tab('scr-op',this)"><i class="fa-solid fa-barcode fa-lg"></i>BIPER</div>
-    <div class="nav-tab" onclick="tab('scr-mot',this)"><i class="fa-solid fa-truck-fast fa-lg"></i>ROTA</div>
+    <div class="nav-tab" onclick="tab('scr-mot',this)"><i class="fa-solid fa-truck fa-lg"></i>ROTA</div>
 </div>
 
 <script>
-    let logs = JSON.parse(localStorage.getItem('LOG_V82') || '[]');
-    let db = JSON.parse(localStorage.getItem('DB_V82') || '{}');
+    let logs = JSON.parse(localStorage.getItem('LOG_V82_U') || '[]');
+    let db = JSON.parse(localStorage.getItem('DB_V82_U') || '{}');
     let scan; let cam = false;
+    let saldoGlobal = {}; // Melhoria aprovada: Memória de Saldo para Trava
 
     function init() { render(); }
     function login() { document.getElementById('scr-login').classList.remove('active'); document.getElementById('nav').style.display='flex'; tab('scr-shark',document.querySelector('.nav-tab')); }
     function sair() { if(cam) scan.stop(); location.reload(); }
     function tab(id,el) { document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active')); document.getElementById(id).classList.add('active'); el.classList.add('active'); render(); }
 
-    function toggleCam(div, btn, isMot = false) {
+    function toggleCam(div, btn, isM = false) {
         const b = document.getElementById(btn);
         if(!cam) { 
             scan = new Html5Qrcode(div); 
-            scan.start({facingMode:"environment"},{fps:20,qrbox:250}, isMot ? onMot : onSuccess); 
-            b.innerText="STOP"; cam=true; 
-        } else { 
-            scan.stop().then(()=>{document.getElementById(div).innerHTML=""; b.innerText="SCANNER"; cam=false;}); 
-        }
+            scan.start({facingMode:"environment"},{fps:20,qrbox:250}, isM ? onMot : onSuccess); 
+            b.innerText="PARAR"; cam=true; 
+        } else { scan.stop().then(()=>{document.getElementById(div).innerHTML=""; b.innerText="ESCANEAR"; cam=false;}); }
     }
 
-    function onMot(c) { document.getElementById('rom-box').style.display='block'; document.getElementById('rom-id').innerText="ROM: "+c; addLog('MOT','BIPE',`CARGA: ${c}`); }
+    function onMot(c) { document.getElementById('rom-box').style.display='block'; document.getElementById('rom-id').innerText="CARGA: "+c; }
 
     function onSuccess(c) {
-        if(!db[c]) { let n = prompt("NOVO ITEM! NOME:"); if(n) { db[c]=n; localStorage.setItem('DB_V82', JSON.stringify(db)); } else return; }
+        if(!db[c]) { let n = prompt("NOVO ITEM! NOME:"); if(n) { db[c]=n; localStorage.setItem('DB_V82_U', JSON.stringify(db)); } else return; }
         let etp = document.getElementById('m-op').value;
-        let q = prompt(`ITEM: ${db[c]}\nQTD PARA ${etp}:`, "1");
+        
+        // MELHORIA: Trava de Saldo (Não deixa separar ou sair se não tem no estoque)
+        if(etp !== 'ENTRADA' && (saldoGlobal[db[c]] || 0) <= 0) {
+            alert("ERRO: SALDO INSUFICIENTE PARA " + etp);
+            return;
+        }
+
+        let q = prompt(`ITEM: ${db[c]}\nQTD ${etp}:`, "1");
         if(q) addLog('OP', etp, `${db[c]} (${c}) | QTD: ${q}`);
     }
 
     function processarManual() { let c = document.getElementById('man-cod').value; if(c) onSuccess(c); }
-    function fazerAvaria() { let c = prompt("CÓDIGO:"); if(c) { let q = prompt("QTD:"); addLog('OP', 'AVARIA', `${db[c]||c} | QTD: ${q}`); } }
+    function fazerAvaria() { let c = prompt("EAN:"); if(c) { let q = prompt("QTD:"); addLog('OP', 'AVARIA', `${db[c]||c} | QTD: ${q}`); } }
 
     function addLog(orig, acao, info) {
         logs.unshift({t: new Date().toLocaleTimeString(), orig, acao, info});
-        localStorage.setItem('LOG_V82', JSON.stringify(logs.slice(0,800)));
+        localStorage.setItem('LOG_V82_U', JSON.stringify(logs.slice(0,1000)));
         render();
     }
 
-    function limpar() { if(confirm("APAGAR TUDO?")) { localStorage.clear(); location.reload(); } }
-    function exportar() { let b = new Blob([JSON.stringify({logs, db})], {type:"application/json"}); let a = document.createElement('a'); a.href=URL.createObjectURL(b); a.download="LOGPRO_BK.json"; a.click(); }
-    function importar(i) { let r = new FileReader(); r.onload=function(){ let d=JSON.parse(r.result); logs=d.logs; db=d.db; localStorage.setItem('LOG_V82', JSON.stringify(logs)); localStorage.setItem('DB_V82', JSON.stringify(db)); render(); alert("OK!"); }; r.readAsText(i.files[0]); }
+    function limpar() { if(confirm("RESETAR SISTEMA?")) { localStorage.clear(); location.reload(); } }
+    function exportar() { let b = new Blob([JSON.stringify({logs, db})], {type:"application/json"}); let a = document.createElement('a'); a.href=URL.createObjectURL(b); a.download="LOGPRO_ULTIMATE.json"; a.click(); }
+    function importar(i) { let r = new FileReader(); r.onload=function(){ let d=JSON.parse(r.result); logs=d.logs; db=d.db; localStorage.setItem('LOG_V82_U', JSON.stringify(logs)); localStorage.setItem('DB_V82_U', JSON.stringify(db)); render(); alert("DADOS CARREGADOS!"); }; r.readAsText(i.files[0]); }
 
     function render() {
-        let h=""; let ent=0,sep=0,out=0,av=0; let fila={};
+        let h=""; let ent=0,sep=0,out=0,av=0; let fila={}; saldoGlobal = {};
         let s = document.getElementById('shark-search').value.toLowerCase();
         
         logs.forEach(l => {
@@ -184,6 +179,7 @@
             if(l.acao==='SEPARACAO') { sep+=q; fila[id]=(fila[id]||0)-q; }
             if(l.acao==='SAIDA') out+=q;
             if(l.acao==='AVARIA') { av+=q; fila[id]=(fila[id]||0)-q; }
+            saldoGlobal[id] = fila[id] || 0;
 
             if(l.info.toLowerCase().includes(s) || l.acao.toLowerCase().includes(s)) {
                 let c = l.acao==='ENTRADA'?'#007aff':l.acao==='SEPARACAO'?'#ffae00':l.acao==='AVARIA'?'#ff3b30':'#00ff41';
@@ -196,8 +192,9 @@
         
         let fHtml = "";
         for(let it in fila) if(fila[it]>0) fHtml += `<div class="picking-item"><span>${it}</span><b>${fila[it]} PENDENTE</b></div>`;
-        document.getElementById('picking-queue').innerHTML = fHtml || '<p style="text-align:center;color:#444">AGUARDANDO CARGA</p>';
+        document.getElementById('picking-queue').innerHTML = fHtml || '<p style="text-align:center;color:#444">FILA LIMPA</p>';
     }
 </script>
 </body>
-</html>
+                </html>
+                
