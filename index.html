@@ -1,190 +1,247 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>LOG-PRO v90 | TITAN</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<script src="https://unpkg.com/html5-qrcode"></script>
-<style>
-:root{--p:#00ff41;--s:#007aff;--bg:#000;--sf:#0a0a0a;--brd:#1a1a1a;--dg:#ff3b30;--w:#ffae00}
-*{margin:0;padding:0;box-sizing:border-box;outline:none;-webkit-tap-highlight-color:transparent}
-body{background:var(--bg);color:#fff;font-family:'Inter',sans-serif;font-size:11px;height:100vh;overflow:hidden;text-transform:uppercase}
-.scr{display:none;height:100vh;flex-direction:column;background:var(--bg)}.act{display:flex!important}
-header{padding:15px;border-bottom:2px solid var(--brd);display:flex;justify-content:space-between;align-items:center;font-family:'Orbitron';background:#000}
-.scroll{flex:1;overflow-y:auto;padding:15px 15px 100px 15px}
-.c{background:var(--sf);border:1px solid var(--brd);border-radius:12px;padding:15px;margin-bottom:15px}
-h3{font-family:'Orbitron';font-size:9px;color:var(--p);margin-bottom:12px;display:flex;align-items:center;gap:8px;border-left:3px solid var(--p);padding-left:8px}
-input,select{width:100%;padding:14px;background:#050505;border:1px solid #222;color:#fff;border-radius:8px;font-size:11px;margin-bottom:10px;font-weight:700}
-.btn{width:100%;padding:16px;border:none;border-radius:10px;font-family:'Orbitron';font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;text-transform:uppercase;margin-bottom:5px;transition:0.2s}
-.btn:active{transform:scale(0.95)}.b-p{background:var(--p);color:#000}.b-s{background:var(--s);color:#fff}.b-d{background:var(--dg);color:#fff}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:15px}
-.kpi{background:#0a0a0a;border:1px solid #222;padding:10px 5px;border-radius:8px;text-align:center}
-.kpi span{font-family:'Orbitron';font-size:14px;color:var(--p);display:block}
-#r-op,#r-mot{width:100%;background:#000;border-radius:12px;border:2px solid var(--p);min-height:200px;display:none}
-.nav{display:flex;background:#000;border-top:2px solid var(--brd);position:fixed;bottom:0;width:100%;height:70px;z-index:100}
-.nav div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#444;font-size:8px;font-weight:800;gap:4px}
-.nav .act-tab{color:var(--p);border-top:3px solid var(--p);background:#050505}
-table{width:100%;border-collapse:collapse;font-size:9px}td{padding:12px 5px;border-bottom:1px solid #111}
-.pill{padding:4px 6px;border-radius:4px;font-weight:900;font-size:7px;color:#000}
-.item-bipado{display:flex;justify-content:space-between;padding:10px;background:#111;border-bottom:1px solid #222;font-size:10px}
-.critico{border:2px solid var(--dg)!important;animation:blink 1s infinite}@keyframes blink{50%{opacity:0.5}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LOG-PRO v90 TITAN | FULL SYSTEM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <style>
+        :root { --p: #00ff41; --s: #007aff; --bg: #000; --sf: #0a0a0a; --brd: #1a1a1a; --dg: #ff3b30; --w: #ffae00; }
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; font-size: 11px; height: 100vh; overflow: hidden; text-transform: uppercase; }
+        .screen { display: none; height: 100vh; flex-direction: column; background: var(--bg); }
+        .active-screen { display: flex !important; }
+        header { padding: 15px; border-bottom: 2px solid var(--brd); display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron'; background: #000; }
+        .scroll-area { flex: 1; overflow-y: auto; padding: 15px 15px 100px 15px; }
+        .card { background: var(--sf); border: 1px solid var(--brd); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+        h3 { font-family: 'Orbitron'; font-size: 9px; color: var(--p); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; border-left: 3px solid var(--p); padding-left: 8px; }
+        input, select { width: 100%; padding: 14px; background: #050505; border: 1px solid #222; color: #fff; border-radius: 8px; font-size: 11px; margin-bottom: 10px; font-weight: 700; }
+        .btn { width: 100%; padding: 16px; border: none; border-radius: 10px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; margin-bottom: 5px; }
+        .btn-p { background: var(--p); color: #000; }
+        .btn-s { background: var(--s); color: #fff; }
+        .btn-d { background: var(--dg); color: #fff; }
+        .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 15px; }
+        .kpi-box { background: #0a0a0a; border: 1px solid #222; padding: 10px 5px; border-radius: 8px; text-align: center; }
+        .kpi-box span { font-family: 'Orbitron'; font-size: 14px; color: var(--p); display: block; }
+        .scanner-view { width: 100%; background: #000; border-radius: 12px; border: 2px solid var(--p); min-height: 200px; display: none; overflow: hidden; }
+        .bottom-nav { display: flex; background: #000; border-top: 2px solid var(--brd); position: fixed; bottom: 0; width: 100%; height: 70px; z-index: 100; }
+        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #444; font-size: 8px; font-weight: 800; gap: 4px; }
+        .active-tab { color: var(--p); border-top: 3px solid var(--p); background: #050505; }
+        table { width: 100%; border-collapse: collapse; font-size: 9px; }
+        td { padding: 12px 5px; border-bottom: 1px solid #111; }
+        .pill { padding: 4px 6px; border-radius: 4px; font-weight: 900; font-size: 7px; color: #000; }
+        .alert-box { border: 2px solid var(--dg) !important; animation: blink 1s infinite; margin-bottom: 10px; padding: 10px; border-radius: 8px; color: var(--dg); font-weight: 800; }
+        @keyframes blink { 50% { opacity: 0.4; } }
+    </style>
 </head>
-<body onload="init()">
+<body onload="inicializarApp()">
 
-<div id="s-log" class="scr act" style="justify-content:center;align-items:center;padding:40px">
-    <div style="font-family:'Orbitron';color:var(--p);font-size:35px">LOG-PRO</div>
-    <div style="color:#555;font-size:10px;margin-bottom:40px">TITAN v90 | JP DIAS</div>
-    <input type="password" id="pin" placeholder="PIN" style="text-align:center">
-    <button class="btn b-p" onclick="login()">INITIALIZE</button>
-</div>
+    <div id="tela-login" class="screen active-screen" style="justify-content:center; align-items:center; padding:40px;">
+        <h1 style="font-family:'Orbitron'; color:var(--p); font-size:35px;">LOG-PRO</h1>
+        <p style="color:#555; font-size:10px; margin-bottom:40px;">v90 | FULL INTEGRATED</p>
+        <input type="password" id="pin-acesso" placeholder="PIN" style="text-align:center;">
+        <button class="btn btn-p" onclick="realizarLogin()">INITIALIZE</button>
+    </div>
 
-<div id="s-shk" class="scr">
-    <header><span>SHARK INTELLIGENCE</span><button onclick="sair()" class="btn b-d" style="width:60px;height:30px;font-size:8px">SAIR</button></header>
-    <div class="scroll">
-        <div class="grid">
-            <div class="kpi"><span id="k-in">0</span><small>ENT</small></div>
-            <div class="kpi"><span id="k-sep" style="color:var(--w)">0</span><small>SEP</small></div>
-            <div class="kpi"><span id="k-out" style="color:var(--s)">0</span><small>SAI</small></div>
-            <div class="kpi"><span id="k-av" style="color:var(--dg)">0</span><small>AVA</small></div>
-        </div>
-        <div id="alertas" style="margin-bottom:10px"></div>
-        <div class="c">
-            <h3><i class="fa-solid fa-gears"></i> SISTEMA</h3>
-            <button class="btn b-s btn-small" onclick="exp()">BACKUP JSON</button>
-            <button class="btn b-d btn-small" style="margin-top:5px" onclick="limpar()">RESET TOTAL</button>
-        </div>
-        <div class="c">
-            <h3><i class="fa-solid fa-list"></i> HISTÓRICO GLOBAL</h3>
-            <input type="text" id="busc" placeholder="BUSCAR..." onkeyup="rend()">
-            <table><tbody id="logs"></tbody></table>
+    <div id="tela-shark" class="screen">
+        <header><span>SHARK PANEL</span> <button onclick="logout()" class="btn-d" style="width:50px; height:25px; border:none; font-size:7px;">SAIR</button></header>
+        <div class="scroll-area">
+            <div class="kpi-grid">
+                <div class="kpi-box"><span id="kpi-ent">0</span><small>ENT</small></div>
+                <div class="kpi-box"><span id="kpi-sep" style="color:var(--w)">0</span><small>SEP</small></div>
+                <div class="kpi-box"><span id="kpi-sai" style="color:var(--s)">0</span><small>SAI</small></div>
+                <div class="kpi-box"><span id="kpi-ava" style="color:var(--dg)">0</span><small>AVA</small></div>
+            </div>
+            <div id="container-alertas"></div>
+            <div class="card">
+                <h3><i class="fa-solid fa-plus-circle"></i> CADASTRO MANUAL</h3>
+                <input type="text" id="cad-ean" placeholder="CÓDIGO EAN">
+                <input type="text" id="cad-nome" placeholder="NOME DO PRODUTO">
+                <button class="btn btn-p" onclick="cadastrarManual()">SALVAR</button>
+            </div>
+            <div class="card">
+                <h3><i class="fa-solid fa-boxes-packing"></i> FILA DE PICKING</h3>
+                <div id="fila-picking"></div>
+            </div>
+            <div class="card">
+                <h3><i class="fa-solid fa-clock-rotate-left"></i> HISTÓRICO</h3>
+                <table><tbody id="tabela-logs"></tbody></table>
+            </div>
         </div>
     </div>
-</div>
 
-<div id="s-op" class="scr">
-    <header><span>OPERADOR PRO</span><button onclick="gerarRomaneio()" class="btn b-s" style="width:80px;height:30px;font-size:8px">ROMANEIO</button></header>
-    <div class="scroll">
-        <div class="c">
-            <div id="r-op"></div>
-            <button class="btn b-p" id="b-op" onclick="cam('r-op','b-op',0)">CÂMERA</button>
-        </div>
-        <div class="c">
-            <select id="sel">
-                <option value="ENTRADA">📥 ENTRADA</option>
-                <option value="SEPARACAO">📦 SEPARAÇÃO</option>
-                <option value="SAIDA">🚚 EXPEDIÇÃO</option>
-            </select>
-            <input type="text" id="man" placeholder="EAN MANUAL">
-            <button class="btn b-s" onclick="bMan()">BIPAR</button>
-        </div>
-        <div class="c">
-            <h3><i class="fa-solid fa-receipt"></i> ÚLTIMOS BIPADOS (SESSÃO)</h3>
-            <div id="lista-bipados"></div>
-            <button class="btn b-d" style="margin-top:10px;height:35px;font-size:8px" onclick="limparSessao()">LIMPAR SESSÃO</button>
-        </div>
-    </div>
-</div>
-
-<div id="s-mot" class="scr">
-    <header><span>ENTREGA GPS</span><button onclick="sair()" class="btn b-d" style="width:60px;height:30px;font-size:8px">SAIR</button></header>
-    <div class="scroll">
-        <div class="c">
-            <div id="r-mot"></div>
-            <button class="btn b-s" id="b-mot" onclick="cam('r-mot','b-mot',1)">SCAN ROMANEIO</button>
-        </div>
-        <div id="rom" class="c" style="display:none;border-left:5px solid var(--p)">
-            <h2 id="rom-id"></h2>
-            <p id="gps-info" style="font-size:8px;color:var(--p);margin:5px 0"></p>
-            <button class="btn b-p" onclick="confirmarRota()">CONFIRMAR ENTREGA (GPS)</button>
+    <div id="tela-operador" class="screen">
+        <header><span>OPERADOR</span> <button onclick="gerarRomaneio()" class="btn-s" style="width:70px; height:25px; border:none; font-size:7px;">ROMANEIO</button></header>
+        <div class="scroll-area">
+            <div class="card">
+                <div id="reader-op" class="scanner-view"></div>
+                <button class="btn btn-p" id="btn-cam-op" onclick="controleCamera('reader-op','btn-cam-op',false)">CÂMERA</button>
+            </div>
+            <div class="card">
+                <select id="operacao-tipo">
+                    <option value="ENTRADA">📥 ENTRADA</option>
+                    <option value="SEPARACAO">📦 SEPARAÇÃO</option>
+                    <option value="SAIDA">🚚 EXPEDIÇÃO</option>
+                </select>
+                <input type="text" id="ean-manual" placeholder="BIPAGEM MANUAL">
+                <button class="btn btn-s" onclick="processarManual()">BIPAR</button>
+                <button class="btn btn-d" style="margin-top:10px" onclick="registrarAvaria()">⚠️ REGISTRAR AVARIA</button>
+            </div>
+            <div class="card" id="card-sessao">
+                <h3><i class="fa-solid fa-receipt"></i> SESSÃO</h3>
+                <div id="lista-sessao"></div>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="nav" id="nv" style="display:none">
-    <div class="act-tab" onclick="tab('s-shk',this)"><i class="fa-solid fa-chart-line"></i>SHARK</div>
-    <div onclick="tab('s-op',this)"><i class="fa-solid fa-barcode"></i>OP</div>
-    <div onclick="tab('s-mot',this)"><i class="fa-solid fa-truck"></i>ROTA</div>
-</div>
+    <div id="tela-motorista" class="screen">
+        <header><span>ROTA GPS</span></header>
+        <div class="scroll-area">
+            <div class="card">
+                <div id="reader-mot" class="scanner-view"></div>
+                <button class="btn btn-s" id="btn-cam-mot" onclick="controleCamera('reader-mot','btn-cam-mot',true)">SCAN ROMANEIO</button>
+            </div>
+            <div id="card-romaneio" class="card" style="display:none; border-left:5px solid var(--p);">
+                <h2 id="romaneio-id"></h2>
+                <p id="info-gps" style="color:var(--p); margin:10px 0;"></p>
+                <button class="btn btn-p" onclick="confirmarEntrega()">CONFIRMAR ENTREGA</button>
+            </div>
+        </div>
+    </div>
 
-<script>
-let l=JSON.parse(localStorage.getItem('L_V90')||'[]'), db=JSON.parse(localStorage.getItem('D_V90')||'{}'), sessao=[];
-let scn, cm=0, sld={}, gps="";
+    <div class="bottom-nav" id="nav-principal" style="display:none;">
+        <div class="nav-item active-tab" onclick="navegar('tela-shark', this)"><i class="fa-solid fa-chart-line"></i>SHARK</div>
+        <div class="nav-item" onclick="navegar('tela-operador', this)"><i class="fa-solid fa-barcode"></i>OP</div>
+        <div class="nav-item" onclick="navegar('tela-motorista', this)"><i class="fa-solid fa-truck"></i>ROTA</div>
+    </div>
 
-function init(){rend()}
-function login(){if(document.getElementById('pin').value){document.getElementById('s-log').classList.remove('act');document.getElementById('nv').style.display='flex';tab('s-shk',document.querySelector('.nav div'))}}
-function sair(){if(cm)scn.stop();location.reload()}
-function tab(id,e){document.querySelectorAll('.scr').forEach(s=>s.classList.remove('act'));document.querySelectorAll('.nav div').forEach(t=>t.classList.remove('act-tab'));document.getElementById(id).classList.add('act');e.classList.add('act-tab');rend()}
+    <script>
+        let logs = JSON.parse(localStorage.getItem('L90') || '[]');
+        let produtos = JSON.parse(localStorage.getItem('P90') || '{}');
+        let sessao = [];
+        let html5QrCode, isCameraOpen = false, currentGps = "";
 
-function cam(div,btn,isM){
-    let b=document.getElementById(btn), d=document.getElementById(div);
-    if(!cm){d.style.display='block';scn=new Html5Qrcode(div);scn.start({facingMode:"environment"},{fps:15,qrbox:250},isM?oM:oO);b.innerText="PARAR";cm=1}
-    else{scn.stop().then(()=>{d.style.display='none';d.innerHTML="";b.innerText="CÂMERA";cm=0})}
-}
+        function inicializarApp() { renderizarTudo(); }
+        function realizarLogin() { document.getElementById('tela-login').classList.remove('active-screen'); document.getElementById('nav-principal').style.display='flex'; navegar('tela-shark', document.querySelector('.nav-item')); }
+        function logout() { location.reload(); }
 
-function oM(c){
-    document.getElementById('rom').style.display='block';
-    document.getElementById('rom-id').innerText="ROM: "+c;
-    navigator.geolocation.getCurrentPosition(p=>{
-        gps = `${p.coords.latitude},${p.coords.longitude}`;
-        document.getElementById('gps-info').innerText = "📍 GPS LOCALIZADO: " + gps;
-    });
-}
-
-function oO(c){
-    if(!db[c]){let n=prompt("PRODUTO NOVO! NOME:");if(n){db[c]=n;localStorage.setItem('D_V90',JSON.stringify(db))}else return}
-    let t=document.getElementById('sel').value;
-    if(t!=='ENTRADA'&&(sld[db[c]]||0)<=0){alert("HARD-LOCK: ESTOQUE ZERADO!");return}
-    let q=prompt(`QTD PARA ${t}:`,"1");
-    if(q&&q>0){
-        let registro = {item:db[c], cod:c, qtd:q, hora:new Date().toLocaleTimeString(), tipo:t};
-        sessao.unshift(registro);
-        log('OP',t,`${db[c]} (${c}) | QTD: ${q}`);
-        atualizarSessao();
-    }
-}
-
-function atualizarSessao(){
-    let h=""; sessao.forEach(x=>h+=`<div class="item-bipado"><span>${x.item}</span><b>${x.qtd} UN</b></div>`);
-    document.getElementById('lista-bipados').innerHTML=h;
-}
-
-function gerarRomaneio(){
-    if(sessao.length===0){alert("NADA BIPADO NA SESSÃO!");return}
-    let txt = "ROMANEIO DIGITAL LOG-PRO\n\n";
-    sessao.forEach(x=>txt+=`[${x.tipo}] ${x.item} - ${x.qtd} UN\n`);
-    alert(txt + "\nEnviando para o sistema de carga...");
-    log('OP','ROMANEIO','GEROU ROMANEIO COM '+sessao.length+' ITENS');
-}
-
-function bMan(){let c=document.getElementById('man').value;if(c)oO(c);document.getElementById('man').value=""}
-function confirmarRota(){log('MOT','ENTREGA','CONFIRMADO EM: '+gps);alert("ENTREGA REGISTRADA NO MAPA!");sair()}
-function log(o,a,i){l.unshift({t:new Date().toLocaleTimeString(),o,a,i});localStorage.setItem('L_V90',JSON.stringify(l.slice(0,1000)));rend()}
-function limparSessao(){sessao=[];atualizarSessao()}
-function limpar(){if(confirm("LIMPAR TUDO?")){localStorage.clear();location.reload()}}
-function exp(){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify({l,db})],{type:"application/json"}));a.download="LOGPRO_TITAN.json";a.click()}
-
-function rend(){
-    let h="",e=0,sp=0,sa=0,av=0,fl={},bs=document.getElementById('busc').value.toLowerCase();sld={};
-    l.forEach(x=>{
-        let q=parseInt(x.i.split('QTD: ')[1])||0, id=x.i.split(' (')[0].split(' |')[0];
-        fl[id]=fl[id]||0;
-        if(x.a==='ENTRADA'){e+=q;fl[id]+=q}else if(x.a==='SEPARACAO'){sp+=q;fl[id]-=q}else if(x.a==='SAIDA'){sa+=q}
-        sld[id]=fl[id];
-        if((x.i+" "+x.a).toLowerCase().includes(bs)){
-            let c=x.a==='ENTRADA'?'#007aff':x.a==='SEPARACAO'?'#ffae00':'#00ff41';
-            h+=`<tr><td>${x.t}</td><td><span class="pill" style="background:${c}">${x.a}</span></td><td><b>${x.i}</b></td></tr>`;
+        function navegar(id, el) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-tab'));
+            document.getElementById(id).classList.add('active-screen');
+            el.classList.add('active-tab');
+            if(isCameraOpen) controleCamera();
+            renderizarTudo();
         }
-    });
-    document.getElementById('logs').innerHTML=h;
-    document.getElementById('k-in').innerText=e;document.getElementById('k-sep').innerText=sp;document.getElementById('k-out').innerText=sa;
-    
-    // ALERTA DE ESTOQUE BAIXO (Pilar 3)
-    let ah=""; for(let k in fl) if(fl[k]>0 && fl[k]<5) ah+=`<div class="c critico" style="padding:10px;color:var(--dg)">⚠️ ESTOQUE BAIXO: ${k} (${fl[k]} UN)</div>`;
-    document.getElementById('alertas').innerHTML=ah;
-}
-</script>
+
+        function controleCamera(div, btn, isMot) {
+            if(!isCameraOpen) {
+                document.getElementById(div).style.display = 'block';
+                html5QrCode = new Html5Qrcode(div);
+                html5QrCode.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, c => isMot ? handleMotorista(c) : handleOperador(c));
+                document.getElementById(btn).innerText = "PARAR"; isCameraOpen = true;
+            } else {
+                html5QrCode.stop().then(() => { document.querySelectorAll('.scanner-view').forEach(v=>v.style.display='none'); isCameraOpen = false; });
+            }
+        }
+
+        function handleOperador(c) {
+            if(!produtos[c]) {
+                let n = prompt("NOVO PRODUTO! NOME:");
+                if(n) { produtos[c] = n; localStorage.setItem('P90', JSON.stringify(produtos)); } else return;
+            }
+            let t = document.getElementById('operacao-tipo').value;
+            let saldo = calcularSaldo(produtos[c]);
+            if(t !== 'ENTRADA' && saldo <= 0) return alert("HARD-LOCK: SEM ESTOQUE!");
+            
+            let q = prompt("QTD PARA " + t + ":", "1");
+            if(q && q > 0) {
+                if(t !== 'ENTRADA' && q > saldo) return alert("SALDO INSUFICIENTE!");
+                sessao.unshift({n: produtos[c], q: q, t: t});
+                registrarLog('OP', t, `${produtos[c]} (${c}) | QTD: ${q}`);
+                atualizarSessao();
+            }
+        }
+
+        function registrarAvaria() {
+            let c = prompt("EAN DA AVARIA:");
+            if(!c || !produtos[c]) return alert("NÃO CADASTRADO!");
+            let saldo = calcularSaldo(produtos[c]);
+            if(saldo <= 0) return alert("SEM SALDO!");
+            let q = prompt("QTD AVARIADA (MAX: "+saldo+"):");
+            if(q && q > 0 && q <= saldo) {
+                registrarLog('OP', 'AVARIA', `${produtos[c]} (${c}) | QTD: ${q}`);
+                alert("AVARIA REGISTRADA!");
+            }
+        }
+
+        function calcularSaldo(nome) {
+            let s = 0;
+            logs.forEach(l => {
+                if(l.i.includes(nome)) {
+                    let q = parseInt(l.i.split('QTD: ')[1]) || 0;
+                    if(l.a === 'ENTRADA') s += q; else s -= q;
+                }
+            });
+            return s;
+        }
+
+        function handleMotorista(c) {
+            document.getElementById('card-romaneio').style.display='block';
+            document.getElementById('romaneio-id').innerText="CARGA: "+c;
+            navigator.geolocation.getCurrentPosition(p => {
+                currentGps = p.coords.latitude + "," + p.coords.longitude;
+                document.getElementById('info-gps').innerText = "📍 GPS: " + currentGps;
+            });
+        }
+
+        function confirmarEntrega() { registrarLog('MOT', 'ENTREGA', 'GPS: ' + currentGps); alert("ENTREGUE!"); location.reload(); }
+
+        function registrarLog(o, a, i) {
+            logs.unshift({t: new Date().toLocaleTimeString(), o, a, i});
+            localStorage.setItem('L90', JSON.stringify(logs.slice(0, 1000)));
+            renderizarTudo();
+        }
+
+        function renderizarTudo() {
+            let h="", ent=0, sep=0, sai=0, ava=0, fila={}, alertas="";
+            logs.forEach(l => {
+                let q = parseInt(l.i.split('QTD: ')[1]) || 0;
+                let n = l.i.split(' (')[0].split(' |')[0];
+                fila[n] = fila[n] || 0;
+                if(l.a==='ENTRADA'){ ent+=q; fila[n]+=q; }
+                else if(l.a==='SEPARACAO'){ sep+=q; fila[n]-=q; }
+                else if(l.a==='SAIDA'){ sai+=q; }
+                else if(l.a==='AVARIA'){ ava+=q; fila[n]-=q; }
+                let cor = l.a==='ENTRADA'?'#007aff':l.a==='SEPARACAO'?'#ffae00':l.a==='AVARIA'?'#ff3b30':'#00ff41';
+                h += `<tr><td>${l.t}</td><td><span class="pill" style="background:${cor}">${l.a}</span></td><td><b>${l.i}</b></td></tr>`;
+            });
+            document.getElementById('tabela-logs').innerHTML = h;
+            document.getElementById('kpi-ent').innerText = ent; document.getElementById('kpi-sep').innerText = sep;
+            document.getElementById('kpi-sai').innerText = sai; document.getElementById('kpi-ava').innerText = ava;
+            let fh = "";
+            for(let k in fila) {
+                if(fila[k] > 0) {
+                    fh += `<div style="background:#111; padding:10px; border-radius:8px; margin-bottom:5px; display:flex; justify-content:space-between;"><span>${k}</span><b style="color:var(--w)">${fila[k]} UN</b></div>`;
+                    if(fila[k] < 5) alertas += `<div class="alert-box">ESTOQUE BAIXO: ${k} (${fila[k]} UN)</div>`;
+                }
+            }
+            document.getElementById('fila-picking').innerHTML = fh;
+            document.getElementById('container-alertas').innerHTML = alertas;
+        }
+
+        function cadastrarManual() {
+            let e = document.getElementById('cad-ean').value;
+            let n = document.getElementById('cad-nome').value;
+            if(e && n) { produtos[e] = n; localStorage.setItem('P90', JSON.stringify(produtos)); renderizarTudo(); alert("OK!"); }
+        }
+
+        function processarManual() { let e = document.getElementById('ean-manual').value; if(e) handleOperador(e); document.getElementById('ean-manual').value=""; }
+        function atualizarSessao() { let h=""; sessao.forEach(x=> h += `<div style="padding:5px; border-bottom:1px solid #222; font-size:9px;">${x.n} - ${x.q} [${x.t}]</div>`); document.getElementById('lista-sessao').innerHTML = h; }
+        function gerarRomaneio() { if(sessao.length===0) return; let r="ROMANEIO\n\n"; sessao.forEach(x=>r+=`${x.n}: ${x.q}\n`); alert(r); sessao=[]; atualizarSessao(); }
+    </script>
 </body>
     </html>
     
