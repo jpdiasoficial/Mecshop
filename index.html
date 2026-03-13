@@ -6,39 +6,49 @@
     <title>SERGEL | Gestor Shark</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --red: #ea1d2c; --navy: #1d3557; --bg: #f7f7f7; --green: #2e7d32; --gray: #777; }
+        :root { --red: #ea1d2c; --navy: #1d3557; --bg: #f7f7f7; --green: #2e7d32; --gray: #777; --border: #ddd; }
         body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding-bottom: 240px; color: #333; }
         
         header { background: #fff; padding: 20px; text-align: center; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 1000; }
         .loja-call { font-size: 12px; color: var(--gray); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
         .trigger-dot { position: absolute; right: 15px; top: 18px; color: #eee; cursor: pointer; font-size: 20px; }
 
-        /* CATEGORIAS (STORIES) */
-        .cat-scroll { display: flex; gap: 15px; overflow-x: auto; padding: 15px; background: #fff; border-bottom: 1px solid #eee; scrollbar-width: none; }
+        /* CATEGORIAS DINÂMICAS (BOLINHA OU BOTÃO) */
+        .cat-scroll { display: flex; gap: 12px; overflow-x: auto; padding: 15px; background: #fff; border-bottom: 1px solid #eee; scrollbar-width: none; align-items: center; }
         .cat-scroll::-webkit-scrollbar { display: none; }
-        .cat-item { min-width: 75px; text-align: center; cursor: pointer; transition: 0.3s; opacity: 0.5; }
-        .cat-item.active { opacity: 1; transform: scale(1.05); }
-        .cat-img-nav { width: 60px; height: 60px; border-radius: 50%; border: 3px solid var(--red); object-fit: cover; padding: 2px; background: #eee; }
-        .cat-item span { font-size: 10px; font-weight: 700; display: block; margin-top: 5px; }
+        
+        /* Estilo quando TEM imagem (Bolinha) */
+        .cat-item { min-width: 70px; text-align: center; cursor: pointer; transition: 0.3s; opacity: 0.5; display: flex; flex-direction: column; align-items: center; }
+        .cat-img-nav { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--red); object-fit: cover; padding: 2px; background: #fff; }
+        .cat-item span { font-size: 10px; font-weight: 700; margin-top: 5px; }
 
-        /* PRODUTOS COM IMAGEM OPCIONAL */
+        /* Estilo quando NÃO TEM imagem (Botão Retangular iFood) */
+        .cat-btn { min-width: 100px; height: 40px; padding: 0 15px; border-radius: 8px; border: 1.5px solid var(--border); background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; opacity: 0.6; white-space: nowrap; }
+        .cat-btn span { font-size: 11px; font-weight: 600; color: #333; }
+
+        /* Ativo para ambos */
+        .active { opacity: 1 !important; transform: scale(1.05); }
+        .cat-btn.active { border-color: var(--red); background: #fff1f2; }
+        .cat-btn.active span { color: var(--red); }
+
+        /* PRODUTOS */
         .container { padding: 15px; max-width: 800px; margin: auto; }
         .item-card { background: #fff; border-radius: 12px; margin-bottom: 12px; border: 1px solid #eee; display: flex; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-        .prod-img-box { width: 100px; height: 100px; flex-shrink: 0; display: none; } /* Oculto por padrão */
+        .prod-img-box { width: 100px; height: 100px; flex-shrink: 0; display: none; }
         .prod-img-box img { width: 100%; height: 100%; object-fit: cover; }
         .item-content { flex: 1; padding: 12px; display: flex; flex-direction: column; justify-content: space-between; }
         .item-info b { font-size: 14px; display: block; color: var(--navy); }
         .item-desc { font-size: 11px; color: var(--gray); margin: 4px 0; line-height: 1.4; }
         .price-row { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 8px; }
         .price-tag { font-size: 15px; font-weight: 800; color: var(--green); }
-        .atacado-badge { font-size: 9px; background: #fff3cd; color: #856404; padding: 2px 5px; border-radius: 4px; font-weight: 700; display: block; margin-top: 2px; }
+        .atacado-badge { font-size: 9px; background: #fff3cd; color: #856404; padding: 2px 5px; border-radius: 4px; font-weight: 700; display: block; }
 
-        /* QTY CONTROLS */
+        /* QTY */
         .qty-controls { display: flex; align-items: center; gap: 10px; background: #f8f8f8; padding: 4px 8px; border-radius: 8px; border: 1px solid #eee; }
         .btn-qty { border: none; background: none; color: var(--red); font-size: 20px; font-weight: 900; cursor: pointer; }
         .qty-num { font-size: 14px; font-weight: 700; min-width: 18px; text-align: center; }
 
-        /* CARRINHO */
+        /* FOOTER */
         .footer-cart { position: fixed; bottom: 0; width: 100%; background: #fff; padding: 15px 20px; border-top: 1px solid #eee; z-index: 950; box-sizing: border-box; box-shadow: 0 -5px 20px rgba(0,0,0,0.08); }
         .cupom-area { margin-bottom: 12px; display: none; }
         .cupom-flex { display: flex; gap: 8px; }
@@ -121,7 +131,7 @@
         <div id="tab2" style="display:none;">
             <div class="card-adm">
                 <input type="text" id="c-nome" placeholder="NOME CATEGORIA">
-                <input type="text" id="c-img" placeholder="URL DA FOTO (BOLINHA OPCIONAL)">
+                <input type="text" id="c-img" placeholder="URL DA FOTO (DEIXE EM BRANCO PARA BOTÃO)">
                 <button class="btn-add" style="background:var(--green);" onclick="salvarCategoria()">CRIAR CATEGORIA</button>
             </div>
             <div id="lista-adm-cats"></div>
@@ -165,11 +175,19 @@
     function renderCategorias() {
         let h = "";
         db_cats.forEach(c => { 
-            let img = c.img ? c.img : 'https://cdn-icons-png.flaticon.com/512/938/938063.png';
-            h += `<div class="cat-item ${catAtiva === c.nome ? 'active' : ''}" onclick="selecionarCat('${c.nome}')">
-                    <img src="${img}" class="cat-img-nav">
-                    <span>${c.nome}</span>
-                  </div>`; 
+            let ativo = catAtiva === c.nome ? 'active' : '';
+            if (c.img && c.img.trim() !== "") {
+                // MODO BOLINHA (STORIES)
+                h += `<div class="cat-item ${ativo}" onclick="selecionarCat('${c.nome}')">
+                        <img src="${c.img}" class="cat-img-nav">
+                        <span>${c.nome}</span>
+                      </div>`;
+            } else {
+                // MODO BOTÃO (TIPO IFOOD/SERVIÇOS)
+                h += `<div class="cat-btn ${ativo}" onclick="selecionarCat('${c.nome}')">
+                        <span>${c.nome}</span>
+                      </div>`;
+            }
         });
         document.getElementById('cat-lista-loja').innerHTML = h;
     }
@@ -182,7 +200,7 @@
             let qNoCar = car[p.id] || 0;
             let isAtacado = (p.qAtac > 0 && qNoCar >= p.qAtac);
             let precoExibir = isAtacado ? p.atacado : p.preco;
-            let imgTag = p.img ? `<div class="prod-img-box" style="display:block;"><img src="${p.img}"></div>` : `<div class="prod-img-box"></div>`;
+            let imgTag = (p.img && p.img.trim() !== "") ? `<div class="prod-img-box" style="display:block;"><img src="${p.img}"></div>` : `<div class="prod-img-box"></div>`;
 
             h += `
             <div class="item-card">
@@ -204,7 +222,7 @@
                 </div>
             </div>`;
         });
-        document.getElementById('menu-lista').innerHTML = h || "<p style='text-align:center; opacity:0.3; padding:50px;'>Escolha uma categoria.</p>";
+        document.getElementById('menu-lista').innerHTML = h || "<p style='text-align:center; opacity:0.3; padding:50px;'>Selecione uma categoria.</p>";
     }
 
     function addCar(id, v) { 
