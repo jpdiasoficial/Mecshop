@@ -3,75 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SERGEL | Pedidos</title>
+    <title>SERGEL | Gestor Shark</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --red: #ea1d2c; --navy: #1d3557; --bg: #f7f7f7; --green: #2e7d32; }
-        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding-bottom: 220px; }
+        :root { --red: #ea1d2c; --navy: #1d3557; --bg: #f7f7f7; --green: #2e7d32; --gray: #777; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding-bottom: 240px; color: #333; }
         
-        /* CABEÇALHO MINIMALISTA */
-        header { 
-            background: #fff; padding: 25px 20px; text-align: center; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 1000;
-        }
-        .loja-call { 
-            font-size: 13px; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px; 
-        }
-        .trigger-dot { position: absolute; right: 15px; top: 22px; color: #f2f2f2; cursor: pointer; font-size: 20px; }
+        /* HEADER */
+        header { background: #fff; padding: 20px; text-align: center; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 1000; }
+        .loja-call { font-size: 12px; color: var(--gray); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .trigger-dot { position: absolute; right: 15px; top: 18px; color: #eee; cursor: pointer; font-size: 20px; }
 
-        /* CATEGORIAS (BOLINHAS) */
+        /* CATEGORIAS (ESTILO STORIES) */
         .cat-scroll { display: flex; gap: 15px; overflow-x: auto; padding: 15px; background: #fff; border-bottom: 1px solid #eee; scrollbar-width: none; }
         .cat-scroll::-webkit-scrollbar { display: none; }
-        .cat-item { min-width: 80px; text-align: center; cursor: pointer; opacity: 0.4; transition: 0.3s; display: flex; flex-direction: column; align-items: center; }
-        .cat-item.active { opacity: 1; transform: scale(1.1); }
-        .cat-img-nav { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--red); object-fit: cover; margin-bottom: 5px; background: #eee; }
-        .cat-item span { font-size: 10px; font-weight: 700; }
+        .cat-item { min-width: 75px; text-align: center; cursor: pointer; transition: 0.3s; opacity: 0.5; }
+        .cat-item.active { opacity: 1; transform: scale(1.05); }
+        .cat-img-nav { width: 60px; height: 60px; border-radius: 50%; border: 3px solid var(--red); object-fit: cover; padding: 2px; background: #fff; }
+        .cat-item span { font-size: 10px; font-weight: 700; display: block; margin-top: 5px; }
 
-        /* LISTA DE PRODUTOS */
-        .container { padding: 20px; max-width: 1200px; margin: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-        .item-card { background: #fff; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #eee; display: flex; flex-direction: column; }
-        .product-img { width: 100%; height: 160px; object-fit: cover; background: #f9f9f9; }
-        .item-content { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
-        .item-info b { font-size: 15px; text-transform: uppercase; color: #333; }
-        .item-desc { font-size: 11px; color: #777; margin: 5px 0; min-height: 30px; }
-        .price-main { font-size: 18px; color: var(--navy); font-weight: 800; margin-top: auto; }
-        
-        /* BOTÕES + E - */
-        .qty-box { display: flex; align-items: center; gap: 20px; border: 1.5px solid #f0f0f0; padding: 10px; border-radius: 12px; background: #fafafa; justify-content: center; margin-top: 15px; }
-        .btn-qty { border: none; background: none; color: var(--red); font-size: 28px; font-weight: 900; cursor: pointer; width: 40px; height: 40px; }
-        .qty-num { font-size: 18px; font-weight: 800; color: #333; min-width: 25px; text-align: center; }
+        /* LISTA DE PRODUTOS (SEM IMAGEM) */
+        .container { padding: 15px; max-width: 800px; margin: auto; }
+        .item-card { background: #fff; border-radius: 12px; padding: 15px; margin-bottom: 12px; border: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .item-info { flex: 1; padding-right: 10px; }
+        .item-info b { font-size: 14px; display: block; color: var(--navy); }
+        .item-desc { font-size: 11px; color: var(--gray); margin: 4px 0; line-height: 1.4; }
+        .price-tag { font-size: 15px; font-weight: 800; color: var(--green); }
+        .atacado-badge { font-size: 9px; background: #fff3cd; color: #856404; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+
+        /* CONTROLES DE QUANTIDADE */
+        .qty-controls { display: flex; align-items: center; gap: 12px; background: #f8f8f8; padding: 5px 10px; border-radius: 8px; }
+        .btn-qty { border: none; background: none; color: var(--red); font-size: 22px; font-weight: 900; cursor: pointer; }
+        .qty-num { font-size: 15px; font-weight: 700; min-width: 20px; text-align: center; }
 
         /* RODAPÉ E CARRINHO */
-        .footer-cart { position: fixed; bottom: 0; width: 100%; background: #fff; padding: 20px; border-top: 1px solid #eee; z-index: 900; box-sizing: border-box; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); }
-        .btn-send { width: 100%; background: var(--red); color: #fff; border: none; padding: 18px; border-radius: 12px; font-weight: 800; font-size: 16px; cursor: pointer; }
-
-        /* ÁREA DE LOGIN E PAINEL */
-        #login-area { display: none; text-align: center; padding: 10px; }
-        #pass-input { padding: 10px; border-radius: 8px; border: 1px solid #ddd; width: 150px; text-align: center; }
+        .footer-cart { position: fixed; bottom: 0; width: 100%; background: #fff; padding: 15px 20px; border-top: 1px solid #eee; z-index: 950; box-sizing: border-box; box-shadow: 0 -5px 20px rgba(0,0,0,0.08); }
+        .cupom-area { margin-bottom: 12px; display: none; } /* Oculto por padrão */
+        .cupom-flex { display: flex; gap: 8px; }
+        .btn-send { width: 100%; background: var(--red); color: #fff; border: none; padding: 16px; border-radius: 10px; font-weight: 800; font-size: 15px; cursor: pointer; }
+        
+        /* ADMIN */
         #panel-admin { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 2000; padding: 20px; box-sizing: border-box; overflow-y: auto; }
         .card-adm { background: #f9f9f9; padding: 15px; border-radius: 12px; border: 1px solid #eee; margin-bottom: 15px; }
-        input, select, textarea { width: 100%; padding: 12px; margin: 6px 0; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; box-sizing: border-box; }
-        .btn-add { width: 100%; background: var(--navy); color: white; padding: 15px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; }
-        .admin-list-item { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #eee; align-items: center; background: #fff; margin-bottom: 5px; border-radius: 8px; }
-        .tab-btn { padding: 12px; border: none; background: #eee; cursor: pointer; font-weight: bold; border-radius: 8px; flex: 1; }
+        input, select, textarea { width: 100%; padding: 12px; margin: 5px 0; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; box-sizing: border-box; font-size: 14px; }
+        .btn-add { width: 100%; background: var(--navy); color: white; padding: 14px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        .tab-btn { padding: 10px; border: none; background: #eee; cursor: pointer; font-weight: bold; border-radius: 8px; flex: 1; font-size: 11px; }
         .tab-btn.active { background: var(--red); color: #fff; }
     </style>
 </head>
 <body onload="init()">
 
 <header>
-    <span class="loja-call">Faça seu pedido abaixo</span>
+    <span class="loja-call">Escolha seus sorvetes</span>
     <div class="trigger-dot" onclick="mostrarLogin()">...</div>
 </header>
 
-<div id="login-area"><input type="password" id="pass-input" placeholder="SENHA" oninput="checarSenha(this.value)"></div>
+<div id="login-area" style="display:none; text-align:center; padding:15px;">
+    <input type="password" id="pass-input" placeholder="SENHA" oninput="checarSenha(this.value)" style="width:120px;">
+</div>
 
 <div class="cat-scroll" id="cat-lista-loja"></div>
 <div class="container" id="menu-lista"></div>
 
 <div class="footer-cart">
-    <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
-        <b id="total-val" style="font-size: 20px;">R$ 0,00</b>
-        <b id="total-itens" style="color:#777; font-size: 14px; margin-top: 5px;">0 ITENS</b>
+    <div id="cupom-container" class="cupom-area">
+        <div class="cupom-flex">
+            <input type="text" id="cupom-input" placeholder="CUPOM DE DESCONTO" style="margin:0; text-transform:uppercase;">
+            <button onclick="aplicarCupom()" style="background:var(--navy); color:#fff; border:none; padding:0 15px; border-radius:8px; font-weight:700;">OK</button>
+        </div>
+        <small id="cupom-msg" style="display:block; margin-top:5px; font-size:10px;"></small>
+    </div>
+    
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <div>
+            <b id="total-val" style="font-size: 22px; color:var(--navy);">R$ 0,00</b><br>
+            <small id="desconto-info" style="color:var(--green); font-weight:700;"></small>
+        </div>
+        <b id="total-itens" style="color:var(--gray); font-size: 13px;">0 ITENS</b>
     </div>
     <button class="btn-send" onclick="finalizarPedido()">ENVIAR PEDIDO AO WHATSAPP</button>
 </div>
@@ -79,23 +87,29 @@
 <div id="panel-admin">
     <div style="max-width: 600px; margin: auto;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-            <h2 style="margin:0; color:var(--red); font-size: 20px;">GESTOR SHARK</h2>
-            <button onclick="fecharAdmin()" style="padding:10px 15px; background:#333; color:#fff; border:none; border-radius:8px;">SAIR</button>
+            <h2 style="margin:0; color:var(--red); font-size: 18px;">GESTOR SHARK v2</h2>
+            <button onclick="fecharAdmin()" style="padding:8px 15px; background:#333; color:#fff; border:none; border-radius:8px; font-size:12px;">SAIR</button>
         </div>
-        <div style="margin-bottom: 20px; display: flex; gap: 8px;">
+        
+        <div style="margin-bottom: 15px; display: flex; gap: 5px;">
             <button class="tab-btn active" id="btnTab1" onclick="switchTab(1)">PRODUTOS</button>
             <button class="tab-btn" id="btnTab2" onclick="switchTab(2)">CATEGORIAS</button>
-            <button class="tab-btn" id="btnTab3" onclick="switchTab(3)">VENDAS</button>
+            <button class="tab-btn" id="btnTab3" onclick="switchTab(3)">CUPONS</button>
+            <button class="tab-btn" id="btnTab4" onclick="switchTab(4)">VENDAS</button>
         </div>
 
         <div id="tab1">
             <div class="card-adm">
-                <input type="text" id="p-nome" placeholder="NOME DO PRODUTO">
-                <textarea id="p-desc" placeholder="INGREDIENTES"></textarea>
-                <div style="display:flex; gap:8px;"><input type="text" id="p-preco" placeholder="PREÇO VAREJO"><input type="number" id="p-est" placeholder="ESTOQUE"></div>
-                <div style="display:flex; gap:8px;"><input type="text" id="p-atac" placeholder="PREÇO ATACADO"><input type="number" id="p-qAtac" placeholder="QTD MÍNIMA"></div>
-                <input type="text" id="p-img" placeholder="LINK DA IMAGEM">
-                <select id="p-cat"></select>
+                <input type="text" id="p-nome" placeholder="NOME (Ex: Pote 2L)">
+                <textarea id="p-desc" placeholder="DESCRIÇÃO / SABORES"></textarea>
+                <div style="display:flex; gap:8px;">
+                    <input type="text" id="p-preco" placeholder="PREÇO VAREJO">
+                    <input type="text" id="p-atac" placeholder="PREÇO ATACADO">
+                </div>
+                <div style="display:flex; gap:8px;">
+                    <input type="number" id="p-qAtac" placeholder="QTD MÍN. ATACADO">
+                    <select id="p-cat"></select>
+                </div>
                 <button class="btn-add" onclick="salvarProduto()">SALVAR PRODUTO</button>
             </div>
             <div id="lista-adm-produtos"></div>
@@ -104,15 +118,28 @@
         <div id="tab2" style="display:none;">
             <div class="card-adm">
                 <input type="text" id="c-nome" placeholder="NOME CATEGORIA">
-                <input type="text" id="c-img" placeholder="LINK FOTO BOLINHA">
+                <input type="text" id="c-img" placeholder="URL DA IMAGEM (BOLINHA)">
                 <button class="btn-add" style="background:var(--green);" onclick="salvarCategoria()">CRIAR CATEGORIA</button>
             </div>
             <div id="lista-adm-cats"></div>
         </div>
 
         <div id="tab3" style="display:none;">
+            <div class="card-adm">
+                <input type="text" id="cup-codigo" placeholder="CÓDIGO (Ex: SORVETE10)" style="text-transform:uppercase;">
+                <input type="number" id="cup-valor" placeholder="VALOR DO DESCONTO">
+                <select id="cup-tipo">
+                    <option value="fixo">REAIS (R$)</option>
+                    <option value="porcentagem">PORCENTAGEM (%)</option>
+                </select>
+                <button class="btn-add" onclick="salvarCupom()">ATIVAR CUPOM</button>
+            </div>
+            <div id="lista-adm-cupons"></div>
+        </div>
+
+        <div id="tab4" style="display:none;">
             <div id="vendas-log"></div>
-            <button onclick="limparVendas()" style="color:red; background:none; border:none; margin-top:20px; cursor:pointer;">Limpar Histórico</button>
+            <button onclick="limparVendas()" style="color:red; background:none; border:none; margin-top:20px; cursor:pointer; font-weight:700;">LIMPAR HISTÓRICO</button>
         </div>
     </div>
 </div>
@@ -120,101 +147,196 @@
 <script>
     let db_cats = JSON.parse(localStorage.getItem('shark_cats')) || [];
     let db_prods = JSON.parse(localStorage.getItem('shark_prods')) || [];
+    let db_cupons = JSON.parse(localStorage.getItem('shark_cupons')) || [];
     let vendas = JSON.parse(localStorage.getItem('shark_vendas')) || [];
     let car = {};
+    let cupomAtivo = null;
     let catAtiva = db_cats[0] ? db_cats[0].nome : '';
 
-    function init() { 
-        renderCategorias(); 
-        renderLoja(); 
-        renderAdminProds(); 
-        renderAdminCats(); 
-        renderVendas(); 
-        atualizarSelectCats(); 
+    function init() {
+        renderCategorias();
+        renderLoja();
+        renderAdminProds();
+        renderAdminCats();
+        renderAdminCupons();
+        renderVendas();
+        atualizarSelectCats();
+        verificarVisibilidadeCupom();
     }
 
+    // AUTH & NAVIGATION
     function mostrarLogin() { document.getElementById('login-area').style.display = 'block'; }
-    function checarSenha(v) { if(v === "9910") { document.getElementById('panel-admin').style.display='block'; document.getElementById('login-area').style.display='none'; } }
+    function checarSenha(v) { if(v === "9910") { document.getElementById('panel-admin').style.display='block'; document.getElementById('login-area').style.display='none'; document.getElementById('pass-input').value=''; } }
     function fecharAdmin() { document.getElementById('panel-admin').style.display='none'; }
-    function switchTab(n) { [1,2,3].forEach(i => { document.getElementById('tab'+i).style.display = (i===n)?'block':'none'; document.getElementById('btnTab'+i).classList.toggle('active', i===n); }); }
+    function switchTab(n) { [1,2,3,4].forEach(i => { document.getElementById('tab'+i).style.display = (i===n)?'block':'none'; document.getElementById('btnTab'+i).classList.toggle('active', i===n); }); }
 
+    // LOJA & CATEGORIAS
     function renderCategorias() {
         let h = "";
-        db_cats.forEach(c => { h += `<div class="cat-item ${catAtiva === c.nome ? 'active' : ''}" onclick="selecionarCat('${c.nome}')"><img src="${c.img}" class="cat-img-nav"><span>${c.nome}</span></div>`; });
+        db_cats.forEach(c => { 
+            h += `<div class="cat-item ${catAtiva === c.nome ? 'active' : ''}" onclick="selecionarCat('${c.nome}')">
+                    <img src="${c.img || 'https://via.placeholder.com/100'}" class="cat-img-nav">
+                    <span>${c.nome}</span>
+                  </div>`; 
+        });
         document.getElementById('cat-lista-loja').innerHTML = h;
     }
+
     function selecionarCat(n) { catAtiva = n; renderCategorias(); renderLoja(); }
+
+    function renderLoja() {
+        let h = "";
+        let filtrados = db_prods.filter(p => p.categoria === catAtiva);
+        filtrados.forEach(p => {
+            let precoExibir = p.preco;
+            let qNoCar = car[p.id] || 0;
+            let isAtacado = (p.qAtac > 0 && qNoCar >= p.qAtac);
+            if(isAtacado) precoExibir = p.atacado;
+
+            h += `
+            <div class="item-card">
+                <div class="item-info">
+                    <b>${p.nome}</b>
+                    <p class="item-desc">${p.desc || ''}</p>
+                    <span class="price-tag">R$ ${precoExibir.toFixed(2).replace('.',',')}</span>
+                    ${p.qAtac > 0 ? `<br><span class="atacado-badge">Atacado: R$ ${p.atacado.toFixed(2)} (un. acima de ${p.qAtac})</span>` : ''}
+                </div>
+                <div class="qty-controls">
+                    <button class="btn-qty" onclick="addCar(${p.id},-1)">-</button>
+                    <span class="qty-num" id="q-${p.id}">${qNoCar}</span>
+                    <button class="btn-qty" onclick="addCar(${p.id},1)">+</button>
+                </div>
+            </div>`;
+        });
+        document.getElementById('menu-lista').innerHTML = h || "<p style='text-align:center; opacity:0.3; padding:50px;'>Selecione uma categoria.</p>";
+    }
+
+    // CARRINHO & LÓGICA
+    function addCar(id, v) { 
+        car[id] = (car[id] || 0) + v; 
+        if(car[id] <= 0) delete car[id]; 
+        renderLoja(); // Recarrega para atualizar preços de atacado visualmente
+        atualizarTotal(); 
+    }
+
+    function atualizarTotal() {
+        let subtotal = 0, qtdTotal = 0;
+        for(let id in car) {
+            let p = db_prods.find(x => x.id == id);
+            let precoAplicado = (p.qAtac > 0 && car[id] >= p.qAtac) ? p.atacado : p.preco;
+            subtotal += precoAplicado * car[id];
+            qtdTotal += car[id];
+        }
+
+        let descVal = 0;
+        if(cupomAtivo) {
+            descVal = cupomAtivo.tipo === 'porcentagem' ? (subtotal * (cupomAtivo.valor/100)) : cupomAtivo.valor;
+        }
+
+        let totalFinal = Math.max(0, subtotal - descVal);
+        document.getElementById('total-val').innerText = "R$ " + totalFinal.toFixed(2).replace('.',',');
+        document.getElementById('total-itens').innerText = qtdTotal + " ITENS";
+        document.getElementById('desconto-info').innerText = descVal > 0 ? `- R$ ${descVal.toFixed(2)} (Cupom)` : "";
+    }
+
+    // CUPONS
+    function verificarVisibilidadeCupom() {
+        document.getElementById('cupom-container').style.display = db_cupons.length > 0 ? 'block' : 'none';
+    }
+
+    function aplicarCupom() {
+        let cod = document.getElementById('cupom-input').value.toUpperCase().trim();
+        let cup = db_cupons.find(c => c.codigo === cod);
+        if(cup) {
+            cupomAtivo = cup;
+            document.getElementById('cupom-msg').innerHTML = `<span style="color:green">Cupom ${cod} aplicado!</span>`;
+            atualizarTotal();
+        } else {
+            cupomAtivo = null;
+            document.getElementById('cupom-msg').innerHTML = `<span style="color:red">Cupom inválido</span>`;
+            atualizarTotal();
+        }
+    }
+
+    // SALVAMENTO DATA (ADMIN)
+    function salvarProduto() {
+        let n = document.getElementById('p-nome').value.toUpperCase();
+        let p = parseFloat(document.getElementById('p-preco').value.replace(',','.'));
+        let a = parseFloat(document.getElementById('p-atac').value.replace(',','.')) || 0;
+        let qa = parseInt(document.getElementById('p-qAtac').value) || 0;
+        let cat = document.getElementById('p-cat').value;
+        if(n && p) {
+            db_prods.push({id: Date.now(), nome: n, desc: document.getElementById('p-desc').value, preco: p, atacado: a, qAtac: qa, categoria: cat});
+            localStorage.setItem('shark_prods', JSON.stringify(db_prods));
+            init();
+            ['p-nome','p-desc','p-preco','p-atac','p-qAtac'].forEach(id => document.getElementById(id).value='');
+        }
+    }
 
     function salvarCategoria() {
         let n = document.getElementById('c-nome').value.toUpperCase();
         let i = document.getElementById('c-img').value;
-        if(n) { 
-            db_cats.push({id: Date.now(), nome: n, img: i}); 
-            localStorage.setItem('shark_cats', JSON.stringify(db_cats)); 
+        if(n) {
+            db_cats.push({id: Date.now(), nome: n, img: i});
+            localStorage.setItem('shark_cats', JSON.stringify(db_cats));
             if(!catAtiva) catAtiva = n;
-            init(); 
+            init();
             document.getElementById('c-nome').value=''; document.getElementById('c-img').value='';
         }
     }
 
-    function renderLoja() {
-        let h = "";
-        db_prods.filter(p => p.categoria === catAtiva).forEach(p => {
-            let img = p.img ? `<img src="${p.img}" class="product-img">` : "";
-            h += `<div class="item-card">${img}<div class="item-content"><b>${p.nome}</b><p class="item-desc">${p.desc || ''}</p><span class="price-main">R$ ${p.preco.toFixed(2).replace('.',',')}</span><div class="qty-box"><button class="btn-qty" onclick="addCar(${p.id},-1)">-</button><span class="qty-num" id="q-${p.id}">${car[p.id] || 0}</span><button class="btn-qty" onclick="addCar(${p.id},1)">+</button></div></div></div>`;
-        });
-        document.getElementById('menu-lista').innerHTML = h || "<p style='text-align:center; grid-column:1/-1; opacity:0.3; padding:50px;'>Escolha uma categoria acima.</p>";
-    }
-
-    function addCar(id, v) { 
-        car[id] = (car[id] || 0) + v; 
-        if(car[id] < 0) car[id] = 0; 
-        document.getElementById('q-'+id).innerText = car[id]; 
-        atualizarTotal(); 
-    }
-    
-    function atualizarTotal() {
-        let t = 0, q = 0;
-        for(let id in car) { if(car[id] > 0) { let p = db_prods.find(x => x.id == id); let pf = (p.atacado > 0 && car[id] >= p.qAtac) ? p.atacado : p.preco; t += pf * car[id]; q += car[id]; } }
-        document.getElementById('total-val').innerText = "R$ " + t.toFixed(2).replace('.',',');
-        document.getElementById('total-itens').innerText = q + " ITENS";
-    }
-
-    function salvarProduto() {
-        let n = document.getElementById('p-nome').value.toUpperCase();
-        let d = document.getElementById('p-desc').value;
-        let p = parseFloat(document.getElementById('p-preco').value.replace(',','.'));
-        let e = parseInt(document.getElementById('p-est').value) || 0;
-        let a = parseFloat(document.getElementById('p-atac').value.replace(',','.')) || 0;
-        let qa = parseInt(document.getElementById('p-qAtac').value) || 0;
-        let img = document.getElementById('p-img').value;
-        let cat = document.getElementById('p-cat').value;
-        if(n && p) { 
-            db_prods.push({id: Date.now(), nome: n, desc: d, preco: p, estoque: e, atacado: a, qAtac: qa, img: img, categoria: cat}); 
-            localStorage.setItem('shark_prods', JSON.stringify(db_prods)); 
-            init(); 
-            ['p-nome','p-desc','p-preco','p-est','p-atac','p-qAtac','p-img'].forEach(id => document.getElementById(id).value='');
+    function salvarCupom() {
+        let cod = document.getElementById('cup-codigo').value.toUpperCase().trim();
+        let val = parseFloat(document.getElementById('cup-valor').value);
+        let tipo = document.getElementById('cup-tipo').value;
+        if(cod && val) {
+            db_cupons.push({id: Date.now(), codigo: cod, valor: val, tipo: tipo});
+            localStorage.setItem('shark_cupons', JSON.stringify(db_cupons));
+            init();
+            document.getElementById('cup-codigo').value=''; document.getElementById('cup-valor').value='';
         }
     }
 
+    // REMOVERS & RENDERS ADM
     function removerProd(id) { db_prods = db_prods.filter(p => p.id !== id); localStorage.setItem('shark_prods', JSON.stringify(db_prods)); init(); }
     function removerCat(id) { db_cats = db_cats.filter(c => c.id !== id); localStorage.setItem('shark_cats', JSON.stringify(db_cats)); init(); }
-    function renderAdminProds() { document.getElementById('lista-adm-produtos').innerHTML = db_prods.map(p => `<div class="admin-list-item"><span><b>${p.nome}</b><br><small>${p.categoria}</small></span><button onclick="removerProd(${p.id})" style="color:red; border:none; background:none; font-weight:bold;">APAGAR</button></div>`).join(''); }
-    function renderAdminCats() { document.getElementById('lista-adm-cats').innerHTML = db_cats.map(c => `<div class="admin-list-item"><span><b>${c.nome}</b></span><button onclick="removerCat(${c.id})" style="color:red; border:none; background:none; font-weight:bold;">APAGAR</button></div>`).join(''); }
+    function removerCupom(id) { db_cupons = db_cupons.filter(c => c.id !== id); localStorage.setItem('shark_cupons', JSON.stringify(db_cupons)); init(); }
+
+    function renderAdminProds() { document.getElementById('lista-adm-produtos').innerHTML = db_prods.map(p => `<div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #eee;"><span>${p.nome}</span><button onclick="removerProd(${p.id})" style="color:red; border:none; background:none;">Apagar</button></div>`).join(''); }
+    function renderAdminCats() { document.getElementById('lista-adm-cats').innerHTML = db_cats.map(c => `<div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #eee;"><span>${c.nome}</span><button onclick="removerCat(${c.id})" style="color:red; border:none; background:none;">Apagar</button></div>`).join(''); }
+    function renderAdminCupons() { document.getElementById('lista-adm-cupons').innerHTML = db_cupons.map(c => `<div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #eee;"><span>${c.codigo} (${c.tipo === 'fixo' ? 'R$' : '%'})</span><button onclick="removerCupom(${c.id})" style="color:red; border:none; background:none;">Apagar</button></div>`).join(''); }
     function atualizarSelectCats() { document.getElementById('p-cat').innerHTML = db_cats.map(c => `<option value="${c.nome}">${c.nome}</option>`).join(''); }
     function renderVendas() { document.getElementById('vendas-log').innerHTML = vendas.map(v => `<div style="font-size:11px; border-bottom:1px solid #eee; padding:8px;">${v.data} - ${v.cliente} (R$ ${v.total})</div>`).join(''); }
     function limparVendas() { if(confirm("Limpar Histórico?")) { vendas = []; localStorage.setItem('shark_vendas', JSON.stringify(vendas)); renderVendas(); } }
 
+    // FINALIZAÇÃO
     function finalizarPedido() {
         let nome = prompt("QUAL SEU NOME?"); if(!nome) return;
-        let t = 0; let it = "";
-        for(let id in car) { if(car[id] > 0) { let p = db_prods.find(x => x.id == id); let pf = (p.atacado > 0 && car[id] >= p.qAtac) ? p.atacado : p.preco; it += `${car[id]}x ${p.nome}\n`; t += pf * car[id]; } }
+        let t = 0; let it = ""; let descFinal = 0;
+        
+        for(let id in car) {
+            let p = db_prods.find(x => x.id == id);
+            let atac = (p.qAtac > 0 && car[id] >= p.qAtac);
+            let pf = atac ? p.atacado : p.preco;
+            it += `✅ ${car[id]}x ${p.nome} ${atac ? '*(ATACADO)*' : ''} (R$ ${pf.toFixed(2)})\n`;
+            t += pf * car[id];
+        }
+        
         if(t === 0) return alert("CARRINHO VAZIO");
+
+        if(cupomAtivo) {
+            descFinal = cupomAtivo.tipo === 'porcentagem' ? (t * (cupomAtivo.valor/100)) : cupomAtivo.valor;
+        }
+
+        let totalComDesconto = Math.max(0, t - descFinal);
         let dataF = new Date().toLocaleString('pt-BR');
-        vendas.push({data: dataF, cliente: nome.toUpperCase(), total: t.toFixed(2).replace('.',',')});
+        vendas.push({data: dataF, cliente: nome.toUpperCase(), total: totalComDesconto.toFixed(2)});
         localStorage.setItem('shark_vendas', JSON.stringify(vendas));
 
-        let msg = `🍦 *NOVO PEDIDO - SERGEL*\n👤 *CLIENTE:* ${nome.toUpperCase()}\n----------\n${it}----------\n*TOTAL: R$ ${t.toFixed(2).replace('.',',')}*\n\n👉 *PRÓXIMO PASSO:*\nPor favor, realize o pagamento e *encaminhe o comprovante nesta conversa* para iniciarmos a separação.`;
+        let msg = `🍦 *NOVO PEDIDO - SERGEL*\n👤 *CLIENTE:* ${nome.toUpperCase()}\n\n*ITENS:*\n${it}\n`;
+        if(descFinal > 0) msg += `🎁 *CUPOM:* - R$ ${descFinal.toFixed(2)}\n`;
+        msg += `💰 *TOTAL: R$ ${totalComDesconto.toFixed(2).replace('.',',')}*\n\n----------\nPor favor, envie o comprovante do PIX para confirmar!`;
+        
         window.open(`https://wa.me/551999999999?text=${encodeURIComponent(msg)}`);
     }
 </script>
