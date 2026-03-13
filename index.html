@@ -3,50 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LOG-PRO v82 | ULTRA</title>
+    <title>LOG-PRO v82 | FULL INTELLIGENCE</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="https://unpkg.com/html5-qrcode"></script>
 
     <style>
         :root { --p: #00ff41; --s: #007aff; --bg: #000; --sf: #0a0a0a; --brd: #1a1a1a; --dg: #ff3b30; --wrn: #ffae00; }
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; font-size: 11px; height: 100vh; overflow: hidden; text-transform: uppercase; }
+        
         .screen { display: none; height: 100vh; flex-direction: column; background: var(--bg); }
         .active { display: flex !important; }
         header { padding: 15px; border-bottom: 2px solid var(--brd); display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron'; background: #000; }
         .scroll { flex: 1; overflow-y: auto; padding: 15px 15px 100px 15px; }
+        
         .card { background: var(--sf); border: 1px solid var(--brd); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
         h3 { font-family: 'Orbitron'; font-size: 9px; color: var(--p); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; border-left: 3px solid var(--p); padding-left: 8px; }
-        input, select { width: 100%; padding: 14px; background: #050505; border: 1px solid #222; color: #fff; border-radius: 8px; font-size: 11px; margin-bottom: 10px; font-weight: 700; outline: none; }
+        
+        input, select { width: 100%; padding: 14px; background: #050505; border: 1px solid #222; color: #fff; border-radius: 8px; font-size: 11px; margin-bottom: 10px; font-weight: 700; }
         .btn { width: 100%; padding: 16px; border: none; border-radius: 10px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; margin-bottom: 5px; }
         .btn-p { background: var(--p); color: #000; }
         .btn-s { background: var(--s); color: #fff; }
         .btn-dg { background: var(--dg); color: #fff; }
-        .btn-sm { padding: 8px; font-size: 9px; }
+        .btn-sm { padding: 8px; font-size: 8px; height: 35px; }
+
         .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 15px; }
         .kpi-card { background: #0a0a0a; border: 1px solid #222; padding: 10px 5px; border-radius: 8px; text-align: center; }
-        .kpi-val { font-family: 'Orbitron'; font-size: 14px; color: var(--p); display: block; }
-        #reader, #reader-db { width: 100%; background: #000; border-radius: 12px; border: 2px solid var(--p); overflow: hidden; min-height: 200px; }
+        .kpi-val { font-family: 'Orbitron'; font-size: 13px; color: var(--p); display: block; }
+        
+        #reader, #reader-mot, #reader-db { width: 100%; background: #000; border-radius: 12px; border: 2px solid var(--p); overflow: hidden; min-height: 200px; }
+        
         .nav-tabs { display: flex; background: #000; border-top: 2px solid var(--brd); position: fixed; bottom: 0; width: 100%; z-index: 100; height: 70px; }
         .nav-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #444; font-size: 8px; font-weight: 800; gap: 4px; }
         .nav-tab.active { color: var(--p); border-top: 3px solid var(--p); background: #050505; }
+        
         table { width: 100%; border-collapse: collapse; font-size: 9px; }
         td { padding: 12px 5px; border-bottom: 1px solid #111; }
-        .st-pill { padding: 4px 8px; border-radius: 4px; font-weight: 900; font-size: 7px; color:#000; display: inline-block; }
+        .st-pill { padding: 4px 6px; border-radius: 4px; font-weight: 900; font-size: 7px; color:#000; }
+        .picking-item { background: #111; padding: 12px; border-radius: 8px; border-left: 4px solid var(--wrn); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
     </style>
 </head>
 <body onload="init()">
 
 <div id="scr-login" class="screen active" style="justify-content:center; align-items:center; padding:40px;">
     <div style="font-family:'Orbitron'; color:var(--p); font-size:35px;">LOG-PRO</div>
-    <div style="color:#444; font-size:9px; margin-bottom:40px;">ULTRA EDITION v82</div>
+    <div style="color:#333; font-size:9px; margin-bottom:40px;">v82 | COMPLETE STACK</div>
     <input type="password" id="pin" placeholder="PIN">
     <button class="btn btn-p" onclick="login()">ACESSAR</button>
 </div>
 
 <div id="scr-shark" class="screen">
-    <header><span>PAINEL SHARK</span> <button onclick="sair()" class="btn-dg btn-sm">SAIR</button></header>
+    <header><span>PAINEL SHARK</span> <button onclick="sair()" class="btn-dg btn-sm" style="width:60px">SAIR</button></header>
     <div class="scroll">
         <div class="kpi-grid">
             <div class="kpi-card"><span class="kpi-val" id="k-in">0</span><small>ENT</small></div>
@@ -56,26 +64,22 @@
         </div>
 
         <div class="card">
-            <h3><i class="fa-solid fa-database"></i> GESTÃO DE DADOS</h3>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <button class="btn btn-s btn-sm" onclick="exportarDados()"><i class="fa-solid fa-download"></i> EXTRAIR</button>
-                <button class="btn btn-s btn-sm" onclick="document.getElementById('fileIn').click()"><i class="fa-solid fa-upload"></i> INSERIR</button>
+            <h3><i class="fa-solid fa-file-export"></i> DADOS</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <button class="btn btn-s btn-sm" onclick="exportar()"><i class="fa-solid fa-download"></i> EXTRAIR</button>
+                <button class="btn btn-s btn-sm" onclick="document.getElementById('fin').click()"><i class="fa-solid fa-upload"></i> INSERIR</button>
             </div>
-            <button class="btn btn-dg btn-sm" style="margin-top:10px" onclick="limparTudo()"><i class="fa-solid fa-trash-can"></i> APAGAR TUDO</button>
-            <input type="file" id="fileIn" style="display:none" onchange="importarDados(this)">
+            <button class="btn btn-dg btn-sm" style="margin-top:8px" onclick="limpar()"><i class="fa-solid fa-trash"></i> APAGAR TUDO</button>
+            <input type="file" id="fin" style="display:none" onchange="importar(this)">
         </div>
 
         <div class="card">
-            <h3><i class="fa-solid fa-barcode"></i> CADASTRO RÁPIDO (EAN)</h3>
-            <div id="reader-db"></div>
-            <button class="btn btn-p btn-sm" id="db-btn" onclick="toggleCam('reader-db','db-btn', 'DB')">SCANNER CADASTRO</button>
-            <input type="text" id="db-manual-cod" placeholder="EAN MANUAL" style="margin-top:10px">
-            <input type="text" id="db-manual-nom" placeholder="NOME DO ITEM">
-            <button class="btn btn-s btn-sm" onclick="salvarDBManual()">CADASTRAR ITEM</button>
+            <h3><i class="fa-solid fa-boxes-packing"></i> FILA DE SEPARAÇÃO</h3>
+            <div id="picking-queue"></div>
         </div>
 
         <div class="card">
-            <h3><i class="fa-solid fa-clock"></i> LOGS</h3>
+            <h3><i class="fa-solid fa-list"></i> LOGS DO SISTEMA</h3>
             <input type="text" id="shark-search" placeholder="🔍 BUSCAR..." onkeyup="render()">
             <table><tbody id="m-logs"></tbody></table>
         </div>
@@ -83,37 +87,52 @@
 </div>
 
 <div id="scr-op" class="screen">
-    <header><span>BIPAGEM</span> <button onclick="sair()" class="btn-dg btn-sm">SAIR</button></header>
+    <header><span>BIPAGEM</span> <button onclick="sair()" class="btn-dg btn-sm" style="width:60px">SAIR</button></header>
     <div class="scroll">
         <div class="card">
-            <h3><i class="fa-solid fa-camera"></i> SCANNER OPERACIONAL</h3>
             <div id="reader"></div>
-            <button class="btn btn-p" id="c-btn" onclick="toggleCam('reader','c-btn', 'OP')">LIGAR SENSOR</button>
+            <button class="btn btn-p" id="c-btn" style="margin-top:10px" onclick="toggleCam('reader','c-btn')">LIGAR SCANNER</button>
         </div>
         <div class="card">
-            <h3><i class="fa-solid fa-keyboard"></i> ENTRADA MANUAL</h3>
-            <input type="text" id="manual-cod" placeholder="DIGITE O CÓDIGO">
-            <button class="btn btn-s" onclick="processarManual()">BIPAR MANUAL</button>
+            <h3><i class="fa-solid fa-keyboard"></i> MANUAL / CADASTRO</h3>
+            <input type="text" id="man-cod" placeholder="EAN / CÓDIGO">
+            <button class="btn btn-s" onclick="processarManual()">PROCESSAR ITEM</button>
         </div>
         <div class="card">
             <select id="m-op">
                 <option value="ENTRADA">📥 ENTRADA</option>
                 <option value="SEPARACAO">📦 SEPARAÇÃO</option>
-                <option value="EXPEDIÇÃO">🚚 EXPEDIÇÃO</option>
+                <option value="SAIDA">🚚 SAÍDA</option>
             </select>
             <button class="btn btn-dg" onclick="fazerAvaria()"><i class="fa-solid fa-hammer"></i> REGISTRAR AVARIA</button>
         </div>
     </div>
 </div>
 
+<div id="scr-mot" class="screen">
+    <header><span>ROTA</span> <button onclick="sair()" class="btn-dg btn-sm" style="width:60px">SAIR</button></header>
+    <div class="scroll">
+        <div class="card">
+            <h3><i class="fa-solid fa-truck"></i> SCANNER DE CARGA</h3>
+            <div id="reader-mot"></div>
+            <button class="btn btn-s" id="m-btn" style="margin-top:10px" onclick="toggleCam('reader-mot','m-btn', true)">BIPAR ROMANEIO</button>
+        </div>
+        <div id="rom-box" class="card" style="display:none; border-left: 5px solid var(--p);">
+            <h2 id="rom-id"></h2>
+            <button class="btn btn-p" style="margin-top:10px" onclick="addLog('MOT','ROTA','SAÍDA CONFIRMADA')">INICIAR VIAGEM</button>
+        </div>
+    </div>
+</div>
+
 <div class="nav-tabs" id="nav" style="display:none">
-    <div class="nav-tab active" onclick="tab('scr-shark',this)"><i class="fa-solid fa-chart-pie fa-lg"></i>PAINEL</div>
+    <div class="nav-tab active" onclick="tab('scr-shark',this)"><i class="fa-solid fa-chart-line fa-lg"></i>PAINEL</div>
     <div class="nav-tab" onclick="tab('scr-op',this)"><i class="fa-solid fa-barcode fa-lg"></i>BIPER</div>
+    <div class="nav-tab" onclick="tab('scr-mot',this)"><i class="fa-solid fa-truck-fast fa-lg"></i>ROTA</div>
 </div>
 
 <script>
-    let logs = JSON.parse(localStorage.getItem('LOGPRO_V82') || '[]');
-    let db = JSON.parse(localStorage.getItem('LOGPRO_DB') || '{}');
+    let logs = JSON.parse(localStorage.getItem('LOG_V82') || '[]');
+    let db = JSON.parse(localStorage.getItem('DB_V82') || '{}');
     let scan; let cam = false;
 
     function init() { render(); }
@@ -121,74 +140,51 @@
     function sair() { if(cam) scan.stop(); location.reload(); }
     function tab(id,el) { document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active')); document.getElementById(id).classList.add('active'); el.classList.add('active'); render(); }
 
-    function toggleCam(div, btn, mode) {
+    function toggleCam(div, btn, isMot = false) {
         const b = document.getElementById(btn);
         if(!cam) { 
             scan = new Html5Qrcode(div); 
-            scan.start({facingMode:"environment"},{fps:20,qrbox:250}, (c) => mode === 'DB' ? onDbScan(c) : onSuccess(c)); 
+            scan.start({facingMode:"environment"},{fps:20,qrbox:250}, isMot ? onMot : onSuccess); 
             b.innerText="STOP"; cam=true; 
         } else { 
             scan.stop().then(()=>{document.getElementById(div).innerHTML=""; b.innerText="SCANNER"; cam=false;}); 
         }
     }
 
-    function onDbScan(cod) {
-        let nome = prompt("NOME PARA O CÓDIGO "+cod+":");
-        if(nome) { db[cod] = nome; localStorage.setItem('LOGPRO_DB', JSON.stringify(db)); alert("CADASTRADO!"); }
-    }
+    function onMot(c) { document.getElementById('rom-box').style.display='block'; document.getElementById('rom-id').innerText="ROM: "+c; addLog('MOT','BIPE',`CARGA: ${c}`); }
 
-    function salvarDBManual() {
-        let c = document.getElementById('db-manual-cod').value;
-        let n = document.getElementById('db-manual-nom').value;
-        if(c && n) { db[c] = n; localStorage.setItem('LOGPRO_DB', JSON.stringify(db)); alert("CADASTRADO!"); render(); }
-    }
-
-    function onSuccess(cod) {
-        if(!db[cod]) {
-            let n = prompt("ITEM NÃO CADASTRADO!\nDIGITE O NOME PARA "+cod+":");
-            if(n) { db[cod] = n; localStorage.setItem('LOGPRO_DB', JSON.stringify(db)); } else return;
-        }
+    function onSuccess(c) {
+        if(!db[c]) { let n = prompt("NOVO ITEM! NOME:"); if(n) { db[c]=n; localStorage.setItem('DB_V82', JSON.stringify(db)); } else return; }
         let etp = document.getElementById('m-op').value;
-        let q = prompt(`ITEM: ${db[cod]}\nQTD PARA ${etp}:`, "1");
-        if(q) addLog('OP', etp, `${db[cod]} (${cod}) | QTD: ${q}`);
+        let q = prompt(`ITEM: ${db[c]}\nQTD PARA ${etp}:`, "1");
+        if(q) addLog('OP', etp, `${db[c]} (${c}) | QTD: ${q}`);
     }
 
-    function processarManual() { let c = document.getElementById('manual-cod').value; if(c) onSuccess(c); }
-
+    function processarManual() { let c = document.getElementById('man-cod').value; if(c) onSuccess(c); }
     function fazerAvaria() { let c = prompt("CÓDIGO:"); if(c) { let q = prompt("QTD:"); addLog('OP', 'AVARIA', `${db[c]||c} | QTD: ${q}`); } }
 
     function addLog(orig, acao, info) {
         logs.unshift({t: new Date().toLocaleTimeString(), orig, acao, info});
-        localStorage.setItem('LOGPRO_V82', JSON.stringify(logs.slice(0,1000)));
+        localStorage.setItem('LOG_V82', JSON.stringify(logs.slice(0,800)));
         render();
     }
 
-    function limparTudo() { if(confirm("APAGAR TODA A LISTA E DATABASE?")) { localStorage.clear(); location.reload(); } }
-
-    function exportarDados() {
-        let data = { logs, db };
-        let blob = new Blob([JSON.stringify(data)], {type: "application/json"});
-        let a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = "LOGPRO_BACKUP.json"; a.click();
-    }
-
-    function importarDados(input) {
-        let reader = new FileReader();
-        reader.onload = function() {
-            let data = JSON.parse(reader.result);
-            logs = data.logs; db = data.db;
-            localStorage.setItem('LOGPRO_V82', JSON.stringify(logs));
-            localStorage.setItem('LOGPRO_DB', JSON.stringify(db));
-            render(); alert("DADOS IMPORTADOS!");
-        };
-        reader.readAsText(input.files[0]);
-    }
+    function limpar() { if(confirm("APAGAR TUDO?")) { localStorage.clear(); location.reload(); } }
+    function exportar() { let b = new Blob([JSON.stringify({logs, db})], {type:"application/json"}); let a = document.createElement('a'); a.href=URL.createObjectURL(b); a.download="LOGPRO_BK.json"; a.click(); }
+    function importar(i) { let r = new FileReader(); r.onload=function(){ let d=JSON.parse(r.result); logs=d.logs; db=d.db; localStorage.setItem('LOG_V82', JSON.stringify(logs)); localStorage.setItem('DB_V82', JSON.stringify(db)); render(); alert("OK!"); }; r.readAsText(i.files[0]); }
 
     function render() {
-        let h=""; let ent=0,sep=0,out=0,av=0;
+        let h=""; let ent=0,sep=0,out=0,av=0; let fila={};
         let s = document.getElementById('shark-search').value.toLowerCase();
+        
         logs.forEach(l => {
             let q = parseInt(l.info.split('QTD: ')[1]) || 0;
-            if(l.acao==='ENTRADA') ent+=q; if(l.acao==='SEPARACAO') sep+=q; if(l.acao==='EXPEDIÇÃO') out+=q; if(l.acao==='AVARIA') av+=q;
+            let id = l.info.split(' (')[0];
+            if(l.acao==='ENTRADA') { ent+=q; fila[id]=(fila[id]||0)+q; }
+            if(l.acao==='SEPARACAO') { sep+=q; fila[id]=(fila[id]||0)-q; }
+            if(l.acao==='SAIDA') out+=q;
+            if(l.acao==='AVARIA') { av+=q; fila[id]=(fila[id]||0)-q; }
+
             if(l.info.toLowerCase().includes(s) || l.acao.toLowerCase().includes(s)) {
                 let c = l.acao==='ENTRADA'?'#007aff':l.acao==='SEPARACAO'?'#ffae00':l.acao==='AVARIA'?'#ff3b30':'#00ff41';
                 h += `<tr><td>${l.t}</td><td><span class="st-pill" style="background:${c}">${l.acao}</span></td><td>${l.info}</td></tr>`;
@@ -197,8 +193,11 @@
         document.getElementById('m-logs').innerHTML = h;
         document.getElementById('k-in').innerText=ent; document.getElementById('k-sep').innerText=sep;
         document.getElementById('k-out').innerText=out; document.getElementById('k-av').innerText=av;
+        
+        let fHtml = "";
+        for(let it in fila) if(fila[it]>0) fHtml += `<div class="picking-item"><span>${it}</span><b>${fila[it]} PENDENTE</b></div>`;
+        document.getElementById('picking-queue').innerHTML = fHtml || '<p style="text-align:center;color:#444">AGUARDANDO CARGA</p>';
     }
 </script>
 </body>
-    </html>
-    
+</html>
