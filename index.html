@@ -3,259 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LOG-PRO v95 | FULL INTELLIGENCE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script src="https://unpkg.com/html5-qrcode"></script>
+    <title>SERGEL | Pedidos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --p: #00ff41; --s: #007aff; --bg: #000; --sf: #0a0a0a; --brd: #1a1a1a; --dg: #ff3b30; --w: #ffae00; }
-        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; font-size: 11px; height: 100vh; overflow: hidden; text-transform: uppercase; }
-        .screen { display: none; height: 100vh; flex-direction: column; background: var(--bg); }
-        .active-screen { display: flex !important; }
-        header { padding: 15px; border-bottom: 2px solid var(--brd); display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron'; background: #000; }
-        .scroll-area { flex: 1; overflow-y: auto; padding: 15px 15px 100px 15px; }
-        .card { background: var(--sf); border: 1px solid var(--brd); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
-        h3 { font-family: 'Orbitron'; font-size: 9px; color: var(--p); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; border-left: 3px solid var(--p); padding-left: 8px; }
-        input, select { width: 100%; padding: 14px; background: #050505; border: 1px solid #222; color: #fff; border-radius: 8px; font-size: 11px; margin-bottom: 10px; font-weight: 700; }
-        .btn { width: 100%; padding: 16px; border: none; border-radius: 10px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; margin-bottom: 5px; }
-        .btn-p { background: var(--p); color: #000; }
-        .btn-s { background: var(--s); color: #fff; }
-        .btn-d { background: var(--dg); color: #fff; }
-        .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 15px; }
-        .kpi-box { background: #0a0a0a; border: 1px solid #222; padding: 10px 5px; border-radius: 8px; text-align: center; }
-        .kpi-box span { font-family: 'Orbitron'; font-size: 14px; color: var(--p); display: block; }
-        .scanner-view { width: 100%; background: #000; border-radius: 12px; border: 2px solid var(--p); min-height: 200px; display: none; overflow: hidden; }
-        .bottom-nav { display: flex; background: #000; border-top: 2px solid var(--brd); position: fixed; bottom: 0; width: 100%; height: 70px; z-index: 100; }
-        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #444; font-size: 8px; font-weight: 800; gap: 4px; }
-        .active-tab { color: var(--p); border-top: 3px solid var(--p); background: #050505; }
-        table { width: 100%; border-collapse: collapse; font-size: 9px; }
-        td { padding: 12px 5px; border-bottom: 1px solid #111; }
-        .pill { padding: 4px 6px; border-radius: 4px; font-weight: 900; font-size: 7px; color: #000; }
-        .alert-box { border: 2px solid var(--dg) !important; animation: blink 1s infinite; margin-bottom: 10px; padding: 10px; border-radius: 8px; color: var(--dg); font-weight: 800; }
-        @keyframes blink { 50% { opacity: 0.4; } }
+        :root { --red: #ea1d2c; --navy: #1d3557; --bg: #f7f7f7; --green: #2e7d32; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding-bottom: 220px; }
+        
+        /* CABEÇALHO MINIMALISTA */
+        header { 
+            background: #fff; padding: 25px 20px; text-align: center; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 1000;
+        }
+        .loja-call { 
+            font-size: 13px; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px; 
+        }
+        .trigger-dot { position: absolute; right: 15px; top: 22px; color: #f2f2f2; cursor: pointer; font-size: 20px; }
+
+        /* CATEGORIAS (BOLINHAS) */
+        .cat-scroll { display: flex; gap: 15px; overflow-x: auto; padding: 15px; background: #fff; border-bottom: 1px solid #eee; scrollbar-width: none; }
+        .cat-scroll::-webkit-scrollbar { display: none; }
+        .cat-item { min-width: 80px; text-align: center; cursor: pointer; opacity: 0.4; transition: 0.3s; display: flex; flex-direction: column; align-items: center; }
+        .cat-item.active { opacity: 1; transform: scale(1.1); }
+        .cat-img-nav { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--red); object-fit: cover; margin-bottom: 5px; background: #eee; }
+        .cat-item span { font-size: 10px; font-weight: 700; }
+
+        /* LISTA DE PRODUTOS */
+        .container { padding: 20px; max-width: 1200px; margin: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .item-card { background: #fff; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #eee; display: flex; flex-direction: column; }
+        .product-img { width: 100%; height: 160px; object-fit: cover; background: #f9f9f9; }
+        .item-content { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
+        .item-info b { font-size: 15px; text-transform: uppercase; color: #333; }
+        .item-desc { font-size: 11px; color: #777; margin: 5px 0; min-height: 30px; }
+        .price-main { font-size: 18px; color: var(--navy); font-weight: 800; margin-top: auto; }
+        
+        /* BOTÕES + E - */
+        .qty-box { display: flex; align-items: center; gap: 20px; border: 1.5px solid #f0f0f0; padding: 10px; border-radius: 12px; background: #fafafa; justify-content: center; margin-top: 15px; }
+        .btn-qty { border: none; background: none; color: var(--red); font-size: 28px; font-weight: 900; cursor: pointer; width: 40px; height: 40px; }
+        .qty-num { font-size: 18px; font-weight: 800; color: #333; min-width: 25px; text-align: center; }
+
+        /* RODAPÉ E CARRINHO */
+        .footer-cart { position: fixed; bottom: 0; width: 100%; background: #fff; padding: 20px; border-top: 1px solid #eee; z-index: 900; box-sizing: border-box; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); }
+        .btn-send { width: 100%; background: var(--red); color: #fff; border: none; padding: 18px; border-radius: 12px; font-weight: 800; font-size: 16px; cursor: pointer; }
+
+        /* ÁREA DE LOGIN E PAINEL */
+        #login-area { display: none; text-align: center; padding: 10px; }
+        #pass-input { padding: 10px; border-radius: 8px; border: 1px solid #ddd; width: 150px; text-align: center; }
+        #panel-admin { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 2000; padding: 20px; box-sizing: border-box; overflow-y: auto; }
+        .card-adm { background: #f9f9f9; padding: 15px; border-radius: 12px; border: 1px solid #eee; margin-bottom: 15px; }
+        input, select, textarea { width: 100%; padding: 12px; margin: 6px 0; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; box-sizing: border-box; }
+        .btn-add { width: 100%; background: var(--navy); color: white; padding: 15px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; }
+        .admin-list-item { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #eee; align-items: center; background: #fff; margin-bottom: 5px; border-radius: 8px; }
+        .tab-btn { padding: 12px; border: none; background: #eee; cursor: pointer; font-weight: bold; border-radius: 8px; flex: 1; }
+        .tab-btn.active { background: var(--red); color: #fff; }
     </style>
 </head>
-<body onload="inicializarApp()">
+<body onload="init()">
 
-    <div id="tela-login" class="screen active-screen" style="justify-content:center; align-items:center; padding:40px;">
-        <h1 style="font-family:'Orbitron'; color:var(--p); font-size:35px;">LOG-PRO</h1>
-        <p style="color:#555; font-size:10px; margin-bottom:40px;">v95 | JP DIAS - FULL INTEGRATED</p>
-        <input type="password" id="pin-acesso" placeholder="PIN" style="text-align:center;">
-        <button class="btn btn-p" onclick="realizarLogin()">ENTRAR</button>
+<header>
+    <span class="loja-call">Faça seu pedido abaixo</span>
+    <div class="trigger-dot" onclick="mostrarLogin()">...</div>
+</header>
+
+<div id="login-area"><input type="password" id="pass-input" placeholder="SENHA" oninput="checarSenha(this.value)"></div>
+
+<div class="cat-scroll" id="cat-lista-loja"></div>
+<div class="container" id="menu-lista"></div>
+
+<div class="footer-cart">
+    <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+        <b id="total-val" style="font-size: 20px;">R$ 0,00</b>
+        <b id="total-itens" style="color:#777; font-size: 14px; margin-top: 5px;">0 ITENS</b>
     </div>
+    <button class="btn-send" onclick="finalizarPedido()">ENVIAR PEDIDO AO WHATSAPP</button>
+</div>
 
-    <div id="tela-shark" class="screen">
-        <header><span>SHARK PANEL</span> <button onclick="logout()" class="btn-d" style="width:50px; height:25px; border:none; font-size:7px;">SAIR</button></header>
-        <div class="scroll-area">
-            <div class="kpi-grid">
-                <div class="kpi-box"><span id="kpi-ent">0</span><small>ENT</small></div>
-                <div class="kpi-box"><span id="kpi-sep" style="color:var(--w)">0</span><small>SEP</small></div>
-                <div class="kpi-box"><span id="kpi-sai" style="color:var(--s)">0</span><small>SAI</small></div>
-                <div class="kpi-box"><span id="kpi-ava" style="color:var(--dg)">0</span><small>AVA</small></div>
+<div id="panel-admin">
+    <div style="max-width: 600px; margin: auto;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+            <h2 style="margin:0; color:var(--red); font-size: 20px;">GESTOR SHARK</h2>
+            <button onclick="fecharAdmin()" style="padding:10px 15px; background:#333; color:#fff; border:none; border-radius:8px;">SAIR</button>
+        </div>
+        <div style="margin-bottom: 20px; display: flex; gap: 8px;">
+            <button class="tab-btn active" id="btnTab1" onclick="switchTab(1)">PRODUTOS</button>
+            <button class="tab-btn" id="btnTab2" onclick="switchTab(2)">CATEGORIAS</button>
+            <button class="tab-btn" id="btnTab3" onclick="switchTab(3)">VENDAS</button>
+        </div>
+
+        <div id="tab1">
+            <div class="card-adm">
+                <input type="text" id="p-nome" placeholder="NOME DO PRODUTO">
+                <textarea id="p-desc" placeholder="INGREDIENTES"></textarea>
+                <div style="display:flex; gap:8px;"><input type="text" id="p-preco" placeholder="PREÇO VAREJO"><input type="number" id="p-est" placeholder="ESTOQUE"></div>
+                <div style="display:flex; gap:8px;"><input type="text" id="p-atac" placeholder="PREÇO ATACADO"><input type="number" id="p-qAtac" placeholder="QTD MÍNIMA"></div>
+                <input type="text" id="p-img" placeholder="LINK DA IMAGEM">
+                <select id="p-cat"></select>
+                <button class="btn-add" onclick="salvarProduto()">SALVAR PRODUTO</button>
             </div>
-            <div id="container-alertas"></div>
-            <div class="card">
-                <h3><i class="fa-solid fa-database"></i> CADASTRO E BACKUP</h3>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
-                    <button class="btn btn-s" style="padding:10px; font-size:8px;" onclick="exportarBackup()">EXPORTAR</button>
-                    <button class="btn btn-s" style="padding:10px; font-size:8px;" onclick="document.getElementById('in-file').click()">IMPORTAR</button>
-                </div>
-                <input type="file" id="in-file" style="display:none;" onchange="importarBackup(this)">
-                <input type="text" id="cad-ean" placeholder="CÓDIGO EAN">
-                <input type="text" id="cad-nome" placeholder="NOME DO PRODUTO">
-                <button class="btn btn-p" style="padding:10px; font-size:8px;" onclick="cadastrarManual()">SALVAR PRODUTO</button>
-                <button class="btn btn-d" style="margin-top:10px; padding:10px; font-size:8px;" onclick="resetSistema()">RESET TOTAL</button>
+            <div id="lista-adm-produtos"></div>
+        </div>
+
+        <div id="tab2" style="display:none;">
+            <div class="card-adm">
+                <input type="text" id="c-nome" placeholder="NOME CATEGORIA">
+                <input type="text" id="c-img" placeholder="LINK FOTO BOLINHA">
+                <button class="btn-add" style="background:var(--green);" onclick="salvarCategoria()">CRIAR CATEGORIA</button>
             </div>
-            <div class="card">
-                <h3><i class="fa-solid fa-boxes-packing"></i> FILA DE PICKING (SALDO ATUAL)</h3>
-                <div id="fila-picking"></div>
-            </div>
-            <div class="card">
-                <h3><i class="fa-solid fa-clock-rotate-left"></i> ÚLTIMOS LOGS</h3>
-                <table><tbody id="tabela-logs"></tbody></table>
-            </div>
+            <div id="lista-adm-cats"></div>
+        </div>
+
+        <div id="tab3" style="display:none;">
+            <div id="vendas-log"></div>
+            <button onclick="limparVendas()" style="color:red; background:none; border:none; margin-top:20px; cursor:pointer;">Limpar Histórico</button>
         </div>
     </div>
+</div>
 
-    <div id="tela-operador" class="screen">
-        <header><span>OPERADOR</span> <button onclick="gerarRomaneio()" class="btn-s" style="width:70px; height:25px; border:none; font-size:7px;">GERAR ROMANEIO</button></header>
-        <div class="scroll-area">
-            <div class="card">
-                <div id="reader-op" class="scanner-view"></div>
-                <button class="btn btn-p" id="btn-cam-op" onclick="controleCamera('reader-op','btn-cam-op',false)">ABRIR CÂMERA</button>
-            </div>
-            <div class="card">
-                <select id="operacao-tipo">
-                    <option value="ENTRADA">📥 REGISTRAR ENTRADA</option>
-                    <option value="SEPARACAO">📦 REGISTRAR SEPARAÇÃO</option>
-                    <option value="SAIDA">🚚 REGISTRAR EXPEDIÇÃO</option>
-                </select>
-                <input type="text" id="ean-manual" placeholder="DIGITE O EAN">
-                <button class="btn btn-s" onclick="processarManual()">BIPAR MANUAL</button>
-                <button class="btn btn-d" style="margin-top:10px" onclick="registrarAvaria()">⚠️ REGISTRAR AVARIA</button>
-            </div>
-            <div class="card">
-                <h3><i class="fa-solid fa-receipt"></i> SESSÃO ATUAL</h3>
-                <div id="lista-sessao"></div>
-            </div>
-        </div>
-    </div>
+<script>
+    let db_cats = JSON.parse(localStorage.getItem('shark_cats')) || [];
+    let db_prods = JSON.parse(localStorage.getItem('shark_prods')) || [];
+    let vendas = JSON.parse(localStorage.getItem('shark_vendas')) || [];
+    let car = {};
+    let catAtiva = db_cats[0] ? db_cats[0].nome : '';
 
-    <div id="tela-motorista" class="screen">
-        <header><span>MOTORISTA / ROTA</span></header>
-        <div class="scroll-area">
-            <div class="card">
-                <div id="reader-mot" class="scanner-view"></div>
-                <button class="btn btn-s" id="btn-cam-mot" onclick="controleCamera('reader-mot','btn-cam-mot',true)">SCAN ROMANEIO</button>
-            </div>
-            <div id="card-romaneio" class="card" style="display:none; border-left:5px solid var(--p);">
-                <h2 id="romaneio-id"></h2>
-                <p id="info-gps" style="color:var(--p); margin:10px 0; font-size:10px;"></p>
-                <button class="btn btn-p" onclick="confirmarEntrega()">CONFIRMAR ENTREGA NO MAPA</button>
-            </div>
-        </div>
-    </div>
+    function init() { 
+        renderCategorias(); 
+        renderLoja(); 
+        renderAdminProds(); 
+        renderAdminCats(); 
+        renderVendas(); 
+        atualizarSelectCats(); 
+    }
 
-    <div class="bottom-nav" id="nav-principal" style="display:none;">
-        <div class="nav-item active-tab" onclick="navegar('tela-shark', this)"><i class="fa-solid fa-chart-line"></i>SHARK</div>
-        <div class="nav-item" onclick="navegar('tela-operador', this)"><i class="fa-solid fa-barcode"></i>OP</div>
-        <div class="nav-item" onclick="navegar('tela-motorista', this)"><i class="fa-solid fa-truck"></i>ROTA</div>
-    </div>
+    function mostrarLogin() { document.getElementById('login-area').style.display = 'block'; }
+    function checarSenha(v) { if(v === "9910") { document.getElementById('panel-admin').style.display='block'; document.getElementById('login-area').style.display='none'; } }
+    function fecharAdmin() { document.getElementById('panel-admin').style.display='none'; }
+    function switchTab(n) { [1,2,3].forEach(i => { document.getElementById('tab'+i).style.display = (i===n)?'block':'none'; document.getElementById('btnTab'+i).classList.toggle('active', i===n); }); }
 
-    <script>
-        let logs = JSON.parse(localStorage.getItem('L95') || '[]');
-        let produtos = JSON.parse(localStorage.getItem('P95') || '{}');
-        let sessao = [];
-        let html5QrCode, isCameraOpen = false, currentGps = "";
+    function renderCategorias() {
+        let h = "";
+        db_cats.forEach(c => { h += `<div class="cat-item ${catAtiva === c.nome ? 'active' : ''}" onclick="selecionarCat('${c.nome}')"><img src="${c.img}" class="cat-img-nav"><span>${c.nome}</span></div>`; });
+        document.getElementById('cat-lista-loja').innerHTML = h;
+    }
+    function selecionarCat(n) { catAtiva = n; renderCategorias(); renderLoja(); }
 
-        function inicializarApp() { renderizarTudo(); }
-        function realizarLogin() { document.getElementById('tela-login').classList.remove('active-screen'); document.getElementById('nav-principal').style.display='flex'; navegar('tela-shark', document.querySelector('.nav-item')); }
-        function logout() { location.reload(); }
-
-        function navegar(id, el) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-tab'));
-            document.getElementById(id).classList.add('active-screen');
-            el.classList.add('active-tab');
-            if(isCameraOpen) controleCamera();
-            renderizarTudo();
+    function salvarCategoria() {
+        let n = document.getElementById('c-nome').value.toUpperCase();
+        let i = document.getElementById('c-img').value;
+        if(n) { 
+            db_cats.push({id: Date.now(), nome: n, img: i}); 
+            localStorage.setItem('shark_cats', JSON.stringify(db_cats)); 
+            if(!catAtiva) catAtiva = n;
+            init(); 
+            document.getElementById('c-nome').value=''; document.getElementById('c-img').value='';
         }
+    }
 
-        function controleCamera(div, btn, isMot) {
-            if(!isCameraOpen) {
-                document.getElementById(div).style.display = 'block';
-                html5QrCode = new Html5Qrcode(div);
-                html5QrCode.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, c => isMot ? handleMotorista(c) : handleOperador(c));
-                document.getElementById(btn).innerText = "PARAR"; isCameraOpen = true;
-            } else {
-                html5QrCode.stop().then(() => { document.querySelectorAll('.scanner-view').forEach(v=>v.style.display='none'); isCameraOpen = false; });
-            }
+    function renderLoja() {
+        let h = "";
+        db_prods.filter(p => p.categoria === catAtiva).forEach(p => {
+            let img = p.img ? `<img src="${p.img}" class="product-img">` : "";
+            h += `<div class="item-card">${img}<div class="item-content"><b>${p.nome}</b><p class="item-desc">${p.desc || ''}</p><span class="price-main">R$ ${p.preco.toFixed(2).replace('.',',')}</span><div class="qty-box"><button class="btn-qty" onclick="addCar(${p.id},-1)">-</button><span class="qty-num" id="q-${p.id}">${car[p.id] || 0}</span><button class="btn-qty" onclick="addCar(${p.id},1)">+</button></div></div></div>`;
+        });
+        document.getElementById('menu-lista').innerHTML = h || "<p style='text-align:center; grid-column:1/-1; opacity:0.3; padding:50px;'>Escolha uma categoria acima.</p>";
+    }
+
+    function addCar(id, v) { 
+        car[id] = (car[id] || 0) + v; 
+        if(car[id] < 0) car[id] = 0; 
+        document.getElementById('q-'+id).innerText = car[id]; 
+        atualizarTotal(); 
+    }
+    
+    function atualizarTotal() {
+        let t = 0, q = 0;
+        for(let id in car) { if(car[id] > 0) { let p = db_prods.find(x => x.id == id); let pf = (p.atacado > 0 && car[id] >= p.qAtac) ? p.atacado : p.preco; t += pf * car[id]; q += car[id]; } }
+        document.getElementById('total-val').innerText = "R$ " + t.toFixed(2).replace('.',',');
+        document.getElementById('total-itens').innerText = q + " ITENS";
+    }
+
+    function salvarProduto() {
+        let n = document.getElementById('p-nome').value.toUpperCase();
+        let d = document.getElementById('p-desc').value;
+        let p = parseFloat(document.getElementById('p-preco').value.replace(',','.'));
+        let e = parseInt(document.getElementById('p-est').value) || 0;
+        let a = parseFloat(document.getElementById('p-atac').value.replace(',','.')) || 0;
+        let qa = parseInt(document.getElementById('p-qAtac').value) || 0;
+        let img = document.getElementById('p-img').value;
+        let cat = document.getElementById('p-cat').value;
+        if(n && p) { 
+            db_prods.push({id: Date.now(), nome: n, desc: d, preco: p, estoque: e, atacado: a, qAtac: qa, img: img, categoria: cat}); 
+            localStorage.setItem('shark_prods', JSON.stringify(db_prods)); 
+            init(); 
+            ['p-nome','p-desc','p-preco','p-est','p-atac','p-qAtac','p-img'].forEach(id => document.getElementById(id).value='');
         }
+    }
 
-        function handleOperador(c) {
-            if(!produtos[c]) {
-                let n = prompt("PRODUTO NÃO CADASTRADO!\nDIGITE O NOME:");
-                if(n) { produtos[c] = n; localStorage.setItem('P95', JSON.stringify(produtos)); } else return;
-            }
-            let t = document.getElementById('operacao-tipo').value;
-            let saldo = calcularSaldo(produtos[c]);
-            
-            if(t !== 'ENTRADA' && saldo <= 0) return alert("TRAVA HARD-LOCK: ESTOQUE ZERADO!");
-            
-            let q = prompt("QUANTIDADE PARA " + t + " (SALDO: " + saldo + "):", "1");
-            if(q && q > 0) {
-                if(t !== 'ENTRADA' && parseInt(q) > saldo) return alert("ERRO: SALDO INSUFICIENTE!");
-                sessao.unshift({n: produtos[c], q: q, t: t});
-                registrarLog('OP', t, `${produtos[c]} (${c}) | QTD: ${q}`);
-                atualizarSessao();
-            }
-        }
+    function removerProd(id) { db_prods = db_prods.filter(p => p.id !== id); localStorage.setItem('shark_prods', JSON.stringify(db_prods)); init(); }
+    function removerCat(id) { db_cats = db_cats.filter(c => c.id !== id); localStorage.setItem('shark_cats', JSON.stringify(db_cats)); init(); }
+    function renderAdminProds() { document.getElementById('lista-adm-produtos').innerHTML = db_prods.map(p => `<div class="admin-list-item"><span><b>${p.nome}</b><br><small>${p.categoria}</small></span><button onclick="removerProd(${p.id})" style="color:red; border:none; background:none; font-weight:bold;">APAGAR</button></div>`).join(''); }
+    function renderAdminCats() { document.getElementById('lista-adm-cats').innerHTML = db_cats.map(c => `<div class="admin-list-item"><span><b>${c.nome}</b></span><button onclick="removerCat(${c.id})" style="color:red; border:none; background:none; font-weight:bold;">APAGAR</button></div>`).join(''); }
+    function atualizarSelectCats() { document.getElementById('p-cat').innerHTML = db_cats.map(c => `<option value="${c.nome}">${c.nome}</option>`).join(''); }
+    function renderVendas() { document.getElementById('vendas-log').innerHTML = vendas.map(v => `<div style="font-size:11px; border-bottom:1px solid #eee; padding:8px;">${v.data} - ${v.cliente} (R$ ${v.total})</div>`).join(''); }
+    function limparVendas() { if(confirm("Limpar Histórico?")) { vendas = []; localStorage.setItem('shark_vendas', JSON.stringify(vendas)); renderVendas(); } }
 
-        function registrarAvaria() {
-            let c = prompt("BIPE O CÓDIGO DA AVARIA:");
-            if(!c || !produtos[c]) return alert("PRODUTO NÃO LOCALIZADO!");
-            let saldo = calcularSaldo(produtos[c]);
-            if(saldo <= 0) return alert("ESTOQUE ZERADO, NÃO HÁ O QUE AVARIAR!");
-            let q = prompt("QTD AVARIADA (MAX: "+saldo+"):");
-            if(q && q > 0 && q <= saldo) {
-                registrarLog('OP', 'AVARIA', `${produtos[c]} (${c}) | QTD: ${q}`);
-                alert("AVARIA REGISTRADA!");
-            }
-        }
+    function finalizarPedido() {
+        let nome = prompt("QUAL SEU NOME?"); if(!nome) return;
+        let t = 0; let it = "";
+        for(let id in car) { if(car[id] > 0) { let p = db_prods.find(x => x.id == id); let pf = (p.atacado > 0 && car[id] >= p.qAtac) ? p.atacado : p.preco; it += `${car[id]}x ${p.nome}\n`; t += pf * car[id]; } }
+        if(t === 0) return alert("CARRINHO VAZIO");
+        let dataF = new Date().toLocaleString('pt-BR');
+        vendas.push({data: dataF, cliente: nome.toUpperCase(), total: t.toFixed(2).replace('.',',')});
+        localStorage.setItem('shark_vendas', JSON.stringify(vendas));
 
-        function calcularSaldo(nome) {
-            let s = 0;
-            logs.forEach(l => {
-                if(l.i.includes(nome)) {
-                    let q = parseInt(l.i.split('QTD: ')[1]) || 0;
-                    if(l.a === 'ENTRADA') s += q; else s -= q;
-                }
-            });
-            return s;
-        }
-
-        function handleMotorista(c) {
-            document.getElementById('card-romaneio').style.display='block';
-            document.getElementById('romaneio-id').innerText="ROMANEIO: " + c;
-            navigator.geolocation.getCurrentPosition(p => {
-                currentGps = p.coords.latitude + "," + p.coords.longitude;
-                document.getElementById('info-gps').innerText = "📍 LOCALIZAÇÃO GPS CAPTURADA: " + currentGps;
-            }, () => { alert("POR FAVOR, ATIVE O GPS!"); });
-        }
-
-        function confirmarEntrega() {
-            if(!currentGps) return alert("AGUARDANDO GPS...");
-            registrarLog('MOT', 'ENTREGA', 'GPS: ' + currentGps);
-            alert("ROTA FINALIZADA COM SUCESSO!");
-            document.getElementById('card-romaneio').style.display='none';
-        }
-
-        function registrarLog(o, a, i) {
-            logs.unshift({t: new Date().toLocaleTimeString(), o, a, i});
-            localStorage.setItem('L95', JSON.stringify(logs.slice(0, 1000)));
-            renderizarTudo();
-        }
-
-        function renderizarTudo() {
-            let h="", ent=0, sep=0, sai=0, ava=0, fila={}, alertas="";
-            logs.forEach(l => {
-                let q = parseInt(l.i.split('QTD: ')[1]) || 0;
-                let n = l.i.split(' (')[0].split(' |')[0];
-                fila[n] = fila[n] || 0;
-                if(l.a==='ENTRADA'){ ent+=q; fila[n]+=q; }
-                else if(l.a==='SEPARACAO'){ sep+=q; fila[n]-=q; }
-                else if(l.a==='SAIDA'){ sai+=q; }
-                else if(l.a==='AVARIA'){ ava+=q; fila[n]-=q; }
-                let cor = l.a==='ENTRADA'?'#007aff':l.a==='SEPARACAO'?'#ffae00':l.a==='AVARIA'?'#ff3b30':'#00ff41';
-                h += `<tr><td>${l.t}</td><td><span class="pill" style="background:${cor}">${l.a}</span></td><td><b>${l.i}</b></td></tr>`;
-            });
-            document.getElementById('tabela-logs').innerHTML = h;
-            document.getElementById('kpi-ent').innerText = ent; document.getElementById('kpi-sep').innerText = sep;
-            document.getElementById('kpi-sai').innerText = sai; document.getElementById('kpi-ava').innerText = ava;
-            let fh = "";
-            for(let k in fila) {
-                if(fila[k] > 0) {
-                    fh += `<div style="background:#111; padding:10px; border-radius:8px; margin-bottom:5px; display:flex; justify-content:space-between;"><span>${k}</span><b style="color:var(--w)">${fila[k]} UN</b></div>`;
-                    if(fila[k] < 5) alertas += `<div class="alert-box">⚠️ ESTOQUE CRÍTICO: ${k} (${fila[k]} UN)</div>`;
-                }
-            }
-            document.getElementById('fila-picking').innerHTML = fh || '<p style="text-align:center; color:#444;">NENHUM SALDO PENDENTE</p>';
-            document.getElementById('container-alertas').innerHTML = alertas;
-        }
-
-        function cadastrarManual() {
-            let e = document.getElementById('cad-ean').value;
-            let n = document.getElementById('cad-nome').value;
-            if(e && n) { produtos[e] = n; localStorage.setItem('P95', JSON.stringify(produtos)); renderizarTudo(); alert("CADASTRADO!"); document.getElementById('cad-ean').value=""; document.getElementById('cad-nome').value=""; }
-        }
-
-        function processarManual() { let e = document.getElementById('ean-manual').value; if(e) handleOperador(e); document.getElementById('ean-manual').value=""; }
-        function atualizarSessao() { let h=""; sessao.forEach(x=> h += `<div style="padding:8px; border-bottom:1px solid #222; font-size:9px; color:#aaa;">${x.n} - ${x.q} UN [${x.t}]</div>`); document.getElementById('lista-sessao').innerHTML = h; }
-        function gerarRomaneio() { if(sessao.length===0) return alert("SESSÃO VAZIA!"); let r="ROMANEIO DE CARGA\n\n"; sessao.forEach(x=>r+=`${x.n}: ${x.q} UN\n`); alert(r); sessao=[]; atualizarSessao(); }
-        function resetSistema() { if(confirm("DESEJA APAGAR TODO O BANCO DE DADOS?")) { localStorage.clear(); location.reload(); } }
-        function exportarBackup() { let a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify({logs, produtos})], {type: "application/json"})); a.download = "LOGPRO_BACKUP.json"; a.click(); }
-        function importarBackup(i) { let f = new FileReader(); f.onload = e => { let d = JSON.parse(e.target.result); logs = d.logs; produtos = d.produtos; localStorage.setItem('P95', JSON.stringify(produtos)); localStorage.setItem('L95', JSON.stringify(logs)); renderizarTudo(); alert("IMPORTADO COM SUCESSO!"); }; f.readAsText(i.files[0]); }
-    </script>
+        let msg = `🍦 *NOVO PEDIDO - SERGEL*\n👤 *CLIENTE:* ${nome.toUpperCase()}\n----------\n${it}----------\n*TOTAL: R$ ${t.toFixed(2).replace('.',',')}*\n\n👉 *PRÓXIMO PASSO:*\nPor favor, realize o pagamento e *encaminhe o comprovante nesta conversa* para iniciarmos a separação.`;
+        window.open(`https://wa.me/551999999999?text=${encodeURIComponent(msg)}`);
+    }
+</script>
 </body>
 </html>
