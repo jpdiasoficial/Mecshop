@@ -6,164 +6,227 @@
     <title>SERGEL | Shark Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --red: #ea1d2c; --bg: #ffffff; --gray: #f2f2f2; --green: #2e7d32; }
-        * { box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { margin: 0; background: var(--bg); padding-bottom: 110px; color: #3e3e3e; }
+        :root { --red: #ea1d2c; --bg: #ffffff; --light-gray: #f2f2f2; --text-main: #3e3e3e; --green: #2e7d32; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Poppins', sans-serif; }
+        body { background: var(--bg); margin: 0; color: var(--text-main); padding-bottom: 120px; }
+
+        /* HEADER */
         header { padding: 15px; position: sticky; top: 0; background: #fff; z-index: 100; border-bottom: 1px solid #eee; }
-        .search-container { background: var(--gray); border-radius: 10px; display: flex; padding: 10px 15px; }
+        .loja-call { font-size: 13px; color: #888; font-weight: 600; text-transform: uppercase; display: block; text-align: center; }
+        .trigger-dot { position: absolute; right: 20px; top: 15px; color: #eee; cursor: pointer; padding: 5px; font-size: 20px; }
+
+        /* BUSCA */
+        .search-container { background: var(--light-gray); border-radius: 10px; display: flex; align-items: center; padding: 10px 15px; margin: 10px 15px; }
         .search-container input { border: none; background: none; width: 100%; outline: none; font-size: 14px; }
-        .trigger-dot { position: absolute; right: 20px; top: 15px; color: #ddd; cursor: pointer; padding: 5px; }
-        .cat-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 15px; scrollbar-width: none; }
-        .pill { padding: 8px 18px; border-radius: 20px; border: 1px solid #eee; background: #fff; font-size: 12px; font-weight: 600; white-space: nowrap; cursor: pointer; color: #777; }
-        .pill.active { background: var(--red); color: #fff; border-color: var(--red); }
+
+        /* CATEGORIAS (BOLINHAS) */
+        .cat-scroll { display: flex; gap: 15px; overflow-x: auto; padding: 15px; scrollbar-width: none; }
+        .cat-circle { min-width: 75px; display: flex; flex-direction: column; align-items: center; gap: 5px; opacity: 0.5; cursor: pointer; }
+        .cat-circle img { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--red); object-fit: cover; padding: 2px; background: #fff; }
+        .cat-circle span { font-size: 10px; font-weight: 700; text-align: center; text-transform: uppercase; }
+        .cat-circle.active { opacity: 1; transform: scale(1.05); }
+
+        /* LISTA DE PRODUTOS */
         .container { padding: 0 15px; }
-        .item-card { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #f2f2f2; align-items: center; }
+        .item-card { display: flex; justify-content: space-between; padding: 20px 0; border-bottom: 1px solid #f2f2f2; gap: 15px; align-items: center; }
         .item-info { flex: 1; }
-        .item-info b { font-size: 15px; display: block; }
-        .price { font-size: 14px; font-weight: 700; color: #333; }
-        .prod-img { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; margin-left: 10px; }
-        .btn-add { border: 1px solid #eee; background: #fff; color: var(--red); padding: 8px 12px; border-radius: 6px; font-weight: 700; font-size: 11px; cursor: pointer; }
-        .counter { display: flex; align-items: center; border: 1px solid var(--red); border-radius: 6px; }
-        .btn-q { border: none; background: none; color: var(--red); padding: 5px 10px; font-size: 18px; font-weight: bold; }
-        .footer-bar { position: fixed; bottom: 0; width: 100%; background: #fff; padding: 15px 20px; border-top: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
-        .btn-fin { background: var(--red); color: #fff; border: none; padding: 12px 30px; border-radius: 8px; font-weight: 600; cursor: pointer; }
-        #panel-admin { display: none; position: fixed; top: 0; width: 100%; height: 100%; background: #fff; z-index: 3000; padding: 20px; overflow-y: auto; }
+        .item-info b { font-size: 15px; display: block; color: #000; text-transform: uppercase; }
+        .price-varejo { font-size: 16px; font-weight: 700; color: #333; }
+        .price-atacado { font-size: 11px; color: var(--green); font-weight: 600; display: block; }
+        .prod-img { width: 85px; height: 85px; border-radius: 12px; object-fit: cover; }
+
+        /* BOTÕES */
+        .action-box { min-width: 110px; display: flex; justify-content: flex-end; }
+        .btn-add-main { border: 1px solid #eee; background: #fff; color: var(--red); padding: 8px 15px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+        .counter-box { display: flex; align-items: center; border: 1.5px solid var(--red); border-radius: 8px; background: #fff; }
+        .btn-qty { border: none; background: none; color: var(--red); padding: 5px 12px; font-size: 20px; font-weight: bold; cursor: pointer; }
+
+        /* FOOTER */
+        .footer-bar { position: fixed; bottom: 0; width: 100%; background: #fff; padding: 15px 20px; border-top: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; z-index: 500; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); }
+        .btn-finalizar { background: var(--red); color: #fff; border: none; padding: 14px 35px; border-radius: 10px; font-weight: 700; font-size: 16px; cursor: pointer; }
+
+        /* ADMIN & LOGIN */
+        #login-area { display: none; background: #fff; padding: 15px; text-align: center; border-bottom: 1px solid #eee; }
+        #panel-admin { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 3000; padding: 20px; overflow-y: auto; }
         .admin-card { background: #f9f9f9; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #eee; }
-        .input-text { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 10px; font-size: 13px; }
-        .row-adm { padding: 12px; background: #fff; border: 1px solid #eee; border-radius: 8px; margin-bottom: 8px; }
-        .switch-box { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
+        input, textarea, select { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; }
+        
+        /* MODAL CHECKOUT */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; }
+        .modal-content { position: absolute; bottom: 0; background: #fff; width: 100%; border-radius: 20px 20px 0 0; padding: 25px; max-height: 85vh; overflow-y: auto; }
     </style>
 </head>
 <body onload="init()">
 
 <header>
-    <div class="trigger-dot" onclick="abrirLogin()">...</div>
-    <div class="search-container"><input type="text" id="buscador" placeholder="Buscar sabor..." oninput="renderLoja()"></div>
+    <div class="trigger-dot" onclick="mostrarLogin()">...</div>
+    <span class="loja-call">Faça seu pedido abaixo</span>
 </header>
+
+<div id="login-area">
+    <input type="password" id="pass-shk" placeholder="SENHA ACESSO" oninput="checarSenha(this.value)" style="width:150px; text-align:center;">
+</div>
+
+<div class="search-container">
+    <input type="text" id="buscador" placeholder="O que você deseja hoje?" oninput="renderLoja()">
+</div>
+
 <div class="cat-scroll" id="cat-lista"></div>
-<div class="container" id="lista-geral"></div>
+<div class="container" id="lista-produtos"></div>
 
 <div class="footer-bar">
-    <div><small>Subtotal</small><br><b id="total-final">R$ 0,00</b></div>
-    <button class="btn-fin" onclick="abrirCheckout()">Finalizar</button>
+    <div><small style="color:#888; text-transform:uppercase; font-size:10px;">Subtotal</small><br><b id="total-final" style="font-size:20px;">R$ 0,00</b></div>
+    <button class="btn-finalizar" onclick="abrirCheckout()">Finalizar</button>
+</div>
+
+<div class="modal" id="modal-checkout">
+    <div class="modal-content">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h2 style="margin:0">Fechar Pedido</h2>
+            <b onclick="fecharCheckout()" style="color:#999; cursor:pointer;">X</b>
+        </div>
+        <input type="text" id="cliente-nome" placeholder="Seu Nome completo">
+        <div id="revisao-pedido" style="margin:15px 0; border-top:1px solid #eee; padding-top:10px;"></div>
+        <button class="btn-finalizar" style="width:100%" onclick="enviarWhatsApp()">ENVIAR PARA WHATSAPP</button>
+    </div>
 </div>
 
 <div id="panel-admin">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-        <h3 style="margin:0">GESTOR SHARK</h3>
-        <button onclick="fecharAdmin()">Sair</button>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <h2 style="color:var(--red); margin:0;">GESTOR SHARK</h2>
+        <button onclick="fecharAdmin()" style="padding:10px 15px; background:#333; color:#fff; border:none; border-radius:8px;">SAIR</button>
     </div>
 
     <div class="admin-card">
-        <b style="color:var(--red)">CONTROLES DA LOJA</b>
-        <div class="switch-box"><span>Aceitar Entrega</span><input type="checkbox" id="cfg-ent" checked onchange="save()"></div>
-        <div class="switch-box"><span>Aceitar Retirada</span><input type="checkbox" id="cfg-ret" checked onchange="save()"></div>
-        <div class="switch-box"><span>Ativar Cupom</span><input type="checkbox" id="cfg-cup" checked onchange="save()"></div>
+        <b>IMPORTAR EM MASSA (NOMES)</b>
+        <textarea id="import-area" style="height:80px;" placeholder="Cole aqui a lista de nomes da planilha..."></textarea>
+        <button onclick="importarMassa()" style="width:100%; background:var(--red); color:#fff; border:none; padding:12px; border-radius:8px; font-weight:700;">SUBIR LISTA</button>
     </div>
 
     <div class="admin-card">
-        <b>IMPORTAR DA PLANILHA</b>
-        <textarea id="import-area" class="input-text" style="height:60px;" placeholder="Cole aqui os nomes dos produtos..."></textarea>
-        <button onclick="importar()" style="width:100%; background:#333; color:#fff; padding:10px; border:none; border-radius:5px;">Processar Nomes</button>
+        <b>CRIAR CATEGORIA (BOLINHA)</b>
+        <input type="text" id="c-nome" placeholder="Nome da Categoria">
+        <input type="text" id="c-img" placeholder="URL da Imagem (Picolé, Pote, etc)">
+        <button onclick="addCat()" style="width:100%; background:#333; color:#fff; border:none; padding:10px; border-radius:8px;">ADICIONAR BOLINHA</button>
     </div>
 
-    <div class="admin-card">
-        <b>MEUS PRODUTOS</b>
-        <div id="adm-lista"></div>
-    </div>
+    <div id="lista-adm-itens"></div>
 </div>
 
 <script>
-    let db = { prods: [], cats: [], cfgs: {ent:true, ret:true, cup:true} };
-    let car = {}; let catAtiva = '';
+    let db = {
+        cats: JSON.parse(localStorage.getItem('shk_cats_v4')) || [{nome:'Tudo', img:'https://cdn-icons-png.flaticon.com/512/1814/1814400.png'}],
+        prods: JSON.parse(localStorage.getItem('shk_prods_v4')) || []
+    };
+    let car = {}; let catAtiva = 'Tudo';
 
-    function init() {
-        db.prods = JSON.parse(localStorage.getItem('sergel_p')) || [];
-        db.cats = JSON.parse(localStorage.getItem('sergel_c')) || [];
-        db.cfgs = JSON.parse(localStorage.getItem('sergel_g')) || {ent:true, ret:true, cup:true};
-        if(db.cats.length > 0 && !catAtiva) catAtiva = db.cats[0].nome;
-        document.getElementById('cfg-ent').checked = db.cfgs.ent;
-        document.getElementById('cfg-ret').checked = db.cfgs.ret;
-        document.getElementById('cfg-cup').checked = db.cfgs.cup;
-        renderCats(); renderLoja(); atualizarAdmin();
+    function init() { renderCats(); renderLoja(); renderAdmin(); }
+
+    function mostrarLogin() { 
+        let a = document.getElementById('login-area');
+        a.style.display = (a.style.display === 'block') ? 'none' : 'block';
+    }
+
+    function checarSenha(v) { 
+        if(v === "9910") { 
+            document.getElementById('panel-admin').style.display='block'; 
+            document.getElementById('login-area').style.display='none'; 
+            document.getElementById('pass-shk').value = '';
+        } 
     }
 
     function renderCats() {
-        document.getElementById('cat-lista').innerHTML = db.cats.map(c => `<div class="pill ${catAtiva===c.nome?'active':''}" onclick="setCat('${c.nome}')">${c.nome}</div>`).join('');
+        document.getElementById('cat-lista').innerHTML = db.cats.map(c => `
+            <div class="cat-circle ${catAtiva === c.nome ? 'active' : ''}" onclick="catAtiva='${c.nome}';renderCats();renderLoja();">
+                <img src="${c.img || 'https://via.placeholder.com/60'}">
+                <span>${c.nome}</span>
+            </div>`).join('');
     }
-    function setCat(n) { catAtiva = n; renderCats(); renderLoja(); }
 
     function renderLoja() {
         let b = document.getElementById('buscador').value.toLowerCase();
-        let h = db.prods.filter(p => p.ativo && p.cat === catAtiva && p.nome.toLowerCase().includes(b)).map(p => {
+        let f = db.prods.filter(p => p.on && (catAtiva === 'Tudo' || p.cat === catAtiva) && p.nome.toLowerCase().includes(b));
+        
+        document.getElementById('lista-produtos').innerHTML = f.map(p => {
             let q = car[p.id] || 0;
-            return `<div class="item-card">
-                <div class="item-info"><b>${p.nome}</b><span class="price">R$ ${p.preco.toFixed(2)}</span></div>
+            return `
+            <div class="item-card">
+                <div class="item-info">
+                    <b>${p.nome}</b>
+                    <span class="price-varejo">R$ ${p.preco.toFixed(2).replace('.',',')}</span>
+                    ${p.qAtac > 0 ? `<span class="price-atacado">Atacado: R$ ${p.atac.toFixed(2)} (+${p.qAtac} un)</span>` : ''}
+                </div>
                 ${p.img ? `<img src="${p.img}" class="prod-img">` : ''}
                 <div class="action-box">
-                    ${q === 0 ? `<button class="btn-add" onclick="add(${p.id},1)">ADICIONAR</button>` : 
-                    `<div class="counter"><button class="btn-q" onclick="add(${p.id},-1)">-</button><span>${q}</span><button class="btn-q" onclick="add(${p.id},1)">+</button></div>`}
+                    ${q === 0 ? `<button class="btn-add-main" onclick="add(${p.id},1)">ADICIONAR</button>` : 
+                    `<div class="counter-box"><button class="btn-qty" onclick="add(${p.id},-1)">-</button><span style="font-weight:700">${q}</span><button class="btn-qty" onclick="add(${p.id},1)">+</button></div>`}
                 </div>
             </div>`;
         }).join('');
-        document.getElementById('lista-geral').innerHTML = h || '<p style="text-align:center; padding:20px; opacity:0.5;">Nenhum produto ativo nesta categoria.</p>';
     }
 
-    function add(id,v) { car[id] = (car[id] || 0) + v; if(car[id]<=0) delete car[id]; renderLoja(); calc(); }
+    function add(id, v) { car[id] = (car[id] || 0) + v; if(car[id] <= 0) delete car[id]; renderLoja(); calc(); }
     function calc() {
-        let t = 0; for(let id in car) { let p = db.prods.find(x=>x.id==id); t += p.preco * car[id]; }
+        let t = 0;
+        for(let id in car) {
+            let p = db.prods.find(x => x.id == id);
+            let preco = (p.qAtac > 0 && car[id] >= p.qAtac) ? p.atacado : p.preco;
+            t += preco * car[id];
+        }
         document.getElementById('total-final').innerText = `R$ ${t.toFixed(2).replace('.',',')}`;
     }
 
-    function importar() {
-        let lines = document.getElementById('import-area').value.split('\n');
-        lines.forEach(l => {
-            if(l.trim() !== "") {
-                let p = { id: Date.now()+Math.random(), nome: l.trim().toUpperCase(), preco: 0, cat: 'Geral', ativo: false, img: '' };
-                db.prods.push(p);
-                if(!db.cats.find(c => c.nome === 'Geral')) db.cats.push({nome: 'Geral'});
-            }
-        });
-        save(); init(); alert("Importado! Agora defina os preços no painel.");
+    function abrirCheckout() {
+        if(Object.keys(car).length === 0) return alert("Seu carrinho está vazio!");
+        document.getElementById('modal-checkout').style.display = 'block';
+        let h = "";
+        for(let id in car) {
+            let p = db.prods.find(x => x.id == id);
+            h += `<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>${car[id]}x ${p.nome}</span><b>R$ ${((p.qAtac > 0 && car[id] >= p.qAtac ? p.atacado : p.preco) * car[id]).toFixed(2)}</b></div>`;
+        }
+        document.getElementById('revisao-pedido').innerHTML = h;
+    }
+    function fecharCheckout() { document.getElementById('modal-checkout').style.display = 'none'; }
+
+    function importarMassa() {
+        let n = document.getElementById('import-area').value.split('\n');
+        n.forEach(l => { if(l.trim()) db.prods.push({id: Date.now()+Math.random(), nome: l.trim().toUpperCase(), preco: 0, atacado: 0, qAtac: 0, cat: 'Tudo', on: false, img: ''}); });
+        salvar(); renderAdmin(); alert("Importado!");
     }
 
-    function editarPreco(id, val) { db.prods.find(x=>x.id==id).preco = parseFloat(val) || 0; save(); renderLoja(); }
-    function setImg(id) { let u = prompt("URL da Foto:"); if(u!==null) { db.prods.find(x=>x.id==id).img = u; save(); renderLoja(); atualizarAdmin(); } }
-    function toggle(id) { let p = db.prods.find(x=>x.id==id); p.ativo = !p.ativo; save(); atualizarAdmin(); renderLoja(); }
-    function remover(id) { if(confirm("Apagar?")) { db.prods = db.prods.filter(x=>x.id!=id); save(); init(); } }
-
-    function save() {
-        db.cfgs.ent = document.getElementById('cfg-ent').checked;
-        db.cfgs.ret = document.getElementById('cfg-ret').checked;
-        db.cfgs.cup = document.getElementById('cfg-cup').checked;
-        localStorage.setItem('sergel_p', JSON.stringify(db.prods));
-        localStorage.setItem('sergel_c', JSON.stringify(db.cats));
-        localStorage.setItem('sergel_g', JSON.stringify(db.cfgs));
+    function addCat() {
+        let n = document.getElementById('c-nome').value.toUpperCase();
+        let i = document.getElementById('c-img').value;
+        if(n) { db.cats.push({nome: n, img: i}); salvar(); renderCats(); renderAdmin(); }
     }
 
-    function atualizarAdmin() {
-        document.getElementById('adm-lista').innerHTML = db.prods.map(p => `
-            <div class="row-adm">
-                <b style="font-size:12px;">${p.nome}</b>
+    function renderAdmin() {
+        document.getElementById('lista-adm-itens').innerHTML = db.prods.map(p => `
+            <div class="admin-card" style="font-size:12px;">
+                <b>${p.nome}</b>
                 <div style="display:flex; gap:5px; margin-top:5px;">
-                    <input type="number" placeholder="Preço" value="${p.preco}" onchange="editarPreco(${p.id}, this.value)" style="width:70px;">
-                    <button onclick="setImg(${p.id})">📸</button>
-                    <button onclick="toggle(${p.id})" style="background:${p.ativo?'#4CAF50':'#ccc'}; color:#fff; border:none; border-radius:4px; font-size:10px; flex:1;">${p.ativo?'ATIVO':'OFF'}</button>
-                    <button onclick="remover(${p.id})" style="background:none; border:none; color:red;">🗑️</button>
+                    <input type="number" step="0.01" value="${p.preco}" placeholder="Varejo" onchange="p_up(${p.id},'preco',this.value)" style="width:70px;">
+                    <input type="number" step="0.01" value="${p.atacado}" placeholder="Atac" onchange="p_up(${p.id},'atacado',this.value)" style="width:70px;">
+                    <select onchange="p_up(${p.id},'cat',this.value)" style="flex:1">${db.cats.map(c => `<option ${p.cat===c.nome?'selected':''}>${c.nome}</option>`).join('')}</select>
+                    <button onclick="p_up(${p.id},'on',!${p.on});renderAdmin();renderLoja();" style="background:${p.on?'#4CAF50':'#ccc'}; color:#fff; border:none; border-radius:5px; padding:0 10px;">${p.on?'ON':'OFF'}</button>
+                    <button onclick="db.prods=db.prods.filter(x=>x.id!=${p.id});salvar();renderAdmin();" style="border:none; background:none;">🗑️</button>
                 </div>
             </div>`).join('');
     }
 
-    function abrirLogin() { if(prompt("Senha:")==="9910") document.getElementById('panel-admin').style.display='block'; }
+    function p_up(id, f, v) { let p = db.prods.find(x=>x.id==id); p[f] = (f==='on' || f==='cat') ? v : parseFloat(v); salvar(); }
+    function salvar() { 
+        localStorage.setItem('shk_prods_v4', JSON.stringify(db.prods)); 
+        localStorage.setItem('shk_cats_v4', JSON.stringify(db.cats));
+    }
     function fecharAdmin() { document.getElementById('panel-admin').style.display='none'; }
-    function abrirCheckout() {
-        let n = prompt("Seu Nome:");
-        if(n) {
-            let msg = `🍦 *PEDIDO SERGEL*\n👤 *CLIENTE:* ${n.toUpperCase()}\n\n*ITENS:*\n`;
-            for(let id in car) { let p = db.prods.find(x=>x.id==id); msg += `• ${car[id]}x ${p.nome}\n`; }
-            msg += `\n💰 *TOTAL: ${document.getElementById('total-final').innerText}*`;
-            window.open(`https://wa.me/5519994750657?text=${encodeURIComponent(msg)}`);
-        }
+
+    function enviarWhatsApp() {
+        let n = document.getElementById('cliente-nome').value; if(!n) return alert("Seu nome?");
+        let msg = `🍦 *NOVO PEDIDO SERGEL*\n👤 *CLIENTE:* ${n.toUpperCase()}\n\n*PEDIDO:*\n`;
+        for(let id in car) { let p = db.prods.find(x=>x.id==id); msg += `• ${car[id]}x ${p.nome}\n`; }
+        msg += `\n💰 *TOTAL: ${document.getElementById('total-final').innerText}*`;
+        window.open(`https://wa.me/5519994750657?text=${encodeURIComponent(msg)}`);
     }
 </script>
 </body>
