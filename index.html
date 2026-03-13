@@ -3,173 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HG MOTORS | EXCELÊNCIA AUTOMOTIVA</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <title>HG MOTORS | DIAMOND EDITION</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
     <style>
         :root {
-            --gold: #D4AF37; --dark: #050505; --card: #111111; --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.08); --w: #25D366; --text-dim: #888;
-            --grad: linear-gradient(135deg, #D4AF37 0%, #f2d06b 100%);
+            --gold: #D4AF37; --platinum: #E5E4E2; --bg: #030303;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --neon-gold: rgba(212, 175, 55, 0.2);
         }
 
-        /* 1-5: Reset e Scroll Smooth */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; }
-        body { background: var(--dark); color: #fff; overflow-x: hidden; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: #fff; overflow-x: hidden; letter-spacing: -0.02em; }
 
-        /* 6-10: Header Ultra Glass */
-        header { 
-            position: fixed; top: 0; width: 100%; z-index: 2000; padding: 15px 20px;
-            background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;
+        /* HEADER DIAMOND */
+        header {
+            position: fixed; top: 0; width: 100%; z-index: 2000; padding: 25px;
+            background: linear-gradient(to bottom, rgba(3,3,3,0.9), transparent);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--glass-border);
         }
-        .logo-img { height: 40px; filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.3)); }
+        .logo-box img { height: 45px; filter: drop-shadow(0 0 15px var(--neon-gold)); }
 
-        /* 11-15: Hero Section (Impacto Landing Page) */
-        .hero { 
-            padding: 120px 20px 40px; text-align: center; 
-            background: radial-gradient(circle at top, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+        /* HERO VISUAL SECTION */
+        .hero-visual {
+            height: 100vh; width: 100%; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+            background: radial-gradient(circle at center, #1a1a1a 0%, var(--bg) 80%);
+            position: relative; overflow: hidden;
         }
-        .hero h2 { font-size: 32px; font-weight: 800; letter-spacing: -1px; margin-bottom: 10px; }
-        .hero p { color: var(--text-dim); font-size: 14px; max-width: 300px; margin: 0 auto 25px; }
-
-        /* 16-20: Categorias Estilo App */
-        .nav-cats { display: flex; gap: 12px; overflow-x: auto; padding: 10px 20px; scrollbar-width: none; margin-bottom: 30px; }
-        .nav-cats::-webkit-scrollbar { display: none; }
-        .cat-card { 
-            min-width: 100px; padding: 20px 10px; background: var(--card); border: 1px solid var(--border);
-            border-radius: 20px; text-align: center; transition: 0.3s;
+        .hero-visual::before {
+            content: ''; position: absolute; top: -50%; width: 200%; height: 200%;
+            background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+            opacity: 0.05; animation: rotate 60s linear infinite;
         }
-        .cat-card i { font-size: 20px; color: var(--gold); margin-bottom: 8px; display: block; }
-        .cat-card span { font-size: 10px; font-weight: 800; color: var(--text-dim); text-transform: uppercase; }
-        .cat-card.active { border-color: var(--gold); background: rgba(212, 175, 55, 0.05); transform: translateY(-5px); }
-        .cat-card.active span { color: #fff; }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* 21-30: Feed de Veículos (Grid Galático) */
-        .feed { padding: 0 20px 100px; max-width: 600px; margin: 0 auto; }
-        .item-card { 
-            background: var(--card); border-radius: 30px; border: 1px solid var(--border);
-            margin-bottom: 30px; overflow: hidden; position: relative;
-            animation: slideUp 0.6s ease-out forwards;
+        .hero-content h2 { font-size: 10vw; font-weight: 800; line-height: 0.9; text-transform: uppercase; margin-bottom: 10px; background: linear-gradient(180deg, #fff 0%, #444 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-content p { font-size: 14px; letter-spacing: 5px; color: var(--gold); font-weight: 300; text-transform: uppercase; }
+
+        /* CATEGORIAS FLOATING */
+        .floating-nav {
+            display: flex; gap: 15px; padding: 30px 20px; overflow-x: auto;
+            scrollbar-width: none; position: relative; z-index: 10;
         }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .floating-nav::-webkit-scrollbar { display: none; }
+        .nav-item {
+            min-width: 120px; height: 160px; background: var(--glass-bg);
+            border: 1px solid var(--glass-border); border-radius: 30px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: 0.5s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+        .nav-item.active { background: #fff; border-color: #fff; transform: translateY(-10px); }
+        .nav-item i { font-size: 24px; color: var(--gold); margin-bottom: 15px; transition: 0.3s; }
+        .nav-item.active i { color: #000; }
+        .nav-item span { font-size: 10px; font-weight: 800; text-transform: uppercase; color: #555; }
+        .nav-item.active span { color: #000; }
 
-        .item-img { width: 100%; height: 350px; position: relative; }
-        .item-img img { width: 100%; height: 100%; object-fit: cover; }
+        /* VITRINE DE LUXO */
+        .lux-feed { padding: 40px 20px; display: grid; grid-template-columns: 1fr; gap: 40px; max-width: 800px; margin: 0 auto; }
         
-        /* 31-35: Badges e Info Flutuante */
-        .status-tag { 
-            position: absolute; top: 20px; left: 20px; background: rgba(0,0,0,0.6); 
-            backdrop-filter: blur(10px); padding: 7px 15px; border-radius: 50px;
-            font-size: 10px; font-weight: 800; border: 1px solid rgba(255,255,255,0.1);
-            display: flex; align-items: center; gap: 6px;
+        .lux-card {
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            border-radius: 40px; padding: 10px; position: relative;
+            transition: 0.5s;
         }
-        .status-tag::before { content: ''; width: 8px; height: 8px; background: var(--w); border-radius: 50%; box-shadow: 0 0 10px var(--w); }
+        .lux-card:hover { transform: scale(1.02); border-color: var(--gold); }
 
-        .item-details { padding: 25px; }
-        .item-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
-        .item-name { font-size: 24px; font-weight: 800; text-transform: uppercase; line-height: 1; }
-        .item-meta { font-size: 11px; color: var(--gold); font-weight: 700; letter-spacing: 1px; }
-
-        /* 36-40: Pricing Box Shark Gold */
-        .pricing-box { 
-            background: rgba(255,255,255,0.02); border-radius: 20px; padding: 20px;
-            border: 1px solid var(--border); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end;
+        .lux-img-box {
+            width: 100%; height: 400px; border-radius: 32px; overflow: hidden;
+            position: relative;
         }
-        .price-now { font-size: 28px; font-weight: 800; color: #fff; display: block; }
-        .price-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; font-weight: 700; }
-
-        /* 41-45: Botão de Conversão (CTA) */
-        .btn-whatsapp { 
-            background: var(--w); color: #fff; text-decoration: none; display: flex;
-            align-items: center; justify-content: center; gap: 12px; padding: 22px;
-            border-radius: 20px; font-weight: 800; font-size: 15px; text-transform: uppercase;
-            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.2); transition: 0.3s;
+        .lux-img-box img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .lux-badge {
+            position: absolute; bottom: 20px; left: 20px;
+            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px);
+            padding: 10px 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);
+            font-size: 11px; font-weight: 700;
         }
-        .btn-whatsapp:active { transform: scale(0.95); background: #1da851; }
 
-        /* Footer simples */
-        footer { text-align: center; padding: 40px; color: #333; font-size: 10px; font-weight: 800; letter-spacing: 2px; }
+        .lux-info { padding: 30px 20px; }
+        .lux-brand { color: var(--gold); font-size: 12px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
+        .lux-title { font-size: 32px; font-weight: 800; margin: 5px 0 20px; line-height: 1; }
+        
+        .lux-price-tag {
+            background: #fff; color: #000; padding: 25px; border-radius: 25px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .lux-price-tag .val { font-size: 30px; font-weight: 800; }
+        .lux-price-tag .label { font-size: 10px; font-weight: 700; text-transform: uppercase; opacity: 0.5; }
+
+        .lux-btn {
+            margin-top: 15px; width: 100%; background: var(--bg); color: #fff;
+            padding: 22px; border-radius: 25px; border: 1px solid var(--glass-border);
+            font-weight: 800; text-transform: uppercase; font-size: 13px;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            transition: 0.3s; cursor: pointer;
+        }
+        .lux-btn:hover { background: var(--gold); color: #000; border-color: var(--gold); }
+
     </style>
 </head>
 <body onload="render('TODOS')">
 
     <header>
-        <img src="https://i.ibb.co/vzY3fS9/logo-hg.png" alt="HG MOTORS" class="logo-img">
-        <a href="https://wa.me/5519999999999" style="color: #fff; font-size: 20px;"><i class="fa-brands fa-whatsapp"></i></a>
+        <div class="logo-box"><img src="5565.png" alt="HG LOGO"></div>
+        <div class="menu-trigger" style="color: var(--gold);"><i class="fa-solid fa-ellipsis-vertical"></i></div>
     </header>
 
-    <section class="hero">
-        <p>HORTOLÂNDIA • SP</p>
-        <h2>HG MOTORS</h2>
-        <p>Veículos selecionados com garantia e procedência Shark Gold.</p>
+    <section class="hero-visual">
+        <div class="hero-content">
+            <p>Selection & Luxury</p>
+            <h2>HG MOTORS</h2>
+            <p style="color: #fff; letter-spacing: 2px; margin-top: 10px; opacity: 0.5;">Sinta a Experiência Diamond</p>
+        </div>
     </section>
 
-    <div class="nav-cats">
-        <div class="cat-card active" onclick="tab(this, 'TODOS')"><i class="fa-solid fa-grid-2"></i><span>Todos</span></div>
-        <div class="cat-card" onclick="tab(this, 'SEDAN')"><i class="fa-solid fa-car-side"></i><span>Sedans</span></div>
-        <div class="cat-card" onclick="tab(this, 'SUV')"><i class="fa-solid fa-car-rear"></i><span>SUVs</span></div>
-        <div class="cat-card" onclick="tab(this, 'PREMIUM')"><i class="fa-solid fa-crown"></i><span>Premium</span></div>
-        <div class="cat-card" onclick="tab(this, 'MOTO')"><i class="fa-solid fa-motorcycle"></i><span>Motos</span></div>
+    <div class="floating-nav">
+        <div class="nav-item active" onclick="tab(this, 'TODOS')"><i class="fa-solid fa-chess-king"></i><span>Elite</span></div>
+        <div class="nav-item" onclick="tab(this, 'SEDAN')"><i class="fa-solid fa-car-side"></i><span>Sedans</span></div>
+        <div class="nav-item" onclick="tab(this, 'SUV')"><i class="fa-solid fa-shuttle-space"></i><span>SUVs</span></div>
+        <div class="nav-item" onclick="tab(this, 'MOTO')"><i class="fa-solid fa-bolt"></i><span>Motos</span></div>
     </div>
 
-    <main class="feed" id="vitrine"></main>
-
-    <footer>
-        DESENVOLVIDO POR JP DIAS • SHARK TECH 2026
-    </footer>
+    <main class="lux-feed" id="main-vitrine"></main>
 
     <script>
-        // Banco de Dados Unificado (Puxando as fotos reais que você mandou)
-        const db = [
-            { cat: 'PREMIUM', nome: 'BMW 320i Sport', info: '2022 • Turbo • ZF8 • Teto Solar', preco: '249.900', img: '5739.jpg' },
-            { cat: 'SUV', nome: 'Jeep Compass', info: '2021 • Longitude • Diesel 4x4', preco: '158.900', img: '5743.jpg' },
-            { cat: 'SEDAN', nome: 'Civic G10 EXL', info: '2020 • Full LED • Paddle Shift', preco: '119.900', img: '5745.jpg' },
-            { cat: 'SUV', nome: 'Chevrolet Equinox', info: '2021 • Premier • Teto Panorâmico', preco: '145.900', img: '5746.jpg' },
-            { cat: 'PREMIUM', nome: 'Audi A3 Sedan', desc: '2022 • S-Line • New Design', preco: '189.900', img: '5752.jpg' },
-            { cat: 'MOTO', nome: 'Honda CB 500X', info: '2020 • Adventure • ABS', preco: '38.500', img: '5740.jpg' }
+        const estoque = [
+            { cat: 'SEDAN', marca: 'BMW', nome: '320i M Sport', preco: '249.900', img: '5739.jpg', specs: 'Carbon Fiber Interior' },
+            { cat: 'SUV', marca: 'JEEP', nome: 'Compass Longitude', preco: '158.900', img: '5743.jpg', specs: 'Diesel High Torque' },
+            { cat: 'SEDAN', marca: 'HONDA', nome: 'Civic G10 EXL', preco: '119.900', img: '5745.jpg', specs: 'Perfect Conditions' },
+            { cat: 'SUV', marca: 'CHEVROLET', nome: 'Equinox Premier', preco: '145.900', img: '5746.jpg', specs: 'Full AWD System' },
+            { cat: 'MOTO', marca: 'HONDA', nome: 'CB 500X', preco: '38.500', img: '5740.jpg', specs: 'Adventure Ready' }
         ];
 
-        function render(filtro) {
-            const vitrine = document.getElementById('vitrine');
-            const lista = filtro === 'TODOS' ? db : db.filter(v => v.cat === filtro);
+        function render(f) {
+            const vitrine = document.getElementById('main-vitrine');
+            const lista = f === 'TODOS' ? estoque : estoque.filter(v => v.cat === f);
             
             vitrine.innerHTML = lista.map(v => `
-                <article class="item-card">
-                    <div class="item-img">
+                <article class="lux-card">
+                    <div class="lux-img-box">
                         <img src="${v.img}" alt="${v.nome}" loading="lazy">
-                        <div class="status-tag">DISPONÍVEL</div>
+                        <div class="lux-badge">${v.specs}</div>
                     </div>
-                    <div class="item-details">
-                        <div class="item-header">
+                    <div class="lux-info">
+                        <span class="lux-brand">${v.marca} // PREMIUM</span>
+                        <h3 class="lux-title">${v.nome}</h3>
+                        
+                        <div class="lux-price-tag">
                             <div>
-                                <span class="item-meta">${v.cat} • EXCLUSIVE</span>
-                                <h3 class="item-name">${v.nome}</h3>
+                                <span class="label">Investment</span>
+                                <span class="val">R$ ${v.preco}</span>
                             </div>
+                            <i class="fa-solid fa-arrow-up-right-from-square" style="opacity: 0.2"></i>
                         </div>
-                        <p style="font-size: 13px; color: #666; margin-bottom: 20px;">${v.info || 'Completo, revisado e com garantia.'}</p>
-                        <div class="pricing-box">
-                            <div>
-                                <span class="price-label">Valor de Repasse</span>
-                                <span class="price-now">R$ ${v.preco}</span>
-                            </div>
-                            <div style="text-align: right">
-                                <span style="font-size: 10px; color: var(--w); font-weight: 800;">Oportunidade</span>
-                            </div>
-                        </div>
-                        <a href="https://wa.me/5519999999999?text=Tenho%20interesse%20no%20${v.nome}" class="btn-whatsapp">
-                            <i class="fa-brands fa-whatsapp"></i> Consultar Agora
-                        </a>
+                        
+                        <button class="lux-btn" onclick="window.open('https://wa.me/5519999999999')">
+                            <i class="fa-brands fa-whatsapp"></i> Reserve esta Unidade
+                        </button>
                     </div>
                 </article>
             `).join('');
         }
 
         function tab(el, cat) {
-            document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             el.classList.add('active');
             render(cat);
+            window.scrollTo({ top: window.innerHeight + 100, behavior: 'smooth' });
         }
     </script>
 </body>
