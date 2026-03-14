@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LOG-PRO v96 | SHARK EDITION</title>
+    <title>LOG-PRO v97 | FULL UNIFIED</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="https://unpkg.com/html5-qrcode"></script>
@@ -34,21 +34,19 @@
         td { padding: 12px 5px; border-bottom: 1px solid #111; }
         .pill { padding: 4px 6px; border-radius: 4px; font-weight: 900; font-size: 7px; color: #000; }
         .alert-box { border: 2px solid var(--dg) !important; animation: blink 1s infinite; margin-bottom: 10px; padding: 10px; border-radius: 8px; color: var(--dg); font-weight: 800; }
-        #qrcode-container { background: #fff; padding: 10px; border-radius: 8px; display: inline-block; margin: 10px 0; }
-        @keyframes blink { 50% { opacity: 0.4; } }
-
-        /* Estilo da Barra de Eficiência (Pilar 2) */
+        #qrcode-output img { margin: 0 auto; border: 10px solid #fff; border-radius: 5px; }
         .eficiencia-bar { width: 100%; height: 6px; background: #111; border-radius: 3px; margin-top: 5px; overflow: hidden; }
         .eficiencia-fill { height: 100%; background: var(--p); transition: 0.5s; }
+        @keyframes blink { 50% { opacity: 0.4; } }
     </style>
 </head>
 <body onload="inicializarApp()">
 
     <div id="tela-login" class="screen active-screen" style="justify-content:center; align-items:center; padding:40px;">
         <h1 style="font-family:'Orbitron'; color:var(--p); font-size:35px;">LOG-PRO</h1>
-        <p style="color:#555; font-size:10px; margin-bottom:40px;">v96 | SHARK INFRASTRUCTURE</p>
-        <input type="password" id="pin-acesso" placeholder="PIN" style="text-align:center;">
-        <button class="btn btn-p" onclick="realizarLogin()">ENTRAR</button>
+        <p style="color:#555; font-size:10px; margin-bottom:40px;">v97 | FULL UNIFIED SYSTEM</p>
+        <input type="password" id="pin-acesso" placeholder="PIN ACESSO" style="text-align:center;">
+        <button class="btn btn-p" onclick="realizarLogin()">AUTENTICAR</button>
     </div>
 
     <div id="tela-shark" class="screen">
@@ -62,27 +60,27 @@
             </div>
 
             <div class="card">
-                <h3><i class="fa-solid fa-gauge-high"></i> SAÚDE DO FLUXO (ROI)</h3>
+                <h3><i class="fa-solid fa-gauge-high"></i> PERFORMANCE DE FLUXO</h3>
                 <div id="metricas-fluxo"></div>
             </div>
 
             <div id="container-alertas"></div>
             
             <div class="card">
-                <h3><i class="fa-solid fa-database"></i> CADASTRO E BACKUP</h3>
+                <h3><i class="fa-solid fa-database"></i> GESTÃO DE DADOS</h3>
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
-                    <button class="btn btn-s" style="padding:10px; font-size:8px;" onclick="exportarBackup()">EXPORTAR</button>
-                    <button class="btn btn-s" style="padding:10px; font-size:8px;" onclick="document.getElementById('in-file').click()">IMPORTAR</button>
+                    <button class="btn btn-s" style="padding:10px; font-size:8px;" onclick="exportarBackup()">BACKUP</button>
+                    <button class="btn btn-s" style="padding:10px; font-size:8px;" onclick="document.getElementById('in-file').click()">RESTORE</button>
                 </div>
                 <input type="file" id="in-file" style="display:none;" onchange="importarBackup(this)">
-                <input type="text" id="cad-ean" placeholder="CÓDIGO EAN">
-                <input type="text" id="cad-nome" placeholder="NOME DO PRODUTO">
-                <button class="btn btn-p" style="padding:10px; font-size:8px;" onclick="cadastrarManual()">SALVAR PRODUTO</button>
-                <button class="btn btn-d" style="margin-top:10px; padding:10px; font-size:8px;" onclick="resetSistema()">RESET TOTAL</button>
+                <input type="text" id="cad-ean" placeholder="EAN DO PRODUTO">
+                <input type="text" id="cad-nome" placeholder="NOME COMERCIAL">
+                <button class="btn btn-p" style="padding:10px; font-size:8px;" onclick="cadastrarManual()">CADASTRAR</button>
+                <button class="btn btn-d" style="margin-top:10px; padding:10px; font-size:8px;" onclick="resetSistema()">WIPE DATABASE</button>
             </div>
             
             <div class="card">
-                <h3><i class="fa-solid fa-boxes-packing"></i> FILA DE PICKING</h3>
+                <h3><i class="fa-solid fa-boxes-packing"></i> ESTOQUE DISPONÍVEL</h3>
                 <div id="fila-picking"></div>
             </div>
         </div>
@@ -92,34 +90,35 @@
         <header>
             <span>OPERADOR</span> 
             <div style="display:flex; gap:5px;">
-                <button onclick="gerarRomaneioQR()" class="btn-s" style="width:60px; height:25px; border:none; font-size:7px; padding:0;">GERAR QR</button>
-                <button onclick="compartilharWhatsApp()" class="btn-p" style="width:60px; height:25px; border:none; font-size:7px; padding:0;"><i class="fa-brands fa-whatsapp"></i> ENVIAR</button>
+                <button onclick="gerarRomaneioQR()" class="btn-s" style="width:60px; height:25px; border:none; font-size:7px;">QR CODE</button>
+                <button onclick="compartilharWhatsApp()" class="btn-p" style="width:60px; height:25px; border:none; font-size:7px;"><i class="fa-brands fa-whatsapp"></i> ZAP</button>
             </div>
         </header>
         <div class="scroll-area">
-            <div id="modal-qr" class="card" style="display:none; text-align:center;">
-                <h3><i class="fa-solid fa-qrcode"></i> ESCANEIE PARA IMPORTAR</h3>
-                <div id="qrcode-output"></div>
-                <button class="btn btn-d" onclick="document.getElementById('modal-qr').style.display='none'">FECHAR</button>
+            <div id="modal-qr" class="card" style="display:none; text-align:center; border: 2px solid var(--p);">
+                <h3><i class="fa-solid fa-qrcode"></i> ROMANEIO VIRTUAL</h3>
+                <div id="qrcode-output" style="display: flex; justify-content: center; margin-bottom: 10px;"></div>
+                <button class="btn btn-d" onclick="fecharQR()">FECHAR</button>
             </div>
 
             <div class="card">
                 <div id="reader-op" class="scanner-view"></div>
-                <button class="btn btn-p" id="btn-cam-op" onclick="controleCamera('reader-op','btn-cam-op',false)">ABRIR CÂMERA</button>
+                <button class="btn btn-p" id="btn-cam-op" onclick="controleCamera('reader-op','btn-cam-op',false)">ATIVAR SCANNER</button>
             </div>
             <div class="card">
                 <select id="operacao-tipo">
-                    <option value="ENTRADA">📥 REGISTRAR ENTRADA</option>
-                    <option value="SEPARACAO">📦 REGISTRAR SEPARAÇÃO</option>
-                    <option value="SAIDA">🚚 REGISTRAR EXPEDIÇÃO</option>
+                    <option value="ENTRADA">📥 ENTRADA</option>
+                    <option value="SEPARACAO">📦 SEPARAÇÃO</option>
+                    <option value="SAIDA">🚚 EXPEDIÇÃO</option>
                 </select>
-                <input type="text" id="ean-manual" placeholder="DIGITE O EAN">
-                <button class="btn btn-s" onclick="processarManual()">BIPAR MANUAL</button>
+                <input type="text" id="ean-manual" placeholder="DIGITE OU COLE EAN">
+                <button class="btn btn-s" onclick="processarManual()">REGISTRAR</button>
                 <button class="btn btn-d" style="margin-top:10px" onclick="registrarAvaria()">⚠️ REGISTRAR AVARIA</button>
             </div>
             <div class="card">
                 <h3><i class="fa-solid fa-receipt"></i> SESSÃO ATUAL</h3>
                 <div id="lista-sessao"></div>
+                <button id="btn-limpar-sessao" class="btn btn-d" style="margin-top:10px; padding:5px; font-size:7px; display:none;" onclick="limparSessao()">LIMPAR SESSÃO</button>
             </div>
         </div>
     </div>
@@ -132,24 +131,24 @@
                 <button class="btn btn-s" id="btn-cam-mot" onclick="controleCamera('reader-mot','btn-cam-mot',true)">SCAN QR OPERADOR</button>
             </div>
             <div id="card-romaneio" class="card" style="display:none; border-left:5px solid var(--p);">
-                <h2 id="romaneio-id">ROMANEIO CARREGADO</h2>
-                <div id="itens-rota" style="margin:10px 0; font-size:9px; color:#888;"></div>
-                <p id="info-gps" style="color:var(--p); margin:10px 0; font-size:10px;"></p>
-                <button id="btn-confirmar-entrega" class="btn btn-p" onclick="confirmarEntrega()">CONFIRMAR ENTREGA GPS</button>
+                <h2 style="font-family:'Orbitron'; font-size:12px; color:var(--p);">ROMANEIO RECEBIDO</h2>
+                <div id="itens-rota" style="margin:15px 0; font-size:10px; color:#ccc; line-height: 1.6;"></div>
+                <p id="info-gps" style="color:var(--w); margin-bottom:15px; font-size:10px; font-weight:800;"></p>
+                <button id="btn-confirmar-entrega" class="btn btn-p" onclick="confirmarEntrega()" disabled style="opacity:0.3;">AGUARDANDO GPS...</button>
             </div>
         </div>
     </div>
 
     <div class="bottom-nav" id="nav-principal" style="display:none;">
-        <div class="nav-item active-tab" onclick="navegar('tela-shark', this)"><i class="fa-solid fa-chart-line"></i>SHARK</div>
+        <div class="nav-item active-tab" onclick="navegar('tela-shark', this)"><i class="fa-solid fa-chart-pie"></i>SHARK</div>
         <div class="nav-item" onclick="navegar('tela-operador', this)"><i class="fa-solid fa-barcode"></i>OP</div>
-        <div class="nav-item" onclick="navegar('tela-motorista', this)"><i class="fa-solid fa-truck"></i>ROTA</div>
+        <div class="nav-item" onclick="navegar('tela-motorista', this)"><i class="fa-solid fa-truck-fast"></i>ROTA</div>
     </div>
 
     <script>
-        let logs = JSON.parse(localStorage.getItem('L95') || '[]');
-        let produtos = JSON.parse(localStorage.getItem('P95') || '{}');
-        let sessao = [];
+        let logs = JSON.parse(localStorage.getItem('L97') || '[]');
+        let produtos = JSON.parse(localStorage.getItem('P97') || '{}');
+        let sessao = JSON.parse(localStorage.getItem('SESSAO_TEMP') || '[]');
         let html5QrCode, isCameraOpen = false, currentGps = "";
 
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -169,7 +168,7 @@
             }
         }
 
-        function inicializarApp() { renderizarTudo(); }
+        function inicializarApp() { renderizarTudo(); atualizarSessao(); }
         function realizarLogin() { tocarBip('sucesso'); document.getElementById('tela-login').classList.remove('active-screen'); document.getElementById('nav-principal').style.display='flex'; navegar('tela-shark', document.querySelector('.nav-item')); }
         function logout() { location.reload(); }
 
@@ -186,83 +185,82 @@
             if(!isCameraOpen && div && btn) {
                 document.getElementById(div).style.display = 'block';
                 html5QrCode = new Html5Qrcode(div);
-                html5QrCode.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, c => isMot ? handleMotorista(c) : handleOperador(c));
-                document.getElementById(btn).innerText = "PARAR"; isCameraOpen = true;
+                html5QrCode.start({ facingMode: "environment" }, { fps: 20, qrbox: 250 }, c => isMot ? handleMotorista(c) : handleOperador(c));
+                document.getElementById(btn).innerText = "STOP CAMERA"; isCameraOpen = true;
             } else if (isCameraOpen) {
                 html5QrCode.stop().then(() => { 
                     document.querySelectorAll('.scanner-view').forEach(v=>v.style.display='none'); 
-                    document.querySelectorAll('[id^="btn-cam"]').forEach(b=>b.innerText="ABRIR CÂMERA");
+                    document.querySelectorAll('[id^="btn-cam"]').forEach(b=>b.innerText="ATIVAR SCANNER");
                     isCameraOpen = false; 
                 });
             }
         }
 
         function handleOperador(c) {
+            tocarBip('sucesso');
             if(!produtos[c]) {
                 tocarBip('erro');
-                let n = prompt("PRODUTO NÃO CADASTRADO!\nDIGITE O NOME:");
-                if(n) { produtos[c] = n; localStorage.setItem('P95', JSON.stringify(produtos)); } else return;
+                let n = prompt("PRODUTO NÃO CADASTRADO!\nNOME DO ITEM:");
+                if(n) { produtos[c] = n; localStorage.setItem('P97', JSON.stringify(produtos)); } else return;
             }
             let t = document.getElementById('operacao-tipo').value;
             let saldo = calcularSaldo(produtos[c]);
             if(t !== 'ENTRADA' && saldo <= 0) { tocarBip('erro'); return alert("ESTOQUE ZERADO!"); }
-            let q = prompt("QTD PARA " + t + ":", "1");
+            
+            let q = prompt(`[${t}] QUANTIDADE PARA ${produtos[c]}:`, "1");
             if(q && q > 0) {
                 if(t !== 'ENTRADA' && parseInt(q) > saldo) { tocarBip('erro'); return alert("SALDO INSUFICIENTE!"); }
                 tocarBip('sucesso');
-                sessao.unshift({n: produtos[c], q: q, t: t});
+                sessao.unshift({n: produtos[c], q: q, t: t, h: new Date().toLocaleTimeString()});
+                localStorage.setItem('SESSAO_TEMP', JSON.stringify(sessao));
                 registrarLog('OP', t, `${produtos[c]} (${c}) | QTD: ${q}`);
                 atualizarSessao();
             }
         }
 
-        // --- PILAR 1: PONTE QR CODE (OPERADOR PARA MOTORISTA) ---
         function gerarRomaneioQR() {
-            if(sessao.length === 0) { tocarBip('erro'); return alert("SESSÃO VAZIA!"); }
+            if(sessao.length === 0) { tocarBip('erro'); return alert("NADA NA SESSÃO!"); }
             tocarBip('sucesso');
             document.getElementById('modal-qr').style.display = 'block';
             document.getElementById('qrcode-output').innerHTML = "";
-            // Compacta a sessão para caber no QR
-            let dadosReduzidos = sessao.map(i => `${i.n}:${i.q}`).join('|');
-            new QRCode(document.getElementById("qrcode-output"), { text: "LOGPRO:" + dadosReduzidos, width: 200, height: 200 });
+            let dataPackage = "LOGPRO:" + sessao.map(i => `${i.n}:${i.q}`).join('|');
+            new QRCode(document.getElementById("qrcode-output"), { text: dataPackage, width: 180, height: 180, colorDark : "#000000", colorLight : "#ffffff" });
         }
+
+        function fecharQR() { document.getElementById('modal-qr').style.display = 'none'; }
 
         function handleMotorista(c) {
             if(c.startsWith("LOGPRO:")) {
                 tocarBip('sucesso');
                 let dados = c.replace("LOGPRO:", "").split('|');
-                let html = "📦 <b>ITENS PARA ENTREGA:</b><br>";
-                dados.forEach(d => { html += `• ${d.replace(':',' - ')} UN<br>`; });
+                let html = "📦 <b>CHECKLIST DE CARGA:</b><br>";
+                dados.forEach(d => { let p = d.split(':'); html += `• ${p[0]}: <b>${p[1]} UN</b><br>`; });
                 document.getElementById('itens-rota').innerHTML = html;
                 document.getElementById('card-romaneio').style.display='block';
                 
-                // Ativa GPS e Trava "Falso Positivo"
                 navigator.geolocation.getCurrentPosition(p => {
                     currentGps = p.coords.latitude + "," + p.coords.longitude;
-                    document.getElementById('info-gps').innerText = "📍 GPS LOCALIZADO: " + currentGps;
-                    document.getElementById('btn-confirmar-entrega').style.opacity = "1";
+                    document.getElementById('info-gps').innerText = "📍 GPS ATIVO: " + currentGps;
+                    let btn = document.getElementById('btn-confirmar-entrega');
+                    btn.disabled = false; btn.style.opacity = "1"; btn.innerText = "CONFIRMAR ENTREGA";
                 }, () => { 
                     tocarBip('erro'); 
-                    document.getElementById('info-gps').innerText = "❌ GPS BLOQUEADO - ATIVE PARA CONTINUAR";
-                    document.getElementById('btn-confirmar-entrega').style.opacity = "0.3";
+                    document.getElementById('info-gps').innerText = "❌ GPS DESATIVADO - IMPOSSÍVEL ENTREGAR";
                 });
-            } else {
-                tocarBip('erro');
-                alert("QR CODE INVÁLIDO!");
-            }
+            } else { tocarBip('erro'); alert("QR CODE INVÁLIDO OU ESTRANHO AO LOGPRO!"); }
         }
 
         function confirmarEntrega() {
-            if(!currentGps) { tocarBip('erro'); return alert("ERRO: GPS OBRIGATÓRIO PARA ENTREGA!"); }
+            if(!currentGps) return;
             tocarBip('sucesso');
-            registrarLog('MOT', 'ENTREGA', 'GPS: ' + currentGps);
-            alert("ENTREGA CONFIRMADA COM SUCESSO!");
+            registrarLog('MOT', 'ENTREGA', 'LOCALIZAÇÃO: ' + currentGps);
+            alert("EXPEDIÇÃO FINALIZADA COM SUCESSO!");
             document.getElementById('card-romaneio').style.display='none';
         }
 
         function registrarLog(o, a, i) {
             logs.unshift({t: new Date().toLocaleTimeString(), o, a, i});
-            localStorage.setItem('L95', JSON.stringify(logs.slice(0, 1000)));
+            localStorage.setItem('L97', JSON.stringify(logs.slice(0, 1000)));
             renderizarTudo();
         }
 
@@ -271,7 +269,8 @@
             logs.forEach(l => {
                 if(l.i.includes(nome)) {
                     let q = parseInt(l.i.split('QTD: ')[1]) || 0;
-                    if(l.a === 'ENTRADA') s += q; else s -= q;
+                    if(l.a === 'ENTRADA') s += q; 
+                    else if(l.a === 'SEPARACAO' || l.a === 'AVARIA') s -= q;
                 }
             });
             return s;
@@ -285,7 +284,7 @@
                 fila[n] = (fila[n] || 0);
                 if(l.a==='ENTRADA'){ ent+=q; fila[n]+=q; }
                 else if(l.a==='SEPARACAO'){ sep+=q; fila[n]-=q; }
-                else if(l.a==='SAIDA'){ sai+=q; }
+                else if(l.a==='ENTREGA'){ sai+=1; } 
                 else if(l.a==='AVARIA'){ ava+=q; fila[n]-=q; }
                 let cor = l.a==='ENTRADA'?'#007aff':l.a==='SEPARACAO'?'#ffae00':l.a==='AVARIA'?'#ff3b30':'#00ff41';
                 h += `<tr><td>${l.t}</td><td><span class="pill" style="background:${cor}">${l.a}</span></td><td><b>${l.i}</b></td></tr>`;
@@ -294,12 +293,11 @@
             document.getElementById('kpi-ent').innerText = ent; document.getElementById('kpi-sep').innerText = sep;
             document.getElementById('kpi-sai').innerText = sai; document.getElementById('kpi-ava').innerText = ava;
 
-            // --- PILAR 2: MÉTRICAS DE FLUXO (ROI) ---
-            let totalAcoes = ent + sep + sai + ava;
-            let percSaida = totalAcoes > 0 ? (sai / ent * 100).toFixed(0) : 0;
+            let totalEntrada = ent || 1;
+            let percSaida = Math.min(100, (sai / totalEntrada * 100)).toFixed(0);
             document.getElementById('metricas-fluxo').innerHTML = `
                 <div style="margin-bottom:10px;">
-                    <div style="display:flex; justify-content:space-between; font-size:8px;"><span>TAXA DE EXPEDIÇÃO: ${percSaida}%</span></div>
+                    <div style="display:flex; justify-content:space-between; font-size:8px;"><span>TAXA DE VAZÃO: ${percSaida}%</span> <span>META: 100%</span></div>
                     <div class="eficiencia-bar"><div class="eficiencia-fill" style="width:${percSaida}%"></div></div>
                 </div>`;
 
@@ -310,37 +308,11 @@
                     if(fila[k] < 5) alertas += `<div class="alert-box">⚠️ ESTOQUE CRÍTICO: ${k} (${fila[k]} UN)</div>`;
                 }
             }
-            document.getElementById('fila-picking').innerHTML = fh || '<p style="text-align:center; color:#444;">VAZIO</p>';
+            document.getElementById('fila-picking').innerHTML = fh || '<p style="text-align:center; color:#444;">SEM ESTOQUE REGISTRADO</p>';
             document.getElementById('container-alertas').innerHTML = alertas;
         }
 
         function cadastrarManual() {
             let e = document.getElementById('cad-ean').value;
             let n = document.getElementById('cad-nome').value;
-            if(e && n) { produtos[e] = n; localStorage.setItem('P95', JSON.stringify(produtos)); tocarBip('sucesso'); renderizarTudo(); }
-        }
-
-        function processarManual() { let e = document.getElementById('ean-manual').value; if(e) handleOperador(e); document.getElementById('ean-manual').value=""; }
-        function atualizarSessao() { let h=""; sessao.forEach(x=> h += `<div style="padding:8px; border-bottom:1px solid #222; font-size:9px; color:#aaa;">${x.n} - ${x.q} UN [${x.t}]</div>`); document.getElementById('lista-sessao').innerHTML = h; }
-        
-        function compartilharWhatsApp() {
-            if(sessao.length === 0) return alert("VAZIO!");
-            let texto = `📦 *ROMANEIO LOG-PRO*\n\n`;
-            sessao.forEach(x => { texto += `✅ ${x.n}: *${x.q} UN*\n`; });
-            window.open(`https://wa.me/?text=${encodeURIComponent(texto)}`, '_blank');
-            sessao = []; atualizarSessao();
-        }
-
-        function registrarAvaria() {
-            let c = prompt("EAN DA AVARIA:");
-            if(!c || !produtos[c]) return;
-            let q = prompt("QTD:");
-            if(q > 0) { registrarLog('OP', 'AVARIA', `${produtos[c]} (${c}) | QTD: ${q}`); }
-        }
-
-        function exportarBackup() { let a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify({logs, produtos})], {type: "application/json"})); a.download = "LOGPRO_V96.json"; a.click(); }
-        function importarBackup(i) { let f = new FileReader(); f.onload = e => { let d = JSON.parse(e.target.result); logs = d.logs; produtos = d.produtos; localStorage.setItem('P95', JSON.stringify(produtos)); localStorage.setItem('L95', JSON.stringify(logs)); renderizarTudo(); alert("OK!"); }; f.readAsText(i.files[0]); }
-        function resetSistema() { if(confirm("APAGAR TUDO?")) { localStorage.clear(); location.reload(); } }
-    </script>
-</body>
-</html>
+            if(e && n) { produtos[e]
