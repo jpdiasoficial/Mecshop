@@ -79,7 +79,13 @@
     </div>
 
     <div id="tela-operador" class="screen">
-        <header><span>OPERADOR</span> <button onclick="gerarRomaneio()" class="btn-s" style="width:70px; height:25px; border:none; font-size:7px;">GERAR ROMANEIO</button></header>
+        <header>
+            <span>OPERADOR</span> 
+            <div style="display:flex; gap:5px;">
+                <button onclick="gerarRomaneio()" class="btn-s" style="width:60px; height:25px; border:none; font-size:7px; padding:0;">ROMANEIO</button>
+                <button onclick="compartilharWhatsApp()" class="btn-p" style="width:60px; height:25px; border:none; font-size:7px; padding:0;"><i class="fa-brands fa-whatsapp"></i> ENVIAR</button>
+            </div>
+        </header>
         <div class="scroll-area">
             <div class="card">
                 <div id="reader-op" class="scanner-view"></div>
@@ -129,8 +135,34 @@
         let sessao = [];
         let html5QrCode, isCameraOpen = false, currentGps = "";
 
+        // --- SISTEMA DE AUDIO NATIVO (Alta Performance) ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function tocarBip(tipo) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            if (tipo === 'sucesso') {
+                osc.type = 'sine'; osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+            } else if (tipo === 'erro') {
+                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+            }
+        }
+
         function inicializarApp() { renderizarTudo(); }
-        function realizarLogin() { document.getElementById('tela-login').classList.remove('active-screen'); document.getElementById('nav-principal').style.display='flex'; navegar('tela-shark', document.querySelector('.nav-item')); }
+        
+        function realizarLogin() { 
+            tocarBip('sucesso');
+            document.getElementById('tela-login').classList.remove('active-screen'); 
+            document.getElementById('nav-principal').style.display='flex'; 
+            navegar('tela-shark', document.querySelector('.nav-item')); 
+        }
+        
         function logout() { location.reload(); }
 
         function navegar(id, el) {
@@ -138,49 +170,62 @@
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-tab'));
             document.getElementById(id).classList.add('active-screen');
             el.classList.add('active-tab');
-            if(isCameraOpen) controleCamera();
+            if(isCameraOpen) controleCamera(null, null, null); // Fecha a câmera ao navegar
             renderizarTudo();
         }
 
         function controleCamera(div, btn, isMot) {
-            if(!isCameraOpen) {
+            if(!isCameraOpen && div && btn) {
                 document.getElementById(div).style.display = 'block';
                 html5QrCode = new Html5Qrcode(div);
                 html5QrCode.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, c => isMot ? handleMotorista(c) : handleOperador(c));
                 document.getElementById(btn).innerText = "PARAR"; isCameraOpen = true;
-            } else {
-                html5QrCode.stop().then(() => { document.querySelectorAll('.scanner-view').forEach(v=>v.style.display='none'); isCameraOpen = false; });
+                tocarBip('sucesso');
+            } else if (isCameraOpen) {
+                html5QrCode.stop().then(() => { 
+                    document.querySelectorAll('.scanner-view').forEach(v=>v.style.display='none'); 
+                    document.querySelectorAll('[id^="btn-cam"]').forEach(b=>b.innerText="ABRIR CÂMERA");
+                    isCameraOpen = false; 
+                });
             }
         }
 
         function handleOperador(c) {
+            tocarBip('sucesso'); // Bip de leitura inicial
             if(!produtos[c]) {
+                tocarBip('erro');
                 let n = prompt("PRODUTO NÃO CADASTRADO!\nDIGITE O NOME:");
                 if(n) { produtos[c] = n; localStorage.setItem('P95', JSON.stringify(produtos)); } else return;
             }
             let t = document.getElementById('operacao-tipo').value;
             let saldo = calcularSaldo(produtos[c]);
             
-            if(t !== 'ENTRADA' && saldo <= 0) return alert("TRAVA HARD-LOCK: ESTOQUE ZERADO!");
+            if(t !== 'ENTRADA' && saldo <= 0) { tocarBip('erro'); return alert("TRAVA HARD-LOCK: ESTOQUE ZERADO!"); }
             
             let q = prompt("QUANTIDADE PARA " + t + " (SALDO: " + saldo + "):", "1");
             if(q && q > 0) {
-                if(t !== 'ENTRADA' && parseInt(q) > saldo) return alert("ERRO: SALDO INSUFICIENTE!");
+                if(t !== 'ENTRADA' && parseInt(q) > saldo) { tocarBip('erro'); return alert("ERRO: SALDO INSUFICIENTE!"); }
+                tocarBip('sucesso'); // Confirmação da ação
                 sessao.unshift({n: produtos[c], q: q, t: t});
                 registrarLog('OP', t, `${produtos[c]} (${c}) | QTD: ${q}`);
                 atualizarSessao();
+            } else {
+                tocarBip('erro'); // Cancelou ou digitou errado
             }
         }
 
         function registrarAvaria() {
             let c = prompt("BIPE O CÓDIGO DA AVARIA:");
-            if(!c || !produtos[c]) return alert("PRODUTO NÃO LOCALIZADO!");
+            if(!c || !produtos[c]) { tocarBip('erro'); return alert("PRODUTO NÃO LOCALIZADO!"); }
             let saldo = calcularSaldo(produtos[c]);
-            if(saldo <= 0) return alert("ESTOQUE ZERADO, NÃO HÁ O QUE AVARIAR!");
+            if(saldo <= 0) { tocarBip('erro'); return alert("ESTOQUE ZERADO, NÃO HÁ O QUE AVARIAR!"); }
             let q = prompt("QTD AVARIADA (MAX: "+saldo+"):");
             if(q && q > 0 && q <= saldo) {
+                tocarBip('sucesso');
                 registrarLog('OP', 'AVARIA', `${produtos[c]} (${c}) | QTD: ${q}`);
                 alert("AVARIA REGISTRADA!");
+            } else {
+                tocarBip('erro');
             }
         }
 
@@ -196,16 +241,18 @@
         }
 
         function handleMotorista(c) {
+            tocarBip('sucesso');
             document.getElementById('card-romaneio').style.display='block';
             document.getElementById('romaneio-id').innerText="ROMANEIO: " + c;
             navigator.geolocation.getCurrentPosition(p => {
                 currentGps = p.coords.latitude + "," + p.coords.longitude;
                 document.getElementById('info-gps').innerText = "📍 LOCALIZAÇÃO GPS CAPTURADA: " + currentGps;
-            }, () => { alert("POR FAVOR, ATIVE O GPS!"); });
+            }, () => { tocarBip('erro'); alert("POR FAVOR, ATIVE O GPS!"); });
         }
 
         function confirmarEntrega() {
-            if(!currentGps) return alert("AGUARDANDO GPS...");
+            if(!currentGps) { tocarBip('erro'); return alert("AGUARDANDO GPS..."); }
+            tocarBip('sucesso');
             registrarLog('MOT', 'ENTREGA', 'GPS: ' + currentGps);
             alert("ROTA FINALIZADA COM SUCESSO!");
             document.getElementById('card-romaneio').style.display='none';
@@ -247,16 +294,42 @@
         function cadastrarManual() {
             let e = document.getElementById('cad-ean').value;
             let n = document.getElementById('cad-nome').value;
-            if(e && n) { produtos[e] = n; localStorage.setItem('P95', JSON.stringify(produtos)); renderizarTudo(); alert("CADASTRADO!"); document.getElementById('cad-ean').value=""; document.getElementById('cad-nome').value=""; }
+            if(e && n) { 
+                produtos[e] = n; localStorage.setItem('P95', JSON.stringify(produtos)); 
+                renderizarTudo(); tocarBip('sucesso'); alert("CADASTRADO!"); 
+                document.getElementById('cad-ean').value=""; document.getElementById('cad-nome').value=""; 
+            } else { tocarBip('erro'); }
         }
 
         function processarManual() { let e = document.getElementById('ean-manual').value; if(e) handleOperador(e); document.getElementById('ean-manual').value=""; }
+        
         function atualizarSessao() { let h=""; sessao.forEach(x=> h += `<div style="padding:8px; border-bottom:1px solid #222; font-size:9px; color:#aaa;">${x.n} - ${x.q} UN [${x.t}]</div>`); document.getElementById('lista-sessao').innerHTML = h; }
-        function gerarRomaneio() { if(sessao.length===0) return alert("SESSÃO VAZIA!"); let r="ROMANEIO DE CARGA\n\n"; sessao.forEach(x=>r+=`${x.n}: ${x.q} UN\n`); alert(r); sessao=[]; atualizarSessao(); }
+        
+        // Mantido o gerador original
+        function gerarRomaneio() { 
+            if(sessao.length===0) { tocarBip('erro'); return alert("SESSÃO VAZIA!"); }
+            tocarBip('sucesso');
+            let r="ROMANEIO DE CARGA\n\n"; sessao.forEach(x=>r+=`${x.n}: ${x.q} UN\n`); alert(r); sessao=[]; atualizarSessao(); 
+        }
+
+        // --- NOVA FUNÇÃO: COMPARTILHAR WHATSAPP ---
+        function compartilharWhatsApp() {
+            if(sessao.length === 0) { tocarBip('erro'); return alert("SESSÃO VAZIA! Registre itens primeiro."); }
+            tocarBip('sucesso');
+            
+            let data = new Date().toLocaleString('pt-BR');
+            let texto = `📦 *ROMANEIO DE CARGA | LOG-PRO v95*\n⏱️ *Data:* ${data}\n\n*ITENS PROCESSADOS:*\n`;
+            
+            sessao.forEach(x => { texto += `✅ ${x.n}: *${x.q} UN* (${x.t})\n`; });
+            
+            texto += `\n⚙️ _Infraestrutura de Alta Conversão_`;
+            
+            let url = `https://wa.me/?text=${encodeURIComponent(texto)}`;
+            window.open(url, '_blank');
+            
+            sessao = []; 
+            atualizarSessao();
+        }
+
         function resetSistema() { if(confirm("DESEJA APAGAR TODO O BANCO DE DADOS?")) { localStorage.clear(); location.reload(); } }
-        function exportarBackup() { let a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify({logs, produtos})], {type: "application/json"})); a.download = "LOGPRO_BACKUP.json"; a.click(); }
-        function importarBackup(i) { let f = new FileReader(); f.onload = e => { let d = JSON.parse(e.target.result); logs = d.logs; produtos = d.produtos; localStorage.setItem('P95', JSON.stringify(produtos)); localStorage.setItem('L95', JSON.stringify(logs)); renderizarTudo(); alert("IMPORTADO COM SUCESSO!"); }; f.readAsText(i.files[0]); }
-    </script>
-</body>
-    </html>
-    
+        function exportarBackup() { tocarBip('sucesso'); let a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify({logs, produtos})], {type: "application/
