@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LOG-PRO v95 | FULL INTELLIGENCE</title>
+    <title>LOG-PRO v96 | SHARK EDITION</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root { --p: #00ff41; --s: #007aff; --bg: #000; --sf: #0a0a0a; --brd: #1a1a1a; --dg: #ff3b30; --w: #ffae00; }
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
@@ -33,14 +34,19 @@
         td { padding: 12px 5px; border-bottom: 1px solid #111; }
         .pill { padding: 4px 6px; border-radius: 4px; font-weight: 900; font-size: 7px; color: #000; }
         .alert-box { border: 2px solid var(--dg) !important; animation: blink 1s infinite; margin-bottom: 10px; padding: 10px; border-radius: 8px; color: var(--dg); font-weight: 800; }
+        #qrcode-container { background: #fff; padding: 10px; border-radius: 8px; display: inline-block; margin: 10px 0; }
         @keyframes blink { 50% { opacity: 0.4; } }
+
+        /* Estilo da Barra de Eficiência (Pilar 2) */
+        .eficiencia-bar { width: 100%; height: 6px; background: #111; border-radius: 3px; margin-top: 5px; overflow: hidden; }
+        .eficiencia-fill { height: 100%; background: var(--p); transition: 0.5s; }
     </style>
 </head>
 <body onload="inicializarApp()">
 
     <div id="tela-login" class="screen active-screen" style="justify-content:center; align-items:center; padding:40px;">
         <h1 style="font-family:'Orbitron'; color:var(--p); font-size:35px;">LOG-PRO</h1>
-        <p style="color:#555; font-size:10px; margin-bottom:40px;">v95 | JP DIAS - FULL INTEGRATED</p>
+        <p style="color:#555; font-size:10px; margin-bottom:40px;">v96 | SHARK INFRASTRUCTURE</p>
         <input type="password" id="pin-acesso" placeholder="PIN" style="text-align:center;">
         <button class="btn btn-p" onclick="realizarLogin()">ENTRAR</button>
     </div>
@@ -54,7 +60,14 @@
                 <div class="kpi-box"><span id="kpi-sai" style="color:var(--s)">0</span><small>SAI</small></div>
                 <div class="kpi-box"><span id="kpi-ava" style="color:var(--dg)">0</span><small>AVA</small></div>
             </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-gauge-high"></i> SAÚDE DO FLUXO (ROI)</h3>
+                <div id="metricas-fluxo"></div>
+            </div>
+
             <div id="container-alertas"></div>
+            
             <div class="card">
                 <h3><i class="fa-solid fa-database"></i> CADASTRO E BACKUP</h3>
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
@@ -67,13 +80,10 @@
                 <button class="btn btn-p" style="padding:10px; font-size:8px;" onclick="cadastrarManual()">SALVAR PRODUTO</button>
                 <button class="btn btn-d" style="margin-top:10px; padding:10px; font-size:8px;" onclick="resetSistema()">RESET TOTAL</button>
             </div>
+            
             <div class="card">
-                <h3><i class="fa-solid fa-boxes-packing"></i> FILA DE PICKING (SALDO ATUAL)</h3>
+                <h3><i class="fa-solid fa-boxes-packing"></i> FILA DE PICKING</h3>
                 <div id="fila-picking"></div>
-            </div>
-            <div class="card">
-                <h3><i class="fa-solid fa-clock-rotate-left"></i> ÚLTIMOS LOGS</h3>
-                <table><tbody id="tabela-logs"></tbody></table>
             </div>
         </div>
     </div>
@@ -82,11 +92,17 @@
         <header>
             <span>OPERADOR</span> 
             <div style="display:flex; gap:5px;">
-                <button onclick="gerarRomaneio()" class="btn-s" style="width:60px; height:25px; border:none; font-size:7px; padding:0;">ROMANEIO</button>
+                <button onclick="gerarRomaneioQR()" class="btn-s" style="width:60px; height:25px; border:none; font-size:7px; padding:0;">GERAR QR</button>
                 <button onclick="compartilharWhatsApp()" class="btn-p" style="width:60px; height:25px; border:none; font-size:7px; padding:0;"><i class="fa-brands fa-whatsapp"></i> ENVIAR</button>
             </div>
         </header>
         <div class="scroll-area">
+            <div id="modal-qr" class="card" style="display:none; text-align:center;">
+                <h3><i class="fa-solid fa-qrcode"></i> ESCANEIE PARA IMPORTAR</h3>
+                <div id="qrcode-output"></div>
+                <button class="btn btn-d" onclick="document.getElementById('modal-qr').style.display='none'">FECHAR</button>
+            </div>
+
             <div class="card">
                 <div id="reader-op" class="scanner-view"></div>
                 <button class="btn btn-p" id="btn-cam-op" onclick="controleCamera('reader-op','btn-cam-op',false)">ABRIR CÂMERA</button>
@@ -113,12 +129,13 @@
         <div class="scroll-area">
             <div class="card">
                 <div id="reader-mot" class="scanner-view"></div>
-                <button class="btn btn-s" id="btn-cam-mot" onclick="controleCamera('reader-mot','btn-cam-mot',true)">SCAN ROMANEIO</button>
+                <button class="btn btn-s" id="btn-cam-mot" onclick="controleCamera('reader-mot','btn-cam-mot',true)">SCAN QR OPERADOR</button>
             </div>
             <div id="card-romaneio" class="card" style="display:none; border-left:5px solid var(--p);">
-                <h2 id="romaneio-id"></h2>
+                <h2 id="romaneio-id">ROMANEIO CARREGADO</h2>
+                <div id="itens-rota" style="margin:10px 0; font-size:9px; color:#888;"></div>
                 <p id="info-gps" style="color:var(--p); margin:10px 0; font-size:10px;"></p>
-                <button class="btn btn-p" onclick="confirmarEntrega()">CONFIRMAR ENTREGA NO MAPA</button>
+                <button id="btn-confirmar-entrega" class="btn btn-p" onclick="confirmarEntrega()">CONFIRMAR ENTREGA GPS</button>
             </div>
         </div>
     </div>
@@ -135,14 +152,12 @@
         let sessao = [];
         let html5QrCode, isCameraOpen = false, currentGps = "";
 
-        // --- SISTEMA DE AUDIO NATIVO (Alta Performance) ---
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function tocarBip(tipo) {
             if (audioCtx.state === 'suspended') audioCtx.resume();
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
+            osc.connect(gain); gain.connect(audioCtx.destination);
             if (tipo === 'sucesso') {
                 osc.type = 'sine'; osc.frequency.setValueAtTime(800, audioCtx.currentTime);
                 gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
@@ -155,14 +170,7 @@
         }
 
         function inicializarApp() { renderizarTudo(); }
-        
-        function realizarLogin() { 
-            tocarBip('sucesso');
-            document.getElementById('tela-login').classList.remove('active-screen'); 
-            document.getElementById('nav-principal').style.display='flex'; 
-            navegar('tela-shark', document.querySelector('.nav-item')); 
-        }
-        
+        function realizarLogin() { tocarBip('sucesso'); document.getElementById('tela-login').classList.remove('active-screen'); document.getElementById('nav-principal').style.display='flex'; navegar('tela-shark', document.querySelector('.nav-item')); }
         function logout() { location.reload(); }
 
         function navegar(id, el) {
@@ -170,7 +178,7 @@
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-tab'));
             document.getElementById(id).classList.add('active-screen');
             el.classList.add('active-tab');
-            if(isCameraOpen) controleCamera(null, null, null); // Fecha a câmera ao navegar
+            if(isCameraOpen) controleCamera(null, null, null);
             renderizarTudo();
         }
 
@@ -180,7 +188,6 @@
                 html5QrCode = new Html5Qrcode(div);
                 html5QrCode.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, c => isMot ? handleMotorista(c) : handleOperador(c));
                 document.getElementById(btn).innerText = "PARAR"; isCameraOpen = true;
-                tocarBip('sucesso');
             } else if (isCameraOpen) {
                 html5QrCode.stop().then(() => { 
                     document.querySelectorAll('.scanner-view').forEach(v=>v.style.display='none'); 
@@ -191,7 +198,6 @@
         }
 
         function handleOperador(c) {
-            tocarBip('sucesso'); // Bip de leitura inicial
             if(!produtos[c]) {
                 tocarBip('erro');
                 let n = prompt("PRODUTO NÃO CADASTRADO!\nDIGITE O NOME:");
@@ -199,34 +205,65 @@
             }
             let t = document.getElementById('operacao-tipo').value;
             let saldo = calcularSaldo(produtos[c]);
-            
-            if(t !== 'ENTRADA' && saldo <= 0) { tocarBip('erro'); return alert("TRAVA HARD-LOCK: ESTOQUE ZERADO!"); }
-            
-            let q = prompt("QUANTIDADE PARA " + t + " (SALDO: " + saldo + "):", "1");
+            if(t !== 'ENTRADA' && saldo <= 0) { tocarBip('erro'); return alert("ESTOQUE ZERADO!"); }
+            let q = prompt("QTD PARA " + t + ":", "1");
             if(q && q > 0) {
-                if(t !== 'ENTRADA' && parseInt(q) > saldo) { tocarBip('erro'); return alert("ERRO: SALDO INSUFICIENTE!"); }
-                tocarBip('sucesso'); // Confirmação da ação
+                if(t !== 'ENTRADA' && parseInt(q) > saldo) { tocarBip('erro'); return alert("SALDO INSUFICIENTE!"); }
+                tocarBip('sucesso');
                 sessao.unshift({n: produtos[c], q: q, t: t});
                 registrarLog('OP', t, `${produtos[c]} (${c}) | QTD: ${q}`);
                 atualizarSessao();
-            } else {
-                tocarBip('erro'); // Cancelou ou digitou errado
             }
         }
 
-        function registrarAvaria() {
-            let c = prompt("BIPE O CÓDIGO DA AVARIA:");
-            if(!c || !produtos[c]) { tocarBip('erro'); return alert("PRODUTO NÃO LOCALIZADO!"); }
-            let saldo = calcularSaldo(produtos[c]);
-            if(saldo <= 0) { tocarBip('erro'); return alert("ESTOQUE ZERADO, NÃO HÁ O QUE AVARIAR!"); }
-            let q = prompt("QTD AVARIADA (MAX: "+saldo+"):");
-            if(q && q > 0 && q <= saldo) {
+        // --- PILAR 1: PONTE QR CODE (OPERADOR PARA MOTORISTA) ---
+        function gerarRomaneioQR() {
+            if(sessao.length === 0) { tocarBip('erro'); return alert("SESSÃO VAZIA!"); }
+            tocarBip('sucesso');
+            document.getElementById('modal-qr').style.display = 'block';
+            document.getElementById('qrcode-output').innerHTML = "";
+            // Compacta a sessão para caber no QR
+            let dadosReduzidos = sessao.map(i => `${i.n}:${i.q}`).join('|');
+            new QRCode(document.getElementById("qrcode-output"), { text: "LOGPRO:" + dadosReduzidos, width: 200, height: 200 });
+        }
+
+        function handleMotorista(c) {
+            if(c.startsWith("LOGPRO:")) {
                 tocarBip('sucesso');
-                registrarLog('OP', 'AVARIA', `${produtos[c]} (${c}) | QTD: ${q}`);
-                alert("AVARIA REGISTRADA!");
+                let dados = c.replace("LOGPRO:", "").split('|');
+                let html = "📦 <b>ITENS PARA ENTREGA:</b><br>";
+                dados.forEach(d => { html += `• ${d.replace(':',' - ')} UN<br>`; });
+                document.getElementById('itens-rota').innerHTML = html;
+                document.getElementById('card-romaneio').style.display='block';
+                
+                // Ativa GPS e Trava "Falso Positivo"
+                navigator.geolocation.getCurrentPosition(p => {
+                    currentGps = p.coords.latitude + "," + p.coords.longitude;
+                    document.getElementById('info-gps').innerText = "📍 GPS LOCALIZADO: " + currentGps;
+                    document.getElementById('btn-confirmar-entrega').style.opacity = "1";
+                }, () => { 
+                    tocarBip('erro'); 
+                    document.getElementById('info-gps').innerText = "❌ GPS BLOQUEADO - ATIVE PARA CONTINUAR";
+                    document.getElementById('btn-confirmar-entrega').style.opacity = "0.3";
+                });
             } else {
                 tocarBip('erro');
+                alert("QR CODE INVÁLIDO!");
             }
+        }
+
+        function confirmarEntrega() {
+            if(!currentGps) { tocarBip('erro'); return alert("ERRO: GPS OBRIGATÓRIO PARA ENTREGA!"); }
+            tocarBip('sucesso');
+            registrarLog('MOT', 'ENTREGA', 'GPS: ' + currentGps);
+            alert("ENTREGA CONFIRMADA COM SUCESSO!");
+            document.getElementById('card-romaneio').style.display='none';
+        }
+
+        function registrarLog(o, a, i) {
+            logs.unshift({t: new Date().toLocaleTimeString(), o, a, i});
+            localStorage.setItem('L95', JSON.stringify(logs.slice(0, 1000)));
+            renderizarTudo();
         }
 
         function calcularSaldo(nome) {
@@ -240,36 +277,12 @@
             return s;
         }
 
-        function handleMotorista(c) {
-            tocarBip('sucesso');
-            document.getElementById('card-romaneio').style.display='block';
-            document.getElementById('romaneio-id').innerText="ROMANEIO: " + c;
-            navigator.geolocation.getCurrentPosition(p => {
-                currentGps = p.coords.latitude + "," + p.coords.longitude;
-                document.getElementById('info-gps').innerText = "📍 LOCALIZAÇÃO GPS CAPTURADA: " + currentGps;
-            }, () => { tocarBip('erro'); alert("POR FAVOR, ATIVE O GPS!"); });
-        }
-
-        function confirmarEntrega() {
-            if(!currentGps) { tocarBip('erro'); return alert("AGUARDANDO GPS..."); }
-            tocarBip('sucesso');
-            registrarLog('MOT', 'ENTREGA', 'GPS: ' + currentGps);
-            alert("ROTA FINALIZADA COM SUCESSO!");
-            document.getElementById('card-romaneio').style.display='none';
-        }
-
-        function registrarLog(o, a, i) {
-            logs.unshift({t: new Date().toLocaleTimeString(), o, a, i});
-            localStorage.setItem('L95', JSON.stringify(logs.slice(0, 1000)));
-            renderizarTudo();
-        }
-
         function renderizarTudo() {
-            let h="", ent=0, sep=0, sai=0, ava=0, fila={}, alertas="";
+            let h="", ent=0, sep=0, sai=0, ava=0, fila={};
             logs.forEach(l => {
                 let q = parseInt(l.i.split('QTD: ')[1]) || 0;
                 let n = l.i.split(' (')[0].split(' |')[0];
-                fila[n] = fila[n] || 0;
+                fila[n] = (fila[n] || 0);
                 if(l.a==='ENTRADA'){ ent+=q; fila[n]+=q; }
                 else if(l.a==='SEPARACAO'){ sep+=q; fila[n]-=q; }
                 else if(l.a==='SAIDA'){ sai+=q; }
@@ -280,56 +293,54 @@
             document.getElementById('tabela-logs').innerHTML = h;
             document.getElementById('kpi-ent').innerText = ent; document.getElementById('kpi-sep').innerText = sep;
             document.getElementById('kpi-sai').innerText = sai; document.getElementById('kpi-ava').innerText = ava;
-            let fh = "";
+
+            // --- PILAR 2: MÉTRICAS DE FLUXO (ROI) ---
+            let totalAcoes = ent + sep + sai + ava;
+            let percSaida = totalAcoes > 0 ? (sai / ent * 100).toFixed(0) : 0;
+            document.getElementById('metricas-fluxo').innerHTML = `
+                <div style="margin-bottom:10px;">
+                    <div style="display:flex; justify-content:space-between; font-size:8px;"><span>TAXA DE EXPEDIÇÃO: ${percSaida}%</span></div>
+                    <div class="eficiencia-bar"><div class="eficiencia-fill" style="width:${percSaida}%"></div></div>
+                </div>`;
+
+            let fh = "", alertas = "";
             for(let k in fila) {
                 if(fila[k] > 0) {
                     fh += `<div style="background:#111; padding:10px; border-radius:8px; margin-bottom:5px; display:flex; justify-content:space-between;"><span>${k}</span><b style="color:var(--w)">${fila[k]} UN</b></div>`;
                     if(fila[k] < 5) alertas += `<div class="alert-box">⚠️ ESTOQUE CRÍTICO: ${k} (${fila[k]} UN)</div>`;
                 }
             }
-            document.getElementById('fila-picking').innerHTML = fh || '<p style="text-align:center; color:#444;">NENHUM SALDO PENDENTE</p>';
+            document.getElementById('fila-picking').innerHTML = fh || '<p style="text-align:center; color:#444;">VAZIO</p>';
             document.getElementById('container-alertas').innerHTML = alertas;
         }
 
         function cadastrarManual() {
             let e = document.getElementById('cad-ean').value;
             let n = document.getElementById('cad-nome').value;
-            if(e && n) { 
-                produtos[e] = n; localStorage.setItem('P95', JSON.stringify(produtos)); 
-                renderizarTudo(); tocarBip('sucesso'); alert("CADASTRADO!"); 
-                document.getElementById('cad-ean').value=""; document.getElementById('cad-nome').value=""; 
-            } else { tocarBip('erro'); }
+            if(e && n) { produtos[e] = n; localStorage.setItem('P95', JSON.stringify(produtos)); tocarBip('sucesso'); renderizarTudo(); }
         }
 
         function processarManual() { let e = document.getElementById('ean-manual').value; if(e) handleOperador(e); document.getElementById('ean-manual').value=""; }
-        
         function atualizarSessao() { let h=""; sessao.forEach(x=> h += `<div style="padding:8px; border-bottom:1px solid #222; font-size:9px; color:#aaa;">${x.n} - ${x.q} UN [${x.t}]</div>`); document.getElementById('lista-sessao').innerHTML = h; }
         
-        // Mantido o gerador original
-        function gerarRomaneio() { 
-            if(sessao.length===0) { tocarBip('erro'); return alert("SESSÃO VAZIA!"); }
-            tocarBip('sucesso');
-            let r="ROMANEIO DE CARGA\n\n"; sessao.forEach(x=>r+=`${x.n}: ${x.q} UN\n`); alert(r); sessao=[]; atualizarSessao(); 
-        }
-
-        // --- NOVA FUNÇÃO: COMPARTILHAR WHATSAPP ---
         function compartilharWhatsApp() {
-            if(sessao.length === 0) { tocarBip('erro'); return alert("SESSÃO VAZIA! Registre itens primeiro."); }
-            tocarBip('sucesso');
-            
-            let data = new Date().toLocaleString('pt-BR');
-            let texto = `📦 *ROMANEIO DE CARGA | LOG-PRO v95*\n⏱️ *Data:* ${data}\n\n*ITENS PROCESSADOS:*\n`;
-            
-            sessao.forEach(x => { texto += `✅ ${x.n}: *${x.q} UN* (${x.t})\n`; });
-            
-            texto += `\n⚙️ _Infraestrutura de Alta Conversão_`;
-            
-            let url = `https://wa.me/?text=${encodeURIComponent(texto)}`;
-            window.open(url, '_blank');
-            
-            sessao = []; 
-            atualizarSessao();
+            if(sessao.length === 0) return alert("VAZIO!");
+            let texto = `📦 *ROMANEIO LOG-PRO*\n\n`;
+            sessao.forEach(x => { texto += `✅ ${x.n}: *${x.q} UN*\n`; });
+            window.open(`https://wa.me/?text=${encodeURIComponent(texto)}`, '_blank');
+            sessao = []; atualizarSessao();
         }
 
-        function resetSistema() { if(confirm("DESEJA APAGAR TODO O BANCO DE DADOS?")) { localStorage.clear(); location.reload(); } }
-        function exportarBackup() { tocarBip('sucesso'); let a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify({logs, produtos})], {type: "application/
+        function registrarAvaria() {
+            let c = prompt("EAN DA AVARIA:");
+            if(!c || !produtos[c]) return;
+            let q = prompt("QTD:");
+            if(q > 0) { registrarLog('OP', 'AVARIA', `${produtos[c]} (${c}) | QTD: ${q}`); }
+        }
+
+        function exportarBackup() { let a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify({logs, produtos})], {type: "application/json"})); a.download = "LOGPRO_V96.json"; a.click(); }
+        function importarBackup(i) { let f = new FileReader(); f.onload = e => { let d = JSON.parse(e.target.result); logs = d.logs; produtos = d.produtos; localStorage.setItem('P95', JSON.stringify(produtos)); localStorage.setItem('L95', JSON.stringify(logs)); renderizarTudo(); alert("OK!"); }; f.readAsText(i.files[0]); }
+        function resetSistema() { if(confirm("APAGAR TUDO?")) { localStorage.clear(); location.reload(); } }
+    </script>
+</body>
+</html>
