@@ -315,4 +315,38 @@
         function cadastrarManual() {
             let e = document.getElementById('cad-ean').value;
             let n = document.getElementById('cad-nome').value;
-            if(e && n) { produtos[e]
+            if(e && n) { produtos[e] = n; localStorage.setItem('P97', JSON.stringify(produtos)); tocarBip('sucesso'); alert("CADASTRADO!"); document.getElementById('cad-ean').value=""; document.getElementById('cad-nome').value=""; renderizarTudo(); }
+        }
+
+        function processarManual() { let e = document.getElementById('ean-manual').value; if(e) handleOperador(e); document.getElementById('ean-manual').value=""; }
+        
+        function atualizarSessao() { 
+            let h=""; 
+            sessao.forEach(x=> h += `<div style="padding:8px; border-bottom:1px solid #222; font-size:8px; color:#aaa; display:flex; justify-content:space-between;"><span>${x.n} x${x.q}</span> <span>${x.t}</span></div>`); 
+            document.getElementById('lista-sessao').innerHTML = h || '<p style="color:#333; text-align:center;">VAZIO</p>';
+            document.getElementById('btn-limpar-sessao').style.display = sessao.length > 0 ? 'block' : 'none';
+        }
+
+        function limparSessao() { if(confirm("LIMPAR LISTA ATUAL?")) { sessao = []; localStorage.removeItem('SESSAO_TEMP'); atualizarSessao(); } }
+        
+        function compartilharWhatsApp() {
+            if(sessao.length === 0) return alert("VAZIO!");
+            let t = `📦 *LOGPRO REPORT*\n\n`;
+            sessao.forEach(x => { t += `• ${x.n}: *${x.q} UN* [${x.t}]\n`; });
+            window.open(`https://wa.me/?text=${encodeURIComponent(t)}`, '_blank');
+        }
+
+        function registrarAvaria() {
+            let c = prompt("EAN DA AVARIA:");
+            if(!c || !produtos[c]) return;
+            let q = prompt("QTD AVARIADA:");
+            let m = prompt("MOTIVO DA AVARIA:");
+            if(q > 0) { registrarLog('OP', 'AVARIA', `${produtos[c]} (${c}) | QTD: ${q} | MOTIVO: ${m}`); tocarBip('erro'); alert("AVARIA REGISTRADA"); }
+        }
+
+        function resetSistema() { if(confirm("WIPE TOTAL? ISSO APAGARÁ TUDO!")) { localStorage.clear(); location.reload(); } }
+        function exportarBackup() { let a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify({logs, produtos})], {type: "application/json"})); a.download = "LOGPRO_V97.json"; a.click(); }
+        function importarBackup(i) { let f = new FileReader(); f.onload = e => { let d = JSON.parse(e.target.result); logs = d.logs; produtos = d.produtos; localStorage.setItem('P97', JSON.stringify(produtos)); localStorage.setItem('L97', JSON.stringify(logs)); renderizarTudo(); alert("DATABASE RESTORED!"); }; f.readAsText(i.files[0]); }
+    </script>
+</body>
+</html>
