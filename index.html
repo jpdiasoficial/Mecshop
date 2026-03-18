@@ -8,11 +8,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="https://unpkg.com/html5-qrcode"></script>
     <style>
-        :root { --p: #00ff41; --s: #007aff; --bg: #000; --sf: #0a0a0a; --brd: #1a1a1a; --dg: #ff3b30; }
+        :root { --p: #00ff41; --s: #007aff; --bg: #000; --sf: #0a0a0a; --brd: #1a1a1a; --dg: #ff3b30; --wpp: #25D366; }
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; font-size: 11px; height: 100vh; overflow: hidden; text-transform: uppercase; }
         
-        /* HEADER */
         header { padding: 15px; border-bottom: 2px solid var(--brd); display: flex; justify-content: space-between; align-items: center; background: #000; z-index: 101; position: relative; }
         .logo-main { font-family: 'Orbitron'; color: var(--p); font-size: 18px; font-weight: 900; letter-spacing: 2px; }
         .logo-sub { font-family: 'Orbitron'; color: #fff; font-size: 8px; opacity: 0.5; display: block; letter-spacing: 2px; }
@@ -21,7 +20,6 @@
         .active-screen { display: flex !important; }
         .scroll-area { flex: 1; overflow-y: auto; padding: 15px 15px 160px 15px; }
         
-        /* ASSINATURA JP DIAS FIXA */
         .dev-credit { position: fixed; bottom: 70px; width: 100%; text-align: center; font-family: 'Orbitron'; font-size: 8px; color: #444; letter-spacing: 2px; padding: 10px; background: rgba(0,0,0,0.95); z-index: 99; border-top: 1px solid #111; }
         .dev-credit b { color: var(--p); }
 
@@ -33,27 +31,31 @@
         input, select { width: 100%; padding: 12px; background: #050505; border: 1px solid #222; color: #fff; border-radius: 8px; font-size: 11px; margin-bottom: 8px; font-weight: 700; border-left: 2px solid transparent; transition: 0.2s; }
         input:focus, select:focus { border-left: 2px solid var(--p); background: #111; }
 
-        .btn { width: 100%; padding: 14px; border: none; border-radius: 10px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        .btn { width: 100%; padding: 14px; border: none; border-radius: 10px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; letter-spacing: 1px; transition: 0.2s; }
+        .btn:active { transform: scale(0.98); }
         .btn-p { background: var(--p); color: #000; box-shadow: 0 0 10px rgba(0, 255, 65, 0.1); }
         .btn-s { background: var(--s); color: #fff; }
         .btn-d { background: var(--dg); color: #fff; }
+        .btn-wpp { background: var(--wpp); color: #000; }
+        .btn-outline { background: transparent; border: 1px solid #333; color: #fff; }
 
-        /* KPIS */
         .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 15px; }
         .kpi-box { background: #0a0a0a; border: 1px solid #222; padding: 10px 5px; border-radius: 8px; text-align: center; }
         .kpi-box span { font-family: 'Orbitron'; font-size: 14px; color: var(--p); display: block; margin-bottom: 2px; }
         .kpi-box small { font-size: 7px; color: #666; font-weight: 800; letter-spacing: 1px; }
         
-        /* ALERTA ESTOQUE */
         .low-stock { color: var(--dg) !important; animation: blink 0.8s infinite; }
         @keyframes blink { 50% { opacity: 0.3; } }
 
         .bottom-nav { display: none; background: #000; border-top: 2px solid var(--brd); position: fixed; bottom: 0; width: 100%; height: 70px; z-index: 100; }
-        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #444; font-size: 8px; font-weight: 800; gap: 4px; cursor: pointer; }
+        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #444; font-size: 8px; font-weight: 800; gap: 4px; cursor: pointer; transition: 0.3s; }
         .active-tab { color: var(--p); border-top: 3px solid var(--p); background: #050505; }
         
         .item-row { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #111; background: #050505; margin-bottom: 4px; border-radius: 6px; }
         .status-tag { font-size: 7px; padding: 4px 8px; border-radius: 4px; font-weight: 900; text-transform: uppercase; display: inline-block; margin-bottom: 8px; }
+        
+        .btn-small { padding: 6px 10px; font-size: 8px; border-radius: 4px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     </style>
 </head>
 <body onload="inicializarApp()">
@@ -81,14 +83,24 @@
                 <div class="kpi-box"><span id="adm-ava" style="color:var(--dg)">0</span><small>AVARIA</small></div>
                 <div class="kpi-box"><span id="adm-rta" style="color:var(--s)">0</span><small>ROTAS</small></div>
             </div>
+
+            <div class="card grid-2" style="padding:10px;">
+                <button class="btn btn-outline" style="font-size:8px;" onclick="exportarRelatorio()"><i class="fa-solid fa-file-csv"></i> EXPORTAR DB</button>
+                <button class="btn btn-d" style="font-size:8px;" onclick="zerarBanco()"><i class="fa-solid fa-trash-can"></i> ZERAR DADOS</button>
+            </div>
+
             <div class="card">
-                <h3><i class="fa-solid fa-barcode"></i> NOVO SKU</h3>
+                <h3><i class="fa-solid fa-barcode"></i> CADASTRAR / EDITAR SKU</h3>
                 <input type="text" id="add-ean" placeholder="EAN OU CÓDIGO">
                 <input type="text" id="add-nome" placeholder="NOME DO PRODUTO">
-                <button class="btn btn-p" onclick="cadastrarProduto()">SALVAR NO BANCO</button>
+                <button class="btn btn-p" onclick="cadastrarProduto()">SALVAR PRODUTO</button>
+                
+                <h3 style="margin-top:20px;"><i class="fa-solid fa-boxes-stacked"></i> LISTA DE SKUS</h3>
+                <div id="lista-skus" style="max-height: 150px; overflow-y:auto; border-top:1px solid #222; padding-top:10px;"></div>
             </div>
+
             <div class="card">
-                <h3><i class="fa-solid fa-list-check"></i> LOGS DE MOVIMENTAÇÃO</h3>
+                <h3><i class="fa-solid fa-list-check"></i> LOGS EM TEMPO REAL</h3>
                 <div id="log-global-list"></div>
             </div>
         </div>
@@ -102,20 +114,21 @@
         <div class="scroll-area">
             <div class="card">
                 <div id="reader-wms" style="width:100%; min-height:180px; background:#000; border:2px solid var(--p); display:none; margin-bottom:10px; border-radius:8px; overflow:hidden;"></div>
-                <button class="btn btn-p" id="btn-cam-wms" onclick="toggleScanner()"><i class="fa-solid fa-camera"></i> SCANNER CAMERA</button>
+                <button class="btn btn-p" id="btn-cam-wms" onclick="toggleScanner()"><i class="fa-solid fa-camera"></i> LIGAR SCANNER</button>
             </div>
             <div class="card">
-                <h3>REGISTRAR ITEM</h3>
+                <h3>REGISTRAR MOVIMENTO</h3>
                 <select id="mov-tipo">
                     <option value="ENTRADA">📥 ENTRADA DE ESTOQUE</option>
                     <option value="SEPARACAO">📦 SEPARAÇÃO P/ ROTA</option>
-                    <option value="AVARIA">⚠️ AVARIA</option>
+                    <option value="AVARIA">⚠️ LANÇAR AVARIA</option>
                 </select>
-                <input type="text" id="mov-ean" placeholder="EAN OU BIP">
-                <button class="btn btn-s" onclick="processarMovimento()">CONFIRMAR REGISTRO</button>
+                <input type="text" id="mov-ean" placeholder="EAN OU BIP MANUAL" onkeypress="if(event.key==='Enter') processarMovimento()">
+                <button class="btn btn-s" onclick="processarMovimento()"><i class="fa-solid fa-check"></i> CONFIRMAR REGISTRO</button>
             </div>
             <div class="card">
                 <h3>FECHAR ROMANEIO</h3>
+                <p style="font-size:9px; color:#888; margin-bottom:10px;">ITENS AGUARDANDO ROTA: <b id="qtd-separados" style="color:var(--p)">0</b></p>
                 <input type="text" id="mot-rota" placeholder="NOME DO MOTORISTA">
                 <button class="btn btn-d" onclick="fecharRota()"><i class="fa-solid fa-truck-ramp-box"></i> GERAR CARGA</button>
             </div>
@@ -139,10 +152,32 @@
     </div>
 
     <script>
-        // BANCO DE DADOS LOCAL - PERSISTÊNCIA TOTAL
+        // BANCO DE DADOS LOCAL 
         let db = JSON.parse(localStorage.getItem('LOGPRO_FINAL') || '{"produtos":{}, "logs":[], "rotas":[]}');
         let scannerAtivo = false;
         let html5QrCode;
+
+        // INTELIGÊNCIA TEMPO REAL: Atualiza telas se outra aba modificar o LocalStorage
+        window.addEventListener('storage', () => {
+            db = JSON.parse(localStorage.getItem('LOGPRO_FINAL') || '{"produtos":{}, "logs":[], "rotas":[]}');
+            render();
+        });
+
+        // BEEP INTELIGENTE DO WMS (AudioContext Nativo)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function beep() {
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.type = 'sine';
+            oscillator.frequency.value = 800;
+            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.1);
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 0.1);
+        }
 
         function inicializarApp() { render(); }
 
@@ -153,7 +188,6 @@
             document.getElementById('bot-nav').style.display = 'flex';
             document.getElementById('dev-footer').style.display = 'block';
             
-            // Controle de visualização de abas
             document.getElementById('nv-adm').style.display = (role==='admin') ? 'flex' : 'none';
             document.getElementById('nv-op').style.display = (role!=='motorista') ? 'flex' : 'none';
             document.getElementById('nv-mt').style.display = (role!=='operador') ? 'flex' : 'none';
@@ -171,26 +205,49 @@
             el.classList.add('active-tab');
         }
 
+        // FUNÇÕES ADMIN AVANÇADAS
         function cadastrarProduto() {
             let e = document.getElementById('add-ean').value.trim();
             let n = document.getElementById('add-nome').value.trim();
             if(e && n) { 
                 db.produtos[e] = n; 
                 save(); 
-                alert("PRODUTO CADASTRADO!"); 
                 document.getElementById('add-ean').value=''; 
                 document.getElementById('add-nome').value=''; 
-            } else {
-                alert("PREENCHA EAN E NOME.");
+            } else alert("PREENCHA EAN E NOME.");
+        }
+
+        function excluirProduto(ean) {
+            if(confirm("APAGAR SKU: " + db.produtos[ean] + "?")) {
+                delete db.produtos[ean]; save();
             }
         }
 
+        function zerarBanco() {
+            if(confirm("ATENÇÃO! ISSO APAGARÁ TODO O ESTOQUE E ROTAS. CONFIRMAR?")) {
+                db = {"produtos":{}, "logs":[], "rotas":[]};
+                save(); alert("SISTEMA RESETADO!");
+            }
+        }
+
+        function exportarRelatorio() {
+            let csv = "ID,TIPO,EAN,NOME,QTD,ROTA\n";
+            db.logs.forEach(l => { csv += `${l.id},${l.tipo},${l.ean},${l.nome},${l.qtd},${l.rotaId||'ESTOQUE'}\n`; });
+            let blob = new Blob([csv], { type: 'text/csv' });
+            let a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = `LOGPRO_DADOS_${new Date().getTime()}.csv`;
+            a.click();
+        }
+
+        // FUNÇÕES WMS AVANÇADAS
         function processarMovimento(eanLido = null) {
             let ean = (eanLido || document.getElementById('mov-ean').value).trim();
             if(!ean) return;
+            beep(); // Feedback Sonoro Imediato
             
             if(!db.produtos[ean]) {
-                let n = prompt("EAN NÃO CADASTRADO! DIGITE O NOME DO PRODUTO:");
+                let n = prompt("NOVO EAN DETECTADO. NOME DO PRODUTO:");
                 if(n) db.produtos[ean] = n; else return;
             }
             
@@ -206,6 +263,7 @@
                 });
                 save(); 
                 document.getElementById('mov-ean').value = "";
+                document.getElementById('mov-ean').focus();
             }
         }
 
@@ -222,24 +280,41 @@
             
             save(); 
             document.getElementById('mot-rota').value = "";
-            alert(`ROMANEIO ${idR} GERADO PARA ${mot}!`);
+            alert(`ROMANEIO ${idR} GERADO COM SUCESSO!`);
         }
 
-        function concluirEntrega(id) {
+        // INTEGRAÇÃO WHATSAPP MOTORISTA
+        function confirmarEntregaWPP(id) {
             if(confirm("CONFIRMAR ENTREGA DESTA CARGA?")) {
                 let r = db.rotas.find(x => x.id === id);
                 r.status = 'ENTREGUE';
                 save();
+                
+                let texto = `*COMPROVANTE DE ENTREGA - LOG-PRO*%0A*Carga:* ${r.id}%0A*Motorista:* ${r.mot}%0A*Status:* ✅ ENTREGUE%0A*Data:* ${r.data}%0A%0A*Itens:*%0A`;
+                r.itens.forEach(i => texto += `- ${i.nome} (${i.qtd}x)%0A`);
+                texto += `%0A_Sistema Desenvolvido por JP Dias_`;
+                
+                window.open(`https://api.whatsapp.com/send?text=${texto}`, '_blank');
             }
         }
 
         function render() {
-            let est = 0, ava = 0, logsH = "", rotasH = "";
+            let est = 0, ava = 0, sepCount = 0;
+            let logsH = "", rotasH = "", skusH = "";
             
-            // Cálculos Dinâmicos
+            // Render SKUs (Admin)
+            Object.keys(db.produtos).forEach(k => {
+                skusH += `<div class="item-row">
+                    <div><b>${k}</b><br><small style="color:#aaa">${db.produtos[k]}</small></div>
+                    <button class="btn btn-d btn-small" onclick="excluirProduto('${k}')"><i class="fa-solid fa-x"></i></button>
+                </div>`;
+            });
+            if(document.getElementById('lista-skus')) document.getElementById('lista-skus').innerHTML = skusH || "<small>NENHUM SKU.</small>";
+
+            // Cálculos e Logs Dinâmicos
             db.logs.forEach(l => {
                 if(l.tipo === 'ENTRADA') est += l.qtd;
-                if(l.tipo === 'SEPARACAO') est -= l.qtd;
+                if(l.tipo === 'SEPARACAO') { est -= l.qtd; if(!l.rotaId) sepCount += l.qtd; }
                 if(l.tipo === 'AVARIA') ava += l.qtd;
                 
                 let cor = l.tipo === 'ENTRADA' ? 'var(--p)' : (l.tipo === 'AVARIA' ? 'var(--dg)' : 'var(--s)');
@@ -249,37 +324,35 @@
                 </div>`;
             });
 
-            // Atualiza Dashboard Admin
+            // WMS Info
+            if(document.getElementById('qtd-separados')) document.getElementById('qtd-separados').innerText = sepCount;
+
+            // Admin Dash
             if(document.getElementById('adm-sku')) {
                 document.getElementById('adm-sku').innerText = Object.keys(db.produtos).length;
                 let elEst = document.getElementById('adm-est');
                 elEst.innerText = est;
-                
-                // Inteligência: Piscar se estoque menor que 5
                 if(est < 5 && est > 0) elEst.classList.add('low-stock'); else elEst.classList.remove('low-stock');
-                
                 document.getElementById('adm-ava').innerText = ava;
                 document.getElementById('adm-rta').innerText = db.rotas.filter(r=>r.status==='EM ROTA').length;
                 document.getElementById('log-global-list').innerHTML = logsH || "<p style='text-align:center;color:#444;font-size:9px;'>SEM MOVIMENTAÇÕES</p>";
             }
 
-            // Atualiza Tela Motorista
+            // Rotas Motorista
             db.rotas.forEach(r => {
-                let bgTag = r.status === 'ENTREGUE' ? '#222' : 'var(--s)';
-                let corTag = r.status === 'ENTREGUE' ? '#666' : '#fff';
-                
-                rotasH += `<div class="card" style="border-color:${r.status==='ENTREGUE'?'#111':'var(--brd)'}">
-                    <span class="status-tag" style="background:${bgTag}; color:${corTag}">${r.status}</span>
+                let isEntregue = r.status === 'ENTREGUE';
+                rotasH += `<div class="card" style="border-color:${isEntregue?'#111':'var(--brd)'}">
+                    <span class="status-tag" style="background:${isEntregue?'#222':'var(--s)'}; color:${isEntregue?'#666':'#fff'}">${r.status}</span>
                     <h3 style="margin-top:0;">CARGA ${r.id}</h3>
                     <p style="font-size:9px; color:#888; margin-bottom:12px;">MOT: <b style="color:#ccc">${r.mot}</b> | DATA: ${r.data}</p>
                     <div style="margin-bottom:15px; border-top:1px dashed #222; padding-top:10px; font-size:10px; color:#aaa; line-height:1.6;">
                         ${r.itens.map(i => `• ${i.nome} <b style="color:#fff">(${i.qtd}x)</b>`).join('<br>')}
                     </div>
-                    ${r.status === 'EM ROTA' ? `<button class="btn btn-p" onclick="concluirEntrega('${r.id}')"><i class="fa-solid fa-check-double"></i> CONFIRMAR ENTREGA</button>` : `<p style="text-align:center; color:#444; font-weight:900; font-family:'Orbitron'; font-size:10px;">CARGA FINALIZADA</p>`}
+                    ${!isEntregue ? `<button class="btn btn-wpp" onclick="confirmarEntregaWPP('${r.id}')"><i class="fa-brands fa-whatsapp"></i> ENTREGAR E AVISAR</button>` : `<p style="text-align:center; color:#444; font-weight:900; font-family:'Orbitron'; font-size:10px;">✅ FINALIZADA</p>`}
                 </div>`;
             });
             if(document.getElementById('lista-entregas')) {
-                document.getElementById('lista-entregas').innerHTML = rotasH || "<p style='text-align:center;color:#444;font-size:9px;margin-top:20px;'>NENHUMA CARGA ATRIBUÍDA</p>";
+                document.getElementById('lista-entregas').innerHTML = rotasH || "<p style='text-align:center;color:#444;font-size:9px;margin-top:20px;'>NENHUMA CARGA</p>";
             }
         }
 
@@ -298,7 +371,7 @@
                 html5QrCode.stop().then(() => { 
                     document.getElementById('reader-wms').style.display='none'; 
                     scannerAtivo = false; 
-                    document.getElementById('btn-cam-wms').innerHTML = '<i class="fa-solid fa-camera"></i> SCANNER CAMERA'; 
+                    document.getElementById('btn-cam-wms').innerHTML = '<i class="fa-solid fa-camera"></i> LIGAR SCANNER'; 
                     document.getElementById('btn-cam-wms').classList.replace('btn-d', 'btn-p');
                 });
             }
