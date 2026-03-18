@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LOG-PRO v107 | SHARK INTELLIGENCE</title>
+    <title>LOG-PRO v108 | SHARK INTELLIGENCE</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="https://unpkg.com/html5-qrcode"></script>
@@ -13,104 +13,114 @@
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; font-size: 11px; height: 100vh; overflow: hidden; text-transform: uppercase; }
         .screen { display: none; height: 100vh; flex-direction: column; }
         .active-screen { display: flex !important; }
-        header { padding: 15px; border-bottom: 2px solid var(--brd); display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron'; background: #000; }
-        .scroll-area { flex: 1; overflow-y: auto; padding: 15px 15px 100px 15px; }
+        
+        header { padding: 15px; border-bottom: 2px solid var(--brd); display: flex; justify-content: space-between; align-items: center; background: #000; }
+        .logo-text { font-family: 'Orbitron'; font-weight: 900; color: var(--p); letter-spacing: 2px; }
+        .logo-text span { color: #fff; font-size: 8px; margin-left: 5px; opacity: 0.5; }
+
+        .scroll-area { flex: 1; overflow-y: auto; padding: 15px 15px 120px 15px; }
         .card { background: var(--sf); border: 1px solid var(--brd); border-radius: 12px; padding: 15px; margin-bottom: 15px; position: relative; }
         h3 { font-family: 'Orbitron'; font-size: 9px; color: var(--p); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; border-left: 3px solid var(--p); padding-left: 8px; }
+        
         input, select { width: 100%; padding: 12px; background: #050505; border: 1px solid #222; color: #fff; border-radius: 8px; font-size: 11px; margin-bottom: 8px; font-weight: 700; }
         .btn { width: 100%; padding: 14px; border: none; border-radius: 10px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; transition: 0.2s; }
         .btn-p { background: var(--p); color: #000; }
         .btn-s { background: var(--s); color: #fff; }
         .btn-d { background: var(--dg); color: #fff; }
         .btn-logout { background: none; border: 1px solid var(--dg); color: var(--dg); padding: 5px 10px; border-radius: 5px; font-size: 8px; font-family: 'Orbitron'; }
+        
         .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 15px; }
         .kpi-box { background: #0a0a0a; border: 1px solid #222; padding: 10px 5px; border-radius: 8px; text-align: center; }
         .kpi-box span { font-family: 'Orbitron'; font-size: 14px; color: var(--p); display: block; }
-        .bottom-nav { display: none; background: #000; border-top: 2px solid var(--brd); position: fixed; bottom: 0; width: 100%; height: 70px; z-index: 100; }
+        
+        .bottom-nav { display: none; background: #000; border-top: 2px solid var(--brd); position: fixed; bottom: 0; width: 100%; height: 70px; z-index: 100; padding-bottom: 15px; }
         .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #444; font-size: 8px; font-weight: 800; gap: 4px; }
         .active-tab { color: var(--p); border-top: 3px solid var(--p); background: #050505; }
+        
+        .dev-footer { position: fixed; bottom: 70px; width: 100%; text-align: center; font-family: 'Orbitron'; font-size: 7px; color: #333; letter-spacing: 2px; padding: 5px 0; background: rgba(0,0,0,0.8); z-index: 90; pointer-events: none; }
+        .dev-footer b { color: var(--p); }
+
         .item-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #111; background: #050505; margin-bottom: 2px; border-radius: 5px; }
-        .status-badge { font-size: 7px; padding: 2px 5px; border-radius: 3px; font-weight: 900; }
     </style>
 </head>
 <body onload="inicializarApp()">
 
     <div id="tela-login" class="screen active-screen" style="justify-content:center; padding:40px;">
-        <h1 style="font-family:'Orbitron'; color:var(--p); text-align:center; font-size:40px;">SHARK</h1>
-        <p style="color:#555; font-size:9px; text-align:center; margin-bottom:40px; letter-spacing:3px;">INTEL v107</p>
+        <div style="text-align:center; margin-bottom:30px;">
+            <h1 style="font-family:'Orbitron'; color:var(--p); font-size:45px; line-height:1;">LOG-PRO</h1>
+            <p style="color:#555; font-size:9px; letter-spacing:5px;">SHARK INTELLIGENCE</p>
+        </div>
         <button class="btn btn-p" onclick="login('shark')" style="margin-bottom:10px;">👑 ADMIN MASTER</button>
         <button class="btn btn-s" onclick="login('operador')" style="margin-bottom:10px;">📦 OPERADOR WMS</button>
         <button class="btn btn-d" onclick="login('motorista')">🚚 MOTORISTA ROTA</button>
+        <p style="text-align:center; font-family:'Orbitron'; font-size:7px; color:#333; margin-top:30px; letter-spacing:2px;">ENGINEERED BY <b>JP DIAS</b></p>
     </div>
 
     <div id="tela-shark" class="screen">
-        <header><span>SHARK COMMAND</span> <button class="btn-logout" onclick="logout()">SAIR</button></header>
+        <header>
+            <div class="logo-text">LOG-PRO <span>v108</span></div>
+            <button class="btn-logout" onclick="logout()">SAIR</button>
+        </header>
         <div class="scroll-area">
             <div class="kpi-grid">
                 <div class="kpi-box"><span id="sk-inv">0</span><small>SKUS</small></div>
-                <div class="kpi-box"><span id="sk-est">0</span><small>SALDO</small></div>
+                <div class="kpi-box"><span id="sk-est">0</span><small>ESTQ</small></div>
                 <div class="kpi-box"><span id="sk-ava" style="color:var(--dg)">0</span><small>AVA</small></div>
                 <div class="kpi-box"><span id="sk-rta" style="color:var(--s)">0</span><small>ROTAS</small></div>
             </div>
-
             <div class="card">
-                <h3><i class="fa-solid fa-plus-circle"></i> GESTÃO DE SKU</h3>
+                <h3><i class="fa-solid fa-plus-circle"></i> NOVO SKU</h3>
                 <input type="text" id="sk-ean" placeholder="EAN/CÓDIGO">
                 <input type="text" id="sk-nome" placeholder="NOME DO PRODUTO">
                 <div style="display:flex; gap:5px;">
                     <button class="btn btn-p" onclick="sharkSaveSku()">SALVAR</button>
-                    <button class="btn btn-d" onclick="sharkDelSku()">EXCLUIR</button>
+                    <button class="btn btn-d" onclick="sharkDelSku()">APAGAR</button>
                 </div>
             </div>
-
             <div class="card">
-                <h3><i class="fa-solid fa-database"></i> DADOS & BACKUP</h3>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                    <button class="btn btn-s" onclick="exportData()">EXPORTAR</button>
-                    <button class="btn btn-p" onclick="document.getElementById('impFull').click()">IMPORTAR</button>
-                </div>
-                <input type="file" id="impFull" style="display:none" onchange="importData(this)">
-            </div>
-
-            <div class="card">
-                <h3><i class="fa-solid fa-clock-rotate-left"></i> LOGS EDITÁVEIS</h3>
+                <h3><i class="fa-solid fa-clock-rotate-left"></i> ÚLTIMOS LOGS</h3>
                 <div id="shark-log-list"></div>
             </div>
         </div>
     </div>
 
     <div id="tela-operador" class="screen">
-        <header><span>WMS OPERATOR</span> <button class="btn-logout" onclick="logout()">SAIR</button></header>
+        <header>
+            <div class="logo-text">WMS <span>PICKING</span></div>
+            <button class="btn-logout" onclick="logout()">SAIR</button>
+        </header>
         <div class="scroll-area">
             <div class="card">
                 <div id="reader-op" style="width:100%; min-height:180px; background:#000; border:2px solid var(--p); display:none; margin-bottom:10px;"></div>
-                <button class="btn btn-p" id="btn-cam" onclick="toggleCam()">ACIONAR CAMERA</button>
+                <button class="btn btn-p" id="btn-cam" onclick="toggleCam()">SCANNER CAMERA</button>
             </div>
-            
             <div class="card">
-                <h3>MOVIMENTAÇÃO</h3>
+                <h3>MOVIMENTO</h3>
                 <select id="op-tipo">
                     <option value="ENTRADA">📥 ENTRADA</option>
                     <option value="SEPARACAO">📦 SEPARAÇÃO</option>
                     <option value="AVARIA">⚠️ AVARIA</option>
                 </select>
                 <input type="text" id="op-ean" placeholder="EAN OU BIP">
-                <input type="text" id="op-loc" placeholder="LOCAL/ENDEREÇO">
-                <button class="btn btn-s" onclick="opRegistrar()">REGISTRAR ITEM</button>
+                <button class="btn btn-s" onclick="opRegistrar()">CONFIRMAR</button>
             </div>
-
             <div class="card">
-                <h3>FECHAR ROTA</h3>
+                <h3>FECHAR CARGA</h3>
                 <input type="text" id="mot-nome" placeholder="NOME DO MOTORISTA">
-                <button class="btn btn-d" onclick="gerarRomaneio()">FECHAR CARGA</button>
+                <button class="btn btn-d" onclick="gerarRomaneio()">GERAR ROTA</button>
             </div>
         </div>
     </div>
 
     <div id="tela-motorista" class="screen">
-        <header><span>DRIVER CONTROL</span> <button class="btn-logout" onclick="logout()">SAIR</button></header>
+        <header>
+            <div class="logo-text">ROTA <span>CONTROL</span></div>
+            <button class="btn-logout" onclick="logout()">SAIR</button>
+        </header>
         <div class="scroll-area" id="motorista-content"></div>
     </div>
+
+    <div class="dev-footer" id="dev-footer" style="display:none;">DEVELOPED BY <b>JP DIAS</b></div>
 
     <div class="bottom-nav" id="bot-nav">
         <div class="nav-item" id="nv-sk" onclick="navegar('tela-shark', this)"><i class="fa-solid fa-crown"></i>SHARK</div>
@@ -119,7 +129,7 @@
     </div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('SHARK_V107') || '{"produtos":{}, "logs":[], "romaneios":[]}');
+        let db = JSON.parse(localStorage.getItem('SHARK_V108') || '{"produtos":{}, "logs":[], "romaneios":[]}');
         let html5QrCode, camAtiva = false;
 
         function inicializarApp() { render(); }
@@ -127,6 +137,7 @@
         function login(role) {
             document.getElementById('tela-login').classList.remove('active-screen');
             document.getElementById('bot-nav').style.display = 'flex';
+            document.getElementById('dev-footer').style.display = 'block';
             document.getElementById('nv-sk').style.display = (role==='shark') ? 'flex' : 'none';
             document.getElementById('nv-op').style.display = (role!=='motorista') ? 'flex' : 'none';
             document.getElementById('nv-mt').style.display = (role!=='operador') ? 'flex' : 'none';
@@ -135,6 +146,7 @@
 
         function logout() {
             document.getElementById('bot-nav').style.display = 'none';
+            document.getElementById('dev-footer').style.display = 'none';
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
             document.getElementById('tela-login').classList.add('active-screen');
         }
@@ -147,26 +159,16 @@
             render();
         }
 
-        // --- LÓGICA DE REGISTRO ---
         function opRegistrar(eanLido = null) {
             let ean = eanLido || document.getElementById('op-ean').value;
             if(!ean) return;
             if(!db.produtos[ean]) {
-                let n = prompt("PRODUTO NOVO! NOME:");
+                let n = prompt("NOME DO PRODUTO:");
                 if(n) db.produtos[ean] = n; else return;
             }
             let qtd = prompt("QUANTIDADE:", "1");
             if(qtd) {
-                db.logs.unshift({
-                    id: Date.now(),
-                    data: new Date().toLocaleString(),
-                    tipo: document.getElementById('op-tipo').value,
-                    ean: ean,
-                    nome: db.produtos[ean],
-                    qtd: parseInt(qtd),
-                    local: document.getElementById('op-loc').value || 'WMS',
-                    romaneio: null
-                });
+                db.logs.unshift({ id: Date.now(), tipo: document.getElementById('op-tipo').value, ean: ean, nome: db.produtos[ean], qtd: parseInt(qtd), romaneio: null });
                 save(); render();
                 document.getElementById('op-ean').value = "";
             }
@@ -174,95 +176,57 @@
 
         function gerarRomaneio() {
             let mot = document.getElementById('mot-nome').value;
-            if(!mot) return alert("INFORME O MOTORISTA!");
+            if(!mot) return alert("QUEM É O MOTORISTA?");
             let itens = db.logs.filter(l => l.tipo === 'SEPARACAO' && !l.romaneio);
-            if(itens.length === 0) return alert("NENHUM ITEM SEPARADO!");
-
-            let idR = "SHK-" + Math.floor(1000 + Math.random() * 9000);
+            if(itens.length === 0) return alert("NADA SEPARADO!");
+            let idR = "RT-" + Math.floor(100 + Math.random() * 899);
             itens.forEach(i => i.romaneio = idR);
             db.romaneios.unshift({ id: idR, motorista: mot, status: 'EM ROTA', itens: itens });
             save(); render();
-            alert(`ROTA ${idR} GERADA!`);
+            alert(`ROTA ${idR} OK!`);
         }
 
-        // --- RENDERIZAÇÃO ---
         function render() {
             let estTotal = 0, avarias = 0, shLogs = "", mtHtml = "";
-            let saldos = {};
-
             db.logs.forEach((l, idx) => {
-                saldos[l.nome] = saldos[l.nome] || 0;
-                if(l.tipo === 'ENTRADA') { estTotal += l.qtd; saldos[l.nome] += l.qtd; }
-                if(l.tipo === 'SEPARACAO') { estTotal -= l.qtd; saldos[l.nome] -= l.qtd; }
+                if(l.tipo === 'ENTRADA') estTotal += l.qtd;
+                if(l.tipo === 'SEPARACAO') estTotal -= l.qtd;
                 if(l.tipo === 'AVARIA') avarias += l.qtd;
-
-                shLogs += `<div class="item-row">
-                    <div><b>${l.tipo}</b><br><small>${l.nome} (${l.qtd})</small></div>
-                    <button class="btn-logout" style="border-color:#333; color:#666" onclick="deleteLog(${idx})">DEL</button>
-                </div>`;
+                shLogs += `<div class="item-row"><div><b>${l.tipo}</b><br><small>${l.nome} (${l.qtd})</small></div><button class="btn-logout" onclick="deleteLog(${idx})">DEL</button></div>`;
             });
-
             if(document.getElementById('sk-inv')) {
                 document.getElementById('sk-inv').innerText = Object.keys(db.produtos).length;
                 document.getElementById('sk-est').innerText = estTotal;
                 document.getElementById('sk-ava').innerText = avarias;
                 document.getElementById('sk-rta').innerText = db.romaneios.filter(r=>r.status==='EM ROTA').length;
-                document.getElementById('shark-log-list').innerHTML = shLogs || "SEM LOGS";
+                document.getElementById('shark-log-list').innerHTML = shLogs;
             }
-
             db.romaneios.forEach(r => {
                 mtHtml += `<div class="card">
                     <span class="status-badge" style="background:${r.status==='EM ROTA'?'var(--s)':'var(--p)'}">${r.status}</span>
-                    <h3>ROMANEIO ${r.id}</h3>
+                    <h3>ROTA ${r.id}</h3>
                     <p style="font-size:8px;">MOTORISTA: ${r.motorista}</p>
                     <div style="margin:10px 0;">${r.itens.map(i => `• ${i.nome} (${i.qtd})`).join('<br>')}</div>
-                    ${r.status === 'EM ROTA' ? `<button class="btn btn-p" style="height:30px; font-size:8px;" onclick="concluirRota('${r.id}')">CONFIRMAR ENTREGA</button>` : '✅ CONCLUÍDO'}
+                    ${r.status === 'EM ROTA' ? `<button class="btn btn-p" style="height:30px; font-size:8px;" onclick="concluirRota('${r.id}')">BAIXAR ENTREGA</button>` : '✅ ENTREGUE'}
                 </div>`;
             });
             if(document.getElementById('motorista-content')) document.getElementById('motorista-content').innerHTML = mtHtml || "SEM CARGA";
         }
 
-        function concluirRota(id) {
-            let r = db.romaneios.find(x => x.id === id);
-            r.status = 'ENTREGUE';
-            save(); render();
-        }
-
-        function sharkSaveSku() {
-            let e = document.getElementById('sk-ean').value;
-            let n = document.getElementById('sk-nome').value;
-            if(e && n) { db.produtos[e] = n; save(); render(); alert("SKU SALVO!"); }
-        }
-
-        function sharkDelSku() {
-            let e = document.getElementById('sk-ean').value;
-            if(db.produtos[e] && confirm("EXCLUIR ESTE SKU?")) { delete db.produtos[e]; save(); render(); }
-        }
-
-        function deleteLog(idx) { if(confirm("REMOVER ESTA LINHA?")) { db.logs.splice(idx,1); save(); render(); } }
-        function save() { localStorage.setItem('SHARK_V107', JSON.stringify(db)); }
-
-        function exportData() {
-            let blob = new Blob([JSON.stringify(db)], {type:'application/json'});
-            let a = document.createElement('a');
-            a.href = URL.createObjectURL(blob); a.download = `shark_v107_bkp.json`;
-            a.click();
-        }
-
-        function importData(input) {
-            let fr = new FileReader();
-            fr.onload = () => { db = JSON.parse(fr.result); save(); location.reload(); };
-            fr.readAsText(input.files[0]);
-        }
+        function concluirRota(id) { let r = db.romaneios.find(x => x.id === id); r.status = 'ENTREGUE'; save(); render(); }
+        function sharkSaveSku() { let e = document.getElementById('sk-ean').value; let n = document.getElementById('sk-nome').value; if(e && n) { db.produtos[e] = n; save(); render(); } }
+        function sharkDelSku() { let e = document.getElementById('sk-ean').value; if(db.produtos[e] && confirm("EXCLUIR?")) { delete db.produtos[e]; save(); render(); } }
+        function deleteLog(idx) { if(confirm("APAGAR?")) { db.logs.splice(idx,1); save(); render(); } }
+        function save() { localStorage.setItem('SHARK_V108', JSON.stringify(db)); }
 
         function toggleCam() {
             if(!camAtiva) {
                 document.getElementById('reader-op').style.display='block';
                 html5QrCode = new Html5Qrcode("reader-op");
                 html5QrCode.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, (txt) => { opRegistrar(txt); toggleCam(); });
-                document.getElementById('btn-cam').innerText="PARAR SCAN"; camAtiva=true;
+                document.getElementById('btn-cam').innerText="FECHAR"; camAtiva=true;
             } else {
-                html5QrCode.stop().then(() => { document.getElementById('reader-op').style.display='none'; camAtiva=false; document.getElementById('btn-cam').innerText="ACIONAR CAMERA"; });
+                html5QrCode.stop().then(() => { document.getElementById('reader-op').style.display='none'; camAtiva=false; document.getElementById('btn-cam').innerText="SCANNER"; });
             }
         }
     </script>
