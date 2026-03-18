@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LOG-PRO v112 | JP DIAS</title>
+    <title>LOG-PRO | JP DIAS</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="https://unpkg.com/html5-qrcode"></script>
@@ -12,29 +12,37 @@
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; font-size: 11px; height: 100vh; overflow: hidden; text-transform: uppercase; }
         
-        header { padding: 15px; border-bottom: 2px solid var(--brd); display: flex; justify-content: space-between; align-items: center; background: #000; }
+        /* HEADER LOG-PRO */
+        header { padding: 15px; border-bottom: 2px solid var(--brd); display: flex; justify-content: space-between; align-items: center; background: #000; z-index: 101; position: relative; }
         .logo-main { font-family: 'Orbitron'; color: var(--p); font-size: 18px; font-weight: 900; letter-spacing: 2px; }
-        .logo-sub { font-family: 'Orbitron'; color: #fff; font-size: 8px; opacity: 0.5; }
+        .logo-sub { font-family: 'Orbitron'; color: #fff; font-size: 8px; opacity: 0.5; display: block; }
 
         .screen { display: none; height: 100vh; flex-direction: column; }
         .active-screen { display: flex !important; }
-        .scroll-area { flex: 1; overflow-y: auto; padding: 15px 15px 150px 15px; }
+        .scroll-area { flex: 1; overflow-y: auto; padding: 15px 15px 160px 15px; }
         
-        .dev-credit { position: fixed; bottom: 70px; width: 100%; text-align: center; font-family: 'Orbitron'; font-size: 8px; color: #444; letter-spacing: 2px; padding: 10px; background: rgba(0,0,0,0.9); z-index: 99; border-top: 1px solid #111; }
+        /* ASSINATURA JP DIAS */
+        .dev-credit { position: fixed; bottom: 70px; width: 100%; text-align: center; font-family: 'Orbitron'; font-size: 8px; color: #444; letter-spacing: 2px; padding: 10px; background: rgba(0,0,0,0.95); z-index: 99; border-top: 1px solid #111; }
         .dev-credit b { color: var(--p); }
 
-        .card { background: var(--sf); border: 1px solid var(--brd); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
-        h3 { font-family: 'Orbitron'; font-size: 9px; color: var(--p); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; border-left: 3px solid var(--p); padding-left: 8px; }
+        .card { background: var(--sf); border: 1px solid var(--brd); border-radius: 12px; padding: 15px; margin-bottom: 15px; position: relative; overflow: hidden; }
+        .card::after { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--p); }
         
-        input, select { width: 100%; padding: 12px; background: #050505; border: 1px solid #222; color: #fff; border-radius: 8px; font-size: 11px; margin-bottom: 8px; font-weight: 700; }
-        .btn { width: 100%; padding: 14px; border: none; border-radius: 10px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; transition: 0.2s; }
-        .btn-p { background: var(--p); color: #000; }
+        h3 { font-family: 'Orbitron'; font-size: 9px; color: var(--p); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        
+        input, select { width: 100%; padding: 12px; background: #050505; border: 1px solid #222; color: #fff; border-radius: 8px; font-size: 11px; margin-bottom: 8px; font-weight: 700; border-left: 2px solid transparent; }
+        input:focus { border-left: 2px solid var(--p); background: #0a0a0a; }
+
+        .btn { width: 100%; padding: 14px; border: none; border-radius: 10px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; }
+        .btn-p { background: var(--p); color: #000; box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); }
         .btn-s { background: var(--s); color: #fff; }
         .btn-d { background: var(--dg); color: #fff; }
 
+        /* KPIS INTELIGENTES */
         .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 15px; }
-        .kpi-box { background: #0a0a0a; border: 1px solid #222; padding: 10px 5px; border-radius: 8px; text-align: center; }
+        .kpi-box { background: #0a0a0a; border: 1px solid #222; padding: 10px 5px; border-radius: 8px; text-align: center; position: relative; }
         .kpi-box span { font-family: 'Orbitron'; font-size: 14px; color: var(--p); display: block; }
+        .kpi-box small { font-size: 7px; color: #555; font-weight: 800; }
         
         .low-stock { color: var(--dg) !important; animation: blink 0.8s infinite; }
         @keyframes blink { 50% { opacity: 0.2; } }
@@ -43,113 +51,120 @@
         .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #444; font-size: 8px; font-weight: 800; gap: 4px; }
         .active-tab { color: var(--p); border-top: 3px solid var(--p); background: #050505; }
         
-        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #111; background: #050505; margin-bottom: 2px; border-radius: 5px; }
-        .status-badge { font-size: 7px; padding: 2px 6px; border-radius: 4px; font-weight: 900; margin-bottom: 5px; display: inline-block; }
+        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #111; background: #050505; margin-bottom: 2px; border-radius: 6px; }
+        .status-tag { font-size: 7px; padding: 3px 7px; border-radius: 4px; font-weight: 900; text-transform: uppercase; }
     </style>
 </head>
 <body onload="inicializarApp()">
 
     <div id="tela-login" class="screen active-screen" style="justify-content:center; padding:40px;">
-        <div style="text-align:center; margin-bottom:50px;">
-            <h1 style="font-family:'Orbitron'; color:var(--p); font-size:45px; letter-spacing:2px;">LOG-PRO</h1>
-            <p style="color:#555; font-size:9px; letter-spacing:5px;">LOGISTICS INTELLIGENCE</p>
+        <div style="text-align:center; margin-bottom:60px;">
+            <div style="display:inline-block; border: 2px solid var(--p); padding: 10px 20px;">
+                <h1 style="font-family:'Orbitron'; color:var(--p); font-size:40px; letter-spacing:4px; margin:0;">LOG-PRO</h1>
+            </div>
+            <p style="color:#555; font-size:9px; letter-spacing:6px; margin-top:10px;">SYSTEM ARCHITECTURE</p>
         </div>
-        <button class="btn btn-p" onclick="login('shark')" style="margin-bottom:12px;">👑 ADMIN MASTER</button>
-        <button class="btn btn-s" onclick="login('operador')" style="margin-bottom:12px;">📦 OPERADOR WMS</button>
-        <button class="btn btn-d" onclick="login('motorista')">🚚 MOTORISTA ROTA</button>
-        <p style="text-align:center; font-family:'Orbitron'; font-size:8px; color:#333; margin-top:40px; letter-spacing:2px;">SISTEMA DESENVOLVIDO POR <b>JP DIAS</b></p>
+        <button class="btn btn-p" onclick="login('admin')" style="margin-bottom:12px;"><i class="fa-solid fa-shield-halved"></i> MASTER ADMIN</button>
+        <button class="btn btn-s" onclick="login('operador')" style="margin-bottom:12px;"><i class="fa-solid fa-box-open"></i> OPERADOR WMS</button>
+        <button class="btn btn-d" onclick="login('motorista')"><i class="fa-solid fa-truck-fast"></i> MOTORISTA ROTA</button>
+        <p style="text-align:center; font-family:'Orbitron'; font-size:8px; color:#222; margin-top:50px; letter-spacing:3px;">ENG. BY <b>JP DIAS</b></p>
     </div>
 
-    <div id="tela-shark" class="screen">
+    <div id="tela-admin" class="screen">
         <header>
-            <div><span class="logo-main">LOG-PRO</span><br><span class="logo-sub">CONTROLE CENTRAL</span></div>
-            <button onclick="logout()" style="background:none; border:1px solid var(--dg); color:var(--dg); font-size:7px; padding:4px 8px; font-family:'Orbitron';">SAIR</button>
+            <div><span class="logo-main">LOG-PRO</span><span class="logo-sub">CONTROLE DASHBOARD</span></div>
+            <button onclick="logout()" style="background:none; border:1px solid var(--dg); color:var(--dg); font-size:7px; padding:5px 10px; font-family:'Orbitron';">LOGOUT</button>
         </header>
         <div class="scroll-area">
             <div class="kpi-grid">
-                <div class="kpi-box"><span id="sk-inv">0</span><small>SKUS</small></div>
-                <div class="kpi-box"><span id="sk-est">0</span><small>ESTOQUE</small></div>
-                <div class="kpi-box"><span id="sk-ava" style="color:var(--dg)">0</span><small>AVARIA</small></div>
-                <div class="kpi-box"><span id="sk-rta" style="color:var(--s)">0</span><small>ROTAS</small></div>
+                <div class="kpi-box"><span id="adm-sku">0</span><small>PRODUTOS</small></div>
+                <div class="kpi-box"><span id="adm-est">0</span><small>ESTOQUE</small></div>
+                <div class="kpi-box"><span id="adm-ava" style="color:var(--dg)">0</span><small>AVARIAS</small></div>
+                <div class="kpi-box"><span id="adm-rta" style="color:var(--s)">0</span><small>EM ROTA</small></div>
             </div>
             <div class="card">
-                <h3><i class="fa-solid fa-plus"></i> NOVO SKU</h3>
-                <input type="text" id="sk-ean" placeholder="EAN / CÓDIGO">
-                <input type="text" id="sk-nome" placeholder="NOME DO PRODUTO">
-                <button class="btn btn-p" onclick="sharkSaveSku()">CADASTRAR</button>
+                <h3><i class="fa-solid fa-barcode"></i> CADASTRAR PRODUTO</h3>
+                <input type="text" id="add-ean" placeholder="EAN OU CÓDIGO INTERNO">
+                <input type="text" id="add-nome" placeholder="NOME DO PRODUTO">
+                <button class="btn btn-p" onclick="cadastrarProduto()">SALVAR NO BANCO</button>
             </div>
             <div class="card">
-                <h3><i class="fa-solid fa-history"></i> LOGS DO SISTEMA</h3>
-                <div id="shark-log-list"></div>
+                <h3><i class="fa-solid fa-list-check"></i> HISTÓRICO GLOBAL</h3>
+                <div id="log-global-list"></div>
             </div>
         </div>
     </div>
 
     <div id="tela-operador" class="screen">
         <header>
-            <div><span class="logo-main">LOG-PRO</span><br><span class="logo-sub">TERMINAL WMS</span></div>
-            <button onclick="logout()" style="background:none; border:1px solid var(--dg); color:var(--dg); font-size:7px; padding:4px 8px; font-family:'Orbitron';">SAIR</button>
+            <div><span class="logo-main">WMS</span><span class="logo-sub">TERMINAL OPERACIONAL</span></div>
+            <button onclick="logout()" style="background:none; border:1px solid var(--dg); color:var(--dg); font-size:7px; padding:5px 10px; font-family:'Orbitron';">SAIR</button>
         </header>
         <div class="scroll-area">
             <div class="card">
-                <div id="reader-op" style="width:100%; min-height:180px; background:#000; border:2px solid var(--p); display:none; margin-bottom:10px;"></div>
-                <button class="btn btn-p" id="btn-cam" onclick="toggleCam()">SCANNER CAMERA</button>
+                <div id="reader-wms" style="width:100%; min-height:180px; background:#000; border:2px solid var(--p); display:none; margin-bottom:10px;"></div>
+                <button class="btn btn-p" id="btn-cam-wms" onclick="toggleScanner()">ACIONAR CAMERA</button>
             </div>
             <div class="card">
-                <h3>MOVIMENTAÇÃO</h3>
-                <select id="op-tipo">
-                    <option value="ENTRADA">📥 ENTRADA</option>
-                    <option value="SEPARACAO">📦 SEPARAÇÃO</option>
-                    <option value="AVARIA">⚠️ AVARIA</option>
+                <h3>REGISTRO DE MOVIMENTO</h3>
+                <select id="mov-tipo">
+                    <option value="ENTRADA">📥 ENTRADA DE ESTOQUE</option>
+                    <option value="SEPARACAO">📦 SEPARAÇÃO P/ ROTA</option>
+                    <option value="AVARIA">⚠️ REGISTRAR AVARIA</option>
                 </select>
-                <input type="text" id="op-ean" placeholder="EAN OU BIP">
-                <button class="btn btn-s" onclick="opRegistrar()">CONFIRMAR</button>
+                <input type="text" id="mov-ean" placeholder="EAN OU BIP MANUAL">
+                <button class="btn btn-s" onclick="processarMovimento()">CONFIRMAR ITEM</button>
             </div>
             <div class="card">
-                <h3>FECHAR CARGA (ROTA)</h3>
-                <input type="text" id="mot-nome" placeholder="NOME DO MOTORISTA">
-                <button class="btn btn-d" onclick="gerarRomaneio()">GERAR ROMANEIO</button>
+                <h3>FECHAMENTO DE ROMANEIO</h3>
+                <input type="text" id="mot-rota" placeholder="NOME DO MOTORISTA">
+                <button class="btn btn-d" onclick="fecharRota()">GERAR CARGA PARA MOTORISTA</button>
             </div>
         </div>
     </div>
 
     <div id="tela-motorista" class="screen">
         <header>
-            <div><span class="logo-main">LOG-PRO</span><br><span class="logo-sub">MINHAS ENTREGAS</span></div>
-            <button onclick="logout()" style="background:none; border:1px solid var(--dg); color:var(--dg); font-size:7px; padding:4px 8px; font-family:'Orbitron';">SAIR</button>
+            <div><span class="logo-main">ROTA</span><span class="logo-sub">SISTEMA DE ENTREGA</span></div>
+            <button onclick="logout()" style="background:none; border:1px solid var(--dg); color:var(--dg); font-size:7px; padding:5px 10px; font-family:'Orbitron';">SAIR</button>
         </header>
-        <div class="scroll-area" id="motorista-content"></div>
+        <div class="scroll-area" id="lista-entregas"></div>
     </div>
 
     <div id="dev-footer" class="dev-credit" style="display:none;">DEVELOPED BY <b>JP DIAS</b></div>
 
     <div class="bottom-nav" id="bot-nav">
-        <div class="nav-item" id="nv-sk" onclick="navegar('tela-shark', this)"><i class="fa-solid fa-crown"></i>ADMIN</div>
-        <div class="nav-item" id="nv-op" onclick="navegar('tela-operador', this)"><i class="fa-solid fa-barcode"></i>WMS</div>
-        <div class="nav-item" id="nv-mt" onclick="navegar('tela-motorista', this)"><i class="fa-solid fa-truck"></i>ROTA</div>
+        <div class="nav-item" id="nv-adm" onclick="navegar('tela-admin', this)"><i class="fa-solid fa-gauge-high"></i>DASH</div>
+        <div class="nav-item" id="nv-op" onclick="navegar('tela-operador', this)"><i class="fa-solid fa-qrcode"></i>OPERAR</div>
+        <div class="nav-item" id="nv-mt" onclick="navegar('tela-motorista', this)"><i class="fa-solid fa-truck-ramp-box"></i>ROTAS</div>
     </div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('LOGPRO_V112') || '{"produtos":{}, "logs":[], "romaneios":[]}');
-        let html5QrCode, camAtiva = false;
+        // DB NATIVO LOCALSTORAGE - LÓGICA DE PERSISTÊNCIA DO INÍCIO
+        let db = JSON.parse(localStorage.getItem('LOGPRO_DATA') || '{"produtos":{}, "logs":[], "rotas":[]}');
+        let scannerAtivo = false;
+        let html5QrCode;
 
         function inicializarApp() { render(); }
+
+        function save() { localStorage.setItem('LOGPRO_DATA', JSON.stringify(db)); render(); }
 
         function login(role) {
             document.getElementById('tela-login').classList.remove('active-screen');
             document.getElementById('bot-nav').style.display = 'flex';
             document.getElementById('dev-footer').style.display = 'block';
-            document.getElementById('nv-sk').style.display = (role==='shark') ? 'flex' : 'none';
+            
+            // Controle de permissão
+            document.getElementById('nv-adm').style.display = (role==='admin') ? 'flex' : 'none';
             document.getElementById('nv-op').style.display = (role!=='motorista') ? 'flex' : 'none';
             document.getElementById('nv-mt').style.display = (role!=='operador') ? 'flex' : 'none';
-            navegar('tela-'+role, document.getElementById('nv-'+(role=='operador'?'op':role=='motorista'?'mt':'sk')));
+            
+            let alvo = role === 'admin' ? 'tela-admin' : (role === 'operador' ? 'tela-operador' : 'tela-motorista');
+            navegar(alvo, document.getElementById('nv-' + (role==='admin'?'adm':role==='operador'?'op':'mt')));
         }
 
         function logout() {
-            document.getElementById('bot-nav').style.display = 'none';
-            document.getElementById('dev-footer').style.display = 'none';
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
-            document.getElementById('tela-login').classList.add('active-screen');
+            location.reload(); // Limpa estado da sessão
         }
 
         function navegar(id, el) {
@@ -157,84 +172,91 @@
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-tab'));
             document.getElementById(id).classList.add('active-screen');
             el.classList.add('active-tab');
-            render();
         }
 
-        function opRegistrar(eanLido = null) {
-            let ean = eanLido || document.getElementById('op-ean').value;
+        function cadastrarProduto() {
+            let e = document.getElementById('add-ean').value;
+            let n = document.getElementById('add-nome').value;
+            if(e && n) { db.produtos[e] = n; save(); alert("SKU PRONTO!"); document.getElementById('add-ean').value=''; document.getElementById('add-nome').value=''; }
+        }
+
+        function processarMovimento(eanLido = null) {
+            let ean = eanLido || document.getElementById('mov-ean').value;
             if(!ean) return;
             if(!db.produtos[ean]) {
-                let n = prompt("PRODUTO NÃO ENCONTRADO! DIGITE O NOME:");
+                let n = prompt("PRODUTO NOVO! NOME:");
                 if(n) db.produtos[ean] = n; else return;
             }
             let qtd = prompt("QUANTIDADE:", "1");
             if(qtd) {
-                db.logs.unshift({ id: Date.now(), tipo: document.getElementById('op-tipo').value, ean: ean, nome: db.produtos[ean], qtd: parseInt(qtd), romaneio: null });
-                save(); render();
-                document.getElementById('op-ean').value = "";
+                db.logs.unshift({ id: Date.now(), tipo: document.getElementById('mov-tipo').value, ean: ean, nome: db.produtos[ean], qtd: parseInt(qtd), rotaId: null });
+                save(); document.getElementById('mov-ean').value = "";
             }
         }
 
-        function gerarRomaneio() {
-            let mot = document.getElementById('mot-nome').value;
-            if(!mot) return alert("NOME DO MOTORISTA OBRIGATÓRIO!");
-            let itens = db.logs.filter(l => l.tipo === 'SEPARACAO' && !l.romaneio);
-            if(itens.length === 0) return alert("SEM ITENS SEPARADOS PARA ROTA!");
-            let idR = "RT-" + Math.floor(100 + Math.random() * 899);
-            itens.forEach(i => i.romaneio = idR);
-            db.romaneios.unshift({ id: idR, motorista: mot, status: 'EM ROTA', itens: [...itens] });
-            save(); render();
-            alert(`ROTA ${idR} GERADA!`);
+        function fecharRota() {
+            let mot = document.getElementById('mot-rota').value;
+            if(!mot) return alert("INFORME O MOTORISTA!");
+            let itens = db.logs.filter(l => l.tipo === 'SEPARACAO' && !l.rotaId);
+            if(itens.length === 0) return alert("SEM ITENS SEPARADOS!");
+            
+            let idR = "R-" + Math.floor(1000 + Math.random() * 9000);
+            itens.forEach(i => i.rotaId = idR);
+            db.rotas.unshift({ id: idR, mot: mot, status: 'EM TRANSITO', itens: [...itens] });
+            save(); alert("ROTA ENVIADA!");
+        }
+
+        function concluirEntrega(id) {
+            let r = db.rotas.find(x => x.id === id);
+            r.status = 'ENTREGUE';
+            save();
         }
 
         function render() {
-            let estTotal = 0, avarias = 0, shLogs = "", mtHtml = "";
-            db.logs.forEach((l) => {
-                if(l.tipo === 'ENTRADA') estTotal += l.qtd;
-                if(l.tipo === 'SEPARACAO') estTotal -= l.qtd;
-                if(l.tipo === 'AVARIA') avarias += l.qtd;
-                shLogs += `<div class="item-row"><div><b>${l.tipo}</b><br><small>${l.nome}</small></div><b>${l.qtd}</b></div>`;
+            let est = 0, ava = 0, logsH = "", rotasH = "";
+            
+            // Cálculo Inteligente de Estoque
+            db.logs.forEach(l => {
+                if(l.tipo === 'ENTRADA') est += l.qtd;
+                if(l.tipo === 'SEPARACAO') est -= l.qtd;
+                if(l.tipo === 'AVARIA') ava += l.qtd;
+                logsH += `<div class="item-row"><div><b>${l.tipo}</b><br><small>${l.nome}</small></div><b>${l.qtd} UN</b></div>`;
             });
 
-            if(document.getElementById('sk-inv')) {
-                document.getElementById('sk-inv').innerText = Object.keys(db.produtos).length;
-                let elEst = document.getElementById('sk-est');
-                elEst.innerText = estTotal;
-                if(estTotal < 5) elEst.classList.add('low-stock'); else elEst.classList.remove('low-stock');
-                document.getElementById('sk-ava').innerText = avarias;
-                document.getElementById('sk-rta').innerText = db.romaneios.filter(r=>r.status==='EM ROTA').length;
-                document.getElementById('shark-log-list').innerHTML = shLogs || "SEM MOVIMENTAÇÃO";
+            // Dash Adm
+            if(document.getElementById('adm-sku')) {
+                document.getElementById('adm-sku').innerText = Object.keys(db.produtos).length;
+                let elEst = document.getElementById('adm-est');
+                elEst.innerText = est;
+                if(est < 5) elEst.classList.add('low-stock'); else elEst.classList.remove('low-stock');
+                document.getElementById('adm-ava').innerText = ava;
+                document.getElementById('adm-rta').innerText = db.rotas.filter(r=>r.status==='EM TRANSITO').length;
+                document.getElementById('log-global-list').innerHTML = logsH || "SEM DADOS";
             }
 
-            db.romaneios.forEach(r => {
-                mtHtml += `<div class="card">
-                    <span class="status-badge" style="background:${r.status==='EM ROTA'?'var(--s)':'var(--p)'}">${r.status}</span>
-                    <h3>CARGA ${r.id}</h3>
-                    <p style="font-size:8px; margin-bottom:10px;">MOT: ${r.motorista}</p>
-                    <div style="margin-bottom:15px;">${r.itens.map(i => `• ${i.nome} (${i.qtd})`).join('<br>')}</div>
-                    ${r.status === 'EM ROTA' ? `<button class="btn btn-p" style="height:35px; font-size:9px;" onclick="concluirRota('${r.id}')">CONFIRMAR ENTREGA</button>` : '✅ CARGA ENTREGUE'}
+            // Tela Motorista
+            db.rotas.forEach(r => {
+                rotasH += `<div class="card">
+                    <span class="status-tag" style="background:${r.status==='ENTREGUE'?'#222':'var(--s)'}">${r.status}</span>
+                    <h3 style="margin-top:5px;">CARGA ${r.id}</h3>
+                    <p style="font-size:8px; opacity:0.6; margin-bottom:10px;">MOTORISTA: ${r.mot}</p>
+                    <div style="margin-bottom:15px; border-top:1px solid #222; padding-top:10px;">
+                        ${r.itens.map(i => `• ${i.nome} (${i.qtd})`).join('<br>')}
+                    </div>
+                    ${r.status === 'EM TRANSITO' ? `<button class="btn btn-p" onclick="concluirEntrega('${r.id}')">BAIXA DE ENTREGA</button>` : '✅ FINALIZADO'}
                 </div>`;
             });
-            if(document.getElementById('motorista-content')) document.getElementById('motorista-content').innerHTML = mtHtml || "NENHUMA CARGA DISPONÍVEL";
+            if(document.getElementById('lista-entregas')) document.getElementById('lista-entregas').innerHTML = rotasH || "AGUARDANDO CARGAS...";
         }
 
-        function concluirRota(id) { let r = db.romaneios.find(x => x.id === id); r.status = 'ENTREGUE'; save(); render(); }
-        function sharkSaveSku() {
-            let e = document.getElementById('sk-ean').value;
-            let n = document.getElementById('sk-nome').value;
-            if(e && n) { db.produtos[e] = n; save(); render(); alert("SKU CADASTRADO!"); }
-        }
-
-        function save() { localStorage.setItem('LOGPRO_V112', JSON.stringify(db)); }
-
-        function toggleCam() {
-            if(!camAtiva) {
-                document.getElementById('reader-op').style.display='block';
-                html5QrCode = new Html5Qrcode("reader-op");
-                html5QrCode.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, (txt) => { opRegistrar(txt); toggleCam(); });
-                document.getElementById('btn-cam').innerText="PARAR CAMERA"; camAtiva=true;
+        function toggleScanner() {
+            if(!scannerAtivo) {
+                document.getElementById('reader-wms').style.display='block';
+                html5QrCode = new Html5Qrcode("reader-wms");
+                html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, (txt) => { processarMovimento(txt); toggleScanner(); });
+                document.getElementById('btn-cam-wms').innerText="CANCELAR SCANNER"; scannerAtivo=true;
             } else {
-                html5QrCode.stop().then(() => { document.getElementById('reader-op').style.display='none'; camAtiva=false; document.getElementById('btn-cam').innerText="SCANNER CAMERA"; });
+                html5QrCode.stop().then(() => { document.getElementById('reader-wms').style.display='none'; scannerAtivo=false; document.getElementById('btn-cam-wms').innerText="ACIONAR CAMERA"; });
             }
         }
     </script>
